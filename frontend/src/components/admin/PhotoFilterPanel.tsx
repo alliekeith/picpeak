@@ -113,7 +113,7 @@ export const PhotoFilterPanel: React.FC<PhotoFilterPanelProps> = ({
           <select
             value={filters.minRating ?? ''}
             onChange={(e) => handleRatingChange(e.target.value === '' ? null : parseFloat(e.target.value))}
-            className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-brand-500 focus:border-primary"
+            className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-ring focus:border-primary"
             disabled={isLoading}
           >
             {RATING_OPTIONS.map(option => (
@@ -131,7 +131,7 @@ export const PhotoFilterPanel: React.FC<PhotoFilterPanelProps> = ({
               type="checkbox"
               checked={filters.hasLikes || false}
               onChange={() => handleCheckboxChange('hasLikes')}
-              className="rounded-sm border-border text-brand focus:ring-brand-500"
+              className="rounded-sm border-border text-primary focus:ring-ring"
               disabled={isLoading}
             />
             <Heart className="w-4 h-4 text-red-500" />
@@ -148,7 +148,7 @@ export const PhotoFilterPanel: React.FC<PhotoFilterPanelProps> = ({
               type="checkbox"
               checked={filters.hasFavorites || false}
               onChange={() => handleCheckboxChange('hasFavorites')}
-              className="rounded-sm border-border text-brand focus:ring-brand-500"
+              className="rounded-sm border-border text-primary focus:ring-ring"
               disabled={isLoading}
             />
             <Bookmark className="w-4 h-4 text-yellow-500" />
@@ -165,7 +165,7 @@ export const PhotoFilterPanel: React.FC<PhotoFilterPanelProps> = ({
               type="checkbox"
               checked={filters.hasComments || false}
               onChange={() => handleCheckboxChange('hasComments')}
-              className="rounded-sm border-border text-brand focus:ring-brand-500"
+              className="rounded-sm border-border text-primary focus:ring-ring"
               disabled={isLoading}
             />
             <MessageCircle className="w-4 h-4 text-blue-500" />

@@ -59,7 +59,7 @@ export const PhotoFilters: React.FC<PhotoFiltersProps> = ({
               const numeric = Number(raw);
               onCategoryChange(Number.isNaN(numeric) ? raw : numeric);
             }}
-            className="px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-brand-500 focus:border-primary"
+            className="px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-ring focus:border-primary"
           >
             <option value="">{t('gallery.allCategories', 'All Categories')}</option>
             {/* The literal the backend understands, not 0 (#1211). It skips
@@ -82,7 +82,7 @@ export const PhotoFilters: React.FC<PhotoFiltersProps> = ({
             <select
               value={mediaType}
               onChange={(e) => onMediaTypeChange(e.target.value as 'all' | 'photo' | 'video')}
-              className="px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-brand-500 focus:border-primary"
+              className="px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-ring focus:border-primary"
             >
               <option value="all">{t('gallery.allMedia', 'All media')}</option>
               <option value="photo">{t('gallery.photosOnly', 'Photos only')}</option>
@@ -96,7 +96,7 @@ export const PhotoFilters: React.FC<PhotoFiltersProps> = ({
           <select
             value={sortBy}
             onChange={(e) => onSortChange(e.target.value as 'date' | 'name' | 'size' | 'rating', sortOrder)}
-            className="px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-brand-500 focus:border-primary"
+            className="px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-ring focus:border-primary"
           >
             <option value="date">{t('gallery.sortByDate', 'Sort by Date')}</option>
             <option value="name">{t('gallery.sortByName', 'Sort by Name')}</option>

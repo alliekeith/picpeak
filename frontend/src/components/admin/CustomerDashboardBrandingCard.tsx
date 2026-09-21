@@ -105,7 +105,7 @@ export const CustomerDashboardBrandingCard: React.FC = () => {
 
   return (
     <Card><CardContent><div className="flex items-start gap-3 mb-4">
-              <div className="w-10 h-10 rounded-lg bg-brand-soft text-on-brand-soft flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 rounded-lg bg-accent text-accent-foreground flex items-center justify-center shrink-0">
                 <UserCog className="w-5 h-5" />
               </div>
               <div>

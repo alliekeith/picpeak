@@ -143,7 +143,7 @@ export const ArchivesPage: React.FC = () => {
                             <p className="text-sm text-muted-foreground">{t('archives.totalArchives')}</p>
                             <p className="text-2xl font-bold text-foreground">{totals.archives}</p>
                           </div>
-                          <Archive className="w-8 h-8 text-brand" />
+                          <Archive className="w-8 h-8 text-primary" />
                         </div></CardContent></Card>
 
         <Card className="py-4"><CardContent className="px-4"><div className="flex items-center justify-between">
@@ -193,7 +193,7 @@ export const ArchivesPage: React.FC = () => {
                       <select
                         value={filterType}
                         onChange={(e) => setFilterType(e.target.value)}
-                        className="px-4 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
+                        className="px-4 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-ring focus:border-primary"
                       >
                         <option value="all">{t('archives.allTypes')}</option>
                         <option value="wedding">{t('archives.wedding')}</option>
@@ -206,7 +206,7 @@ export const ArchivesPage: React.FC = () => {
                       <select
                         value={sortBy}
                         onChange={(e) => setSortBy(e.target.value as any)}
-                        className="px-4 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
+                        className="px-4 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-ring focus:border-primary"
                       >
                         <option value="date">{t('archives.sortByDate')}</option>
                         <option value="name">{t('archives.sortByName')}</option>

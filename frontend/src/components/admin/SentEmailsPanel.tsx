@@ -131,7 +131,7 @@ export const SentEmailsPanel: React.FC = () => {
                             <td className="px-3 py-2 whitespace-nowrap">{m.sentAt ? fmtDateTime(m.sentAt) : '—'}</td>
                             <td className="px-3 py-2">
                               {m.eventId ? (
-                                <Link to={`/admin/events/${m.eventId}`} className="text-brand hover:underline" onClick={(e) => e.stopPropagation()}>
+                                <Link to={`/admin/events/${m.eventId}`} className="text-primary hover:underline" onClick={(e) => e.stopPropagation()}>
                                   {m.eventName || `#${m.eventId}`}
                                 </Link>
                               ) : '—'}

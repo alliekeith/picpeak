@@ -27,7 +27,7 @@ export const EventTabs: React.FC<EventTabsProps> = ({
           onClick={() => setActiveTab('overview')}
           className={`py-2 px-1 border-b-2 font-medium text-sm ${
             activeTab === 'overview'
-              ? 'border-brand text-brand'
+              ? 'border-primary text-primary'
               : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
           }`}
         >
@@ -37,7 +37,7 @@ export const EventTabs: React.FC<EventTabsProps> = ({
           onClick={() => setActiveTab('photos')}
           className={`py-2 px-1 border-b-2 font-medium text-sm flex items-center gap-2 ${
             activeTab === 'photos'
-              ? 'border-brand text-brand'
+              ? 'border-primary text-primary'
               : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
           }`}
         >
@@ -53,7 +53,7 @@ export const EventTabs: React.FC<EventTabsProps> = ({
           onClick={() => setActiveTab('categories')}
           className={`py-2 px-1 border-b-2 font-medium text-sm ${
             activeTab === 'categories'
-              ? 'border-brand text-brand'
+              ? 'border-primary text-primary'
               : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
           }`}
         >
@@ -64,7 +64,7 @@ export const EventTabs: React.FC<EventTabsProps> = ({
             onClick={() => setActiveTab('guests')}
             className={`py-2 px-1 border-b-2 font-medium text-sm ${
               activeTab === 'guests'
-                ? 'border-brand text-brand'
+                ? 'border-primary text-primary'
                 : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
             }`}
           >

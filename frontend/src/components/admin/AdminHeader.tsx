@@ -327,7 +327,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick }) => {
                       {unreadCount > 0 && (
                         <button
                           onClick={() => markAllAsReadMutation.mutate()}
-                          className="text-xs text-brand hover:opacity-80 flex items-center gap-1"
+                          className="text-xs text-primary hover:opacity-80 flex items-center gap-1"
                           title={t('admin.markAllRead')}
                         >
                           <CheckCircle className="w-3 h-3" />
@@ -384,7 +384,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick }) => {
                     <div className="px-4 py-2 border-t border-border text-center">
                       <button
                         onClick={notificationsModal.close}
-                        className="text-sm text-brand hover:opacity-80"
+                        className="text-sm text-primary hover:opacity-80"
                       >
                         {t('admin.close')}
                       </button>
@@ -440,7 +440,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick }) => {
                             onClick={() => handleUserMenuLangSelect(language.code)}
                             className={`w-full pl-11 pr-4 py-2 text-left text-sm flex items-center gap-3 hover:bg-accent ${
                               language.code === i18n.language
-                                ? 'text-brand bg-primary/15'
+                                ? 'text-primary bg-primary/15'
                                 : 'text-foreground'
                             }`}
                           >

@@ -133,7 +133,7 @@ export const RoleEditorModal: React.FC<RoleEditorModalProps> = ({
       <Card className="w-full max-w-3xl max-h-[90vh] flex flex-col"><CardContent><div className="p-6 flex-1 overflow-y-auto">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2">
-                        <Shield className="w-5 h-5 text-brand" />
+                        <Shield className="w-5 h-5 text-primary" />
                         <h2 className="text-xl font-semibold text-foreground">
                           {mode === 'create'
                             ? t('roleEditor.createTitle', 'Create role')
@@ -226,7 +226,7 @@ export const RoleEditorModal: React.FC<RoleEditorModalProps> = ({
                                 type="button"
                                 onClick={() => toggleCategory(perms, allSelected)}
                                 disabled={readOnly}
-                                className="text-xs font-medium text-brand hover:underline disabled:opacity-40 disabled:no-underline"
+                                className="text-xs font-medium text-primary hover:underline disabled:opacity-40 disabled:no-underline"
                               >
                                 {allSelected ? t('roleEditor.clearAll', 'Clear all') : t('roleEditor.selectAll', 'Select all')}
                               </button>
@@ -245,7 +245,7 @@ export const RoleEditorModal: React.FC<RoleEditorModalProps> = ({
                                       checked={checked}
                                       onChange={() => togglePerm(p.name)}
                                       disabled={readOnly}
-                                      className="mt-0.5 rounded-sm border-border text-brand focus:ring-brand"
+                                      className="mt-0.5 rounded-sm border-border text-primary focus:ring-ring"
                                     />
                                     <span className="min-w-0">
                                       <span className="block text-sm text-foreground">{p.display_name}</span>

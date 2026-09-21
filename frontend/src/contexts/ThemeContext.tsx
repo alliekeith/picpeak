@@ -3,7 +3,6 @@ import type { ReactNode } from 'react';
 import { ThemeConfig, EventTheme, GALLERY_THEME_PRESETS } from '../types/theme.types';
 import { fontsService, extractFamilyName, type FontDefinition } from '../services/fonts.service';
 import { applyForceColorMode } from '../utils/themeMigration';
-import { getReadableForeground } from '../utils/contrast';
 import { usePublicSettings } from '../hooks/usePublicSettings';
 
 // Self-hosted font loader. Resolves the available-fonts list once (cached for
@@ -126,57 +125,9 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
     // support the locked mode — accent CI colours are preserved either way.
     const themeConfig = applyForceColorMode(rawThemeConfig, forcedMode);
 
-    // Apply CSS variables — 8-token CI palette.
-    // Legacy --primary / --brand-light / --brand-dark
-    // are kept for any consumer still reading them; they mirror accent-dark.
-    if (themeConfig.primaryColor) {
-      root.style.setProperty('--primary', themeConfig.primaryColor);
-      root.style.setProperty('--brand-light', lightenColor(themeConfig.primaryColor, 20));
-      root.style.setProperty('--brand-dark', darkenColor(themeConfig.primaryColor, 20));
-    }
-
-    if (themeConfig.accentColor) {
-      root.style.setProperty('--brand', themeConfig.accentColor);
-      // Pick a readable foreground (white or black) for text/icons sitting
-      // on top of `--brand`. The gallery header Download CTA reads
-      // this via `var(--brand-foreground, #ffffff)` so a pale accent doesn't
-      // leave the button text unreadable (PR #401 review follow-up).
-      root.style.setProperty('--brand-foreground', getReadableForeground(themeConfig.accentColor));
-    }
-
-    // Accent-dark: filled CTA background. Falls back to primaryColor for
-    // legacy themes that pre-date the explicit token (matches the previous
-    // implicit behavior where .btn-primary used --primary).
-    const accentDark = themeConfig.accentDarkColor || themeConfig.primaryColor;
-    if (accentDark) {
-      root.style.setProperty('--primary', accentDark);
-      // Same readable-foreground treatment for filled CTAs (.btn-primary
-      // and .tile-selected) that paint on top of accent-dark.
-      root.style.setProperty('--primary-foreground', getReadableForeground(accentDark));
-    }
-    
-    if (themeConfig.backgroundColor) {
-      root.style.setProperty('--background', themeConfig.backgroundColor);
-
-      // Cache the resolved background by slug so the next visit can
-      // apply it from the inline bootstrap in index.html before React
-      // mounts (#358 — eliminates the white flash on dark-theme galleries).
-      try {
-        const m = window.location.pathname.match(/\/gallery\/([^/?#]+)/);
-        if (m && m[1]) {
-          localStorage.setItem(
-            `gallery-theme-bg-${decodeURIComponent(m[1])}`,
-            themeConfig.backgroundColor
-          );
-        }
-      } catch {
-        /* ignore — caching is best-effort */
-      }
-    }
-    
-    if (themeConfig.textColor) {
-      root.style.setProperty('--foreground', themeConfig.textColor);
-    }
+    // Colour tokens are no longer themeable: the palette is stock
+    // shadcn/ui, defined once in src/index.css. Only typography, radius,
+    // shadow, background pattern and custom CSS remain per-theme.
     
     if (themeConfig.fontFamily) {
       root.style.setProperty('--font-family', themeConfig.fontFamily);
@@ -231,44 +182,8 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
       root.style.setProperty('--shadow-default', shadowMap[themeConfig.shadowStyle]);
     }
     
-    // Apply surface colors
     const effectiveMode = resolveColorMode(themeConfig.colorMode);
     setResolvedColorMode(effectiveMode);
-
-    if (themeConfig.surfaceColor) {
-      root.style.setProperty('--card', themeConfig.surfaceColor);
-    } else if (effectiveMode === 'dark') {
-      // Auto-derive dark surface if not explicitly set
-      root.style.setProperty('--card', '#1a1a1a');
-    } else {
-      root.style.setProperty('--card', '#ffffff');
-    }
-
-    // Elevated: raised panels, image placeholders. Falls back to a slight
-    // shift from surface so the layering still reads on legacy themes.
-    if (themeConfig.elevatedColor) {
-      root.style.setProperty('--muted', themeConfig.elevatedColor);
-    } else if (effectiveMode === 'dark') {
-      root.style.setProperty('--muted', '#242424');
-    } else {
-      root.style.setProperty('--muted', '#f5f5f5');
-    }
-
-    if (themeConfig.surfaceBorderColor) {
-      root.style.setProperty('--border', themeConfig.surfaceBorderColor);
-    } else if (effectiveMode === 'dark') {
-      root.style.setProperty('--border', '#2e2e2e');
-    } else {
-      root.style.setProperty('--border', '#e5e5e5');
-    }
-
-    if (themeConfig.mutedTextColor) {
-      root.style.setProperty('--muted-foreground', themeConfig.mutedTextColor);
-    } else if (effectiveMode === 'dark') {
-      root.style.setProperty('--muted-foreground', '#a3a3a3');
-    } else {
-      root.style.setProperty('--muted-foreground', '#737373');
-    }
 
     // Adjust shadow intensity for dark mode
     if (themeConfig.shadowStyle) {
@@ -291,9 +206,9 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
     // Apply background pattern
     if (themeConfig.backgroundPattern && themeConfig.backgroundPattern !== 'none') {
       const patternMap = {
-        dots: `radial-gradient(circle, ${themeConfig.textColor}20 1px, transparent 1px)`,
-        grid: `linear-gradient(${themeConfig.textColor}10 1px, transparent 1px), linear-gradient(90deg, ${themeConfig.textColor}10 1px, transparent 1px)`,
-        waves: `url("data:image/svg+xml,%3Csvg width='100' height='20' viewBox='0 0 100 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M21.184 20c.357-.13.72-.264 1.088-.402l1.768-.661C33.64 15.347 39.647 14 50 14c10.271 0 15.362 1.222 24.629 4.928.955.383 1.869.74 2.75 1.072h6.225c-2.51-.73-5.139-1.691-8.233-2.928C65.888 13.278 60.562 12 50 12c-10.626 0-16.855 1.397-26.66 5.063l-1.767.662c-2.475.923-4.66 1.674-6.724 2.275h6.335zm0-20C13.258 2.892 8.077 4 0 4V2c5.744 0 9.951-.574 14.85-2h6.334zM77.38 0C85.239 2.966 90.502 4 100 4V2c-6.842 0-11.386-.542-16.396-2h-6.225zM0 14c8.44 0 13.718-1.21 22.272-4.402l1.768-.661C33.64 5.347 39.647 4 50 4c10.271 0 15.362 1.222 24.629 4.928C84.112 12.722 89.438 14 100 14v-2c-10.271 0-15.362-1.222-24.629-4.928C65.888 3.278 60.562 2 50 2 39.374 2 33.145 3.397 23.34 7.063l-1.767.662C13.223 10.84 8.163 12 0 12v2z' fill='${themeConfig.textColor}' fill-opacity='0.05'/%3E%3C/svg%3E")`,
+        dots: 'radial-gradient(circle, color-mix(in oklab, var(--foreground) 20%, transparent) 1px, transparent 1px)',
+        grid: 'linear-gradient(color-mix(in oklab, var(--foreground) 10%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in oklab, var(--foreground) 10%, transparent) 1px, transparent 1px)',
+        waves: `url("data:image/svg+xml,%3Csvg width='100' height='20' viewBox='0 0 100 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M21.184 20c.357-.13.72-.264 1.088-.402l1.768-.661C33.64 15.347 39.647 14 50 14c10.271 0 15.362 1.222 24.629 4.928.955.383 1.869.74 2.75 1.072h6.225c-2.51-.73-5.139-1.691-8.233-2.928C65.888 13.278 60.562 12 50 12c-10.626 0-16.855 1.397-26.66 5.063l-1.767.662c-2.475.923-4.66 1.674-6.724 2.275h6.335zm0-20C13.258 2.892 8.077 4 0 4V2c5.744 0 9.951-.574 14.85-2h6.334zM77.38 0C85.239 2.966 90.502 4 100 4V2c-6.842 0-11.386-.542-16.396-2h-6.225zM0 14c8.44 0 13.718-1.21 22.272-4.402l1.768-.661C33.64 5.347 39.647 4 50 4c10.271 0 15.362 1.222 24.629 4.928C84.112 12.722 89.438 14 100 14v-2c-10.271 0-15.362-1.222-24.629-4.928C65.888 3.278 60.562 2 50 2 39.374 2 33.145 3.397 23.34 7.063l-1.767.662C13.223 10.84 8.163 12 0 12v2z' fill='%23737373' fill-opacity='0.05'/%3E%3C/svg%3E")`,
       };
       root.style.setProperty('--background-pattern', patternMap[themeConfig.backgroundPattern]);
       root.style.setProperty('--background-pattern-size', themeConfig.backgroundPattern === 'dots' ? '20px 20px' : themeConfig.backgroundPattern === 'grid' ? '20px 20px' : '100px 20px');
@@ -397,29 +312,6 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
     </ThemeContext.Provider>
   );
 };
-
-// Utility functions for color manipulation
-function lightenColor(color: string, percent: number): string {
-  const num = parseInt(color.replace('#', ''), 16);
-  const amt = Math.round(2.55 * percent);
-  const R = (num >> 16) + amt;
-  const G = (num >> 8 & 0x00FF) + amt;
-  const B = (num & 0x0000FF) + amt;
-  return '#' + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
-    (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
-    (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1);
-}
-
-function darkenColor(color: string, percent: number): string {
-  const num = parseInt(color.replace('#', ''), 16);
-  const amt = Math.round(2.55 * percent);
-  const R = (num >> 16) - amt;
-  const G = (num >> 8 & 0x00FF) - amt;
-  const B = (num & 0x0000FF) - amt;
-  return '#' + (0x1000000 + (R > 0 ? R : 0) * 0x10000 +
-    (G > 0 ? G : 0) * 0x100 +
-    (B > 0 ? B : 0)).toString(16).slice(1);
-}
 
 // Re-export types
 export type { ThemeConfig, EventTheme };

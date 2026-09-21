@@ -144,7 +144,7 @@ const CreateInvitationModal: React.FC<CreateInvitationModalProps> = ({
                               setRoleId(e.target.value ? Number(e.target.value) : '');
                               setErrors((prev) => ({ ...prev, role: undefined }));
                             }}
-                            className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:border-primary"
+                            className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-primary"
                             disabled={isLoading}
                           >
                             <option value="">{t('userManagement.selectRole')}</option>
@@ -251,7 +251,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
                         <select
                           value={roleId}
                           onChange={(e) => setRoleId(e.target.value ? Number(e.target.value) : '')}
-                          className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:border-primary"
+                          className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-primary"
                           disabled={isLoading}
                         >
                           <option value="">{t('userManagement.selectRole')}</option>
@@ -633,7 +633,7 @@ export const UserManagementPage: React.FC = () => {
                               {users?.length || 0}
                             </p>
                           </div>
-                          <Users className="w-8 h-8 text-brand" />
+                          <Users className="w-8 h-8 text-primary" />
                         </div></CardContent></Card>
 
         <Card className="py-4"><CardContent className="px-4"><div className="flex items-center justify-between">
@@ -682,7 +682,7 @@ export const UserManagementPage: React.FC = () => {
               onClick={() => setActiveTab(tab.key)}
               className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors flex items-center gap-2 ${
                 activeTab === tab.key
-                  ? 'border-brand text-brand'
+                  ? 'border-primary text-primary'
                   : 'border-transparent text-muted-foreground hover:text-foreground'
               }`}
             >
@@ -810,7 +810,7 @@ export const UserManagementPage: React.FC = () => {
                                       <div className="flex items-center justify-end gap-2">
                                         <button
                                           onClick={() => handleEditUser(user)}
-                                          className="p-1.5 text-muted-foreground hover:text-brand hover:bg-primary/15 rounded-lg transition-colors"
+                                          className="p-1.5 text-muted-foreground hover:text-primary hover:bg-primary/15 rounded-lg transition-colors"
                                           title={t('userManagement.editUser')}
                                         >
                                           <Edit className="w-4 h-4" />

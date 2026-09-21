@@ -26,7 +26,7 @@ export const CustomCssCard: React.FC<CustomCssCardProps> = ({
               <button
                 type="button"
                 onClick={() => setShowCssInstructions(!showCssInstructions)}
-                className="flex items-center gap-2 text-sm text-brand hover:opacity-80 font-medium"
+                className="flex items-center gap-2 text-sm text-primary hover:opacity-80 font-medium"
               >
                 <Info className="w-4 h-4" />
                 {t('branding.cssInstructions.title', 'How to use Custom CSS')}

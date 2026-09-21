@@ -426,7 +426,7 @@ export const BrandingPage: React.FC = () => {
                             <textarea
                               value={brandingSettings.footer_text}
                               onChange={(e) => handleBrandingChange('footer_text', e.target.value)}
-                              className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500"
+                              className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-ring"
                               rows={2}
                               placeholder={`© ${new Date().getFullYear()} Your Company. All rights reserved.`}
                             />
@@ -489,7 +489,7 @@ export const BrandingPage: React.FC = () => {
                                 <select
                                   value={brandingSettings.promo_position || 'above_footer'}
                                   onChange={(e) => handleBrandingChange('promo_position', e.target.value as 'above_footer' | 'below_footer')}
-                                  className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500"
+                                  className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-ring"
                                 >
                                   <option value="above_footer">{t('branding.promo.aboveFooter', 'Above footer')}</option>
                                   <option value="below_footer">{t('branding.promo.belowFooter', 'Below footer')}</option>
@@ -504,7 +504,7 @@ export const BrandingPage: React.FC = () => {
                                 <select
                                   value={brandingSettings.promo_alignment || 'center'}
                                   onChange={(e) => handleBrandingChange('promo_alignment', e.target.value as 'left' | 'center' | 'right')}
-                                  className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500"
+                                  className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-ring"
                                 >
                                   <option value="left">{t('branding.promo.alignLeft', 'Left')}</option>
                                   <option value="center">{t('branding.promo.alignCenter', 'Center (default — matches footer)')}</option>
@@ -519,7 +519,7 @@ export const BrandingPage: React.FC = () => {
                               <textarea
                                 value={brandingSettings.promo_markdown || ''}
                                 onChange={(e) => handleBrandingChange('promo_markdown', e.target.value)}
-                                className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500 font-mono text-sm"
+                                className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-ring font-mono text-sm"
                                 rows={5}
                                 placeholder={t('branding.promo.placeholder', '**Spring offer**: 20% off prints with code SPRING — see the [print shop](https://example.com).')}
                               />
@@ -537,7 +537,7 @@ export const BrandingPage: React.FC = () => {
                                     will see (#482). */}
                                 <MarkdownContent
                                   source={brandingSettings.promo_markdown}
-                                  className={`text-sm text-foreground prose prose-sm dark:prose-invert max-w-none prose-a:text-brand-600 dark:prose-a:text-brand-400 ${
+                                  className={`text-sm text-foreground prose prose-sm dark:prose-invert max-w-none prose-a:text-primary dark:prose-a:text-primary ${
                                     brandingSettings.promo_alignment === 'left' ? 'text-left'
                                       : brandingSettings.promo_alignment === 'right' ? 'text-right'
                                       : 'text-center'
@@ -565,7 +565,7 @@ export const BrandingPage: React.FC = () => {
                               <textarea
                                 value={brandingSettings.info_markdown || ''}
                                 onChange={(e) => handleBrandingChange('info_markdown', e.target.value)}
-                                className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500 font-mono text-sm"
+                                className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-ring font-mono text-sm"
                                 rows={3}
                                 placeholder={t('branding.infoBanner.placeholder', 'Use the menu button in the top-left corner to filter the photos.')}
                               />
@@ -582,7 +582,7 @@ export const BrandingPage: React.FC = () => {
                                     classes — so the admin sees what guests will see. */}
                                 <MarkdownContent
                                   source={brandingSettings.info_markdown}
-                                  className="text-sm text-foreground prose prose-sm dark:prose-invert max-w-none prose-a:text-brand-600 dark:prose-a:text-brand-400 text-center"
+                                  className="text-sm text-foreground prose prose-sm dark:prose-invert max-w-none prose-a:text-primary dark:prose-a:text-primary text-center"
                                 />
                               </div>
                             )}
@@ -724,7 +724,7 @@ export const BrandingPage: React.FC = () => {
                               <select
                                 value={brandingSettings.logo_size || 'medium'}
                                 onChange={(e) => handleBrandingChange('logo_size', e.target.value)}
-                                className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500"
+                                className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-ring"
                               >
                                 <option value="small">{t('branding.logoSizeSmall', 'Small (32px)')}</option>
                                 <option value="medium">{t('branding.logoSizeMedium', 'Medium (48px)')}</option>
@@ -746,7 +746,7 @@ export const BrandingPage: React.FC = () => {
                                   max="200"
                                   value={brandingSettings.logo_max_height || 48}
                                   onChange={(e) => handleBrandingChange('logo_max_height', parseInt(e.target.value))}
-                                  className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500"
+                                  className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-ring"
                                 />
                                 <p className="text-xs text-muted-foreground mt-1">
                                   {t('branding.logoMaxHeightHelp', 'Set a custom maximum height for the logo (20-200 pixels)')}
@@ -797,7 +797,7 @@ export const BrandingPage: React.FC = () => {
                               <select
                                 value={brandingSettings.logo_display_mode || 'logo_and_text'}
                                 onChange={(e) => handleBrandingChange('logo_display_mode', e.target.value)}
-                                className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500"
+                                className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-ring"
                               >
                                 <option value="logo_only">{t('branding.logoOnly', 'Logo Only')}</option>
                                 <option value="text_only">{t('branding.textOnly', 'Company Name Only')}</option>
@@ -812,7 +812,7 @@ export const BrandingPage: React.FC = () => {
                                   type="checkbox"
                                   checked={brandingSettings.logo_display_header !== false}
                                   onChange={(e) => handleBrandingChange('logo_display_header', e.target.checked)}
-                                  className="rounded-sm border-border text-brand focus:ring-brand-500"
+                                  className="rounded-sm border-border text-primary focus:ring-ring"
                                 />
                                 <div>
                                   <span className="text-sm font-medium text-foreground">
@@ -829,7 +829,7 @@ export const BrandingPage: React.FC = () => {
                                   type="checkbox"
                                   checked={brandingSettings.logo_display_hero !== false}
                                   onChange={(e) => handleBrandingChange('logo_display_hero', e.target.checked)}
-                                  className="rounded-sm border-border text-brand focus:ring-brand-500"
+                                  className="rounded-sm border-border text-primary focus:ring-ring"
                                 />
                                 <div>
                                   <span className="text-sm font-medium text-foreground">
@@ -859,7 +859,7 @@ export const BrandingPage: React.FC = () => {
                                 type="checkbox"
                                 checked={brandingSettings.login_logo_frame_enabled !== false}
                                 onChange={(e) => handleBrandingChange('login_logo_frame_enabled', e.target.checked)}
-                                className="mt-0.5 rounded-sm border-border text-brand focus:ring-brand-500"
+                                className="mt-0.5 rounded-sm border-border text-primary focus:ring-ring"
                               />
                               <div>
                                 <span className="text-sm font-medium text-foreground">
@@ -882,7 +882,7 @@ export const BrandingPage: React.FC = () => {
                               <select
                                 value={brandingSettings.login_logo_size || 'medium'}
                                 onChange={(e) => handleBrandingChange('login_logo_size', e.target.value as 'small' | 'medium' | 'large' | 'xlarge')}
-                                className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500"
+                                className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-ring"
                               >
                                 <option value="small">{t('branding.loginLogo.sizeSmall', 'Small')}</option>
                                 <option value="medium">{t('branding.loginLogo.sizeMedium', 'Medium (default)')}</option>
@@ -898,7 +898,7 @@ export const BrandingPage: React.FC = () => {
                               type="checkbox"
                               checked={brandingSettings.hide_powered_by === true}
                               onChange={(e) => handleBrandingChange('hide_powered_by', e.target.checked)}
-                              className="rounded-sm border-border text-brand focus:ring-brand-500"
+                              className="rounded-sm border-border text-primary focus:ring-ring"
                             />
                             <div>
                               <span className="text-sm font-medium text-foreground">
@@ -915,7 +915,7 @@ export const BrandingPage: React.FC = () => {
                               type="checkbox"
                               checked={brandingSettings.watermark_enabled}
                               onChange={(e) => handleBrandingChange('watermark_enabled', e.target.checked)}
-                              className="rounded-sm border-border text-brand focus:ring-brand-500"
+                              className="rounded-sm border-border text-primary focus:ring-ring"
                             />
                             <div>
                               <span className="text-sm font-medium text-foreground">{t('branding.enableWatermarks')}</span>
@@ -1073,7 +1073,7 @@ export const BrandingPage: React.FC = () => {
                 type="checkbox"
                 checked={isPreviewMode}
                 onChange={(e) => setIsPreviewMode(e.target.checked)}
-                className="rounded-sm border-border text-brand focus:ring-brand-500"
+                className="rounded-sm border-border text-primary focus:ring-ring"
               />
               <span className="text-sm text-foreground">{t('branding.applyLivePreview')}</span>
             </label>

@@ -108,7 +108,7 @@ export const CategoryManager: React.FC = () => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center py-8">
-        <Loader2 className="w-6 h-6 animate-spin text-brand" />
+        <Loader2 className="w-6 h-6 animate-spin text-primary" />
       </div>
     );
   }
@@ -136,7 +136,7 @@ export const CategoryManager: React.FC = () => {
             onKeyPress={(e) => e.key === 'Enter' && handleCreate()}
             placeholder={t('categories.categoryName')}
             maxLength={100}
-            className="flex-1 px-3 py-2 border border-border rounded-md bg-card text-foreground focus:ring-2 focus:ring-brand-500"
+            className="flex-1 px-3 py-2 border border-border rounded-md bg-card text-foreground focus:ring-2 focus:ring-ring"
             autoFocus
           />
           <Button
@@ -186,7 +186,7 @@ export const CategoryManager: React.FC = () => {
                       if (e.key === 'Escape') cancelEdit();
                     }}
                     maxLength={100}
-                    className="flex-1 px-3 py-1 border border-border rounded-md bg-card text-foreground focus:ring-2 focus:ring-brand-500"
+                    className="flex-1 px-3 py-1 border border-border rounded-md bg-card text-foreground focus:ring-2 focus:ring-ring"
                     autoFocus
                   />
                   <Button
@@ -241,7 +241,7 @@ export const CategoryManager: React.FC = () => {
                   <div className="flex gap-1">
                     <button
                       onClick={() => startEdit(category)}
-                      className="p-1.5 text-muted-foreground hover:text-brand dark:hover:text-brand hover:bg-primary/15 rounded-sm transition-colors"
+                      className="p-1.5 text-muted-foreground hover:text-primary dark:hover:text-primary hover:bg-primary/15 rounded-sm transition-colors"
                       title={t('common.edit')}
                     >
                       <Edit2 className="w-4 h-4" />

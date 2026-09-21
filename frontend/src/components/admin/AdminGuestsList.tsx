@@ -327,7 +327,7 @@ export const AdminGuestsList: React.FC<AdminGuestsListProps> = ({ eventId, event
                                             aria-label={t('admin.guests.mergeInclude', 'Include {{name}} in the merge', { name: guest.name })}
                                             checked={mergeSelection.includes(guest.id)}
                                             onChange={() => toggleMergeSelection(guest.id)}
-                                            className="w-4 h-4 text-brand rounded-sm focus:ring-brand-500"
+                                            className="w-4 h-4 text-primary rounded-sm focus:ring-ring"
                                           />
                                         </td>
                                       )}
@@ -342,7 +342,7 @@ export const AdminGuestsList: React.FC<AdminGuestsListProps> = ({ eventId, event
                                             checked={keepId === guest.id}
                                             disabled={!mergeSelection.includes(guest.id)}
                                             onChange={() => setKeepId(guest.id)}
-                                            className="w-4 h-4 text-brand focus:ring-brand-500 disabled:opacity-40"
+                                            className="w-4 h-4 text-primary focus:ring-ring disabled:opacity-40"
                                           />
                                         </td>
                                       )}
@@ -389,7 +389,7 @@ export const AdminGuestsList: React.FC<AdminGuestsListProps> = ({ eventId, event
                                           <button
                                             type="button"
                                             onClick={() => setSelectedGuest(guest)}
-                                            className="p-1 text-muted-foreground hover:text-brand"
+                                            className="p-1 text-muted-foreground hover:text-primary"
                                             title={t('admin.guests.view', 'View details')}
                                           >
                                             <Eye className="w-4 h-4" />
@@ -397,7 +397,7 @@ export const AdminGuestsList: React.FC<AdminGuestsListProps> = ({ eventId, event
                                           <div className="relative group">
                                             <button
                                               type="button"
-                                              className="p-1 text-muted-foreground hover:text-brand"
+                                              className="p-1 text-muted-foreground hover:text-primary"
                                               title={t('admin.guests.export', 'Export')}
                                             >
                                               <Download className="w-4 h-4" />

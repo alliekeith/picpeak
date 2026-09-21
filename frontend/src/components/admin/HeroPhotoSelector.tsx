@@ -127,7 +127,7 @@ export const HeroPhotoSelector: React.FC<HeroPhotoSelectorProps> = ({
                                         onClick={() => handleSelect(photo.id)}
                                         className={`relative cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${
                                           photo.id === selectedPhotoId
-                                            ? 'border-primary ring-2 ring-brand-500 ring-offset-2'
+                                            ? 'border-primary ring-2 ring-ring ring-offset-2'
                                             : 'border-transparent hover:border-border'
                                         }`}
                                       >

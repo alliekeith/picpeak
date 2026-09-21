@@ -283,14 +283,14 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
        * previous max-w-3xl wrapper — it created a narrower column
        * that read as visually offset from the full-width footer
        * (#482, reported by Rekoo-PS). The `prose` class is needed
-       * for the prose-a:text-brand modifier to actually take effect
+       * for the prose-a:text-primary modifier to actually take effect
        * (modifiers without an outer .prose are no-ops in Tailwind
        * Typography).
        */}
       <div className={`container py-4 sm:py-6 px-4 ${promoTextAlignClass}`}>
         <MarkdownContent
           source={promoMarkdown}
-          className={`prose prose-sm max-w-none mx-auto text-sm text-foreground prose-a:text-brand ${promoTextAlignClass}`}
+          className={`prose prose-sm max-w-none mx-auto text-sm text-foreground prose-a:text-primary ${promoTextAlignClass}`}
         />
       </div>
     </div>
@@ -316,7 +316,7 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
       <div className="container py-3 sm:py-4 px-4">
         <MarkdownContent
           source={infoMarkdown}
-          className="prose prose-sm max-w-none text-sm text-foreground prose-a:text-brand text-center"
+          className="prose prose-sm max-w-none text-sm text-foreground prose-a:text-primary text-center"
         />
       </div>
     </div>
@@ -711,7 +711,7 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
               {t('gallery.needHelp')}{' '}
               <a
                 href={`mailto:${brandingSettings.support_email}`}
-                className="text-brand hover:opacity-80 break-all"
+                className="text-primary hover:opacity-80 break-all"
               >
                 {brandingSettings.support_email}
               </a>
@@ -737,7 +737,7 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="text-muted-foreground hover:text-brand transition-colors"
+                  className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   <Icon className="w-5 h-5" />
                 </a>

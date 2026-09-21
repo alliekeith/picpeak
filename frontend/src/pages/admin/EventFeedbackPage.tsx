@@ -212,7 +212,7 @@ export const EventFeedbackPage: React.FC = () => {
               onClick={() => setActiveTab(tab.id as any)}
               className={`flex items-center gap-2 px-1 py-2 border-b-2 font-medium text-sm transition-colors ${
                 activeTab === tab.id
-                  ? 'border-brand text-brand'
+                  ? 'border-primary text-primary'
                   : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
               }`}
             >

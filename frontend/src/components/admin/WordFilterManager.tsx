@@ -202,7 +202,7 @@ export const WordFilterManager: React.FC = () => {
                         <select
                           value={newSeverity}
                           onChange={(e) => setNewSeverity(e.target.value as any)}
-                          className="px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:outline-hidden focus:ring-2 focus:ring-brand-500"
+                          className="px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:outline-hidden focus:ring-2 focus:ring-ring"
                         >
                           <option value="low">{t('settings.moderation.severityLow', 'Low')}</option>
                           <option value="moderate">{t('settings.moderation.severityModerate', 'Moderate')}</option>
@@ -255,7 +255,7 @@ export const WordFilterManager: React.FC = () => {
                                   <select
                                     value={editSeverity}
                                     onChange={(e) => setEditSeverity(e.target.value as any)}
-                                    className="px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:outline-hidden focus:ring-2 focus:ring-brand-500"
+                                    className="px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:outline-hidden focus:ring-2 focus:ring-ring"
                                   >
                                     <option value="low">{t('settings.moderation.severityLow', 'Low')}</option>
                                     <option value="moderate">{t('settings.moderation.severityModerate', 'Moderate')}</option>
@@ -285,7 +285,7 @@ export const WordFilterManager: React.FC = () => {
                                     type="checkbox"
                                     checked={filter.is_active}
                                     onChange={() => handleToggleActive(filter)}
-                                    className="w-4 h-4 text-brand rounded-sm focus:ring-brand-500"
+                                    className="w-4 h-4 text-primary rounded-sm focus:ring-ring"
                                   />
                                   <span className="font-medium text-foreground">{filter.word}</span>
                                   <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${getSeverityBadgeClass(filter.severity)}`}>

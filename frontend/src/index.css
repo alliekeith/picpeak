@@ -19,104 +19,61 @@
  * source scanner cannot see them. v4's replacement for v3's `safelist`.
  */
 @source inline("{,sm:,lg:,xl:}grid-cols-{1..12}");
-
 /* ===================================================================
  * Design tokens
  * ===================================================================
  *
- * Structure and token names follow shadcn/ui exactly, so the unmodified
- * components in src/components/ui resolve without any adaptation:
- * `:root` / `.dark` hold raw colour values, and `@theme inline` exposes
- * them to Tailwind as --color-* utilities.
+ * Stock shadcn/ui (new-york-v4) defaults, unmodified. The values below are
+ * exactly what `shadcn init` writes: a neutral base, a near-black --primary
+ * in light mode and near-white in dark, plus the chart and sidebar token
+ * families.
  *
- * Two PicPeak-specific notes:
+ * PicPeak no longer layers its own palette on top of this. The former
+ * --brand / --brand-light / --brand-dark family and the per-instance colour
+ * branding written by ThemeContext.applyTheme() have both been removed, so
+ * these tokens are the whole colour system: what you see here is what the
+ * app renders, admin and galleries alike.
  *
- * 1. PicPeak previously kept its runtime theme values in --color-* names
- *    (--background, --brand, --primary, ...). In
- *    Tailwind 4 --color-* is Tailwind's own reserved theme namespace and
- *    shadcn claims those exact names, so the runtime values were moved
- *    out of it and onto shadcn's names (--background, --primary, ...).
- *    ThemeContext.applyTheme() writes these at runtime for per-gallery
- *    photographer branding; the values below are the pre-mount defaults.
- *
- * 2. shadcn uses `accent` for a subtle hover surface, whereas PicPeak used
- *    it for the saturated brand colour. The brand colour therefore lives
- *    on --brand (and drives --ring), and the brand CTA fill maps onto
- *    shadcn's --primary. `accent` now means what shadcn means by it.
- *
- * Colour format: the static defaults use oklch, matching shadcn. Runtime
- * branding writes hex, which is equally valid here — Tailwind 4 resolves
- * opacity modifiers such as bg-primary/90 through color-mix(), so both
- * formats support them.
+ * Typography, shadow and background-pattern branding are unaffected — those
+ * are applied through separate custom properties further down.
  */
 :root {
-  /*
-   * The built-in palette. These --default-* values are the single source of
-   * truth for "unbranded": :root points the live tokens at them, and the
-   * .unbranded-surface scope below points them back at the same values to
-   * undo whatever branding applyTheme() wrote onto <html>.
-   */
-  --default-radius: 0.5rem;
-  --default-background: oklch(0.985 0 0);
-  --default-foreground: oklch(0.145 0 0);
-  --default-card: oklch(1 0 0);
-  --default-muted: oklch(0.97 0 0);
-  --default-muted-foreground: oklch(0.556 0 0);
-  --default-border: oklch(0.922 0 0);
-  /* Brand CTA fill (#5C8762 — scrappbook.de green). */
-  --default-primary: oklch(0.5758 0.0605 145.28);
-  --default-primary-foreground: oklch(1 0 0);
-  --default-brand: oklch(0.723 0.1854 145.3);
-  --default-brand-foreground: oklch(1 0 0);
-  --default-brand-light: oklch(0.6756 0.0713 145.6);
-  --default-brand-dark: oklch(0.4989 0.0545 145.4);
+  --radius: 0.625rem;
 
-  --radius: var(--default-radius);
-
-  /*
-   * BASE tokens. ThemeContext.applyTheme() overwrites exactly these at
-   * runtime from the branding settings.
-   */
-  --background: var(--default-background);
-  --foreground: var(--default-foreground);
-  --card: var(--default-card);
-  --muted: var(--default-muted);
-  --muted-foreground: var(--default-muted-foreground);
-  --border: var(--default-border);
-
-  --primary: var(--default-primary);
-  --primary-foreground: var(--default-primary-foreground);
-
-  /*
-   * DERIVED tokens. These reference the base tokens rather than repeating
-   * values, so a theme only has to set the base set and every shadcn
-   * component still follows the branding. Without this, applyTheme() would
-   * brand `bg-card` but leave `bg-popover` at its static default, and
-   * dropdowns would stay white inside a dark gallery theme.
-   */
-  --card-foreground: var(--foreground);
-  --popover: var(--card);
-  --popover-foreground: var(--foreground);
-  --secondary: var(--muted);
-  --secondary-foreground: var(--foreground);
-  --accent: var(--muted);
-  --accent-foreground: var(--foreground);
-  --input: var(--border);
-  --ring: var(--brand);
-
-  /* Destructive is deliberately NOT brandable: a delete action should read
-   * as dangerous no matter what colours a photographer picks. */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(1 0 0);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
 
-  /*
-   * PicPeak brand tokens. Not part of shadcn's set: these carry the
-   * photographer's colour for links, focus rings and tinted chips.
-   */
-  --brand: var(--default-brand);
-  --brand-foreground: var(--default-brand-foreground);
-  --brand-light: var(--default-brand-light);
-  --brand-dark: var(--default-brand-dark);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
 
   /* Non-colour theme values written by ThemeContext.applyTheme(). */
   --font-family: 'Inter', 'Noto Sans', system-ui, -apple-system, sans-serif;
@@ -126,62 +83,40 @@
 }
 
 .dark {
-  /*
-   * Redefines the DEFAULTS rather than the live tokens, so both :root and the
-   * .unbranded-surface scope below pick dark mode up. Only the base tokens
-   * are listed; the derived ones in :root follow automatically because they
-   * are var() references.
-   */
-  --default-background: oklch(0.145 0 0);
-  --default-foreground: oklch(0.985 0 0);
-  --default-card: oklch(0.205 0 0);
-  --default-muted: oklch(0.269 0 0);
-  --default-muted-foreground: oklch(0.708 0 0);
-  --default-border: oklch(0.269 0 0);
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
 
-  --background: var(--default-background);
-  --foreground: var(--default-foreground);
-  --card: var(--default-card);
-  --muted: var(--default-muted);
-  --muted-foreground: var(--default-muted-foreground);
-  --border: var(--default-border);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
 
-  --destructive: oklch(0.637 0.237 25.331);
-  --destructive-foreground: oklch(1 0 0);
-}
-
-/*
- * Unbranded scope.
- *
- * applyTheme() writes the instance branding as inline custom properties on
- * <html>, because the page background and its pattern live on body and
- * body::before and need document-level scope. The admin panel is deliberately
- * NOT branded — it has its own dark-mode switch — so this class, set on <body>
- * for admin routes, re-points the base tokens at the built-in palette.
- * Everything inside body then resolves to the defaults, dialogs, dropdowns and
- * toasts included: those portal to body and would escape a scope placed on a
- * layout element instead.
- *
- * Only colour, radius, shadow and the background pattern are reset.
- * Typography still follows the instance setting, which is applied through a
- * separate `*` rule.
- */
-.unbranded-surface {
-  --background: var(--default-background);
-  --foreground: var(--default-foreground);
-  --card: var(--default-card);
-  --muted: var(--default-muted);
-  --muted-foreground: var(--default-muted-foreground);
-  --border: var(--default-border);
-  --primary: var(--default-primary);
-  --primary-foreground: var(--default-primary-foreground);
-  --brand: var(--default-brand);
-  --brand-foreground: var(--default-brand-foreground);
-  --brand-light: var(--default-brand-light);
-  --brand-dark: var(--default-brand-dark);
-  --radius: var(--default-radius);
-  --shadow-default: 0 4px 6px rgb(0 0 0 / 0.1);
-  --background-pattern: none;
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
 }
 
 @theme inline {
@@ -205,43 +140,28 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  --color-brand: var(--brand);
-  --color-brand-foreground: var(--brand-foreground);
-  --color-brand-light: var(--brand-light);
-  --color-brand-dark: var(--brand-dark);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 }
-
 @theme {
   --font-sans: 'Inter', 'Noto Sans', system-ui, -apple-system, sans-serif;
-
-  /*
-   * Brand green scale. Previously named primary-50..900; renamed because
-   * Tailwind 4 + shadcn need `primary` for the single CTA colour above.
-   * Values are unchanged, so every migrated call site renders identically.
-   */
-  --color-brand-50: #f0fdf4;
-  --color-brand-100: #dcfce7;
-  --color-brand-200: #bbf7d0;
-  --color-brand-300: #86efac;
-  --color-brand-400: #4ade80;
-  --color-brand-500: #22c55e;
-  --color-brand-600: #5c8762;
-  --color-brand-700: #4a6f4f;
-  --color-brand-800: #3f5d42;
-  --color-brand-900: #365238;
-
-  --color-sand-50: #fdfcfb;
-  --color-sand-100: #f7f5f2;
-  --color-sand-200: #f0ebe5;
-  --color-sand-300: #e6ddd4;
-  --color-sand-400: #d4c2b0;
-  --color-sand-500: #c2a68c;
-  --color-sand-600: #b18b68;
 
   --spacing-18: 4.5rem;
   --spacing-88: 22rem;
@@ -314,23 +234,10 @@ body {
 }
 
 @utility btn {
-  /*
-   * Button styles.
-   *
-   * Migration note: .btn-primary now binds to --primary instead
-   * of --primary. The two tokens are kept in lockstep by the
-   * customizer (handleChange syncs primaryColor → accentDarkColor) and by
-   * the migration helper (legacy themes get accentDarkColor = primaryColor),
-   * so existing instances render identically after upgrade — but new themes
-   * that set only accentDarkColor (the 8-token CI flow) now drive primary
-   * buttons correctly. White text + accent-dark fill matches the rest of
-   * the selected-state visual language (sidebar, tile-selected, segmented
-   * buttons). Hover stays on --brand-dark for the auto-darkened
-   * legacy behaviour.
-   */
+  /* Button styles. Fills with shadcn's --primary; hover darkens it. */
   @apply inline-flex items-center justify-center font-medium whitespace-nowrap transition-all duration-200 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
   border-radius: var(--radius);
-  --tw-ring-color: var(--brand);
+  --tw-ring-color: var(--ring);
   --tw-ring-offset-color: var(--background);
 }
 
@@ -340,7 +247,7 @@ body {
   @apply hover:opacity-90;
 
   &:hover {
-    background-color: var(--brand-dark);
+    background-color: color-mix(in oklab, var(--primary) 90%, black);
   }
 }
 
@@ -393,7 +300,7 @@ body {
    * own, so both overrides are gone and a branded gallery now restyles these
    * inputs without any extra scope.
    */
-  @apply flex h-10 w-full rounded-lg border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+  @apply flex h-10 w-full rounded-lg border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
   background-color: var(--card);
   border-color: var(--input);
   color: var(--foreground);
@@ -434,7 +341,7 @@ body {
 
 @utility input-themed {
   /* Gallery-specific input that uses theme variables */
-  @apply flex h-10 w-full rounded-lg border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+  @apply flex h-10 w-full rounded-lg border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
   background-color: var(--card);
   border-color: var(--border);
   color: var(--foreground);
@@ -506,42 +413,6 @@ body {
  * modifiers (bg-primary/90), which these hand-written ones did not.
  */
 
-@utility bg-brand-soft {
-  /*
-   * Low-opacity accent fills used as "icon tile" / "tinted chip"
-   * backgrounds (Features tab feature icons, Sidebar Preview pills,
-   * Customer dashboard branding card header). Picks up the admin's CI
-   * accent automatically — previously these places used Tailwind's
-   * hardcoded `brand-50` palette which stayed green regardless of
-   * branding settings.
-   *
-   * Mix weights bumped from 12% / 28% to 18% / 55% so the tint reads
-   * as "tinted" rather than "barely there" on dark backgrounds. The
-   * pill foreground intentionally falls back to a high-contrast theme
-   * colour rather than the accent itself (.text-primary on an
-   * accent-soft bg disappears because both come from the same
-   * source).
-   *
-   * color-mix is supported on every browser we ship (Chromium 111+,
-   * Safari 16.2+, Firefox 113+ — see baseline). Older browsers fall
-   * back to the var(--primary) below.
-   */
-  background-color: var(--primary);
-  background-color: color-mix(
-    in srgb,
-    var(--primary) 18%,
-    transparent
-  );
-  .dark & {
-    background-color: var(--primary);
-    background-color: color-mix(
-      in srgb,
-      var(--primary) 55%,
-      transparent
-    );
-  }
-}
-
 /*
  * Dark-mode overrides for the legacy component classes below.
  *
@@ -564,22 +435,7 @@ body {
    * level of a stylesheet — that matches the document root, so the dark
    * table and select styling was applying in light mode too.
    */
-  .dark .bg-brand-soft {
-    background-color: var(--primary);
-    background-color: color-mix(
-      in srgb,
-      var(--primary) 55%,
-      transparent
-    );
-  }
-  .dark .border-brand-soft {
-    border-color: color-mix(in srgb, var(--primary) 70%, transparent);
-  }
-  .dark .text-on-brand-soft {
-    color: #ffffff;
-  }
-
-  .dark .info-tooltip::after {
+        .dark .info-tooltip::after {
     background-color: #fafafa;
     color: #171717;
   }
@@ -658,28 +514,6 @@ body {
 
   .dark .alert-danger {
     @apply bg-red-900/30 border-red-800 text-red-200;
-  }
-}
-
-@utility border-brand-soft {
-  border-color: var(--primary);
-  border-color: color-mix(in srgb, var(--primary) 45%, transparent);
-  .dark & {
-    border-color: color-mix(in srgb, var(--primary) 70%, transparent);
-  }
-}
-
-@utility text-on-brand-soft {
-  /*
-   * Foreground for content sitting on .bg-brand-soft. Uses the
-   * theme's text token (already high-contrast against both light
-   * backgrounds and dark surfaces) instead of the accent itself —
-   * accent-on-accent-soft was the reason the Sidebar Preview pills
-   * read as "barely visible".
-   */
-  color: var(--primary);
-  .dark & {
-    color: #ffffff;
   }
 }
 
@@ -906,7 +740,7 @@ body {
 
 @utility text-gradient {
   /* Text gradient */
-  @apply bg-clip-text text-transparent bg-linear-to-r from-brand-600 to-brand-800;
+  @apply bg-clip-text text-transparent bg-linear-to-r from-foreground to-muted-foreground;
 }
 
 @utility smooth-scroll {
@@ -951,7 +785,7 @@ body {
   }
 
   &input[type='range']::-webkit-slider-thumb:hover {
-    background: var(--brand-dark);
+    background: color-mix(in oklab, var(--primary) 90%, black);
     transform: scale(1.1);
   }
 
@@ -975,7 +809,7 @@ body {
   }
 
   &input[type='range']::-moz-range-thumb:hover {
-    background: var(--brand-dark);
+    background: color-mix(in oklab, var(--primary) 90%, black);
     transform: scale(1.1);
   }
 

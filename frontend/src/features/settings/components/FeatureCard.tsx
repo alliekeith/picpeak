@@ -47,14 +47,14 @@ export const FeatureCard: React.FC<FeatureCardProps> = ({
   >
     <div className="flex items-start gap-4 p-5">
       {/* Icon tile — enabled state uses the admin's CI accent (via
-          .bg-brand-soft + .text-on-brand-soft) so it follows the
+          .bg-accent + .text-accent-foreground) so it follows the
           configured brand palette. The foreground token resolves to
           a high-contrast colour in both light and dark mode. */}
       <div
         className={clsx(
           'shrink-0 w-10 h-10 rounded-lg flex items-center justify-center',
           enabled
-            ? 'bg-brand-soft text-on-brand-soft'
+            ? 'bg-accent text-accent-foreground'
             : 'bg-muted text-muted-foreground',
         )}
       >

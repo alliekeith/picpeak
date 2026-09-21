@@ -284,7 +284,7 @@ export const AnalyticsPage: React.FC = () => {
           <select
             value={dateRange}
             onChange={(e) => setDateRange(e.target.value as any)}
-            className="px-4 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500"
+            className="px-4 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-ring"
           >
             <option value="7d">{t('analytics.last7Days')}</option>
             <option value="30d">{t('analytics.last30Days')}</option>

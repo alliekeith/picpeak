@@ -55,11 +55,11 @@ export const SidebarPreview: React.FC<SidebarPreviewProps> = ({ staged }) => {
                   className={clsx(
                     'inline-flex items-center gap-2 px-2.5 py-1.5 rounded-md text-xs font-medium border',
                     // Feature-driven pills pick up the admin's CI accent via
-                    // .bg-brand-soft / .border-brand-soft, with
-                    // .text-on-brand-soft as the legible foreground (the
+                    // .bg-accent / .border-border, with
+                    // .text-accent-foreground as the legible foreground (the
                     // accent token itself washes out on its own tint).
                     item.featureDriven
-                      ? 'border-brand-soft bg-brand-soft text-on-brand-soft'
+                      ? 'border-border bg-accent text-accent-foreground'
                       : 'border-border bg-muted text-foreground',
                   )}
                 >

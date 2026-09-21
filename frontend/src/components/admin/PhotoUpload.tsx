@@ -594,7 +594,7 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({ eventId, onUploadCompl
         <select
           value={selectedCategoryId || ''}
           onChange={(e) => setSelectedCategoryId(e.target.value ? Number(e.target.value) : null)}
-          className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-brand-500"
+          className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-ring"
         >
           <option value="">{t('upload.noCategory')}</option>
           {categories.map((category) => (
@@ -612,7 +612,7 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({ eventId, onUploadCompl
           id="replace-by-name"
           checked={replaceByName}
           onChange={(e) => setReplaceByName(e.target.checked)}
-          className="rounded-sm border-border text-brand focus:ring-brand-500"
+          className="rounded-sm border-border text-primary focus:ring-ring"
         />
         <label htmlFor="replace-by-name" className="text-sm text-foreground">
           {t('upload.replaceByName', 'Replace existing photos with same name')}

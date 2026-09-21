@@ -56,26 +56,6 @@ export const ThemePresetsCard: React.FC<ThemePresetsCardProps> = ({
                     )}
                   </div>
                   <div className="flex items-center gap-2 mt-3">
-                    <div className="flex gap-1">
-                      {/* Preview swatches: background, surface, accent-dark, accent
-                          — gives a quick read of the preset's full palette. */}
-                      <div
-                        className="w-5 h-5 rounded-full border border-border"
-                        style={{ backgroundColor: theme.config.backgroundColor }}
-                      />
-                      <div
-                        className="w-5 h-5 rounded-full border border-border"
-                        style={{ backgroundColor: theme.config.surfaceColor || theme.config.backgroundColor }}
-                      />
-                      <div
-                        className="w-5 h-5 rounded-full border border-border"
-                        style={{ backgroundColor: theme.config.accentDarkColor || theme.config.primaryColor }}
-                      />
-                      <div
-                        className="w-5 h-5 rounded-full border border-border"
-                        style={{ backgroundColor: theme.config.accentColor }}
-                      />
-                    </div>
                     {theme.config.galleryLayout && layoutIcons[theme.config.galleryLayout] && (
                       <div className="ml-auto text-muted-foreground">
                         {layoutIcons[theme.config.galleryLayout]}

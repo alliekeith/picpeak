@@ -119,7 +119,7 @@ export const ImageSecurityTab: React.FC = () => {
     <div className="space-y-6">
       {/* Default Protection Level */}
       <Card><CardContent><h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-                    <Shield className="w-5 h-5 text-brand-600" />
+                    <Shield className="w-5 h-5 text-primary" />
                     {t('settings.imageSecurity.defaultProtection', 'Default Protection Settings')}
                   </h2><p className="text-sm text-muted-foreground mb-4">
                     {t('settings.imageSecurity.defaultProtectionHelp', 'These settings apply to all new events. Individual events can override these defaults.')}
@@ -131,7 +131,7 @@ export const ImageSecurityTab: React.FC = () => {
                       <select
                         value={settings.default_protection_level}
                         onChange={(e) => handleChange('default_protection_level', e.target.value as ImageSecuritySettings['default_protection_level'])}
-                        className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                        className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-ring focus:border-primary"
                       >
                         <option value="basic">{t('events.protectionLevelBasic', 'Basic - Right-click blocking only')}</option>
                         <option value="standard">{t('events.protectionLevelStandard', 'Standard - Keyboard shortcuts blocked')}</option>
@@ -151,7 +151,7 @@ export const ImageSecurityTab: React.FC = () => {
                           max="100"
                           value={settings.default_image_quality}
                           onChange={(e) => handleChange('default_image_quality', parseInt(e.target.value) || 85)}
-                          className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                          className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-ring focus:border-primary"
                         />
                         <p className="text-xs text-muted-foreground mt-1">{t('settings.imageSecurity.imageQualityHelp', '1-100, higher = better quality')}</p>
                       </div>
@@ -163,7 +163,7 @@ export const ImageSecurityTab: React.FC = () => {
                           type="checkbox"
                           checked={settings.enable_devtools_protection}
                           onChange={(e) => handleChange('enable_devtools_protection', e.target.checked)}
-                          className="w-4 h-4 text-brand-600 border-border rounded-sm focus:ring-brand-500"
+                          className="w-4 h-4 text-primary border-border rounded-sm focus:ring-ring"
                         />
                         <Monitor className="w-4 h-4 ml-2 mr-1 text-muted-foreground" />
                         <span className="text-sm text-foreground">
@@ -176,7 +176,7 @@ export const ImageSecurityTab: React.FC = () => {
                           type="checkbox"
                           checked={settings.enable_canvas_rendering}
                           onChange={(e) => handleChange('enable_canvas_rendering', e.target.checked)}
-                          className="w-4 h-4 text-brand-600 border-border rounded-sm focus:ring-brand-500"
+                          className="w-4 h-4 text-primary border-border rounded-sm focus:ring-ring"
                         />
                         <Image className="w-4 h-4 ml-2 mr-1 text-muted-foreground" />
                         <span className="text-sm text-foreground">
@@ -202,7 +202,7 @@ export const ImageSecurityTab: React.FC = () => {
                         max="1000"
                         value={settings.max_image_requests_per_minute}
                         onChange={(e) => handleChange('max_image_requests_per_minute', parseInt(e.target.value) || 30)}
-                        className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                        className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-ring focus:border-primary"
                       />
                     </div>
 
@@ -216,7 +216,7 @@ export const ImageSecurityTab: React.FC = () => {
                         max="5000"
                         value={settings.max_image_requests_per_5_minutes}
                         onChange={(e) => handleChange('max_image_requests_per_5_minutes', parseInt(e.target.value) || 100)}
-                        className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                        className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-ring focus:border-primary"
                       />
                     </div>
 
@@ -230,7 +230,7 @@ export const ImageSecurityTab: React.FC = () => {
                         max="10000"
                         value={settings.max_image_requests_per_hour}
                         onChange={(e) => handleChange('max_image_requests_per_hour', parseInt(e.target.value) || 500)}
-                        className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                        className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-ring focus:border-primary"
                       />
                     </div>
                   </div></CardContent></Card>
@@ -250,7 +250,7 @@ export const ImageSecurityTab: React.FC = () => {
                           max="100"
                           value={settings.suspicious_activity_threshold}
                           onChange={(e) => handleChange('suspicious_activity_threshold', parseInt(e.target.value) || 10)}
-                          className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                          className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-ring focus:border-primary"
                         />
                         <p className="text-xs text-muted-foreground mt-1">{t('settings.imageSecurity.suspiciousActivityThresholdHelp', 'Violations before flagging as suspicious')}</p>
                       </div>
@@ -265,7 +265,7 @@ export const ImageSecurityTab: React.FC = () => {
                           max="500"
                           value={settings.auto_block_threshold}
                           onChange={(e) => handleChange('auto_block_threshold', parseInt(e.target.value) || 50)}
-                          className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                          className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-ring focus:border-primary"
                         />
                         <p className="text-xs text-muted-foreground mt-1">{t('settings.imageSecurity.autoBlockThresholdHelp', 'Violations before auto-blocking IP')}</p>
                       </div>
@@ -277,7 +277,7 @@ export const ImageSecurityTab: React.FC = () => {
                           type="checkbox"
                           checked={settings.security_monitoring_enabled}
                           onChange={(e) => handleChange('security_monitoring_enabled', e.target.checked)}
-                          className="w-4 h-4 text-brand-600 border-border rounded-sm focus:ring-brand-500"
+                          className="w-4 h-4 text-primary border-border rounded-sm focus:ring-ring"
                         />
                         <span className="ml-2 text-sm text-foreground">
                           {t('settings.imageSecurity.enableMonitoring', 'Enable security monitoring')}
@@ -289,7 +289,7 @@ export const ImageSecurityTab: React.FC = () => {
                           type="checkbox"
                           checked={settings.block_suspicious_ips}
                           onChange={(e) => handleChange('block_suspicious_ips', e.target.checked)}
-                          className="w-4 h-4 text-brand-600 border-border rounded-sm focus:ring-brand-500"
+                          className="w-4 h-4 text-primary border-border rounded-sm focus:ring-ring"
                         />
                         <span className="ml-2 text-sm text-foreground">
                           {t('settings.imageSecurity.blockSuspiciousIps', 'Automatically block suspicious IPs')}
@@ -301,7 +301,7 @@ export const ImageSecurityTab: React.FC = () => {
                           type="checkbox"
                           checked={settings.log_security_events_to_db}
                           onChange={(e) => handleChange('log_security_events_to_db', e.target.checked)}
-                          className="w-4 h-4 text-brand-600 border-border rounded-sm focus:ring-brand-500"
+                          className="w-4 h-4 text-primary border-border rounded-sm focus:ring-ring"
                         />
                         <span className="ml-2 text-sm text-foreground">
                           {t('settings.imageSecurity.logEvents', 'Log security events to database')}

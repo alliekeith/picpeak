@@ -144,7 +144,7 @@ export const EventTypesPage: React.FC = () => {
                         type="checkbox"
                         checked={showInactive}
                         onChange={(e) => setShowInactive(e.target.checked)}
-                        className="rounded-sm border-border text-brand focus:ring-brand-500"
+                        className="rounded-sm border-border text-primary focus:ring-ring"
                       />
                       <span className="text-sm text-foreground">
                         {t('eventTypes.showInactive', 'Show inactive')}
@@ -230,7 +230,7 @@ export const EventTypesPage: React.FC = () => {
                                 <div className="flex items-center justify-end gap-2">
                                   <button
                                     onClick={() => setEditingType(type)}
-                                    className="p-2 hover:bg-accent rounded-lg text-muted-foreground hover:text-brand"
+                                    className="p-2 hover:bg-accent rounded-lg text-muted-foreground hover:text-primary"
                                     title={t('common.edit', 'Edit')}
                                   >
                                     <Edit className="w-4 h-4" />
@@ -434,7 +434,7 @@ const EventTypeModal: React.FC<EventTypeModalProps> = ({
                           <select
                             value={form.theme_preset}
                             onChange={(e) => setForm({ ...form, theme_preset: e.target.value })}
-                            className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
+                            className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-ring focus:border-primary"
                           >
                             {Object.entries(GALLERY_THEME_PRESETS).map(([key, preset]) => (
                               <option key={key} value={key}>
@@ -451,7 +451,7 @@ const EventTypeModal: React.FC<EventTypeModalProps> = ({
                               type="checkbox"
                               checked={eventType?.is_active}
                               onChange={(e) => onSubmit({ is_active: e.target.checked })}
-                              className="rounded-sm border-border text-brand focus:ring-brand-500"
+                              className="rounded-sm border-border text-primary focus:ring-ring"
                             />
                             <span className="text-sm text-foreground">
                               {t('eventTypes.form.isActive', 'Active (visible in event creation)')}

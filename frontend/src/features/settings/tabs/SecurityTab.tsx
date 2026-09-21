@@ -67,7 +67,7 @@ export const SecurityTab: React.FC<SecurityTabProps> = ({
                       <select
                         value={securitySettings.password_complexity}
                         onChange={(e) => setSecuritySettings(prev => ({ ...prev, password_complexity: e.target.value }))}
-                        className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                        className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-primary"
                       >
                         <option value="simple">{t('settings.security.complexitySimple')}</option>
                         <option value="moderate">{t('settings.security.complexityModerate')}</option>
@@ -143,7 +143,7 @@ export const SecurityTab: React.FC<SecurityTabProps> = ({
 
                     <div className="p-4 bg-muted border border-border rounded-lg">
                       <div className="flex items-start gap-3">
-                        <ShieldCheck className="w-5 h-5 text-brand-600 dark:text-brand-400 shrink-0 mt-0.5" />
+                        <ShieldCheck className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                         <div className="text-sm text-foreground">
                           <p className="font-medium text-foreground">{t('settings.security.twoFactorTitle')}</p>
                           <p className="mt-1">{t('settings.security.twoFactorNote')}</p>
@@ -160,7 +160,7 @@ export const SecurityTab: React.FC<SecurityTabProps> = ({
                         type="checkbox"
                         checked={rateLimitSettings.rate_limit_enabled}
                         onChange={(e) => setRateLimit('rate_limit_enabled', e.target.checked)}
-                        className="w-4 h-4 text-brand-600 rounded-sm focus:ring-brand-500"
+                        className="w-4 h-4 text-primary rounded-sm focus:ring-ring"
                       />
                       <span className="ml-2 text-sm text-foreground">{t('settings.security.rateLimitEnabled')}</span>
                     </label>
@@ -176,7 +176,7 @@ export const SecurityTab: React.FC<SecurityTabProps> = ({
                         type="checkbox"
                         checked={rateLimitSettings.rate_limit_skip_authenticated}
                         onChange={(e) => setRateLimit('rate_limit_skip_authenticated', e.target.checked)}
-                        className="mt-0.5 w-4 h-4 text-brand-600 rounded-sm focus:ring-brand-500"
+                        className="mt-0.5 w-4 h-4 text-primary rounded-sm focus:ring-ring"
                       />
                       <span className="ml-2 text-sm text-foreground">
                         {t('settings.security.rateLimitSkipAuthenticated')}
@@ -189,7 +189,7 @@ export const SecurityTab: React.FC<SecurityTabProps> = ({
                         type="checkbox"
                         checked={rateLimitSettings.rate_limit_public_endpoints_only}
                         onChange={(e) => setRateLimit('rate_limit_public_endpoints_only', e.target.checked)}
-                        className="mt-0.5 w-4 h-4 text-brand-600 rounded-sm focus:ring-brand-500"
+                        className="mt-0.5 w-4 h-4 text-primary rounded-sm focus:ring-ring"
                       />
                       <span className="ml-2 text-sm text-foreground">
                         {t('settings.security.rateLimitPublicOnly')}
@@ -209,7 +209,7 @@ export const SecurityTab: React.FC<SecurityTabProps> = ({
                         type="checkbox"
                         checked={securitySettings.gallery_password_recoverable}
                         onChange={(e) => setSecuritySettings(prev => ({ ...prev, gallery_password_recoverable: e.target.checked }))}
-                        className="w-4 h-4 mt-0.5 text-brand-600 rounded-sm focus:ring-brand-500"
+                        className="w-4 h-4 mt-0.5 text-primary rounded-sm focus:ring-ring"
                       />
                       <span className="ml-2 text-sm text-foreground">
                         <span className="block font-medium text-foreground">{t('settings.security.galleryPasswordRecoverable')}</span>
@@ -237,7 +237,7 @@ export const SecurityTab: React.FC<SecurityTabProps> = ({
                         type="checkbox"
                         checked={securitySettings.enable_recaptcha}
                         onChange={(e) => setSecuritySettings(prev => ({ ...prev, enable_recaptcha: e.target.checked }))}
-                        className="w-4 h-4 text-brand-600 rounded-sm focus:ring-brand-500"
+                        className="w-4 h-4 text-primary rounded-sm focus:ring-ring"
                       />
                       <span className="ml-2 text-sm text-foreground">{t('settings.security.enableRecaptcha')}</span>
                     </label>

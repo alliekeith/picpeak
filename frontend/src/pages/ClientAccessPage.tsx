@@ -167,7 +167,7 @@ export const ClientAccessPage: React.FC = () => {
                   {t('clientAccess.guestHint')}{' '}
                   <Link
                     to={`/gallery/${slug}`}
-                    className="text-brand-600 dark:text-brand-400 hover:underline"
+                    className="text-primary hover:underline"
                   >
                     {t('clientAccess.guestLink')}
                   </Link>

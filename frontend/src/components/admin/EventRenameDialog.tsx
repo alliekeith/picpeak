@@ -197,7 +197,7 @@ export const EventRenameDialog: React.FC<EventRenameDialogProps> = ({
                     // Renaming in progress
                     <div className="space-y-4 py-8">
                       <div className="flex flex-col items-center gap-4">
-                        <Loader2 className="w-10 h-10 text-brand animate-spin" />
+                        <Loader2 className="w-10 h-10 text-primary animate-spin" />
                         <p className="text-foreground font-medium">{renameStatus}</p>
                       </div>
                     </div>
@@ -256,7 +256,7 @@ export const EventRenameDialog: React.FC<EventRenameDialogProps> = ({
                               type="checkbox"
                               checked={resendEmail}
                               onChange={(e) => setResendEmail(e.target.checked)}
-                              className="mt-1 w-4 h-4 text-brand border-border rounded-sm focus:ring-brand-500"
+                              className="mt-1 w-4 h-4 text-primary border-border rounded-sm focus:ring-ring"
                             />
                             <div>
                               <span className="text-sm font-medium text-foreground flex items-center gap-1">

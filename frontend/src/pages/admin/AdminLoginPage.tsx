@@ -344,7 +344,7 @@ export const AdminLoginPage: React.FC = () => {
                                 type="checkbox"
                                 checked={rememberMe}
                                 onChange={(e) => setRememberMe(e.target.checked)}
-                                className="w-4 h-4 text-brand border-border rounded-sm focus:ring-brand-500"
+                                className="w-4 h-4 text-primary border-border rounded-sm focus:ring-ring"
                               />
                               <span className="ml-2 text-sm text-foreground">{t('adminLogin.rememberMe')}</span>
                             </label>
@@ -394,7 +394,7 @@ export const AdminLoginPage: React.FC = () => {
                         ) : (
                         <form onSubmit={handleMfaSubmit} className="space-y-6">
                           <div className="text-center">
-                            <div className="mx-auto mb-3 w-12 h-12 rounded-full flex items-center justify-center bg-brand-50 dark:bg-brand-900/30">
+                            <div className="mx-auto mb-3 w-12 h-12 rounded-full flex items-center justify-center bg-accent">
                               <ShieldCheck className="w-6 h-6" style={{ color: 'var(--primary, #5C8762)' }} />
                             </div>
                             <h2 className="text-lg font-semibold" style={{ color: 'var(--foreground, #171717)' }}>

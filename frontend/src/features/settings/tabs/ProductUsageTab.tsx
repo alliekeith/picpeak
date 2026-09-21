@@ -289,7 +289,7 @@ export default function ProductUsageTab() {
                                 href={portalUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-sm text-brand-600 dark:text-brand-400 hover:underline self-center"
+                                className="text-sm text-primary hover:underline self-center"
                               >
                                 {t('productUsage.portalReady')}
                               </a>
@@ -307,7 +307,7 @@ export default function ProductUsageTab() {
                           </a>
                         )}
                         <a
-                          className="text-sm text-brand-600 dark:text-brand-400 hover:underline self-center"
+                          className="text-sm text-primary hover:underline self-center"
                           href={`${data.collector_url}/transparency`}
                           target="_blank"
                           rel="noreferrer"

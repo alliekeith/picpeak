@@ -43,7 +43,7 @@ export const WelcomeMessageEditor: React.FC<WelcomeMessageEditorProps> = ({
           onChange={handleChange}
           placeholder={placeholder}
           rows={rows}
-          className="w-full px-3 py-2 border border-border bg-card text-foreground placeholder-neutral-400 dark:placeholder-neutral-500 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary transition-colors resize-none font-mono text-sm"
+          className="w-full px-3 py-2 border border-border bg-card text-foreground placeholder-neutral-400 dark:placeholder-neutral-500 rounded-lg focus:ring-2 focus:ring-ring focus:border-primary transition-colors resize-none font-mono text-sm"
         />
         <div className="absolute top-2 right-2 text-muted-foreground" title="Line breaks will be preserved in emails">
           <HelpCircle className="w-4 h-4" aria-hidden="true" />
