@@ -14,7 +14,6 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import { Clock, ChevronRight, AlertTriangle } from 'lucide-react';
-import { Card } from '../../../components/common';
 import { HoursSection } from '../../../components/admin/HoursSection';
 import {
   CustomerPicker,
@@ -27,6 +26,7 @@ import {
 } from '../../../services/customerAdmin.service';
 import { businessProfileService } from '../../../services/businessProfile.service';
 import { formatMoneyMinor } from '../../../utils/money';
+import { Card, CardContent } from "@/components/ui/card";
 
 /** Build a display label matching the CustomerPicker convention. */
 function summaryLabel(r: UnbilledHoursSummaryRow): string {
@@ -111,118 +111,109 @@ export const HoursLoggingPage: React.FC = () => {
         </div>
       </div>
 
-      <Card padding="lg">
-        <label className="block text-sm font-medium text-neutral-900 dark:text-neutral-100 mb-2">
-          {t('hoursLogging.pickCustomer', 'Customer')}
-        </label>
-        <CustomerPicker
-          value={selectedId}
-          label={customerLabel}
-          isPassive={customerIsPassive}
-          requireFeature="hoursLogging"
-          onSelect={(c: CustomerSummary) => {
-            setSelectedId(c.id);
-            setCustomerLabel(
-              c.companyName
-                || [c.firstName, c.lastName].filter(Boolean).join(' ')
-                || c.displayName
-                || c.email
-                || `#${c.id}`,
-            );
-            setCustomerIsPassive(Boolean(c.isPassive));
-            setCustomerHoursAllowed(c.featureHoursLogging !== false);
-          }}
-          onCreate={(c: CustomerAccountDetail) => {
-            setSelectedId(c.id);
-            setCustomerLabel(c.companyName || c.displayName || c.email || `#${c.id}`);
-            setCustomerIsPassive(Boolean(c.isPassive));
-            setCustomerHoursAllowed(c.featureHoursLogging !== false);
-          }}
-          onClear={() => {
-            setSelectedId(null);
-            setCustomerLabel('');
-            setCustomerIsPassive(false);
-            setCustomerHoursAllowed(true);
-          }}
-          searchPlaceholder={t('hoursLogging.searchPlaceholder',
-            'Search by email or company…') as string}
-        />
-        {selectedId && !customerHoursAllowed && (
-          <p className="mt-2 text-xs text-amber-700 dark:text-amber-300">
-            {t('hoursLogging.customerLoggingDisabled',
-              "This customer has hour logging disabled. Enable it on the customer's detail page to log hours.")}
-          </p>
-        )}
-      </Card>
+      <Card className="py-8"><CardContent className="px-8"><label className="block text-sm font-medium text-neutral-900 dark:text-neutral-100 mb-2">
+                    {t('hoursLogging.pickCustomer', 'Customer')}
+                  </label><CustomerPicker
+                    value={selectedId}
+                    label={customerLabel}
+                    isPassive={customerIsPassive}
+                    requireFeature="hoursLogging"
+                    onSelect={(c: CustomerSummary) => {
+                      setSelectedId(c.id);
+                      setCustomerLabel(
+                        c.companyName
+                          || [c.firstName, c.lastName].filter(Boolean).join(' ')
+                          || c.displayName
+                          || c.email
+                          || `#${c.id}`,
+                      );
+                      setCustomerIsPassive(Boolean(c.isPassive));
+                      setCustomerHoursAllowed(c.featureHoursLogging !== false);
+                    }}
+                    onCreate={(c: CustomerAccountDetail) => {
+                      setSelectedId(c.id);
+                      setCustomerLabel(c.companyName || c.displayName || c.email || `#${c.id}`);
+                      setCustomerIsPassive(Boolean(c.isPassive));
+                      setCustomerHoursAllowed(c.featureHoursLogging !== false);
+                    }}
+                    onClear={() => {
+                      setSelectedId(null);
+                      setCustomerLabel('');
+                      setCustomerIsPassive(false);
+                      setCustomerHoursAllowed(true);
+                    }}
+                    searchPlaceholder={t('hoursLogging.searchPlaceholder',
+                      'Search by email or company…') as string}
+                  />{selectedId && !customerHoursAllowed && (
+                    <p className="mt-2 text-xs text-amber-700 dark:text-amber-300">
+                      {t('hoursLogging.customerLoggingDisabled',
+                        "This customer has hour logging disabled. Enable it on the customer's detail page to log hours.")}
+                    </p>
+                  )}</CardContent></Card>
 
       {!selectedId && (
-        <Card padding="lg">
-          <div className="flex items-center gap-2 mb-1">
-            <Clock className="w-4 h-4 text-neutral-500 dark:text-neutral-400" />
-            <h2 className="text-base font-semibold text-neutral-900 dark:text-neutral-100">
-              {t('hoursLogging.openHours.title', 'Open hours across all customers')}
-            </h2>
-          </div>
-          <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
-            {t('hoursLogging.openHours.subtitle',
-              'Unbilled time blocks waiting to be billed. Pick a customer above, or click a row to drill in.')}
-          </p>
-
-          {summaryLoading ? (
-            <p className="text-sm text-neutral-500 dark:text-neutral-400 py-6 text-center">
-              {t('common.loading', 'Loading…')}
-            </p>
-          ) : summary.length === 0 ? (
-            <p className="text-sm text-neutral-500 dark:text-neutral-400 py-6 text-center">
-              {t('hoursLogging.openHours.empty',
-                'No unbilled hours right now — everything is billed or no time has been logged yet.')}
-            </p>
-          ) : (
-            <div className="divide-y divide-neutral-200 dark:divide-neutral-700">
-              {summary.map((r) => (
-                <button
-                  key={r.customerAccountId}
-                  type="button"
-                  onClick={() => selectFromSummary(r)}
-                  className="w-full flex items-center justify-between gap-4 py-3 text-left hover:bg-neutral-50 dark:hover:bg-neutral-800/60 rounded-md px-2 -mx-2 transition-colors"
-                >
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium text-neutral-900 dark:text-neutral-100 truncate">{summaryLabel(r)}</span>
-                      {r.isPassive && (
-                        <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-sm bg-neutral-100 text-neutral-600 dark:bg-neutral-700 dark:text-neutral-300">
-                          {t('hoursLogging.openHours.passive', 'Passive')}
-                        </span>
-                      )}
-                    </div>
-                    <div className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
-                      {t('hoursLogging.openHours.entryLine', {
-                        count: r.entryCount,
-                        hours: (r.totalMinutes / 60).toFixed(2),
-                        defaultValue: '{{count}} entries · {{hours}}h',
-                      })}
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3 shrink-0">
-                    <div className="text-right">
-                      {r.rateResolvable ? (
-                        <div className="font-semibold text-neutral-900 dark:text-neutral-100 tabular-nums">
-                          {formatMoneyMinor(r.openAmountMinor, currency)}
-                        </div>
-                      ) : (
-                        <div className="flex items-center gap-1 text-amber-700 dark:text-amber-300 text-xs">
-                          <AlertTriangle className="w-3.5 h-3.5" />
-                          {t('hoursLogging.openHours.needsRate', 'Rate not set')}
-                        </div>
-                      )}
-                    </div>
-                    <ChevronRight className="w-4 h-4 text-neutral-500 dark:text-neutral-400" />
-                  </div>
-                </button>
-              ))}
-            </div>
-          )}
-        </Card>
+        <Card className="py-8"><CardContent className="px-8"><div className="flex items-center gap-2 mb-1">
+                          <Clock className="w-4 h-4 text-neutral-500 dark:text-neutral-400" />
+                          <h2 className="text-base font-semibold text-neutral-900 dark:text-neutral-100">
+                            {t('hoursLogging.openHours.title', 'Open hours across all customers')}
+                          </h2>
+                        </div><p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
+                          {t('hoursLogging.openHours.subtitle',
+                            'Unbilled time blocks waiting to be billed. Pick a customer above, or click a row to drill in.')}
+                        </p>{summaryLoading ? (
+                          <p className="text-sm text-neutral-500 dark:text-neutral-400 py-6 text-center">
+                            {t('common.loading', 'Loading…')}
+                          </p>
+                        ) : summary.length === 0 ? (
+                          <p className="text-sm text-neutral-500 dark:text-neutral-400 py-6 text-center">
+                            {t('hoursLogging.openHours.empty',
+                              'No unbilled hours right now — everything is billed or no time has been logged yet.')}
+                          </p>
+                        ) : (
+                          <div className="divide-y divide-neutral-200 dark:divide-neutral-700">
+                            {summary.map((r) => (
+                              <button
+                                key={r.customerAccountId}
+                                type="button"
+                                onClick={() => selectFromSummary(r)}
+                                className="w-full flex items-center justify-between gap-4 py-3 text-left hover:bg-neutral-50 dark:hover:bg-neutral-800/60 rounded-md px-2 -mx-2 transition-colors"
+                              >
+                                <div className="min-w-0">
+                                  <div className="flex items-center gap-2">
+                                    <span className="font-medium text-neutral-900 dark:text-neutral-100 truncate">{summaryLabel(r)}</span>
+                                    {r.isPassive && (
+                                      <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-sm bg-neutral-100 text-neutral-600 dark:bg-neutral-700 dark:text-neutral-300">
+                                        {t('hoursLogging.openHours.passive', 'Passive')}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+                                    {t('hoursLogging.openHours.entryLine', {
+                                      count: r.entryCount,
+                                      hours: (r.totalMinutes / 60).toFixed(2),
+                                      defaultValue: '{{count}} entries · {{hours}}h',
+                                    })}
+                                  </div>
+                                </div>
+                                <div className="flex items-center gap-3 shrink-0">
+                                  <div className="text-right">
+                                    {r.rateResolvable ? (
+                                      <div className="font-semibold text-neutral-900 dark:text-neutral-100 tabular-nums">
+                                        {formatMoneyMinor(r.openAmountMinor, currency)}
+                                      </div>
+                                    ) : (
+                                      <div className="flex items-center gap-1 text-amber-700 dark:text-amber-300 text-xs">
+                                        <AlertTriangle className="w-3.5 h-3.5" />
+                                        {t('hoursLogging.openHours.needsRate', 'Rate not set')}
+                                      </div>
+                                    )}
+                                  </div>
+                                  <ChevronRight className="w-4 h-4 text-neutral-500 dark:text-neutral-400" />
+                                </div>
+                              </button>
+                            ))}
+                          </div>
+                        )}</CardContent></Card>
       )}
 
       {selectedId && customerHoursAllowed && (

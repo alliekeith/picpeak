@@ -3,12 +3,13 @@ import type { TFunction } from 'i18next';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { X, Plus, FileText } from 'lucide-react';
-import { Button, Loading } from '../../../components/common';
+import { Loading } from '../../../components/common';
 import { CustomerPicker } from '../../../components/admin/CustomerPicker';
 import { customerAdminService } from '../../../services/customerAdmin.service';
 import { quotesService } from '../../../services/quotes.service';
 import { contractsService } from '../../../services/contracts.service';
 import { billsService } from '../../../services/bills.service';
+import { Button } from "@/components/ui/button";
 
 /**
  * From a customer message: resolve (or pick/create) the customer, then either
@@ -132,9 +133,8 @@ export const DocumentActionModal: React.FC<{
 
           {customer && (
             <>
-              <Button variant="primary" onClick={createNew} leftIcon={<Plus className="w-4 h-4" />} className="w-full justify-center">
-                {t('messages.createNewDoc', 'Create new {{label}}', { label: t(`messages.doc.${docType}`, cfg.label) })}
-              </Button>
+              <Button onClick={createNew} className="w-full justify-center">
+                                          <Plus className="w-4 h-4" />{t('messages.createNewDoc', 'Create new {{label}}', { label: t(`messages.doc.${docType}`, cfg.label) })}</Button>
 
               {cfg.hasExisting && (
                 <div>

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { X, ArrowLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Button, Input } from '../common';
 import { useGuestIdentity } from '../../contexts/GuestIdentityContext';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 /**
  * Email-based identity recovery flow (Phase 3.2).
@@ -134,16 +136,15 @@ export const GuestRecoveryModal: React.FC = () => {
 
         {step === 'email' ? (
           <form onSubmit={handleRequestCode} className="space-y-4">
-            <Input
-              type="email"
-              label={t('gallery.guestRecovery.emailLabel', 'Email')}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              autoFocus
-              required
-            />
-            <Button type="submit" variant="primary" className="w-full" disabled={submitting}>
+            <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('gallery.guestRecovery.emailLabel', 'Email')}</span><Input
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    placeholder="you@example.com"
+                                    autoFocus
+                                    required
+                                  /></Label></div>
+            <Button type="submit" className="w-full" disabled={submitting}>
               {submitting
                 ? t('common.submitting', 'Submitting...')
                 : t('gallery.guestRecovery.sendCode', 'Send code')}
@@ -151,16 +152,15 @@ export const GuestRecoveryModal: React.FC = () => {
           </form>
         ) : (
           <form onSubmit={handleVerify} className="space-y-4">
-            <Input
-              label={t('gallery.guestRecovery.codeLabel', 'Verification code')}
-              value={code}
-              onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-              placeholder="123456"
-              maxLength={6}
-              autoFocus
-              required
-            />
-            <Button type="submit" variant="primary" className="w-full" disabled={submitting}>
+            <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('gallery.guestRecovery.codeLabel', 'Verification code')}</span><Input
+                                        value={code}
+                                        onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                                        placeholder="123456"
+                                        maxLength={6}
+                                        autoFocus
+                                        required
+                                      /></Label></div>
+            <Button type="submit" className="w-full" disabled={submitting}>
               {submitting
                 ? t('common.submitting', 'Submitting...')
                 : t('gallery.guestRecovery.verifyCode', 'Verify and continue')}

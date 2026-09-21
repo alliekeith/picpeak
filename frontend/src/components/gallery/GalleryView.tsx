@@ -6,8 +6,6 @@ import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { differenceInDays, parseISO } from 'date-fns';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-
-import { Button } from '../common';
 import { GallerySkeleton } from './GallerySkeleton';
 import { PasswordChangeRequiredNotice } from './PasswordChangeRequiredNotice';
 import { isAdminSessionExpired, isPasswordChangeRequired } from '../../utils/passwordChangeRequired';
@@ -46,6 +44,7 @@ import { usePublicSettings } from '../../hooks/usePublicSettings';
 import type { Photo } from '../../types';
 import { GALLERY_THEME_PRESETS } from '../../types/theme.types';
 import { useQueryClient } from '@tanstack/react-query';
+import { Button } from "@/components/ui/button";
 
 interface GalleryViewProps {
   slug: string;
@@ -875,13 +874,10 @@ export const GalleryView: React.FC<GalleryViewProps> = ({ slug, event, requiresP
                 {t('gallery.revealUploadHint', 'You can already add your own photos to the collection:')}
               </p>
               <Button
-                variant="primary"
-                size="lg"
-                leftIcon={<Upload className="w-5 h-5" />}
-                onClick={() => setShowUploadModal(true)}
-              >
-                {t('upload.uploadPhotos', 'Upload Photos')}
-              </Button>
+                                        size="lg"
+                                        onClick={() => setShowUploadModal(true)}
+                                      >
+                                        <Upload className="w-5 h-5" />{t('upload.uploadPhotos', 'Upload Photos')}</Button>
             </div>
           )}
         </div>
@@ -951,21 +947,19 @@ export const GalleryView: React.FC<GalleryViewProps> = ({ slug, event, requiresP
       </span>
       {allowDownloads && folderDownloadableIds.length > 0 && (
         <Button
-          variant="outline"
-          size="sm"
-          onClick={handleDownloadFolder}
-          leftIcon={<Download className="w-4 h-4" />}
-          className="ml-auto"
-        >
-          {folderDownloadCapped
-            ? t('gallery.downloadFolderCapped', 'Download first {{limit}} of {{total}}', {
-                limit: SELECTED_DOWNLOAD_LIMIT,
-                total: folderDownloadableIds.length,
-              })
-            : t('gallery.downloadFolder', 'Download folder ({{count}})', {
-                count: folderDownloadableIds.length,
-              })}
-        </Button>
+                        variant="outline"
+                        size="sm"
+                        onClick={handleDownloadFolder}
+                        className="ml-auto"
+                      >
+                        <Download className="w-4 h-4" />{folderDownloadCapped
+                          ? t('gallery.downloadFolderCapped', 'Download first {{limit}} of {{total}}', {
+                              limit: SELECTED_DOWNLOAD_LIMIT,
+                              total: folderDownloadableIds.length,
+                            })
+                          : t('gallery.downloadFolder', 'Download folder ({{count}})', {
+                              count: folderDownloadableIds.length,
+                            })}</Button>
       )}
     </div>
   ) : (
@@ -1025,18 +1019,16 @@ export const GalleryView: React.FC<GalleryViewProps> = ({ slug, event, requiresP
                 breadcrumb already offers that folder's download. */}
             {!openFolder && allowDownloads && !hasRestrictedCategory && (
               <Button
-                variant="outline"
-                size="sm"
-                onClick={handleDownloadAll}
-                disabled={downloadAllMutation.isPending}
-                leftIcon={<Download className="w-4 h-4" />}
-                // No ml-auto: the right of this band belongs to Story's fixed
-                // nav (logout, favourites), and pushing the button over there
-                // physically covers those controls.
-                className="pointer-events-auto"
-              >
-                {t('gallery.downloadEverything', 'Download all photos')}
-              </Button>
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={handleDownloadAll}
+                                        disabled={downloadAllMutation.isPending}
+                                        // No ml-auto: the right of this band belongs to Story's fixed
+                                        // nav (logout, favourites), and pushing the button over there
+                                        // physically covers those controls.
+                                        className="pointer-events-auto"
+                                      >
+                                        <Download className="w-4 h-4" />{t('gallery.downloadEverything', 'Download all photos')}</Button>
             )}
           </div>
         )}
@@ -1257,16 +1249,13 @@ export const GalleryView: React.FC<GalleryViewProps> = ({ slug, event, requiresP
           if (allowUploads) {
             items.push(
               <Button
-                key="upload-button"
-                variant="outline"
-                size="sm"
-                leftIcon={<Upload className="w-4 h-4" />}
-                onClick={() => setShowUploadModal(true)}
-                className={!showSidebar ? 'flex-1 sm:flex-initial' : ''}
-              >
-                <span className="hidden sm:inline">{t('upload.uploadPhotos')}</span>
-                <span className="sm:hidden">{t('common.upload')}</span>
-              </Button>
+                                key="upload-button"
+                                variant="outline"
+                                size="sm"
+                                onClick={() => setShowUploadModal(true)}
+                                className={!showSidebar ? 'flex-1 sm:flex-initial' : ''}
+                              >
+                                <Upload className="w-4 h-4" /><span className="hidden sm:inline">{t('upload.uploadPhotos')}</span><span className="sm:hidden">{t('common.upload')}</span></Button>
             );
           }
           
@@ -1294,21 +1283,17 @@ export const GalleryView: React.FC<GalleryViewProps> = ({ slug, event, requiresP
               {isSelectionMode && selectedPhotos.size > 0 && (
                 <div className="flex items-center gap-2">
                   <Button
-                    variant="outline"
-                    size="sm"
-                    leftIcon={<EyeOff className="w-4 h-4" />}
-                    onClick={() => handleBulkVisibility('hidden')}
-                  >
-                    {t('clientAccess.hideSelected')}
-                  </Button>
+                                                          variant="outline"
+                                                          size="sm"
+                                                          onClick={() => handleBulkVisibility('hidden')}
+                                                        >
+                                                          <EyeOff className="w-4 h-4" />{t('clientAccess.hideSelected')}</Button>
                   <Button
-                    variant="outline"
-                    size="sm"
-                    leftIcon={<Eye className="w-4 h-4" />}
-                    onClick={() => handleBulkVisibility('visible')}
-                  >
-                    {t('clientAccess.showSelected')}
-                  </Button>
+                                                          variant="outline"
+                                                          size="sm"
+                                                          onClick={() => handleBulkVisibility('visible')}
+                                                        >
+                                                          <Eye className="w-4 h-4" />{t('clientAccess.showSelected')}</Button>
                 </div>
               )}
             </div>

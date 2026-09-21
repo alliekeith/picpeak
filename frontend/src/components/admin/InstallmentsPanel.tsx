@@ -26,9 +26,11 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Trash2, Plus } from 'lucide-react';
-import { Button, Input, LocalizedDateInput } from '../common';
+import { LocalizedDateInput } from '../common';
 import type { PaymentTermInstallment } from '../../services/quotes.service';
 import { useInstallmentDefaults } from '../../hooks/useInstallmentDefaults';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export type InstallmentPlan = PaymentTermInstallment[];
 
@@ -292,15 +294,13 @@ export const InstallmentsPanel: React.FC<InstallmentsPanelProps> = ({
 
           <div className="flex items-center justify-between mt-3">
             <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={addRow}
-              disabled={disabled || totalPercent >= 100}
-              leftIcon={<Plus className="w-4 h-4" />}
-            >
-              {t('installments.addRow', 'Add installment')}
-            </Button>
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={addRow}
+                                    disabled={disabled || totalPercent >= 100}
+                                  >
+                                    <Plus className="w-4 h-4" />{t('installments.addRow', 'Add installment')}</Button>
             <div className={`text-sm font-medium ${isValid ? 'text-green-700 dark:text-green-300' : 'text-red-700 dark:text-red-300'}`}>
               {t('installments.total', 'Total')}: {totalPercent.toFixed(2)}%
               {!isValid && ` — ${t('installments.mustSumTo100', 'must sum to 100%')}`}

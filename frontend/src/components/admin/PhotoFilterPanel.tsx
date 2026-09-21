@@ -2,8 +2,8 @@ import React from 'react';
 import { Star, Heart, Bookmark, MessageCircle, Filter, X } from 'lucide-react';
 import { COLOR_LABELS, COLOR_LABEL_SWATCHES, type ColorLabel } from '../../services/feedback.service';
 import { useTranslation } from 'react-i18next';
-import { Button } from '../common';
 import { FeedbackFilters, FilterSummary } from '../../services/photos.service';
+import { Button } from "@/components/ui/button";
 
 interface PhotoFilterPanelProps {
   filters: FeedbackFilters;
@@ -95,13 +95,11 @@ export const PhotoFilterPanel: React.FC<PhotoFilterPanelProps> = ({
         </h3>
         {hasActiveFilters && (
           <Button
-            variant="ghost"
-            size="sm"
-            onClick={clearFilters}
-            leftIcon={<X className="w-3 h-3" />}
-          >
-            {t('filter.clear', 'Clear')}
-          </Button>
+                              variant="ghost"
+                              size="sm"
+                              onClick={clearFilters}
+                            >
+                              <X className="w-3 h-3" />{t('filter.clear', 'Clear')}</Button>
         )}
       </div>
 

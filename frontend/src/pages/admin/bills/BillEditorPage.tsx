@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft, Eye, Save as SaveIcon } from 'lucide-react';
-import { Button, Card, Loading, Input, LocalizedDateInput, TimeField } from '../../../components/common';
+import { Loading, LocalizedDateInput, TimeField } from '../../../components/common';
 import { billsService, type InvoiceCreatePayload, type InvoiceQrFormat } from '../../../services/bills.service';
 import { quotesService } from '../../../services/quotes.service';
 import { contractsService } from '../../../services/contracts.service';
@@ -27,6 +27,10 @@ import { userManagementService } from '../../../services/userManagement.service'
 import { settingsService } from '../../../services/settings.service';
 import { useAdminAuth } from '../../../contexts/AdminAuthContext';
 import { toast } from 'react-toastify';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 function toMinor(amount: number) {
   return Math.round((Number(amount) || 0) * 100);
@@ -506,30 +510,27 @@ export const BillEditorPage: React.FC = () => {
         </div>
       </div>
 
-      <Card>
-        <h3 className="font-semibold mb-2">{t('bills.section.customer', 'Customer')}</h3>
-        <CustomerPicker
-          value={customerId}
-          label={customerLabel}
-          isPassive={customerIsPassive}
-          onSelect={(c) => {
-            setCustomerId(c.id);
-            setCustomerLabel(c.companyName || c.displayName || c.email);
-            setCustomerIsPassive(Boolean(c.isPassive));
-          }}
-          onCreate={(c) => {
-            setCustomerId(c.id);
-            setCustomerLabel(c.companyName || c.displayName || c.email);
-            setCustomerIsPassive(Boolean(c.isPassive));
-          }}
-          onClear={() => {
-            setCustomerId(null);
-            setCustomerLabel('');
-            setCustomerIsPassive(false);
-          }}
-          searchPlaceholder={t('bills.customerSearch', 'Search by email or company…') as string}
-        />
-      </Card>
+      <Card><CardContent><h3 className="font-semibold mb-2">{t('bills.section.customer', 'Customer')}</h3><CustomerPicker
+                    value={customerId}
+                    label={customerLabel}
+                    isPassive={customerIsPassive}
+                    onSelect={(c) => {
+                      setCustomerId(c.id);
+                      setCustomerLabel(c.companyName || c.displayName || c.email);
+                      setCustomerIsPassive(Boolean(c.isPassive));
+                    }}
+                    onCreate={(c) => {
+                      setCustomerId(c.id);
+                      setCustomerLabel(c.companyName || c.displayName || c.email);
+                      setCustomerIsPassive(Boolean(c.isPassive));
+                    }}
+                    onClear={() => {
+                      setCustomerId(null);
+                      setCustomerLabel('');
+                      setCustomerIsPassive(false);
+                    }}
+                    searchPlaceholder={t('bills.customerSearch', 'Search by email or company…') as string}
+                  /></CardContent></Card>
 
       {/* Event snapshot section (migration 123). Mirrors the quote
           editor's Event section — free-text label that doesn't require
@@ -537,145 +538,135 @@ export const BillEditorPage: React.FC = () => {
           template's {{event_name}} placeholder, the customer portal
           row heading, the admin list "Event" column, and the tax
           report event column. */}
-      <Card>
-        <h3 className="font-semibold mb-2">{t('bills.section.event', 'Event details')}</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <Input label={t('bills.field.eventName', 'Event') as string}
-            value={eventName} onChange={(e) => setEventName(e.target.value)} />
-          <LocalizedDateInput label={t('bills.field.eventDate', 'Event date') as string}
-            value={eventDate} onChange={setEventDate} />
-          <TimeField label={t('bills.field.eventTimeStart', 'Start time') as string}
-            value={eventTimeStart} onChange={setEventTimeStart} />
-          <TimeField label={t('bills.field.eventTimeEnd', 'End time') as string}
-            value={eventTimeEnd} onChange={setEventTimeEnd} />
-        </div>
-      </Card>
+      <Card><CardContent><h3 className="font-semibold mb-2">{t('bills.section.event', 'Event details')}</h3><div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('bills.field.eventName', 'Event') as string}</span><Input
+                                    value={eventName} onChange={(e) => setEventName(e.target.value)} /></Label></div>
+                    <LocalizedDateInput label={t('bills.field.eventDate', 'Event date') as string}
+                      value={eventDate} onChange={setEventDate} />
+                    <TimeField label={t('bills.field.eventTimeStart', 'Start time') as string}
+                      value={eventTimeStart} onChange={setEventTimeStart} />
+                    <TimeField label={t('bills.field.eventTimeEnd', 'End time') as string}
+                      value={eventTimeEnd} onChange={setEventTimeEnd} />
+                  </div></CardContent></Card>
 
-      <Card>
-        <h3 className="font-semibold mb-2">{t('bills.section.details', 'Details')}</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <LocalizedDateInput label={t('bills.field.issueDate', 'Issue date') as string} value={issueDate} onChange={setIssueDate} />
-          <div>
-            <LocalizedDateInput
-              label={t('bills.field.dueDate', 'Due date') as string}
-              value={dueDate}
-              onChange={setDueDate}
-              disabled={!dueDateOverridden}
-            />
-            <label className="mt-1.5 flex items-center gap-2 text-xs text-neutral-600 dark:text-neutral-400">
-              <input
-                type="checkbox"
-                checked={dueDateOverridden}
-                onChange={(e) => setDueDateOverridden(e.target.checked)}
-                className="rounded-sm border-neutral-300 dark:border-neutral-600"
-              />
-              {dueDateOverridden
-                ? t('bills.field.dueDateOverrideOn', 'Manual due date — untick to auto-set from send date + payment term')
-                : t('bills.field.dueDateOverrideOff', 'Auto from send date + payment term — tick to set manually')}
-            </label>
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">{t('bills.field.scheduledSendAt', 'Scheduled send (optional)')}</label>
-            {/* Localized date + time (honours general_date_format +
-                general_time_format) instead of a native datetime-local, which
-                renders in the browser locale (US date + 12h). Recombined into
-                the "YYYY-MM-DDTHH:MM" the payload + scheduler expect. */}
-            <div className="grid grid-cols-2 gap-3">
-              <LocalizedDateInput
-                value={scheduledSendAt ? scheduledSendAt.slice(0, 10) : ''}
-                onChange={(iso) => {
-                  if (!iso) { setScheduledSendAt(''); return; }
-                  const time = scheduledSendAt.length >= 16 ? scheduledSendAt.slice(11, 16) : '09:00';
-                  setScheduledSendAt(`${iso}T${time}`);
-                }}
-              />
-              <TimeField
-                value={scheduledSendAt.length >= 16 ? scheduledSendAt.slice(11, 16) : ''}
-                onChange={(hhmm) => {
-                  const date = scheduledSendAt ? scheduledSendAt.slice(0, 10) : '';
-                  if (!date) return;
-                  setScheduledSendAt(`${date}T${hhmm || '09:00'}`);
-                }}
-              />
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">{t('bills.field.qrFormat', 'Payment QR format')}</label>
-            <select
-              value={qrFormat || ''}
-              onChange={(e) => setQrFormat((e.target.value || null) as any)}
-              className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm">
-              {/* Empty value = use the business-profile default. Server
-                  resolves the actual format at render time, so admins
-                  who curate it once in Settings → Business profile
-                  never have to think about it per-invoice. */}
-              <option value="">{t('bills.qrFormat.profileDefault', 'Use business profile default')}</option>
-              <option value="none">{t('bills.qrFormat.none', 'None (override)')}</option>
-              <option value="swiss">{t('bills.qrFormat.swiss', 'Swiss QR-bill')}</option>
-              <option value="epc">{t('bills.qrFormat.epc', 'EPC QR (SEPA)')}</option>
-            </select>
-          </div>
-          {/* Per-invoice bank-account override (migration 102 column
-              business_bank_account_id). Empty value = let the server
-              pick the default account for the invoice currency at
-              save time. Showing every configured bank lets the admin
-              pin one for this invoice without changing the global
-              defaults in Settings → Business profile. */}
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium mb-1">
-              {t('bills.field.businessBankAccount', 'Payment account')}
-            </label>
-            <select
-              value={businessBankAccountId == null ? '' : String(businessBankAccountId)}
-              onChange={(e) => setBusinessBankAccountId(e.target.value ? Number(e.target.value) : null)}
-              className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm">
-              <option value="">
-                {t('bills.field.bankAccountProfileDefault',
-                  'Use business profile default for {{currency}}', { currency })}
-              </option>
-              {bankAccounts.map((b) => {
-                const labelParts = [
-                  b.label || b.accountHolder || b.iban,
-                  b.currency,
-                  b.isDefault ? t('bills.field.bankAccountDefaultBadge', '(default)') : null,
-                ].filter(Boolean);
-                return (
-                  <option key={b.id} value={b.id}>
-                    {labelParts.join(' · ')} — {b.iban}
-                  </option>
-                );
-              })}
-            </select>
-            <p className="text-xs text-neutral-500 mt-1">
-              {t('bills.field.bankAccountHelp',
-                'Overrides the profile default for this invoice only. Leave on default to inherit the currency-matched account from Settings → Business profile.')}
-            </p>
-          </div>
-        </div>
-      </Card>
+      <Card><CardContent><h3 className="font-semibold mb-2">{t('bills.section.details', 'Details')}</h3><div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <LocalizedDateInput label={t('bills.field.issueDate', 'Issue date') as string} value={issueDate} onChange={setIssueDate} />
+                    <div>
+                      <LocalizedDateInput
+                        label={t('bills.field.dueDate', 'Due date') as string}
+                        value={dueDate}
+                        onChange={setDueDate}
+                        disabled={!dueDateOverridden}
+                      />
+                      <label className="mt-1.5 flex items-center gap-2 text-xs text-neutral-600 dark:text-neutral-400">
+                        <input
+                          type="checkbox"
+                          checked={dueDateOverridden}
+                          onChange={(e) => setDueDateOverridden(e.target.checked)}
+                          className="rounded-sm border-neutral-300 dark:border-neutral-600"
+                        />
+                        {dueDateOverridden
+                          ? t('bills.field.dueDateOverrideOn', 'Manual due date — untick to auto-set from send date + payment term')
+                          : t('bills.field.dueDateOverrideOff', 'Auto from send date + payment term — tick to set manually')}
+                      </label>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">{t('bills.field.scheduledSendAt', 'Scheduled send (optional)')}</label>
+                      {/* Localized date + time (honours general_date_format +
+                          general_time_format) instead of a native datetime-local, which
+                          renders in the browser locale (US date + 12h). Recombined into
+                          the "YYYY-MM-DDTHH:MM" the payload + scheduler expect. */}
+                      <div className="grid grid-cols-2 gap-3">
+                        <LocalizedDateInput
+                          value={scheduledSendAt ? scheduledSendAt.slice(0, 10) : ''}
+                          onChange={(iso) => {
+                            if (!iso) { setScheduledSendAt(''); return; }
+                            const time = scheduledSendAt.length >= 16 ? scheduledSendAt.slice(11, 16) : '09:00';
+                            setScheduledSendAt(`${iso}T${time}`);
+                          }}
+                        />
+                        <TimeField
+                          value={scheduledSendAt.length >= 16 ? scheduledSendAt.slice(11, 16) : ''}
+                          onChange={(hhmm) => {
+                            const date = scheduledSendAt ? scheduledSendAt.slice(0, 10) : '';
+                            if (!date) return;
+                            setScheduledSendAt(`${date}T${hhmm || '09:00'}`);
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">{t('bills.field.qrFormat', 'Payment QR format')}</label>
+                      <select
+                        value={qrFormat || ''}
+                        onChange={(e) => setQrFormat((e.target.value || null) as any)}
+                        className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm">
+                        {/* Empty value = use the business-profile default. Server
+                            resolves the actual format at render time, so admins
+                            who curate it once in Settings → Business profile
+                            never have to think about it per-invoice. */}
+                        <option value="">{t('bills.qrFormat.profileDefault', 'Use business profile default')}</option>
+                        <option value="none">{t('bills.qrFormat.none', 'None (override)')}</option>
+                        <option value="swiss">{t('bills.qrFormat.swiss', 'Swiss QR-bill')}</option>
+                        <option value="epc">{t('bills.qrFormat.epc', 'EPC QR (SEPA)')}</option>
+                      </select>
+                    </div>
+                    {/* Per-invoice bank-account override (migration 102 column
+                        business_bank_account_id). Empty value = let the server
+                        pick the default account for the invoice currency at
+                        save time. Showing every configured bank lets the admin
+                        pin one for this invoice without changing the global
+                        defaults in Settings → Business profile. */}
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium mb-1">
+                        {t('bills.field.businessBankAccount', 'Payment account')}
+                      </label>
+                      <select
+                        value={businessBankAccountId == null ? '' : String(businessBankAccountId)}
+                        onChange={(e) => setBusinessBankAccountId(e.target.value ? Number(e.target.value) : null)}
+                        className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm">
+                        <option value="">
+                          {t('bills.field.bankAccountProfileDefault',
+                            'Use business profile default for {{currency}}', { currency })}
+                        </option>
+                        {bankAccounts.map((b) => {
+                          const labelParts = [
+                            b.label || b.accountHolder || b.iban,
+                            b.currency,
+                            b.isDefault ? t('bills.field.bankAccountDefaultBadge', '(default)') : null,
+                          ].filter(Boolean);
+                          return (
+                            <option key={b.id} value={b.id}>
+                              {labelParts.join(' · ')} — {b.iban}
+                            </option>
+                          );
+                        })}
+                      </select>
+                      <p className="text-xs text-neutral-500 mt-1">
+                        {t('bills.field.bankAccountHelp',
+                          'Overrides the profile default for this invoice only. Leave on default to inherit the currency-matched account from Settings → Business profile.')}
+                      </p>
+                    </div>
+                  </div></CardContent></Card>
 
-      <Card>
-        <h3 className="font-semibold mb-2">{t('bills.section.lineItems', 'Line items')}</h3>
-        <LineItemsTable items={lineItems} currency={currency} showDiscount={false}
-          vatRate={vatRate / 100} shippingAmount={shipping}
-          roundTotal={appSettings?.crm_invoice_round_total === true} onChange={setLineItems} />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
-          <VatRateSelect
-            label={t('bills.field.vatRate', 'VAT rate %') as string}
-            rate={vatRate}
-            code={vatCode}
-            onChange={(rate, code) => { setVatRate(rate); setVatCode(code); }} />
-          <Input type="number" step="0.01" label={t('bills.field.shipping', 'Shipping') as string}
-            value={shipping} onChange={(e) => setShipping(Number(e.target.value))} />
-          <div>
-            <label className="block text-sm font-medium mb-1">{t('bills.field.currency', 'Currency')}</label>
-            <select value={currency} onChange={(e) => setCurrency(e.target.value)}
-              className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm">
-              <option>CHF</option><option>EUR</option><option>USD</option><option>GBP</option>
-            </select>
-          </div>
-        </div>
-      </Card>
+      <Card><CardContent><h3 className="font-semibold mb-2">{t('bills.section.lineItems', 'Line items')}</h3><LineItemsTable items={lineItems} currency={currency} showDiscount={false}
+                    vatRate={vatRate / 100} shippingAmount={shipping}
+                    roundTotal={appSettings?.crm_invoice_round_total === true} onChange={setLineItems} /><div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
+                    <VatRateSelect
+                      label={t('bills.field.vatRate', 'VAT rate %') as string}
+                      rate={vatRate}
+                      code={vatCode}
+                      onChange={(rate, code) => { setVatRate(rate); setVatCode(code); }} />
+                    <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('bills.field.shipping', 'Shipping') as string}</span><Input type="number" step="0.01"
+                                        value={shipping} onChange={(e) => setShipping(Number(e.target.value))} /></Label></div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">{t('bills.field.currency', 'Currency')}</label>
+                      <select value={currency} onChange={(e) => setCurrency(e.target.value)}
+                        className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm">
+                        <option>CHF</option><option>EUR</option><option>USD</option><option>GBP</option>
+                      </select>
+                    </div>
+                  </div></CardContent></Card>
 
       {/* Payment conditions — picks net-days + Skonto from the shared
           payment-term templates (same dropdown the quote editor uses).
@@ -686,108 +677,94 @@ export const BillEditorPage: React.FC = () => {
           dropdowns replace the legacy single one. The `ptTemplates`
           query is still mounted above so legacy invoices whose state
           only has the single FK still resolve their preview text. */}
-      <Card>
-        <h3 className="font-semibold mb-2">{t('bills.section.payment', 'Payment conditions')}</h3>
-        <Link to="/admin/settings?tab=crm"
-          className="text-xs text-brand hover:underline mb-2 inline-block">
-          {t('common.configureInSettings', 'Configure defaults in Settings ↗')}
-        </Link>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div>
-            <label className="block text-sm font-medium mb-1">{t('bills.field.paymentNetDays', 'Net days')}</label>
-            <select
-              className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm"
-              value={paymentNetDaysTemplateId || ''}
-              onChange={(e) => setPaymentNetDaysTemplateId(e.target.value ? Number(e.target.value) : null)}
-            >
-              <option value="">{t('bills.field.selectNetDays', '— Select net days —')}</option>
-              {netDaysTemplates?.templates.map((tpl) => (
-                <option key={tpl.id} value={tpl.id}>{tpl.name}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">{t('bills.field.paymentTiming', 'Payment schedule')}</label>
-            <select
-              className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm"
-              value={paymentTimingTemplateId || ''}
-              onChange={(e) => setPaymentTimingTemplateId(e.target.value ? Number(e.target.value) : null)}
-            >
-              <option value="">{t('bills.field.selectTiming', '— Select schedule —')}</option>
-              {timingTemplates?.templates.map((tpl) => (
-                <option key={tpl.id} value={tpl.id}>{tpl.name}</option>
-              ))}
-            </select>
-          </div>
-        </div>
-        {/* Per-invoice Skonto opt-out (migration 126). Surfaced
-            alongside the payment-term pickers because it's a peer
-            override of the same CRM defaults. Admin ticks this for
-            invoices that shouldn't qualify even when the global
-            default offers Skonto (e.g. Storni, instalments, retainers). */}
-        <label className="flex items-start gap-2 text-sm mt-3 cursor-pointer">
-          <input
-            type="checkbox"
-            className="mt-1"
-            checked={skontoDisabled}
-            onChange={(e) => setSkontoDisabled(e.target.checked)}
-          />
-          <span>
-            {t('bills.field.skontoDisabled',
-              'Disable Skonto for this invoice (suppresses the early-payment-discount block on the PDF and the "Paid with Skonto" buttons in the admin email / record-payment dialog).')}
-          </span>
-        </label>
-        <p className="text-xs text-neutral-500 mt-2">
-          {t('bills.field.paymentTermHelp',
-            'Net days + Skonto for this invoice. Leave blank to inherit from the source quote or the global CRM defaults.')}
-        </p>
+      <Card><CardContent><h3 className="font-semibold mb-2">{t('bills.section.payment', 'Payment conditions')}</h3><Link to="/admin/settings?tab=crm"
+                    className="text-xs text-brand hover:underline mb-2 inline-block">
+                    {t('common.configureInSettings', 'Configure defaults in Settings ↗')}
+                  </Link><div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-sm font-medium mb-1">{t('bills.field.paymentNetDays', 'Net days')}</label>
+                      <select
+                        className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm"
+                        value={paymentNetDaysTemplateId || ''}
+                        onChange={(e) => setPaymentNetDaysTemplateId(e.target.value ? Number(e.target.value) : null)}
+                      >
+                        <option value="">{t('bills.field.selectNetDays', '— Select net days —')}</option>
+                        {netDaysTemplates?.templates.map((tpl) => (
+                          <option key={tpl.id} value={tpl.id}>{tpl.name}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">{t('bills.field.paymentTiming', 'Payment schedule')}</label>
+                      <select
+                        className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm"
+                        value={paymentTimingTemplateId || ''}
+                        onChange={(e) => setPaymentTimingTemplateId(e.target.value ? Number(e.target.value) : null)}
+                      >
+                        <option value="">{t('bills.field.selectTiming', '— Select schedule —')}</option>
+                        {timingTemplates?.templates.map((tpl) => (
+                          <option key={tpl.id} value={tpl.id}>{tpl.name}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>{/* Per-invoice Skonto opt-out (migration 126). Surfaced
+                      alongside the payment-term pickers because it's a peer
+                      override of the same CRM defaults. Admin ticks this for
+                      invoices that shouldn't qualify even when the global
+                      default offers Skonto (e.g. Storni, instalments, retainers). */}<label className="flex items-start gap-2 text-sm mt-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="mt-1"
+                      checked={skontoDisabled}
+                      onChange={(e) => setSkontoDisabled(e.target.checked)}
+                    />
+                    <span>
+                      {t('bills.field.skontoDisabled',
+                        'Disable Skonto for this invoice (suppresses the early-payment-discount block on the PDF and the "Paid with Skonto" buttons in the admin email / record-payment dialog).')}
+                    </span>
+                  </label><p className="text-xs text-neutral-500 mt-2">
+                    {t('bills.field.paymentTermHelp',
+                      'Net days + Skonto for this invoice. Leave blank to inherit from the source quote or the global CRM defaults.')}
+                  </p>{/* Ad-hoc installments panel (commit #6). When the admin builds
+                      a multi-row plan and clicks Save, the backend spawns one
+                      invoice per row via spawnInstallmentInvoices (commit #4)
+                      and returns the array of new ids. */}<div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
+                    <InstallmentsPanel
+                      value={installments}
+                      onChange={setInstallments}
+                      onValidityChange={setInstallmentsValid}
+                      eventDate={eventDate || null}
+                    />
+                  </div></CardContent></Card>
 
-        {/* Ad-hoc installments panel (commit #6). When the admin builds
-            a multi-row plan and clicks Save, the backend spawns one
-            invoice per row via spawnInstallmentInvoices (commit #4)
-            and returns the array of new ids. */}
-        <div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
-          <InstallmentsPanel
-            value={installments}
-            onChange={setInstallments}
-            onValidityChange={setInstallmentsValid}
-            eventDate={eventDate || null}
-          />
-        </div>
-      </Card>
-
-      <Card>
-        {/* CC PDF — admin email prefilled, with a picker when more than
-            one admin exists. Mirrors the quote editor + CreateEventPage
-            so the muscle memory carries over. */}
-        <div className="space-y-1">
-          <Input type="email"
-            label={t('bills.field.ccPdfEmail', 'CC PDF to (extra recipient)') as string}
-            placeholder={t('bills.field.ccPdfEmailPlaceholder', 'name@example.com') as string}
-            value={ccPdfEmail} onChange={(e) => setCcPdfEmail(e.target.value)} />
-          {activeAdmins.length > 1 && (
-            <div className="flex items-center gap-2">
-              <label htmlFor="bill-cc-pdf-picker" className="text-xs text-neutral-600 dark:text-neutral-400 whitespace-nowrap">
-                {t('bills.field.ccPdfPickFromAdmins', 'Pick from admins:')}
-              </label>
-              <select
-                id="bill-cc-pdf-picker"
-                value={activeAdmins.some((a: any) => a.email === ccPdfEmail) ? ccPdfEmail : ''}
-                onChange={(e) => {
-                  const email = e.target.value;
-                  if (email) setCcPdfEmail(email);
-                }}
-                className="text-xs px-2 py-1 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-sm focus:ring-2 focus:ring-brand-500 focus:border-primary"
-              >
-                <option value="">{t('bills.field.ccPdfCustom', 'Custom email')}</option>
-                {activeAdmins.map((a: any) => (
-                  <option key={a.id} value={a.email}>{a.email}</option>
-                ))}
-              </select>
-            </div>
-          )}
-        </div>
-      </Card>
+      <Card><CardContent>{/* CC PDF — admin email prefilled, with a picker when more than
+                      one admin exists. Mirrors the quote editor + CreateEventPage
+                      so the muscle memory carries over. */}<div className="space-y-1">
+                    <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('bills.field.ccPdfEmail', 'CC PDF to (extra recipient)') as string}</span><Input type="email"
+                                        placeholder={t('bills.field.ccPdfEmailPlaceholder', 'name@example.com') as string}
+                                        value={ccPdfEmail} onChange={(e) => setCcPdfEmail(e.target.value)} /></Label></div>
+                    {activeAdmins.length > 1 && (
+                      <div className="flex items-center gap-2">
+                        <label htmlFor="bill-cc-pdf-picker" className="text-xs text-neutral-600 dark:text-neutral-400 whitespace-nowrap">
+                          {t('bills.field.ccPdfPickFromAdmins', 'Pick from admins:')}
+                        </label>
+                        <select
+                          id="bill-cc-pdf-picker"
+                          value={activeAdmins.some((a: any) => a.email === ccPdfEmail) ? ccPdfEmail : ''}
+                          onChange={(e) => {
+                            const email = e.target.value;
+                            if (email) setCcPdfEmail(email);
+                          }}
+                          className="text-xs px-2 py-1 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-sm focus:ring-2 focus:ring-brand-500 focus:border-primary"
+                        >
+                          <option value="">{t('bills.field.ccPdfCustom', 'Custom email')}</option>
+                          {activeAdmins.map((a: any) => (
+                            <option key={a.id} value={a.email}>{a.email}</option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+                  </div></CardContent></Card>
     </div>
   );
 };

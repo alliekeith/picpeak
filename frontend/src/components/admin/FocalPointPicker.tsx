@@ -1,6 +1,7 @@
 import React, { useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AuthenticatedImage, Button } from '../common';
+import { AuthenticatedImage } from '../common';
+import { Button } from "@/components/ui/button";
 
 interface FocalPointPickerProps {
   imageUrl: string;

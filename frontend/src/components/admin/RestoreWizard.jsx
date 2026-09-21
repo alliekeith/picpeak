@@ -27,9 +27,12 @@ import {
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { Button, Card, Input, Loading } from '../common';
+import { Loading } from '../common';
 import { api } from '../../config/api';
 import { useLocalizedDate } from '../../hooks/useLocalizedDate';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 export const RestoreWizard = ({ onVerifyIntegrity } = {}) => {
   const { t } = useTranslation();
@@ -243,44 +246,41 @@ export const RestoreWizard = ({ onVerifyIntegrity } = {}) => {
 
       {/* Source-specific configuration */}
       {restoreData.source === 's3' && (
-        <Card className="p-4 space-y-4">
-          <h4 className="font-medium text-neutral-900 dark:text-neutral-100">{t('backup.restore.source.configuration.s3')}</h4>
-          <div className="grid grid-cols-2 gap-4">
-            <Input
-              placeholder={t('backup.restore.source.configuration.endpoint')}
-              value={restoreData.sourceConfig.s3Endpoint || ''}
-              onChange={(e) => setRestoreData(prev => ({
-                ...prev,
-                sourceConfig: { ...prev.sourceConfig, s3Endpoint: e.target.value }
-              }))}
-            />
-            <Input
-              placeholder={t('backup.restore.source.configuration.bucket')}
-              value={restoreData.sourceConfig.s3Bucket || ''}
-              onChange={(e) => setRestoreData(prev => ({
-                ...prev,
-                sourceConfig: { ...prev.sourceConfig, s3Bucket: e.target.value }
-              }))}
-            />
-            <Input
-              placeholder={t('backup.restore.source.configuration.accessKey')}
-              value={restoreData.sourceConfig.s3AccessKey || ''}
-              onChange={(e) => setRestoreData(prev => ({
-                ...prev,
-                sourceConfig: { ...prev.sourceConfig, s3AccessKey: e.target.value }
-              }))}
-            />
-            <Input
-              type="password"
-              placeholder={t('backup.restore.source.configuration.secretKey')}
-              value={restoreData.sourceConfig.s3SecretKey || ''}
-              onChange={(e) => setRestoreData(prev => ({
-                ...prev,
-                sourceConfig: { ...prev.sourceConfig, s3SecretKey: e.target.value }
-              }))}
-            />
-          </div>
-        </Card>
+        <Card className="p-4 space-y-4"><CardContent><h4 className="font-medium text-neutral-900 dark:text-neutral-100">{t('backup.restore.source.configuration.s3')}</h4><div className="grid grid-cols-2 gap-4">
+                          <Input
+                            placeholder={t('backup.restore.source.configuration.endpoint')}
+                            value={restoreData.sourceConfig.s3Endpoint || ''}
+                            onChange={(e) => setRestoreData(prev => ({
+                              ...prev,
+                              sourceConfig: { ...prev.sourceConfig, s3Endpoint: e.target.value }
+                            }))}
+                          />
+                          <Input
+                            placeholder={t('backup.restore.source.configuration.bucket')}
+                            value={restoreData.sourceConfig.s3Bucket || ''}
+                            onChange={(e) => setRestoreData(prev => ({
+                              ...prev,
+                              sourceConfig: { ...prev.sourceConfig, s3Bucket: e.target.value }
+                            }))}
+                          />
+                          <Input
+                            placeholder={t('backup.restore.source.configuration.accessKey')}
+                            value={restoreData.sourceConfig.s3AccessKey || ''}
+                            onChange={(e) => setRestoreData(prev => ({
+                              ...prev,
+                              sourceConfig: { ...prev.sourceConfig, s3AccessKey: e.target.value }
+                            }))}
+                          />
+                          <Input
+                            type="password"
+                            placeholder={t('backup.restore.source.configuration.secretKey')}
+                            value={restoreData.sourceConfig.s3SecretKey || ''}
+                            onChange={(e) => setRestoreData(prev => ({
+                              ...prev,
+                              sourceConfig: { ...prev.sourceConfig, s3SecretKey: e.target.value }
+                            }))}
+                          />
+                        </div></CardContent></Card>
       )}
 
       {restoreData.source === 'upload' && (
@@ -317,12 +317,10 @@ export const RestoreWizard = ({ onVerifyIntegrity } = {}) => {
           {restoreData.uploadType === 'picpeak' && <PicpeakRestoreCard />}
 
           {restoreData.uploadType === 'manifest' && (
-            <Card className="p-4">
-              <div className="text-center py-8">
-                <Upload className="h-12 w-12 mx-auto mb-3 text-neutral-400" />
-                <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('backup.restore.source.upload.manifestComingSoon', 'Manifest Upload functionality coming soon')}</p>
-              </div>
-            </Card>
+            <Card className="p-4"><CardContent><div className="text-center py-8">
+                                      <Upload className="h-12 w-12 mx-auto mb-3 text-neutral-400" />
+                                      <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('backup.restore.source.upload.manifestComingSoon', 'Manifest Upload functionality coming soon')}</p>
+                                    </div></CardContent></Card>
           )}
         </div>
       )}
@@ -339,76 +337,71 @@ export const RestoreWizard = ({ onVerifyIntegrity } = {}) => {
       {loadingBackups ? (
         <Loading />
       ) : availableBackups?.length === 0 ? (
-        <Card className="p-8 text-center">
-          <FileArchive className="h-12 w-12 mx-auto mb-3 text-neutral-300 dark:text-neutral-600" />
-          <p className="text-neutral-500 dark:text-neutral-400">{t('backup.restore.backup.noBackupsFound')}</p>
-        </Card>
+        <Card className="p-8 text-center"><CardContent><FileArchive className="h-12 w-12 mx-auto mb-3 text-neutral-300 dark:text-neutral-600" /><p className="text-neutral-500 dark:text-neutral-400">{t('backup.restore.backup.noBackupsFound')}</p></CardContent></Card>
       ) : (
         <div className="space-y-3">
           {availableBackups?.map((backup) => (
             <Card
-              key={backup.id}
-              className={`p-4 cursor-pointer transition-all ${
-                restoreData.selectedBackup?.id === backup.id
-                  ? 'ring-2 ring-primary bg-primary/15'
-                  : 'hover:shadow-md'
-              }`}
-              onClick={() => setRestoreData(prev => ({ ...prev, selectedBackup: backup }))}
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <div className={`p-2 rounded-lg ${
-                    backup.status === 'completed' ? 'bg-green-100 dark:bg-green-900/40' : 'bg-amber-100 dark:bg-amber-900/40'
-                  }`}>
-                    {backup.status === 'completed' ? (
-                      <CheckCircle className="h-6 w-6 text-green-600 dark:text-green-400" />
-                    ) : (
-                      <AlertCircle className="h-6 w-6 text-amber-600 dark:text-amber-400" />
-                    )}
-                  </div>
-                  <div>
-                    <p className="font-medium text-neutral-900 dark:text-neutral-100">
-                      {fmtDate(backup.created_at)} {t('backup.restore.backup.at')} {fmtTime(backup.created_at)}
-                    </p>
-                    <p className="text-sm text-neutral-500 dark:text-neutral-400">
-                      {t('backup.dashboard.backupType', { type: backup.backup_type })} • {formatBytes(backup.total_size || 0)}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-2">
-                  {/* Files-only warning — backend's /list-backups now
-                      returns `database_included: boolean` parsed from
-                      the manifest's database.backup_file field. A row
-                      where this is false is exactly the data-loss
-                      scenario the Stage A guard prevents going forward:
-                      a manifest written without an inline DB dump.
-                      Restoring it would NOT bring CRM data back. */}
-                  {backup.database_included === false && (
-                    <span
-                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 border border-red-300 dark:border-red-700"
-                      title={t('backup.restore.backup.filesOnlyHint',
-                        'This backup has no database dump — restoring it will NOT recover the database (CRM data, customers, quotes, invoices, contracts will be empty after restore).')}
-                    >
-                      <AlertCircle className="h-3 w-3" />
-                      {t('backup.restore.backup.filesOnlyBadge', 'No DB')}
-                    </span>
-                  )}
-                  {backup.corrupt && (
-                    <span
-                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 border border-amber-300 dark:border-amber-700"
-                      title={t('backup.restore.backup.corruptHint',
-                        'The manifest file is unreadable — the backup may be incomplete or damaged.')}
-                    >
-                      <AlertCircle className="h-3 w-3" />
-                      {t('backup.restore.backup.corruptBadge', 'Corrupt')}
-                    </span>
-                  )}
-                  {backup.encrypted && (
-                    <Shield className="h-5 w-5 text-neutral-400" />
-                  )}
-                </div>
-              </div>
-            </Card>
+                            key={backup.id}
+                            className={`p-4 cursor-pointer transition-all ${
+                              restoreData.selectedBackup?.id === backup.id
+                                ? 'ring-2 ring-primary bg-primary/15'
+                                : 'hover:shadow-md'
+                            }`}
+                            onClick={() => setRestoreData(prev => ({ ...prev, selectedBackup: backup }))}
+                          ><CardContent><div className="flex items-center justify-between">
+                              <div className="flex items-center space-x-4">
+                                <div className={`p-2 rounded-lg ${
+                                  backup.status === 'completed' ? 'bg-green-100 dark:bg-green-900/40' : 'bg-amber-100 dark:bg-amber-900/40'
+                                }`}>
+                                  {backup.status === 'completed' ? (
+                                    <CheckCircle className="h-6 w-6 text-green-600 dark:text-green-400" />
+                                  ) : (
+                                    <AlertCircle className="h-6 w-6 text-amber-600 dark:text-amber-400" />
+                                  )}
+                                </div>
+                                <div>
+                                  <p className="font-medium text-neutral-900 dark:text-neutral-100">
+                                    {fmtDate(backup.created_at)} {t('backup.restore.backup.at')} {fmtTime(backup.created_at)}
+                                  </p>
+                                  <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                                    {t('backup.dashboard.backupType', { type: backup.backup_type })} • {formatBytes(backup.total_size || 0)}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                {/* Files-only warning — backend's /list-backups now
+                                    returns `database_included: boolean` parsed from
+                                    the manifest's database.backup_file field. A row
+                                    where this is false is exactly the data-loss
+                                    scenario the Stage A guard prevents going forward:
+                                    a manifest written without an inline DB dump.
+                                    Restoring it would NOT bring CRM data back. */}
+                                {backup.database_included === false && (
+                                  <span
+                                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 border border-red-300 dark:border-red-700"
+                                    title={t('backup.restore.backup.filesOnlyHint',
+                                      'This backup has no database dump — restoring it will NOT recover the database (CRM data, customers, quotes, invoices, contracts will be empty after restore).')}
+                                  >
+                                    <AlertCircle className="h-3 w-3" />
+                                    {t('backup.restore.backup.filesOnlyBadge', 'No DB')}
+                                  </span>
+                                )}
+                                {backup.corrupt && (
+                                  <span
+                                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 border border-amber-300 dark:border-amber-700"
+                                    title={t('backup.restore.backup.corruptHint',
+                                      'The manifest file is unreadable — the backup may be incomplete or damaged.')}
+                                  >
+                                    <AlertCircle className="h-3 w-3" />
+                                    {t('backup.restore.backup.corruptBadge', 'Corrupt')}
+                                  </span>
+                                )}
+                                {backup.encrypted && (
+                                  <Shield className="h-5 w-5 text-neutral-400" />
+                                )}
+                              </div>
+                            </div></CardContent></Card>
           ))}
         </div>
       )}
@@ -420,45 +413,41 @@ export const RestoreWizard = ({ onVerifyIntegrity } = {}) => {
           caused Ralf's 2026-05-29 data loss (four files-only manifests
           mistaken for full backups). */}
       {restoreData.selectedBackup && restoreData.selectedBackup.database_included === false && (
-        <Card className="p-4 bg-red-50 dark:bg-red-900/30 border-red-300 dark:border-red-700">
-          <div className="flex items-start space-x-3">
-            <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400 mt-0.5" />
-            <div className="flex-1">
-              <p className="text-sm font-semibold text-red-800 dark:text-red-200">
-                {t('backup.restore.backup.filesOnlyWarning.title',
-                  'Selected backup has no database dump')}
-              </p>
-              <p className="mt-1 text-sm text-red-700 dark:text-red-300">
-                {t('backup.restore.backup.filesOnlyWarning.message',
-                  'Restoring this backup will recover files (photos, PDFs) but the database — including admin users, customers, quotes, invoices, contracts, and settings — will NOT come back. Pick a different backup if you have one with a database dump, or proceed only if files-only is what you want.')}
-              </p>
-            </div>
-          </div>
-        </Card>
+        <Card className="p-4 bg-red-50 dark:bg-red-900/30 border-red-300 dark:border-red-700"><CardContent><div className="flex items-start space-x-3">
+                          <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400 mt-0.5" />
+                          <div className="flex-1">
+                            <p className="text-sm font-semibold text-red-800 dark:text-red-200">
+                              {t('backup.restore.backup.filesOnlyWarning.title',
+                                'Selected backup has no database dump')}
+                            </p>
+                            <p className="mt-1 text-sm text-red-700 dark:text-red-300">
+                              {t('backup.restore.backup.filesOnlyWarning.message',
+                                'Restoring this backup will recover files (photos, PDFs) but the database — including admin users, customers, quotes, invoices, contracts, and settings — will NOT come back. Pick a different backup if you have one with a database dump, or proceed only if files-only is what you want.')}
+                            </p>
+                          </div>
+                        </div></CardContent></Card>
       )}
 
       {restoreData.selectedBackup?.encrypted && (
-        <Card className="p-4 bg-amber-50 dark:bg-amber-900/30 border-amber-200 dark:border-amber-800">
-          <div className="flex items-start space-x-3">
-            <Shield className="h-5 w-5 text-amber-600 dark:text-amber-400 mt-0.5" />
-            <div className="flex-1">
-              <p className="text-sm font-medium text-amber-900 dark:text-amber-200">{t('backup.restore.backup.encrypted')}</p>
-              <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
-                {t('backup.restore.backup.encryptedMessage')}
-              </p>
-              <Input
-                type="password"
-                placeholder={t('backup.restore.backup.enterPassphrase')}
-                className="mt-3"
-                value={restoreData.encryptionPassphrase}
-                onChange={(e) => setRestoreData(prev => ({
-                  ...prev,
-                  encryptionPassphrase: e.target.value
-                }))}
-              />
-            </div>
-          </div>
-        </Card>
+        <Card className="p-4 bg-amber-50 dark:bg-amber-900/30 border-amber-200 dark:border-amber-800"><CardContent><div className="flex items-start space-x-3">
+                          <Shield className="h-5 w-5 text-amber-600 dark:text-amber-400 mt-0.5" />
+                          <div className="flex-1">
+                            <p className="text-sm font-medium text-amber-900 dark:text-amber-200">{t('backup.restore.backup.encrypted')}</p>
+                            <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
+                              {t('backup.restore.backup.encryptedMessage')}
+                            </p>
+                            <Input
+                              type="password"
+                              placeholder={t('backup.restore.backup.enterPassphrase')}
+                              className="mt-3"
+                              value={restoreData.encryptionPassphrase}
+                              onChange={(e) => setRestoreData(prev => ({
+                                ...prev,
+                                encryptionPassphrase: e.target.value
+                              }))}
+                            />
+                          </div>
+                        </div></CardContent></Card>
       )}
     </div>
   );
@@ -502,45 +491,39 @@ export const RestoreWizard = ({ onVerifyIntegrity } = {}) => {
       </div>
 
       {/* Additional Options */}
-      <Card className="p-4 space-y-4">
-        <h4 className="font-medium text-neutral-900 dark:text-neutral-100">{t('backup.restore.options.additionalOptions.title')}</h4>
-
-        <label className="flex items-start space-x-3">
-          <input
-            type="checkbox"
-            checked={restoreData.skipPreBackup}
-            onChange={(e) => setRestoreData(prev => ({
-              ...prev,
-              skipPreBackup: e.target.checked
-            }))}
-            className="mt-1 h-4 w-4 text-primary focus:ring-primary border-neutral-300 dark:border-neutral-600 rounded-sm bg-white dark:bg-neutral-700"
-          />
-          <div>
-            <p className="text-sm font-medium text-neutral-700 dark:text-neutral-300">{t('backup.restore.options.additionalOptions.skipPreBackup')}</p>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400">
-              {t('backup.restore.options.additionalOptions.skipPreBackupHelp')}
-            </p>
-          </div>
-        </label>
-
-        <label className="flex items-start space-x-3">
-          <input
-            type="checkbox"
-            checked={restoreData.force}
-            onChange={(e) => setRestoreData(prev => ({
-              ...prev,
-              force: e.target.checked
-            }))}
-            className="mt-1 h-4 w-4 text-primary focus:ring-primary border-neutral-300 dark:border-neutral-600 rounded-sm bg-white dark:bg-neutral-700"
-          />
-          <div>
-            <p className="text-sm font-medium text-neutral-700 dark:text-neutral-300">{t('backup.restore.options.additionalOptions.force')}</p>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400">
-              {t('backup.restore.options.additionalOptions.forceHelp')}
-            </p>
-          </div>
-        </label>
-      </Card>
+      <Card className="p-4 space-y-4"><CardContent><h4 className="font-medium text-neutral-900 dark:text-neutral-100">{t('backup.restore.options.additionalOptions.title')}</h4><label className="flex items-start space-x-3">
+                    <input
+                      type="checkbox"
+                      checked={restoreData.skipPreBackup}
+                      onChange={(e) => setRestoreData(prev => ({
+                        ...prev,
+                        skipPreBackup: e.target.checked
+                      }))}
+                      className="mt-1 h-4 w-4 text-primary focus:ring-primary border-neutral-300 dark:border-neutral-600 rounded-sm bg-white dark:bg-neutral-700"
+                    />
+                    <div>
+                      <p className="text-sm font-medium text-neutral-700 dark:text-neutral-300">{t('backup.restore.options.additionalOptions.skipPreBackup')}</p>
+                      <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                        {t('backup.restore.options.additionalOptions.skipPreBackupHelp')}
+                      </p>
+                    </div>
+                  </label><label className="flex items-start space-x-3">
+                    <input
+                      type="checkbox"
+                      checked={restoreData.force}
+                      onChange={(e) => setRestoreData(prev => ({
+                        ...prev,
+                        force: e.target.checked
+                      }))}
+                      className="mt-1 h-4 w-4 text-primary focus:ring-primary border-neutral-300 dark:border-neutral-600 rounded-sm bg-white dark:bg-neutral-700"
+                    />
+                    <div>
+                      <p className="text-sm font-medium text-neutral-700 dark:text-neutral-300">{t('backup.restore.options.additionalOptions.force')}</p>
+                      <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                        {t('backup.restore.options.additionalOptions.forceHelp')}
+                      </p>
+                    </div>
+                  </label></CardContent></Card>
     </div>
   );
 
@@ -555,87 +538,79 @@ export const RestoreWizard = ({ onVerifyIntegrity } = {}) => {
         <>
           {/* Validation Results */}
           <Card className={`p-4 ${
-            validationResult.validation?.isValid
-              ? 'bg-green-50 dark:bg-green-900/30 border-green-200 dark:border-green-800'
-              : 'bg-red-50 dark:bg-red-900/30 border-red-200 dark:border-red-800'
-          }`}>
-            <div className="flex items-start space-x-3">
-              {validationResult.validation?.isValid ? (
-                <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
-              ) : (
-                <XCircle className="h-5 w-5 text-red-600 mt-0.5" />
-              )}
-              <div className="flex-1">
-                <p className={`text-sm font-medium ${
-                  validationResult.validation?.isValid ? 'text-green-900 dark:text-green-200' : 'text-red-900 dark:text-red-200'
-                }`}>
-                  {validationResult.validation?.isValid 
-                    ? t('backup.restore.confirmation.validation.passed') 
-                    : t('backup.restore.confirmation.validation.failed')}
-                </p>
-                {validationResult.validation?.errors?.length > 0 && (
-                  <ul className="mt-2 text-sm text-red-700 dark:text-red-300 list-disc list-inside">
-                    {validationResult.validation.errors.map((error, idx) => (
-                      <li key={idx}>{error}</li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            </div>
-          </Card>
+                              validationResult.validation?.isValid
+                                ? 'bg-green-50 dark:bg-green-900/30 border-green-200 dark:border-green-800'
+                                : 'bg-red-50 dark:bg-red-900/30 border-red-200 dark:border-red-800'
+                            }`}><CardContent><div className="flex items-start space-x-3">
+                                {validationResult.validation?.isValid ? (
+                                  <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
+                                ) : (
+                                  <XCircle className="h-5 w-5 text-red-600 mt-0.5" />
+                                )}
+                                <div className="flex-1">
+                                  <p className={`text-sm font-medium ${
+                                    validationResult.validation?.isValid ? 'text-green-900 dark:text-green-200' : 'text-red-900 dark:text-red-200'
+                                  }`}>
+                                    {validationResult.validation?.isValid 
+                                      ? t('backup.restore.confirmation.validation.passed') 
+                                      : t('backup.restore.confirmation.validation.failed')}
+                                  </p>
+                                  {validationResult.validation?.errors?.length > 0 && (
+                                    <ul className="mt-2 text-sm text-red-700 dark:text-red-300 list-disc list-inside">
+                                      {validationResult.validation.errors.map((error, idx) => (
+                                        <li key={idx}>{error}</li>
+                                      ))}
+                                    </ul>
+                                  )}
+                                </div>
+                              </div></CardContent></Card>
 
           {/* Space Check */}
           {validationResult.spaceCheck && (
-            <Card className="p-4">
-              <h4 className="font-medium text-neutral-900 dark:text-neutral-100 mb-3">{t('backup.restore.confirmation.spaceCheck.title')}</h4>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-neutral-600 dark:text-neutral-400">{t('backup.restore.confirmation.spaceCheck.required')}:</span>
-                  <span className="font-medium text-neutral-900 dark:text-neutral-100">
-                    {validationResult.spaceCheck.requiredFormatted || formatBytes(validationResult.spaceCheck.required || 0)}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-neutral-600 dark:text-neutral-400">{t('backup.restore.confirmation.spaceCheck.available')}:</span>
-                  <span className="font-medium text-neutral-900 dark:text-neutral-100">
-                    {validationResult.spaceCheck.availableFormatted ||
-                     (validationResult.spaceCheck.available != null ? formatBytes(validationResult.spaceCheck.available) : t('common.unknown', 'Unknown'))}
-                  </span>
-                </div>
-                {validationResult.spaceCheck.sufficient === false && (
-                  <p className="text-red-600 text-xs mt-2">
-                    <AlertCircle className="inline h-3 w-3 mr-1" />
-                    {t('backup.restore.confirmation.spaceCheck.insufficient')}
-                  </p>
-                )}
-              </div>
-            </Card>
+            <Card className="p-4"><CardContent><h4 className="font-medium text-neutral-900 dark:text-neutral-100 mb-3">{t('backup.restore.confirmation.spaceCheck.title')}</h4><div className="space-y-2 text-sm">
+                                      <div className="flex justify-between">
+                                        <span className="text-neutral-600 dark:text-neutral-400">{t('backup.restore.confirmation.spaceCheck.required')}:</span>
+                                        <span className="font-medium text-neutral-900 dark:text-neutral-100">
+                                          {validationResult.spaceCheck.requiredFormatted || formatBytes(validationResult.spaceCheck.required || 0)}
+                                        </span>
+                                      </div>
+                                      <div className="flex justify-between">
+                                        <span className="text-neutral-600 dark:text-neutral-400">{t('backup.restore.confirmation.spaceCheck.available')}:</span>
+                                        <span className="font-medium text-neutral-900 dark:text-neutral-100">
+                                          {validationResult.spaceCheck.availableFormatted ||
+                                           (validationResult.spaceCheck.available != null ? formatBytes(validationResult.spaceCheck.available) : t('common.unknown', 'Unknown'))}
+                                        </span>
+                                      </div>
+                                      {validationResult.spaceCheck.sufficient === false && (
+                                        <p className="text-red-600 text-xs mt-2">
+                                          <AlertCircle className="inline h-3 w-3 mr-1" />
+                                          {t('backup.restore.confirmation.spaceCheck.insufficient')}
+                                        </p>
+                                      )}
+                                    </div></CardContent></Card>
           )}
 
           {/* Summary */}
-          <Card className="p-4">
-            <h4 className="font-medium text-neutral-900 dark:text-neutral-100 mb-3">{t('backup.restore.confirmation.summary.title')}</h4>
-            <dl className="space-y-2 text-sm">
-              <div className="flex justify-between">
-                <dt className="text-neutral-600 dark:text-neutral-400">{t('backup.restore.confirmation.summary.source')}:</dt>
-                <dd className="font-medium text-neutral-900 dark:text-neutral-100 capitalize">{restoreData.source}</dd>
-              </div>
-              <div className="flex justify-between">
-                <dt className="text-neutral-600 dark:text-neutral-400">{t('backup.restore.confirmation.summary.backupDate')}:</dt>
-                <dd className="font-medium text-neutral-900 dark:text-neutral-100">
-                  {fmtDateTime(restoreData.selectedBackup.created_at)}
-                </dd>
-              </div>
-              <div className="flex justify-between">
-                <dt className="text-neutral-600 dark:text-neutral-400">{t('backup.restore.confirmation.summary.restoreType')}:</dt>
-                <dd className="font-medium text-neutral-900 dark:text-neutral-100 capitalize">{restoreData.restoreType}</dd>
-              </div>
-              <div className="flex justify-between">
-                <dt className="text-neutral-600 dark:text-neutral-400">{t('backup.restore.confirmation.summary.preBackup')}:</dt>
-                <dd className="font-medium text-neutral-900 dark:text-neutral-100">{restoreData.skipPreBackup ? t('backup.restore.confirmation.summary.skipped') : t('backup.restore.confirmation.summary.enabled')}</dd>
-              </div>
-            </dl>
-          </Card>
+          <Card className="p-4"><CardContent><h4 className="font-medium text-neutral-900 dark:text-neutral-100 mb-3">{t('backup.restore.confirmation.summary.title')}</h4><dl className="space-y-2 text-sm">
+                                <div className="flex justify-between">
+                                  <dt className="text-neutral-600 dark:text-neutral-400">{t('backup.restore.confirmation.summary.source')}:</dt>
+                                  <dd className="font-medium text-neutral-900 dark:text-neutral-100 capitalize">{restoreData.source}</dd>
+                                </div>
+                                <div className="flex justify-between">
+                                  <dt className="text-neutral-600 dark:text-neutral-400">{t('backup.restore.confirmation.summary.backupDate')}:</dt>
+                                  <dd className="font-medium text-neutral-900 dark:text-neutral-100">
+                                    {fmtDateTime(restoreData.selectedBackup.created_at)}
+                                  </dd>
+                                </div>
+                                <div className="flex justify-between">
+                                  <dt className="text-neutral-600 dark:text-neutral-400">{t('backup.restore.confirmation.summary.restoreType')}:</dt>
+                                  <dd className="font-medium text-neutral-900 dark:text-neutral-100 capitalize">{restoreData.restoreType}</dd>
+                                </div>
+                                <div className="flex justify-between">
+                                  <dt className="text-neutral-600 dark:text-neutral-400">{t('backup.restore.confirmation.summary.preBackup')}:</dt>
+                                  <dd className="font-medium text-neutral-900 dark:text-neutral-100">{restoreData.skipPreBackup ? t('backup.restore.confirmation.summary.skipped') : t('backup.restore.confirmation.summary.enabled')}</dd>
+                                </div>
+                              </dl></CardContent></Card>
 
           {/* Warning */}
           <div className="bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
@@ -722,65 +697,57 @@ export const RestoreWizard = ({ onVerifyIntegrity } = {}) => {
         )}
 
         {/* Progress Bar */}
-        <Card className="p-6">
-          <div className="space-y-4">
-            <div className="flex justify-between text-sm">
-              <span className="text-neutral-600 dark:text-neutral-400">{t('backup.restore.progress.overallProgress')}</span>
-              <span className="font-medium text-neutral-900 dark:text-neutral-100">{progress.percentage || 0}%</span>
-            </div>
-            <div className="w-full bg-neutral-200 dark:bg-neutral-700 rounded-full h-3">
-              <div
-                className="bg-primary h-3 rounded-full transition-all duration-500"
-                style={{ width: `${progress.percentage || 0}%` }}
-              />
-            </div>
-            {progress.currentFile && (
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                {t('backup.restore.progress.current')}: {progress.currentFile}
-              </p>
-            )}
-          </div>
-        </Card>
+        <Card className="p-6"><CardContent><div className="space-y-4">
+                        <div className="flex justify-between text-sm">
+                          <span className="text-neutral-600 dark:text-neutral-400">{t('backup.restore.progress.overallProgress')}</span>
+                          <span className="font-medium text-neutral-900 dark:text-neutral-100">{progress.percentage || 0}%</span>
+                        </div>
+                        <div className="w-full bg-neutral-200 dark:bg-neutral-700 rounded-full h-3">
+                          <div
+                            className="bg-primary h-3 rounded-full transition-all duration-500"
+                            style={{ width: `${progress.percentage || 0}%` }}
+                          />
+                        </div>
+                        {progress.currentFile && (
+                          <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                            {t('backup.restore.progress.current')}: {progress.currentFile}
+                          </p>
+                        )}
+                      </div></CardContent></Card>
 
         {/* Status Details */}
-        <Card className="p-6">
-          <h4 className="font-medium text-neutral-900 dark:text-neutral-100 mb-4">{t('backup.restore.progress.statusDetails')}</h4>
-          <div className="space-y-3">
-            {progress.steps?.map((step, idx) => (
-              <div key={idx} className="flex items-center space-x-3">
-                {step.status === 'completed' ? (
-                  <CheckCircle className="h-5 w-5 text-green-500" />
-                ) : step.status === 'running' ? (
-                  <Loader2 className="h-5 w-5 text-blue-500 animate-spin" />
-                ) : step.status === 'failed' ? (
-                  <XCircle className="h-5 w-5 text-red-500" />
-                ) : (
-                  <Clock className="h-5 w-5 text-neutral-300 dark:text-neutral-600" />
-                )}
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">{step.name}</p>
-                  {step.message && (
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400">{step.message}</p>
-                  )}
-                </div>
-                {step.duration && (
-                  <span className="text-xs text-neutral-500 dark:text-neutral-400">{step.duration}</span>
-                )}
-              </div>
-            ))}
-          </div>
-        </Card>
+        <Card className="p-6"><CardContent><h4 className="font-medium text-neutral-900 dark:text-neutral-100 mb-4">{t('backup.restore.progress.statusDetails')}</h4><div className="space-y-3">
+                        {progress.steps?.map((step, idx) => (
+                          <div key={idx} className="flex items-center space-x-3">
+                            {step.status === 'completed' ? (
+                              <CheckCircle className="h-5 w-5 text-green-500" />
+                            ) : step.status === 'running' ? (
+                              <Loader2 className="h-5 w-5 text-blue-500 animate-spin" />
+                            ) : step.status === 'failed' ? (
+                              <XCircle className="h-5 w-5 text-red-500" />
+                            ) : (
+                              <Clock className="h-5 w-5 text-neutral-300 dark:text-neutral-600" />
+                            )}
+                            <div className="flex-1">
+                              <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">{step.name}</p>
+                              {step.message && (
+                                <p className="text-xs text-neutral-500 dark:text-neutral-400">{step.message}</p>
+                              )}
+                            </div>
+                            {step.duration && (
+                              <span className="text-xs text-neutral-500 dark:text-neutral-400">{step.duration}</span>
+                            )}
+                          </div>
+                        ))}
+                      </div></CardContent></Card>
 
         {/* Logs */}
         {progress.logs && progress.logs.length > 0 && (
-          <Card className="p-6">
-            <h4 className="font-medium text-neutral-900 dark:text-neutral-100 mb-4">{t('backup.restore.progress.restoreLogs')}</h4>
-            <div className="bg-neutral-900 rounded-lg p-4 max-h-64 overflow-y-auto">
-              <pre className="text-xs text-neutral-300 font-mono">
-                {progress.logs.join('\n')}
-              </pre>
-            </div>
-          </Card>
+          <Card className="p-6"><CardContent><h4 className="font-medium text-neutral-900 dark:text-neutral-100 mb-4">{t('backup.restore.progress.restoreLogs')}</h4><div className="bg-neutral-900 rounded-lg p-4 max-h-64 overflow-y-auto">
+                              <pre className="text-xs text-neutral-300 font-mono">
+                                {progress.logs.join('\n')}
+                              </pre>
+                            </div></CardContent></Card>
         )}
 
         {/* Completion Actions — only when the most recent run actually
@@ -806,17 +773,15 @@ export const RestoreWizard = ({ onVerifyIntegrity } = {}) => {
                     restored state. */}
                 {onVerifyIntegrity && (
                   <Button
-                    variant="outline"
-                    size="sm"
-                    className="mt-3"
-                    onClick={onVerifyIntegrity}
-                    leftIcon={<ShieldCheck className="w-4 h-4" />}
-                  >
-                    {t(
-                      'backup.restore.progress.success.verifyIntegrity',
-                      'Verify document integrity now',
-                    )}
-                  </Button>
+                                                    variant="outline"
+                                                    size="sm"
+                                                    className="mt-3"
+                                                    onClick={onVerifyIntegrity}
+                                                  >
+                                                    <ShieldCheck className="w-4 h-4" />{t(
+                                                      'backup.restore.progress.success.verifyIntegrity',
+                                                      'Verify document integrity now',
+                                                    )}</Button>
                 )}
               </div>
             </div>
@@ -878,13 +843,7 @@ export const RestoreWizard = ({ onVerifyIntegrity } = {}) => {
       </div>
 
       {/* Step Content */}
-      <Card className="p-6">
-        {currentStep === 0 && renderSourceSelection()}
-        {currentStep === 1 && renderBackupSelection()}
-        {currentStep === 2 && renderRestoreOptions()}
-        {currentStep === 3 && renderConfirmation()}
-        {currentStep === 4 && renderProgress()}
-      </Card>
+      <Card className="p-6"><CardContent>{currentStep === 0 && renderSourceSelection()}{currentStep === 1 && renderBackupSelection()}{currentStep === 2 && renderRestoreOptions()}{currentStep === 3 && renderConfirmation()}{currentStep === 4 && renderProgress()}</CardContent></Card>
 
       {/* Navigation Buttons */}
       <div className="mt-6 flex justify-between">

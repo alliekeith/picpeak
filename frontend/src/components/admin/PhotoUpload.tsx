@@ -1,6 +1,5 @@
 import React, { useState, useRef, useMemo, useEffect } from 'react';
 import { Upload, X, Image, Loader2, Cog, AlertTriangle } from 'lucide-react';
-import { Button } from '../common';
 import { clsx } from 'clsx';
 import { api } from '../../config/api';
 import { toast } from 'react-toastify';
@@ -11,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { extensionsToMimeTypes, extensionsToAcceptString, extensionsToLabel, normalizeFileMimeType } from '../../utils/fileTypes';
 import { useUploadProgress } from '../../hooks/useUploadProgress';
 import { photosService } from '../../services/photos.service';
+import { Button } from "@/components/ui/button";
 
 interface PhotoUploadProps {
   eventId: number;
@@ -713,13 +713,10 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({ eventId, onUploadCompl
       {/* Upload Button */}
       <div className="flex justify-end">
         <Button
-          variant="primary"
-          onClick={handleUpload}
-          disabled={selectedFiles.length === 0 || isUploading}
-          leftIcon={isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
-        >
-          {isUploading ? t('upload.uploading') : t('common.upload') + ` ${selectedFiles.length} ${t(selectedFiles.length === 1 ? 'common.photo' : 'common.photos')}`}
-        </Button>
+                        onClick={handleUpload}
+                        disabled={selectedFiles.length === 0 || isUploading}
+                      >
+                        {isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}{isUploading ? t('upload.uploading') : t('common.upload') + ` ${selectedFiles.length} ${t(selectedFiles.length === 1 ? 'common.photo' : 'common.photos')}`}</Button>
       </div>
 
       {/* Failure report — names every file that didn't make it into the

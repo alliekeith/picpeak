@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { Save, RotateCcw, AlertTriangle, Check } from 'lucide-react';
-import { Button, Card, Loading } from '../common';
+import { Save, RotateCcw, AlertTriangle, Check, Loader2 } from 'lucide-react';
+import { Loading } from '../common';
 import { cssTemplatesService, CssTemplate } from '../../services/cssTemplates.service';
 import { useLocalizedDate } from '../../hooks/useLocalizedDate';
 import { useMutationWithToast } from '../../hooks';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 export const CssTemplateEditor: React.FC = () => {
   const { t } = useTranslation();
@@ -88,150 +90,141 @@ export const CssTemplateEditor: React.FC = () => {
   }
 
   return (
-    <Card>
-      <div className="p-6">
-        {/* No title here — this component IS the Settings → Custom CSS
-            tab, and the Settings shell already renders that section
-            heading (icon + label + divider). A second, near-identical H2
-            stacked directly under it (QA warning). */}
+    <Card><CardContent><div className="p-6">
+              {/* No title here — this component IS the Settings → Custom CSS
+                  tab, and the Settings shell already renders that section
+                  heading (icon + label + divider). A second, near-identical H2
+                  stacked directly under it (QA warning). */}
 
-        {/* Tab Navigation */}
-        <div className="flex border-b border-neutral-200 dark:border-neutral-700 mb-6">
-          {[1, 2, 3].map(slot => {
-            const template = localTemplates.find(t => t.slot_number === slot);
-            return (
-              <button
-                key={slot}
-                onClick={() => setActiveSlot(slot)}
-                className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
-                  activeSlot === slot
-                    ? 'border-brand text-brand'
-                    : 'border-transparent text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 hover:border-neutral-300 dark:hover:border-neutral-600'
-                }`}
-              >
-                {t('cssTemplates.template', 'Template')} {slot}
-                {template && (
-                  <span className="ml-2 text-neutral-400">
-                    ({template.name})
-                  </span>
-                )}
-                {template?.is_enabled && (
-                  <Check className="w-3 h-3 inline ml-1 text-green-500" />
-                )}
-              </button>
-            );
-          })}
-        </div>
+              {/* Tab Navigation */}
+              <div className="flex border-b border-neutral-200 dark:border-neutral-700 mb-6">
+                {[1, 2, 3].map(slot => {
+                  const template = localTemplates.find(t => t.slot_number === slot);
+                  return (
+                    <button
+                      key={slot}
+                      onClick={() => setActiveSlot(slot)}
+                      className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
+                        activeSlot === slot
+                          ? 'border-brand text-brand'
+                          : 'border-transparent text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 hover:border-neutral-300 dark:hover:border-neutral-600'
+                      }`}
+                    >
+                      {t('cssTemplates.template', 'Template')} {slot}
+                      {template && (
+                        <span className="ml-2 text-neutral-400">
+                          ({template.name})
+                        </span>
+                      )}
+                      {template?.is_enabled && (
+                        <Check className="w-3 h-3 inline ml-1 text-green-500" />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
 
-        {activeTemplate && (
-          <div className="space-y-6">
-            {/* Template Name */}
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 dark:text-neutral-300 mb-2">
-                {t('cssTemplates.templateName', 'Template Name')}
-              </label>
-              <input
-                type="text"
-                value={activeTemplate.name}
-                onChange={(e) => updateLocalTemplate({ name: e.target.value })}
-                maxLength={50}
-                className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-brand-500 focus:border-primary"
-              />
-            </div>
+              {activeTemplate && (
+                <div className="space-y-6">
+                  {/* Template Name */}
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 dark:text-neutral-300 mb-2">
+                      {t('cssTemplates.templateName', 'Template Name')}
+                    </label>
+                    <input
+                      type="text"
+                      value={activeTemplate.name}
+                      onChange={(e) => updateLocalTemplate({ name: e.target.value })}
+                      maxLength={50}
+                      className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-brand-500 focus:border-primary"
+                    />
+                  </div>
 
-            {/* Enable Toggle */}
-            <div>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={activeTemplate.is_enabled}
-                  onChange={(e) => updateLocalTemplate({ is_enabled: e.target.checked })}
-                  className="rounded-sm border-neutral-300 text-brand focus:ring-brand-500"
-                />
-                <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                  {t('cssTemplates.enableTemplate', 'Enable this template')}
-                </span>
-              </label>
-              <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1 ml-6">
-                {t('cssTemplates.enableHint', 'Enabled templates can be selected when creating events')}
-              </p>
-            </div>
+                  {/* Enable Toggle */}
+                  <div>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={activeTemplate.is_enabled}
+                        onChange={(e) => updateLocalTemplate({ is_enabled: e.target.checked })}
+                        className="rounded-sm border-neutral-300 text-brand focus:ring-brand-500"
+                      />
+                      <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                        {t('cssTemplates.enableTemplate', 'Enable this template')}
+                      </span>
+                    </label>
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1 ml-6">
+                      {t('cssTemplates.enableHint', 'Enabled templates can be selected when creating events')}
+                    </p>
+                  </div>
 
-            {/* CSS Editor */}
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 dark:text-neutral-300 mb-2">
-                {t('cssTemplates.cssContent', 'CSS Content')}
-              </label>
-              <div className="relative">
-                <textarea
-                  value={activeTemplate.css_content}
-                  onChange={(e) => updateLocalTemplate({ css_content: e.target.value })}
-                  className="w-full h-96 px-4 py-3 font-mono text-sm border border-neutral-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary bg-neutral-900 text-green-400"
-                  spellCheck={false}
-                  placeholder="/* Enter your custom CSS here */"
-                />
-                <div className="absolute bottom-3 right-3 text-xs text-neutral-400">
-                  {(activeTemplate.css_content?.length || 0).toLocaleString()} / 102,400 {t('common.characters', 'characters')}
+                  {/* CSS Editor */}
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 dark:text-neutral-300 mb-2">
+                      {t('cssTemplates.cssContent', 'CSS Content')}
+                    </label>
+                    <div className="relative">
+                      <textarea
+                        value={activeTemplate.css_content}
+                        onChange={(e) => updateLocalTemplate({ css_content: e.target.value })}
+                        className="w-full h-96 px-4 py-3 font-mono text-sm border border-neutral-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary bg-neutral-900 text-green-400"
+                        spellCheck={false}
+                        placeholder="/* Enter your custom CSS here */"
+                      />
+                      <div className="absolute bottom-3 right-3 text-xs text-neutral-400">
+                        {(activeTemplate.css_content?.length || 0).toLocaleString()} / 102,400 {t('common.characters', 'characters')}
+                      </div>
+                    </div>
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-2">
+                      {t('cssTemplates.cssHint', 'Use .gallery-page to scope styles to the gallery. Available variables: --gallery-bg, --gallery-text, --gallery-accent')}
+                    </p>
+                  </div>
+
+                  {/* Security Notice */}
+                  <div className="flex items-start gap-2 p-3 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 rounded-lg">
+                    <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 mt-0.5 shrink-0" />
+                    <div className="text-xs text-amber-800 dark:text-amber-200">
+                      <strong>{t('cssTemplates.securityNotice', 'Security Notice')}:</strong>{' '}
+                      {t('cssTemplates.securityText', 'CSS is sanitized to prevent malicious code. External URLs, @import, and JavaScript expressions are blocked.')}
+                    </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex items-center justify-between pt-4 border-t border-neutral-100 dark:border-neutral-700">
+                    <div className="flex items-center gap-3">
+                      {activeSlot === 1 && activeTemplate.is_default && (
+                        <Button
+                                                            variant="outline"
+                                                            size="sm"
+                                                            onClick={handleReset}
+                                                            disabled={resetMutation.isPending}
+                                                          >
+                                                            <RotateCcw className="w-4 h-4" />{t('cssTemplates.resetToDefault', 'Reset to Default')}</Button>
+                      )}
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      {hasChanges && (
+                        <span className="text-sm text-amber-600">
+                          {t('cssTemplates.unsavedChanges', 'Unsaved changes')}
+                        </span>
+                      )}
+                      <Button
+                                                      onClick={() => saveMutation.mutate()} disabled={saveMutation.isPending || !hasChanges || saveMutation.isPending}
+                                                    >
+                                                      {saveMutation.isPending && <Loader2 className="animate-spin" />}<Save className="w-4 h-4" />{t('cssTemplates.saveTemplate', 'Save Template')}</Button>
+                    </div>
+                  </div>
+
+                  {/* Last Updated */}
+                  {activeTemplate.updated_at && (
+                    <p className="text-xs text-neutral-400 dark:text-neutral-500 text-right">
+                      {t('cssTemplates.lastUpdated', 'Last updated')}: {fmtDateTime(activeTemplate.updated_at)}
+                    </p>
+                  )}
                 </div>
-              </div>
-              <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-2">
-                {t('cssTemplates.cssHint', 'Use .gallery-page to scope styles to the gallery. Available variables: --gallery-bg, --gallery-text, --gallery-accent')}
-              </p>
-            </div>
-
-            {/* Security Notice */}
-            <div className="flex items-start gap-2 p-3 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 rounded-lg">
-              <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 mt-0.5 shrink-0" />
-              <div className="text-xs text-amber-800 dark:text-amber-200">
-                <strong>{t('cssTemplates.securityNotice', 'Security Notice')}:</strong>{' '}
-                {t('cssTemplates.securityText', 'CSS is sanitized to prevent malicious code. External URLs, @import, and JavaScript expressions are blocked.')}
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex items-center justify-between pt-4 border-t border-neutral-100 dark:border-neutral-700">
-              <div className="flex items-center gap-3">
-                {activeSlot === 1 && activeTemplate.is_default && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleReset}
-                    disabled={resetMutation.isPending}
-                    leftIcon={<RotateCcw className="w-4 h-4" />}
-                  >
-                    {t('cssTemplates.resetToDefault', 'Reset to Default')}
-                  </Button>
-                )}
-              </div>
-
-              <div className="flex items-center gap-3">
-                {hasChanges && (
-                  <span className="text-sm text-amber-600">
-                    {t('cssTemplates.unsavedChanges', 'Unsaved changes')}
-                  </span>
-                )}
-                <Button
-                  variant="primary"
-                  onClick={() => saveMutation.mutate()}
-                  disabled={saveMutation.isPending || !hasChanges}
-                  isLoading={saveMutation.isPending}
-                  leftIcon={<Save className="w-4 h-4" />}
-                >
-                  {t('cssTemplates.saveTemplate', 'Save Template')}
-                </Button>
-              </div>
-            </div>
-
-            {/* Last Updated */}
-            {activeTemplate.updated_at && (
-              <p className="text-xs text-neutral-400 dark:text-neutral-500 text-right">
-                {t('cssTemplates.lastUpdated', 'Last updated')}: {fmtDateTime(activeTemplate.updated_at)}
-              </p>
-            )}
-          </div>
-        )}
-      </div>
-    </Card>
+              )}
+            </div></CardContent></Card>
   );
 };
 

@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft, Eye, Send, CheckCircle, BellRing, XCircle, Truck, Edit2, RefreshCw } from 'lucide-react';
-import { Button, Card, Loading, Input, LocalizedDateInput } from '../../../components/common';
+import { Loading, LocalizedDateInput } from '../../../components/common';
 import { DocumentLineageCard } from '../../../components/admin/DocumentLineageCard';
 import { billsService, isDraftInvoice } from '../../../services/bills.service';
 import { accountingService, type InvoiceRebillProof } from '../../../services/accounting.service';
@@ -17,6 +17,10 @@ import { formatMoney } from '../../../components/admin/LineItemsTable';
 import { formatMoneyMinor } from '../../../utils/money';
 import { useLocalizedDate } from '../../../hooks/useLocalizedDate';
 import { toast } from 'react-toastify';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export const BillDetailPage: React.FC = () => {
   const { t } = useTranslation();
@@ -403,26 +407,22 @@ export const BillDetailPage: React.FC = () => {
           Both lineage links are clickable so the admin can hop
           between the document pair without leaving the detail flow. */}
       {inv.kind === 'storno' && inv.cancelsInvoiceId && (
-        <Card padding="md" className="bg-purple-50 dark:bg-purple-950/30 border-purple-200 dark:border-purple-800">
-          <p className="text-sm text-purple-900 dark:text-purple-200">
-            {t('bills.stornoCancelsLabel', 'This Stornorechnung cancels invoice')}{' '}
-            <Link to={`/admin/clients/bills/${inv.cancelsInvoiceId}`} className="font-medium underline">
-              {inv.cancelsInvoiceNumber || `#${inv.cancelsInvoiceId}`}
-            </Link>
-            .
-          </p>
-        </Card>
+        <Card className="bg-purple-50 dark:bg-purple-950/30 border-purple-200 dark:border-purple-800"><CardContent><p className="text-sm text-purple-900 dark:text-purple-200">
+                          {t('bills.stornoCancelsLabel', 'This Stornorechnung cancels invoice')}{' '}
+                          <Link to={`/admin/clients/bills/${inv.cancelsInvoiceId}`} className="font-medium underline">
+                            {inv.cancelsInvoiceNumber || `#${inv.cancelsInvoiceId}`}
+                          </Link>
+                          .
+                        </p></CardContent></Card>
       )}
       {inv.kind !== 'storno' && inv.status === 'cancelled' && inv.cancellationStornoId && (
-        <Card padding="md" className="bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800">
-          <p className="text-sm text-amber-900 dark:text-amber-200">
-            {t('bills.cancelledByStornoLabel', 'This invoice was cancelled by Stornorechnung')}{' '}
-            <Link to={`/admin/clients/bills/${inv.cancellationStornoId}`} className="font-medium underline">
-              {inv.cancellationStornoNumber || `#${inv.cancellationStornoId}`}
-            </Link>
-            .
-          </p>
-        </Card>
+        <Card className="bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800"><CardContent><p className="text-sm text-amber-900 dark:text-amber-200">
+                          {t('bills.cancelledByStornoLabel', 'This invoice was cancelled by Stornorechnung')}{' '}
+                          <Link to={`/admin/clients/bills/${inv.cancellationStornoId}`} className="font-medium underline">
+                            {inv.cancellationStornoNumber || `#${inv.cancellationStornoId}`}
+                          </Link>
+                          .
+                        </p></CardContent></Card>
       )}
 
       {/* Cross-document lineage via deal_uuid (migration 140). Replaces
@@ -435,80 +435,72 @@ export const BillDetailPage: React.FC = () => {
         className="mt-4"
       />
 
-      <Card>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-          {inv.eventName && (
-            <div><div className="text-neutral-600 dark:text-neutral-300">{t('bills.field.eventName', 'Event')}</div>
-              <div>
-                {inv.eventId ? (
-                  <Link to={`/admin/events/${inv.eventId}`} className="text-neutral-900 dark:text-neutral-100 hover:underline">{inv.eventName}</Link>
-                ) : inv.eventName}
-                {inv.eventDate ? ` · ${fmtDate(inv.eventDate)}` : ''}
-              </div>
-            </div>
-          )}
-          <div><div className="text-neutral-600 dark:text-neutral-300">{t('bills.field.issueDate', 'Issued')}</div><div>{fmtDate(inv.issueDate)}</div></div>
-          <div><div className="text-neutral-600 dark:text-neutral-300">{t('bills.field.dueDate', 'Due')}</div><div>{fmtDate(inv.dueDate)}</div></div>
-          {inv.scheduledSendAt && <div><div className="text-neutral-600 dark:text-neutral-300">{t('bills.field.scheduledSendAt', 'Scheduled send')}</div><div>{fmtDate(inv.scheduledSendAt)}</div></div>}
-          {inv.installmentTotal > 1 && <div><div className="text-neutral-600 dark:text-neutral-300">{t('bills.field.installment', 'Installment')}</div><div>{inv.installmentIndex + 1}/{inv.installmentTotal}</div></div>}
-          <div><div className="text-neutral-600 dark:text-neutral-300">{t('bills.field.total', 'Total')}</div><div>{formatMoney(Number(inv.totalAmountMinor || 0) / 100, inv.currency)}</div></div>
-          <div><div className="text-neutral-600 dark:text-neutral-300">{t('bills.field.paid', 'Paid')}</div><div>{formatMoney(Number(inv.paidAmountMinor || 0) / 100, inv.currency)}</div></div>
-          <div><div className="text-neutral-600 dark:text-neutral-300">{t('bills.field.outstanding', 'Outstanding')}</div>
-            <div className={outstanding > 0 ? 'text-red-700 font-medium' : ''}>{formatMoney(outstanding, inv.currency)}</div></div>
-          {inv.lateFeeAmountMinor > 0 && <div><div className="text-neutral-600 dark:text-neutral-300">{t('bills.field.lateFee', 'Late fee')}</div><div className="text-amber-700">{formatMoney(Number(inv.lateFeeAmountMinor) / 100, inv.currency)}</div></div>}
-          {/* Source-quote / source-contract cross-links moved out of
-              the top stats grid into the unified Linked-documents card
-              above, mirroring the quote + contract detail pages. The
-              customers see the same provenance as a "Bezug: ..." line
-              on the PDF itself. */}
-        </div>
-      </Card>
+      <Card><CardContent><div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                    {inv.eventName && (
+                      <div><div className="text-neutral-600 dark:text-neutral-300">{t('bills.field.eventName', 'Event')}</div>
+                        <div>
+                          {inv.eventId ? (
+                            <Link to={`/admin/events/${inv.eventId}`} className="text-neutral-900 dark:text-neutral-100 hover:underline">{inv.eventName}</Link>
+                          ) : inv.eventName}
+                          {inv.eventDate ? ` · ${fmtDate(inv.eventDate)}` : ''}
+                        </div>
+                      </div>
+                    )}
+                    <div><div className="text-neutral-600 dark:text-neutral-300">{t('bills.field.issueDate', 'Issued')}</div><div>{fmtDate(inv.issueDate)}</div></div>
+                    <div><div className="text-neutral-600 dark:text-neutral-300">{t('bills.field.dueDate', 'Due')}</div><div>{fmtDate(inv.dueDate)}</div></div>
+                    {inv.scheduledSendAt && <div><div className="text-neutral-600 dark:text-neutral-300">{t('bills.field.scheduledSendAt', 'Scheduled send')}</div><div>{fmtDate(inv.scheduledSendAt)}</div></div>}
+                    {inv.installmentTotal > 1 && <div><div className="text-neutral-600 dark:text-neutral-300">{t('bills.field.installment', 'Installment')}</div><div>{inv.installmentIndex + 1}/{inv.installmentTotal}</div></div>}
+                    <div><div className="text-neutral-600 dark:text-neutral-300">{t('bills.field.total', 'Total')}</div><div>{formatMoney(Number(inv.totalAmountMinor || 0) / 100, inv.currency)}</div></div>
+                    <div><div className="text-neutral-600 dark:text-neutral-300">{t('bills.field.paid', 'Paid')}</div><div>{formatMoney(Number(inv.paidAmountMinor || 0) / 100, inv.currency)}</div></div>
+                    <div><div className="text-neutral-600 dark:text-neutral-300">{t('bills.field.outstanding', 'Outstanding')}</div>
+                      <div className={outstanding > 0 ? 'text-red-700 font-medium' : ''}>{formatMoney(outstanding, inv.currency)}</div></div>
+                    {inv.lateFeeAmountMinor > 0 && <div><div className="text-neutral-600 dark:text-neutral-300">{t('bills.field.lateFee', 'Late fee')}</div><div className="text-amber-700">{formatMoney(Number(inv.lateFeeAmountMinor) / 100, inv.currency)}</div></div>}
+                    {/* Source-quote / source-contract cross-links moved out of
+                        the top stats grid into the unified Linked-documents card
+                        above, mirroring the quote + contract detail pages. The
+                        customers see the same provenance as a "Bezug: ..." line
+                        on the PDF itself. */}
+                  </div></CardContent></Card>
 
-      <Card>
-        <h3 className="font-semibold mb-3">{t('bills.section.lineItems', 'Line items')}</h3>
-        <table className="w-full text-sm">
-          <thead><tr className="border-b border-neutral-200 dark:border-neutral-700">
-            <th className="text-left py-2">#</th>
-            <th className="text-left py-2">{t('crm.lineItems.quantity', 'Qty')}</th>
-            <th className="text-left py-2">{t('crm.lineItems.description', 'Description')}</th>
-            <th className="text-right py-2">{t('crm.lineItems.unitPrice', 'Unit')}</th>
-            <th className="text-right py-2">{t('crm.lineItems.total', 'Total')}</th>
-          </tr></thead>
-          <tbody>{lineItemRows}</tbody>
-        </table>
-      </Card>
+      <Card><CardContent><h3 className="font-semibold mb-3">{t('bills.section.lineItems', 'Line items')}</h3><table className="w-full text-sm">
+                    <thead><tr className="border-b border-neutral-200 dark:border-neutral-700">
+                      <th className="text-left py-2">#</th>
+                      <th className="text-left py-2">{t('crm.lineItems.quantity', 'Qty')}</th>
+                      <th className="text-left py-2">{t('crm.lineItems.description', 'Description')}</th>
+                      <th className="text-right py-2">{t('crm.lineItems.unitPrice', 'Unit')}</th>
+                      <th className="text-right py-2">{t('crm.lineItems.total', 'Total')}</th>
+                    </tr></thead>
+                    <tbody>{lineItemRows}</tbody>
+                  </table></CardContent></Card>
 
-      <Card>
-        <h3 className="font-semibold mb-3">{t('bills.section.paymentLog', 'Payment log')}</h3>
-        {data.payments.length === 0 ? (
-          <p className="text-sm text-neutral-500">{t('bills.noPayments', 'No payments recorded yet.')}</p>
-        ) : (
-          <table className="w-full text-sm">
-            <thead><tr className="border-b border-neutral-200 dark:border-neutral-700">
-              {/* Per-cell horizontal padding so the right-aligned
-                  Amount column and the left-aligned Method column
-                  have visible breathing room. Without padding the
-                  two collide visually on narrow rows. */}
-              <th className="text-left py-2 pr-4">{t('bills.payment.paidAt', 'Date')}</th>
-              <th className="text-right py-2 px-4">{t('bills.payment.amount', 'Amount')}</th>
-              <th className="text-left py-2 pl-4 pr-4">{t('bills.payment.method', 'Method')}</th>
-              <th className="text-left py-2 pr-4">{t('bills.payment.reference', 'Reference')}</th>
-              <th className="text-left py-2">{t('bills.payment.notes', 'Notes')}</th>
-            </tr></thead>
-            <tbody>
-              {data.payments.map((p) => (
-                <tr key={p.id} className="border-b border-neutral-100 dark:border-neutral-800">
-                  <td className="py-2 pr-4 whitespace-nowrap">{fmtDate(p.paidAt)}</td>
-                  <td className="py-2 px-4 text-right tabular-nums whitespace-nowrap">{formatMoney(Number(p.amountMinor) / 100, inv.currency)}</td>
-                  <td className="py-2 pl-4 pr-4 whitespace-nowrap">{p.paymentMethod || '—'}</td>
-                  <td className="py-2 pr-4 font-mono text-xs">{p.reference || '—'}</td>
-                  <td className="py-2">{p.notes || '—'}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </Card>
+      <Card><CardContent><h3 className="font-semibold mb-3">{t('bills.section.paymentLog', 'Payment log')}</h3>{data.payments.length === 0 ? (
+                    <p className="text-sm text-neutral-500">{t('bills.noPayments', 'No payments recorded yet.')}</p>
+                  ) : (
+                    <table className="w-full text-sm">
+                      <thead><tr className="border-b border-neutral-200 dark:border-neutral-700">
+                        {/* Per-cell horizontal padding so the right-aligned
+                            Amount column and the left-aligned Method column
+                            have visible breathing room. Without padding the
+                            two collide visually on narrow rows. */}
+                        <th className="text-left py-2 pr-4">{t('bills.payment.paidAt', 'Date')}</th>
+                        <th className="text-right py-2 px-4">{t('bills.payment.amount', 'Amount')}</th>
+                        <th className="text-left py-2 pl-4 pr-4">{t('bills.payment.method', 'Method')}</th>
+                        <th className="text-left py-2 pr-4">{t('bills.payment.reference', 'Reference')}</th>
+                        <th className="text-left py-2">{t('bills.payment.notes', 'Notes')}</th>
+                      </tr></thead>
+                      <tbody>
+                        {data.payments.map((p) => (
+                          <tr key={p.id} className="border-b border-neutral-100 dark:border-neutral-800">
+                            <td className="py-2 pr-4 whitespace-nowrap">{fmtDate(p.paidAt)}</td>
+                            <td className="py-2 px-4 text-right tabular-nums whitespace-nowrap">{formatMoney(Number(p.amountMinor) / 100, inv.currency)}</td>
+                            <td className="py-2 pl-4 pr-4 whitespace-nowrap">{p.paymentMethod || '—'}</td>
+                            <td className="py-2 pr-4 font-mono text-xs">{p.reference || '—'}</td>
+                            <td className="py-2">{p.notes || '—'}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  )}</CardContent></Card>
 
       {sendDialogOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={() => !sending && setSendDialogOpen(false)}>
@@ -583,8 +575,8 @@ export const BillDetailPage: React.FC = () => {
             onClick={(e) => e.stopPropagation()}>
             <h3 className="font-semibold mb-3 text-lg">{t('bills.markPaid', 'Mark paid')}</h3>
             <div className="space-y-3">
-              <Input type="number" step="0.01" label={t('bills.payment.amount', 'Amount') as string} value={payAmount}
-                onChange={(e) => setPayAmount(e.target.value)} placeholder={String(outstanding.toFixed(2))} />
+              <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('bills.payment.amount', 'Amount') as string}</span><Input type="number" step="0.01" value={payAmount}
+                                          onChange={(e) => setPayAmount(e.target.value)} placeholder={String(outstanding.toFixed(2))} /></Label></div>
               {/* Optional payment date — drives `paid_at`, which the
                   dashboard's cash-basis revenue windows key on. Defaults
                   to today; backdate it to when the payment actually arrived. */}
@@ -644,8 +636,8 @@ export const BillDetailPage: React.FC = () => {
                   <option value="twint">{t('bills.payment.methods.twint', 'TWINT')}</option>
                 </select>
               </div>
-              <Input label={t('bills.payment.reference', 'Reference') as string} value={payReference}
-                onChange={(e) => setPayReference(e.target.value)} />
+              <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('bills.payment.reference', 'Reference') as string}</span><Input value={payReference}
+                                          onChange={(e) => setPayReference(e.target.value)} /></Label></div>
               <div>
                 <label className="block text-sm font-medium mb-1">{t('bills.payment.notes', 'Notes')}</label>
                 <textarea rows={3} className="w-full rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-3 py-2 text-sm"

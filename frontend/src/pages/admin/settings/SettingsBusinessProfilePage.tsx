@@ -8,7 +8,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Plus, Trash2, Star, Pencil, Save, Clock, Copy, Mail } from 'lucide-react';
+import { Plus, Trash2, Star, Pencil, Save, Clock, Copy, Mail, Loader2 } from 'lucide-react';
 import {
   businessProfileService,
   type BusinessProfile,
@@ -17,10 +17,14 @@ import {
   type BusinessHoursBlock,
   type QrFormat,
 } from '../../../services/businessProfile.service';
-import { Button, Card, Loading, Input, CountrySelect, TimeField } from '../../../components/common';
+import { Loading, CountrySelect, TimeField } from '../../../components/common';
 import { toast } from 'react-toastify';
 import { currencyOptions, normalizeCurrency } from '../../../constants/currencies';
 import { useMutationWithToast } from '../../../hooks';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 // Full IANA timezone list for the picker. `Intl.supportedValuesOf` is ES2022
 // (all current browsers); fall back to a small CH/LI-relevant set on the rare
@@ -73,289 +77,254 @@ export const SettingsBusinessProfilePage: React.FC = () => {
           {t('businessProfile.subtitle', 'Issuer block shown on every quote and invoice PDF.')}
         </p>
         <Button
-          onClick={() => saveProfile.mutate()}
-          disabled={saveProfile.isPending}
-          isLoading={saveProfile.isPending}
-          leftIcon={<Save className="w-4 h-4" />}
-        >
-          {t('common.save', 'Save')}
-        </Button>
+                        onClick={() => saveProfile.mutate()} disabled={saveProfile.isPending || saveProfile.isPending}
+                      >
+                        {saveProfile.isPending && <Loader2 className="animate-spin" />}<Save className="w-4 h-4" />{t('common.save', 'Save')}</Button>
       </div>
 
-      <Card>
-        <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-3">{t('businessProfile.section.company', 'Company')}</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <Input label={t('businessProfile.field.companyName', 'Company name') as string} value={profile.companyName}
-            onChange={(e) => setProfile({ ...profile, companyName: e.target.value })} />
-          <Input label={t('businessProfile.field.vatId', 'VAT ID (USt-IdNr.)') as string} value={profile.vatId}
-            onChange={(e) => setProfile({ ...profile, vatId: e.target.value })} />
-          {/* Migration 139 — Steuernummer. Distinct from VAT-ID. §14
-              UStG requires one or both on every invoice; many
-              Kleinunternehmer (§19 UStG) only have this. */}
-          <Input label={t('businessProfile.field.taxId', 'Tax number (Steuernummer)') as string}
-            value={profile.taxId}
-            onChange={(e) => setProfile({ ...profile, taxId: e.target.value })} />
-          <Input label={t('businessProfile.field.addressLine1', 'Address line 1') as string} value={profile.addressLine1}
-            onChange={(e) => setProfile({ ...profile, addressLine1: e.target.value })} />
-          <Input label={t('businessProfile.field.addressLine2', 'Address line 2') as string} value={profile.addressLine2}
-            onChange={(e) => setProfile({ ...profile, addressLine2: e.target.value })} />
-          <Input label={t('businessProfile.field.postalCode', 'Postal code') as string} value={profile.postalCode}
-            onChange={(e) => setProfile({ ...profile, postalCode: e.target.value })} />
-          <Input label={t('businessProfile.field.city', 'City') as string} value={profile.city}
-            onChange={(e) => setProfile({ ...profile, city: e.target.value })} />
-          <Input label={t('businessProfile.field.state', 'State / Region') as string} value={profile.state}
-            onChange={(e) => setProfile({ ...profile, state: e.target.value })} />
-          <CountrySelect label={t('businessProfile.field.countryCode', 'Country') as string}
-            value={profile.countryCode || ''}
-            onChange={(code) => setProfile({ ...profile, countryCode: code })} />
-          {/* The free-text "Country (full name)" override (migration 107) was
-              removed as redundant — the picker stores the ISO code and the PDF
-              renderer derives the localized full name from it
-              (pdfService.countryName). The DB column + `country_name ||`
-              fallback remain, so any legacy override still renders. */}
-        </div>
-      </Card>
+      <Card><CardContent><h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-3">{t('businessProfile.section.company', 'Company')}</h3><div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('businessProfile.field.companyName', 'Company name') as string}</span><Input value={profile.companyName}
+                                    onChange={(e) => setProfile({ ...profile, companyName: e.target.value })} /></Label></div>
+                    <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('businessProfile.field.vatId', 'VAT ID (USt-IdNr.)') as string}</span><Input value={profile.vatId}
+                                    onChange={(e) => setProfile({ ...profile, vatId: e.target.value })} /></Label></div>
+                    {/* Migration 139 — Steuernummer. Distinct from VAT-ID. §14
+                        UStG requires one or both on every invoice; many
+                        Kleinunternehmer (§19 UStG) only have this. */}
+                    <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('businessProfile.field.taxId', 'Tax number (Steuernummer)') as string}</span><Input
+                                    value={profile.taxId}
+                                    onChange={(e) => setProfile({ ...profile, taxId: e.target.value })} /></Label></div>
+                    <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('businessProfile.field.addressLine1', 'Address line 1') as string}</span><Input value={profile.addressLine1}
+                                    onChange={(e) => setProfile({ ...profile, addressLine1: e.target.value })} /></Label></div>
+                    <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('businessProfile.field.addressLine2', 'Address line 2') as string}</span><Input value={profile.addressLine2}
+                                    onChange={(e) => setProfile({ ...profile, addressLine2: e.target.value })} /></Label></div>
+                    <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('businessProfile.field.postalCode', 'Postal code') as string}</span><Input value={profile.postalCode}
+                                    onChange={(e) => setProfile({ ...profile, postalCode: e.target.value })} /></Label></div>
+                    <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('businessProfile.field.city', 'City') as string}</span><Input value={profile.city}
+                                    onChange={(e) => setProfile({ ...profile, city: e.target.value })} /></Label></div>
+                    <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('businessProfile.field.state', 'State / Region') as string}</span><Input value={profile.state}
+                                    onChange={(e) => setProfile({ ...profile, state: e.target.value })} /></Label></div>
+                    <CountrySelect label={t('businessProfile.field.countryCode', 'Country') as string}
+                      value={profile.countryCode || ''}
+                      onChange={(code) => setProfile({ ...profile, countryCode: code })} />
+                    {/* The free-text "Country (full name)" override (migration 107) was
+                        removed as redundant — the picker stores the ISO code and the PDF
+                        renderer derives the localized full name from it
+                        (pdfService.countryName). The DB column + `country_name ||`
+                        fallback remain, so any legacy override still renders. */}
+                  </div></CardContent></Card>
 
-      <Card>
-        <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-3">{t('businessProfile.section.contact', 'Contact')}</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <Input label={t('businessProfile.field.phone', 'Phone') as string} value={profile.phone}
-            onChange={(e) => setProfile({ ...profile, phone: e.target.value })} />
-          <Input label={t('businessProfile.field.mobile', 'Mobile') as string} value={profile.mobile}
-            onChange={(e) => setProfile({ ...profile, mobile: e.target.value })} />
-          <Input type="email" label={t('businessProfile.field.email', 'Email') as string} value={profile.email}
-            onChange={(e) => setProfile({ ...profile, email: e.target.value })} />
-          <Input label={t('businessProfile.field.website', 'Website') as string} value={profile.website}
-            onChange={(e) => setProfile({ ...profile, website: e.target.value })} />
-        </div>
-      </Card>
+      <Card><CardContent><h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-3">{t('businessProfile.section.contact', 'Contact')}</h3><div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('businessProfile.field.phone', 'Phone') as string}</span><Input value={profile.phone}
+                                    onChange={(e) => setProfile({ ...profile, phone: e.target.value })} /></Label></div>
+                    <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('businessProfile.field.mobile', 'Mobile') as string}</span><Input value={profile.mobile}
+                                    onChange={(e) => setProfile({ ...profile, mobile: e.target.value })} /></Label></div>
+                    <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('businessProfile.field.email', 'Email') as string}</span><Input type="email" value={profile.email}
+                                    onChange={(e) => setProfile({ ...profile, email: e.target.value })} /></Label></div>
+                    <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('businessProfile.field.website', 'Website') as string}</span><Input value={profile.website}
+                                    onChange={(e) => setProfile({ ...profile, website: e.target.value })} /></Label></div>
+                  </div></CardContent></Card>
 
-      <Card>
-        <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-3">{t('businessProfile.section.defaults', 'Defaults')}</h3>
-        {/* Pointer so admins who look for the old VAT/hourly-rate fields here
-            know where they went. */}
-        <p className="mb-3 rounded-md border border-blue-200 dark:border-blue-900/50 bg-blue-50 dark:bg-blue-900/20 px-3 py-2 text-xs text-blue-800 dark:text-blue-300">
-          {t('businessProfile.movedToAccounting', 'The VAT rate, VAT label and default hourly rate now live under Settings → Accounting.')}
-        </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-              {t('businessProfile.field.defaultCurrency', 'Default currency')}
-            </label>
-            {/* Dropdown; the stored value is normalised (e.g. an old free-text
-                "chf" → "CHF") so it pre-selects, and an unknown code is kept as
-                an extra option so nothing is lost. */}
-            <select
-              value={normalizeCurrency(profile.defaultCurrency)}
-              onChange={(e) => setProfile({ ...profile, defaultCurrency: e.target.value })}
-              className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm focus:outline-hidden focus:ring-2 focus:ring-brand-500"
-            >
-              {currencyOptions(profile.defaultCurrency).map((c) => (
-                <option key={c} value={c}>{c}</option>
-              ))}
-            </select>
-          </div>
-          <Input label={t('businessProfile.field.defaultLocale', 'Default locale') as string} value={profile.defaultLocale}
-            maxLength={8} onChange={(e) => setProfile({ ...profile, defaultLocale: e.target.value })} />
-          {/* Migration 137 — IANA timezone for the admin calendar + the
-              scheduled-email business-hours snapping. Dropdown of the full
-              IANA list; blank = fall back to the server/browser tz. */}
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-              {t('businessProfile.field.timezone', 'Timezone (IANA)')}
-            </label>
-            <select
-              value={profile.timezone || ''}
-              onChange={(e) => setProfile({ ...profile, timezone: e.target.value || null })}
-              className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm focus:outline-hidden focus:ring-2 focus:ring-brand-500"
-            >
-              <option value="">
-                {t('businessProfile.field.timezoneSystemDefault', 'System default')} ({Intl.DateTimeFormat().resolvedOptions().timeZone})
-              </option>
-              {IANA_TIMEZONES.map((tz) => (
-                <option key={tz} value={tz}>{tz}</option>
-              ))}
-            </select>
-          </div>
-          {/* VAT rate %, VAT label and the default hourly rate moved to
-              Settings → Accounting (so all financial/VAT config lives in one
-              place). See the callout above. */}
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{t('businessProfile.field.defaultQrFormat', 'Default invoice QR')}</label>
-            <select value={profile.defaultQrFormat} onChange={(e) => setProfile({ ...profile, defaultQrFormat: e.target.value as QrFormat })}
-              className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm">
-              <option value="none">{t('businessProfile.qrFormat.none', 'None')}</option>
-              <option value="swiss">{t('businessProfile.qrFormat.swiss', 'Swiss QR-bill (CH / LI)')}</option>
-              <option value="epc">{t('businessProfile.qrFormat.epc', 'EPC QR (SEPA / EUR)')}</option>
-            </select>
-          </div>
-          <Input label={t('businessProfile.field.footerLine', 'PDF footer line') as string} value={profile.footerLine}
-            onChange={(e) => setProfile({ ...profile, footerLine: e.target.value })} />
-          {/* Dedicated PDF letterhead logo — separate from the global
-              Settings → Branding logo. SVG accepted (rasterised to PNG
-              on the fly). When unset the renderer falls back to the
-              branding logo. */}
-          <div className="md:col-span-2">
-            <PdfLogoUploader profile={profile} setProfile={setProfile} />
-          </div>
-          {/* Logo banner height (pt) — admin-adjustable per migration 108. */}
-          <Input type="number" min={24} max={200}
-            label={t('businessProfile.field.pdfLogoHeight', 'PDF logo height (pt, 24-200)') as string}
-            value={profile.pdfLogoHeight ?? 56}
-            onChange={(e) => setProfile({ ...profile, pdfLogoHeight: Number(e.target.value) })} />
-          {/* Folding marks dropdown. */}
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-              {t('businessProfile.field.pdfFoldingMarks', 'Folding marks on PDF page edge')}
-            </label>
-            <select value={profile.pdfFoldingMarks || 'none'}
-              onChange={(e) => setProfile({ ...profile, pdfFoldingMarks: e.target.value as any })}
-              className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm">
-              <option value="none">{t('businessProfile.foldingMarks.none', 'None')}</option>
-              <option value="half">{t('businessProfile.foldingMarks.half', 'Half (148.5mm) — for C5 envelopes')}</option>
-              <option value="third">{t('businessProfile.foldingMarks.third', 'Thirds (105 + 210mm) — for DL / DIN long envelopes')}</option>
-              <option value="both">{t('businessProfile.foldingMarks.both', 'All three marks')}</option>
-            </select>
-          </div>
-          {/* PDF font selection lives on Settings → Branding now
-              (migration 121, "PDF typography" card). The legacy
-              free-text TTF path input was retired in favour of the
-              bundled-fonts dropdown there. The column
-              `pdf_font_ttf_path` stays on the row as a power-user
-              override that the PDF renderer still honours when
-              populated directly in the DB. */}
-        </div>
-
-        {/* PDF letterhead visibility toggles — let the admin suppress
-            the logo or the company-name line independently. Useful
-            when the logo itself already contains the brand name
-            (very common with wordmark logos). Lifted out of the input
-            grid so the toggle switches don't fight the field sizing. */}
-        <div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700 space-y-3">
-          <PdfToggleRow
-            label={t('businessProfile.field.pdfShowLogo', 'Show logo in PDF letterhead') as string}
-            description={t('businessProfile.field.pdfShowLogoHelp',
-              'When off, the logo image is suppressed on every PDF even if a logo is uploaded.') as string}
-            enabled={profile.pdfShowLogo}
-            onChange={(v) => setProfile({ ...profile, pdfShowLogo: v })}
-          />
-          <PdfToggleRow
-            label={t('businessProfile.field.pdfShowCompanyName', 'Show company name in PDF letterhead') as string}
-            description={t('businessProfile.field.pdfShowCompanyNameHelp',
-              'When off, the company-name line is suppressed (useful if the logo is a wordmark already containing the name).') as string}
-            enabled={profile.pdfShowCompanyName}
-            onChange={(v) => setProfile({ ...profile, pdfShowCompanyName: v })}
-          />
-          <PdfToggleRow
-            label={t('businessProfile.field.pdfCompanyNameInline', 'Render company name inline with address') as string}
-            description={t('businessProfile.field.pdfCompanyNameInlineHelp',
-              'When on, the company name appears as a plain line directly above the street address (same size + weight). When off, it renders as a bold title under the logo.') as string}
-            enabled={profile.pdfCompanyNameInline}
-            onChange={(v) => setProfile({ ...profile, pdfCompanyNameInline: v })}
-          />
-          {/* Quote payment-block toggles (migration 110). Both default
-              OFF — a quote is an offer, not a demand for payment, and
-              the IBAN block is always invoice-only. Admins opt in when
-              they want to set payment expectations on the quote. */}
-          <PdfToggleRow
-            label={t('businessProfile.field.pdfQuoteShowNetDays', 'Show net payment days on quote PDFs') as string}
-            description={t('businessProfile.field.pdfQuoteShowNetDaysHelp',
-              'When on, quote PDFs include the "X days from invoice date." line in the payment conditions block. Invoices always show this row regardless.') as string}
-            enabled={profile.pdfQuoteShowNetDays}
-            onChange={(v) => setProfile({ ...profile, pdfQuoteShowNetDays: v })}
-          />
-          <PdfToggleRow
-            label={t('businessProfile.field.pdfQuoteShowSkonto', 'Show Skonto / early-payment discount on quote PDFs') as string}
-            description={t('businessProfile.field.pdfQuoteShowSkontoHelp',
-              'When on, quote PDFs include the Skonto offer and the "Amount with discount" line. Invoices always show these regardless.') as string}
-            enabled={profile.pdfQuoteShowSkonto}
-            onChange={(v) => setProfile({ ...profile, pdfQuoteShowSkonto: v })}
-          />
-        </div>
-      </Card>
+      <Card><CardContent><h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-3">{t('businessProfile.section.defaults', 'Defaults')}</h3>{/* Pointer so admins who look for the old VAT/hourly-rate fields here
+                      know where they went. */}<p className="mb-3 rounded-md border border-blue-200 dark:border-blue-900/50 bg-blue-50 dark:bg-blue-900/20 px-3 py-2 text-xs text-blue-800 dark:text-blue-300">
+                    {t('businessProfile.movedToAccounting', 'The VAT rate, VAT label and default hourly rate now live under Settings → Accounting.')}
+                  </p><div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                        {t('businessProfile.field.defaultCurrency', 'Default currency')}
+                      </label>
+                      {/* Dropdown; the stored value is normalised (e.g. an old free-text
+                          "chf" → "CHF") so it pre-selects, and an unknown code is kept as
+                          an extra option so nothing is lost. */}
+                      <select
+                        value={normalizeCurrency(profile.defaultCurrency)}
+                        onChange={(e) => setProfile({ ...profile, defaultCurrency: e.target.value })}
+                        className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm focus:outline-hidden focus:ring-2 focus:ring-brand-500"
+                      >
+                        {currencyOptions(profile.defaultCurrency).map((c) => (
+                          <option key={c} value={c}>{c}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('businessProfile.field.defaultLocale', 'Default locale') as string}</span><Input value={profile.defaultLocale}
+                                        maxLength={8} onChange={(e) => setProfile({ ...profile, defaultLocale: e.target.value })} /></Label></div>
+                    {/* Migration 137 — IANA timezone for the admin calendar + the
+                        scheduled-email business-hours snapping. Dropdown of the full
+                        IANA list; blank = fall back to the server/browser tz. */}
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                        {t('businessProfile.field.timezone', 'Timezone (IANA)')}
+                      </label>
+                      <select
+                        value={profile.timezone || ''}
+                        onChange={(e) => setProfile({ ...profile, timezone: e.target.value || null })}
+                        className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm focus:outline-hidden focus:ring-2 focus:ring-brand-500"
+                      >
+                        <option value="">
+                          {t('businessProfile.field.timezoneSystemDefault', 'System default')} ({Intl.DateTimeFormat().resolvedOptions().timeZone})
+                        </option>
+                        {IANA_TIMEZONES.map((tz) => (
+                          <option key={tz} value={tz}>{tz}</option>
+                        ))}
+                      </select>
+                    </div>
+                    {/* VAT rate %, VAT label and the default hourly rate moved to
+                        Settings → Accounting (so all financial/VAT config lives in one
+                        place). See the callout above. */}
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{t('businessProfile.field.defaultQrFormat', 'Default invoice QR')}</label>
+                      <select value={profile.defaultQrFormat} onChange={(e) => setProfile({ ...profile, defaultQrFormat: e.target.value as QrFormat })}
+                        className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm">
+                        <option value="none">{t('businessProfile.qrFormat.none', 'None')}</option>
+                        <option value="swiss">{t('businessProfile.qrFormat.swiss', 'Swiss QR-bill (CH / LI)')}</option>
+                        <option value="epc">{t('businessProfile.qrFormat.epc', 'EPC QR (SEPA / EUR)')}</option>
+                      </select>
+                    </div>
+                    <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('businessProfile.field.footerLine', 'PDF footer line') as string}</span><Input value={profile.footerLine}
+                                        onChange={(e) => setProfile({ ...profile, footerLine: e.target.value })} /></Label></div>
+                    {/* Dedicated PDF letterhead logo — separate from the global
+                        Settings → Branding logo. SVG accepted (rasterised to PNG
+                        on the fly). When unset the renderer falls back to the
+                        branding logo. */}
+                    <div className="md:col-span-2">
+                      <PdfLogoUploader profile={profile} setProfile={setProfile} />
+                    </div>
+                    {/* Logo banner height (pt) — admin-adjustable per migration 108. */}
+                    <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('businessProfile.field.pdfLogoHeight', 'PDF logo height (pt, 24-200)') as string}</span><Input type="number" min={24} max={200}
+                                        value={profile.pdfLogoHeight ?? 56}
+                                        onChange={(e) => setProfile({ ...profile, pdfLogoHeight: Number(e.target.value) })} /></Label></div>
+                    {/* Folding marks dropdown. */}
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                        {t('businessProfile.field.pdfFoldingMarks', 'Folding marks on PDF page edge')}
+                      </label>
+                      <select value={profile.pdfFoldingMarks || 'none'}
+                        onChange={(e) => setProfile({ ...profile, pdfFoldingMarks: e.target.value as any })}
+                        className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm">
+                        <option value="none">{t('businessProfile.foldingMarks.none', 'None')}</option>
+                        <option value="half">{t('businessProfile.foldingMarks.half', 'Half (148.5mm) — for C5 envelopes')}</option>
+                        <option value="third">{t('businessProfile.foldingMarks.third', 'Thirds (105 + 210mm) — for DL / DIN long envelopes')}</option>
+                        <option value="both">{t('businessProfile.foldingMarks.both', 'All three marks')}</option>
+                      </select>
+                    </div>
+                    {/* PDF font selection lives on Settings → Branding now
+                        (migration 121, "PDF typography" card). The legacy
+                        free-text TTF path input was retired in favour of the
+                        bundled-fonts dropdown there. The column
+                        `pdf_font_ttf_path` stays on the row as a power-user
+                        override that the PDF renderer still honours when
+                        populated directly in the DB. */}
+                  </div>{/* PDF letterhead visibility toggles — let the admin suppress
+                      the logo or the company-name line independently. Useful
+                      when the logo itself already contains the brand name
+                      (very common with wordmark logos). Lifted out of the input
+                      grid so the toggle switches don't fight the field sizing. */}<div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700 space-y-3">
+                    <PdfToggleRow
+                      label={t('businessProfile.field.pdfShowLogo', 'Show logo in PDF letterhead') as string}
+                      description={t('businessProfile.field.pdfShowLogoHelp',
+                        'When off, the logo image is suppressed on every PDF even if a logo is uploaded.') as string}
+                      enabled={profile.pdfShowLogo}
+                      onChange={(v) => setProfile({ ...profile, pdfShowLogo: v })}
+                    />
+                    <PdfToggleRow
+                      label={t('businessProfile.field.pdfShowCompanyName', 'Show company name in PDF letterhead') as string}
+                      description={t('businessProfile.field.pdfShowCompanyNameHelp',
+                        'When off, the company-name line is suppressed (useful if the logo is a wordmark already containing the name).') as string}
+                      enabled={profile.pdfShowCompanyName}
+                      onChange={(v) => setProfile({ ...profile, pdfShowCompanyName: v })}
+                    />
+                    <PdfToggleRow
+                      label={t('businessProfile.field.pdfCompanyNameInline', 'Render company name inline with address') as string}
+                      description={t('businessProfile.field.pdfCompanyNameInlineHelp',
+                        'When on, the company name appears as a plain line directly above the street address (same size + weight). When off, it renders as a bold title under the logo.') as string}
+                      enabled={profile.pdfCompanyNameInline}
+                      onChange={(v) => setProfile({ ...profile, pdfCompanyNameInline: v })}
+                    />
+                    {/* Quote payment-block toggles (migration 110). Both default
+                        OFF — a quote is an offer, not a demand for payment, and
+                        the IBAN block is always invoice-only. Admins opt in when
+                        they want to set payment expectations on the quote. */}
+                    <PdfToggleRow
+                      label={t('businessProfile.field.pdfQuoteShowNetDays', 'Show net payment days on quote PDFs') as string}
+                      description={t('businessProfile.field.pdfQuoteShowNetDaysHelp',
+                        'When on, quote PDFs include the "X days from invoice date." line in the payment conditions block. Invoices always show this row regardless.') as string}
+                      enabled={profile.pdfQuoteShowNetDays}
+                      onChange={(v) => setProfile({ ...profile, pdfQuoteShowNetDays: v })}
+                    />
+                    <PdfToggleRow
+                      label={t('businessProfile.field.pdfQuoteShowSkonto', 'Show Skonto / early-payment discount on quote PDFs') as string}
+                      description={t('businessProfile.field.pdfQuoteShowSkontoHelp',
+                        'When on, quote PDFs include the Skonto offer and the "Amount with discount" line. Invoices always show these regardless.') as string}
+                      enabled={profile.pdfQuoteShowSkonto}
+                      onChange={(v) => setProfile({ ...profile, pdfQuoteShowSkonto: v })}
+                    />
+                  </div></CardContent></Card>
 
       {/* Business hours (migration 114). Per-weekday opening blocks with
           lunch-break support, interpreted in the profile timezone above.
           Drives the scheduled-email floor: an email scheduled outside the
           open blocks is held until the next opening. */}
-      <Card>
-        <div className="flex items-center gap-2 mb-1">
-          <Clock className="w-5 h-5 text-neutral-500" />
-          <h3 className="font-semibold text-neutral-900 dark:text-neutral-100">{t('businessProfile.businessHours.title', 'Business hours')}</h3>
-        </div>
-        <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
-          {t('businessProfile.businessHours.subtitle',
-            'Set opening hours per weekday — add a second block for a lunch break. Interpreted in the timezone above ({{tz}}).',
-            { tz: profile.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone })}
-        </p>
-
-        <BusinessHoursEditor
-          value={profile.businessHours}
-          onChange={(next) => setProfile({ ...profile, businessHours: next })}
-        />
-
-        <div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
-          <PdfToggleRow
-            label={t('businessProfile.businessHours.floorToggle', 'Hold scheduled emails until business hours') as string}
-            description={t('businessProfile.businessHours.floorToggleHelp',
-              'When on, an automated email scheduled outside the hours above is delivered at the next opening instead of at an odd hour. When off, scheduled emails send at their exact time.') as string}
-            enabled={profile.scheduledEmailFloorEnabled}
-            onChange={(v) => setProfile({ ...profile, scheduledEmailFloorEnabled: v })}
-          />
-        </div>
-      </Card>
+      <Card><CardContent><div className="flex items-center gap-2 mb-1">
+                    <Clock className="w-5 h-5 text-neutral-500" />
+                    <h3 className="font-semibold text-neutral-900 dark:text-neutral-100">{t('businessProfile.businessHours.title', 'Business hours')}</h3>
+                  </div><p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
+                    {t('businessProfile.businessHours.subtitle',
+                      'Set opening hours per weekday — add a second block for a lunch break. Interpreted in the timezone above ({{tz}}).',
+                      { tz: profile.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone })}
+                  </p><BusinessHoursEditor
+                    value={profile.businessHours}
+                    onChange={(next) => setProfile({ ...profile, businessHours: next })}
+                  /><div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
+                    <PdfToggleRow
+                      label={t('businessProfile.businessHours.floorToggle', 'Hold scheduled emails until business hours') as string}
+                      description={t('businessProfile.businessHours.floorToggleHelp',
+                        'When on, an automated email scheduled outside the hours above is delivered at the next opening instead of at an odd hour. When off, scheduled emails send at their exact time.') as string}
+                      enabled={profile.scheduledEmailFloorEnabled}
+                      onChange={(v) => setProfile({ ...profile, scheduledEmailFloorEnabled: v })}
+                    />
+                  </div></CardContent></Card>
 
       {/* Global email footer signature (migration 198, issue #1264).
           Rendered by wrapEmailHtml only, so flipping this toggle changes
           the footer of EVERY outgoing mail — transactional, preview, test
           and manual — without any per-template edit. Every value except
           the legal line below comes from the fields already on this page. */}
-      <Card>
-        <div className="flex items-center gap-2 mb-1">
-          <Mail className="w-5 h-5 text-neutral-500" />
-          <h3 className="font-semibold text-neutral-900 dark:text-neutral-100">
-            {t('businessProfile.emailSignature.title', 'Email signature')}
-          </h3>
-        </div>
-        <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
-          {t('businessProfile.emailSignature.subtitle',
-            'Append your company details to the footer of every email this installation sends. Built from the address and contact fields above — nothing is duplicated.')}
-        </p>
-
-        <PdfToggleRow
-          label={t('businessProfile.emailSignature.toggle', 'Show signature in email footers') as string}
-          description={t('businessProfile.emailSignature.toggleHelp',
-            'When off, emails keep the plain logo + company name footer. Applies to every automatic email — gallery notices, quotes, invoices, reminders — plus test sends and previews. Replies you write yourself in Messages are sent as typed and do not get the signature.') as string}
-          enabled={profile.emailSignatureEnabled}
-          onChange={(v) => setProfile({ ...profile, emailSignatureEnabled: v })}
-        />
-
-        <div className="mt-4">
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-            {t('businessProfile.emailSignature.extra', 'Legal line (optional)')}
-          </label>
-          <textarea
-            rows={3}
-            maxLength={500}
-            value={profile.emailSignatureExtra}
-            onChange={(e) => setProfile({ ...profile, emailSignatureExtra: e.target.value })}
-            placeholder={t('businessProfile.emailSignature.extraPlaceholder',
-              'Handelsregister Vaduz FL-0002.123.456-7') as string}
-            className="w-full rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100"
-          />
-          <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
-            {t('businessProfile.emailSignature.extraHelp',
-              'Registration number, disclaimer or any line with no field of its own. Plain text, up to 500 characters.')}
-          </p>
-        </div>
-
-        <div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
-          <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-2 uppercase tracking-wide">
-            {t('businessProfile.emailSignature.previewTitle', 'Footer preview')}
-          </p>
-          <EmailSignaturePreview profile={profile} />
-        </div>
-      </Card>
+      <Card><CardContent><div className="flex items-center gap-2 mb-1">
+                    <Mail className="w-5 h-5 text-neutral-500" />
+                    <h3 className="font-semibold text-neutral-900 dark:text-neutral-100">
+                      {t('businessProfile.emailSignature.title', 'Email signature')}
+                    </h3>
+                  </div><p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
+                    {t('businessProfile.emailSignature.subtitle',
+                      'Append your company details to the footer of every email this installation sends. Built from the address and contact fields above — nothing is duplicated.')}
+                  </p><PdfToggleRow
+                    label={t('businessProfile.emailSignature.toggle', 'Show signature in email footers') as string}
+                    description={t('businessProfile.emailSignature.toggleHelp',
+                      'When off, emails keep the plain logo + company name footer. Applies to every automatic email — gallery notices, quotes, invoices, reminders — plus test sends and previews. Replies you write yourself in Messages are sent as typed and do not get the signature.') as string}
+                    enabled={profile.emailSignatureEnabled}
+                    onChange={(v) => setProfile({ ...profile, emailSignatureEnabled: v })}
+                  /><div className="mt-4">
+                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                      {t('businessProfile.emailSignature.extra', 'Legal line (optional)')}
+                    </label>
+                    <textarea
+                      rows={3}
+                      maxLength={500}
+                      value={profile.emailSignatureExtra}
+                      onChange={(e) => setProfile({ ...profile, emailSignatureExtra: e.target.value })}
+                      placeholder={t('businessProfile.emailSignature.extraPlaceholder',
+                        'Handelsregister Vaduz FL-0002.123.456-7') as string}
+                      className="w-full rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100"
+                    />
+                    <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                      {t('businessProfile.emailSignature.extraHelp',
+                        'Registration number, disclaimer or any line with no field of its own. Plain text, up to 500 characters.')}
+                    </p>
+                  </div><div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
+                    <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-2 uppercase tracking-wide">
+                      {t('businessProfile.emailSignature.previewTitle', 'Footer preview')}
+                    </p>
+                    <EmailSignaturePreview profile={profile} />
+                  </div></CardContent></Card>
 
       {/* Disclaimer banner for QR-bill / IBAN data. picpeak renders
           what the operator types — it cannot validate IBAN/BIC, QR-IID
@@ -756,16 +725,16 @@ const BankAccountsSection: React.FC<BankAccountsSectionProps> = ({ accounts }) =
   const renderForm = (mode: 'new' | 'edit', onSubmit: () => void, submitting: boolean) => (
     <div className="mb-4 p-3 rounded-md border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <Input label={t('businessProfile.bank.label', 'Label') as string} value={draft.label}
-          onChange={(e) => setDraft({ ...draft, label: e.target.value })} />
-        <Input label={t('businessProfile.bank.accountHolder', 'Account holder') as string} value={draft.accountHolder}
-          onChange={(e) => setDraft({ ...draft, accountHolder: e.target.value })} />
-        <Input label="IBAN" value={draft.iban}
-          onChange={(e) => setDraft({ ...draft, iban: e.target.value })} />
-        <Input label="BIC" value={draft.bic}
-          onChange={(e) => setDraft({ ...draft, bic: e.target.value })} />
-        <Input label={t('businessProfile.bank.currency', 'Currency') as string} value={draft.currency}
-          maxLength={3} onChange={(e) => setDraft({ ...draft, currency: e.target.value.toUpperCase() })} />
+        <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('businessProfile.bank.label', 'Label') as string}</span><Input value={draft.label}
+                        onChange={(e) => setDraft({ ...draft, label: e.target.value })} /></Label></div>
+        <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('businessProfile.bank.accountHolder', 'Account holder') as string}</span><Input value={draft.accountHolder}
+                        onChange={(e) => setDraft({ ...draft, accountHolder: e.target.value })} /></Label></div>
+        <div className="w-full"><Label className="block"><span className="mb-1.5 block">IBAN</span><Input value={draft.iban}
+                        onChange={(e) => setDraft({ ...draft, iban: e.target.value })} /></Label></div>
+        <div className="w-full"><Label className="block"><span className="mb-1.5 block">BIC</span><Input value={draft.bic}
+                        onChange={(e) => setDraft({ ...draft, bic: e.target.value })} /></Label></div>
+        <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('businessProfile.bank.currency', 'Currency') as string}</span><Input value={draft.currency}
+                        maxLength={3} onChange={(e) => setDraft({ ...draft, currency: e.target.value.toUpperCase() })} /></Label></div>
         <label className="flex items-center gap-2 text-sm text-neutral-800 dark:text-neutral-200 pt-6">
           <input type="checkbox" checked={draft.isDefault}
             onChange={(e) => setDraft({ ...draft, isDefault: e.target.checked })} />
@@ -775,75 +744,65 @@ const BankAccountsSection: React.FC<BankAccountsSectionProps> = ({ accounts }) =
       <div className="flex justify-end gap-2 mt-3">
         <Button variant="outline" size="sm" onClick={closeForm}>{t('common.cancel', 'Cancel')}</Button>
         <Button
-          size="sm"
-          onClick={onSubmit}
-          disabled={!draft.iban || submitting}
-          isLoading={submitting}
-          leftIcon={mode === 'new' ? <Plus className="w-4 h-4" /> : <Save className="w-4 h-4" />}
-        >
-          {mode === 'new' ? t('common.add', 'Add') : t('common.save', 'Save')}
-        </Button>
+                        size="sm"
+                        onClick={onSubmit} disabled={!draft.iban || submitting || submitting}
+                      >
+                        {submitting && <Loader2 className="animate-spin" />}{mode === 'new' ? <Plus className="w-4 h-4" /> : <Save className="w-4 h-4" />}{mode === 'new' ? t('common.add', 'Add') : t('common.save', 'Save')}</Button>
       </div>
     </div>
   );
 
   return (
-    <Card>
-      <div className="flex items-center justify-between mb-3">
-        <h3 className="font-semibold text-neutral-900 dark:text-neutral-100">{t('businessProfile.section.banks', 'Bank accounts')}</h3>
-        <Button size="sm" onClick={() => {
-          if (openForm === 'new') closeForm();
-          else { setDraft(EMPTY_DRAFT); setOpenForm('new'); }
-        }}>
-          <Plus className="w-4 h-4 mr-1" />{t('businessProfile.addBank', 'Add account')}
-        </Button>
-      </div>
-
-      {openForm === 'new' && renderForm('new', () => create.mutate(), create.isPending)}
-
-      {accounts.length === 0 ? (
-        <p className="text-sm text-neutral-500">{t('businessProfile.noBanks', 'No bank accounts configured yet.')}</p>
-      ) : (
-        <ul className="divide-y divide-neutral-200 dark:divide-neutral-700">
-          {accounts.map((b) => (
-            <React.Fragment key={b.id}>
-              <li className="py-2 flex items-center justify-between">
-                <div>
-                  <div className="font-medium text-sm text-neutral-900 dark:text-neutral-100">{b.label || b.iban}
-                    {b.isDefault && <Star className="inline w-4 h-4 ml-1 text-amber-500" />}
-                  </div>
-                  <div className="text-xs text-neutral-500 font-mono">{b.iban.replace(/(.{4})/g, '$1 ').trim()}{b.currency ? ` · ${b.currency}` : ''}</div>
-                </div>
-                <div className="flex gap-2">
-                  {!b.isDefault && (
-                    <Button variant="outline" size="sm" onClick={() => setDefault.mutate(b.id)}>
-                      {t('businessProfile.bank.makeDefault', 'Make default')}
-                    </Button>
-                  )}
-                  <Button variant="outline" size="sm" onClick={() => {
-                    if (openForm === b.id) closeForm();
-                    else startEdit(b);
-                  }}
-                    title={t('common.edit', 'Edit') as string}>
-                    <Pencil className="w-4 h-4" />
-                  </Button>
-                  <Button variant="outline" size="sm" onClick={() => {
-                    if (window.confirm(t('businessProfile.bank.confirmDelete', 'Remove this bank account?'))) remove.mutate(b.id);
-                  }}
-                    title={t('common.delete', 'Delete') as string}>
-                    <Trash2 className="w-4 h-4 text-red-600" />
-                  </Button>
-                </div>
-              </li>
-              {openForm === b.id && (
-                <li className="py-2">
-                  {renderForm('edit', () => update.mutate(b.id), update.isPending)}
-                </li>
-              )}
-            </React.Fragment>
-          ))}
-        </ul>
-      )}
-    </Card>
+    <Card><CardContent><div className="flex items-center justify-between mb-3">
+              <h3 className="font-semibold text-neutral-900 dark:text-neutral-100">{t('businessProfile.section.banks', 'Bank accounts')}</h3>
+              <Button size="sm" onClick={() => {
+                if (openForm === 'new') closeForm();
+                else { setDraft(EMPTY_DRAFT); setOpenForm('new'); }
+              }}>
+                <Plus className="w-4 h-4 mr-1" />{t('businessProfile.addBank', 'Add account')}
+              </Button>
+            </div>{openForm === 'new' && renderForm('new', () => create.mutate(), create.isPending)}{accounts.length === 0 ? (
+              <p className="text-sm text-neutral-500">{t('businessProfile.noBanks', 'No bank accounts configured yet.')}</p>
+            ) : (
+              <ul className="divide-y divide-neutral-200 dark:divide-neutral-700">
+                {accounts.map((b) => (
+                  <React.Fragment key={b.id}>
+                    <li className="py-2 flex items-center justify-between">
+                      <div>
+                        <div className="font-medium text-sm text-neutral-900 dark:text-neutral-100">{b.label || b.iban}
+                          {b.isDefault && <Star className="inline w-4 h-4 ml-1 text-amber-500" />}
+                        </div>
+                        <div className="text-xs text-neutral-500 font-mono">{b.iban.replace(/(.{4})/g, '$1 ').trim()}{b.currency ? ` · ${b.currency}` : ''}</div>
+                      </div>
+                      <div className="flex gap-2">
+                        {!b.isDefault && (
+                          <Button variant="outline" size="sm" onClick={() => setDefault.mutate(b.id)}>
+                            {t('businessProfile.bank.makeDefault', 'Make default')}
+                          </Button>
+                        )}
+                        <Button variant="outline" size="sm" onClick={() => {
+                          if (openForm === b.id) closeForm();
+                          else startEdit(b);
+                        }}
+                          title={t('common.edit', 'Edit') as string}>
+                          <Pencil className="w-4 h-4" />
+                        </Button>
+                        <Button variant="outline" size="sm" onClick={() => {
+                          if (window.confirm(t('businessProfile.bank.confirmDelete', 'Remove this bank account?'))) remove.mutate(b.id);
+                        }}
+                          title={t('common.delete', 'Delete') as string}>
+                          <Trash2 className="w-4 h-4 text-red-600" />
+                        </Button>
+                      </div>
+                    </li>
+                    {openForm === b.id && (
+                      <li className="py-2">
+                        {renderForm('edit', () => update.mutate(b.id), update.isPending)}
+                      </li>
+                    )}
+                  </React.Fragment>
+                ))}
+              </ul>
+            )}</CardContent></Card>
   );
 };

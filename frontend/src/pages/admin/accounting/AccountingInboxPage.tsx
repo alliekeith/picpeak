@@ -11,7 +11,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { Camera, Upload, Inbox, X, Circle, Eye, RotateCcw, Send, Pencil } from 'lucide-react';
-import { Button, Card, CardContent, Input, LocalizedDateInput, Loading } from '../../../components/common';
+import { LocalizedDateInput, Loading } from '../../../components/common';
 import { DecimalInput } from '../../../components/common/DecimalInput';
 import { CustomerAccountPicker, type SelectedCustomer } from '../../../components/admin/CustomerAccountPicker';
 import { EventBookingSelect } from '../../../components/admin/EventBookingSelect';
@@ -23,6 +23,9 @@ import {
   accountingService, categoryLabel,
   type InboundDocument, type Disposition, type MarkupType, type PaymentMethod, type ExpenseCategory,
 } from '../../../services/accounting.service';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 const DISPOSITIONS: Disposition[] = ['rebill', 'durchlaufend', 'eigener_aufwand', 'duplikat', 'abgelehnt'];
 const PAYMENT_METHODS: PaymentMethod[] = ['bank_transfer', 'cash', 'twint', 'paypal', 'card', 'other'];

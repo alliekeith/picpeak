@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Lock, Eye, EyeOff, AlertCircle } from 'lucide-react';
+import { Lock, Eye, EyeOff, AlertCircle, Loader2 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useMutation } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-
-import { Button, Input, Card } from '../common';
 import { adminService } from '../../services/admin.service';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 export const MandatoryPasswordChangeModal: React.FC = () => {
   const { t } = useTranslation();
@@ -102,134 +103,123 @@ export const MandatoryPasswordChangeModal: React.FC = () => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <Card className="w-full max-w-md">
-        <div className="p-6">
-          <div className="mb-6 text-center">
-            <div className="mx-auto w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mb-4">
-              <AlertCircle className="w-6 h-6 text-amber-600" />
-            </div>
-            <h2 className="text-xl font-semibold text-neutral-900 mb-2">{t('mandatoryPasswordChange.title')}</h2>
-            <p className="text-sm text-neutral-600">
-              {t('mandatoryPasswordChange.description')}
-            </p>
-          </div>
+      <Card className="w-full max-w-md"><CardContent><div className="p-6">
+                    <div className="mb-6 text-center">
+                      <div className="mx-auto w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mb-4">
+                        <AlertCircle className="w-6 h-6 text-amber-600" />
+                      </div>
+                      <h2 className="text-xl font-semibold text-neutral-900 mb-2">{t('mandatoryPasswordChange.title')}</h2>
+                      <p className="text-sm text-neutral-600">
+                        {t('mandatoryPasswordChange.description')}
+                      </p>
+                    </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Current Password */}
-            <div>
-              <label htmlFor="currentPassword" className="block text-sm font-medium text-neutral-700 mb-1">
-                {t('passwordChange.currentPassword')}
-              </label>
-              <div className="relative">
-                <Input
-                  id="currentPassword"
-                  type={showPasswords.current ? 'text' : 'password'}
-                  value={formData.currentPassword}
-                  onChange={handleInputChange('currentPassword')}
-                  error={errors.currentPassword}
-                  placeholder={t('passwordChange.currentPasswordPlaceholder')}
-                  leftIcon={<Lock className="w-5 h-5 text-neutral-400" />}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPasswords(prev => ({ ...prev, current: !prev.current }))}
-                  className="absolute right-3 top-2 p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-sm"
-                >
-                  {showPasswords.current ? 
-                    <EyeOff className="w-4 h-4 text-neutral-500" /> : 
-                    <Eye className="w-4 h-4 text-neutral-500" />
-                  }
-                </button>
-              </div>
-            </div>
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                      {/* Current Password */}
+                      <div>
+                        <label htmlFor="currentPassword" className="block text-sm font-medium text-neutral-700 mb-1">
+                          {t('passwordChange.currentPassword')}
+                        </label>
+                        <div className="relative">
+                          <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-neutral-400" />}</div><Input
+                                                      id="currentPassword"
+                                                      type={showPasswords.current ? 'text' : 'password'}
+                                                      value={formData.currentPassword}
+                                                      onChange={handleInputChange('currentPassword')}
+                                                      placeholder={t('passwordChange.currentPasswordPlaceholder')} className="pl-10" aria-invalid={!!(errors.currentPassword)} aria-describedby={(errors.currentPassword) ? "currentPassword-error" : undefined}
+                                                    /></div>{(errors.currentPassword) && <p id={"currentPassword-error"} className="mt-1.5 text-sm text-destructive">{errors.currentPassword}</p>}</div>
+                          <button
+                            type="button"
+                            onClick={() => setShowPasswords(prev => ({ ...prev, current: !prev.current }))}
+                            className="absolute right-3 top-2 p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-sm"
+                          >
+                            {showPasswords.current ? 
+                              <EyeOff className="w-4 h-4 text-neutral-500" /> : 
+                              <Eye className="w-4 h-4 text-neutral-500" />
+                            }
+                          </button>
+                        </div>
+                      </div>
 
-            {/* New Password */}
-            <div>
-              <label htmlFor="newPassword" className="block text-sm font-medium text-neutral-700 mb-1">
-                {t('passwordChange.newPassword')}
-              </label>
-              <div className="relative">
-                <Input
-                  id="newPassword"
-                  type={showPasswords.new ? 'text' : 'password'}
-                  value={formData.newPassword}
-                  onChange={handleInputChange('newPassword')}
-                  error={errors.newPassword}
-                  placeholder={t('passwordChange.newPasswordPlaceholder')}
-                  leftIcon={<Lock className="w-5 h-5 text-neutral-400" />}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPasswords(prev => ({ ...prev, new: !prev.new }))}
-                  className="absolute right-3 top-2 p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-sm"
-                >
-                  {showPasswords.new ? 
-                    <EyeOff className="w-4 h-4 text-neutral-500" /> : 
-                    <Eye className="w-4 h-4 text-neutral-500" />
-                  }
-                </button>
-              </div>
-            </div>
+                      {/* New Password */}
+                      <div>
+                        <label htmlFor="newPassword" className="block text-sm font-medium text-neutral-700 mb-1">
+                          {t('passwordChange.newPassword')}
+                        </label>
+                        <div className="relative">
+                          <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-neutral-400" />}</div><Input
+                                                      id="newPassword"
+                                                      type={showPasswords.new ? 'text' : 'password'}
+                                                      value={formData.newPassword}
+                                                      onChange={handleInputChange('newPassword')}
+                                                      placeholder={t('passwordChange.newPasswordPlaceholder')} className="pl-10" aria-invalid={!!(errors.newPassword)} aria-describedby={(errors.newPassword) ? "newPassword-error" : undefined}
+                                                    /></div>{(errors.newPassword) && <p id={"newPassword-error"} className="mt-1.5 text-sm text-destructive">{errors.newPassword}</p>}</div>
+                          <button
+                            type="button"
+                            onClick={() => setShowPasswords(prev => ({ ...prev, new: !prev.new }))}
+                            className="absolute right-3 top-2 p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-sm"
+                          >
+                            {showPasswords.new ? 
+                              <EyeOff className="w-4 h-4 text-neutral-500" /> : 
+                              <Eye className="w-4 h-4 text-neutral-500" />
+                            }
+                          </button>
+                        </div>
+                      </div>
 
-            {/* Confirm Password */}
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-neutral-700 mb-1">
-                {t('passwordChange.confirmPassword')}
-              </label>
-              <div className="relative">
-                <Input
-                  id="confirmPassword"
-                  type={showPasswords.confirm ? 'text' : 'password'}
-                  value={formData.confirmPassword}
-                  onChange={handleInputChange('confirmPassword')}
-                  error={errors.confirmPassword}
-                  placeholder={t('passwordChange.confirmPasswordPlaceholder')}
-                  leftIcon={<Lock className="w-5 h-5 text-neutral-400" />}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPasswords(prev => ({ ...prev, confirm: !prev.confirm }))}
-                  className="absolute right-3 top-2 p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-sm"
-                >
-                  {showPasswords.confirm ? 
-                    <EyeOff className="w-4 h-4 text-neutral-500" /> : 
-                    <Eye className="w-4 h-4 text-neutral-500" />
-                  }
-                </button>
-              </div>
-            </div>
+                      {/* Confirm Password */}
+                      <div>
+                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-neutral-700 mb-1">
+                          {t('passwordChange.confirmPassword')}
+                        </label>
+                        <div className="relative">
+                          <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-neutral-400" />}</div><Input
+                                                      id="confirmPassword"
+                                                      type={showPasswords.confirm ? 'text' : 'password'}
+                                                      value={formData.confirmPassword}
+                                                      onChange={handleInputChange('confirmPassword')}
+                                                      placeholder={t('passwordChange.confirmPasswordPlaceholder')} className="pl-10" aria-invalid={!!(errors.confirmPassword)} aria-describedby={(errors.confirmPassword) ? "confirmPassword-error" : undefined}
+                                                    /></div>{(errors.confirmPassword) && <p id={"confirmPassword-error"} className="mt-1.5 text-sm text-destructive">{errors.confirmPassword}</p>}</div>
+                          <button
+                            type="button"
+                            onClick={() => setShowPasswords(prev => ({ ...prev, confirm: !prev.confirm }))}
+                            className="absolute right-3 top-2 p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-sm"
+                          >
+                            {showPasswords.confirm ? 
+                              <EyeOff className="w-4 h-4 text-neutral-500" /> : 
+                              <Eye className="w-4 h-4 text-neutral-500" />
+                            }
+                          </button>
+                        </div>
+                      </div>
 
-            {/* Password Requirements */}
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-              <div className="flex items-start gap-2">
-                <AlertCircle className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
-                <div className="text-sm text-blue-800">
-                  <p className="font-medium">{t('passwordChange.requirements')}</p>
-                  <ul className="list-disc list-inside mt-1 space-y-1">
-                    <li>{t('mandatoryPasswordChange.minLength')}</li>
-                    <li>{t('mandatoryPasswordChange.mustContainUpperLower')}</li>
-                    <li>{t('mandatoryPasswordChange.mustContainNumbers')}</li>
-                    <li>{t('mandatoryPasswordChange.mustContainSpecial')}</li>
-                    <li>{t('passwordChange.mustDiffer')}</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
+                      {/* Password Requirements */}
+                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                        <div className="flex items-start gap-2">
+                          <AlertCircle className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+                          <div className="text-sm text-blue-800">
+                            <p className="font-medium">{t('passwordChange.requirements')}</p>
+                            <ul className="list-disc list-inside mt-1 space-y-1">
+                              <li>{t('mandatoryPasswordChange.minLength')}</li>
+                              <li>{t('mandatoryPasswordChange.mustContainUpperLower')}</li>
+                              <li>{t('mandatoryPasswordChange.mustContainNumbers')}</li>
+                              <li>{t('mandatoryPasswordChange.mustContainSpecial')}</li>
+                              <li>{t('passwordChange.mustDiffer')}</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
 
-            {/* Action Button */}
-            <div className="pt-2">
-              <Button
-                type="submit"
-                variant="primary"
-                className="w-full"
-                isLoading={changePasswordMutation.isPending}
-              >
-                {t('passwordChange.title')}
-              </Button>
-            </div>
-          </form>
-        </div>
-      </Card>
+                      {/* Action Button */}
+                      <div className="pt-2">
+                        <Button
+                                                    type="submit"
+                                                    className="w-full" disabled={changePasswordMutation.isPending}
+                                                  >
+                                                    {changePasswordMutation.isPending && <Loader2 className="animate-spin" />}{t('passwordChange.title')}</Button>
+                      </div>
+                    </form>
+                  </div></CardContent></Card>
     </div>
   );
 };

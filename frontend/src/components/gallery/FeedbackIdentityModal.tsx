@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Button, Input } from '../common';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface FeedbackIdentityModalProps {
   isOpen: boolean;
@@ -16,6 +18,7 @@ export const FeedbackIdentityModal: React.FC<FeedbackIdentityModalProps> = ({
   onSubmit,
   feedbackType
 }) => {
+    const __fieldId = React.useId();
   const { t } = useTranslation();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -63,27 +66,22 @@ export const FeedbackIdentityModal: React.FC<FeedbackIdentityModalProps> = ({
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            label={t('feedback.yourName', 'Your Name')}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            error={errors.name}
-            placeholder={t('feedback.namePlaceholder', 'Enter your name')}
-            required
-          />
-          <Input
-            type="email"
-            label={t('feedback.yourEmail', 'Your Email')}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            error={errors.email}
-            placeholder={t('feedback.emailPlaceholder', 'Enter your email')}
-            required
-          />
+          <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('feedback.yourName', 'Your Name')}</span><Input
+                              value={name}
+                              onChange={(e) => setName(e.target.value)}
+                              placeholder={t('feedback.namePlaceholder', 'Enter your name')}
+                              required aria-invalid={!!(errors.name)} aria-describedby={(errors.name) ? `${__fieldId}-0-error` : undefined}
+                            />{(errors.name) && <p id={`${__fieldId}-0-error`} className="mt-1.5 text-sm text-destructive">{errors.name}</p>}</Label></div>
+          <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('feedback.yourEmail', 'Your Email')}</span><Input
+                              type="email"
+                              value={email}
+                              onChange={(e) => setEmail(e.target.value)}
+                              placeholder={t('feedback.emailPlaceholder', 'Enter your email')}
+                              required aria-invalid={!!(errors.email)} aria-describedby={(errors.email) ? `${__fieldId}-1-error` : undefined}
+                            />{(errors.email) && <p id={`${__fieldId}-1-error`} className="mt-1.5 text-sm text-destructive">{errors.email}</p>}</Label></div>
           <div className="flex gap-2 pt-2">
             <Button
               type="submit"
-              variant="primary"
               className="flex-1"
             >
               {t('feedback.submitFeedback', 'Submit Feedback')}

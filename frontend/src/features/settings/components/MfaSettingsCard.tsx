@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { ShieldCheck, ShieldOff, Copy, Download, Check, KeyRound, AlertTriangle } from 'lucide-react';
+import { ShieldCheck, ShieldOff, Copy, Download, Check, KeyRound, AlertTriangle, Loader2 } from 'lucide-react';
 
-import { Button, Card, Input, Loading, useConfirm } from '../../../components/common';
+import { Loading, useConfirm } from '../../../components/common';
 import { mfaService } from '../../../services/mfa.service';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 // Per-user admin TOTP MFA management (issue #738). Lives on the admin's own
 // account surface (Settings → General → Admin Account). Self-service: acts on
@@ -59,12 +62,10 @@ const RecoveryCodesPanel: React.FC<RecoveryCodesPanelProps> = ({ codes, onConfir
       </div>
 
       <div className="flex flex-wrap gap-2">
-        <Button variant="outline" size="sm" leftIcon={copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} onClick={handleCopy}>
-          {copied ? t('settings.mfa.copied') : t('settings.mfa.copy')}
-        </Button>
-        <Button variant="outline" size="sm" leftIcon={<Download className="w-4 h-4" />} onClick={handleDownload}>
-          {t('settings.mfa.download')}
-        </Button>
+        <Button variant="outline" size="sm" onClick={handleCopy}>
+                        {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}{copied ? t('settings.mfa.copied') : t('settings.mfa.copy')}</Button>
+        <Button variant="outline" size="sm" onClick={handleDownload}>
+                        <Download className="w-4 h-4" />{t('settings.mfa.download')}</Button>
       </div>
 
       <label className="flex items-start gap-2">
@@ -77,7 +78,7 @@ const RecoveryCodesPanel: React.FC<RecoveryCodesPanelProps> = ({ codes, onConfir
         <span className="text-sm text-neutral-700 dark:text-neutral-300">{t('settings.mfa.recoveryCodesAck')}</span>
       </label>
 
-      <Button variant="primary" disabled={!acknowledged} onClick={onConfirm}>
+      <Button disabled={!acknowledged} onClick={onConfirm}>
         {t('settings.mfa.done')}
       </Button>
     </div>
@@ -85,6 +86,7 @@ const RecoveryCodesPanel: React.FC<RecoveryCodesPanelProps> = ({ codes, onConfir
 };
 
 export const MfaSettingsCard: React.FC = () => {
+    const __fieldId = React.useId();
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const confirm = useConfirm();
@@ -173,148 +175,126 @@ export const MfaSettingsCard: React.FC = () => {
   };
 
   return (
-    <Card padding="md">
-      <div className="flex items-center gap-2 mb-1">
-        <ShieldCheck className="w-5 h-5 text-neutral-700 dark:text-neutral-300" />
-        <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">{t('settings.mfa.title')}</h2>
-      </div>
-      <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">{t('settings.mfa.description')}</p>
-
-      {isLoading ? (
-        <div className="py-8 flex justify-center">
-          <Loading size="md" />
-        </div>
-      ) : recoveryCodes ? (
-        <RecoveryCodesPanel codes={recoveryCodes} onConfirm={() => setRecoveryCodes(null)} />
-      ) : status?.enabled ? (
-        /* ---------------- Enrolled ---------------- */
-        <div className="space-y-4">
-          <div className="p-3 rounded-lg bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-green-600 dark:text-green-400 shrink-0" />
-            <span className="text-sm text-green-800 dark:text-green-200">{t('settings.mfa.enabledBadge')}</span>
-          </div>
-
-          <p className="text-sm text-neutral-600 dark:text-neutral-400">
-            {t('settings.mfa.recoveryCodesRemaining', { count: status.recoveryCodesRemaining })}
-          </p>
-
-          {showRegenerate ? (
-            <div className="space-y-3 p-4 rounded-lg border border-neutral-200 dark:border-neutral-700">
-              <p className="text-sm text-neutral-700 dark:text-neutral-300">{t('settings.mfa.regenerateHelp')}</p>
-              <Input
-                type="text"
-                value={regenerateCode}
-                onChange={(e) => {
-                  setRegenerateCode(e.target.value);
-                  if (regenerateError) setRegenerateError(null);
-                }}
-                placeholder={t('settings.mfa.codePlaceholder')}
-                leftIcon={<KeyRound className="w-5 h-5 text-neutral-400" />}
-                error={regenerateError || undefined}
-                autoComplete="one-time-code"
-              />
-              <div className="flex gap-2">
-                <Button
-                  variant="primary"
-                  isLoading={regenerateMutation.isPending}
-                  onClick={() => {
-                    const trimmed = regenerateCode.trim();
-                    if (!trimmed) { setRegenerateError(t('settings.mfa.codeRequired')); return; }
-                    regenerateMutation.mutate(trimmed);
-                  }}
-                >
-                  {t('settings.mfa.regenerateConfirm')}
-                </Button>
-                <Button variant="ghost" onClick={() => { setShowRegenerate(false); setRegenerateCode(''); setRegenerateError(null); }}>
-                  {t('common.cancel')}
-                </Button>
+    <Card><CardContent><div className="flex items-center gap-2 mb-1">
+              <ShieldCheck className="w-5 h-5 text-neutral-700 dark:text-neutral-300" />
+              <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">{t('settings.mfa.title')}</h2>
+            </div><p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">{t('settings.mfa.description')}</p>{isLoading ? (
+              <div className="py-8 flex justify-center">
+                <Loading size="md" />
               </div>
-            </div>
-          ) : (
-            <div className="flex flex-wrap gap-2">
-              <Button variant="outline" onClick={() => setShowRegenerate(true)}>
-                {t('settings.mfa.regenerate')}
-              </Button>
-              <Button
-                variant="outline"
-                leftIcon={<ShieldOff className="w-4 h-4" />}
-                isLoading={disableMutation.isPending}
-                onClick={handleDisable}
-              >
-                {t('settings.mfa.disable')}
-              </Button>
-            </div>
-          )}
-        </div>
-      ) : setupData ? (
-        /* ---------------- Setup in progress ---------------- */
-        <div className="space-y-4">
-          <p className="text-sm text-neutral-700 dark:text-neutral-300">{t('settings.mfa.setupScanInstruction')}</p>
-          <div className="flex flex-col sm:flex-row gap-4 items-start">
-            <img
-              src={setupData.qr}
-              alt={t('settings.mfa.qrAlt')}
-              className="w-44 h-44 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white p-2"
-            />
-            <div className="space-y-2">
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('settings.mfa.manualEntry')}</p>
-              <code className="block px-3 py-2 rounded-sm bg-neutral-100 dark:bg-neutral-800 text-sm font-mono text-neutral-900 dark:text-neutral-100 break-all select-all">
-                {setupData.secret}
-              </code>
-            </div>
-          </div>
+            ) : recoveryCodes ? (
+              <RecoveryCodesPanel codes={recoveryCodes} onConfirm={() => setRecoveryCodes(null)} />
+            ) : status?.enabled ? (
+              /* ---------------- Enrolled ---------------- */
+              <div className="space-y-4">
+                <div className="p-3 rounded-lg bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 flex items-center gap-2">
+                  <ShieldCheck className="w-5 h-5 text-green-600 dark:text-green-400 shrink-0" />
+                  <span className="text-sm text-green-800 dark:text-green-200">{t('settings.mfa.enabledBadge')}</span>
+                </div>
 
-          <div>
-            <label htmlFor="mfa-enable-code" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-              {t('settings.mfa.enterCodeLabel')}
-            </label>
-            <Input
-              id="mfa-enable-code"
-              type="text"
-              value={enableCode}
-              onChange={(e) => {
-                setEnableCode(e.target.value);
-                if (enableError) setEnableError(null);
-              }}
-              placeholder={t('settings.mfa.codePlaceholder')}
-              leftIcon={<KeyRound className="w-5 h-5 text-neutral-400" />}
-              error={enableError || undefined}
-              inputMode="numeric"
-              autoComplete="one-time-code"
-            />
-          </div>
+                <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                  {t('settings.mfa.recoveryCodesRemaining', { count: status.recoveryCodesRemaining })}
+                </p>
 
-          <div className="flex gap-2">
-            <Button
-              variant="primary"
-              isLoading={enableMutation.isPending}
-              onClick={() => {
-                const trimmed = enableCode.trim();
-                if (!trimmed) { setEnableError(t('settings.mfa.codeRequired')); return; }
-                enableMutation.mutate(trimmed);
-              }}
-            >
-              {t('settings.mfa.enable')}
-            </Button>
-            <Button variant="ghost" onClick={() => { setSetupData(null); setEnableCode(''); setEnableError(null); }}>
-              {t('common.cancel')}
-            </Button>
-          </div>
-        </div>
-      ) : (
-        /* ---------------- Not enrolled ---------------- */
-        <div className="space-y-3">
-          <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('settings.mfa.notEnrolled')}</p>
-          <Button
-            variant="primary"
-            leftIcon={<ShieldCheck className="w-5 h-5" />}
-            isLoading={setupMutation.isPending}
-            onClick={() => setupMutation.mutate()}
-          >
-            {t('settings.mfa.setUp')}
-          </Button>
-        </div>
-      )}
-    </Card>
+                {showRegenerate ? (
+                  <div className="space-y-3 p-4 rounded-lg border border-neutral-200 dark:border-neutral-700">
+                    <p className="text-sm text-neutral-700 dark:text-neutral-300">{t('settings.mfa.regenerateHelp')}</p>
+                    <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<KeyRound className="w-5 h-5 text-neutral-400" />}</div><Input
+                                                        type="text"
+                                                        value={regenerateCode}
+                                                        onChange={(e) => {
+                                                          setRegenerateCode(e.target.value);
+                                                          if (regenerateError) setRegenerateError(null);
+                                                        }}
+                                                        placeholder={t('settings.mfa.codePlaceholder')}
+                                                        autoComplete="one-time-code" className="pl-10" aria-invalid={!!(regenerateError || undefined)} aria-describedby={(regenerateError || undefined) ? `${__fieldId}-0-error` : undefined}
+                                                      /></div>{(regenerateError || undefined) && <p id={`${__fieldId}-0-error`} className="mt-1.5 text-sm text-destructive">{regenerateError || undefined}</p>}</div>
+                    <div className="flex gap-2">
+                      <Button
+                                                              onClick={() => {
+                                                                const trimmed = regenerateCode.trim();
+                                                                if (!trimmed) { setRegenerateError(t('settings.mfa.codeRequired')); return; }
+                                                                regenerateMutation.mutate(trimmed);
+                                                              }} disabled={regenerateMutation.isPending}
+                                                            >
+                                                              {regenerateMutation.isPending && <Loader2 className="animate-spin" />}{t('settings.mfa.regenerateConfirm')}</Button>
+                      <Button variant="ghost" onClick={() => { setShowRegenerate(false); setRegenerateCode(''); setRegenerateError(null); }}>
+                        {t('common.cancel')}
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-wrap gap-2">
+                    <Button variant="outline" onClick={() => setShowRegenerate(true)}>
+                      {t('settings.mfa.regenerate')}
+                    </Button>
+                    <Button
+                                                            variant="outline"
+                                                            onClick={handleDisable} disabled={disableMutation.isPending}
+                                                          >
+                                                            {disableMutation.isPending && <Loader2 className="animate-spin" />}<ShieldOff className="w-4 h-4" />{t('settings.mfa.disable')}</Button>
+                  </div>
+                )}
+              </div>
+            ) : setupData ? (
+              /* ---------------- Setup in progress ---------------- */
+              <div className="space-y-4">
+                <p className="text-sm text-neutral-700 dark:text-neutral-300">{t('settings.mfa.setupScanInstruction')}</p>
+                <div className="flex flex-col sm:flex-row gap-4 items-start">
+                  <img
+                    src={setupData.qr}
+                    alt={t('settings.mfa.qrAlt')}
+                    className="w-44 h-44 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white p-2"
+                  />
+                  <div className="space-y-2">
+                    <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('settings.mfa.manualEntry')}</p>
+                    <code className="block px-3 py-2 rounded-sm bg-neutral-100 dark:bg-neutral-800 text-sm font-mono text-neutral-900 dark:text-neutral-100 break-all select-all">
+                      {setupData.secret}
+                    </code>
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="mfa-enable-code" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                    {t('settings.mfa.enterCodeLabel')}
+                  </label>
+                  <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<KeyRound className="w-5 h-5 text-neutral-400" />}</div><Input
+                                                      id="mfa-enable-code"
+                                                      type="text"
+                                                      value={enableCode}
+                                                      onChange={(e) => {
+                                                        setEnableCode(e.target.value);
+                                                        if (enableError) setEnableError(null);
+                                                      }}
+                                                      placeholder={t('settings.mfa.codePlaceholder')}
+                                                      inputMode="numeric"
+                                                      autoComplete="one-time-code" className="pl-10" aria-invalid={!!(enableError || undefined)} aria-describedby={(enableError || undefined) ? "mfa-enable-code-error" : undefined}
+                                                    /></div>{(enableError || undefined) && <p id={"mfa-enable-code-error"} className="mt-1.5 text-sm text-destructive">{enableError || undefined}</p>}</div>
+                </div>
+
+                <div className="flex gap-2">
+                  <Button
+                                                      onClick={() => {
+                                                        const trimmed = enableCode.trim();
+                                                        if (!trimmed) { setEnableError(t('settings.mfa.codeRequired')); return; }
+                                                        enableMutation.mutate(trimmed);
+                                                      }} disabled={enableMutation.isPending}
+                                                    >
+                                                      {enableMutation.isPending && <Loader2 className="animate-spin" />}{t('settings.mfa.enable')}</Button>
+                  <Button variant="ghost" onClick={() => { setSetupData(null); setEnableCode(''); setEnableError(null); }}>
+                    {t('common.cancel')}
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              /* ---------------- Not enrolled ---------------- */
+              <div className="space-y-3">
+                <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('settings.mfa.notEnrolled')}</p>
+                <Button
+                                                    onClick={() => setupMutation.mutate()} disabled={setupMutation.isPending}
+                                                  >
+                                                    {setupMutation.isPending && <Loader2 className="animate-spin" />}<ShieldCheck className="w-5 h-5" />{t('settings.mfa.setUp')}</Button>
+              </div>
+            )}</CardContent></Card>
   );
 };

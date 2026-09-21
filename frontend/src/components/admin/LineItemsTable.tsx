@@ -35,7 +35,6 @@
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus, X, ArrowUp, ArrowDown, Save as SaveIcon, ChevronDown, ChevronRight, CornerDownRight, Tag } from 'lucide-react';
-import { Button } from '../common';
 import { DecimalInput } from '../common/DecimalInput';
 import { AddOnBookButton, AddOnBookingState } from '../common/AddOnBookButton';
 import { formatMoney } from '../../utils/money';
@@ -43,6 +42,7 @@ import {
   countedLines, isUnselectedOptional, resolveDiscountAmounts,
   type BoundTo, type LineKind, type LineUnit, type PriceMode, type PromotionSnapshot, type RateSource,
 } from '../../utils/lineItemTotals';
+import { Button } from "@/components/ui/button";
 
 export interface EditableLineItem {
   id?: number;

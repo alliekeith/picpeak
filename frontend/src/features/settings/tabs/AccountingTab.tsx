@@ -8,7 +8,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { Save } from 'lucide-react';
-import { Button, Card, CardContent, Input, Loading } from '../../../components/common';
+import { Loading } from '../../../components/common';
+import { Button } from '@/components/ui/button';
 import { DecimalInput } from '../../../components/common/DecimalInput';
 import { accountingService } from '../../../services/accounting.service';
 import { useFeatureFlags } from '../../../contexts/FeatureFlagsContext';
@@ -17,6 +18,8 @@ import { vatCodesService } from '../../../services/vatCodes.service';
 import { sortedCountryOptions } from '../../../constants/countries';
 import { VatCodesManager } from '../../../components/admin/VatCodesManager';
 import { ChartOfAccountsManager } from '../../../components/admin/ChartOfAccountsManager';
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 const labelCls = 'block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1';
 const inputCls = 'w-full max-w-xs rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-3 py-2 text-sm';

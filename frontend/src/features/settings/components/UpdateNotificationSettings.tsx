@@ -1,10 +1,13 @@
 import React from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { Bell, Save, Mail, Send, RefreshCw } from 'lucide-react';
-import { Card, Button, Input } from '../../../components/common';
+import { Bell, Save, Mail, Send, RefreshCw, Loader2 } from 'lucide-react';
 import { api } from '../../../config/api';
 import { toast } from 'react-toastify';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface UpdateNotificationSettingsData {
   enabled: boolean;
@@ -123,107 +126,83 @@ export const UpdateNotificationSettings: React.FC = () => {
 
   if (isLoading) {
     return (
-      <Card padding="md">
-        <div className="animate-pulse space-y-4">
-          <div className="h-6 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-1/3"></div>
-          <div className="h-10 bg-neutral-200 dark:bg-neutral-700 rounded-sm"></div>
-          <div className="h-10 bg-neutral-200 dark:bg-neutral-700 rounded-sm"></div>
-        </div>
-      </Card>
+      <Card><CardContent><div className="animate-pulse space-y-4">
+                  <div className="h-6 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-1/3"></div>
+                  <div className="h-10 bg-neutral-200 dark:bg-neutral-700 rounded-sm"></div>
+                  <div className="h-10 bg-neutral-200 dark:bg-neutral-700 rounded-sm"></div>
+                </div></CardContent></Card>
     );
   }
 
   return (
-    <Card padding="md">
-      <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4 flex items-center gap-2">
-        <Bell className="w-5 h-5" />
-        {t('settings.updateNotifications.title', 'Update Notifications')}
-      </h2>
+    <Card><CardContent><h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4 flex items-center gap-2">
+              <Bell className="w-5 h-5" />
+              {t('settings.updateNotifications.title', 'Update Notifications')}
+            </h2><p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
+              {t('settings.updateNotifications.description', 'Receive email notifications when new versions of PicPeak are available.')}
+            </p><div className="space-y-4">
+              {/* Enable/Disable Toggle */}
+              <label className="flex items-center gap-3 p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={localEnabled}
+                  onChange={(e) => handleToggleEnabled(e.target.checked)}
+                  className="w-4 h-4 text-brand-600 bg-neutral-100 border-neutral-300 rounded-sm focus:ring-brand-500"
+                />
+                <div>
+                  <p className="font-medium text-neutral-900 dark:text-neutral-100">
+                    {t('settings.updateNotifications.enableEmails', 'Enable email notifications')}
+                  </p>
+                  <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                    {t('settings.updateNotifications.enableEmailsDesc', 'Send email to admins when a new version is available')}
+                  </p>
+                </div>
+              </label>
 
-      <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
-        {t('settings.updateNotifications.description', 'Receive email notifications when new versions of PicPeak are available.')}
-      </p>
+              {/* Recipients */}
+              <div>
+                <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('settings.updateNotifications.recipients', 'Email Recipients')}</span><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Mail className="w-4 h-4 text-neutral-400" />}</div><Input
+                                    type="text"
+                                    value={localRecipients}
+                                    onChange={handleRecipientsChange}
+                                    placeholder={t('settings.updateNotifications.recipientsPlaceholder', 'admin@example.com, other@example.com')}
+                                    disabled={!localEnabled} className="pl-10"
+                                  /></div>{(t('settings.updateNotifications.recipientsHelper', 'Comma-separated email addresses. Leave empty to send to all admin users.')) && <p className="mt-1.5 text-sm text-muted-foreground">{t('settings.updateNotifications.recipientsHelper', 'Comma-separated email addresses. Leave empty to send to all admin users.')}</p>}</Label></div>
+              </div>
 
-      <div className="space-y-4">
-        {/* Enable/Disable Toggle */}
-        <label className="flex items-center gap-3 p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg cursor-pointer">
-          <input
-            type="checkbox"
-            checked={localEnabled}
-            onChange={(e) => handleToggleEnabled(e.target.checked)}
-            className="w-4 h-4 text-brand-600 bg-neutral-100 border-neutral-300 rounded-sm focus:ring-brand-500"
-          />
-          <div>
-            <p className="font-medium text-neutral-900 dark:text-neutral-100">
-              {t('settings.updateNotifications.enableEmails', 'Enable email notifications')}
-            </p>
-            <p className="text-sm text-neutral-600 dark:text-neutral-400">
-              {t('settings.updateNotifications.enableEmailsDesc', 'Send email to admins when a new version is available')}
-            </p>
-          </div>
-        </label>
+              {/* Last notified version */}
+              {settings?.lastNotifiedVersion && (
+                <div className="p-3 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
+                  <p className="text-sm text-blue-700 dark:text-blue-300">
+                    {t('settings.updateNotifications.lastNotified', 'Last notification sent for version: {{version}}', {
+                      version: settings.lastNotifiedVersion
+                    })}
+                  </p>
+                </div>
+              )}
 
-        {/* Recipients */}
-        <div>
-          <Input
-            type="text"
-            value={localRecipients}
-            onChange={handleRecipientsChange}
-            label={t('settings.updateNotifications.recipients', 'Email Recipients')}
-            placeholder={t('settings.updateNotifications.recipientsPlaceholder', 'admin@example.com, other@example.com')}
-            helperText={t('settings.updateNotifications.recipientsHelper', 'Comma-separated email addresses. Leave empty to send to all admin users.')}
-            leftIcon={<Mail className="w-4 h-4 text-neutral-400" />}
-            disabled={!localEnabled}
-          />
-        </div>
-
-        {/* Last notified version */}
-        {settings?.lastNotifiedVersion && (
-          <div className="p-3 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
-            <p className="text-sm text-blue-700 dark:text-blue-300">
-              {t('settings.updateNotifications.lastNotified', 'Last notification sent for version: {{version}}', {
-                version: settings.lastNotifiedVersion
-              })}
-            </p>
-          </div>
-        )}
-
-        {/* Action Buttons */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-neutral-200 dark:border-neutral-700">
-          <div className="flex flex-wrap gap-2">
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => checkMutation.mutate()}
-              isLoading={checkMutation.isPending}
-              leftIcon={<RefreshCw className="w-4 h-4" />}
-              disabled={!localEnabled}
-            >
-              {t('settings.updateNotifications.checkNow', 'Check & Notify')}
-            </Button>
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => sendMutation.mutate()}
-              isLoading={sendMutation.isPending}
-              leftIcon={<Send className="w-4 h-4" />}
-              disabled={!localEnabled}
-            >
-              {t('settings.updateNotifications.sendTest', 'Send Test Email')}
-            </Button>
-          </div>
-          <Button
-            variant="primary"
-            size="sm"
-            onClick={handleSave}
-            isLoading={updateMutation.isPending}
-            leftIcon={<Save className="w-4 h-4" />}
-            disabled={!isDirty}
-          >
-            {t('common.save', 'Save')}
-          </Button>
-        </div>
-      </div>
-    </Card>
+              {/* Action Buttons */}
+              <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-neutral-200 dark:border-neutral-700">
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                                          variant="secondary"
+                                          size="sm"
+                                          onClick={() => checkMutation.mutate()} disabled={!localEnabled || checkMutation.isPending}
+                                        >
+                                          {checkMutation.isPending && <Loader2 className="animate-spin" />}<RefreshCw className="w-4 h-4" />{t('settings.updateNotifications.checkNow', 'Check & Notify')}</Button>
+                  <Button
+                                          variant="secondary"
+                                          size="sm"
+                                          onClick={() => sendMutation.mutate()} disabled={!localEnabled || sendMutation.isPending}
+                                        >
+                                          {sendMutation.isPending && <Loader2 className="animate-spin" />}<Send className="w-4 h-4" />{t('settings.updateNotifications.sendTest', 'Send Test Email')}</Button>
+                </div>
+                <Button
+                                    size="sm"
+                                    onClick={handleSave} disabled={!isDirty || updateMutation.isPending}
+                                  >
+                                    {updateMutation.isPending && <Loader2 className="animate-spin" />}<Save className="w-4 h-4" />{t('common.save', 'Save')}</Button>
+              </div>
+            </div></CardContent></Card>
   );
 };

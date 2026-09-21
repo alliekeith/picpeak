@@ -32,8 +32,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { ArrowLeft, Save, AlertTriangle, Workflow as WorkflowIcon } from 'lucide-react';
-import { Button, Card, Loading, Input } from '../../../components/common';
+import { ArrowLeft, Save, AlertTriangle, Workflow as WorkflowIcon, Loader2 } from 'lucide-react';
+import { Loading } from '../../../components/common';
 import { SUPPORTED_LANGUAGES } from '../../../components/common/LanguageSelector';
 import { EmailTemplateEditor } from '../../../components/admin/EmailTemplateEditor';
 import { eventTypesService } from '../../../services/eventTypes.service';
@@ -41,6 +41,9 @@ import { emailService, type EmailTemplateTranslation } from '../../../services/e
 import { settingsService } from '../../../services/settings.service';
 import { useFeatureFlags } from '../../../contexts/FeatureFlagsContext';
 import { useMutationWithToast } from '../../../hooks';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 const TEMPLATE_KEY_DEFAULT = 'event_reminder_default';
 const TEMPLATE_KEY_PREFIX = 'event_reminder_';
@@ -261,209 +264,193 @@ export const ReminderTemplatesPage: React.FC = () => {
 
       {/* Schedule (on/off + lead time): in Workflows when the engine is live,
           else the legacy global controls. */}
-      <Card className="mb-4">
-        {workflowsLive ? (
-          <div className="flex items-start gap-2 text-sm text-blue-800 dark:text-blue-200">
-            <WorkflowIcon className="w-4 h-4 mt-0.5 shrink-0" />
-            <div>
-              <p className="font-medium">{t('reminderTemplates.scheduleMoved.title', 'The reminder schedule is now in Workflows')}</p>
-              <p className="mt-1 text-neutral-600 dark:text-neutral-400">
-                {t('reminderTemplates.scheduleMoved.body', 'Whether pre-event reminders are sent, and how many days before the event, is configured in the “Pre-event reminder” workflow. This page edits the email templates; per-event overrides stay on each event’s detail page.')}{' '}
-                <Link to="/admin/workflows" className="underline font-medium">{t('reminderTemplates.scheduleMoved.link', 'Open Workflows')}</Link>
-              </p>
-            </div>
-          </div>
-        ) : (
-          <>
-            <h3 className="font-semibold text-sm text-neutral-900 dark:text-neutral-100 mb-2">
-              {t('reminderTemplates.globalSection', 'Global behaviour')}
-            </h3>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-3">
-              {t('reminderTemplates.globalHelp',
-                'Off by default — turn on to start sending pre-event reminders. The offset below is the default; each event can override on its detail page.')}
-            </p>
-            <div className="flex items-center gap-6 flex-wrap">
-              <label className="inline-flex items-center gap-2 text-sm text-neutral-800 dark:text-neutral-200 cursor-pointer">
-                <input type="checkbox" checked={enabled} onChange={(e) => setEnabled(e.target.checked)} />
-                {t('reminderTemplates.enableLabel', 'Send pre-event reminder emails')}
-              </label>
-              <div className="flex items-center gap-2">
-                <label htmlFor="reminder-days-before" className="text-sm text-neutral-700 dark:text-neutral-300">
-                  {t('reminderTemplates.daysBeforeLabel', 'Days before the event')}
-                </label>
-                <Input id="reminder-days-before" type="number" min={0} max={365}
-                  value={daysBefore} onChange={(e) => setDaysBefore(Number(e.target.value))} className="w-24" />
-              </div>
-              <Button variant="outline" size="sm"
-                onClick={() => saveSettingsMutation.mutate()}
-                isLoading={saveSettingsMutation.isPending}
-                disabled={saveSettingsMutation.isPending}
-                leftIcon={<Save className="w-4 h-4" />}>
-                {t('reminderTemplates.saveSettings', 'Save global settings')}
-              </Button>
-            </div>
-          </>
-        )}
-      </Card>
+      <Card className="mb-4"><CardContent>{workflowsLive ? (
+                    <div className="flex items-start gap-2 text-sm text-blue-800 dark:text-blue-200">
+                      <WorkflowIcon className="w-4 h-4 mt-0.5 shrink-0" />
+                      <div>
+                        <p className="font-medium">{t('reminderTemplates.scheduleMoved.title', 'The reminder schedule is now in Workflows')}</p>
+                        <p className="mt-1 text-neutral-600 dark:text-neutral-400">
+                          {t('reminderTemplates.scheduleMoved.body', 'Whether pre-event reminders are sent, and how many days before the event, is configured in the “Pre-event reminder” workflow. This page edits the email templates; per-event overrides stay on each event’s detail page.')}{' '}
+                          <Link to="/admin/workflows" className="underline font-medium">{t('reminderTemplates.scheduleMoved.link', 'Open Workflows')}</Link>
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <h3 className="font-semibold text-sm text-neutral-900 dark:text-neutral-100 mb-2">
+                        {t('reminderTemplates.globalSection', 'Global behaviour')}
+                      </h3>
+                      <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-3">
+                        {t('reminderTemplates.globalHelp',
+                          'Off by default — turn on to start sending pre-event reminders. The offset below is the default; each event can override on its detail page.')}
+                      </p>
+                      <div className="flex items-center gap-6 flex-wrap">
+                        <label className="inline-flex items-center gap-2 text-sm text-neutral-800 dark:text-neutral-200 cursor-pointer">
+                          <input type="checkbox" checked={enabled} onChange={(e) => setEnabled(e.target.checked)} />
+                          {t('reminderTemplates.enableLabel', 'Send pre-event reminder emails')}
+                        </label>
+                        <div className="flex items-center gap-2">
+                          <label htmlFor="reminder-days-before" className="text-sm text-neutral-700 dark:text-neutral-300">
+                            {t('reminderTemplates.daysBeforeLabel', 'Days before the event')}
+                          </label>
+                          <Input id="reminder-days-before" type="number" min={0} max={365}
+                            value={daysBefore} onChange={(e) => setDaysBefore(Number(e.target.value))} className="w-24" />
+                        </div>
+                        <Button variant="outline" size="sm"
+                                                        onClick={() => saveSettingsMutation.mutate()} disabled={saveSettingsMutation.isPending || saveSettingsMutation.isPending}>
+                                                        {saveSettingsMutation.isPending && <Loader2 className="animate-spin" />}<Save className="w-4 h-4" />{t('reminderTemplates.saveSettings', 'Save global settings')}</Button>
+                      </div>
+                    </>
+                  )}</CardContent></Card>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Sidebar — same shape as EmailConfigPage + BlockLibraryPage. */}
-        <Card padding="sm">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-              {t('reminderTemplates.sidebarHeading', 'Templates')}
-            </h3>
-          </div>
-          <div className="space-y-5">
-            {/* Section header — single section for now ("TEMPLATES"). The
-                contract block library uses 4-6 sections; we have one
-                conceptual grouping (default + per-type) so we render
-                one uppercase header and let the rows speak for the
-                taxonomy via the "Default" pill. */}
-            <div>
-              <h4 className="px-1 mb-2 text-[11px] font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
-                {t('reminderTemplates.sectionTemplates', 'Templates')}
-              </h4>
-              <div className="space-y-2">
-                {sidebarRows.map((row) => {
-                  const isSelected = row.key === selectedKey;
-                  const count = translationCount(row.key);
-                  return (
-                    <button
-                      key={row.key}
-                      onClick={() => setSelectedKey(row.key)}
-                      className={`w-full text-left p-3 rounded-lg transition-colors ${
-                        isSelected
-                          ? 'tile-selected'
-                          : 'bg-neutral-50 dark:bg-neutral-700 border-2 border-transparent hover:bg-neutral-100 dark:hover:bg-neutral-600'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between gap-2">
-                        <div className="flex items-center gap-2 min-w-0">
-                          <span className="text-base shrink-0">{row.emoji}</span>
-                          <p className="font-medium text-neutral-900 dark:text-neutral-100 truncate">
-                            {row.label}
-                          </p>
-                        </div>
-                        <div className="flex items-center gap-1.5 shrink-0">
-                          {!row.hasTemplate && !row.isDefault && (
-                            <span
-                              className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-sm font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
-                              title={t('reminderTemplates.usesDefaultTooltip',
-                                'No dedicated template yet — this event type falls back to the default. Edit + save here to create one.') as string}
-                            >
-                              {t('reminderTemplates.usesDefault', 'Default')}
-                            </span>
-                          )}
-                          {row.hasTemplate && (
-                            <span className="text-xs px-2 py-0.5 rounded-full bg-neutral-200 dark:bg-neutral-600 text-neutral-600 dark:text-neutral-300">
-                              {count}/{totalLangs}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </Card>
+        <Card className="py-4"><CardContent className="px-4"><div className="flex items-center justify-between mb-4">
+                          <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                            {t('reminderTemplates.sidebarHeading', 'Templates')}
+                          </h3>
+                        </div><div className="space-y-5">
+                          {/* Section header — single section for now ("TEMPLATES"). The
+                              contract block library uses 4-6 sections; we have one
+                              conceptual grouping (default + per-type) so we render
+                              one uppercase header and let the rows speak for the
+                              taxonomy via the "Default" pill. */}
+                          <div>
+                            <h4 className="px-1 mb-2 text-[11px] font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+                              {t('reminderTemplates.sectionTemplates', 'Templates')}
+                            </h4>
+                            <div className="space-y-2">
+                              {sidebarRows.map((row) => {
+                                const isSelected = row.key === selectedKey;
+                                const count = translationCount(row.key);
+                                return (
+                                  <button
+                                    key={row.key}
+                                    onClick={() => setSelectedKey(row.key)}
+                                    className={`w-full text-left p-3 rounded-lg transition-colors ${
+                                      isSelected
+                                        ? 'tile-selected'
+                                        : 'bg-neutral-50 dark:bg-neutral-700 border-2 border-transparent hover:bg-neutral-100 dark:hover:bg-neutral-600'
+                                    }`}
+                                  >
+                                    <div className="flex items-center justify-between gap-2">
+                                      <div className="flex items-center gap-2 min-w-0">
+                                        <span className="text-base shrink-0">{row.emoji}</span>
+                                        <p className="font-medium text-neutral-900 dark:text-neutral-100 truncate">
+                                          {row.label}
+                                        </p>
+                                      </div>
+                                      <div className="flex items-center gap-1.5 shrink-0">
+                                        {!row.hasTemplate && !row.isDefault && (
+                                          <span
+                                            className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-sm font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
+                                            title={t('reminderTemplates.usesDefaultTooltip',
+                                              'No dedicated template yet — this event type falls back to the default. Edit + save here to create one.') as string}
+                                          >
+                                            {t('reminderTemplates.usesDefault', 'Default')}
+                                          </span>
+                                        )}
+                                        {row.hasTemplate && (
+                                          <span className="text-xs px-2 py-0.5 rounded-full bg-neutral-200 dark:bg-neutral-600 text-neutral-600 dark:text-neutral-300">
+                                            {count}/{totalLangs}
+                                          </span>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </div></CardContent></Card>
 
         {/* Right panel — edit form, lg:col-span-2 to match the email +
             contract editor proportions. */}
         <div className="lg:col-span-2">
-          <Card padding="md">
-            {selectedLoading ? <Loading /> : (
-              <>
-                <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
-                  <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                    {sidebarRows.find((r) => r.key === selectedKey)?.label || selectedKey}
-                  </h3>
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    onClick={() => saveMutation.mutate()}
-                    isLoading={saveMutation.isPending}
-                    disabled={saveMutation.isPending}
-                    leftIcon={<Save className="w-4 h-4" />}
-                  >
-                    {t('reminderTemplates.saveTemplate', 'Save template')}
-                  </Button>
-                </div>
+          <Card><CardContent>{selectedLoading ? <Loading /> : (
+                                <>
+                                  <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+                                    <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                                      {sidebarRows.find((r) => r.key === selectedKey)?.label || selectedKey}
+                                    </h3>
+                                    <Button
+                                                                        size="sm"
+                                                                        onClick={() => saveMutation.mutate()} disabled={saveMutation.isPending || saveMutation.isPending}
+                                                                      >
+                                                                        {saveMutation.isPending && <Loader2 className="animate-spin" />}<Save className="w-4 h-4" />{t('reminderTemplates.saveTemplate', 'Save template')}</Button>
+                                  </div>
 
-                {/* Language tabs — full SUPPORTED_LANGUAGES row with
-                    flags and an amber bullet on locales the admin
-                    hasn't filled. */}
-                <div className="flex flex-wrap gap-1 mb-4 p-1 bg-neutral-100 dark:bg-neutral-700 rounded-lg">
-                  {SUPPORTED_LANGUAGES.map((lang) => {
-                    const tr = translations[lang.code];
-                    const filled = !!(tr && ((tr.subject || '').trim() || (tr.body_html || '').trim()));
-                    return (
-                      <button
-                        key={lang.code}
-                        onClick={() => setEditingLang(lang.code)}
-                        className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors flex items-center gap-1.5 ${
-                          editingLang === lang.code
-                            ? 'bg-white dark:bg-neutral-800 text-primary shadow-xs'
-                            : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200'
-                        }`}
-                      >
-                        <lang.Flag />
-                        <span>{lang.name}</span>
-                        {!filled && lang.code !== 'en' && (
-                          <span
-                            className="w-1.5 h-1.5 rounded-full bg-amber-400"
-                            title={t('reminderTemplates.noTranslation', 'No translation yet') as string}
-                          />
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
+                                  {/* Language tabs — full SUPPORTED_LANGUAGES row with
+                                      flags and an amber bullet on locales the admin
+                                      hasn't filled. */}
+                                  <div className="flex flex-wrap gap-1 mb-4 p-1 bg-neutral-100 dark:bg-neutral-700 rounded-lg">
+                                    {SUPPORTED_LANGUAGES.map((lang) => {
+                                      const tr = translations[lang.code];
+                                      const filled = !!(tr && ((tr.subject || '').trim() || (tr.body_html || '').trim()));
+                                      return (
+                                        <button
+                                          key={lang.code}
+                                          onClick={() => setEditingLang(lang.code)}
+                                          className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors flex items-center gap-1.5 ${
+                                            editingLang === lang.code
+                                              ? 'bg-white dark:bg-neutral-800 text-primary shadow-xs'
+                                              : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200'
+                                          }`}
+                                        >
+                                          <lang.Flag />
+                                          <span>{lang.name}</span>
+                                          {!filled && lang.code !== 'en' && (
+                                            <span
+                                              className="w-1.5 h-1.5 rounded-full bg-amber-400"
+                                              title={t('reminderTemplates.noTranslation', 'No translation yet') as string}
+                                            />
+                                          )}
+                                        </button>
+                                      );
+                                    })}
+                                  </div>
 
-                {isNewPerType && (
-                  <div className="rounded-md border border-amber-300 bg-amber-50 dark:bg-amber-900/20 dark:border-amber-700 p-3 mb-3 flex items-start gap-2">
-                    <AlertTriangle className="w-4 h-4 text-amber-700 dark:text-amber-300 mt-0.5 shrink-0" />
-                    <p className="text-sm text-amber-800 dark:text-amber-200">
-                      {t('reminderTemplates.willCreateOnSave',
-                        'This event type uses the default template. The fields below are pre-filled from the default; saving will create a dedicated template for this event type.')}
-                    </p>
-                  </div>
-                )}
+                                  {isNewPerType && (
+                                    <div className="rounded-md border border-amber-300 bg-amber-50 dark:bg-amber-900/20 dark:border-amber-700 p-3 mb-3 flex items-start gap-2">
+                                      <AlertTriangle className="w-4 h-4 text-amber-700 dark:text-amber-300 mt-0.5 shrink-0" />
+                                      <p className="text-sm text-amber-800 dark:text-amber-200">
+                                        {t('reminderTemplates.willCreateOnSave',
+                                          'This event type uses the default template. The fields below are pre-filled from the default; saving will create a dedicated template for this event type.')}
+                                      </p>
+                                    </div>
+                                  )}
 
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                      {t('reminderTemplates.subjectLabel', 'Subject')} ({SUPPORTED_LANGUAGES.find((l) => l.code === editingLang)?.name || editingLang})
-                    </label>
-                    <Input
-                      type="text"
-                      value={currentTranslation.subject || ''}
-                      onChange={(e) => setCurrentField('subject', e.target.value)}
-                      placeholder={t('reminderTemplates.subjectPlaceholder', 'Email subject') as string}
-                    />
-                  </div>
+                                  <div className="space-y-4">
+                                    <div>
+                                      <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                                        {t('reminderTemplates.subjectLabel', 'Subject')} ({SUPPORTED_LANGUAGES.find((l) => l.code === editingLang)?.name || editingLang})
+                                      </label>
+                                      <Input
+                                        type="text"
+                                        value={currentTranslation.subject || ''}
+                                        onChange={(e) => setCurrentField('subject', e.target.value)}
+                                        placeholder={t('reminderTemplates.subjectPlaceholder', 'Email subject') as string}
+                                      />
+                                    </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                      {t('reminderTemplates.bodyLabel', 'Body')} ({SUPPORTED_LANGUAGES.find((l) => l.code === editingLang)?.name || editingLang})
-                    </label>
-                    <EmailTemplateEditor
-                      content={currentTranslation.body_html || ''}
-                      onChange={(value) => setCurrentField('body_html', value)}
-                      variables={VARIABLES}
-                    />
-                  </div>
+                                    <div>
+                                      <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                                        {t('reminderTemplates.bodyLabel', 'Body')} ({SUPPORTED_LANGUAGES.find((l) => l.code === editingLang)?.name || editingLang})
+                                      </label>
+                                      <EmailTemplateEditor
+                                        content={currentTranslation.body_html || ''}
+                                        onChange={(value) => setCurrentField('body_html', value)}
+                                        variables={VARIABLES}
+                                      />
+                                    </div>
 
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                    {t('reminderTemplates.variablesHint',
-                      'Available variables: {{customer_name}}, {{event_name}}, {{event_date}}, {{event_type}}, {{days_before}}, {{business_name}} — substituted when the email is rendered.')}
-                  </p>
-                </div>
-              </>
-            )}
-          </Card>
+                                    <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                                      {t('reminderTemplates.variablesHint',
+                                        'Available variables: {{customer_name}}, {{event_name}}, {{event_date}}, {{event_type}}, {{days_before}}, {{business_name}} — substituted when the email is rendered.')}
+                                    </p>
+                                  </div>
+                                </>
+                              )}</CardContent></Card>
         </div>
       </div>
     </div>

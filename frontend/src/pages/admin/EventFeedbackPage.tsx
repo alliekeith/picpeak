@@ -19,7 +19,7 @@ import {
 import { toast } from 'react-toastify';
 import { format, parseISO } from 'date-fns';
 
-import { Button, Card, Loading } from '../../components/common';
+import { Loading } from '../../components/common';
 import { AdminAuthenticatedImage } from '../../components/admin/AdminAuthenticatedImage';
 import { FeedbackSettings } from '../../components/admin';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -28,6 +28,8 @@ import { feedbackService } from '../../services/feedback.service';
 import type { PhotoFeedback, FeedbackAnalytics, FeedbackResponse } from '../../services/feedback.service';
 import { useMutationWithToast } from '../../hooks';
 import { useLocalizedDate } from '../../hooks/useLocalizedDate';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 export const EventFeedbackPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -150,13 +152,11 @@ export const EventFeedbackPage: React.FC = () => {
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Button
-            variant="ghost"
-            size="sm"
-            leftIcon={<ArrowLeft className="w-4 h-4" />}
-            onClick={() => navigate(`/admin/events/${id}`)}
-          >
-            {t('common.back')}
-          </Button>
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => navigate(`/admin/events/${id}`)}
+                            >
+                              <ArrowLeft className="w-4 h-4" />{t('common.back')}</Button>
           <div>
             <h1 className="text-2xl font-bold text-neutral-900">
               {t('feedback.title', 'Feedback Management')}
@@ -184,21 +184,17 @@ export const EventFeedbackPage: React.FC = () => {
             </select>
           </div>
           <Button
-            variant="outline"
-            size="sm"
-            leftIcon={<Download className="w-4 h-4" />}
-            onClick={() => handleExport('csv')}
-          >
-            {t('feedback.exportCSV', 'Export CSV')}
-          </Button>
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleExport('csv')}
+                            >
+                              <Download className="w-4 h-4" />{t('feedback.exportCSV', 'Export CSV')}</Button>
           <Button
-            variant="outline"
-            size="sm"
-            leftIcon={<Download className="w-4 h-4" />}
-            onClick={() => handleExport('json')}
-          >
-            {t('feedback.exportJSON', 'Export JSON')}
-          </Button>
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleExport('json')}
+                            >
+                              <Download className="w-4 h-4" />{t('feedback.exportJSON', 'Export JSON')}</Button>
         </div>
       </div>
 
@@ -238,154 +234,140 @@ export const EventFeedbackPage: React.FC = () => {
       {activeTab === 'feedback' && (
         <div className="space-y-4">
           {/* Filters */}
-          <Card>
-            <div className="p-4 flex gap-4">
-              <select
-                value={feedbackFilter.type}
-                onChange={(e) => setFeedbackFilter({ ...feedbackFilter, type: e.target.value, page: 1 })}
-                className="px-3 py-2 border border-neutral-300 rounded-lg"
-              >
-                <option value="">{t('feedback.allTypes', 'All Types')}</option>
-                <option value="rating">{t('feedback.types.rating', 'Ratings')}</option>
-                <option value="like">{t('feedback.types.like', 'Likes')}</option>
-                <option value="comment">{t('feedback.types.comment', 'Comments')}</option>
-                <option value="favorite">{t('feedback.types.favorite', 'Favorites')}</option>
-                <option value="reaction">{t('feedback.types.reaction', 'Reactions')}</option>
-              </select>
-              <select
-                value={feedbackFilter.status}
-                onChange={(e) => setFeedbackFilter({ ...feedbackFilter, status: e.target.value, page: 1 })}
-                className="px-3 py-2 border border-neutral-300 rounded-lg"
-              >
-                <option value="">{t('feedback.allStatuses', 'All Statuses')}</option>
-                <option value="pending">{t('feedback.status.pending', 'Pending')}</option>
-                <option value="approved">{t('feedback.status.approved', 'Approved')}</option>
-                <option value="hidden">{t('feedback.status.hidden', 'Hidden')}</option>
-              </select>
-            </div>
-          </Card>
+          <Card><CardContent><div className="p-4 flex gap-4">
+                                <select
+                                  value={feedbackFilter.type}
+                                  onChange={(e) => setFeedbackFilter({ ...feedbackFilter, type: e.target.value, page: 1 })}
+                                  className="px-3 py-2 border border-neutral-300 rounded-lg"
+                                >
+                                  <option value="">{t('feedback.allTypes', 'All Types')}</option>
+                                  <option value="rating">{t('feedback.types.rating', 'Ratings')}</option>
+                                  <option value="like">{t('feedback.types.like', 'Likes')}</option>
+                                  <option value="comment">{t('feedback.types.comment', 'Comments')}</option>
+                                  <option value="favorite">{t('feedback.types.favorite', 'Favorites')}</option>
+                                  <option value="reaction">{t('feedback.types.reaction', 'Reactions')}</option>
+                                </select>
+                                <select
+                                  value={feedbackFilter.status}
+                                  onChange={(e) => setFeedbackFilter({ ...feedbackFilter, status: e.target.value, page: 1 })}
+                                  className="px-3 py-2 border border-neutral-300 rounded-lg"
+                                >
+                                  <option value="">{t('feedback.allStatuses', 'All Statuses')}</option>
+                                  <option value="pending">{t('feedback.status.pending', 'Pending')}</option>
+                                  <option value="approved">{t('feedback.status.approved', 'Approved')}</option>
+                                  <option value="hidden">{t('feedback.status.hidden', 'Hidden')}</option>
+                                </select>
+                              </div></CardContent></Card>
 
           {/* Feedback List */}
           {feedbackLoading ? (
             <Loading />
           ) : feedbackData?.feedback?.length === 0 ? (
-            <Card>
-              <div className="p-8 text-center text-neutral-500">
-                {t('feedback.noFeedback', 'No feedback found')}
-              </div>
-            </Card>
+            <Card><CardContent><div className="p-8 text-center text-neutral-500">
+                                          {t('feedback.noFeedback', 'No feedback found')}
+                                        </div></CardContent></Card>
           ) : (
             <div className="space-y-2">
               {feedbackData?.feedback?.map((item: PhotoFeedback) => (
-                <Card key={item.id} className="overflow-hidden">
-                  <div className="p-4 flex items-start gap-4">
-                    {item.photo_id && (
-                      <div className="w-16 h-16 overflow-hidden rounded-sm">
-                        <AdminAuthenticatedImage
-                          src={`/admin/photos/${id}/thumbnail/${item.photo_id}`}
-                          alt={item.filename || 'Photo'}
-                          className="w-16 h-16 object-cover rounded-sm"
-                        />
-                      </div>
-                    )}
-                    <div className="flex-1">
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <div className="flex items-center gap-2 mb-1">
-                            {item.feedback_type === 'rating' && <Star className="w-4 h-4 text-yellow-500" />}
-                            {item.feedback_type === 'like' && <Heart className="w-4 h-4 text-red-500" />}
-                            {item.feedback_type === 'comment' && <MessageSquare className="w-4 h-4 text-blue-500" />}
-                            {item.feedback_type === 'reaction' && item.reaction && (
-                              <span className="text-base leading-none">{item.reaction}</span>
-                            )}
-                            <span className="font-medium text-sm">
-                              {item.guest_name || t('feedback.anonymous', 'Anonymous')}
-                            </span>
-                            {item.guest_email && (
-                              <span className="text-xs text-neutral-500">({item.guest_email})</span>
-                            )}
-                          </div>
-                          {item.rating && (
-                            <div className="flex gap-1 mb-1">
-                              {[1, 2, 3, 4, 5].map((star) => (
-                                <Star
-                                  key={star}
-                                  className={`w-4 h-4 ${
-                                    star <= item.rating! ? 'fill-yellow-500 text-yellow-500' : 'text-neutral-300'
-                                  }`}
-                                />
-                              ))}
-                            </div>
-                          )}
-                          {item.comment_text && (
-                            <p className="text-sm text-neutral-700">{item.comment_text}</p>
-                          )}
-                          <p className="text-xs text-neutral-500 mt-1">
-                            {(() => {
-                              const d = typeof item.created_at === 'string' 
-                                ? parseISO(item.created_at) 
-                                : new Date(item.created_at);
-                              return isNaN(d.getTime()) ? t('common.unknownDate', 'Unknown date') : fmtDateTime(d);
-                            })()}
-                          </p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          {item.feedback_type === 'comment' && !item.is_approved && (
-                            <>
-                              <Button
-                                size="sm"
-                                variant="ghost"
-                                leftIcon={<CheckCircle className="w-4 h-4" />}
-                                onClick={() => moderateMutation.mutate({ 
-                                  feedbackId: item.id.toString(), 
-                                  action: 'approve' 
-                                })}
-                              >
-                                {t('feedback.approve', 'Approve')}
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="ghost"
-                                leftIcon={<EyeOff className="w-4 h-4" />}
-                                onClick={() => moderateMutation.mutate({ 
-                                  feedbackId: item.id.toString(), 
-                                  action: 'hide' 
-                                })}
-                              >
-                                {t('feedback.hide', 'Hide')}
-                              </Button>
-                            </>
-                          )}
-                          {item.is_hidden && (
-                            <Button
-                              size="sm"
-                              variant="ghost"
-                              leftIcon={<Eye className="w-4 h-4" />}
-                              onClick={() => moderateMutation.mutate({ 
-                                feedbackId: item.id.toString(), 
-                                action: 'approve' 
-                              })}
-                            >
-                              {t('feedback.unhide', 'Unhide')}
-                            </Button>
-                          )}
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            leftIcon={<Trash2 className="w-4 h-4" />}
-                            onClick={() => {
-                              if (confirm(t('feedback.confirmDelete', 'Are you sure you want to delete this feedback?'))) {
-                                deleteMutation.mutate(item.id.toString());
-                              }
-                            }}
-                          >
-                            {t('common.delete', 'Delete')}
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Card>
+                <Card key={item.id} className="overflow-hidden"><CardContent><div className="p-4 flex items-start gap-4">
+                                      {item.photo_id && (
+                                        <div className="w-16 h-16 overflow-hidden rounded-sm">
+                                          <AdminAuthenticatedImage
+                                            src={`/admin/photos/${id}/thumbnail/${item.photo_id}`}
+                                            alt={item.filename || 'Photo'}
+                                            className="w-16 h-16 object-cover rounded-sm"
+                                          />
+                                        </div>
+                                      )}
+                                      <div className="flex-1">
+                                        <div className="flex items-start justify-between">
+                                          <div>
+                                            <div className="flex items-center gap-2 mb-1">
+                                              {item.feedback_type === 'rating' && <Star className="w-4 h-4 text-yellow-500" />}
+                                              {item.feedback_type === 'like' && <Heart className="w-4 h-4 text-red-500" />}
+                                              {item.feedback_type === 'comment' && <MessageSquare className="w-4 h-4 text-blue-500" />}
+                                              {item.feedback_type === 'reaction' && item.reaction && (
+                                                <span className="text-base leading-none">{item.reaction}</span>
+                                              )}
+                                              <span className="font-medium text-sm">
+                                                {item.guest_name || t('feedback.anonymous', 'Anonymous')}
+                                              </span>
+                                              {item.guest_email && (
+                                                <span className="text-xs text-neutral-500">({item.guest_email})</span>
+                                              )}
+                                            </div>
+                                            {item.rating && (
+                                              <div className="flex gap-1 mb-1">
+                                                {[1, 2, 3, 4, 5].map((star) => (
+                                                  <Star
+                                                    key={star}
+                                                    className={`w-4 h-4 ${
+                                                      star <= item.rating! ? 'fill-yellow-500 text-yellow-500' : 'text-neutral-300'
+                                                    }`}
+                                                  />
+                                                ))}
+                                              </div>
+                                            )}
+                                            {item.comment_text && (
+                                              <p className="text-sm text-neutral-700">{item.comment_text}</p>
+                                            )}
+                                            <p className="text-xs text-neutral-500 mt-1">
+                                              {(() => {
+                                                const d = typeof item.created_at === 'string' 
+                                                  ? parseISO(item.created_at) 
+                                                  : new Date(item.created_at);
+                                                return isNaN(d.getTime()) ? t('common.unknownDate', 'Unknown date') : fmtDateTime(d);
+                                              })()}
+                                            </p>
+                                          </div>
+                                          <div className="flex items-center gap-2">
+                                            {item.feedback_type === 'comment' && !item.is_approved && (
+                                              <>
+                                                <Button
+                                                                                                size="sm"
+                                                                                                variant="ghost"
+                                                                                                onClick={() => moderateMutation.mutate({ 
+                                                                                                  feedbackId: item.id.toString(), 
+                                                                                                  action: 'approve' 
+                                                                                                })}
+                                                                                              >
+                                                                                                <CheckCircle className="w-4 h-4" />{t('feedback.approve', 'Approve')}</Button>
+                                                <Button
+                                                                                                size="sm"
+                                                                                                variant="ghost"
+                                                                                                onClick={() => moderateMutation.mutate({ 
+                                                                                                  feedbackId: item.id.toString(), 
+                                                                                                  action: 'hide' 
+                                                                                                })}
+                                                                                              >
+                                                                                                <EyeOff className="w-4 h-4" />{t('feedback.hide', 'Hide')}</Button>
+                                              </>
+                                            )}
+                                            {item.is_hidden && (
+                                              <Button
+                                                                                          size="sm"
+                                                                                          variant="ghost"
+                                                                                          onClick={() => moderateMutation.mutate({ 
+                                                                                            feedbackId: item.id.toString(), 
+                                                                                            action: 'approve' 
+                                                                                          })}
+                                                                                        >
+                                                                                          <Eye className="w-4 h-4" />{t('feedback.unhide', 'Unhide')}</Button>
+                                            )}
+                                            <Button
+                                                                                    size="sm"
+                                                                                    variant="ghost"
+                                                                                    onClick={() => {
+                                                                                      if (confirm(t('feedback.confirmDelete', 'Are you sure you want to delete this feedback?'))) {
+                                                                                        deleteMutation.mutate(item.id.toString());
+                                                                                      }
+                                                                                    }}
+                                                                                  >
+                                                                                    <Trash2 className="w-4 h-4" />{t('common.delete', 'Delete')}</Button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div></CardContent></Card>
               ))}
             </div>
           )}
@@ -428,129 +410,115 @@ export const EventFeedbackPage: React.FC = () => {
             <>
               {/* Summary Stats */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-                <Card>
-                  <div className="p-6">
-                    <div className="flex items-center gap-3 mb-2">
-                      <Star className="w-8 h-8 text-yellow-500" />
-                      <div>
-                        <p className="text-2xl font-bold">{(analytics.summary.average_rating || 0).toFixed(1)}</p>
-                        <p className="text-sm text-neutral-600">{t('feedback.avgRating', 'Average Rating')}</p>
-                      </div>
-                    </div>
-                    <p className="text-xs text-neutral-500">
-                      {t('feedback.totalRatings', '{{count}} ratings', { count: analytics.summary.total_ratings })}
-                    </p>
-                  </div>
-                </Card>
-                <Card>
-                  <div className="p-6">
-                    <div className="flex items-center gap-3 mb-2">
-                      <Heart className="w-8 h-8 text-red-500" />
-                      <div>
-                        <p className="text-2xl font-bold">{analytics.summary.total_likes}</p>
-                        <p className="text-sm text-neutral-600">{t('feedback.totalLikes', 'Total Likes')}</p>
-                      </div>
-                    </div>
-                  </div>
-                </Card>
-                <Card>
-                  <div className="p-6">
-                    <div className="flex items-center gap-3 mb-2">
-                      <Smile className="w-8 h-8 text-amber-500" />
-                      <div>
-                        <p className="text-2xl font-bold">{analytics.summary.total_reactions || 0}</p>
-                        <p className="text-sm text-neutral-600">{t('feedback.totalReactions', 'Total Reactions')}</p>
-                      </div>
-                    </div>
-                  </div>
-                </Card>
-                <Card>
-                  <div className="p-6">
-                    <div className="flex items-center gap-3 mb-2">
-                      <MessageSquare className="w-8 h-8 text-blue-500" />
-                      <div>
-                        <p className="text-2xl font-bold">{analytics.summary.total_comments}</p>
-                        <p className="text-sm text-neutral-600">{t('feedback.totalComments', 'Total Comments')}</p>
-                      </div>
-                    </div>
-                    {analytics.summary.pending_moderation > 0 && (
-                      <p className="text-xs text-orange-600">
-                        {t('feedback.pendingModeration', '{{count}} pending', { 
-                          count: analytics.summary.pending_moderation 
-                        })}
-                      </p>
-                    )}
-                  </div>
-                </Card>
-                <Card>
-                  <div className="p-6">
-                    <div className="flex items-center gap-3 mb-2">
-                      <TrendingUp className="w-8 h-8 text-green-500" />
-                      <div>
-                        <p className="text-2xl font-bold">{analytics.summary.total_feedback}</p>
-                        <p className="text-sm text-neutral-600">{t('feedback.totalInteractions', 'Total Interactions')}</p>
-                      </div>
-                    </div>
-                  </div>
-                </Card>
+                <Card><CardContent><div className="p-6">
+                                                      <div className="flex items-center gap-3 mb-2">
+                                                        <Star className="w-8 h-8 text-yellow-500" />
+                                                        <div>
+                                                          <p className="text-2xl font-bold">{(analytics.summary.average_rating || 0).toFixed(1)}</p>
+                                                          <p className="text-sm text-neutral-600">{t('feedback.avgRating', 'Average Rating')}</p>
+                                                        </div>
+                                                      </div>
+                                                      <p className="text-xs text-neutral-500">
+                                                        {t('feedback.totalRatings', '{{count}} ratings', { count: analytics.summary.total_ratings })}
+                                                      </p>
+                                                    </div></CardContent></Card>
+                <Card><CardContent><div className="p-6">
+                                                      <div className="flex items-center gap-3 mb-2">
+                                                        <Heart className="w-8 h-8 text-red-500" />
+                                                        <div>
+                                                          <p className="text-2xl font-bold">{analytics.summary.total_likes}</p>
+                                                          <p className="text-sm text-neutral-600">{t('feedback.totalLikes', 'Total Likes')}</p>
+                                                        </div>
+                                                      </div>
+                                                    </div></CardContent></Card>
+                <Card><CardContent><div className="p-6">
+                                                      <div className="flex items-center gap-3 mb-2">
+                                                        <Smile className="w-8 h-8 text-amber-500" />
+                                                        <div>
+                                                          <p className="text-2xl font-bold">{analytics.summary.total_reactions || 0}</p>
+                                                          <p className="text-sm text-neutral-600">{t('feedback.totalReactions', 'Total Reactions')}</p>
+                                                        </div>
+                                                      </div>
+                                                    </div></CardContent></Card>
+                <Card><CardContent><div className="p-6">
+                                                      <div className="flex items-center gap-3 mb-2">
+                                                        <MessageSquare className="w-8 h-8 text-blue-500" />
+                                                        <div>
+                                                          <p className="text-2xl font-bold">{analytics.summary.total_comments}</p>
+                                                          <p className="text-sm text-neutral-600">{t('feedback.totalComments', 'Total Comments')}</p>
+                                                        </div>
+                                                      </div>
+                                                      {analytics.summary.pending_moderation > 0 && (
+                                                        <p className="text-xs text-orange-600">
+                                                          {t('feedback.pendingModeration', '{{count}} pending', { 
+                                                            count: analytics.summary.pending_moderation 
+                                                          })}
+                                                        </p>
+                                                      )}
+                                                    </div></CardContent></Card>
+                <Card><CardContent><div className="p-6">
+                                                      <div className="flex items-center gap-3 mb-2">
+                                                        <TrendingUp className="w-8 h-8 text-green-500" />
+                                                        <div>
+                                                          <p className="text-2xl font-bold">{analytics.summary.total_feedback}</p>
+                                                          <p className="text-sm text-neutral-600">{t('feedback.totalInteractions', 'Total Interactions')}</p>
+                                                        </div>
+                                                      </div>
+                                                    </div></CardContent></Card>
               </div>
 
               {/* Top Rated Photos */}
               {analytics.topRated.length > 0 && (
-                <Card>
-                  <div className="p-6">
-                    <h3 className="text-lg font-semibold mb-4">{t('feedback.topRated', 'Top Rated Photos')}</h3>
-                    <div className="space-y-3">
-                      {analytics.topRated.map((photo) => (
-                        <div key={photo.id} className="flex items-center justify-between">
-                          <span className="text-sm">{photo.filename}</span>
-                          <div className="flex items-center gap-2">
-                            <div className="flex gap-0.5">
-                              {[1, 2, 3, 4, 5].map((star) => (
-                                <Star
-                                  key={star}
-                                  className={`w-3 h-3 ${
-                                    star <= Math.round(photo.average_rating) 
-                                      ? 'fill-yellow-500 text-yellow-500' 
-                                      : 'text-neutral-300'
-                                  }`}
-                                />
-                              ))}
-                            </div>
-                            <span className="text-sm text-neutral-600">
-                              {Number(photo.average_rating).toFixed(1)} ({photo.feedback_count})
-                            </span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </Card>
+                <Card><CardContent><div className="p-6">
+                                                      <h3 className="text-lg font-semibold mb-4">{t('feedback.topRated', 'Top Rated Photos')}</h3>
+                                                      <div className="space-y-3">
+                                                        {analytics.topRated.map((photo) => (
+                                                          <div key={photo.id} className="flex items-center justify-between">
+                                                            <span className="text-sm">{photo.filename}</span>
+                                                            <div className="flex items-center gap-2">
+                                                              <div className="flex gap-0.5">
+                                                                {[1, 2, 3, 4, 5].map((star) => (
+                                                                  <Star
+                                                                    key={star}
+                                                                    className={`w-3 h-3 ${
+                                                                      star <= Math.round(photo.average_rating) 
+                                                                        ? 'fill-yellow-500 text-yellow-500' 
+                                                                        : 'text-neutral-300'
+                                                                    }`}
+                                                                  />
+                                                                ))}
+                                                              </div>
+                                                              <span className="text-sm text-neutral-600">
+                                                                {Number(photo.average_rating).toFixed(1)} ({photo.feedback_count})
+                                                              </span>
+                                                            </div>
+                                                          </div>
+                                                        ))}
+                                                      </div>
+                                                    </div></CardContent></Card>
               )}
 
               {/* Recent Comments */}
               {analytics.recentComments.length > 0 && (
-                <Card>
-                  <div className="p-6">
-                    <h3 className="text-lg font-semibold mb-4">{t('feedback.recentComments', 'Recent Comments')}</h3>
-                    <div className="space-y-3">
-                      {analytics.recentComments.map((comment, idx) => (
-                        <div key={idx} className="border-b border-neutral-100 pb-3 last:border-0">
-                          <p className="text-sm text-neutral-700">{comment.comment_text}</p>
-                          <p className="text-xs text-neutral-500 mt-1">
-                            {comment.guest_name} • {comment.filename} • 
-                            {(() => {
-                              const d = typeof comment.created_at === 'string' 
-                                ? parseISO(comment.created_at) 
-                                : new Date(comment.created_at);
-                              return isNaN(d.getTime()) ? t('common.unknownDate', 'Unknown date') : format(d, 'PP');
-                            })()}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </Card>
+                <Card><CardContent><div className="p-6">
+                                                      <h3 className="text-lg font-semibold mb-4">{t('feedback.recentComments', 'Recent Comments')}</h3>
+                                                      <div className="space-y-3">
+                                                        {analytics.recentComments.map((comment, idx) => (
+                                                          <div key={idx} className="border-b border-neutral-100 pb-3 last:border-0">
+                                                            <p className="text-sm text-neutral-700">{comment.comment_text}</p>
+                                                            <p className="text-xs text-neutral-500 mt-1">
+                                                              {comment.guest_name} • {comment.filename} • 
+                                                              {(() => {
+                                                                const d = typeof comment.created_at === 'string' 
+                                                                  ? parseISO(comment.created_at) 
+                                                                  : new Date(comment.created_at);
+                                                                return isNaN(d.getTime()) ? t('common.unknownDate', 'Unknown date') : format(d, 'PP');
+                                                              })()}
+                                                            </p>
+                                                          </div>
+                                                        ))}
+                                                      </div>
+                                                    </div></CardContent></Card>
               )}
             </>
           ) : null}
@@ -559,22 +527,20 @@ export const EventFeedbackPage: React.FC = () => {
 
       {activeTab === 'moderation' && (
         <div className="space-y-4">
-          <Card>
-            <div className="p-6">
-              <h3 className="text-lg font-semibold mb-4">{t('feedback.wordFilters', 'Word Filters')}</h3>
-              <p className="text-sm text-neutral-600">
-                {t('feedback.wordFiltersDesc', 'Manage blocked words for comment moderation')}
-              </p>
-              <Button
-                variant="outline"
-                size="sm"
-                className="mt-4"
-                onClick={() => navigate('/admin/settings/moderation')}
-              >
-                {t('feedback.manageFilters', 'Manage Word Filters')}
-              </Button>
-            </div>
-          </Card>
+          <Card><CardContent><div className="p-6">
+                                <h3 className="text-lg font-semibold mb-4">{t('feedback.wordFilters', 'Word Filters')}</h3>
+                                <p className="text-sm text-neutral-600">
+                                  {t('feedback.wordFiltersDesc', 'Manage blocked words for comment moderation')}
+                                </p>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="mt-4"
+                                  onClick={() => navigate('/admin/settings/moderation')}
+                                >
+                                  {t('feedback.manageFilters', 'Manage Word Filters')}
+                                </Button>
+                              </div></CardContent></Card>
         </div>
       )}
     </div>

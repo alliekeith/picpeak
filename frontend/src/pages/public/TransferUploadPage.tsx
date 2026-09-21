@@ -14,10 +14,11 @@ import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { UploadCloud, CheckCircle, AlertCircle, X, File as FileIcon } from 'lucide-react';
+import { UploadCloud, CheckCircle, AlertCircle, X, File as FileIcon, Loader2 } from 'lucide-react';
 
-import { Button, Loading } from '../../components/common';
+import { Loading } from '../../components/common';
 import { transfersService } from '../../services/transfers.service';
+import { Button } from "@/components/ui/button";
 
 function formatBytes(bytes: number): string {
   if (!bytes) return '0 B';
@@ -175,15 +176,11 @@ export const TransferUploadPage: React.FC = () => {
       )}
 
       <Button
-        className="mt-5 w-full"
-        size="lg"
-        leftIcon={<UploadCloud className="h-5 w-5" />}
-        onClick={handleUpload}
-        disabled={files.length === 0}
-        isLoading={uploading}
-      >
-        {t('transfers.upload.send', 'Upload {{count}} files', { count: files.length })}
-      </Button>
+                  className="mt-5 w-full"
+                  size="lg"
+                  onClick={handleUpload} disabled={files.length === 0 || uploading}
+                >
+                  {uploading && <Loader2 className="animate-spin" />}<UploadCloud className="h-5 w-5" />{t('transfers.upload.send', 'Upload {{count}} files', { count: files.length })}</Button>
     </div>,
   );
 };

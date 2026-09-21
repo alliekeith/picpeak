@@ -16,12 +16,15 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { X, Plus, Pencil, Trash2, AlertCircle } from 'lucide-react';
-import { Button, Card, CardContent, Input, Loading } from '../common';
+import { Loading } from '../common';
 import {
   ledgerService, type LedgerAccount, type AccountType, type LedgerSettings,
 } from '../../services/ledger.service';
 import { categoryLabel } from '../../services/accounting.service';
 import { useMutationWithToast } from '../../hooks';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 const ACCOUNT_TYPES: AccountType[] = ['asset', 'liability', 'equity', 'revenue', 'expense'];
 const labelCls = 'block text-xs font-medium text-neutral-700 dark:text-neutral-300 mb-1';

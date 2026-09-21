@@ -17,7 +17,7 @@ import { useNavigate, useParams, useSearchParams, Link } from 'react-router-dom'
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { ArrowLeft, Eye, Save } from 'lucide-react';
-import { Button, Card, Input, Loading, LocalizedDateInput, TimeField } from '../../../components/common';
+import { Loading, LocalizedDateInput, TimeField } from '../../../components/common';
 import {
   contractsService,
   type ContractBlockSection,
@@ -30,6 +30,9 @@ import { describeSaveError, newIdempotencyKey, type SaveErrorView } from './cont
 import { contractTemplatesService } from '../../../services/contractTemplates.service';
 import { AttachmentListEditor, type AttachmentRow } from '../../../components/admin/AttachmentListEditor';
 import { SignersEditorCard } from './SignersEditorCard';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 const CRM_DISCLAIMER_URL = 'https://docs.picpeak.app/features/crm/disclaimers';
 
@@ -44,6 +47,7 @@ interface BlockRow {
 }
 
 export const ContractEditorPage: React.FC = () => {
+    const __fieldId = React.useId();
   const { t } = useTranslation();
   const { id } = useParams<{ id?: string }>();
   const [searchParams] = useSearchParams();
@@ -542,16 +546,13 @@ export const ContractEditorPage: React.FC = () => {
   if (isEdit && existingLoading) return <Loading />;
   if (isEdit && existing && existing.contract.status !== 'draft') {
     return (
-      <Card padding="lg">
-        <p className="text-sm text-amber-700 dark:text-amber-300">
-          {t('contracts.editor.locked', 'Sent contracts cannot be edited. Cancel and create a fresh one for amendments.')}
-        </p>
-        <div className="mt-3">
-          <Link to={`/admin/clients/contracts/${numericId}`} className="text-primary hover:underline">
-            ← {t('contracts.editor.backToDetail', 'Back to contract')}
-          </Link>
-        </div>
-      </Card>
+      <Card className="py-8"><CardContent className="px-8"><p className="text-sm text-amber-700 dark:text-amber-300">
+                  {t('contracts.editor.locked', 'Sent contracts cannot be edited. Cancel and create a fresh one for amendments.')}
+                </p><div className="mt-3">
+                  <Link to={`/admin/clients/contracts/${numericId}`} className="text-primary hover:underline">
+                    ← {t('contracts.editor.backToDetail', 'Back to contract')}
+                  </Link>
+                </div></CardContent></Card>
     );
   }
 
@@ -612,217 +613,200 @@ export const ContractEditorPage: React.FC = () => {
       )}
 
       {/* Scalars */}
-      <Card padding="lg" className="mb-4">
-        {!isEdit && (
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">
-              {t('contracts.editor.customer', 'Customer')}
-            </label>
-            <CustomerPicker
-              value={customerAccountId}
-              label={customerLabel}
-              isPassive={customerIsPassive}
-              onSelect={(c) => {
-                setCustomerAccountId(c.id);
-                setCustomerLabel(
-                  c.companyName
-                  || [c.firstName, c.lastName].filter(Boolean).join(' ')
-                  || c.displayName
-                  || c.email
-                  || `#${c.id}`,
-                );
-                setCustomerIsPassive(Boolean(c.isPassive));
-              }}
-              onCreate={(c) => {
-                setCustomerAccountId(c.id);
-                setCustomerLabel(
-                  c.companyName
-                  || [c.firstName, c.lastName].filter(Boolean).join(' ')
-                  || c.displayName
-                  || c.email
-                  || `#${c.id}`,
-                );
-                setCustomerIsPassive(Boolean(c.isPassive));
-              }}
-              onClear={() => { setCustomerAccountId(null); setCustomerLabel(''); setCustomerIsPassive(false); }}
-              searchPlaceholder={t('contracts.editor.searchCustomer', 'Search by email…') as string}
-            />
-            {fieldError('customerAccountId') && (
-              <p className={fieldErrorClass}>{fieldError('customerAccountId')}</p>
-            )}
-          </div>
-        )}
-
-        {!isEdit && (
-          <div className="mb-4">
-            <label htmlFor="contract-template-choice" className="block text-sm font-medium mb-1">
-              {t('contracts.editor.template', 'Start from template')}
-            </label>
-            <select
-              id="contract-template-choice"
-              value={templateChoice ?? ''}
-              onChange={(e) => setTemplateChoice(e.target.value === 'none' ? 'none' : Number(e.target.value))}
-              className={textareaClass(false)}
-            >
-              {templateChoice === null && <option value="">…</option>}
-              {usableTemplates.map((tpl) => (
-                <option key={tpl.id} value={tpl.id}>
-                  {tpl.name}{tpl.isDefault ? ` (${t('contracts.templates.default', 'Default')})` : ''}
-                </option>
-              ))}
-              <option value="none">{t('contracts.editor.templateNone', 'No template — pick the clauses below')}</option>
-            </select>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-              {chosenTemplate
-                ? t('contracts.editor.templateHint', 'The contract starts with this template\'s clauses and texts. You can adjust them once it\'s created.')
-                : t('contracts.editor.templateNoneHint', 'Pick the clauses yourself below.')}
-            </p>
-          </div>
-        )}
-
-        {/* Project link (renders only when the projects feature is on). */}
-        <div className="mb-4">
-          <ProjectSelect
-            label={t('projects.picker.label', 'Project') as string}
-            value={projectId}
-            customerAccountId={customerAccountId}
-            onChange={setProjectId}
-          />
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              {t('contracts.editor.titleField', 'Contract title')}
-            </label>
-            <Input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder={t('contracts.editor.titlePlaceholder', 'e.g. Wedding contract Doe / Müller') as string}
-              error={fieldError('title')}
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              {t('contracts.editor.language', 'Language')}
-            </label>
-            <select
-              value={language}
-              onChange={(e) => setLanguage(e.target.value)}
-              aria-invalid={fieldError('language') ? 'true' : undefined}
-              aria-describedby={fieldError('language') ? 'contract-language-error' : undefined}
-              className={textareaClass(Boolean(fieldError('language')))}
-            >
-              <option value="de">Deutsch</option>
-              <option value="en">English</option>
-            </select>
-            {fieldError('language') && (
-              <p id="contract-language-error" className={fieldErrorClass}>{fieldError('language')}</p>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              {t('contracts.editor.issueDate', 'Issue date')}
-            </label>
-            <LocalizedDateInput value={issueDate} onChange={setIssueDate} error={fieldError('issueDate')} />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              {t('contracts.editor.validUntil', 'Sign by (optional)')}
-            </label>
-            <LocalizedDateInput value={validUntil} onChange={setValidUntil} error={fieldError('validUntil')} />
-          </div>
-        </div>
-
-        {/* Event snapshot fields. Match the quote editor so the chain
-            quote → contract → invoice carries the same labels. When
-            createFromQuote drafts a contract from an accepted quote
-            these come prefilled from the quote. */}
-        <div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
-          <h3 className="text-sm font-semibold mb-2">
-            {t('contracts.editor.eventSection', 'Event (optional)')}
-          </h3>
-          <p className="text-xs text-neutral-500 mb-3">
-            {t('contracts.editor.eventHelp',
-              'Snapshotted onto the contract and propagated to any event / invoice generated from it. Set this so the customer portal and dunning emails show the right "Wedding Doe / Müller" label.')}
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium mb-1">
-                {t('contracts.editor.eventName', 'Event name')}
-              </label>
-              <Input
-                type="text"
-                value={eventName}
-                onChange={(e) => setEventName(e.target.value)}
-                placeholder={t('contracts.editor.eventNamePlaceholder',
-                  'e.g. Wedding Doe / Müller') as string}
-                error={fieldError('eventName')}
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                {t('contracts.editor.eventDate', 'Event date')}
-              </label>
-              <LocalizedDateInput value={eventDate} onChange={setEventDate} error={fieldError('eventDate')} />
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  {t('contracts.editor.eventTimeStart', 'Start')}
-                </label>
-                <TimeField value={eventTimeStart} onChange={setEventTimeStart} />
-                {fieldError('eventTimeStart') && (
-                  <p className={fieldErrorClass}>{fieldError('eventTimeStart')}</p>
-                )}
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  {t('contracts.editor.eventTimeEnd', 'End')}
-                </label>
-                <TimeField value={eventTimeEnd} onChange={setEventTimeEnd} />
-                {fieldError('eventTimeEnd') && (
-                  <p className={fieldErrorClass}>{fieldError('eventTimeEnd')}</p>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-3">
-          <label className="block text-sm font-medium mb-1">
-            {t('contracts.editor.intro', 'Intro text (optional)')}
-          </label>
-          <textarea
-            value={introText}
-            onChange={(e) => setIntroText(e.target.value)}
-            rows={3}
-            aria-invalid={fieldError('introText') ? 'true' : undefined}
-            aria-describedby={fieldError('introText') ? 'contract-intro-error' : undefined}
-            className={textareaClass(Boolean(fieldError('introText')))}
-          />
-          {fieldError('introText') && (
-            <p id="contract-intro-error" className={fieldErrorClass}>{fieldError('introText')}</p>
-          )}
-        </div>
-        <div className="mt-3">
-          <label className="block text-sm font-medium mb-1">
-            {t('contracts.editor.outro', 'Closing text (optional)')}
-          </label>
-          <textarea
-            value={outroText}
-            onChange={(e) => setOutroText(e.target.value)}
-            rows={2}
-            aria-invalid={fieldError('outroText') ? 'true' : undefined}
-            aria-describedby={fieldError('outroText') ? 'contract-outro-error' : undefined}
-            className={textareaClass(Boolean(fieldError('outroText')))}
-          />
-          {fieldError('outroText') && (
-            <p id="contract-outro-error" className={fieldErrorClass}>{fieldError('outroText')}</p>
-          )}
-        </div>
-      </Card>
+      <Card className="py-8 mb-4"><CardContent className="px-8">{!isEdit && (
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium mb-1">
+                        {t('contracts.editor.customer', 'Customer')}
+                      </label>
+                      <CustomerPicker
+                        value={customerAccountId}
+                        label={customerLabel}
+                        isPassive={customerIsPassive}
+                        onSelect={(c) => {
+                          setCustomerAccountId(c.id);
+                          setCustomerLabel(
+                            c.companyName
+                            || [c.firstName, c.lastName].filter(Boolean).join(' ')
+                            || c.displayName
+                            || c.email
+                            || `#${c.id}`,
+                          );
+                          setCustomerIsPassive(Boolean(c.isPassive));
+                        }}
+                        onCreate={(c) => {
+                          setCustomerAccountId(c.id);
+                          setCustomerLabel(
+                            c.companyName
+                            || [c.firstName, c.lastName].filter(Boolean).join(' ')
+                            || c.displayName
+                            || c.email
+                            || `#${c.id}`,
+                          );
+                          setCustomerIsPassive(Boolean(c.isPassive));
+                        }}
+                        onClear={() => { setCustomerAccountId(null); setCustomerLabel(''); setCustomerIsPassive(false); }}
+                        searchPlaceholder={t('contracts.editor.searchCustomer', 'Search by email…') as string}
+                      />
+                      {fieldError('customerAccountId') && (
+                        <p className={fieldErrorClass}>{fieldError('customerAccountId')}</p>
+                      )}
+                    </div>
+                  )}{!isEdit && (
+                    <div className="mb-4">
+                      <label htmlFor="contract-template-choice" className="block text-sm font-medium mb-1">
+                        {t('contracts.editor.template', 'Start from template')}
+                      </label>
+                      <select
+                        id="contract-template-choice"
+                        value={templateChoice ?? ''}
+                        onChange={(e) => setTemplateChoice(e.target.value === 'none' ? 'none' : Number(e.target.value))}
+                        className={textareaClass(false)}
+                      >
+                        {templateChoice === null && <option value="">…</option>}
+                        {usableTemplates.map((tpl) => (
+                          <option key={tpl.id} value={tpl.id}>
+                            {tpl.name}{tpl.isDefault ? ` (${t('contracts.templates.default', 'Default')})` : ''}
+                          </option>
+                        ))}
+                        <option value="none">{t('contracts.editor.templateNone', 'No template — pick the clauses below')}</option>
+                      </select>
+                      <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                        {chosenTemplate
+                          ? t('contracts.editor.templateHint', 'The contract starts with this template\'s clauses and texts. You can adjust them once it\'s created.')
+                          : t('contracts.editor.templateNoneHint', 'Pick the clauses yourself below.')}
+                      </p>
+                    </div>
+                  )}{/* Project link (renders only when the projects feature is on). */}<div className="mb-4">
+                    <ProjectSelect
+                      label={t('projects.picker.label', 'Project') as string}
+                      value={projectId}
+                      customerAccountId={customerAccountId}
+                      onChange={setProjectId}
+                    />
+                  </div><div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-sm font-medium mb-1">
+                        {t('contracts.editor.titleField', 'Contract title')}
+                      </label>
+                      <div className="w-full"><Input
+                                              type="text"
+                                              value={title}
+                                              onChange={(e) => setTitle(e.target.value)}
+                                              placeholder={t('contracts.editor.titlePlaceholder', 'e.g. Wedding contract Doe / Müller') as string} aria-invalid={!!(fieldError('title'))} aria-describedby={(fieldError('title')) ? `${__fieldId}-0-error` : undefined}
+                                            />{(fieldError('title')) && <p id={`${__fieldId}-0-error`} className="mt-1.5 text-sm text-destructive">{fieldError('title')}</p>}</div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">
+                        {t('contracts.editor.language', 'Language')}
+                      </label>
+                      <select
+                        value={language}
+                        onChange={(e) => setLanguage(e.target.value)}
+                        aria-invalid={fieldError('language') ? 'true' : undefined}
+                        aria-describedby={fieldError('language') ? 'contract-language-error' : undefined}
+                        className={textareaClass(Boolean(fieldError('language')))}
+                      >
+                        <option value="de">Deutsch</option>
+                        <option value="en">English</option>
+                      </select>
+                      {fieldError('language') && (
+                        <p id="contract-language-error" className={fieldErrorClass}>{fieldError('language')}</p>
+                      )}
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">
+                        {t('contracts.editor.issueDate', 'Issue date')}
+                      </label>
+                      <LocalizedDateInput value={issueDate} onChange={setIssueDate} error={fieldError('issueDate')} />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">
+                        {t('contracts.editor.validUntil', 'Sign by (optional)')}
+                      </label>
+                      <LocalizedDateInput value={validUntil} onChange={setValidUntil} error={fieldError('validUntil')} />
+                    </div>
+                  </div>{/* Event snapshot fields. Match the quote editor so the chain
+                      quote → contract → invoice carries the same labels. When
+                      createFromQuote drafts a contract from an accepted quote
+                      these come prefilled from the quote. */}<div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
+                    <h3 className="text-sm font-semibold mb-2">
+                      {t('contracts.editor.eventSection', 'Event (optional)')}
+                    </h3>
+                    <p className="text-xs text-neutral-500 mb-3">
+                      {t('contracts.editor.eventHelp',
+                        'Snapshotted onto the contract and propagated to any event / invoice generated from it. Set this so the customer portal and dunning emails show the right "Wedding Doe / Müller" label.')}
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div className="md:col-span-2">
+                        <label className="block text-sm font-medium mb-1">
+                          {t('contracts.editor.eventName', 'Event name')}
+                        </label>
+                        <div className="w-full"><Input
+                                                    type="text"
+                                                    value={eventName}
+                                                    onChange={(e) => setEventName(e.target.value)}
+                                                    placeholder={t('contracts.editor.eventNamePlaceholder',
+                                                      'e.g. Wedding Doe / Müller') as string} aria-invalid={!!(fieldError('eventName'))} aria-describedby={(fieldError('eventName')) ? `${__fieldId}-1-error` : undefined}
+                                                  />{(fieldError('eventName')) && <p id={`${__fieldId}-1-error`} className="mt-1.5 text-sm text-destructive">{fieldError('eventName')}</p>}</div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">
+                          {t('contracts.editor.eventDate', 'Event date')}
+                        </label>
+                        <LocalizedDateInput value={eventDate} onChange={setEventDate} error={fieldError('eventDate')} />
+                      </div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <label className="block text-sm font-medium mb-1">
+                            {t('contracts.editor.eventTimeStart', 'Start')}
+                          </label>
+                          <TimeField value={eventTimeStart} onChange={setEventTimeStart} />
+                          {fieldError('eventTimeStart') && (
+                            <p className={fieldErrorClass}>{fieldError('eventTimeStart')}</p>
+                          )}
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium mb-1">
+                            {t('contracts.editor.eventTimeEnd', 'End')}
+                          </label>
+                          <TimeField value={eventTimeEnd} onChange={setEventTimeEnd} />
+                          {fieldError('eventTimeEnd') && (
+                            <p className={fieldErrorClass}>{fieldError('eventTimeEnd')}</p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div><div className="mt-3">
+                    <label className="block text-sm font-medium mb-1">
+                      {t('contracts.editor.intro', 'Intro text (optional)')}
+                    </label>
+                    <textarea
+                      value={introText}
+                      onChange={(e) => setIntroText(e.target.value)}
+                      rows={3}
+                      aria-invalid={fieldError('introText') ? 'true' : undefined}
+                      aria-describedby={fieldError('introText') ? 'contract-intro-error' : undefined}
+                      className={textareaClass(Boolean(fieldError('introText')))}
+                    />
+                    {fieldError('introText') && (
+                      <p id="contract-intro-error" className={fieldErrorClass}>{fieldError('introText')}</p>
+                    )}
+                  </div><div className="mt-3">
+                    <label className="block text-sm font-medium mb-1">
+                      {t('contracts.editor.outro', 'Closing text (optional)')}
+                    </label>
+                    <textarea
+                      value={outroText}
+                      onChange={(e) => setOutroText(e.target.value)}
+                      rows={2}
+                      aria-invalid={fieldError('outroText') ? 'true' : undefined}
+                      aria-describedby={fieldError('outroText') ? 'contract-outro-error' : undefined}
+                      className={textareaClass(Boolean(fieldError('outroText')))}
+                    />
+                    {fieldError('outroText') && (
+                      <p id="contract-outro-error" className={fieldErrorClass}>{fieldError('outroText')}</p>
+                    )}
+                  </div></CardContent></Card>
 
       {/* Disclaimer banner */}
       <div className="mb-4 p-3 rounded-md border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/30 text-sm text-amber-900 dark:text-amber-200">
@@ -852,64 +836,58 @@ export const ContractEditorPage: React.FC = () => {
       )}
 
       {(isEdit || templateChoice === 'none') && CONTRACT_SECTIONS.map((section) => (
-        <Card key={section} padding="lg" className="mb-3">
-          <h2 className="text-lg font-semibold mb-2">
-            {t(`contracts.sections.${section}`, section)}
-          </h2>
-          {blocksBySection[section].length === 0 ? (
-            <p className="text-sm text-neutral-500">
-              {t('contracts.editor.noBlocksInSection', 'No blocks for this section yet.')}
-            </p>
-          ) : (
-            <ul className="space-y-2">
-              {blocksBySection[section].map((b) => (
-                <li
-                  key={b.blockId}
-                  className="flex items-start gap-3 p-2 rounded-sm border border-neutral-200 dark:border-neutral-700"
-                >
-                  <input
-                    type="checkbox"
-                    className="mt-1"
-                    checked={b.included}
-                    onChange={() => toggleBlock(b.blockId)}
-                  />
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-medium text-sm">{b.name}</span>
-                      {b.isSystem && (
-                        <span className="text-[10px] uppercase tracking-wide px-1.5 py-0.5 rounded-sm bg-neutral-200 dark:bg-neutral-700">
-                          {t('contracts.editor.systemBadge', 'System')}
-                        </span>
-                      )}
-                    </div>
-                    {b.description && (
-                      <p className="text-xs text-neutral-500 mt-1">{b.description}</p>
-                    )}
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <button
-                      type="button"
-                      className="px-2 py-0.5 text-xs rounded-sm border border-neutral-300 dark:border-neutral-600"
-                      onClick={() => moveBlock(b.blockId, -1)}
-                    >↑</button>
-                    <button
-                      type="button"
-                      className="px-2 py-0.5 text-xs rounded-sm border border-neutral-300 dark:border-neutral-600"
-                      onClick={() => moveBlock(b.blockId, 1)}
-                    >↓</button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </Card>
+        <Card key={section} className="py-8 mb-3"><CardContent className="px-8"><h2 className="text-lg font-semibold mb-2">
+                      {t(`contracts.sections.${section}`, section)}
+                    </h2>{blocksBySection[section].length === 0 ? (
+                      <p className="text-sm text-neutral-500">
+                        {t('contracts.editor.noBlocksInSection', 'No blocks for this section yet.')}
+                      </p>
+                    ) : (
+                      <ul className="space-y-2">
+                        {blocksBySection[section].map((b) => (
+                          <li
+                            key={b.blockId}
+                            className="flex items-start gap-3 p-2 rounded-sm border border-neutral-200 dark:border-neutral-700"
+                          >
+                            <input
+                              type="checkbox"
+                              className="mt-1"
+                              checked={b.included}
+                              onChange={() => toggleBlock(b.blockId)}
+                            />
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <span className="font-medium text-sm">{b.name}</span>
+                                {b.isSystem && (
+                                  <span className="text-[10px] uppercase tracking-wide px-1.5 py-0.5 rounded-sm bg-neutral-200 dark:bg-neutral-700">
+                                    {t('contracts.editor.systemBadge', 'System')}
+                                  </span>
+                                )}
+                              </div>
+                              {b.description && (
+                                <p className="text-xs text-neutral-500 mt-1">{b.description}</p>
+                              )}
+                            </div>
+                            <div className="flex flex-col gap-1">
+                              <button
+                                type="button"
+                                className="px-2 py-0.5 text-xs rounded-sm border border-neutral-300 dark:border-neutral-600"
+                                onClick={() => moveBlock(b.blockId, -1)}
+                              >↑</button>
+                              <button
+                                type="button"
+                                className="px-2 py-0.5 text-xs rounded-sm border border-neutral-300 dark:border-neutral-600"
+                                onClick={() => moveBlock(b.blockId, 1)}
+                              >↓</button>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    )}</CardContent></Card>
       ))}
 
       {isEdit && (
-        <Card padding="lg" className="mb-3">
-          <h2 className="text-lg font-semibold mb-2">{t('contracts.attachments.heading', 'Attachments')}</h2>
-          <AttachmentListEditor idPrefix="contract-attachment" value={attachments} onChange={setAttachments} />
-        </Card>
+        <Card className="py-8 mb-3"><CardContent className="px-8"><h2 className="text-lg font-semibold mb-2">{t('contracts.attachments.heading', 'Attachments')}</h2><AttachmentListEditor idPrefix="contract-attachment" value={attachments} onChange={setAttachments} /></CardContent></Card>
       )}
 
       {isEdit && numericId !== null && (
@@ -917,22 +895,18 @@ export const ContractEditorPage: React.FC = () => {
       )}
 
       {isEdit && (existing?.contract.textSections || []).length > 0 && (
-        <Card padding="lg" className="mb-3">
-          <h2 className="text-lg font-semibold mb-2">{t('contracts.editor.textSections', 'Free-text sections')}</h2>
-          <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-2">
-            {t('contracts.editor.textSectionsHint', 'These come from the template and stay as they are when you save.')}
-          </p>
-          <ul className="space-y-2">
-            {(existing?.contract.textSections || []).map((s) => (
-              <li key={s.id} className="p-2 rounded-sm border border-neutral-200 dark:border-neutral-700">
-                <p className="text-sm font-medium">{s.heading || t(`contracts.sections.${s.section}`, s.section)}</p>
-                <p className="text-xs text-neutral-600 dark:text-neutral-400 whitespace-pre-line line-clamp-3">
-                  {s.body[language as keyof typeof s.body] || s.body.en || s.body.de || ''}
-                </p>
-              </li>
-            ))}
-          </ul>
-        </Card>
+        <Card className="py-8 mb-3"><CardContent className="px-8"><h2 className="text-lg font-semibold mb-2">{t('contracts.editor.textSections', 'Free-text sections')}</h2><p className="text-xs text-neutral-500 dark:text-neutral-400 mb-2">
+                          {t('contracts.editor.textSectionsHint', 'These come from the template and stay as they are when you save.')}
+                        </p><ul className="space-y-2">
+                          {(existing?.contract.textSections || []).map((s) => (
+                            <li key={s.id} className="p-2 rounded-sm border border-neutral-200 dark:border-neutral-700">
+                              <p className="text-sm font-medium">{s.heading || t(`contracts.sections.${s.section}`, s.section)}</p>
+                              <p className="text-xs text-neutral-600 dark:text-neutral-400 whitespace-pre-line line-clamp-3">
+                                {s.body[language as keyof typeof s.body] || s.body.en || s.body.de || ''}
+                              </p>
+                            </li>
+                          ))}
+                        </ul></CardContent></Card>
       )}
     </div>
   );

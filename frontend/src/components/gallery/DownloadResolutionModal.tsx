@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Download, Check, AlertCircle, X, Loader2 } from 'lucide-react';
-
-import { Button, Card } from '../common';
 import { galleryService } from '../../services/gallery.service';
 import type { DownloadResolutionChoice, DownloadJobStatus } from '../../types';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 /**
  * Resolution picker for gallery downloads (#858).
@@ -136,113 +136,101 @@ export const DownloadResolutionModal: React.FC<DownloadResolutionModalProps> = (
       aria-label={t('gallery.chooseResolution', 'Choose a download size')}
     >
       <Card
-        className="max-w-md w-full"
-        onClick={(e: React.MouseEvent) => e.stopPropagation()}
-      >
-        <div className="flex items-start justify-between gap-3 mb-4">
-          <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-            {t('gallery.chooseResolution', 'Choose a download size')}
-          </h2>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label={t('common.close', 'Close')}
-            className="text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-200"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        {phase === 'choose' && (
-          <>
-            <div className="space-y-2 mb-5">
-              {choices.map((choice) => (
-                <label
-                  key={choice.id}
-                  className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
-                    selected === choice.id
-                      ? 'border-brand-500 bg-brand-50 dark:bg-brand-900/20'
-                      : 'border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800'
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="download-resolution"
-                    value={choice.id}
-                    checked={selected === choice.id}
-                    onChange={() => setSelected(choice.id)}
-                    className="accent-brand-600"
-                  />
-                  <span className="flex-1 min-w-0">
-                    <span className="block text-sm font-medium text-neutral-900 dark:text-neutral-100">
-                      {choice.label}
-                    </span>
-                    {choice.width && choice.height && (
-                      <span className="block text-xs text-neutral-500 dark:text-neutral-400">
-                        {t('gallery.resolutionUpTo', 'up to {{width}} × {{height}} px', {
-                          width: choice.width,
-                          height: choice.height,
-                        })}
-                      </span>
-                    )}
-                  </span>
-                </label>
-              ))}
-            </div>
-            <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={onClose}>
-                {t('common.cancel', 'Cancel')}
-              </Button>
-              <Button variant="primary" onClick={start} leftIcon={<Download className="w-4 h-4" />}>
-                {t('gallery.prepareDownload', 'Prepare download')}
-              </Button>
-            </div>
-          </>
-        )}
-
-        {phase === 'preparing' && (
-          <div className="py-6 text-center">
-            <Loader2 className="w-8 h-8 mx-auto mb-3 animate-spin text-brand-600" />
-            <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
-              {t('gallery.preparingDownload', 'Preparing your download…')}
-            </p>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-              {photoCount > 0
-                ? t('gallery.preparingProgress', '{{count}} photos packaged', { count: photoCount })
-                : t('gallery.preparingHint', 'Resizing photos — this can take a moment for large galleries.')}
-            </p>
-          </div>
-        )}
-
-        {phase === 'ready' && (
-          <div className="py-6 text-center">
-            <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
-              <Check className="w-6 h-6 text-green-600 dark:text-green-400" />
-            </div>
-            <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100 mb-4">
-              {t('gallery.downloadReady', 'Your download is ready')}
-            </p>
-            <Button variant="primary" onClick={download} leftIcon={<Download className="w-4 h-4" />}>
-              {t('gallery.downloadNow', 'Download')}
-            </Button>
-          </div>
-        )}
-
-        {phase === 'error' && (
-          <div className="py-6 text-center">
-            <AlertCircle className="w-8 h-8 mx-auto mb-3 text-red-600 dark:text-red-400" />
-            <p className="text-sm text-neutral-700 dark:text-neutral-300 mb-4">{error}</p>
-            <div className="flex justify-center gap-2">
-              <Button variant="outline" onClick={onClose}>
-                {t('common.close', 'Close')}
-              </Button>
-              <Button variant="primary" onClick={() => setPhase('choose')}>
-                {t('common.retry', 'Try again')}
-              </Button>
-            </div>
-          </div>
-        )}
-      </Card>
+                  className="max-w-md w-full"
+                  onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                ><CardContent><div className="flex items-start justify-between gap-3 mb-4">
+                    <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                      {t('gallery.chooseResolution', 'Choose a download size')}
+                    </h2>
+                    <button
+                      type="button"
+                      onClick={onClose}
+                      aria-label={t('common.close', 'Close')}
+                      className="text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-200"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>{phase === 'choose' && (
+                    <>
+                      <div className="space-y-2 mb-5">
+                        {choices.map((choice) => (
+                          <label
+                            key={choice.id}
+                            className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
+                              selected === choice.id
+                                ? 'border-brand-500 bg-brand-50 dark:bg-brand-900/20'
+                                : 'border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800'
+                            }`}
+                          >
+                            <input
+                              type="radio"
+                              name="download-resolution"
+                              value={choice.id}
+                              checked={selected === choice.id}
+                              onChange={() => setSelected(choice.id)}
+                              className="accent-brand-600"
+                            />
+                            <span className="flex-1 min-w-0">
+                              <span className="block text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                                {choice.label}
+                              </span>
+                              {choice.width && choice.height && (
+                                <span className="block text-xs text-neutral-500 dark:text-neutral-400">
+                                  {t('gallery.resolutionUpTo', 'up to {{width}} × {{height}} px', {
+                                    width: choice.width,
+                                    height: choice.height,
+                                  })}
+                                </span>
+                              )}
+                            </span>
+                          </label>
+                        ))}
+                      </div>
+                      <div className="flex justify-end gap-2">
+                        <Button variant="outline" onClick={onClose}>
+                          {t('common.cancel', 'Cancel')}
+                        </Button>
+                        <Button onClick={start}>
+                                                    <Download className="w-4 h-4" />{t('gallery.prepareDownload', 'Prepare download')}</Button>
+                      </div>
+                    </>
+                  )}{phase === 'preparing' && (
+                    <div className="py-6 text-center">
+                      <Loader2 className="w-8 h-8 mx-auto mb-3 animate-spin text-brand-600" />
+                      <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                        {t('gallery.preparingDownload', 'Preparing your download…')}
+                      </p>
+                      <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                        {photoCount > 0
+                          ? t('gallery.preparingProgress', '{{count}} photos packaged', { count: photoCount })
+                          : t('gallery.preparingHint', 'Resizing photos — this can take a moment for large galleries.')}
+                      </p>
+                    </div>
+                  )}{phase === 'ready' && (
+                    <div className="py-6 text-center">
+                      <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                        <Check className="w-6 h-6 text-green-600 dark:text-green-400" />
+                      </div>
+                      <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100 mb-4">
+                        {t('gallery.downloadReady', 'Your download is ready')}
+                      </p>
+                      <Button onClick={download}>
+                                              <Download className="w-4 h-4" />{t('gallery.downloadNow', 'Download')}</Button>
+                    </div>
+                  )}{phase === 'error' && (
+                    <div className="py-6 text-center">
+                      <AlertCircle className="w-8 h-8 mx-auto mb-3 text-red-600 dark:text-red-400" />
+                      <p className="text-sm text-neutral-700 dark:text-neutral-300 mb-4">{error}</p>
+                      <div className="flex justify-center gap-2">
+                        <Button variant="outline" onClick={onClose}>
+                          {t('common.close', 'Close')}
+                        </Button>
+                        <Button onClick={() => setPhase('choose')}>
+                          {t('common.retry', 'Try again')}
+                        </Button>
+                      </div>
+                    </div>
+                  )}</CardContent></Card>
     </div>
   );
 };

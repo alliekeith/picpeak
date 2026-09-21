@@ -20,10 +20,14 @@ import { resolve } from 'path';
 const root = resolve(__dirname, '../..');
 
 describe('tailwind typography plugin (#1288)', () => {
-  const config = readFileSync(resolve(root, 'tailwind.config.js'), 'utf8');
+  // Tailwind 4 is configured in CSS rather than JS: tailwind.config.js is
+  // gone and plugins are registered with @plugin in the stylesheet. The guard
+  // is unchanged in purpose — a missing plugin still produces no error and no
+  // warning, the prose classes simply stop existing.
+  const css = readFileSync(resolve(root, 'src/index.css'), 'utf8');
 
-  it('is registered in the tailwind config', () => {
-    expect(config).toMatch(/require\(['"]@tailwindcss\/typography['"]\)/);
+  it('is registered in the stylesheet', () => {
+    expect(css).toMatch(/@plugin\s+['"]@tailwindcss\/typography['"]/);
   });
 
   it('is a declared dependency', () => {

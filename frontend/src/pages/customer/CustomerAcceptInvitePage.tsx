@@ -17,11 +17,11 @@
  */
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Lock, MapPin, Phone, User as UserIcon, AlertCircle, CheckCircle } from 'lucide-react';
+import { Lock, MapPin, Phone, User as UserIcon, AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
-import { Button, Input, Card, Loading, CountrySelect } from '../../components/common';
+import { Loading, CountrySelect } from '../../components/common';
 import {
   customerService,
   type CustomerInvitationInfo,
@@ -29,6 +29,9 @@ import {
 } from '../../services/customer.service';
 import { usePublicSettings } from '../../hooks/usePublicSettings';
 import { usePublicDarkMode } from '../../hooks/usePublicDarkMode';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 interface FormState {
   display_name: string;
@@ -64,6 +67,7 @@ const EMPTY: FormState = {
 };
 
 export const CustomerAcceptInvitePage: React.FC = () => {
+    const __fieldId = React.useId();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { token = '' } = useParams<{ token: string }>();
@@ -203,276 +207,270 @@ export const CustomerAcceptInvitePage: React.FC = () => {
           </p>
         </div>
 
-        <Card padding="lg">
-          {isLookingUp ? (
-            <div className="flex justify-center py-8"><Loading size="lg" /></div>
-          ) : lookupError || !invitation ? (
-            <div className="flex items-start gap-2 text-sm">
-              <AlertCircle className="w-5 h-5 mt-0.5 shrink-0 text-red-600" />
-              <p className="text-foreground">{lookupError}</p>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="flex items-start gap-2 p-3 rounded-lg" style={{ backgroundColor: 'var(--muted, #f5f5f5)' }}>
-                <CheckCircle className="w-5 h-5 mt-0.5 shrink-0" style={{ color: 'var(--brand)' }} />
-                <div className="text-sm text-foreground">
-                  {t('customer.acceptInvite.emailWillBe', 'Your account email will be ')}
-                  <span className="font-medium">{invitation.email}</span>
-                  {invitation.invitedBy ? (
-                    <>
-                      {t('customer.acceptInvite.invitedBy', ', invited by ')}
-                      <span className="font-medium">{invitation.invitedBy}</span>
-                    </>
-                  ) : null}
-                  .
-                </div>
-              </div>
+        <Card className="py-8"><CardContent className="px-8">{isLookingUp ? (
+                          <div className="flex justify-center py-8"><Loading size="lg" /></div>
+                        ) : lookupError || !invitation ? (
+                          <div className="flex items-start gap-2 text-sm">
+                            <AlertCircle className="w-5 h-5 mt-0.5 shrink-0 text-red-600" />
+                            <p className="text-foreground">{lookupError}</p>
+                          </div>
+                        ) : (
+                          <form onSubmit={handleSubmit} className="space-y-6">
+                            <div className="flex items-start gap-2 p-3 rounded-lg" style={{ backgroundColor: 'var(--muted, #f5f5f5)' }}>
+                              <CheckCircle className="w-5 h-5 mt-0.5 shrink-0" style={{ color: 'var(--brand)' }} />
+                              <div className="text-sm text-foreground">
+                                {t('customer.acceptInvite.emailWillBe', 'Your account email will be ')}
+                                <span className="font-medium">{invitation.email}</span>
+                                {invitation.invitedBy ? (
+                                  <>
+                                    {t('customer.acceptInvite.invitedBy', ', invited by ')}
+                                    <span className="font-medium">{invitation.invitedBy}</span>
+                                  </>
+                                ) : null}
+                                .
+                              </div>
+                            </div>
 
-              {errors.form && (
-                <div role="alert" className="flex items-start gap-2 p-3 rounded-lg border" style={{ borderColor: 'var(--border)' }}>
-                  <AlertCircle className="w-4 h-4 mt-0.5 shrink-0 text-red-600" />
-                  <span className="text-sm text-foreground">{errors.form}</span>
-                </div>
-              )}
+                            {errors.form && (
+                              <div role="alert" className="flex items-start gap-2 p-3 rounded-lg border" style={{ borderColor: 'var(--border)' }}>
+                                <AlertCircle className="w-4 h-4 mt-0.5 shrink-0 text-red-600" />
+                                <span className="text-sm text-foreground">{errors.form}</span>
+                              </div>
+                            )}
 
-              {/* Personal — required: display name + password */}
-              <section className="space-y-3">
-                <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-                  <UserIcon className="w-4 h-4" />
-                  {t('customer.acceptInvite.section.personal', 'Personal')}
-                </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-1">
-                      {t('customer.profile.field.salutation', 'Salutation')}
-                    </label>
-                    <select
-                      value={form.salutation}
-                      onChange={(e) => update('salutation', e.target.value)}
-                      className="w-full rounded-lg border px-3 h-10 text-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2"
-                      style={{
-                        backgroundColor: 'var(--card)',
-                        borderColor: 'var(--border)',
-                        color: 'var(--foreground)',
-                      }}
-                    >
-                      {SALUTATION_OPTIONS.map((o) => (
-                        <option key={o.value} value={o.value}>{t(o.labelKey, o.fallback)}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-1">
-                      {t('customer.acceptInvite.displayName', 'Display name')} <span className="text-red-500">*</span>
-                    </label>
-                    <Input
-                      value={form.display_name}
-                      onChange={(e) => update('display_name', e.target.value)}
-                      error={errors.display_name}
-                      autoComplete="name"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-1" htmlFor="invite-first-name">
-                      {t('customer.profile.field.firstName', 'First name')}
-                    </label>
-                    <Input
-                      id="invite-first-name"
-                      name="given-name"
-                      autoComplete="given-name"
-                      value={form.first_name}
-                      onChange={(e) => update('first_name', e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-1" htmlFor="invite-last-name">
-                      {t('customer.profile.field.lastName', 'Last name')}
-                    </label>
-                    <Input
-                      id="invite-last-name"
-                      name="family-name"
-                      autoComplete="family-name"
-                      value={form.last_name}
-                      onChange={(e) => update('last_name', e.target.value)}
-                    />
-                  </div>
-                </div>
-              </section>
+                            {/* Personal — required: display name + password */}
+                            <section className="space-y-3">
+                              <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+                                <UserIcon className="w-4 h-4" />
+                                {t('customer.acceptInvite.section.personal', 'Personal')}
+                              </h2>
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                  <label className="block text-sm font-medium text-foreground mb-1">
+                                    {t('customer.profile.field.salutation', 'Salutation')}
+                                  </label>
+                                  <select
+                                    value={form.salutation}
+                                    onChange={(e) => update('salutation', e.target.value)}
+                                    className="w-full rounded-lg border px-3 h-10 text-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2"
+                                    style={{
+                                      backgroundColor: 'var(--card)',
+                                      borderColor: 'var(--border)',
+                                      color: 'var(--foreground)',
+                                    }}
+                                  >
+                                    {SALUTATION_OPTIONS.map((o) => (
+                                      <option key={o.value} value={o.value}>{t(o.labelKey, o.fallback)}</option>
+                                    ))}
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className="block text-sm font-medium text-foreground mb-1">
+                                    {t('customer.acceptInvite.displayName', 'Display name')} <span className="text-red-500">*</span>
+                                  </label>
+                                  <div className="w-full"><Input
+                                                                              value={form.display_name}
+                                                                              onChange={(e) => update('display_name', e.target.value)}
+                                                                              autoComplete="name" aria-invalid={!!(errors.display_name)} aria-describedby={(errors.display_name) ? `${__fieldId}-0-error` : undefined}
+                                                                            />{(errors.display_name) && <p id={`${__fieldId}-0-error`} className="mt-1.5 text-sm text-destructive">{errors.display_name}</p>}</div>
+                                </div>
+                                <div>
+                                  <label className="block text-sm font-medium text-foreground mb-1" htmlFor="invite-first-name">
+                                    {t('customer.profile.field.firstName', 'First name')}
+                                  </label>
+                                  <Input
+                                    id="invite-first-name"
+                                    name="given-name"
+                                    autoComplete="given-name"
+                                    value={form.first_name}
+                                    onChange={(e) => update('first_name', e.target.value)}
+                                  />
+                                </div>
+                                <div>
+                                  <label className="block text-sm font-medium text-foreground mb-1" htmlFor="invite-last-name">
+                                    {t('customer.profile.field.lastName', 'Last name')}
+                                  </label>
+                                  <Input
+                                    id="invite-last-name"
+                                    name="family-name"
+                                    autoComplete="family-name"
+                                    value={form.last_name}
+                                    onChange={(e) => update('last_name', e.target.value)}
+                                  />
+                                </div>
+                              </div>
+                            </section>
 
-              {/* Contact — all optional, the photographer will probably
-                  appreciate having the phone for last-minute schedule
-                  changes but no customer should be blocked on it. */}
-              <section className="space-y-3">
-                <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-                  <Phone className="w-4 h-4" />
-                  {t('customer.acceptInvite.section.contact', 'Contact & business (optional)')}
-                </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-1" htmlFor="invite-phone">
-                      {t('customer.profile.field.phone', 'Phone')}
-                    </label>
-                    <Input
-                      id="invite-phone"
-                      name="tel"
-                      type="tel"
-                      autoComplete="tel"
-                      value={form.phone}
-                      onChange={(e) => update('phone', e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-1" htmlFor="invite-company">
-                      {t('customer.profile.field.companyName', 'Company name')}
-                    </label>
-                    <Input
-                      id="invite-company"
-                      name="organization"
-                      autoComplete="organization"
-                      value={form.company_name}
-                      onChange={(e) => update('company_name', e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-1" htmlFor="invite-vat">
-                      {t('customer.profile.field.vatId', 'VAT ID')}
-                    </label>
-                    <Input
-                      id="invite-vat"
-                      name="vat-id"
-                      value={form.vat_id}
-                      onChange={(e) => update('vat_id', e.target.value)}
-                    />
-                  </div>
-                </div>
-              </section>
+                            {/* Contact — all optional, the photographer will probably
+                                appreciate having the phone for last-minute schedule
+                                changes but no customer should be blocked on it. */}
+                            <section className="space-y-3">
+                              <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+                                <Phone className="w-4 h-4" />
+                                {t('customer.acceptInvite.section.contact', 'Contact & business (optional)')}
+                              </h2>
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                  <label className="block text-sm font-medium text-foreground mb-1" htmlFor="invite-phone">
+                                    {t('customer.profile.field.phone', 'Phone')}
+                                  </label>
+                                  <Input
+                                    id="invite-phone"
+                                    name="tel"
+                                    type="tel"
+                                    autoComplete="tel"
+                                    value={form.phone}
+                                    onChange={(e) => update('phone', e.target.value)}
+                                  />
+                                </div>
+                                <div>
+                                  <label className="block text-sm font-medium text-foreground mb-1" htmlFor="invite-company">
+                                    {t('customer.profile.field.companyName', 'Company name')}
+                                  </label>
+                                  <Input
+                                    id="invite-company"
+                                    name="organization"
+                                    autoComplete="organization"
+                                    value={form.company_name}
+                                    onChange={(e) => update('company_name', e.target.value)}
+                                  />
+                                </div>
+                                <div>
+                                  <label className="block text-sm font-medium text-foreground mb-1" htmlFor="invite-vat">
+                                    {t('customer.profile.field.vatId', 'VAT ID')}
+                                  </label>
+                                  <Input
+                                    id="invite-vat"
+                                    name="vat-id"
+                                    value={form.vat_id}
+                                    onChange={(e) => update('vat_id', e.target.value)}
+                                  />
+                                </div>
+                              </div>
+                            </section>
 
-              {/* Address */}
-              <section className="space-y-3">
-                <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-                  <MapPin className="w-4 h-4" />
-                  {t('customer.acceptInvite.section.address', 'Billing address (optional)')}
-                </h2>
-                {/* Same `name`+`autoComplete` pairing the profile page
-                    uses — see CustomerProfilePage for the rationale. */}
-                <div className="grid grid-cols-1 sm:grid-cols-6 gap-3">
-                  <div className="sm:col-span-6">
-                    <label className="block text-sm font-medium text-foreground mb-1" htmlFor="invite-address-line1">
-                      {t('customer.profile.field.addressLine1', 'Address line 1')}
-                    </label>
-                    <Input
-                      id="invite-address-line1"
-                      name="address-line1"
-                      autoComplete="billing address-line1"
-                      value={form.address_line1}
-                      onChange={(e) => update('address_line1', e.target.value)}
-                    />
-                  </div>
-                  <div className="sm:col-span-6">
-                    <label className="block text-sm font-medium text-foreground mb-1" htmlFor="invite-address-line2">
-                      {t('customer.profile.field.addressLine2', 'Address line 2')}
-                    </label>
-                    <Input
-                      id="invite-address-line2"
-                      name="address-line2"
-                      autoComplete="billing address-line2"
-                      value={form.address_line2}
-                      onChange={(e) => update('address_line2', e.target.value)}
-                    />
-                  </div>
-                  <div className="sm:col-span-2">
-                    <label className="block text-sm font-medium text-foreground mb-1" htmlFor="invite-postal-code">
-                      {t('customer.profile.field.postalCode', 'Postal code')}
-                    </label>
-                    <Input
-                      id="invite-postal-code"
-                      name="postal-code"
-                      autoComplete="billing postal-code"
-                      inputMode="numeric"
-                      value={form.postal_code}
-                      onChange={(e) => update('postal_code', e.target.value)}
-                    />
-                  </div>
-                  <div className="sm:col-span-4">
-                    <label className="block text-sm font-medium text-foreground mb-1" htmlFor="invite-city">
-                      {t('customer.profile.field.city', 'City')}
-                    </label>
-                    <Input
-                      id="invite-city"
-                      name="address-level2"
-                      autoComplete="billing address-level2"
-                      value={form.city}
-                      onChange={(e) => update('city', e.target.value)}
-                    />
-                  </div>
-                  <div className="sm:col-span-3">
-                    <label className="block text-sm font-medium text-foreground mb-1" htmlFor="invite-state">
-                      {t('customer.profile.field.state', 'State / region')}
-                    </label>
-                    <Input
-                      id="invite-state"
-                      name="address-level1"
-                      autoComplete="billing address-level1"
-                      value={form.state}
-                      onChange={(e) => update('state', e.target.value)}
-                    />
-                  </div>
-                  <div className="sm:col-span-3">
-                    {/* Country picker (ISO code) — dropdown, mirroring the
-                        admin customer / business-profile forms, placed after
-                        State / region. Replaces the old free-text 2-char input. */}
-                    <CountrySelect
-                      label={t('customer.profile.field.countryCode', 'Country') as string}
-                      value={form.country_code}
-                      onChange={(code) => update('country_code', code)}
-                    />
-                  </div>
-                </div>
-              </section>
+                            {/* Address */}
+                            <section className="space-y-3">
+                              <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+                                <MapPin className="w-4 h-4" />
+                                {t('customer.acceptInvite.section.address', 'Billing address (optional)')}
+                              </h2>
+                              {/* Same `name`+`autoComplete` pairing the profile page
+                                  uses — see CustomerProfilePage for the rationale. */}
+                              <div className="grid grid-cols-1 sm:grid-cols-6 gap-3">
+                                <div className="sm:col-span-6">
+                                  <label className="block text-sm font-medium text-foreground mb-1" htmlFor="invite-address-line1">
+                                    {t('customer.profile.field.addressLine1', 'Address line 1')}
+                                  </label>
+                                  <Input
+                                    id="invite-address-line1"
+                                    name="address-line1"
+                                    autoComplete="billing address-line1"
+                                    value={form.address_line1}
+                                    onChange={(e) => update('address_line1', e.target.value)}
+                                  />
+                                </div>
+                                <div className="sm:col-span-6">
+                                  <label className="block text-sm font-medium text-foreground mb-1" htmlFor="invite-address-line2">
+                                    {t('customer.profile.field.addressLine2', 'Address line 2')}
+                                  </label>
+                                  <Input
+                                    id="invite-address-line2"
+                                    name="address-line2"
+                                    autoComplete="billing address-line2"
+                                    value={form.address_line2}
+                                    onChange={(e) => update('address_line2', e.target.value)}
+                                  />
+                                </div>
+                                <div className="sm:col-span-2">
+                                  <label className="block text-sm font-medium text-foreground mb-1" htmlFor="invite-postal-code">
+                                    {t('customer.profile.field.postalCode', 'Postal code')}
+                                  </label>
+                                  <Input
+                                    id="invite-postal-code"
+                                    name="postal-code"
+                                    autoComplete="billing postal-code"
+                                    inputMode="numeric"
+                                    value={form.postal_code}
+                                    onChange={(e) => update('postal_code', e.target.value)}
+                                  />
+                                </div>
+                                <div className="sm:col-span-4">
+                                  <label className="block text-sm font-medium text-foreground mb-1" htmlFor="invite-city">
+                                    {t('customer.profile.field.city', 'City')}
+                                  </label>
+                                  <Input
+                                    id="invite-city"
+                                    name="address-level2"
+                                    autoComplete="billing address-level2"
+                                    value={form.city}
+                                    onChange={(e) => update('city', e.target.value)}
+                                  />
+                                </div>
+                                <div className="sm:col-span-3">
+                                  <label className="block text-sm font-medium text-foreground mb-1" htmlFor="invite-state">
+                                    {t('customer.profile.field.state', 'State / region')}
+                                  </label>
+                                  <Input
+                                    id="invite-state"
+                                    name="address-level1"
+                                    autoComplete="billing address-level1"
+                                    value={form.state}
+                                    onChange={(e) => update('state', e.target.value)}
+                                  />
+                                </div>
+                                <div className="sm:col-span-3">
+                                  {/* Country picker (ISO code) — dropdown, mirroring the
+                                      admin customer / business-profile forms, placed after
+                                      State / region. Replaces the old free-text 2-char input. */}
+                                  <CountrySelect
+                                    label={t('customer.profile.field.countryCode', 'Country') as string}
+                                    value={form.country_code}
+                                    onChange={(code) => update('country_code', code)}
+                                  />
+                                </div>
+                              </div>
+                            </section>
 
-              {/* Password — required */}
-              <section className="space-y-3">
-                <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-                  <Lock className="w-4 h-4" />
-                  {t('customer.acceptInvite.section.password', 'Choose a password')}
-                </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-1">
-                      {t('customer.acceptInvite.password', 'Password')} <span className="text-red-500">*</span>
-                    </label>
-                    <Input
-                      type="password"
-                      value={form.password}
-                      onChange={(e) => update('password', e.target.value)}
-                      error={errors.password}
-                      autoComplete="new-password"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-1">
-                      {t('customer.acceptInvite.confirm', 'Confirm password')} <span className="text-red-500">*</span>
-                    </label>
-                    <Input
-                      type="password"
-                      value={form.confirm}
-                      onChange={(e) => update('confirm', e.target.value)}
-                      error={errors.confirm}
-                      autoComplete="new-password"
-                    />
-                  </div>
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  {t('customer.acceptInvite.passwordHint', 'At least 8 characters, with one uppercase letter and one number.')}
-                </p>
-              </section>
+                            {/* Password — required */}
+                            <section className="space-y-3">
+                              <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+                                <Lock className="w-4 h-4" />
+                                {t('customer.acceptInvite.section.password', 'Choose a password')}
+                              </h2>
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                  <label className="block text-sm font-medium text-foreground mb-1">
+                                    {t('customer.acceptInvite.password', 'Password')} <span className="text-red-500">*</span>
+                                  </label>
+                                  <div className="w-full"><Input
+                                                                              type="password"
+                                                                              value={form.password}
+                                                                              onChange={(e) => update('password', e.target.value)}
+                                                                              autoComplete="new-password" aria-invalid={!!(errors.password)} aria-describedby={(errors.password) ? `${__fieldId}-1-error` : undefined}
+                                                                            />{(errors.password) && <p id={`${__fieldId}-1-error`} className="mt-1.5 text-sm text-destructive">{errors.password}</p>}</div>
+                                </div>
+                                <div>
+                                  <label className="block text-sm font-medium text-foreground mb-1">
+                                    {t('customer.acceptInvite.confirm', 'Confirm password')} <span className="text-red-500">*</span>
+                                  </label>
+                                  <div className="w-full"><Input
+                                                                              type="password"
+                                                                              value={form.confirm}
+                                                                              onChange={(e) => update('confirm', e.target.value)}
+                                                                              autoComplete="new-password" aria-invalid={!!(errors.confirm)} aria-describedby={(errors.confirm) ? `${__fieldId}-2-error` : undefined}
+                                                                            />{(errors.confirm) && <p id={`${__fieldId}-2-error`} className="mt-1.5 text-sm text-destructive">{errors.confirm}</p>}</div>
+                                </div>
+                              </div>
+                              <p className="text-xs text-muted-foreground">
+                                {t('customer.acceptInvite.passwordHint', 'At least 8 characters, with one uppercase letter and one number.')}
+                              </p>
+                            </section>
 
-              <Button type="submit" variant="primary" size="lg" isLoading={isSubmitting} className="w-full">
-                {t('customer.acceptInvite.submit', 'Create account')}
-              </Button>
-            </form>
-          )}
-        </Card>
+                            <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
+                                                                {isSubmitting && <Loader2 className="animate-spin" />}{t('customer.acceptInvite.submit', 'Create account')}</Button>
+                          </form>
+                        )}</CardContent></Card>
       </div>
     </div>
   );

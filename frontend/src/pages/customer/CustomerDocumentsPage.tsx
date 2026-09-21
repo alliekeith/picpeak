@@ -15,10 +15,12 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Download, FolderOpen, Upload, X } from 'lucide-react';
 import { toast } from 'react-toastify';
 
-import { Button, Card, Loading } from '../../components/common';
+import { Loading } from '../../components/common';
 import { useLocalizedDate } from '../../hooks/useLocalizedDate';
 import { formatFileSize } from '../../utils/fileSize';
 import { customerService, type CustomerDocument } from '../../services/customer.service';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 /** Error code from an API error. Blob responses (downloads) carry JSON too. */
 async function readErrorCode(err: any): Promise<string | undefined> {
@@ -123,16 +125,14 @@ export const CustomerDocumentList: React.FC<{ documents: CustomerDocument[]; sho
           </div>
           {doc.downloadable && (
             <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => download(doc)}
-              disabled={busyId === doc.id}
-              leftIcon={<Download className="w-4 h-4" />}
-              aria-label={t('customer.documents.downloadAria', 'Download {{name}}', { name: doc.name })}
-            >
-              {t('customer.documents.download', 'Download')}
-            </Button>
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={() => download(doc)}
+                                disabled={busyId === doc.id}
+                                aria-label={t('customer.documents.downloadAria', 'Download {{name}}', { name: doc.name })}
+                              >
+                                <Download className="w-4 h-4" />{t('customer.documents.download', 'Download')}</Button>
           )}
         </li>
       ))}
@@ -238,98 +238,83 @@ export const CustomerDocumentsPage: React.FC = () => {
         </p>
       </div>
 
-      <Card padding="lg" className="mb-4">
-        <h2 className="text-base font-semibold text-foreground mb-1">{t('customer.documents.uploadTitle', 'Send a document')}</h2>
-        <p className="text-xs text-muted-foreground mb-3">
-          {limits
-            ? t('customer.documents.uploadHint', 'PDF only, up to {{size}} per file. {{used}} of {{quota}} used.', {
-              size: formatFileSize(limits.maxUploadBytes),
-              used: formatFileSize(limits.usedBytes),
-              quota: formatFileSize(limits.quotaBytes),
-            })
-            : t('customer.documents.uploadHintShort', 'PDF only.')}
-        </p>
-        <div className="flex flex-col sm:flex-row sm:items-end gap-3">
-          <label className="flex-1 min-w-0 text-sm text-foreground">
-            <span className="block mb-1">{t('customer.documents.fileLabel', 'PDF file')}</span>
-            <input
-              ref={inputRef}
-              type="file"
-              accept="application/pdf,.pdf"
-              disabled={uploading}
-              onChange={(e) => chooseFile(e.target.files?.[0] ?? null)}
-              className="block w-full text-sm"
-            />
-          </label>
-          {(events?.length ?? 0) > 0 && (
-            <label className="text-sm text-foreground">
-              <span className="block mb-1">{t('customer.documents.eventLabel', 'Event (optional)')}</span>
-              <select
-                value={eventId}
-                disabled={uploading}
-                onChange={(e) => setEventId(e.target.value)}
-                className="h-10 w-full sm:w-56 rounded-lg border px-2 text-sm"
-                style={{
-                  backgroundColor: 'var(--card)',
-                  borderColor: 'var(--border)',
-                  color: 'var(--foreground)',
-                }}
-              >
-                <option value="">{t('customer.documents.noEvent', 'No event')}</option>
-                {events!.map((ev) => (
-                  <option key={ev.id} value={ev.id}>{ev.eventName}</option>
-                ))}
-              </select>
-            </label>
-          )}
-          {uploading ? (
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => abortRef.current?.abort()}
-              leftIcon={<X className="w-4 h-4" />}
-            >
-              {t('customer.documents.cancel', 'Cancel')}
-            </Button>
-          ) : (
-            <Button
-              type="button"
-              variant="primary"
-              onClick={upload}
-              disabled={!file}
-              leftIcon={<Upload className="w-4 h-4" />}
-            >
-              {result?.kind === 'error' && file
-                ? t('customer.documents.retry', 'Try again')
-                : t('customer.documents.upload', 'Upload')}
-            </Button>
-          )}
-        </div>
-        {uploading && (
-          <progress
-            className="mt-3 w-full"
-            max={1}
-            value={progress ?? 0}
-            aria-label={t('customer.documents.progress', 'Upload progress')}
-          />
-        )}
-        <div role="status" aria-live="polite" className="mt-3 text-sm">
-          {result && (
-            <p className={result.kind === 'success' ? 'text-green-700' : 'text-red-600'}>{result.message}</p>
-          )}
-        </div>
-      </Card>
+      <Card className="py-8 mb-4"><CardContent className="px-8"><h2 className="text-base font-semibold text-foreground mb-1">{t('customer.documents.uploadTitle', 'Send a document')}</h2><p className="text-xs text-muted-foreground mb-3">
+                    {limits
+                      ? t('customer.documents.uploadHint', 'PDF only, up to {{size}} per file. {{used}} of {{quota}} used.', {
+                        size: formatFileSize(limits.maxUploadBytes),
+                        used: formatFileSize(limits.usedBytes),
+                        quota: formatFileSize(limits.quotaBytes),
+                      })
+                      : t('customer.documents.uploadHintShort', 'PDF only.')}
+                  </p><div className="flex flex-col sm:flex-row sm:items-end gap-3">
+                    <label className="flex-1 min-w-0 text-sm text-foreground">
+                      <span className="block mb-1">{t('customer.documents.fileLabel', 'PDF file')}</span>
+                      <input
+                        ref={inputRef}
+                        type="file"
+                        accept="application/pdf,.pdf"
+                        disabled={uploading}
+                        onChange={(e) => chooseFile(e.target.files?.[0] ?? null)}
+                        className="block w-full text-sm"
+                      />
+                    </label>
+                    {(events?.length ?? 0) > 0 && (
+                      <label className="text-sm text-foreground">
+                        <span className="block mb-1">{t('customer.documents.eventLabel', 'Event (optional)')}</span>
+                        <select
+                          value={eventId}
+                          disabled={uploading}
+                          onChange={(e) => setEventId(e.target.value)}
+                          className="h-10 w-full sm:w-56 rounded-lg border px-2 text-sm"
+                          style={{
+                            backgroundColor: 'var(--card)',
+                            borderColor: 'var(--border)',
+                            color: 'var(--foreground)',
+                          }}
+                        >
+                          <option value="">{t('customer.documents.noEvent', 'No event')}</option>
+                          {events!.map((ev) => (
+                            <option key={ev.id} value={ev.id}>{ev.eventName}</option>
+                          ))}
+                        </select>
+                      </label>
+                    )}
+                    {uploading ? (
+                      <Button
+                                              type="button"
+                                              variant="outline"
+                                              onClick={() => abortRef.current?.abort()}
+                                            >
+                                              <X className="w-4 h-4" />{t('customer.documents.cancel', 'Cancel')}</Button>
+                    ) : (
+                      <Button
+                                                  type="button"
+                                                  onClick={upload}
+                                                  disabled={!file}
+                                                >
+                                                  <Upload className="w-4 h-4" />{result?.kind === 'error' && file
+                                                    ? t('customer.documents.retry', 'Try again')
+                                                    : t('customer.documents.upload', 'Upload')}</Button>
+                    )}
+                  </div>{uploading && (
+                    <progress
+                      className="mt-3 w-full"
+                      max={1}
+                      value={progress ?? 0}
+                      aria-label={t('customer.documents.progress', 'Upload progress')}
+                    />
+                  )}<div role="status" aria-live="polite" className="mt-3 text-sm">
+                    {result && (
+                      <p className={result.kind === 'success' ? 'text-green-700' : 'text-red-600'}>{result.message}</p>
+                    )}
+                  </div></CardContent></Card>
 
       {documents.length === 0 ? (
-        <Card padding="lg">
-          <p className="text-center text-muted-foreground py-8">
-            {t('customer.documents.empty', 'No documents yet.')}
-          </p>
-        </Card>
+        <Card className="py-8"><CardContent className="px-8"><p className="text-center text-muted-foreground py-8">
+                          {t('customer.documents.empty', 'No documents yet.')}
+                        </p></CardContent></Card>
       ) : (
-        <Card padding="none">
-          <CustomerDocumentList documents={documents} />
-        </Card>
+        <Card className="py-0"><CardContent className="px-0"><CustomerDocumentList documents={documents} /></CardContent></Card>
       )}
     </div>
   );

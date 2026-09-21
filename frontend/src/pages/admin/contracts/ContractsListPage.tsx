@@ -15,13 +15,15 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Plus, Search, BookOpen } from 'lucide-react';
-import { Button, Card, Loading, SortableHeader, useColumnSort, type SortColumnMap } from '../../../components/common';
+import { Loading, SortableHeader, useColumnSort, type SortColumnMap } from '../../../components/common';
 import {
   contractsService,
   type ContractStatus,
   type ContractSort,
 } from '../../../services/contracts.service';
 import { useLocalizedDate } from '../../../hooks/useLocalizedDate';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 const STATUSES: ContractStatus[] = [
   'draft', 'sent', 'signed_by_customer', 'signed_by_admin', 'fully_signed', 'declined', 'cancelled',
@@ -102,109 +104,102 @@ export const ContractsListPage: React.FC = () => {
         </div>
       </div>
 
-      <Card padding="lg">
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="relative flex-1 min-w-[200px]">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
-            <input
-              type="text"
-              placeholder={t('contracts.list.searchPlaceholder', 'Search by number, title or customer…') as string}
-              className="w-full pl-9 pr-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm"
-              value={search}
-              onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-            />
-          </div>
-        </div>
-
-        <div className="mt-3 flex flex-wrap gap-1">
-          {STATUSES.map((s) => {
-            const active = statusFilter.includes(s);
-            return (
-              <button key={s} type="button" onClick={() => toggleStatus(s)}
-                className={`px-2.5 py-1 rounded-full text-xs font-medium border transition-colors ${
-                  active
-                    ? 'bg-primary text-white border-primary'
-                    : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-neutral-300 dark:border-neutral-600'
-                }`}
-              >{t(`contracts.status.${s}`, s)}</button>
-            );
-          })}
-        </div>
-
-        {/* Body of the same card — table or empty state. Matches the
-            single-card layout used by Customers / Quotes / Invoices. */}
-        <div className="mt-4">
-          {isLoading ? <Loading /> : !data || data.contracts.length === 0 ? (
-            <p className="text-center text-neutral-500 dark:text-neutral-400 py-8">{t('contracts.list.empty', 'No contracts yet.')}</p>
-          ) : (
-            <div className="rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead className="bg-neutral-50 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300">
-                    <tr>
-                      <SortableHeader label={t('contracts.list.table.number', 'Number')} columnKey="number" activeKey={activeKey} activeDir={activeDir} onSort={onSort} />
-                      <SortableHeader label={t('contracts.list.table.customer', 'Customer')} columnKey="customer" activeKey={activeKey} activeDir={activeDir} onSort={onSort} />
-                      <th className="px-3 py-2 text-left">{t('contracts.list.table.title', 'Title')}</th>
-                      <SortableHeader label={t('contracts.list.table.issueDate', 'Issued')} columnKey="issue" activeKey={activeKey} activeDir={activeDir} onSort={onSort} />
-                      <th className="px-3 py-2 text-left">{t('contracts.list.table.status', 'Status')}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data.contracts.map((c) => (
-                      <tr key={c.id}
-                        className="border-t border-neutral-200 dark:border-neutral-700 cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-800"
-                        onClick={() => navigate(`/admin/clients/contracts/${c.id}`)}
-                      >
-                        <td className="px-3 py-2 font-mono text-xs">{c.contractNumber}</td>
-                        <td className="px-3 py-2">
-                          {c.customer.companyName
-                            || [c.customer.firstName, c.customer.lastName].filter(Boolean).join(' ')
-                            || c.customer.displayName
-                            || c.customer.email
-                            || '—'}
-                        </td>
-                        <td className="px-3 py-2 truncate max-w-xs">{c.title || '—'}</td>
-                        <td className="px-3 py-2 whitespace-nowrap">{c.issueDate ? format(c.issueDate) : '—'}</td>
-                        <td className="px-3 py-2">
-                          {/* Per-status palette preserved — green for the
-                              terminal "fully_signed", blue for either-side
-                              signed, amber for sent (awaiting customer),
-                              grey for cancelled, neutral for draft. */}
-                          <span className={`px-2 py-0.5 rounded text-xs font-medium ${
-                            c.status === 'fully_signed' ? 'bg-green-100 text-green-800'
-                              : c.status === 'signed_by_customer' || c.status === 'signed_by_admin' ? 'bg-blue-100 text-blue-800'
-                              : c.status === 'sent' ? 'bg-amber-100 text-amber-800'
-                              : c.status === 'declined' ? 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-200'
-                              : c.status === 'cancelled' ? 'bg-neutral-200 text-neutral-600'
-                              : 'bg-neutral-100 text-neutral-700'
-                          }`}>{t(`contracts.status.${c.status}`, c.status)}</span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              {totalPages > 1 && (
-                <div className="flex justify-between items-center px-3 py-2 border-t border-neutral-200 dark:border-neutral-700 text-sm">
-                  <span className="text-neutral-500 dark:text-neutral-400">
-                    {t('contracts.list.pagination', 'Page {{page}} of {{total}} · {{count}} contracts', {
-                      page, total: totalPages, count: data.total,
+      <Card className="py-8"><CardContent className="px-8"><div className="flex flex-wrap items-center gap-3">
+                    <div className="relative flex-1 min-w-[200px]">
+                      <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
+                      <input
+                        type="text"
+                        placeholder={t('contracts.list.searchPlaceholder', 'Search by number, title or customer…') as string}
+                        className="w-full pl-9 pr-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm"
+                        value={search}
+                        onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+                      />
+                    </div>
+                  </div><div className="mt-3 flex flex-wrap gap-1">
+                    {STATUSES.map((s) => {
+                      const active = statusFilter.includes(s);
+                      return (
+                        <button key={s} type="button" onClick={() => toggleStatus(s)}
+                          className={`px-2.5 py-1 rounded-full text-xs font-medium border transition-colors ${
+                            active
+                              ? 'bg-primary text-white border-primary'
+                              : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-neutral-300 dark:border-neutral-600'
+                          }`}
+                        >{t(`contracts.status.${s}`, s)}</button>
+                      );
                     })}
-                  </span>
-                  <div className="flex gap-2">
-                    <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage((p) => Math.max(1, p - 1))}>
-                      {t('common.previous', 'Previous')}
-                    </Button>
-                    <Button variant="outline" size="sm" disabled={page >= totalPages} onClick={() => setPage((p) => Math.min(totalPages, p + 1))}>
-                      {t('common.next', 'Next')}
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-      </Card>
+                  </div>{/* Body of the same card — table or empty state. Matches the
+                      single-card layout used by Customers / Quotes / Invoices. */}<div className="mt-4">
+                    {isLoading ? <Loading /> : !data || data.contracts.length === 0 ? (
+                      <p className="text-center text-neutral-500 dark:text-neutral-400 py-8">{t('contracts.list.empty', 'No contracts yet.')}</p>
+                    ) : (
+                      <div className="rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden">
+                        <div className="overflow-x-auto">
+                          <table className="w-full text-sm">
+                            <thead className="bg-neutral-50 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300">
+                              <tr>
+                                <SortableHeader label={t('contracts.list.table.number', 'Number')} columnKey="number" activeKey={activeKey} activeDir={activeDir} onSort={onSort} />
+                                <SortableHeader label={t('contracts.list.table.customer', 'Customer')} columnKey="customer" activeKey={activeKey} activeDir={activeDir} onSort={onSort} />
+                                <th className="px-3 py-2 text-left">{t('contracts.list.table.title', 'Title')}</th>
+                                <SortableHeader label={t('contracts.list.table.issueDate', 'Issued')} columnKey="issue" activeKey={activeKey} activeDir={activeDir} onSort={onSort} />
+                                <th className="px-3 py-2 text-left">{t('contracts.list.table.status', 'Status')}</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {data.contracts.map((c) => (
+                                <tr key={c.id}
+                                  className="border-t border-neutral-200 dark:border-neutral-700 cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-800"
+                                  onClick={() => navigate(`/admin/clients/contracts/${c.id}`)}
+                                >
+                                  <td className="px-3 py-2 font-mono text-xs">{c.contractNumber}</td>
+                                  <td className="px-3 py-2">
+                                    {c.customer.companyName
+                                      || [c.customer.firstName, c.customer.lastName].filter(Boolean).join(' ')
+                                      || c.customer.displayName
+                                      || c.customer.email
+                                      || '—'}
+                                  </td>
+                                  <td className="px-3 py-2 truncate max-w-xs">{c.title || '—'}</td>
+                                  <td className="px-3 py-2 whitespace-nowrap">{c.issueDate ? format(c.issueDate) : '—'}</td>
+                                  <td className="px-3 py-2">
+                                    {/* Per-status palette preserved — green for the
+                                        terminal "fully_signed", blue for either-side
+                                        signed, amber for sent (awaiting customer),
+                                        grey for cancelled, neutral for draft. */}
+                                    <span className={`px-2 py-0.5 rounded text-xs font-medium ${
+                                      c.status === 'fully_signed' ? 'bg-green-100 text-green-800'
+                                        : c.status === 'signed_by_customer' || c.status === 'signed_by_admin' ? 'bg-blue-100 text-blue-800'
+                                        : c.status === 'sent' ? 'bg-amber-100 text-amber-800'
+                                        : c.status === 'declined' ? 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-200'
+                                        : c.status === 'cancelled' ? 'bg-neutral-200 text-neutral-600'
+                                        : 'bg-neutral-100 text-neutral-700'
+                                    }`}>{t(`contracts.status.${c.status}`, c.status)}</span>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                        {totalPages > 1 && (
+                          <div className="flex justify-between items-center px-3 py-2 border-t border-neutral-200 dark:border-neutral-700 text-sm">
+                            <span className="text-neutral-500 dark:text-neutral-400">
+                              {t('contracts.list.pagination', 'Page {{page}} of {{total}} · {{count}} contracts', {
+                                page, total: totalPages, count: data.total,
+                              })}
+                            </span>
+                            <div className="flex gap-2">
+                              <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage((p) => Math.max(1, p - 1))}>
+                                {t('common.previous', 'Previous')}
+                              </Button>
+                              <Button variant="outline" size="sm" disabled={page >= totalPages} onClick={() => setPage((p) => Math.min(totalPages, p + 1))}>
+                                {t('common.next', 'Next')}
+                              </Button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div></CardContent></Card>
     </div>
   );
 };

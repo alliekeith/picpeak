@@ -4,10 +4,11 @@ import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, Home } from 'lucide-react';
 import DOMPurify from 'dompurify';
-import { Loading, Card } from '../../components/common';
+import { Loading } from '../../components/common';
 import { cmsService } from '../../services/cms.service';
 import { usePublicSettings } from '../../hooks/usePublicSettings';
 import '../../styles/prose-overrides.css';
+import { Card, CardContent } from "@/components/ui/card";
 
 // Force rel="noopener noreferrer" on target="_blank" anchors in CMS-authored
 // HTML so editors can't accidentally (or maliciously) introduce reverse
@@ -92,21 +93,19 @@ export const LegalPage: React.FC = () => {
   if (error || !page) {
     return (
       <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-        <Card className="max-w-md w-full mx-4">
-          <div className="text-center py-12 px-6">
-            <h2 className="text-xl font-semibold text-neutral-900 mb-2">Page Not Found</h2>
-            <p className="text-neutral-600 mb-6">
-              The page you're looking for doesn't exist.
-            </p>
-            <Link
-              to="/"
-              className="inline-flex items-center gap-2 text-brand-600 hover:text-brand-700"
-            >
-              <Home className="w-4 h-4" />
-              Go to Homepage
-            </Link>
-          </div>
-        </Card>
+        <Card className="max-w-md w-full mx-4"><CardContent><div className="text-center py-12 px-6">
+                        <h2 className="text-xl font-semibold text-neutral-900 mb-2">Page Not Found</h2>
+                        <p className="text-neutral-600 mb-6">
+                          The page you're looking for doesn't exist.
+                        </p>
+                        <Link
+                          to="/"
+                          className="inline-flex items-center gap-2 text-brand-600 hover:text-brand-700"
+                        >
+                          <Home className="w-4 h-4" />
+                          Go to Homepage
+                        </Link>
+                      </div></CardContent></Card>
       </div>
     );
   }
@@ -129,33 +128,27 @@ export const LegalPage: React.FC = () => {
       {/* Content */}
       <main className="container py-12">
         <div className="max-w-4xl mx-auto">
-          <Card padding="lg">
-            <h1 className="text-3xl font-bold text-neutral-900 mb-8">{page.title}</h1>
-            
-            {/* This page's chrome is hardcoded light (bg-neutral-50 wrapper,
-                white card). Without an explicit text color the CMS body
-                inherits `body { color: var(--foreground) }`, which a
-                dark-toned branding theme sets to near-white — leaving the
-                Impressum / Datenschutz text invisible (QA S3). */}
-            <div
-              className="prose prose-neutral max-w-none text-neutral-800"
-              dangerouslySetInnerHTML={{ 
-                __html: DOMPurify.sanitize(page.content, {
-                  ALLOWED_TAGS: [
-                    'p', 'br', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-                    'ul', 'ol', 'li', 'blockquote', 'a', 'em', 'strong',
-                    'code', 'pre', 'hr', 'div', 'span'
-                  ],
-                  ALLOWED_ATTR: ['href', 'target', 'rel', 'class', 'style'],
-                  ALLOW_DATA_ATTR: false,
-                  KEEP_CONTENT: true,
-                  ADD_TAGS: ['br'], // Explicitly allow br tags
-                  ADD_ATTR: ['style'], // Allow style for text alignment
-                })
-              }}
-            />
-            
-          </Card>
+          <Card className="py-8"><CardContent className="px-8"><h1 className="text-3xl font-bold text-neutral-900 mb-8">{page.title}</h1>{/* This page's chrome is hardcoded light (bg-neutral-50 wrapper,
+                                  white card). Without an explicit text color the CMS body
+                                  inherits `body { color: var(--foreground) }`, which a
+                                  dark-toned branding theme sets to near-white — leaving the
+                                  Impressum / Datenschutz text invisible (QA S3). */}<div
+                                className="prose prose-neutral max-w-none text-neutral-800"
+                                dangerouslySetInnerHTML={{ 
+                                  __html: DOMPurify.sanitize(page.content, {
+                                    ALLOWED_TAGS: [
+                                      'p', 'br', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+                                      'ul', 'ol', 'li', 'blockquote', 'a', 'em', 'strong',
+                                      'code', 'pre', 'hr', 'div', 'span'
+                                    ],
+                                    ALLOWED_ATTR: ['href', 'target', 'rel', 'class', 'style'],
+                                    ALLOW_DATA_ATTR: false,
+                                    KEEP_CONTENT: true,
+                                    ADD_TAGS: ['br'], // Explicitly allow br tags
+                                    ADD_ATTR: ['style'], // Allow style for text alignment
+                                  })
+                                }}
+                              /></CardContent></Card>
         </div>
       </main>
 

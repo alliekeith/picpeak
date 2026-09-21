@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft, Eye, Send, Copy, ArrowRightCircle, Edit2, Receipt, CheckCircle2, ScrollText, XCircle, FilePlus } from 'lucide-react';
-import { Button, Card, Loading } from '../../../components/common';
+import { Loading } from '../../../components/common';
 import { DocumentLineageCard } from '../../../components/admin/DocumentLineageCard';
 import { QuoteAddOnsCard } from './QuoteAddOnsCard';
 import { quotesService } from '../../../services/quotes.service';
@@ -20,6 +20,8 @@ import { useLocalizedDate } from '../../../hooks/useLocalizedDate';
 import { useFeatureFlags } from '../../../contexts/FeatureFlagsContext';
 import { toast } from 'react-toastify';
 import { quoteErrorText } from '../../../utils/quoteErrors';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 // The statuses the server refuses to edit (quoteService.updateQuote).
 const LOCKED_STATUSES = ['accepted', 'declined', 'converted'];
@@ -299,99 +301,90 @@ export const QuoteDetailPage: React.FC = () => {
         </div>
       </div>
 
-      <Card>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-          <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.field.issueDate', 'Issued')}</div><div>{fmtDate(q.issueDate)}</div></div>
-          {q.validUntil && <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.field.validUntil', 'Valid until')}</div><div>{fmtDate(q.validUntil)}</div></div>}
-          <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.field.eventName', 'Event')}</div><div>{q.eventName || '—'}</div></div>
-          {q.eventDate && <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.field.eventDate', 'Event date')}</div><div>{fmtDate(q.eventDate)}{q.eventTimeStart ? ` ${fmtTime(q.eventTimeStart)}-${q.eventTimeEnd ? fmtTime(q.eventTimeEnd) : ''}` : ''}</div></div>}
-          {q.sentAt && <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.field.sentAt', 'Sent at')}</div><div>{fmtDateTime(q.sentAt)}</div></div>}
-          {q.acceptedAt && <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.field.acceptedAt', 'Accepted at')}</div><div>{fmtDateTime(q.acceptedAt)}</div></div>}
-          {q.declinedAt && <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.field.declinedAt', 'Declined at')}</div><div>{fmtDateTime(q.declinedAt)}</div></div>}
-          {q.replacesQuoteId && q.replacesQuoteNumber && (
-            <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.replacesQuote', 'Replaces')}</div>
-              <button type="button" className="text-brand-600 dark:text-brand-400 hover:underline"
-                onClick={() => navigate(`/admin/clients/quotes/${q.replacesQuoteId}`)}>{q.replacesQuoteNumber}</button></div>
-          )}
-          {q.replacedByQuoteId && q.replacedByQuoteNumber && (
-            <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.replacedByQuote', 'Replaced by')}</div>
-              <button type="button" className="text-brand-600 dark:text-brand-400 hover:underline"
-                onClick={() => navigate(`/admin/clients/quotes/${q.replacedByQuoteId}`)}>{q.replacedByQuoteNumber}</button></div>
-          )}
-          {q.declineReason && <div className="col-span-2 md:col-span-4"><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.field.declineReason', 'Decline reason')}</div><div className="whitespace-pre-line">{q.declineReason}</div></div>}
-          {q.respondedAt && !responseLocked && (
-            <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.field.responseWindow', 'Response window')}</div>
-              <div className="text-amber-700">{t('quotes.responseWindowOpen', 'Open until {{at}}', { at: q.responseLockedAt ? fmtDateTime(q.responseLockedAt) : '' })}</div></div>
-          )}
-        </div>
-      </Card>
+      <Card><CardContent><div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                    <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.field.issueDate', 'Issued')}</div><div>{fmtDate(q.issueDate)}</div></div>
+                    {q.validUntil && <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.field.validUntil', 'Valid until')}</div><div>{fmtDate(q.validUntil)}</div></div>}
+                    <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.field.eventName', 'Event')}</div><div>{q.eventName || '—'}</div></div>
+                    {q.eventDate && <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.field.eventDate', 'Event date')}</div><div>{fmtDate(q.eventDate)}{q.eventTimeStart ? ` ${fmtTime(q.eventTimeStart)}-${q.eventTimeEnd ? fmtTime(q.eventTimeEnd) : ''}` : ''}</div></div>}
+                    {q.sentAt && <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.field.sentAt', 'Sent at')}</div><div>{fmtDateTime(q.sentAt)}</div></div>}
+                    {q.acceptedAt && <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.field.acceptedAt', 'Accepted at')}</div><div>{fmtDateTime(q.acceptedAt)}</div></div>}
+                    {q.declinedAt && <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.field.declinedAt', 'Declined at')}</div><div>{fmtDateTime(q.declinedAt)}</div></div>}
+                    {q.replacesQuoteId && q.replacesQuoteNumber && (
+                      <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.replacesQuote', 'Replaces')}</div>
+                        <button type="button" className="text-brand-600 dark:text-brand-400 hover:underline"
+                          onClick={() => navigate(`/admin/clients/quotes/${q.replacesQuoteId}`)}>{q.replacesQuoteNumber}</button></div>
+                    )}
+                    {q.replacedByQuoteId && q.replacedByQuoteNumber && (
+                      <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.replacedByQuote', 'Replaced by')}</div>
+                        <button type="button" className="text-brand-600 dark:text-brand-400 hover:underline"
+                          onClick={() => navigate(`/admin/clients/quotes/${q.replacedByQuoteId}`)}>{q.replacedByQuoteNumber}</button></div>
+                    )}
+                    {q.declineReason && <div className="col-span-2 md:col-span-4"><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.field.declineReason', 'Decline reason')}</div><div className="whitespace-pre-line">{q.declineReason}</div></div>}
+                    {q.respondedAt && !responseLocked && (
+                      <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.field.responseWindow', 'Response window')}</div>
+                        <div className="text-amber-700">{t('quotes.responseWindowOpen', 'Open until {{at}}', { at: q.responseLockedAt ? fmtDateTime(q.responseLockedAt) : '' })}</div></div>
+                    )}
+                  </div></CardContent></Card>
 
       {/* What the customer wrote with their acceptance (#1451) — plain text. */}
       {q.customerMessage && (
-        <Card>
-          <h3 className="font-semibold mb-2 text-neutral-900 dark:text-neutral-100">
-            {t('quotes.section.customerMessage', 'Message from the customer')}
-          </h3>
-          <p className="text-sm whitespace-pre-wrap wrap-break-word text-neutral-700 dark:text-neutral-300">{q.customerMessage}</p>
-        </Card>
+        <Card><CardContent><h3 className="font-semibold mb-2 text-neutral-900 dark:text-neutral-100">
+                          {t('quotes.section.customerMessage', 'Message from the customer')}
+                        </h3><p className="text-sm whitespace-pre-wrap wrap-break-word text-neutral-700 dark:text-neutral-300">{q.customerMessage}</p></CardContent></Card>
       )}
 
       <QuoteAddOnsCard quote={q} lineItems={data.lineItems} />
 
-      <Card>
-        <h3 className="font-semibold mb-3">{t('quotes.section.lineItems', 'Line items')}</h3>
-        <table className="w-full text-sm">
-          <thead><tr className="border-b border-neutral-200 dark:border-neutral-700">
-            <th className="text-left py-2">#</th>
-            <th className="text-left py-2">{t('crm.lineItems.quantity', 'Qty')}</th>
-            <th className="text-left py-2">{t('crm.lineItems.description', 'Description')}</th>
-            <th className="text-right py-2">{t('crm.lineItems.unitPrice', 'Unit')}</th>
-            <th className="text-right py-2">{t('crm.lineItems.total', 'Total')}</th>
-          </tr></thead>
-          <tbody>
-            {(() => {
-              // Top-level lines are numbered 1, 2, 3…; sub-items indent under
-              // their parent; discount lines carry no number or unit price;
-              // an unticked optional add-on is shown but greyed out (#1451).
-              let number = 0;
-              return data.lineItems.map((li) => {
-                const isSubItem = li.parentPosition != null;
-                const isDiscountLine = li.lineKind === 'discount';
-                const notIncluded = !!li.isOptional && li.selected === false;
-                if (!isSubItem) number += 1;
-                const unitLabel = li.unit ? t(`crm.lineItems.unitShort.${li.unit}`, li.unit) : '';
-                return (
-                  <tr key={li.id} className={`border-b border-neutral-100 dark:border-neutral-800 ${notIncluded ? 'opacity-60' : ''}`}>
-                    <td className="py-2">{isSubItem ? '' : number}</td>
-                    <td className="py-2">{isDiscountLine ? '' : `${Number(li.quantity)}${unitLabel ? ` ${unitLabel}` : ''}`}</td>
-                    <td className={`py-2 whitespace-pre-line ${isSubItem ? 'pl-6' : ''}`}>
-                      {isSubItem ? '• ' : ''}{li.description}
-                      {/* An add-on's status is the last line of its item. */}
-                      {li.isOptional && (
-                        <div className="text-xs text-neutral-500 dark:text-neutral-400">
-                          {notIncluded
-                            ? t('crm.lineItems.optionalNotIncluded', '(add-on, not booked)')
-                            : t('crm.lineItems.optionalIncluded', '(add-on, booked)')}
-                        </div>
-                      )}
-                    </td>
-                    <td className="py-2 text-right tabular-nums">{isDiscountLine ? '' : formatMoneyMinor(Number(li.unitPriceMinor || 0), q.currency)}</td>
-                    <td className="py-2 text-right tabular-nums">{formatMoneyMinor(Number(li.lineTotalMinor || 0), q.currency)}</td>
-                  </tr>
-                );
-              });
-            })()}
-          </tbody>
-        </table>
-        <div className="flex flex-col items-end gap-1 mt-4 text-sm">
-          <div className="flex gap-6"><span className="text-neutral-600">{t('crm.lineItems.subtotal', 'Subtotal')}:</span>
-            <span className="tabular-nums w-28 text-right">{formatMoney(Number(q.netAmountMinor || 0) / 100, q.currency)}</span></div>
-          <div className="flex gap-6"><span className="text-neutral-600">{t('crm.lineItems.vat', 'VAT')} ({Number(q.vatRate || 0).toFixed(1)}%):</span>
-            <span className="tabular-nums w-28 text-right">{formatMoney(Number(q.vatAmountMinor || 0) / 100, q.currency)}</span></div>
-          <div className="flex gap-6 font-semibold text-base"><span>{t('crm.lineItems.total', 'Total')}:</span>
-            <span className="tabular-nums w-28 text-right">{formatMoney(Number(q.totalAmountMinor || 0) / 100, q.currency)}</span></div>
-        </div>
-      </Card>
+      <Card><CardContent><h3 className="font-semibold mb-3">{t('quotes.section.lineItems', 'Line items')}</h3><table className="w-full text-sm">
+                    <thead><tr className="border-b border-neutral-200 dark:border-neutral-700">
+                      <th className="text-left py-2">#</th>
+                      <th className="text-left py-2">{t('crm.lineItems.quantity', 'Qty')}</th>
+                      <th className="text-left py-2">{t('crm.lineItems.description', 'Description')}</th>
+                      <th className="text-right py-2">{t('crm.lineItems.unitPrice', 'Unit')}</th>
+                      <th className="text-right py-2">{t('crm.lineItems.total', 'Total')}</th>
+                    </tr></thead>
+                    <tbody>
+                      {(() => {
+                        // Top-level lines are numbered 1, 2, 3…; sub-items indent under
+                        // their parent; discount lines carry no number or unit price;
+                        // an unticked optional add-on is shown but greyed out (#1451).
+                        let number = 0;
+                        return data.lineItems.map((li) => {
+                          const isSubItem = li.parentPosition != null;
+                          const isDiscountLine = li.lineKind === 'discount';
+                          const notIncluded = !!li.isOptional && li.selected === false;
+                          if (!isSubItem) number += 1;
+                          const unitLabel = li.unit ? t(`crm.lineItems.unitShort.${li.unit}`, li.unit) : '';
+                          return (
+                            <tr key={li.id} className={`border-b border-neutral-100 dark:border-neutral-800 ${notIncluded ? 'opacity-60' : ''}`}>
+                              <td className="py-2">{isSubItem ? '' : number}</td>
+                              <td className="py-2">{isDiscountLine ? '' : `${Number(li.quantity)}${unitLabel ? ` ${unitLabel}` : ''}`}</td>
+                              <td className={`py-2 whitespace-pre-line ${isSubItem ? 'pl-6' : ''}`}>
+                                {isSubItem ? '• ' : ''}{li.description}
+                                {/* An add-on's status is the last line of its item. */}
+                                {li.isOptional && (
+                                  <div className="text-xs text-neutral-500 dark:text-neutral-400">
+                                    {notIncluded
+                                      ? t('crm.lineItems.optionalNotIncluded', '(add-on, not booked)')
+                                      : t('crm.lineItems.optionalIncluded', '(add-on, booked)')}
+                                  </div>
+                                )}
+                              </td>
+                              <td className="py-2 text-right tabular-nums">{isDiscountLine ? '' : formatMoneyMinor(Number(li.unitPriceMinor || 0), q.currency)}</td>
+                              <td className="py-2 text-right tabular-nums">{formatMoneyMinor(Number(li.lineTotalMinor || 0), q.currency)}</td>
+                            </tr>
+                          );
+                        });
+                      })()}
+                    </tbody>
+                  </table><div className="flex flex-col items-end gap-1 mt-4 text-sm">
+                    <div className="flex gap-6"><span className="text-neutral-600">{t('crm.lineItems.subtotal', 'Subtotal')}:</span>
+                      <span className="tabular-nums w-28 text-right">{formatMoney(Number(q.netAmountMinor || 0) / 100, q.currency)}</span></div>
+                    <div className="flex gap-6"><span className="text-neutral-600">{t('crm.lineItems.vat', 'VAT')} ({Number(q.vatRate || 0).toFixed(1)}%):</span>
+                      <span className="tabular-nums w-28 text-right">{formatMoney(Number(q.vatAmountMinor || 0) / 100, q.currency)}</span></div>
+                    <div className="flex gap-6 font-semibold text-base"><span>{t('crm.lineItems.total', 'Total')}:</span>
+                      <span className="tabular-nums w-28 text-right">{formatMoney(Number(q.totalAmountMinor || 0) / 100, q.currency)}</span></div>
+                  </div></CardContent></Card>
 
       {/* Cross-document lineage via deal_uuid (migration 140). One UUID
           groups every quote / contract / invoice / Storno / reissue
@@ -404,10 +397,7 @@ export const QuoteDetailPage: React.FC = () => {
       />
 
       {q.internalNotes && (
-        <Card>
-          <h3 className="font-semibold mb-2">{t('quotes.section.internalNotes', 'Internal notes')}</h3>
-          <p className="text-sm whitespace-pre-line text-neutral-700 dark:text-neutral-300">{q.internalNotes}</p>
-        </Card>
+        <Card><CardContent><h3 className="font-semibold mb-2">{t('quotes.section.internalNotes', 'Internal notes')}</h3><p className="text-sm whitespace-pre-line text-neutral-700 dark:text-neutral-300">{q.internalNotes}</p></CardContent></Card>
       )}
     </div>
   );

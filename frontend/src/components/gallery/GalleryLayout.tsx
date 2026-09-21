@@ -1,17 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { Calendar, Clock, Download, LogOut, Facebook, Instagram, Twitter, Youtube, MessageCircle } from 'lucide-react';
+import { Calendar, Clock, Download, LogOut, Facebook, Instagram, Twitter, Youtube, MessageCircle, Loader2 } from 'lucide-react';
 import { parseISO } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { useLocalizedDate } from '../../hooks/useLocalizedDate';
-import { Button, MarkdownContent, PoweredBy } from '../common';
+import { MarkdownContent, PoweredBy } from '../common';
 import { DynamicFavicon } from '../common/DynamicFavicon';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useGuestIdentityOptional } from '../../contexts/GuestIdentityContext';
 import { buildResourceUrl } from '../../utils/url';
 import { cmsService, type PublicCMSPage } from '../../services/cms.service';
 import type { HeaderStyleType } from '../../types/theme.types';
+import { Button } from "@/components/ui/button";
 
 interface GalleryLayoutProps {
   event: {
@@ -416,16 +417,11 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
                 {/* Download all button - hidden on mobile when sidebar is shown */}
                 {showDownloadAll && onDownloadAll && (
                   <Button
-                    variant="primary"
-                    size="sm"
-                    leftIcon={<Download className="w-4 h-4" />}
-                    onClick={onDownloadAll}
-                    isLoading={isDownloading}
-                    className="gallery-btn gallery-btn-download hidden sm:flex"
-                  >
-                    <span className="hidden sm:inline">{t('gallery.downloadAll')}</span>
-                    <span className="sm:hidden">{t('common.download')}</span>
-                  </Button>
+                                                      size="sm"
+                                                      onClick={onDownloadAll}
+                                                      className="gallery-btn gallery-btn-download hidden sm:flex" disabled={isDownloading}
+                                                    >
+                                                      {isDownloading && <Loader2 className="animate-spin" />}<Download className="w-4 h-4" /><span className="hidden sm:inline">{t('gallery.downloadAll')}</span><span className="sm:hidden">{t('common.download')}</span></Button>
                 )}
 
                 {/*
@@ -445,14 +441,12 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
                 {/* Logout button */}
                 {showLogout && onLogout && (
                   <Button
-                    variant="outline"
-                    size="sm"
-                    leftIcon={<LogOut className="w-4 h-4" />}
-                    onClick={onLogout}
-                    className="gallery-btn gallery-btn-logout sm:min-w-0"
-                  >
-                    <span className="hidden sm:inline">{t('common.logout')}</span>
-                  </Button>
+                                                      variant="outline"
+                                                      size="sm"
+                                                      onClick={onLogout}
+                                                      className="gallery-btn gallery-btn-logout sm:min-w-0"
+                                                    >
+                                                      <LogOut className="w-4 h-4" /><span className="hidden sm:inline">{t('common.logout')}</span></Button>
                 )}
               </div>
             </div>
@@ -494,15 +488,11 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
                 {headerExtra}
                 {showDownloadAll && onDownloadAll && (
                   <Button
-                    variant="primary"
-                    size="sm"
-                    leftIcon={<Download className="w-4 h-4" />}
-                    onClick={onDownloadAll}
-                    isLoading={isDownloading}
-                    className="gallery-btn gallery-btn-download hidden sm:flex"
-                  >
-                    <span className="hidden sm:inline">{t('gallery.downloadAll')}</span>
-                  </Button>
+                                                      size="sm"
+                                                      onClick={onDownloadAll}
+                                                      className="gallery-btn gallery-btn-download hidden sm:flex" disabled={isDownloading}
+                                                    >
+                                                      {isDownloading && <Loader2 className="animate-spin" />}<Download className="w-4 h-4" /><span className="hidden sm:inline">{t('gallery.downloadAll')}</span></Button>
                 )}
                 {/* Accent Download CTA — also rendered in the minimal header
                     so the action stays one click away regardless of header
@@ -516,14 +506,12 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
                 )}
                 {showLogout && onLogout && (
                   <Button
-                    variant="outline"
-                    size="sm"
-                    leftIcon={<LogOut className="w-4 h-4" />}
-                    onClick={onLogout}
-                    className="gallery-btn gallery-btn-logout sm:min-w-0"
-                  >
-                    <span className="hidden sm:inline">{t('common.logout')}</span>
-                  </Button>
+                                                      variant="outline"
+                                                      size="sm"
+                                                      onClick={onLogout}
+                                                      className="gallery-btn gallery-btn-logout sm:min-w-0"
+                                                    >
+                                                      <LogOut className="w-4 h-4" /><span className="hidden sm:inline">{t('common.logout')}</span></Button>
                 )}
               </div>
             </div>
@@ -541,15 +529,11 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
               <div className="flex items-center gap-2 shrink-0">
                 {showDownloadAll && onDownloadAll && (
                   <Button
-                    variant="primary"
-                    size="sm"
-                    leftIcon={<Download className="w-4 h-4" />}
-                    onClick={onDownloadAll}
-                    isLoading={isDownloading}
-                    className="gallery-btn gallery-btn-download hidden sm:flex"
-                  >
-                    <span className="hidden sm:inline">{t('gallery.downloadAll')}</span>
-                  </Button>
+                                                      size="sm"
+                                                      onClick={onDownloadAll}
+                                                      className="gallery-btn gallery-btn-download hidden sm:flex" disabled={isDownloading}
+                                                    >
+                                                      {isDownloading && <Loader2 className="animate-spin" />}<Download className="w-4 h-4" /><span className="hidden sm:inline">{t('gallery.downloadAll')}</span></Button>
                 )}
                 {/* Accent Download CTA — 'none' suppresses the *title* header,
                     not the download affordance: this bar still renders the
@@ -564,14 +548,12 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
                 )}
                 {showLogout && onLogout && (
                   <Button
-                    variant="outline"
-                    size="sm"
-                    leftIcon={<LogOut className="w-4 h-4" />}
-                    onClick={onLogout}
-                    className="gallery-btn gallery-btn-logout sm:min-w-0"
-                  >
-                    <span className="hidden sm:inline">{t('common.logout')}</span>
-                  </Button>
+                                                      variant="outline"
+                                                      size="sm"
+                                                      onClick={onLogout}
+                                                      className="gallery-btn gallery-btn-logout sm:min-w-0"
+                                                    >
+                                                      <LogOut className="w-4 h-4" /><span className="hidden sm:inline">{t('common.logout')}</span></Button>
                 )}
               </div>
             </div>
@@ -593,16 +575,11 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
                 {/* Download all button */}
                 {showDownloadAll && onDownloadAll && (
                   <Button
-                    variant="primary"
-                    size="sm"
-                    leftIcon={<Download className="w-4 h-4" />}
-                    onClick={onDownloadAll}
-                    isLoading={isDownloading}
-                    className="gallery-btn gallery-btn-download"
-                  >
-                    <span className="hidden sm:inline">{t('gallery.downloadAll')}</span>
-                    <span className="sm:hidden">{t('common.download')}</span>
-                  </Button>
+                                                      size="sm"
+                                                      onClick={onDownloadAll}
+                                                      className="gallery-btn gallery-btn-download" disabled={isDownloading}
+                                                    >
+                                                      {isDownloading && <Loader2 className="animate-spin" />}<Download className="w-4 h-4" /><span className="hidden sm:inline">{t('gallery.downloadAll')}</span><span className="sm:hidden">{t('common.download')}</span></Button>
                 )}
 
                 {/* Accent Download CTA — also rendered above the hero so the
@@ -618,14 +595,12 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
                 {/* Logout button */}
                 {showLogout && onLogout && (
                   <Button
-                    variant="outline"
-                    size="sm"
-                    leftIcon={<LogOut className="w-4 h-4" />}
-                    onClick={onLogout}
-                    className="gallery-btn gallery-btn-logout sm:min-w-0"
-                  >
-                    <span className="hidden sm:inline">{t('common.logout')}</span>
-                  </Button>
+                                                      variant="outline"
+                                                      size="sm"
+                                                      onClick={onLogout}
+                                                      className="gallery-btn gallery-btn-logout sm:min-w-0"
+                                                    >
+                                                      <LogOut className="w-4 h-4" /><span className="hidden sm:inline">{t('common.logout')}</span></Button>
                 )}
               </div>
             </div>

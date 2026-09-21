@@ -19,18 +19,20 @@ import { Link } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import {
-  UserPlus, UserCog, Trash2, Search, X, AlertTriangle, CheckCircle2, Clock, MailCheck,
-} from 'lucide-react';
+  UserPlus, UserCog, Trash2, Search, X, AlertTriangle, CheckCircle2, Clock, MailCheck, Loader2 } from 'lucide-react';
 import { InlineCustomerCreate } from '../../components/admin/InlineCustomerCreate';
 import { useMutationWithToast } from '../../hooks';
 import { useLocalizedDate } from '../../hooks/useLocalizedDate';
 
-import { Button, Card, Input, Loading } from '../../components/common';
+import { Loading } from '../../components/common';
 import {
   customerAdminService,
   type CustomerAccountSummary,
   type CustomerInvitationSummary,
 } from '../../services/customerAdmin.service';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 type TabType = 'customers' | 'invitations';
 
@@ -175,180 +177,167 @@ export const CustomerManagementPage: React.FC = () => {
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <Button variant="outline" leftIcon={<UserCog className="w-4 h-4" />} onClick={() => setCreateMode('passive')}>
-            {t('customers.create.openButton', 'Create passive customer')}
-          </Button>
-          <Button variant="primary" leftIcon={<UserPlus className="w-4 h-4" />} onClick={() => setCreateMode('invite')}>
-            {t('customers.invite.button', 'Invite customer')}
-          </Button>
+          <Button variant="outline" onClick={() => setCreateMode('passive')}>
+                              <UserCog className="w-4 h-4" />{t('customers.create.openButton', 'Create passive customer')}</Button>
+          <Button onClick={() => setCreateMode('invite')}>
+                              <UserPlus className="w-4 h-4" />{t('customers.invite.button', 'Invite customer')}</Button>
         </div>
       </div>
 
-      <Card padding="lg">
-        {renderTabs()}
-
-        <div className="mb-4">
-          <Input
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder={t('customers.search.placeholder', 'Search by email, name, or company')}
-            leftIcon={<Search className="w-5 h-5 text-neutral-400" />}
-          />
-        </div>
-
-        {activeTab === 'customers' ? (
-          customersLoading ? (
-            <div className="flex justify-center py-8"><Loading /></div>
-          ) : customersError ? (
-            <div className="text-sm text-red-600 flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4" />
-              {t('customers.loadError', 'Could not load customers')}
-            </div>
-          ) : filteredCustomers.length === 0 ? (
-            <div className="text-center text-neutral-500 dark:text-neutral-400 py-12">
-              {t('customers.empty', 'No customers yet. Click "Invite customer" to add one.')}
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="min-w-full text-sm">
-                <thead>
-                  <tr className="text-left text-neutral-500 dark:text-neutral-400">
-                    <th className="px-3 py-2 font-medium">{t('customers.table.name', 'Name')}</th>
-                    <th className="px-3 py-2 font-medium">{t('customers.table.email', 'Email')}</th>
-                    <th className="px-3 py-2 font-medium">{t('customers.table.company', 'Company')}</th>
-                    <th className="px-3 py-2 font-medium">{t('customers.table.eventCount', 'Events')}</th>
-                    <th className="px-3 py-2 font-medium">{t('customers.table.lastLogin', 'Last login')}</th>
-                    <th className="px-3 py-2 font-medium">{t('customers.table.status', 'Status')}</th>
-                    <th className="px-3 py-2"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredCustomers.map((c) => (
-                    <tr key={c.id} className="border-t border-neutral-200 dark:border-neutral-700">
-                      <td className="px-3 py-3">
-                        <Link to={`/admin/clients/accounts/${c.id}`} className="text-neutral-900 dark:text-neutral-100 hover:underline">
-                          {renderCustomerName(c)}
-                        </Link>
-                      </td>
-                      <td className="px-3 py-3 text-neutral-500 dark:text-neutral-400">{c.email}</td>
-                      <td className="px-3 py-3 text-neutral-500 dark:text-neutral-400">{c.companyName || '—'}</td>
-                      <td className="px-3 py-3 text-neutral-500 dark:text-neutral-400">{c.eventCount ?? 0}</td>
-                      <td className="px-3 py-3 text-neutral-500 dark:text-neutral-400">{formatDate(c.lastLogin)}</td>
-                      <td className="px-3 py-3">
-                        <div className="flex flex-col gap-1">
-                          {c.isActive ? (
-                            <span className="inline-flex items-center gap-1 text-xs" style={{ color: 'var(--brand)' }}>
-                              <CheckCircle2 className="w-3.5 h-3.5" />
-                              {t('customers.status.active', 'Active')}
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center gap-1 text-xs text-red-600">
-                              <X className="w-3.5 h-3.5" />
-                              {t('customers.status.inactive', 'Deactivated')}
-                            </span>
-                          )}
-                          {/* Passive customers (no portal access). The
-                              status badge sits on its own line so a
-                              passive deactivated customer can still
-                              show both states clearly. */}
-                          {c.isPassive && (() => {
-                            const invite = pendingInviteByEmail.get(c.email.trim().toLowerCase());
-                            return invite ? (
-                              <span
-                                className="inline-flex items-center gap-1 text-[11px] px-1.5 py-0.5 rounded-sm bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300"
-                                // Deliberately describes the invitation ROW, not a
-                                // delivery. createInvitation inserts the row and then
-                                // queues the email without a transaction, so an open
-                                // invitation does not prove an email_queue row exists,
-                                // let alone that anything was delivered.
-                                title={t('customers.invitePending.hint',
-                                  'An invitation link for this address is open and has not been accepted. That is not proof the email reached them — check System health if they say it never arrived.') as string}
-                              >
-                                <MailCheck className="w-3 h-3" />
-                                {t('customers.invitePending.badge', 'Invitation pending')}
-                              </span>
-                            ) : (
-                              <span className="inline-flex items-center gap-1 text-[11px] px-1.5 py-0.5 rounded-sm bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300">
-                                {t('customers.passive.badge', 'Passive — admin only')}
-                              </span>
-                            );
-                          })()}
-                        </div>
-                      </td>
-                      <td className="px-3 py-3 text-right">
-                        {c.isActive && (
-                          <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            leftIcon={<Trash2 className="w-4 h-4" />}
-                            onClick={() => setConfirm({ kind: 'deactivate', id: c.id, name: c.email })}
-                          >
-                            {t('customers.deactivate.button', 'Deactivate')}
-                          </Button>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )
-        ) : (
-          invitationsLoading ? (
-            <div className="flex justify-center py-8"><Loading /></div>
-          ) : invitationsError ? (
-            <div className="text-sm text-red-600 flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4" />
-              {t('customers.loadInvitationsError', 'Could not load invitations')}
-            </div>
-          ) : filteredInvitations.length === 0 ? (
-            <div className="text-center text-neutral-500 dark:text-neutral-400 py-12">
-              {t('customers.invitations.empty', 'No pending invitations.')}
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="min-w-full text-sm">
-                <thead>
-                  <tr className="text-left text-neutral-500 dark:text-neutral-400">
-                    <th className="px-3 py-2 font-medium">{t('customers.invitations.email', 'Email')}</th>
-                    <th className="px-3 py-2 font-medium">{t('customers.invitations.invitedBy', 'Invited by')}</th>
-                    <th className="px-3 py-2 font-medium">{t('customers.invitations.expiresAt', 'Expires')}</th>
-                    <th className="px-3 py-2 font-medium">{t('customers.invitations.createdAt', 'Created')}</th>
-                    <th className="px-3 py-2"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredInvitations.map((inv: CustomerInvitationSummary) => (
-                    <tr key={inv.id} className="border-t border-neutral-200 dark:border-neutral-700">
-                      <td className="px-3 py-3 text-neutral-900 dark:text-neutral-100">{inv.email}</td>
-                      <td className="px-3 py-3 text-neutral-500 dark:text-neutral-400">{inv.invitedBy || '—'}</td>
-                      <td className="px-3 py-3 text-neutral-500 dark:text-neutral-400">
-                        <span className="inline-flex items-center gap-1">
-                          <Clock className="w-3.5 h-3.5" />
-                          {formatDate(inv.expiresAt)}
-                        </span>
-                      </td>
-                      <td className="px-3 py-3 text-neutral-500 dark:text-neutral-400">{formatDate(inv.createdAt)}</td>
-                      <td className="px-3 py-3 text-right">
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="sm"
-                          leftIcon={<X className="w-4 h-4" />}
-                          onClick={() => setConfirm({ kind: 'cancelInvite', id: inv.id, email: inv.email })}
-                        >
-                          {t('customers.invitations.cancel', 'Cancel')}
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )
-        )}
-      </Card>
+      <Card className="py-8"><CardContent className="px-8">{renderTabs()}<div className="mb-4">
+                    <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Search className="w-5 h-5 text-neutral-400" />}</div><Input
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    placeholder={t('customers.search.placeholder', 'Search by email, name, or company')} className="pl-10"
+                                  /></div>
+                  </div>{activeTab === 'customers' ? (
+                    customersLoading ? (
+                      <div className="flex justify-center py-8"><Loading /></div>
+                    ) : customersError ? (
+                      <div className="text-sm text-red-600 flex items-center gap-2">
+                        <AlertTriangle className="w-4 h-4" />
+                        {t('customers.loadError', 'Could not load customers')}
+                      </div>
+                    ) : filteredCustomers.length === 0 ? (
+                      <div className="text-center text-neutral-500 dark:text-neutral-400 py-12">
+                        {t('customers.empty', 'No customers yet. Click "Invite customer" to add one.')}
+                      </div>
+                    ) : (
+                      <div className="overflow-x-auto">
+                        <table className="min-w-full text-sm">
+                          <thead>
+                            <tr className="text-left text-neutral-500 dark:text-neutral-400">
+                              <th className="px-3 py-2 font-medium">{t('customers.table.name', 'Name')}</th>
+                              <th className="px-3 py-2 font-medium">{t('customers.table.email', 'Email')}</th>
+                              <th className="px-3 py-2 font-medium">{t('customers.table.company', 'Company')}</th>
+                              <th className="px-3 py-2 font-medium">{t('customers.table.eventCount', 'Events')}</th>
+                              <th className="px-3 py-2 font-medium">{t('customers.table.lastLogin', 'Last login')}</th>
+                              <th className="px-3 py-2 font-medium">{t('customers.table.status', 'Status')}</th>
+                              <th className="px-3 py-2"></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {filteredCustomers.map((c) => (
+                              <tr key={c.id} className="border-t border-neutral-200 dark:border-neutral-700">
+                                <td className="px-3 py-3">
+                                  <Link to={`/admin/clients/accounts/${c.id}`} className="text-neutral-900 dark:text-neutral-100 hover:underline">
+                                    {renderCustomerName(c)}
+                                  </Link>
+                                </td>
+                                <td className="px-3 py-3 text-neutral-500 dark:text-neutral-400">{c.email}</td>
+                                <td className="px-3 py-3 text-neutral-500 dark:text-neutral-400">{c.companyName || '—'}</td>
+                                <td className="px-3 py-3 text-neutral-500 dark:text-neutral-400">{c.eventCount ?? 0}</td>
+                                <td className="px-3 py-3 text-neutral-500 dark:text-neutral-400">{formatDate(c.lastLogin)}</td>
+                                <td className="px-3 py-3">
+                                  <div className="flex flex-col gap-1">
+                                    {c.isActive ? (
+                                      <span className="inline-flex items-center gap-1 text-xs" style={{ color: 'var(--brand)' }}>
+                                        <CheckCircle2 className="w-3.5 h-3.5" />
+                                        {t('customers.status.active', 'Active')}
+                                      </span>
+                                    ) : (
+                                      <span className="inline-flex items-center gap-1 text-xs text-red-600">
+                                        <X className="w-3.5 h-3.5" />
+                                        {t('customers.status.inactive', 'Deactivated')}
+                                      </span>
+                                    )}
+                                    {/* Passive customers (no portal access). The
+                                        status badge sits on its own line so a
+                                        passive deactivated customer can still
+                                        show both states clearly. */}
+                                    {c.isPassive && (() => {
+                                      const invite = pendingInviteByEmail.get(c.email.trim().toLowerCase());
+                                      return invite ? (
+                                        <span
+                                          className="inline-flex items-center gap-1 text-[11px] px-1.5 py-0.5 rounded-sm bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300"
+                                          // Deliberately describes the invitation ROW, not a
+                                          // delivery. createInvitation inserts the row and then
+                                          // queues the email without a transaction, so an open
+                                          // invitation does not prove an email_queue row exists,
+                                          // let alone that anything was delivered.
+                                          title={t('customers.invitePending.hint',
+                                            'An invitation link for this address is open and has not been accepted. That is not proof the email reached them — check System health if they say it never arrived.') as string}
+                                        >
+                                          <MailCheck className="w-3 h-3" />
+                                          {t('customers.invitePending.badge', 'Invitation pending')}
+                                        </span>
+                                      ) : (
+                                        <span className="inline-flex items-center gap-1 text-[11px] px-1.5 py-0.5 rounded-sm bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300">
+                                          {t('customers.passive.badge', 'Passive — admin only')}
+                                        </span>
+                                      );
+                                    })()}
+                                  </div>
+                                </td>
+                                <td className="px-3 py-3 text-right">
+                                  {c.isActive && (
+                                    <Button
+                                                                        type="button"
+                                                                        variant="outline"
+                                                                        size="sm"
+                                                                        onClick={() => setConfirm({ kind: 'deactivate', id: c.id, name: c.email })}
+                                                                      >
+                                                                        <Trash2 className="w-4 h-4" />{t('customers.deactivate.button', 'Deactivate')}</Button>
+                                  )}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )
+                  ) : (
+                    invitationsLoading ? (
+                      <div className="flex justify-center py-8"><Loading /></div>
+                    ) : invitationsError ? (
+                      <div className="text-sm text-red-600 flex items-center gap-2">
+                        <AlertTriangle className="w-4 h-4" />
+                        {t('customers.loadInvitationsError', 'Could not load invitations')}
+                      </div>
+                    ) : filteredInvitations.length === 0 ? (
+                      <div className="text-center text-neutral-500 dark:text-neutral-400 py-12">
+                        {t('customers.invitations.empty', 'No pending invitations.')}
+                      </div>
+                    ) : (
+                      <div className="overflow-x-auto">
+                        <table className="min-w-full text-sm">
+                          <thead>
+                            <tr className="text-left text-neutral-500 dark:text-neutral-400">
+                              <th className="px-3 py-2 font-medium">{t('customers.invitations.email', 'Email')}</th>
+                              <th className="px-3 py-2 font-medium">{t('customers.invitations.invitedBy', 'Invited by')}</th>
+                              <th className="px-3 py-2 font-medium">{t('customers.invitations.expiresAt', 'Expires')}</th>
+                              <th className="px-3 py-2 font-medium">{t('customers.invitations.createdAt', 'Created')}</th>
+                              <th className="px-3 py-2"></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {filteredInvitations.map((inv: CustomerInvitationSummary) => (
+                              <tr key={inv.id} className="border-t border-neutral-200 dark:border-neutral-700">
+                                <td className="px-3 py-3 text-neutral-900 dark:text-neutral-100">{inv.email}</td>
+                                <td className="px-3 py-3 text-neutral-500 dark:text-neutral-400">{inv.invitedBy || '—'}</td>
+                                <td className="px-3 py-3 text-neutral-500 dark:text-neutral-400">
+                                  <span className="inline-flex items-center gap-1">
+                                    <Clock className="w-3.5 h-3.5" />
+                                    {formatDate(inv.expiresAt)}
+                                  </span>
+                                </td>
+                                <td className="px-3 py-3 text-neutral-500 dark:text-neutral-400">{formatDate(inv.createdAt)}</td>
+                                <td className="px-3 py-3 text-right">
+                                  <Button
+                                                                  type="button"
+                                                                  variant="outline"
+                                                                  size="sm"
+                                                                  onClick={() => setConfirm({ kind: 'cancelInvite', id: inv.id, email: inv.email })}
+                                                                >
+                                                                  <X className="w-4 h-4" />{t('customers.invitations.cancel', 'Cancel')}</Button>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )
+                  )}</CardContent></Card>
 
       {/* Unified create / invite modal. The form is identical in both
           modes — only the bottom action button differs (Save as
@@ -407,19 +396,16 @@ export const CustomerManagementPage: React.FC = () => {
                   {t('common.cancel', 'Cancel')}
                 </Button>
                 <Button
-                  variant="primary"
-                  onClick={() => {
-                    if (confirm.kind === 'deactivate') {
-                      deactivateMutation.mutate(confirm.id);
-                    } else {
-                      cancelInviteMutation.mutate(confirm.id);
-                    }
-                    setConfirm(null);
-                  }}
-                  isLoading={deactivateMutation.isPending || cancelInviteMutation.isPending}
-                >
-                  {t('common.confirm', 'Confirm')}
-                </Button>
+                                                onClick={() => {
+                                                  if (confirm.kind === 'deactivate') {
+                                                    deactivateMutation.mutate(confirm.id);
+                                                  } else {
+                                                    cancelInviteMutation.mutate(confirm.id);
+                                                  }
+                                                  setConfirm(null);
+                                                }} disabled={deactivateMutation.isPending || cancelInviteMutation.isPending}
+                                              >
+                                                {deactivateMutation.isPending || cancelInviteMutation.isPending && <Loader2 className="animate-spin" />}{t('common.confirm', 'Confirm')}</Button>
               </div>
             </div>
           </div>

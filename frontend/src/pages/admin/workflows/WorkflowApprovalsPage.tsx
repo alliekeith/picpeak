@@ -8,11 +8,13 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { ArrowLeft, Check, X } from 'lucide-react';
-import { Button, Card, Loading } from '../../../components/common';
+import { ArrowLeft, Check, X, Loader2 } from 'lucide-react';
+import { Loading } from '../../../components/common';
 import { workflowsService, type WorkflowApproval } from '../../../services/workflows.service';
 import { useLocalizedDate } from '../../../hooks/useLocalizedDate';
 import { useMutationWithToast } from '../../../hooks';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 export const WorkflowApprovalsPage: React.FC = () => {
   const { t } = useTranslation();
@@ -56,51 +58,47 @@ export const WorkflowApprovalsPage: React.FC = () => {
         </div>
       </div>
 
-      <Card padding="none">
-        {isLoading ? (
-          <div className="p-10"><Loading /></div>
-        ) : !approvals || approvals.length === 0 ? (
-          <div className="p-10 text-center text-neutral-500 dark:text-neutral-400">{t('workflows.approvals.empty', 'Nothing waiting for you right now.')}</div>
-        ) : (
-          <ul className="divide-y divide-neutral-200 dark:divide-neutral-700">
-            {approvals.map((a) => {
-              const href = entityHref(a);
-              const meta = (
-                <>
-                  <div className="text-sm text-neutral-900 dark:text-neutral-100">{promptOf(a)}</div>
-                  <div className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
-                    {a.workflow_name}
-                    {a.entity_type ? ` · ${a.entity_type} #${a.entity_id}` : ''}
-                    {a.created_at ? ` · ${formatDateTime(a.created_at)}` : ''}
-                  </div>
-                </>
-              );
-              return (
-                <li key={a.id} className="flex items-center gap-3 px-4 py-3">
-                  {href ? (
-                    <button
-                      type="button"
-                      onClick={() => navigate(href)}
-                      className="min-w-0 flex-1 text-left rounded-sm -mx-1 px-1 py-0.5 hover:bg-neutral-50 dark:hover:bg-neutral-800/60 transition-colors cursor-pointer"
-                      title={t('workflows.approvals.openEntity', 'Open {{type}} #{{id}}', { type: a.entity_type, id: a.entity_id }) as string}
-                    >
-                      {meta}
-                    </button>
+      <Card className="py-0"><CardContent className="px-0">{isLoading ? (
+                    <div className="p-10"><Loading /></div>
+                  ) : !approvals || approvals.length === 0 ? (
+                    <div className="p-10 text-center text-neutral-500 dark:text-neutral-400">{t('workflows.approvals.empty', 'Nothing waiting for you right now.')}</div>
                   ) : (
-                    <div className="min-w-0 flex-1">{meta}</div>
-                  )}
-                  <Button variant="outline" size="sm" isLoading={actMutation.isPending} onClick={() => actMutation.mutate({ id: a.id, action: 'confirm' })} leftIcon={<Check className="w-4 h-4" />}>
-                    {t('workflows.approvals.confirm', 'Confirm')}
-                  </Button>
-                  <Button variant="ghost" size="sm" onClick={() => actMutation.mutate({ id: a.id, action: 'deny' })} leftIcon={<X className="w-4 h-4" />}>
-                    {t('workflows.approvals.deny', 'Deny')}
-                  </Button>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </Card>
+                    <ul className="divide-y divide-neutral-200 dark:divide-neutral-700">
+                      {approvals.map((a) => {
+                        const href = entityHref(a);
+                        const meta = (
+                          <>
+                            <div className="text-sm text-neutral-900 dark:text-neutral-100">{promptOf(a)}</div>
+                            <div className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+                              {a.workflow_name}
+                              {a.entity_type ? ` · ${a.entity_type} #${a.entity_id}` : ''}
+                              {a.created_at ? ` · ${formatDateTime(a.created_at)}` : ''}
+                            </div>
+                          </>
+                        );
+                        return (
+                          <li key={a.id} className="flex items-center gap-3 px-4 py-3">
+                            {href ? (
+                              <button
+                                type="button"
+                                onClick={() => navigate(href)}
+                                className="min-w-0 flex-1 text-left rounded-sm -mx-1 px-1 py-0.5 hover:bg-neutral-50 dark:hover:bg-neutral-800/60 transition-colors cursor-pointer"
+                                title={t('workflows.approvals.openEntity', 'Open {{type}} #{{id}}', { type: a.entity_type, id: a.entity_id }) as string}
+                              >
+                                {meta}
+                              </button>
+                            ) : (
+                              <div className="min-w-0 flex-1">{meta}</div>
+                            )}
+                            <Button variant="outline" size="sm" onClick={() => actMutation.mutate({ id: a.id, action: 'confirm' })} disabled={actMutation.isPending}>
+                                                    {actMutation.isPending && <Loader2 className="animate-spin" />}<Check className="w-4 h-4" />{t('workflows.approvals.confirm', 'Confirm')}</Button>
+                            <Button variant="ghost" size="sm" onClick={() => actMutation.mutate({ id: a.id, action: 'deny' })}>
+                                                    <X className="w-4 h-4" />{t('workflows.approvals.deny', 'Deny')}</Button>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}</CardContent></Card>
     </div>
   );
 };

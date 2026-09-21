@@ -10,12 +10,14 @@ import {
   Edit2,
   Save,
   X,
-  Search
-} from 'lucide-react';
+  Search, Loader2 } from 'lucide-react';
 import { toast } from 'react-toastify';
-import { Card, Button, Input, Loading } from '../common';
+import { Loading } from '../common';
 import { feedbackService } from '../../services/feedback.service';
 import { useMutationWithToast } from '../../hooks';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 interface WordFilter {
   id: number;
@@ -164,103 +166,42 @@ export const WordFilterManager: React.FC = () => {
 
   if (isLoading) {
     return (
-      <Card>
-        <div className="p-6">
-          <Loading text={t('settings.moderation.loading', 'Loading word filters...')} />
-        </div>
-      </Card>
+      <Card><CardContent><div className="p-6">
+                  <Loading text={t('settings.moderation.loading', 'Loading word filters...')} />
+                </div></CardContent></Card>
     );
   }
 
   return (
     <>
-      <Card>
-        <div className="p-6">
-          {/* No title here — this component IS the Settings → Moderation
-              tab, and the Settings shell already renders that section
-              heading (icon + label + divider). A second H2 stacked
-              directly under it (QA warning). */}
-          <div className="mb-6">
-            <p className="text-sm text-neutral-600 dark:text-neutral-400">
-              {t('settings.moderation.description', 'Manage words that should be filtered or blocked in comments')}
-            </p>
-          </div>
+      <Card><CardContent><div className="p-6">
+                    {/* No title here — this component IS the Settings → Moderation
+                        tab, and the Settings shell already renders that section
+                        heading (icon + label + divider). A second H2 stacked
+                        directly under it (QA warning). */}
+                    <div className="mb-6">
+                      <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                        {t('settings.moderation.description', 'Manage words that should be filtered or blocked in comments')}
+                      </p>
+                    </div>
 
-          {/* Add new filter */}
-          <div className="mb-6 p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
-            <h3 className="text-sm font-medium text-neutral-900 dark:text-neutral-100 dark:text-neutral-100 mb-3">
-              {t('settings.moderation.addFilter', 'Add New Filter')}
-            </h3>
-            <div className="flex gap-3">
-              <Input
-                type="text"
-                value={newWord}
-                onChange={(e) => setNewWord(e.target.value)}
-                placeholder={t('settings.moderation.enterWord', 'Enter word to filter')}
-                className="flex-1"
-                onKeyPress={(e) => e.key === 'Enter' && handleAdd()}
-              />
-              <select
-                value={newSeverity}
-                onChange={(e) => setNewSeverity(e.target.value as any)}
-                className="px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-brand-500"
-              >
-                <option value="low">{t('settings.moderation.severityLow', 'Low')}</option>
-                <option value="moderate">{t('settings.moderation.severityModerate', 'Moderate')}</option>
-                <option value="high">{t('settings.moderation.severityHigh', 'High')}</option>
-                <option value="block">{t('settings.moderation.severityBlock', 'Block')}</option>
-              </select>
-              <Button
-                variant="primary"
-                leftIcon={<Plus className="w-4 h-4" />}
-                onClick={handleAdd}
-                isLoading={addMutation.isPending}
-              >
-                {t('common.add', 'Add')}
-              </Button>
-            </div>
-          </div>
-
-          {/* Search */}
-          <div className="mb-4">
-            <Input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder={t('settings.moderation.searchFilters', 'Search filters...')}
-              leftIcon={<Search className="w-5 h-5 text-neutral-400" />}
-            />
-          </div>
-
-          {/* Filters list */}
-          <div className="space-y-2">
-            {filteredFilters.length === 0 ? (
-              <div className="text-center py-8 text-neutral-500 dark:text-neutral-400">
-                {searchTerm ? 
-                  t('settings.moderation.noMatchingFilters', 'No matching filters found') : 
-                  t('settings.moderation.noFilters', 'No word filters configured yet')
-                }
-              </div>
-            ) : (
-              filteredFilters.map((filter: WordFilter) => (
-                <div
-                  key={filter.id}
-                  className={`flex items-center justify-between p-3 rounded-lg border ${
-                    filter.is_active ? 'border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800' : 'border-neutral-100 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 opacity-60'
-                  }`}
-                >
-                  {editingId === filter.id ? (
-                    <>
-                      <div className="flex items-center gap-3 flex-1">
+                    {/* Add new filter */}
+                    <div className="mb-6 p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                      <h3 className="text-sm font-medium text-neutral-900 dark:text-neutral-100 dark:text-neutral-100 mb-3">
+                        {t('settings.moderation.addFilter', 'Add New Filter')}
+                      </h3>
+                      <div className="flex gap-3">
                         <Input
                           type="text"
-                          value={editWord}
-                          onChange={(e) => setEditWord(e.target.value)}
-                          className="flex-1 max-w-xs"
+                          value={newWord}
+                          onChange={(e) => setNewWord(e.target.value)}
+                          placeholder={t('settings.moderation.enterWord', 'Enter word to filter')}
+                          className="flex-1"
+                          onKeyPress={(e) => e.key === 'Enter' && handleAdd()}
                         />
                         <select
-                          value={editSeverity}
-                          onChange={(e) => setEditSeverity(e.target.value as any)}
+                          value={newSeverity}
+                          onChange={(e) => setNewSeverity(e.target.value as any)}
                           className="px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-brand-500"
                         >
                           <option value="low">{t('settings.moderation.severityLow', 'Low')}</option>
@@ -268,117 +209,157 @@ export const WordFilterManager: React.FC = () => {
                           <option value="high">{t('settings.moderation.severityHigh', 'High')}</option>
                           <option value="block">{t('settings.moderation.severityBlock', 'Block')}</option>
                         </select>
-                      </div>
-                      <div className="flex items-center gap-2">
                         <Button
-                          size="sm"
-                          variant="ghost"
-                          leftIcon={<Save className="w-4 h-4" />}
-                          onClick={handleSaveEdit}
-                          isLoading={updateMutation.isPending}
-                        >
-                          {t('common.save', 'Save')}
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          leftIcon={<X className="w-4 h-4" />}
-                          onClick={handleCancelEdit}
-                        >
-                          {t('common.cancel', 'Cancel')}
-                        </Button>
+                                                    onClick={handleAdd} disabled={addMutation.isPending}
+                                                  >
+                                                    {addMutation.isPending && <Loader2 className="animate-spin" />}<Plus className="w-4 h-4" />{t('common.add', 'Add')}</Button>
                       </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="flex items-center gap-3">
-                        <input
-                          type="checkbox"
-                          checked={filter.is_active}
-                          onChange={() => handleToggleActive(filter)}
-                          className="w-4 h-4 text-brand rounded-sm focus:ring-brand-500"
-                        />
-                        <span className="font-medium text-neutral-900 dark:text-neutral-100">{filter.word}</span>
-                        <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${getSeverityBadgeClass(filter.severity)}`}>
-                          {getSeverityIcon(filter.severity)}
-                          {filter.severity}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          leftIcon={<Edit2 className="w-4 h-4" />}
-                          onClick={() => handleEdit(filter)}
-                        >
-                          {t('common.edit', 'Edit')}
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          leftIcon={<Trash2 className="w-4 h-4" />}
-                          onClick={() => handleDelete(filter.id)}
-                          isLoading={deleteMutation.isPending}
-                          className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                        >
-                          {t('common.delete', 'Delete')}
-                        </Button>
-                      </div>
-                    </>
-                  )}
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-      </Card>
+                    </div>
+
+                    {/* Search */}
+                    <div className="mb-4">
+                      <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Search className="w-5 h-5 text-neutral-400" />}</div><Input
+                                          type="text"
+                                          value={searchTerm}
+                                          onChange={(e) => setSearchTerm(e.target.value)}
+                                          placeholder={t('settings.moderation.searchFilters', 'Search filters...')} className="pl-10"
+                                        /></div>
+                    </div>
+
+                    {/* Filters list */}
+                    <div className="space-y-2">
+                      {filteredFilters.length === 0 ? (
+                        <div className="text-center py-8 text-neutral-500 dark:text-neutral-400">
+                          {searchTerm ? 
+                            t('settings.moderation.noMatchingFilters', 'No matching filters found') : 
+                            t('settings.moderation.noFilters', 'No word filters configured yet')
+                          }
+                        </div>
+                      ) : (
+                        filteredFilters.map((filter: WordFilter) => (
+                          <div
+                            key={filter.id}
+                            className={`flex items-center justify-between p-3 rounded-lg border ${
+                              filter.is_active ? 'border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800' : 'border-neutral-100 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 opacity-60'
+                            }`}
+                          >
+                            {editingId === filter.id ? (
+                              <>
+                                <div className="flex items-center gap-3 flex-1">
+                                  <Input
+                                    type="text"
+                                    value={editWord}
+                                    onChange={(e) => setEditWord(e.target.value)}
+                                    className="flex-1 max-w-xs"
+                                  />
+                                  <select
+                                    value={editSeverity}
+                                    onChange={(e) => setEditSeverity(e.target.value as any)}
+                                    className="px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-brand-500"
+                                  >
+                                    <option value="low">{t('settings.moderation.severityLow', 'Low')}</option>
+                                    <option value="moderate">{t('settings.moderation.severityModerate', 'Moderate')}</option>
+                                    <option value="high">{t('settings.moderation.severityHigh', 'High')}</option>
+                                    <option value="block">{t('settings.moderation.severityBlock', 'Block')}</option>
+                                  </select>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <Button
+                                                                      size="sm"
+                                                                      variant="ghost"
+                                                                      onClick={handleSaveEdit} disabled={updateMutation.isPending}
+                                                                    >
+                                                                      {updateMutation.isPending && <Loader2 className="animate-spin" />}<Save className="w-4 h-4" />{t('common.save', 'Save')}</Button>
+                                  <Button
+                                                                      size="sm"
+                                                                      variant="ghost"
+                                                                      onClick={handleCancelEdit}
+                                                                    >
+                                                                      <X className="w-4 h-4" />{t('common.cancel', 'Cancel')}</Button>
+                                </div>
+                              </>
+                            ) : (
+                              <>
+                                <div className="flex items-center gap-3">
+                                  <input
+                                    type="checkbox"
+                                    checked={filter.is_active}
+                                    onChange={() => handleToggleActive(filter)}
+                                    className="w-4 h-4 text-brand rounded-sm focus:ring-brand-500"
+                                  />
+                                  <span className="font-medium text-neutral-900 dark:text-neutral-100">{filter.word}</span>
+                                  <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${getSeverityBadgeClass(filter.severity)}`}>
+                                    {getSeverityIcon(filter.severity)}
+                                    {filter.severity}
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <Button
+                                                                          size="sm"
+                                                                          variant="ghost"
+                                                                          onClick={() => handleEdit(filter)}
+                                                                        >
+                                                                          <Edit2 className="w-4 h-4" />{t('common.edit', 'Edit')}</Button>
+                                  <Button
+                                                                          size="sm"
+                                                                          variant="ghost"
+                                                                          onClick={() => handleDelete(filter.id)}
+                                                                          className="text-red-600 hover:text-red-700 hover:bg-red-50" disabled={deleteMutation.isPending}
+                                                                        >
+                                                                          {deleteMutation.isPending && <Loader2 className="animate-spin" />}<Trash2 className="w-4 h-4" />{t('common.delete', 'Delete')}</Button>
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div></CardContent></Card>
 
       {/* Severity explanation */}
-      <Card>
-        <div className="p-6">
-          <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 mb-3">
-            {t('settings.moderation.severityLevels', 'Severity Levels')}
-          </h3>
-          <div className="space-y-2 text-sm">
-            <div className="flex items-start gap-3">
-              {getSeverityIcon('low')}
-              <div>
-                <span className="font-medium text-neutral-900 dark:text-neutral-100">{t('settings.moderation.severityLow', 'Low')}: </span>
-                <span className="text-neutral-600 dark:text-neutral-400">
-                  {t('settings.moderation.lowDescription', 'Word is flagged for review but not automatically blocked')}
-                </span>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              {getSeverityIcon('moderate')}
-              <div>
-                <span className="font-medium text-neutral-900 dark:text-neutral-100">{t('settings.moderation.severityModerate', 'Moderate')}: </span>
-                <span className="text-neutral-600 dark:text-neutral-400">
-                  {t('settings.moderation.moderateDescription', 'Comment requires manual approval before being visible')}
-                </span>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              {getSeverityIcon('high')}
-              <div>
-                <span className="font-medium text-neutral-900 dark:text-neutral-100">{t('settings.moderation.severityHigh', 'High')}: </span>
-                <span className="text-neutral-600 dark:text-neutral-400">
-                  {t('settings.moderation.highDescription', 'Comment is automatically hidden and requires admin review')}
-                </span>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              {getSeverityIcon('block')}
-              <div>
-                <span className="font-medium text-neutral-900 dark:text-neutral-100">{t('settings.moderation.severityBlock', 'Block')}: </span>
-                <span className="text-neutral-600 dark:text-neutral-400">
-                  {t('settings.moderation.blockDescription', 'Comment is rejected immediately and cannot be submitted')}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Card>
+      <Card><CardContent><div className="p-6">
+                    <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 mb-3">
+                      {t('settings.moderation.severityLevels', 'Severity Levels')}
+                    </h3>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex items-start gap-3">
+                        {getSeverityIcon('low')}
+                        <div>
+                          <span className="font-medium text-neutral-900 dark:text-neutral-100">{t('settings.moderation.severityLow', 'Low')}: </span>
+                          <span className="text-neutral-600 dark:text-neutral-400">
+                            {t('settings.moderation.lowDescription', 'Word is flagged for review but not automatically blocked')}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        {getSeverityIcon('moderate')}
+                        <div>
+                          <span className="font-medium text-neutral-900 dark:text-neutral-100">{t('settings.moderation.severityModerate', 'Moderate')}: </span>
+                          <span className="text-neutral-600 dark:text-neutral-400">
+                            {t('settings.moderation.moderateDescription', 'Comment requires manual approval before being visible')}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        {getSeverityIcon('high')}
+                        <div>
+                          <span className="font-medium text-neutral-900 dark:text-neutral-100">{t('settings.moderation.severityHigh', 'High')}: </span>
+                          <span className="text-neutral-600 dark:text-neutral-400">
+                            {t('settings.moderation.highDescription', 'Comment is automatically hidden and requires admin review')}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        {getSeverityIcon('block')}
+                        <div>
+                          <span className="font-medium text-neutral-900 dark:text-neutral-100">{t('settings.moderation.severityBlock', 'Block')}: </span>
+                          <span className="text-neutral-600 dark:text-neutral-400">
+                            {t('settings.moderation.blockDescription', 'Comment is rejected immediately and cannot be submitted')}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div></CardContent></Card>
     </>
   );
 };

@@ -13,7 +13,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ArrowDown, ArrowLeft, ArrowUp, Pencil, Plus, X } from 'lucide-react';
 import { toast } from 'react-toastify';
-import { Button, Card, Input, Loading, LocalizedDateInput } from '../../../../components/common';
+import { Loading, LocalizedDateInput } from '../../../../components/common';
 import { DecimalInput } from '../../../../components/common/DecimalInput';
 import { quotesService, type LineItemPreset } from '../../../../services/quotes.service';
 import {
@@ -24,6 +24,10 @@ import { formatMoneyMinor } from '../../../../utils/money';
 import { PermissionGate } from '../../../../components/admin/PermissionGate';
 import { useLocalizedDate } from '../../../../hooks/useLocalizedDate';
 import type { BoundTo, LineUnit, PriceMode } from '../../../../utils/lineItemTotals';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 type Tab = 'services' | 'packages' | 'promotions' | 'textBlocks' | 'templates';
 const TABS: Tab[] = ['services', 'packages', 'promotions', 'textBlocks', 'templates'];
@@ -189,104 +193,99 @@ const ServicesTab: React.FC = () => {
       </div>
 
       {form && (
-        <Card padding="lg">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <Input label={t('quotes.catalog.field.name', 'Name') as string} value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })} />
-            <Input label={t('quotes.catalog.field.category', 'Category') as string} value={form.category}
-              onChange={(e) => setForm({ ...form, category: e.target.value })} />
-            <div>
-              <label htmlFor="service-price-mode" className={labelCls}>{t('quotes.catalog.field.priceMode', 'Price')}</label>
-              <select id="service-price-mode" className={selectCls} value={form.priceMode}
-                onChange={(e) => {
-                  const priceMode = e.target.value as PriceMode;
-                  setForm({ ...form, priceMode, unit: priceMode === 'fixed' ? form.unit : priceMode });
-                }}>
-                <option value="fixed">{t('quotes.catalog.priceMode.fixed', 'Fixed price')}</option>
-                <option value="hour">{t('quotes.catalog.priceMode.hour', 'Per hour (rate)')}</option>
-                <option value="day">{t('quotes.catalog.priceMode.day', 'Per day (rate)')}</option>
-              </select>
-            </div>
-            {form.priceMode === 'fixed' ? (
-              <div>
-                <label htmlFor="service-unit-price" className={labelCls}>{t('quotes.catalog.field.unitPrice', 'Unit price')}</label>
-                <DecimalInput id="service-unit-price" className={inputCls} value={form.unitPrice} fractionDigits={2}
-                  onChange={(n) => setForm({ ...form, unitPrice: n })} />
-              </div>
-            ) : (
-              <div>
-                <label htmlFor="service-pinned-rate" className={labelCls}>{t('quotes.catalog.field.pinnedRate', 'Own rate (optional)')}</label>
-                <DecimalInput id="service-pinned-rate" className={inputCls} value={form.pinnedRate} fractionDigits={2}
-                  onChange={(n) => setForm({ ...form, pinnedRate: n })} />
-                <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
-                  {t('quotes.catalog.field.pinnedRateHint', 'Leave blank to use the customer\'s rate, or the default rate from Settings → Accounting.')}
-                </p>
-              </div>
-            )}
-            <div>
-              <label htmlFor="service-currency" className={labelCls}>{t('quotes.field.currency', 'Currency')}</label>
-              <select id="service-currency" className={selectCls} value={form.currency}
-                onChange={(e) => setForm({ ...form, currency: e.target.value })}>
-                {CURRENCIES.map((c) => <option key={c}>{c}</option>)}
-              </select>
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label htmlFor="service-quantity" className={labelCls}>{t('quotes.catalog.field.quantityDefault', 'Default quantity')}</label>
-                <DecimalInput id="service-quantity" className={inputCls} value={form.quantityDefault}
-                  onChange={(n) => setForm({ ...form, quantityDefault: Number.isFinite(n) ? n : 1 })} />
-              </div>
-              <div>
-                <label htmlFor="service-unit" className={labelCls}>{t('crm.lineItems.unitLabel', 'Unit')}</label>
-                <select id="service-unit" className={selectCls} value={form.unit}
-                  onChange={(e) => setForm({ ...form, unit: e.target.value as LineUnit | '' })}>
-                  <option value="">{t('crm.lineItems.unitNone', '—')}</option>
-                  {UNITS.map((u) => <option key={u} value={u}>{t(`crm.lineItems.unitOption.${u}`, u)}</option>)}
-                </select>
-              </div>
-            </div>
-            <div className="md:col-span-2">
-              <label htmlFor="service-description" className={labelCls}>{t('quotes.catalog.field.description', 'Description')}</label>
-              <textarea id="service-description" rows={2} className={inputCls} value={form.description}
-                onChange={(e) => setForm({ ...form, description: e.target.value })} />
-            </div>
-            <div className="md:col-span-2">
-              <label htmlFor="service-details" className={labelCls}>{t('quotes.catalog.field.detailsText', 'Notes under the line')}</label>
-              <textarea id="service-details" rows={2} className={inputCls} value={form.detailsText}
-                onChange={(e) => setForm({ ...form, detailsText: e.target.value })} />
-            </div>
-          </div>
-          <div className="mt-4 flex justify-end gap-2">
-            <Button variant="outline" onClick={() => setForm(null)}>{t('common.cancel', 'Cancel')}</Button>
-            <Button onClick={save} disabled={!form.name.trim()}>{t('common.save', 'Save')}</Button>
-          </div>
-        </Card>
+        <Card className="py-8"><CardContent className="px-8"><div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('quotes.catalog.field.name', 'Name') as string}</span><Input value={form.name}
+                                              onChange={(e) => setForm({ ...form, name: e.target.value })} /></Label></div>
+                          <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('quotes.catalog.field.category', 'Category') as string}</span><Input value={form.category}
+                                              onChange={(e) => setForm({ ...form, category: e.target.value })} /></Label></div>
+                          <div>
+                            <label htmlFor="service-price-mode" className={labelCls}>{t('quotes.catalog.field.priceMode', 'Price')}</label>
+                            <select id="service-price-mode" className={selectCls} value={form.priceMode}
+                              onChange={(e) => {
+                                const priceMode = e.target.value as PriceMode;
+                                setForm({ ...form, priceMode, unit: priceMode === 'fixed' ? form.unit : priceMode });
+                              }}>
+                              <option value="fixed">{t('quotes.catalog.priceMode.fixed', 'Fixed price')}</option>
+                              <option value="hour">{t('quotes.catalog.priceMode.hour', 'Per hour (rate)')}</option>
+                              <option value="day">{t('quotes.catalog.priceMode.day', 'Per day (rate)')}</option>
+                            </select>
+                          </div>
+                          {form.priceMode === 'fixed' ? (
+                            <div>
+                              <label htmlFor="service-unit-price" className={labelCls}>{t('quotes.catalog.field.unitPrice', 'Unit price')}</label>
+                              <DecimalInput id="service-unit-price" className={inputCls} value={form.unitPrice} fractionDigits={2}
+                                onChange={(n) => setForm({ ...form, unitPrice: n })} />
+                            </div>
+                          ) : (
+                            <div>
+                              <label htmlFor="service-pinned-rate" className={labelCls}>{t('quotes.catalog.field.pinnedRate', 'Own rate (optional)')}</label>
+                              <DecimalInput id="service-pinned-rate" className={inputCls} value={form.pinnedRate} fractionDigits={2}
+                                onChange={(n) => setForm({ ...form, pinnedRate: n })} />
+                              <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                                {t('quotes.catalog.field.pinnedRateHint', 'Leave blank to use the customer\'s rate, or the default rate from Settings → Accounting.')}
+                              </p>
+                            </div>
+                          )}
+                          <div>
+                            <label htmlFor="service-currency" className={labelCls}>{t('quotes.field.currency', 'Currency')}</label>
+                            <select id="service-currency" className={selectCls} value={form.currency}
+                              onChange={(e) => setForm({ ...form, currency: e.target.value })}>
+                              {CURRENCIES.map((c) => <option key={c}>{c}</option>)}
+                            </select>
+                          </div>
+                          <div className="grid grid-cols-2 gap-3">
+                            <div>
+                              <label htmlFor="service-quantity" className={labelCls}>{t('quotes.catalog.field.quantityDefault', 'Default quantity')}</label>
+                              <DecimalInput id="service-quantity" className={inputCls} value={form.quantityDefault}
+                                onChange={(n) => setForm({ ...form, quantityDefault: Number.isFinite(n) ? n : 1 })} />
+                            </div>
+                            <div>
+                              <label htmlFor="service-unit" className={labelCls}>{t('crm.lineItems.unitLabel', 'Unit')}</label>
+                              <select id="service-unit" className={selectCls} value={form.unit}
+                                onChange={(e) => setForm({ ...form, unit: e.target.value as LineUnit | '' })}>
+                                <option value="">{t('crm.lineItems.unitNone', '—')}</option>
+                                {UNITS.map((u) => <option key={u} value={u}>{t(`crm.lineItems.unitOption.${u}`, u)}</option>)}
+                              </select>
+                            </div>
+                          </div>
+                          <div className="md:col-span-2">
+                            <label htmlFor="service-description" className={labelCls}>{t('quotes.catalog.field.description', 'Description')}</label>
+                            <textarea id="service-description" rows={2} className={inputCls} value={form.description}
+                              onChange={(e) => setForm({ ...form, description: e.target.value })} />
+                          </div>
+                          <div className="md:col-span-2">
+                            <label htmlFor="service-details" className={labelCls}>{t('quotes.catalog.field.detailsText', 'Notes under the line')}</label>
+                            <textarea id="service-details" rows={2} className={inputCls} value={form.detailsText}
+                              onChange={(e) => setForm({ ...form, detailsText: e.target.value })} />
+                          </div>
+                        </div><div className="mt-4 flex justify-end gap-2">
+                          <Button variant="outline" onClick={() => setForm(null)}>{t('common.cancel', 'Cancel')}</Button>
+                          <Button onClick={save} disabled={!form.name.trim()}>{t('common.save', 'Save')}</Button>
+                        </div></CardContent></Card>
       )}
 
-      <Card padding="lg">
-        {presets.length === 0 ? (
-          <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('quotes.catalog.emptyServices', 'No services yet.')}</p>
-        ) : (
-          <table className="w-full text-sm">
-            <tbody>
-              {presets.map((p) => (
-                <tr key={p.id} className={`border-b border-neutral-100 dark:border-neutral-800 ${p.isActive ? '' : 'opacity-60'}`}>
-                  <td className="py-2">
-                    <span className="font-medium">{p.name}</span>
-                    {!p.isActive && <ArchivedBadge />}
-                    {p.category && <div className="text-xs text-neutral-500 dark:text-neutral-400">{p.category}</div>}
-                  </td>
-                  <td className="py-2 text-right tabular-nums">{priceLabel(p)}</td>
-                  <td className="py-2">
-                    <RowActions active={p.isActive} onEdit={() => edit(p)}
-                      onArchive={() => setActive(p, false)} onRestore={() => setActive(p, true)} />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </Card>
+      <Card className="py-8"><CardContent className="px-8">{presets.length === 0 ? (
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('quotes.catalog.emptyServices', 'No services yet.')}</p>
+                  ) : (
+                    <table className="w-full text-sm">
+                      <tbody>
+                        {presets.map((p) => (
+                          <tr key={p.id} className={`border-b border-neutral-100 dark:border-neutral-800 ${p.isActive ? '' : 'opacity-60'}`}>
+                            <td className="py-2">
+                              <span className="font-medium">{p.name}</span>
+                              {!p.isActive && <ArchivedBadge />}
+                              {p.category && <div className="text-xs text-neutral-500 dark:text-neutral-400">{p.category}</div>}
+                            </td>
+                            <td className="py-2 text-right tabular-nums">{priceLabel(p)}</td>
+                            <td className="py-2">
+                              <RowActions active={p.isActive} onEdit={() => edit(p)}
+                                onArchive={() => setActive(p, false)} onRestore={() => setActive(p, true)} />
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  )}</CardContent></Card>
     </div>
   );
 };
@@ -387,91 +386,83 @@ const PackagesTab: React.FC = () => {
       </div>
 
       {form && (
-        <Card padding="lg">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <Input label={t('quotes.catalog.field.name', 'Name') as string} value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })} />
-            <div>
-              <label htmlFor="package-currency" className={labelCls}>{t('quotes.field.currency', 'Currency')}</label>
-              <select id="package-currency" className={selectCls} value={form.currency}
-                onChange={(e) => setForm({ ...form, currency: e.target.value })}>
-                {CURRENCIES.map((c) => <option key={c}>{c}</option>)}
-              </select>
-            </div>
-            <div className="md:col-span-2">
-              <label htmlFor="package-description" className={labelCls}>{t('quotes.catalog.field.description', 'Description')}</label>
-              <textarea id="package-description" rows={2} className={inputCls} value={form.description}
-                onChange={(e) => setForm({ ...form, description: e.target.value })} />
-            </div>
-          </div>
-
-          <h4 className="mt-4 mb-2 text-sm font-semibold">{t('quotes.catalog.packageItems', 'Items')}</h4>
-          <div className="space-y-2">
-            {form.items.map((it, idx) => {
-              const preset = presets.find((p) => p.id === it.presetId);
-              const rateBased = preset?.priceMode === 'hour' || preset?.priceMode === 'day';
-              return (
-                <div key={idx} className="flex flex-wrap items-center gap-2">
-                  <select aria-label={t('quotes.catalog.packageItem', 'Item') as string} className={`${selectCls} flex-1 min-w-48`} value={it.presetId}
-                    onChange={(e) => setItems(form.items.map((x, i) => (i === idx ? { ...x, presetId: Number(e.target.value), boundTo: '' } : x)))}>
-                    {!preset && <option value={it.presetId}>#{it.presetId}</option>}
-                    {presets.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
-                  </select>
-                  <DecimalInput aria-label={t('crm.lineItems.quantity', 'Qty') as string} className={`${inputCls} w-24`} value={it.quantity}
-                    placeholder={preset ? String(preset.quantityDefault) : ''}
-                    onChange={(n) => setItems(form.items.map((x, i) => (i === idx ? { ...x, quantity: n } : x)))} />
-                  {rateBased && (
-                    <select aria-label={t('quotes.catalog.boundTo', 'Quantity') as string} className={`${selectCls} w-auto`} value={it.boundTo}
-                      onChange={(e) => setItems(form.items.map((x, i) => (i === idx ? { ...x, boundTo: e.target.value as BoundTo | '' } : x)))}>
-                      <option value="">{t('quotes.catalog.boundToNone', 'Fixed quantity')}</option>
-                      <option value="hours">{t('crm.lineItems.followsHours', 'Follows the quote hours')}</option>
-                      <option value="days">{t('crm.lineItems.followsDays', 'Follows the quote days')}</option>
-                    </select>
-                  )}
-                  <button type="button" onClick={() => moveItem(idx, -1)} aria-label="Move up" className="p-1 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-700"><ArrowUp className="w-4 h-4" /></button>
-                  <button type="button" onClick={() => moveItem(idx, 1)} aria-label="Move down" className="p-1 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-700"><ArrowDown className="w-4 h-4" /></button>
-                  <button type="button" onClick={() => setItems(form.items.filter((_, i) => i !== idx))} aria-label="Remove"
-                    className="p-1 rounded-sm hover:bg-red-50 dark:hover:bg-red-900/30 text-red-600"><X className="w-4 h-4" /></button>
-                </div>
-              );
-            })}
-            {presets.length > 0 && (
-              <Button variant="outline" size="sm"
-                onClick={() => setItems([...form.items, { presetId: presets[0].id, quantity: NaN, boundTo: '' }])}>
-                <Plus className="w-4 h-4 mr-1" />{t('quotes.catalog.addItem', 'Add item')}
-              </Button>
-            )}
-          </div>
-          <div className="mt-4 flex justify-end gap-2">
-            <Button variant="outline" onClick={() => setForm(null)}>{t('common.cancel', 'Cancel')}</Button>
-            <Button onClick={save} disabled={!form.name.trim() || form.items.length === 0}>{t('common.save', 'Save')}</Button>
-          </div>
-        </Card>
+        <Card className="py-8"><CardContent className="px-8"><div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('quotes.catalog.field.name', 'Name') as string}</span><Input value={form.name}
+                                              onChange={(e) => setForm({ ...form, name: e.target.value })} /></Label></div>
+                          <div>
+                            <label htmlFor="package-currency" className={labelCls}>{t('quotes.field.currency', 'Currency')}</label>
+                            <select id="package-currency" className={selectCls} value={form.currency}
+                              onChange={(e) => setForm({ ...form, currency: e.target.value })}>
+                              {CURRENCIES.map((c) => <option key={c}>{c}</option>)}
+                            </select>
+                          </div>
+                          <div className="md:col-span-2">
+                            <label htmlFor="package-description" className={labelCls}>{t('quotes.catalog.field.description', 'Description')}</label>
+                            <textarea id="package-description" rows={2} className={inputCls} value={form.description}
+                              onChange={(e) => setForm({ ...form, description: e.target.value })} />
+                          </div>
+                        </div><h4 className="mt-4 mb-2 text-sm font-semibold">{t('quotes.catalog.packageItems', 'Items')}</h4><div className="space-y-2">
+                          {form.items.map((it, idx) => {
+                            const preset = presets.find((p) => p.id === it.presetId);
+                            const rateBased = preset?.priceMode === 'hour' || preset?.priceMode === 'day';
+                            return (
+                              <div key={idx} className="flex flex-wrap items-center gap-2">
+                                <select aria-label={t('quotes.catalog.packageItem', 'Item') as string} className={`${selectCls} flex-1 min-w-48`} value={it.presetId}
+                                  onChange={(e) => setItems(form.items.map((x, i) => (i === idx ? { ...x, presetId: Number(e.target.value), boundTo: '' } : x)))}>
+                                  {!preset && <option value={it.presetId}>#{it.presetId}</option>}
+                                  {presets.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+                                </select>
+                                <DecimalInput aria-label={t('crm.lineItems.quantity', 'Qty') as string} className={`${inputCls} w-24`} value={it.quantity}
+                                  placeholder={preset ? String(preset.quantityDefault) : ''}
+                                  onChange={(n) => setItems(form.items.map((x, i) => (i === idx ? { ...x, quantity: n } : x)))} />
+                                {rateBased && (
+                                  <select aria-label={t('quotes.catalog.boundTo', 'Quantity') as string} className={`${selectCls} w-auto`} value={it.boundTo}
+                                    onChange={(e) => setItems(form.items.map((x, i) => (i === idx ? { ...x, boundTo: e.target.value as BoundTo | '' } : x)))}>
+                                    <option value="">{t('quotes.catalog.boundToNone', 'Fixed quantity')}</option>
+                                    <option value="hours">{t('crm.lineItems.followsHours', 'Follows the quote hours')}</option>
+                                    <option value="days">{t('crm.lineItems.followsDays', 'Follows the quote days')}</option>
+                                  </select>
+                                )}
+                                <button type="button" onClick={() => moveItem(idx, -1)} aria-label="Move up" className="p-1 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-700"><ArrowUp className="w-4 h-4" /></button>
+                                <button type="button" onClick={() => moveItem(idx, 1)} aria-label="Move down" className="p-1 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-700"><ArrowDown className="w-4 h-4" /></button>
+                                <button type="button" onClick={() => setItems(form.items.filter((_, i) => i !== idx))} aria-label="Remove"
+                                  className="p-1 rounded-sm hover:bg-red-50 dark:hover:bg-red-900/30 text-red-600"><X className="w-4 h-4" /></button>
+                              </div>
+                            );
+                          })}
+                          {presets.length > 0 && (
+                            <Button variant="outline" size="sm"
+                              onClick={() => setItems([...form.items, { presetId: presets[0].id, quantity: NaN, boundTo: '' }])}>
+                              <Plus className="w-4 h-4 mr-1" />{t('quotes.catalog.addItem', 'Add item')}
+                            </Button>
+                          )}
+                        </div><div className="mt-4 flex justify-end gap-2">
+                          <Button variant="outline" onClick={() => setForm(null)}>{t('common.cancel', 'Cancel')}</Button>
+                          <Button onClick={save} disabled={!form.name.trim() || form.items.length === 0}>{t('common.save', 'Save')}</Button>
+                        </div></CardContent></Card>
       )}
 
-      <Card padding="lg">
-        {packages.length === 0 ? (
-          <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('quotes.catalog.emptyPackages', 'No packages yet.')}</p>
-        ) : (
-          <table className="w-full text-sm">
-            <tbody>
-              {packages.map((p) => (
-                <tr key={p.id} className={`border-b border-neutral-100 dark:border-neutral-800 ${p.isActive ? '' : 'opacity-60'}`}>
-                  <td className="py-2">
-                    <span className="font-medium">{p.name}</span>
-                    {!p.isActive && <ArchivedBadge />}
-                    <div className="text-xs text-neutral-500 dark:text-neutral-400">{p.items.map((it) => it.presetName).join(' · ')}</div>
-                  </td>
-                  <td className="py-2">
-                    <RowActions active={p.isActive} onEdit={() => edit(p)}
-                      onArchive={() => setActive(p, false)} onRestore={() => setActive(p, true)} />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </Card>
+      <Card className="py-8"><CardContent className="px-8">{packages.length === 0 ? (
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('quotes.catalog.emptyPackages', 'No packages yet.')}</p>
+                  ) : (
+                    <table className="w-full text-sm">
+                      <tbody>
+                        {packages.map((p) => (
+                          <tr key={p.id} className={`border-b border-neutral-100 dark:border-neutral-800 ${p.isActive ? '' : 'opacity-60'}`}>
+                            <td className="py-2">
+                              <span className="font-medium">{p.name}</span>
+                              {!p.isActive && <ArchivedBadge />}
+                              <div className="text-xs text-neutral-500 dark:text-neutral-400">{p.items.map((it) => it.presetName).join(' · ')}</div>
+                            </td>
+                            <td className="py-2">
+                              <RowActions active={p.isActive} onEdit={() => edit(p)}
+                                onArchive={() => setActive(p, false)} onRestore={() => setActive(p, true)} />
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  )}</CardContent></Card>
     </div>
   );
 };
@@ -569,104 +560,99 @@ const PromotionsTab: React.FC = () => {
       </div>
 
       {form && (
-        <Card padding="lg">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <Input label={t('quotes.catalog.field.name', 'Name') as string} value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })} />
-            <div>
-              <label htmlFor="promotion-type" className={labelCls}>{t('quotes.catalog.field.promotionType', 'Type')}</label>
-              <select id="promotion-type" className={selectCls} value={form.type}
-                onChange={(e) => setForm({ ...form, type: e.target.value as PromotionForm['type'] })}>
-                <option value="fixed">{t('quotes.catalog.promotionType.fixed', 'Fixed amount')}</option>
-                <option value="percent">{t('quotes.catalog.promotionType.percent', 'Percentage')}</option>
-              </select>
-            </div>
-            {form.type === 'percent' ? (
-              <div>
-                <label htmlFor="promotion-percent" className={labelCls}>{t('quotes.catalog.field.percent', 'Percent')}</label>
-                <DecimalInput id="promotion-percent" className={inputCls} value={form.percent}
-                  aria-describedby="promotion-percent-hint" onChange={(n) => setForm({ ...form, percent: n })} />
-                <p id="promotion-percent-hint" className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
-                  {t('quotes.catalog.promotionPercentHint', 'The percentage to subtract, e.g. 10 for −10 %.')}
-                </p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label htmlFor="promotion-value" className={labelCls}>{t('quotes.catalog.field.amount', 'Amount')}</label>
-                  <DecimalInput id="promotion-value" className={inputCls} value={form.value} fractionDigits={2}
-                    aria-describedby="promotion-value-hint" onChange={(n) => setForm({ ...form, value: n })} />
-                  <p id="promotion-value-hint" className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
-                    {t('quotes.catalog.promotionAmountHint', 'The amount to subtract, e.g. 300 for −300.')}
-                  </p>
-                </div>
-                <div>
-                  <label htmlFor="promotion-currency" className={labelCls}>{t('quotes.field.currency', 'Currency')}</label>
-                  <select id="promotion-currency" className={selectCls} value={form.currency}
-                    onChange={(e) => setForm({ ...form, currency: e.target.value })}>
-                    {CURRENCIES.map((c) => <option key={c}>{c}</option>)}
-                  </select>
-                </div>
-              </div>
-            )}
-            <div className="grid grid-cols-2 gap-3">
-              <LocalizedDateInput label={t('quotes.catalog.field.validFrom', 'Valid from') as string} value={form.validFrom}
-                onChange={(iso) => setForm({ ...form, validFrom: iso })} />
-              <div>
-                <LocalizedDateInput label={t('quotes.catalog.field.validUntil', 'Valid until') as string} value={form.validUntil}
-                  onChange={(iso) => setForm({ ...form, validUntil: iso })} />
-                <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
-                  {t('quotes.catalog.noEndDateHint', 'Leave empty for no end date.')}
-                </p>
-              </div>
-            </div>
-            <div className="md:col-span-2">
-              <label htmlFor="promotion-description" className={labelCls}>{t('quotes.catalog.field.description', 'Description')}</label>
-              <textarea id="promotion-description" rows={2} className={inputCls} value={form.description}
-                aria-describedby="promotion-description-hint"
-                onChange={(e) => setForm({ ...form, description: e.target.value })} />
-              <p id="promotion-description-hint" className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
-                {t('quotes.catalog.promotionDescriptionHint', 'Shown on the quote under the discount.')}
-              </p>
-            </div>
-          </div>
-          <div className="mt-4 flex justify-end gap-2">
-            <Button variant="outline" onClick={() => setForm(null)}>{t('common.cancel', 'Cancel')}</Button>
-            <Button onClick={save} disabled={!form.name.trim()}>{t('common.save', 'Save')}</Button>
-          </div>
-        </Card>
+        <Card className="py-8"><CardContent className="px-8"><div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('quotes.catalog.field.name', 'Name') as string}</span><Input value={form.name}
+                                              onChange={(e) => setForm({ ...form, name: e.target.value })} /></Label></div>
+                          <div>
+                            <label htmlFor="promotion-type" className={labelCls}>{t('quotes.catalog.field.promotionType', 'Type')}</label>
+                            <select id="promotion-type" className={selectCls} value={form.type}
+                              onChange={(e) => setForm({ ...form, type: e.target.value as PromotionForm['type'] })}>
+                              <option value="fixed">{t('quotes.catalog.promotionType.fixed', 'Fixed amount')}</option>
+                              <option value="percent">{t('quotes.catalog.promotionType.percent', 'Percentage')}</option>
+                            </select>
+                          </div>
+                          {form.type === 'percent' ? (
+                            <div>
+                              <label htmlFor="promotion-percent" className={labelCls}>{t('quotes.catalog.field.percent', 'Percent')}</label>
+                              <DecimalInput id="promotion-percent" className={inputCls} value={form.percent}
+                                aria-describedby="promotion-percent-hint" onChange={(n) => setForm({ ...form, percent: n })} />
+                              <p id="promotion-percent-hint" className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                                {t('quotes.catalog.promotionPercentHint', 'The percentage to subtract, e.g. 10 for −10 %.')}
+                              </p>
+                            </div>
+                          ) : (
+                            <div className="grid grid-cols-2 gap-3">
+                              <div>
+                                <label htmlFor="promotion-value" className={labelCls}>{t('quotes.catalog.field.amount', 'Amount')}</label>
+                                <DecimalInput id="promotion-value" className={inputCls} value={form.value} fractionDigits={2}
+                                  aria-describedby="promotion-value-hint" onChange={(n) => setForm({ ...form, value: n })} />
+                                <p id="promotion-value-hint" className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                                  {t('quotes.catalog.promotionAmountHint', 'The amount to subtract, e.g. 300 for −300.')}
+                                </p>
+                              </div>
+                              <div>
+                                <label htmlFor="promotion-currency" className={labelCls}>{t('quotes.field.currency', 'Currency')}</label>
+                                <select id="promotion-currency" className={selectCls} value={form.currency}
+                                  onChange={(e) => setForm({ ...form, currency: e.target.value })}>
+                                  {CURRENCIES.map((c) => <option key={c}>{c}</option>)}
+                                </select>
+                              </div>
+                            </div>
+                          )}
+                          <div className="grid grid-cols-2 gap-3">
+                            <LocalizedDateInput label={t('quotes.catalog.field.validFrom', 'Valid from') as string} value={form.validFrom}
+                              onChange={(iso) => setForm({ ...form, validFrom: iso })} />
+                            <div>
+                              <LocalizedDateInput label={t('quotes.catalog.field.validUntil', 'Valid until') as string} value={form.validUntil}
+                                onChange={(iso) => setForm({ ...form, validUntil: iso })} />
+                              <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                                {t('quotes.catalog.noEndDateHint', 'Leave empty for no end date.')}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="md:col-span-2">
+                            <label htmlFor="promotion-description" className={labelCls}>{t('quotes.catalog.field.description', 'Description')}</label>
+                            <textarea id="promotion-description" rows={2} className={inputCls} value={form.description}
+                              aria-describedby="promotion-description-hint"
+                              onChange={(e) => setForm({ ...form, description: e.target.value })} />
+                            <p id="promotion-description-hint" className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                              {t('quotes.catalog.promotionDescriptionHint', 'Shown on the quote under the discount.')}
+                            </p>
+                          </div>
+                        </div><div className="mt-4 flex justify-end gap-2">
+                          <Button variant="outline" onClick={() => setForm(null)}>{t('common.cancel', 'Cancel')}</Button>
+                          <Button onClick={save} disabled={!form.name.trim()}>{t('common.save', 'Save')}</Button>
+                        </div></CardContent></Card>
       )}
 
-      <Card padding="lg">
-        {promotions.length === 0 ? (
-          <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('quotes.catalog.emptyPromotions', 'No promotions yet.')}</p>
-        ) : (
-          <table className="w-full text-sm">
-            <tbody>
-              {promotions.map((p) => (
-                <tr key={p.id} className={`border-b border-neutral-100 dark:border-neutral-800 ${p.isActive ? '' : 'opacity-60'}`}>
-                  <td className="py-2">
-                    <span className="font-medium">{p.name}</span>
-                    {!p.isActive && <ArchivedBadge />}
-                    <div className="text-xs text-neutral-500 dark:text-neutral-400">
-                      {p.validUntil
-                        ? `${p.validFrom ? `${fmtDate(p.validFrom)} – ` : `${t('quotes.catalog.validUntilOnly', 'Until')} `}${fmtDate(p.validUntil)}`
-                        : p.validFrom
-                          ? t('quotes.catalog.validFromNoEnd', 'From {{date}}, no end date', { date: fmtDate(p.validFrom) })
-                          : t('quotes.catalog.noEndDate', 'No end date')}
-                    </div>
-                  </td>
-                  <td className="py-2 text-right tabular-nums">{valueLabel(p)}</td>
-                  <td className="py-2">
-                    <RowActions active={p.isActive} onEdit={() => edit(p)}
-                      onArchive={() => setActive(p, false)} onRestore={() => setActive(p, true)} />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </Card>
+      <Card className="py-8"><CardContent className="px-8">{promotions.length === 0 ? (
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('quotes.catalog.emptyPromotions', 'No promotions yet.')}</p>
+                  ) : (
+                    <table className="w-full text-sm">
+                      <tbody>
+                        {promotions.map((p) => (
+                          <tr key={p.id} className={`border-b border-neutral-100 dark:border-neutral-800 ${p.isActive ? '' : 'opacity-60'}`}>
+                            <td className="py-2">
+                              <span className="font-medium">{p.name}</span>
+                              {!p.isActive && <ArchivedBadge />}
+                              <div className="text-xs text-neutral-500 dark:text-neutral-400">
+                                {p.validUntil
+                                  ? `${p.validFrom ? `${fmtDate(p.validFrom)} – ` : `${t('quotes.catalog.validUntilOnly', 'Until')} `}${fmtDate(p.validUntil)}`
+                                  : p.validFrom
+                                    ? t('quotes.catalog.validFromNoEnd', 'From {{date}}, no end date', { date: fmtDate(p.validFrom) })
+                                    : t('quotes.catalog.noEndDate', 'No end date')}
+                              </div>
+                            </td>
+                            <td className="py-2 text-right tabular-nums">{valueLabel(p)}</td>
+                            <td className="py-2">
+                              <RowActions active={p.isActive} onEdit={() => edit(p)}
+                                onArchive={() => setActive(p, false)} onRestore={() => setActive(p, true)} />
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  )}</CardContent></Card>
     </div>
   );
 };
@@ -733,67 +719,62 @@ const TextBlocksTab: React.FC = () => {
       </div>
 
       {form && (
-        <Card padding="lg">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <Input label={t('quotes.catalog.field.name', 'Name') as string} value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })} />
-            <div>
-              <label htmlFor="text-block-kind" className={labelCls}>{t('quotes.catalog.field.kind', 'Kind')}</label>
-              <select id="text-block-kind" className={selectCls} value={form.kind}
-                onChange={(e) => setForm({ ...form, kind: e.target.value as TextBlockKind })}>
-                {TEXT_BLOCK_KINDS.map((k) => <option key={k} value={k}>{t(`quotes.catalog.textBlockKind.${k}`, k)}</option>)}
-              </select>
-            </div>
-            <div>
-              <label htmlFor="text-block-language" className={labelCls}>{t('quotes.catalog.field.language', 'Language')}</label>
-              <select id="text-block-language" className={selectCls} value={form.language}
-                onChange={(e) => setForm({ ...form, language: e.target.value })}>
-                {LANGUAGES.map((l) => <option key={l} value={l}>{l.toUpperCase()}</option>)}
-              </select>
-            </div>
-            <div className="md:col-span-3">
-              <label htmlFor="text-block-body" className={labelCls}>{t('quotes.catalog.field.body', 'Text')}</label>
-              <textarea id="text-block-body" rows={5} className={inputCls} value={form.body}
-                onChange={(e) => setForm({ ...form, body: e.target.value })} />
-              <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
-                {t('quotes.catalog.placeholdersHint', 'Placeholders:')}{' '}
-                <span className="font-mono">{PLACEHOLDERS.map((p) => `{{${p}}}`).join(' ')}</span>
-              </p>
-            </div>
-          </div>
-          <div className="mt-4 flex justify-end gap-2">
-            <Button variant="outline" onClick={() => setForm(null)}>{t('common.cancel', 'Cancel')}</Button>
-            <Button onClick={save} disabled={!form.name.trim() || !form.body.trim()}>{t('common.save', 'Save')}</Button>
-          </div>
-        </Card>
+        <Card className="py-8"><CardContent className="px-8"><div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                          <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('quotes.catalog.field.name', 'Name') as string}</span><Input value={form.name}
+                                              onChange={(e) => setForm({ ...form, name: e.target.value })} /></Label></div>
+                          <div>
+                            <label htmlFor="text-block-kind" className={labelCls}>{t('quotes.catalog.field.kind', 'Kind')}</label>
+                            <select id="text-block-kind" className={selectCls} value={form.kind}
+                              onChange={(e) => setForm({ ...form, kind: e.target.value as TextBlockKind })}>
+                              {TEXT_BLOCK_KINDS.map((k) => <option key={k} value={k}>{t(`quotes.catalog.textBlockKind.${k}`, k)}</option>)}
+                            </select>
+                          </div>
+                          <div>
+                            <label htmlFor="text-block-language" className={labelCls}>{t('quotes.catalog.field.language', 'Language')}</label>
+                            <select id="text-block-language" className={selectCls} value={form.language}
+                              onChange={(e) => setForm({ ...form, language: e.target.value })}>
+                              {LANGUAGES.map((l) => <option key={l} value={l}>{l.toUpperCase()}</option>)}
+                            </select>
+                          </div>
+                          <div className="md:col-span-3">
+                            <label htmlFor="text-block-body" className={labelCls}>{t('quotes.catalog.field.body', 'Text')}</label>
+                            <textarea id="text-block-body" rows={5} className={inputCls} value={form.body}
+                              onChange={(e) => setForm({ ...form, body: e.target.value })} />
+                            <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                              {t('quotes.catalog.placeholdersHint', 'Placeholders:')}{' '}
+                              <span className="font-mono">{PLACEHOLDERS.map((p) => `{{${p}}}`).join(' ')}</span>
+                            </p>
+                          </div>
+                        </div><div className="mt-4 flex justify-end gap-2">
+                          <Button variant="outline" onClick={() => setForm(null)}>{t('common.cancel', 'Cancel')}</Button>
+                          <Button onClick={save} disabled={!form.name.trim() || !form.body.trim()}>{t('common.save', 'Save')}</Button>
+                        </div></CardContent></Card>
       )}
 
-      <Card padding="lg">
-        {blocks.length === 0 ? (
-          <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('quotes.catalog.emptyTextBlocks', 'No text blocks yet.')}</p>
-        ) : (
-          <table className="w-full text-sm">
-            <tbody>
-              {blocks.map((b) => (
-                <tr key={b.id} className={`border-b border-neutral-100 dark:border-neutral-800 ${b.isActive ? '' : 'opacity-60'}`}>
-                  <td className="py-2">
-                    <span className="font-medium">{b.name}</span>
-                    {!b.isActive && <ArchivedBadge />}
-                    <div className="text-xs text-neutral-500 dark:text-neutral-400">
-                      {t(`quotes.catalog.textBlockKind.${b.kind}`, b.kind)} · {b.language.toUpperCase()}
-                    </div>
-                  </td>
-                  <td className="py-2">
-                    <RowActions active={b.isActive}
-                      onEdit={() => setForm({ id: b.id, kind: b.kind, language: b.language, name: b.name, body: b.body })}
-                      onArchive={() => setActive(b, false)} onRestore={() => setActive(b, true)} />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </Card>
+      <Card className="py-8"><CardContent className="px-8">{blocks.length === 0 ? (
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('quotes.catalog.emptyTextBlocks', 'No text blocks yet.')}</p>
+                  ) : (
+                    <table className="w-full text-sm">
+                      <tbody>
+                        {blocks.map((b) => (
+                          <tr key={b.id} className={`border-b border-neutral-100 dark:border-neutral-800 ${b.isActive ? '' : 'opacity-60'}`}>
+                            <td className="py-2">
+                              <span className="font-medium">{b.name}</span>
+                              {!b.isActive && <ArchivedBadge />}
+                              <div className="text-xs text-neutral-500 dark:text-neutral-400">
+                                {t(`quotes.catalog.textBlockKind.${b.kind}`, b.kind)} · {b.language.toUpperCase()}
+                              </div>
+                            </td>
+                            <td className="py-2">
+                              <RowActions active={b.isActive}
+                                onEdit={() => setForm({ id: b.id, kind: b.kind, language: b.language, name: b.name, body: b.body })}
+                                onArchive={() => setActive(b, false)} onRestore={() => setActive(b, true)} />
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  )}</CardContent></Card>
     </div>
   );
 };
@@ -839,33 +820,31 @@ const TemplatesTab: React.FC = () => {
           <Button onClick={create}><Plus className="w-4 h-4 mr-1" />{t('quotes.templates.newTemplate', 'New template')}</Button>
         </PermissionGate>
       </div>
-      <Card padding="lg">
-        {templates.length === 0 ? (
-          <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('quotes.catalog.emptyTemplates', 'No templates yet.')}</p>
-        ) : (
-          <table className="w-full text-sm">
-            <tbody>
-              {templates.map((tpl) => (
-                <tr key={tpl.id} className={`border-b border-neutral-100 dark:border-neutral-800 ${tpl.status === 'archived' ? 'opacity-60' : ''}`}>
-                  <td className="py-2">
-                    <Link to={`/admin/clients/quotes/catalog/templates/${tpl.id}`} className="font-medium hover:underline">{tpl.name}</Link>
-                    {tpl.description && <div className="text-xs text-neutral-500 dark:text-neutral-400">{tpl.description}</div>}
-                  </td>
-                  <td className="py-2 text-sm text-neutral-600 dark:text-neutral-400">
-                    {statusLabel(tpl.status)}
-                    {tpl.currentVersion != null && ` · v${tpl.currentVersion}`}
-                  </td>
-                  <td className="py-2 text-right">
-                    <Link to={`/admin/clients/quotes/catalog/templates/${tpl.id}`}>
-                      <Button variant="outline" size="sm"><Pencil className="w-3.5 h-3.5 mr-1" />{t('common.edit', 'Edit')}</Button>
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </Card>
+      <Card className="py-8"><CardContent className="px-8">{templates.length === 0 ? (
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('quotes.catalog.emptyTemplates', 'No templates yet.')}</p>
+                  ) : (
+                    <table className="w-full text-sm">
+                      <tbody>
+                        {templates.map((tpl) => (
+                          <tr key={tpl.id} className={`border-b border-neutral-100 dark:border-neutral-800 ${tpl.status === 'archived' ? 'opacity-60' : ''}`}>
+                            <td className="py-2">
+                              <Link to={`/admin/clients/quotes/catalog/templates/${tpl.id}`} className="font-medium hover:underline">{tpl.name}</Link>
+                              {tpl.description && <div className="text-xs text-neutral-500 dark:text-neutral-400">{tpl.description}</div>}
+                            </td>
+                            <td className="py-2 text-sm text-neutral-600 dark:text-neutral-400">
+                              {statusLabel(tpl.status)}
+                              {tpl.currentVersion != null && ` · v${tpl.currentVersion}`}
+                            </td>
+                            <td className="py-2 text-right">
+                              <Link to={`/admin/clients/quotes/catalog/templates/${tpl.id}`}>
+                                <Button variant="outline" size="sm"><Pencil className="w-3.5 h-3.5 mr-1" />{t('common.edit', 'Edit')}</Button>
+                              </Link>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  )}</CardContent></Card>
     </div>
   );
 };

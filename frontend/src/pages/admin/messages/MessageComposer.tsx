@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import type { TFunction } from 'i18next';
 import { useMutation } from '@tanstack/react-query';
 import DOMPurify from 'dompurify';
-import { X, Send as SendIcon } from 'lucide-react';
+import { X, Send as SendIcon, Loader2 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { emailService } from '../../../services/email.service';
-import { Button } from '../../../components/common';
+import { Button } from "@/components/ui/button";
 
 /**
  * Compose / reply modal. The body is pre-loaded with the rendered template (or a
@@ -107,9 +107,8 @@ export const MessageComposer: React.FC<{
           <span className="text-xs text-neutral-400">{t('messages.sendsFromHint', 'Sends from your configured outgoing address.')}</span>
           <div className="ml-auto flex gap-2">
             <Button variant="outline" onClick={onClose}>{t('messages.cancel', 'Cancel')}</Button>
-            <Button variant="primary" onClick={() => send.mutate()} isLoading={send.isPending} disabled={!canSend} leftIcon={<SendIcon className="w-4 h-4" />}>
-              {t('messages.send', 'Send')}
-            </Button>
+            <Button onClick={() => send.mutate()} disabled={!canSend || send.isPending}>
+                                    {send.isPending && <Loader2 className="animate-spin" />}<SendIcon className="w-4 h-4" />{t('messages.send', 'Send')}</Button>
           </div>
         </div>
       </div>

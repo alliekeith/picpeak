@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { X, Copy, Check, Trash2 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-import { Button, Input, Loading } from '../common';
+import { Loading } from '../common';
 import { guestsService, GuestInvite } from '../../services/guests.service';
 import { useMutationWithToast } from '../../hooks';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface GuestInviteDialogProps {
   eventId: number;
@@ -79,23 +82,20 @@ export const GuestInviteDialog: React.FC<GuestInviteDialogProps> = ({ eventId, o
               {t('admin.guests.createInvite', 'Create invite')}
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-              <Input
-                label={t('admin.guests.inviteName', 'Guest name')}
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="e.g. Alice"
-                required
-              />
-              <Input
-                type="email"
-                label={t('admin.guests.inviteEmail', 'Email (optional)')}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="alice@example.com"
-              />
+              <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('admin.guests.inviteName', 'Guest name')}</span><Input
+                                          value={name}
+                                          onChange={(e) => setName(e.target.value)}
+                                          placeholder="e.g. Alice"
+                                          required
+                                        /></Label></div>
+              <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('admin.guests.inviteEmail', 'Email (optional)')}</span><Input
+                                          type="email"
+                                          value={email}
+                                          onChange={(e) => setEmail(e.target.value)}
+                                          placeholder="alice@example.com"
+                                        /></Label></div>
             </div>
             <Button
-              variant="primary"
               size="sm"
               onClick={() => createMutation.mutate()}
               disabled={!name.trim() || createMutation.isPending}

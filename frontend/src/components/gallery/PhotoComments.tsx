@@ -5,9 +5,10 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { feedbackService } from '../../services/feedback.service';
 import { toast } from 'react-toastify';
 import { format } from 'date-fns';
-import { Button, Input } from '../common';
 import type { PhotoFeedback } from '../../services/feedback.service';
 import { useGuestIdentityOptional } from '../../contexts/GuestIdentityContext';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 interface PhotoCommentsProps {
   photoId: string;
@@ -28,6 +29,7 @@ export const PhotoComments: React.FC<PhotoCommentsProps> = ({
   showToGuests,
   onCommentAdded
 }) => {
+    const __fieldId = React.useId();
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const guestIdentity = useGuestIdentityOptional();
@@ -157,19 +159,17 @@ export const PhotoComments: React.FC<PhotoCommentsProps> = ({
         <form onSubmit={handleSubmitComment} className="space-y-3 p-4 bg-card rounded-lg border border-border">
           {requireNameEmail && !isGuestMode && (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <Input
-                placeholder={t('feedback.yourName', 'Your name')}
-                value={guestName}
-                onChange={(e) => setGuestName(e.target.value)}
-                error={errors.guest_name}
-              />
-              <Input
-                type="email"
-                placeholder={t('feedback.yourEmail', 'Your email')}
-                value={guestEmail}
-                onChange={(e) => setGuestEmail(e.target.value)}
-                error={errors.guest_email}
-              />
+              <div className="w-full"><Input
+                                          placeholder={t('feedback.yourName', 'Your name')}
+                                          value={guestName}
+                                          onChange={(e) => setGuestName(e.target.value)} aria-invalid={!!(errors.guest_name)} aria-describedby={(errors.guest_name) ? `${__fieldId}-0-error` : undefined}
+                                        />{(errors.guest_name) && <p id={`${__fieldId}-0-error`} className="mt-1.5 text-sm text-destructive">{errors.guest_name}</p>}</div>
+              <div className="w-full"><Input
+                                          type="email"
+                                          placeholder={t('feedback.yourEmail', 'Your email')}
+                                          value={guestEmail}
+                                          onChange={(e) => setGuestEmail(e.target.value)} aria-invalid={!!(errors.guest_email)} aria-describedby={(errors.guest_email) ? `${__fieldId}-1-error` : undefined}
+                                        />{(errors.guest_email) && <p id={`${__fieldId}-1-error`} className="mt-1.5 text-sm text-destructive">{errors.guest_email}</p>}</div>
             </div>
           )}
           
@@ -195,14 +195,11 @@ export const PhotoComments: React.FC<PhotoCommentsProps> = ({
 
           <div className="flex gap-2">
             <Button
-              type="submit"
-              size="sm"
-              variant="primary"
-              leftIcon={submitCommentMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-              disabled={submitCommentMutation.isPending}
-            >
-              {t('feedback.submit', 'Submit')}
-            </Button>
+                                    type="submit"
+                                    size="sm"
+                                    disabled={submitCommentMutation.isPending}
+                                  >
+                                    {submitCommentMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}{t('feedback.submit', 'Submit')}</Button>
             <Button
               type="button"
               size="sm"

@@ -10,14 +10,16 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
-import { Plus, Save, Trash2 } from 'lucide-react';
-import { Button, Card, Loading } from '../../../components/common';
+import { Plus, Save, Trash2, Loader2 } from 'lucide-react';
+import { Loading } from '../../../components/common';
 import { PermissionGate } from '../../../components/admin/PermissionGate';
 import {
   contractsService,
   type ContractSignersOverview,
   type ContractSigningOrder,
 } from '../../../services/contracts.service';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 export const MAX_CUSTOMER_SIGNERS = 5;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -173,146 +175,137 @@ export const SignersEditorCard: React.FC<SignersEditorCardProps> = ({ contractId
   );
 
   return (
-    <Card padding="lg" className="mb-3">
-      <div className="flex items-center justify-between gap-2 flex-wrap mb-1">
-        <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-          {t('contracts.signers.title', 'Signers')}
-        </h2>
-        {dirty && (
-          <span className="text-xs text-amber-700 dark:text-amber-300">
-            {t('contracts.signers.unsaved', 'Unsaved changes')}
-          </span>
-        )}
-      </div>
-      <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-3">
-        {t('contracts.signers.hint', 'Saved separately from the contract. Signers can change until the contract is sent.')}
-      </p>
-
-      {isLoading ? (
-        <Loading />
-      ) : isError ? (
-        <p className="text-sm text-red-700 dark:text-red-300">
-          {t('contracts.signers.loadError', 'The signers couldn\'t be loaded. Reload the page to try again.')}
-        </p>
-      ) : (
-        <PermissionGate permission="contracts.manage" fallback={readOnly}>
-          <div className="space-y-4">
-            {rows.length === 0 ? (
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">{defaultHint}</p>
-            ) : (
-              <>
-                <ol className="space-y-2">
-                  {rows.map((r, i) => (
-                    <li key={r.key} className="flex flex-wrap items-center gap-2">
-                      <span className="w-5 text-sm text-neutral-500 dark:text-neutral-400">{i + 1}.</span>
-                      <div className="flex-1 min-w-[160px]">
-                        <input
-                          type="text"
-                          value={r.name}
-                          onChange={(e) => updateRow(r.key, { name: e.target.value })}
-                          aria-label={t('contracts.signers.nameOf', 'Name of signer {{number}}', { number: i + 1 })}
-                          placeholder={t('contracts.signers.nameLabel', 'Name')}
-                          maxLength={255}
-                          className={INPUT}
-                        />
-                      </div>
-                      <div className="flex-1 min-w-[200px]">
-                        <input
-                          type="email"
-                          value={r.email}
-                          onChange={(e) => updateRow(r.key, { email: e.target.value })}
-                          aria-label={t('contracts.signers.emailOf', 'Email of signer {{number}}', { number: i + 1 })}
-                          placeholder={t('contracts.signers.emailLabel', 'Email')}
-                          maxLength={255}
-                          className={INPUT}
-                        />
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => removeRow(r.key)}
-                        aria-label={t('contracts.signers.remove', 'Remove signer {{number}}', { number: i + 1 })}
-                        className="p-2 rounded-md text-neutral-500 dark:text-neutral-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-neutral-100 dark:hover:bg-neutral-700"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </li>
-                  ))}
-                  {issuerRow(rows.length + 1)}
-                </ol>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                  {t('contracts.signers.onlyListedHint', 'Only the people listed here sign. Add the customer too if they should sign.')}
-                </p>
-              </>
-            )}
-
-            <div className="flex flex-wrap items-center gap-3">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={addRow}
-                disabled={rows.length >= MAX_CUSTOMER_SIGNERS}
-              >
-                <Plus className="w-4 h-4 mr-1" />
-                {t('contracts.signers.add', 'Add signer')}
-              </Button>
-              {rows.length >= MAX_CUSTOMER_SIGNERS && (
-                <span className="text-xs text-neutral-500 dark:text-neutral-400">
-                  {t('contracts.signers.max', 'You can add up to {{max}} signers.', { max: MAX_CUSTOMER_SIGNERS })}
+    <Card className="py-8 mb-3"><CardContent className="px-8"><div className="flex items-center justify-between gap-2 flex-wrap mb-1">
+              <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                {t('contracts.signers.title', 'Signers')}
+              </h2>
+              {dirty && (
+                <span className="text-xs text-amber-700 dark:text-amber-300">
+                  {t('contracts.signers.unsaved', 'Unsaved changes')}
                 </span>
               )}
-            </div>
+            </div><p className="text-xs text-neutral-500 dark:text-neutral-400 mb-3">
+              {t('contracts.signers.hint', 'Saved separately from the contract. Signers can change until the contract is sent.')}
+            </p>{isLoading ? (
+              <Loading />
+            ) : isError ? (
+              <p className="text-sm text-red-700 dark:text-red-300">
+                {t('contracts.signers.loadError', 'The signers couldn\'t be loaded. Reload the page to try again.')}
+              </p>
+            ) : (
+              <PermissionGate permission="contracts.manage" fallback={readOnly}>
+                <div className="space-y-4">
+                  {rows.length === 0 ? (
+                    <p className="text-sm text-neutral-600 dark:text-neutral-400">{defaultHint}</p>
+                  ) : (
+                    <>
+                      <ol className="space-y-2">
+                        {rows.map((r, i) => (
+                          <li key={r.key} className="flex flex-wrap items-center gap-2">
+                            <span className="w-5 text-sm text-neutral-500 dark:text-neutral-400">{i + 1}.</span>
+                            <div className="flex-1 min-w-[160px]">
+                              <input
+                                type="text"
+                                value={r.name}
+                                onChange={(e) => updateRow(r.key, { name: e.target.value })}
+                                aria-label={t('contracts.signers.nameOf', 'Name of signer {{number}}', { number: i + 1 })}
+                                placeholder={t('contracts.signers.nameLabel', 'Name')}
+                                maxLength={255}
+                                className={INPUT}
+                              />
+                            </div>
+                            <div className="flex-1 min-w-[200px]">
+                              <input
+                                type="email"
+                                value={r.email}
+                                onChange={(e) => updateRow(r.key, { email: e.target.value })}
+                                aria-label={t('contracts.signers.emailOf', 'Email of signer {{number}}', { number: i + 1 })}
+                                placeholder={t('contracts.signers.emailLabel', 'Email')}
+                                maxLength={255}
+                                className={INPUT}
+                              />
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => removeRow(r.key)}
+                              aria-label={t('contracts.signers.remove', 'Remove signer {{number}}', { number: i + 1 })}
+                              className="p-2 rounded-md text-neutral-500 dark:text-neutral-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </li>
+                        ))}
+                        {issuerRow(rows.length + 1)}
+                      </ol>
+                      <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                        {t('contracts.signers.onlyListedHint', 'Only the people listed here sign. Add the customer too if they should sign.')}
+                      </p>
+                    </>
+                  )}
 
-            <fieldset>
-              <legend className="text-sm font-medium mb-1 text-neutral-900 dark:text-neutral-100">
-                {t('contracts.signers.orderLabel', 'Signing order')}
-              </legend>
-              <div className="space-y-2">
-                {(['parallel', 'sequential'] as const).map((value) => (
-                  <label key={value} className="flex items-start gap-2 text-sm text-neutral-800 dark:text-neutral-200">
-                    <input
-                      type="radio"
-                      name={`contract-${contractId}-signing-order`}
-                      value={value}
-                      checked={order === value}
-                      onChange={() => { setOrder(value); setDirty(true); setError(null); }}
-                      className="mt-1"
-                    />
-                    <span>
-                      <span className="font-medium">
-                        {value === 'parallel'
-                          ? t('contracts.signers.orderParallel', 'All at once')
-                          : t('contracts.signers.orderSequential', 'One after the other')}
+                  <div className="flex flex-wrap items-center gap-3">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={addRow}
+                      disabled={rows.length >= MAX_CUSTOMER_SIGNERS}
+                    >
+                      <Plus className="w-4 h-4 mr-1" />
+                      {t('contracts.signers.add', 'Add signer')}
+                    </Button>
+                    {rows.length >= MAX_CUSTOMER_SIGNERS && (
+                      <span className="text-xs text-neutral-500 dark:text-neutral-400">
+                        {t('contracts.signers.max', 'You can add up to {{max}} signers.', { max: MAX_CUSTOMER_SIGNERS })}
                       </span>
-                      <span className="block text-xs text-neutral-500 dark:text-neutral-400">
-                        {value === 'parallel'
-                          ? t('contracts.signers.orderParallelHint', 'Everyone gets their link when you send the contract.')
-                          : t('contracts.signers.orderSequentialHint', 'Signers get their link in the order listed, each once the one before has signed.')}
-                      </span>
-                    </span>
-                  </label>
-                ))}
-              </div>
-            </fieldset>
+                    )}
+                  </div>
 
-            {error && (
-              <p role="alert" className="text-sm text-red-700 dark:text-red-300">{error}</p>
-            )}
+                  <fieldset>
+                    <legend className="text-sm font-medium mb-1 text-neutral-900 dark:text-neutral-100">
+                      {t('contracts.signers.orderLabel', 'Signing order')}
+                    </legend>
+                    <div className="space-y-2">
+                      {(['parallel', 'sequential'] as const).map((value) => (
+                        <label key={value} className="flex items-start gap-2 text-sm text-neutral-800 dark:text-neutral-200">
+                          <input
+                            type="radio"
+                            name={`contract-${contractId}-signing-order`}
+                            value={value}
+                            checked={order === value}
+                            onChange={() => { setOrder(value); setDirty(true); setError(null); }}
+                            className="mt-1"
+                          />
+                          <span>
+                            <span className="font-medium">
+                              {value === 'parallel'
+                                ? t('contracts.signers.orderParallel', 'All at once')
+                                : t('contracts.signers.orderSequential', 'One after the other')}
+                            </span>
+                            <span className="block text-xs text-neutral-500 dark:text-neutral-400">
+                              {value === 'parallel'
+                                ? t('contracts.signers.orderParallelHint', 'Everyone gets their link when you send the contract.')
+                                : t('contracts.signers.orderSequentialHint', 'Signers get their link in the order listed, each once the one before has signed.')}
+                            </span>
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                  </fieldset>
 
-            <div className="flex justify-end">
-              <Button
-                onClick={handleSave}
-                disabled={!dirty || rows.length === 0 || saveMutation.isPending}
-                isLoading={saveMutation.isPending}
-              >
-                <Save className="w-4 h-4 mr-1" />
-                {saveMutation.isPending
-                  ? t('contracts.signers.saving', 'Saving…')
-                  : t('contracts.signers.save', 'Save signers')}
-              </Button>
-            </div>
-          </div>
-        </PermissionGate>
-      )}
-    </Card>
+                  {error && (
+                    <p role="alert" className="text-sm text-red-700 dark:text-red-300">{error}</p>
+                  )}
+
+                  <div className="flex justify-end">
+                    <Button
+                                                        onClick={handleSave} disabled={!dirty || rows.length === 0 || saveMutation.isPending || saveMutation.isPending}
+                                                      >
+                                                        {saveMutation.isPending && <Loader2 className="animate-spin" />}<Save className="w-4 h-4 mr-1" />{saveMutation.isPending
+                                                          ? t('contracts.signers.saving', 'Saving…')
+                                                          : t('contracts.signers.save', 'Save signers')}</Button>
+                  </div>
+                </div>
+              </PermissionGate>
+            )}</CardContent></Card>
   );
 };

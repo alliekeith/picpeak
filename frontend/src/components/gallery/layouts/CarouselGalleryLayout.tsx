@@ -2,12 +2,13 @@ import { usePhotoSelection } from '../../../hooks/usePhotoSelection';
 import React, { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Download, Maximize2, Play, Pause, Heart, MessageSquare } from 'lucide-react';
 import { useTheme } from '../../../contexts/ThemeContext';
-import { AuthenticatedImage, Button } from '../../common';
+import { AuthenticatedImage } from '../../common';
 import { ColorLabelBadge } from '../ColorLabelBadge';
 import type { BaseGalleryLayoutProps } from './BaseGalleryLayout';
 import { FeedbackIdentityModal } from '../../gallery/FeedbackIdentityModal';
 import { feedbackService } from '../../../services/feedback.service';
 import { useGuestIdentityOptional } from '../../../contexts/GuestIdentityContext';
+import { Button } from "@/components/ui/button";
 
 export const CarouselGalleryLayout: React.FC<BaseGalleryLayoutProps> = ({
   photos,

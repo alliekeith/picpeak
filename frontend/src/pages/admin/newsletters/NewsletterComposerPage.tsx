@@ -16,16 +16,20 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Save, Send, TestTube2, Users, Eye, ArrowLeft, AlertTriangle } from 'lucide-react';
+import { Save, Send, TestTube2, Users, Eye, ArrowLeft, AlertTriangle, Loader2 } from 'lucide-react';
 import { toast } from 'react-toastify';
 
-import { Button, Card, Input, Loading, useConfirm } from '../../../components/common';
+import { Loading, useConfirm } from '../../../components/common';
 import { EmailTemplateEditor } from '../../../components/admin/EmailTemplateEditor';
 import {
   newslettersService, type Campaign, type RecipientMode,
 } from '../../../services/newsletters.service';
 import { customerAdminService } from '../../../services/customerAdmin.service';
 import { usePermissions } from '../../../contexts/PermissionsContext';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 /**
  * Recipient count above which the composer warns about deliverability.
@@ -216,19 +220,16 @@ export const NewsletterComposerPage: React.FC = () => {
 
   if (draft.status !== 'draft') {
     return (
-      <Card>
-        <p className="text-neutral-700 dark:text-neutral-300">
-          {t('newsletters.notEditable',
-            'This campaign has already been queued and can no longer be edited.')}
-        </p>
-        <Button
-          variant="outline"
-          className="mt-4"
-          onClick={() => navigate(`/admin/clients/newsletters/${campaignId}`)}
-        >
-          {t('newsletters.viewCampaign', 'View campaign')}
-        </Button>
-      </Card>
+      <Card><CardContent><p className="text-neutral-700 dark:text-neutral-300">
+                  {t('newsletters.notEditable',
+                    'This campaign has already been queued and can no longer be edited.')}
+                </p><Button
+                  variant="outline"
+                  className="mt-4"
+                  onClick={() => navigate(`/admin/clients/newsletters/${campaignId}`)}
+                >
+                  {t('newsletters.viewCampaign', 'View campaign')}
+                </Button></CardContent></Card>
     );
   }
 
@@ -244,19 +245,16 @@ export const NewsletterComposerPage: React.FC = () => {
           {t('newsletters.backToList', 'All campaigns')}
         </button>
         <Button
-          onClick={async () => {
-            try {
-              await persistDraft();
-              toast.success(t('newsletters.saved', 'Campaign saved.'));
-            } catch {
-              toast.error(t('newsletters.saveFailed', 'Could not save the campaign.'));
-            }
-          }}
-          isLoading={save.isPending}
-          leftIcon={<Save className="w-4 h-4" />}
-        >
-          {t('common.save', 'Save')}
-        </Button>
+                        onClick={async () => {
+                          try {
+                            await persistDraft();
+                            toast.success(t('newsletters.saved', 'Campaign saved.'));
+                          } catch {
+                            toast.error(t('newsletters.saveFailed', 'Could not save the campaign.'));
+                          }
+                        }} disabled={save.isPending}
+                      >
+                        {save.isPending && <Loader2 className="animate-spin" />}<Save className="w-4 h-4" />{t('common.save', 'Save')}</Button>
       </div>
 
       {/* Two columns, not three. An email body is 600px wide and the editor
@@ -268,267 +266,238 @@ export const NewsletterComposerPage: React.FC = () => {
           full-width below where it can render at true email size. */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         {/* ---- 1. Content ---- */}
-        <Card className="xl:col-span-2">
-          <h3 className="font-semibold mb-4 text-neutral-900 dark:text-neutral-100">
-            {t('newsletters.section.content', 'Content')}
-          </h3>
-          <div className="space-y-4">
-            <Input
-              label={t('newsletters.field.name', 'Campaign name (internal)') as string}
-              value={draft.name}
-              onChange={(e) => patch({ name: e.target.value })}
-            />
-            <Input
-              label={t('newsletters.field.subject', 'Subject') as string}
-              value={draft.subject}
-              maxLength={255}
-              onChange={(e) => patch({ subject: e.target.value })}
-            />
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                {t('newsletters.field.body', 'Body')}
-              </label>
-              <EmailTemplateEditor
-                content={draft.bodyHtml}
-                onChange={(html) => patch({ bodyHtml: html })}
-                variables={VARIABLES}
-              />
-            </div>
+        <Card className="xl:col-span-2"><CardContent><h3 className="font-semibold mb-4 text-neutral-900 dark:text-neutral-100">
+                          {t('newsletters.section.content', 'Content')}
+                        </h3><div className="space-y-4">
+                          <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('newsletters.field.name', 'Campaign name (internal)') as string}</span><Input
+                                                  value={draft.name}
+                                                  onChange={(e) => patch({ name: e.target.value })}
+                                                /></Label></div>
+                          <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('newsletters.field.subject', 'Subject') as string}</span><Input
+                                                  value={draft.subject}
+                                                  maxLength={255}
+                                                  onChange={(e) => patch({ subject: e.target.value })}
+                                                /></Label></div>
+                          <div>
+                            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                              {t('newsletters.field.body', 'Body')}
+                            </label>
+                            <EmailTemplateEditor
+                              content={draft.bodyHtml}
+                              onChange={(html) => patch({ bodyHtml: html })}
+                              variables={VARIABLES}
+                            />
+                          </div>
 
-            <div>
-              <button
-                type="button"
-                onClick={() => setShowCss((v) => !v)}
-                className="text-sm hover:underline"
-                style={{ color: 'var(--brand)' }}
-              >
-                {showCss
-                  ? t('newsletters.hideCss', 'Hide custom CSS')
-                  : t('newsletters.showCss', 'Custom CSS (optional)')}
-              </button>
-              {showCss && (
-                <>
-                  <textarea
-                    rows={6}
-                    value={draft.bodyCss}
-                    onChange={(e) => patch({ bodyCss: e.target.value })}
-                    placeholder=".cta { background: #5C8762; color: #fff; }"
-                    className="mt-2 w-full font-mono text-xs rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-3 py-2"
-                  />
-                  <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
-                    {t('newsletters.cssHelp',
-                      'Many email clients drop a <style> block — keep the important styling on inline attributes. Remote images and @import are stripped.')}
-                  </p>
-                </>
-              )}
-            </div>
-          </div>
-        </Card>
+                          <div>
+                            <button
+                              type="button"
+                              onClick={() => setShowCss((v) => !v)}
+                              className="text-sm hover:underline"
+                              style={{ color: 'var(--brand)' }}
+                            >
+                              {showCss
+                                ? t('newsletters.hideCss', 'Hide custom CSS')
+                                : t('newsletters.showCss', 'Custom CSS (optional)')}
+                            </button>
+                            {showCss && (
+                              <>
+                                <textarea
+                                  rows={6}
+                                  value={draft.bodyCss}
+                                  onChange={(e) => patch({ bodyCss: e.target.value })}
+                                  placeholder=".cta { background: #5C8762; color: #fff; }"
+                                  className="mt-2 w-full font-mono text-xs rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-3 py-2"
+                                />
+                                <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                                  {t('newsletters.cssHelp',
+                                    'Many email clients drop a <style> block — keep the important styling on inline attributes. Remote images and @import are stripped.')}
+                                </p>
+                              </>
+                            )}
+                          </div>
+                        </div></CardContent></Card>
 
         {/* ---- 2. Recipients ---- */}
-        <Card>
-          <div className="flex items-center gap-2 mb-4">
-            <Users className="w-5 h-5 text-neutral-500" />
-            <h3 className="font-semibold text-neutral-900 dark:text-neutral-100">
-              {t('newsletters.section.recipients', 'Recipients & send')}
-            </h3>
-          </div>
+        <Card><CardContent><div className="flex items-center gap-2 mb-4">
+                          <Users className="w-5 h-5 text-neutral-500" />
+                          <h3 className="font-semibold text-neutral-900 dark:text-neutral-100">
+                            {t('newsletters.section.recipients', 'Recipients & send')}
+                          </h3>
+                        </div><div className="space-y-2 mb-4">
+                          {(['all_active', 'manual'] as RecipientMode[])
+                            .filter((mode) => mode === 'all_active' || canPickCustomers)
+                            .map((mode) => (
+                            <label key={mode} className="flex items-start gap-2 cursor-pointer">
+                              <input
+                                type="radio"
+                                name="recipientMode"
+                                className="mt-1"
+                                checked={draft.recipientMode === mode}
+                                onChange={() => patch({ recipientMode: mode })}
+                              />
+                              <span className="text-sm">
+                                <span className="font-medium text-neutral-900 dark:text-neutral-100">
+                                  {mode === 'all_active'
+                                    ? t('newsletters.mode.allActive', 'All active customers')
+                                    : t('newsletters.mode.manual', 'Pick customers')}
+                                </span>
+                              </span>
+                            </label>
+                          ))}
+                        </div>{draft.recipientMode === 'manual' && (
+                          <div className="mb-4 max-h-64 overflow-y-auto border border-neutral-200 dark:border-neutral-700 rounded-md p-2">
+                            {(customers ?? []).map((c) => (
+                              <label key={c.id} className="flex items-center gap-2 py-1 cursor-pointer text-sm">
+                                <input
+                                  type="checkbox"
+                                  checked={draft.customerIds.includes(c.id)}
+                                  onChange={(e) => patch({
+                                    customerIds: e.target.checked
+                                      ? [...draft.customerIds, c.id]
+                                      : draft.customerIds.filter((x) => x !== c.id),
+                                  })}
+                                />
+                                <span className="text-neutral-800 dark:text-neutral-200">
+                                  {c.displayName || c.email}
+                                </span>
+                              </label>
+                            ))}
+                          </div>
+                        )}{/* The server's own count, not a local estimate. */}<div
+                          data-testid="recipient-summary"
+                          className="rounded-md bg-neutral-50 dark:bg-neutral-800/60 p-3 text-sm"
+                        >
+                          <p className="font-medium text-neutral-900 dark:text-neutral-100">
+                            {t('newsletters.recipientCount', '{{count}} recipients',
+                              { count: resolution?.recipientCount ?? 0 })}
+                          </p>
+                          {(resolution?.skippedOptOut ?? 0) > 0 && (
+                            <p className="text-neutral-600 dark:text-neutral-400 mt-1">
+                              {t('newsletters.skippedOptOut', '{{count}} skipped (opted out)',
+                                { count: resolution?.skippedOptOut ?? 0 })}
+                            </p>
+                          )}
+                          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-2">
+                            {t('newsletters.saveToRefresh', 'Save to refresh this count.')}
+                          </p>
+                        </div><div className="mt-4">
+                          <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('newsletters.field.rate', 'Send rate (emails per minute)') as string}</span><Input
+                                                  type="number"
+                                                  min={1}
+                                                  // 10 is what the queue can actually deliver: the processor takes
+                                                  // 10 rows once a minute, globally. Anything higher was rejected
+                                                  // server-side after passing this control.
+                                                  max={10}
+                                                  value={String(draft.sendRatePerMinute)}
+                                                  onChange={(e) => patch({ sendRatePerMinute: Number(e.target.value) })}
+                                                /></Label></div>
+                          <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                            {t('newsletters.rateHelp',
+                              'Sends are spread out so your mail provider does not rate-limit you, and so a '
+                              + 'sudden burst does not look like spam. Check your provider\'s hourly cap '
+                              + 'before raising this.')}
+                          </p>
+                        </div>{/* Test + queue live with the recipient rule they act on. */}<div className="mt-6 pt-4 border-t border-neutral-200 dark:border-neutral-700 space-y-3">
+                          <div className="flex gap-2 items-end">
+                            <div className="flex-1">
+                              <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('newsletters.field.testTo', 'Send a test to') as string}</span><Input
+                                                              type="email"
+                                                              value={testEmail}
+                                                              onChange={(e) => setTestEmail(e.target.value)}
+                                                              placeholder="you@example.com"
+                                                            /></Label></div>
+                            </div>
+                            <Button
+                                                        variant="outline"
+                                                        onClick={sendTest}
+                                                        disabled={!testEmail}
+                                                      >
+                                                        <TestTube2 className="w-4 h-4" />{t('newsletters.sendTest', 'Test')}</Button>
+                          </div>
 
-          <div className="space-y-2 mb-4">
-            {(['all_active', 'manual'] as RecipientMode[])
-              .filter((mode) => mode === 'all_active' || canPickCustomers)
-              .map((mode) => (
-              <label key={mode} className="flex items-start gap-2 cursor-pointer">
-                <input
-                  type="radio"
-                  name="recipientMode"
-                  className="mt-1"
-                  checked={draft.recipientMode === mode}
-                  onChange={() => patch({ recipientMode: mode })}
-                />
-                <span className="text-sm">
-                  <span className="font-medium text-neutral-900 dark:text-neutral-100">
-                    {mode === 'all_active'
-                      ? t('newsletters.mode.allActive', 'All active customers')
-                      : t('newsletters.mode.manual', 'Pick customers')}
-                  </span>
-                </span>
-              </label>
-            ))}
-          </div>
+                          {(resolution?.recipientCount ?? 0) >= LARGE_SEND_THRESHOLD && (
+                            <div
+                              data-testid="large-send-warning"
+                              className="rounded-md border border-amber-300 dark:border-amber-700/60 bg-amber-50 dark:bg-amber-900/20 p-3"
+                            >
+                              <div className="flex gap-2">
+                                <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-500 shrink-0 mt-0.5" />
+                                <div className="text-xs text-amber-900 dark:text-amber-200 space-y-1">
+                                  <p className="font-medium">
+                                    {t('newsletters.largeSend.title',
+                                      'Large send — check your sending reputation first')}
+                                  </p>
+                                  <p>
+                                    {t('newsletters.largeSend.body',
+                                      'Mailing {{count}} people at once from a domain that usually sends '
+                                      + 'only transactional email is what makes spam filters take notice. '
+                                      + 'Providers may throttle, junk or block the whole batch, and a bad '
+                                      + 'run damages delivery of your gallery emails too.',
+                                      { count: resolution?.recipientCount ?? 0 })}
+                                  </p>
+                                  <p>
+                                    {t('newsletters.largeSend.advice',
+                                      'Confirm SPF, DKIM and DMARC are set up for your sending domain, '
+                                      + 'send yourself a test first, and consider splitting a first '
+                                      + 'campaign across several smaller sends.')}
+                                  </p>
+                                  <p>
+                                    {t('newsletters.largeSend.duration',
+                                      'At {{rate}}/minute this takes about {{minutes}} minutes. The send '
+                                      + 'queue is shared, so while it runs other email — gallery '
+                                      + 'invitations, password resets — can be delayed behind it.',
+                                      { rate: effectiveRate, minutes: estimatedMinutes })}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          )}
 
-          {draft.recipientMode === 'manual' && (
-            <div className="mb-4 max-h-64 overflow-y-auto border border-neutral-200 dark:border-neutral-700 rounded-md p-2">
-              {(customers ?? []).map((c) => (
-                <label key={c.id} className="flex items-center gap-2 py-1 cursor-pointer text-sm">
-                  <input
-                    type="checkbox"
-                    checked={draft.customerIds.includes(c.id)}
-                    onChange={(e) => patch({
-                      customerIds: e.target.checked
-                        ? [...draft.customerIds, c.id]
-                        : draft.customerIds.filter((x) => x !== c.id),
-                    })}
-                  />
-                  <span className="text-neutral-800 dark:text-neutral-200">
-                    {c.displayName || c.email}
-                  </span>
-                </label>
-              ))}
-            </div>
-          )}
-
-          {/* The server's own count, not a local estimate. */}
-          <div
-            data-testid="recipient-summary"
-            className="rounded-md bg-neutral-50 dark:bg-neutral-800/60 p-3 text-sm"
-          >
-            <p className="font-medium text-neutral-900 dark:text-neutral-100">
-              {t('newsletters.recipientCount', '{{count}} recipients',
-                { count: resolution?.recipientCount ?? 0 })}
-            </p>
-            {(resolution?.skippedOptOut ?? 0) > 0 && (
-              <p className="text-neutral-600 dark:text-neutral-400 mt-1">
-                {t('newsletters.skippedOptOut', '{{count}} skipped (opted out)',
-                  { count: resolution?.skippedOptOut ?? 0 })}
-              </p>
-            )}
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-2">
-              {t('newsletters.saveToRefresh', 'Save to refresh this count.')}
-            </p>
-          </div>
-
-          <div className="mt-4">
-            <Input
-              type="number"
-              min={1}
-              // 10 is what the queue can actually deliver: the processor takes
-              // 10 rows once a minute, globally. Anything higher was rejected
-              // server-side after passing this control.
-              max={10}
-              label={t('newsletters.field.rate', 'Send rate (emails per minute)') as string}
-              value={String(draft.sendRatePerMinute)}
-              onChange={(e) => patch({ sendRatePerMinute: Number(e.target.value) })}
-            />
-            <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
-              {t('newsletters.rateHelp',
-                'Sends are spread out so your mail provider does not rate-limit you, and so a '
-                + 'sudden burst does not look like spam. Check your provider\'s hourly cap '
-                + 'before raising this.')}
-            </p>
-          </div>
-
-          {/* Test + queue live with the recipient rule they act on. */}
-          <div className="mt-6 pt-4 border-t border-neutral-200 dark:border-neutral-700 space-y-3">
-            <div className="flex gap-2 items-end">
-              <div className="flex-1">
-                <Input
-                  type="email"
-                  label={t('newsletters.field.testTo', 'Send a test to') as string}
-                  value={testEmail}
-                  onChange={(e) => setTestEmail(e.target.value)}
-                  placeholder="you@example.com"
-                />
-              </div>
-              <Button
-                variant="outline"
-                onClick={sendTest}
-                disabled={!testEmail}
-                leftIcon={<TestTube2 className="w-4 h-4" />}
-              >
-                {t('newsletters.sendTest', 'Test')}
-              </Button>
-            </div>
-
-            {(resolution?.recipientCount ?? 0) >= LARGE_SEND_THRESHOLD && (
-              <div
-                data-testid="large-send-warning"
-                className="rounded-md border border-amber-300 dark:border-amber-700/60 bg-amber-50 dark:bg-amber-900/20 p-3"
-              >
-                <div className="flex gap-2">
-                  <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-500 shrink-0 mt-0.5" />
-                  <div className="text-xs text-amber-900 dark:text-amber-200 space-y-1">
-                    <p className="font-medium">
-                      {t('newsletters.largeSend.title',
-                        'Large send — check your sending reputation first')}
-                    </p>
-                    <p>
-                      {t('newsletters.largeSend.body',
-                        'Mailing {{count}} people at once from a domain that usually sends '
-                        + 'only transactional email is what makes spam filters take notice. '
-                        + 'Providers may throttle, junk or block the whole batch, and a bad '
-                        + 'run damages delivery of your gallery emails too.',
-                        { count: resolution?.recipientCount ?? 0 })}
-                    </p>
-                    <p>
-                      {t('newsletters.largeSend.advice',
-                        'Confirm SPF, DKIM and DMARC are set up for your sending domain, '
-                        + 'send yourself a test first, and consider splitting a first '
-                        + 'campaign across several smaller sends.')}
-                    </p>
-                    <p>
-                      {t('newsletters.largeSend.duration',
-                        'At {{rate}}/minute this takes about {{minutes}} minutes. The send '
-                        + 'queue is shared, so while it runs other email — gallery '
-                        + 'invitations, password resets — can be delayed behind it.',
-                        { rate: effectiveRate, minutes: estimatedMinutes })}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <Button
-              onClick={queueCampaign}
-              disabled={!canQueue}
-              className="w-full"
-              leftIcon={<Send className="w-4 h-4" />}
-            >
-              {t('newsletters.queueButton', 'Queue campaign')}
-            </Button>
-            {!canQueue && (
-              <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                {t('newsletters.queueBlocked',
-                  'A subject, a body and at least one recipient are needed before sending.')}
-              </p>
-            )}
-          </div>
-        </Card>
+                          <Button
+                                                  onClick={queueCampaign}
+                                                  disabled={!canQueue}
+                                                  className="w-full"
+                                                >
+                                                  <Send className="w-4 h-4" />{t('newsletters.queueButton', 'Queue campaign')}</Button>
+                          {!canQueue && (
+                            <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                              {t('newsletters.queueBlocked',
+                                'A subject, a body and at least one recipient are needed before sending.')}
+                            </p>
+                          )}
+                        </div></CardContent></Card>
       </div>
 
       {/* ---- Preview, full width ---- */}
-      <Card className="mt-6">
-        <div className="flex items-center justify-between gap-4 mb-4">
-          <div className="flex items-center gap-2">
-            <Eye className="w-5 h-5 text-neutral-500" />
-            <h3 className="font-semibold text-neutral-900 dark:text-neutral-100">
-              {t('newsletters.section.preview', 'Preview')}
-            </h3>
-          </div>
-          <Button variant="outline" onClick={loadPreview}>
-            {t('newsletters.refreshPreview', 'Refresh preview')}
-          </Button>
-        </div>
-
-        {previewHtml ? (
-          <iframe
-            data-testid="newsletter-preview"
-            title={t('newsletters.previewTitle', 'Newsletter preview') as string}
-            // No allow-scripts. The body is sanitized server-side; this is
-            // the second line of defence, and it is the only DOM campaign
-            // HTML ever reaches.
-            sandbox=""
-            srcDoc={previewHtml}
-            // 680px: the 600px email plus its wrapper padding, so it renders
-            // at the width a recipient sees instead of side-scrolling.
-            className="w-full max-w-[680px] mx-auto h-[640px] border border-neutral-200 dark:border-neutral-700 rounded-md bg-white"
-          />
-        ) : (
-          <div className="max-w-[680px] mx-auto h-[240px] rounded-md border border-dashed border-neutral-300 dark:border-neutral-600 flex items-center justify-center text-sm text-neutral-500 dark:text-neutral-400">
-            {t('newsletters.previewEmpty', 'Refresh the preview to see the email as a customer will.')}
-          </div>
-        )}
-      </Card>
+      <Card className="mt-6"><CardContent><div className="flex items-center justify-between gap-4 mb-4">
+                    <div className="flex items-center gap-2">
+                      <Eye className="w-5 h-5 text-neutral-500" />
+                      <h3 className="font-semibold text-neutral-900 dark:text-neutral-100">
+                        {t('newsletters.section.preview', 'Preview')}
+                      </h3>
+                    </div>
+                    <Button variant="outline" onClick={loadPreview}>
+                      {t('newsletters.refreshPreview', 'Refresh preview')}
+                    </Button>
+                  </div>{previewHtml ? (
+                    <iframe
+                      data-testid="newsletter-preview"
+                      title={t('newsletters.previewTitle', 'Newsletter preview') as string}
+                      // No allow-scripts. The body is sanitized server-side; this is
+                      // the second line of defence, and it is the only DOM campaign
+                      // HTML ever reaches.
+                      sandbox=""
+                      srcDoc={previewHtml}
+                      // 680px: the 600px email plus its wrapper padding, so it renders
+                      // at the width a recipient sees instead of side-scrolling.
+                      className="w-full max-w-[680px] mx-auto h-[640px] border border-neutral-200 dark:border-neutral-700 rounded-md bg-white"
+                    />
+                  ) : (
+                    <div className="max-w-[680px] mx-auto h-[240px] rounded-md border border-dashed border-neutral-300 dark:border-neutral-600 flex items-center justify-center text-sm text-neutral-500 dark:text-neutral-400">
+                      {t('newsletters.previewEmpty', 'Refresh the preview to see the email as a customer will.')}
+                    </div>
+                  )}</CardContent></Card>
     </div>
   );
 };

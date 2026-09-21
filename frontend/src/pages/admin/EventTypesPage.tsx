@@ -11,13 +11,16 @@ import {
   EyeOff,
   X,
   AlertTriangle,
-  Tags
-} from 'lucide-react';
+  Tags, Loader2 } from 'lucide-react';
 
-import { Button, Input, Card, Loading } from '../../components/common';
+import { Loading } from '../../components/common';
 import { useModal, useMutationWithToast } from '../../hooks';
 import { eventTypesService, EventType, CreateEventTypeData, UpdateEventTypeData } from '../../services/eventTypes.service';
 import { GALLERY_THEME_PRESETS } from '../../types/theme.types';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 // Common emoji options for event types
 const EMOJI_OPTIONS = [
@@ -121,142 +124,134 @@ export const EventTypesPage: React.FC = () => {
             </p>
           </div>
           <Button
-            variant="primary"
-            leftIcon={<Plus className="w-4 h-4" />}
-            onClick={() => createModal.open()}
-          >
-            {t('eventTypes.createNew', 'New Event Type')}
-          </Button>
+                              onClick={() => createModal.open()}
+                            >
+                              <Plus className="w-4 h-4" />{t('eventTypes.createNew', 'New Event Type')}</Button>
         </div>
       </div>
 
       {/* Filters */}
-      <Card className="mb-6">
-        <div className="p-4 flex flex-col sm:flex-row gap-4">
-          <div className="flex-1">
-            <Input
-              placeholder={t('eventTypes.searchPlaceholder', 'Search event types...')}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              leftIcon={<Search className="w-4 h-4" />}
-            />
-          </div>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={showInactive}
-              onChange={(e) => setShowInactive(e.target.checked)}
-              className="rounded-sm border-neutral-300 dark:border-neutral-600 text-brand focus:ring-brand-500"
-            />
-            <span className="text-sm text-neutral-700 dark:text-neutral-300">
-              {t('eventTypes.showInactive', 'Show inactive')}
-            </span>
-          </label>
-        </div>
-      </Card>
+      <Card className="mb-6"><CardContent><div className="p-4 flex flex-col sm:flex-row gap-4">
+                    <div className="flex-1">
+                      <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Search className="w-4 h-4" />}</div><Input
+                                          placeholder={t('eventTypes.searchPlaceholder', 'Search event types...')}
+                                          value={searchTerm}
+                                          onChange={(e) => setSearchTerm(e.target.value)} className="pl-10"
+                                        /></div>
+                    </div>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={showInactive}
+                        onChange={(e) => setShowInactive(e.target.checked)}
+                        className="rounded-sm border-neutral-300 dark:border-neutral-600 text-brand focus:ring-brand-500"
+                      />
+                      <span className="text-sm text-neutral-700 dark:text-neutral-300">
+                        {t('eventTypes.showInactive', 'Show inactive')}
+                      </span>
+                    </label>
+                  </div></CardContent></Card>
 
       {/* Event Types List */}
-      <Card>
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700">
-              <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase w-10">
-                  {/* Drag handle column */}
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase">
-                  {t('eventTypes.table.type', 'Type')}
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase">
-                  {t('eventTypes.table.slugPrefix', 'URL Prefix')}
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase">
-                  {t('eventTypes.table.theme', 'Default Theme')}
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase">
-                  {t('eventTypes.table.status', 'Status')}
-                </th>
-                <th className="px-4 py-3 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase">
-                  {t('eventTypes.table.actions', 'Actions')}
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white dark:bg-neutral-800 divide-y divide-neutral-200 dark:divide-neutral-700">
-              {filteredTypes.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="px-4 py-8 text-center text-neutral-500 dark:text-neutral-400">
-                    {searchTerm
-                      ? t('eventTypes.noResults', 'No event types found')
-                      : t('eventTypes.empty', 'No event types yet')}
-                  </td>
-                </tr>
-              ) : (
-                filteredTypes.map((type) => (
-                  <tr key={type.id} className={`hover:bg-neutral-50 dark:hover:bg-neutral-700/50 ${!type.is_active ? 'opacity-60' : ''}`}>
-                    <td className="px-4 py-4">
-                      <GripVertical className="w-4 h-4 text-neutral-400 cursor-grab" />
-                    </td>
-                    <td className="px-4 py-4">
-                      <div className="flex items-center gap-3">
-                        <span className="text-2xl">{type.emoji}</span>
-                        <div>
-                          <div className="font-medium text-neutral-900 dark:text-neutral-100">{type.name}</div>
-                          {type.is_system && (
-                            <span className="text-xs text-neutral-500 dark:text-neutral-400">
-                              {t('eventTypes.system', 'System')}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-4 py-4">
-                      <code className="px-2 py-1 bg-neutral-100 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 rounded-sm text-sm">
-                        {type.slug_prefix}
-                      </code>
-                    </td>
-                    <td className="px-4 py-4 text-sm text-neutral-600 dark:text-neutral-300">
-                      {GALLERY_THEME_PRESETS[type.theme_preset]?.name || type.theme_preset || '-'}
-                    </td>
-                    <td className="px-4 py-4">
-                      {type.is_active ? (
-                        <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 rounded-full text-xs">
-                          <Eye className="w-3 h-3" />
-                          {t('common.active', 'Active')}
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1 px-2 py-1 bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400 rounded-full text-xs">
-                          <EyeOff className="w-3 h-3" />
-                          {t('common.inactive', 'Inactive')}
-                        </span>
-                      )}
-                    </td>
-                    <td className="px-4 py-4">
-                      <div className="flex items-center justify-end gap-2">
-                        <button
-                          onClick={() => setEditingType(type)}
-                          className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg text-neutral-600 dark:text-neutral-400 hover:text-brand"
-                          title={t('common.edit', 'Edit')}
-                        >
-                          <Edit className="w-4 h-4" />
-                        </button>
-                        {!type.is_system && (
-                          <button
-                            onClick={() => setDeleteConfirm(type)}
-                            className="p-2 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg text-neutral-600 dark:text-neutral-400 hover:text-red-600"
-                            title={t('common.delete', 'Delete')}
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
+      <Card><CardContent><div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead className="bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700">
+                        <tr>
+                          <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase w-10">
+                            {/* Drag handle column */}
+                          </th>
+                          <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase">
+                            {t('eventTypes.table.type', 'Type')}
+                          </th>
+                          <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase">
+                            {t('eventTypes.table.slugPrefix', 'URL Prefix')}
+                          </th>
+                          <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase">
+                            {t('eventTypes.table.theme', 'Default Theme')}
+                          </th>
+                          <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase">
+                            {t('eventTypes.table.status', 'Status')}
+                          </th>
+                          <th className="px-4 py-3 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase">
+                            {t('eventTypes.table.actions', 'Actions')}
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white dark:bg-neutral-800 divide-y divide-neutral-200 dark:divide-neutral-700">
+                        {filteredTypes.length === 0 ? (
+                          <tr>
+                            <td colSpan={6} className="px-4 py-8 text-center text-neutral-500 dark:text-neutral-400">
+                              {searchTerm
+                                ? t('eventTypes.noResults', 'No event types found')
+                                : t('eventTypes.empty', 'No event types yet')}
+                            </td>
+                          </tr>
+                        ) : (
+                          filteredTypes.map((type) => (
+                            <tr key={type.id} className={`hover:bg-neutral-50 dark:hover:bg-neutral-700/50 ${!type.is_active ? 'opacity-60' : ''}`}>
+                              <td className="px-4 py-4">
+                                <GripVertical className="w-4 h-4 text-neutral-400 cursor-grab" />
+                              </td>
+                              <td className="px-4 py-4">
+                                <div className="flex items-center gap-3">
+                                  <span className="text-2xl">{type.emoji}</span>
+                                  <div>
+                                    <div className="font-medium text-neutral-900 dark:text-neutral-100">{type.name}</div>
+                                    {type.is_system && (
+                                      <span className="text-xs text-neutral-500 dark:text-neutral-400">
+                                        {t('eventTypes.system', 'System')}
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="px-4 py-4">
+                                <code className="px-2 py-1 bg-neutral-100 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 rounded-sm text-sm">
+                                  {type.slug_prefix}
+                                </code>
+                              </td>
+                              <td className="px-4 py-4 text-sm text-neutral-600 dark:text-neutral-300">
+                                {GALLERY_THEME_PRESETS[type.theme_preset]?.name || type.theme_preset || '-'}
+                              </td>
+                              <td className="px-4 py-4">
+                                {type.is_active ? (
+                                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 rounded-full text-xs">
+                                    <Eye className="w-3 h-3" />
+                                    {t('common.active', 'Active')}
+                                  </span>
+                                ) : (
+                                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400 rounded-full text-xs">
+                                    <EyeOff className="w-3 h-3" />
+                                    {t('common.inactive', 'Inactive')}
+                                  </span>
+                                )}
+                              </td>
+                              <td className="px-4 py-4">
+                                <div className="flex items-center justify-end gap-2">
+                                  <button
+                                    onClick={() => setEditingType(type)}
+                                    className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg text-neutral-600 dark:text-neutral-400 hover:text-brand"
+                                    title={t('common.edit', 'Edit')}
+                                  >
+                                    <Edit className="w-4 h-4" />
+                                  </button>
+                                  {!type.is_system && (
+                                    <button
+                                      onClick={() => setDeleteConfirm(type)}
+                                      className="p-2 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg text-neutral-600 dark:text-neutral-400 hover:text-red-600"
+                                      title={t('common.delete', 'Delete')}
+                                    >
+                                      <Trash2 className="w-4 h-4" />
+                                    </button>
+                                  )}
+                                </div>
+                              </td>
+                            </tr>
+                          ))
                         )}
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-      </Card>
+                      </tbody>
+                    </table>
+                  </div></CardContent></Card>
 
       {/* Slug Preview Info */}
       <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg border border-blue-200 dark:border-blue-800">
@@ -312,6 +307,7 @@ const EventTypeModal: React.FC<EventTypeModalProps> = ({
   onSubmit,
   isLoading
 }) => {
+    const __fieldId = React.useId();
   const { t } = useTranslation();
   const isEditing = !!eventType;
 
@@ -358,128 +354,121 @@ const EventTypeModal: React.FC<EventTypeModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <Card className="w-full max-w-lg max-h-[90vh] overflow-y-auto">
-        <div className="p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-              {isEditing
-                ? t('eventTypes.edit', 'Edit Event Type')
-                : t('eventTypes.createNew', 'New Event Type')}
-            </h2>
-            <button
-              onClick={onClose}
-              className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg"
-              disabled={isLoading}
-            >
-              <X className="w-5 h-5 text-neutral-500 dark:text-neutral-400" />
-            </button>
-          </div>
+      <Card className="w-full max-w-lg max-h-[90vh] overflow-y-auto"><CardContent><div className="p-6">
+                    <div className="flex items-center justify-between mb-6">
+                      <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+                        {isEditing
+                          ? t('eventTypes.edit', 'Edit Event Type')
+                          : t('eventTypes.createNew', 'New Event Type')}
+                      </h2>
+                      <button
+                        onClick={onClose}
+                        className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg"
+                        disabled={isLoading}
+                      >
+                        <X className="w-5 h-5 text-neutral-500 dark:text-neutral-400" />
+                      </button>
+                    </div>
 
-          <form onSubmit={handleSubmit}>
-            <div className="space-y-4">
-              {/* Name */}
-              <Input
-                label={t('eventTypes.form.name', 'Display Name')}
-                placeholder={t('eventTypes.form.namePlaceholder', 'e.g., Family Shoot')}
-                value={form.name}
-                onChange={(e) => {
-                  setForm({ ...form, name: e.target.value });
-                  setErrors({ ...errors, name: undefined });
-                }}
-                error={errors.name}
-              />
+                    <form onSubmit={handleSubmit}>
+                      <div className="space-y-4">
+                        {/* Name */}
+                        <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('eventTypes.form.name', 'Display Name')}</span><Input
+                                                placeholder={t('eventTypes.form.namePlaceholder', 'e.g., Family Shoot')}
+                                                value={form.name}
+                                                onChange={(e) => {
+                                                  setForm({ ...form, name: e.target.value });
+                                                  setErrors({ ...errors, name: undefined });
+                                                }} aria-invalid={!!(errors.name)} aria-describedby={(errors.name) ? `${__fieldId}-0-error` : undefined}
+                                              />{(errors.name) && <p id={`${__fieldId}-0-error`} className="mt-1.5 text-sm text-destructive">{errors.name}</p>}</Label></div>
 
-              {/* Slug Prefix */}
-              <div>
-                <Input
-                  label={t('eventTypes.form.slugPrefix', 'URL Prefix')}
-                  placeholder={t('eventTypes.form.slugPrefixPlaceholder', 'e.g., family')}
-                  value={form.slug_prefix}
-                  onChange={(e) => {
-                    const value = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-');
-                    setForm({ ...form, slug_prefix: value });
-                    setErrors({ ...errors, slug_prefix: undefined });
-                  }}
-                  error={errors.slug_prefix}
-                />
-                {form.slug_prefix && (
-                  <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
-                    {t('eventTypes.form.slugPreview', 'Example URL:')}{' '}
-                    <code className="bg-neutral-100 dark:bg-neutral-700 px-1 rounded-sm">
-                      {form.slug_prefix}-event-name-2025-01-22
-                    </code>
-                  </p>
-                )}
-              </div>
+                        {/* Slug Prefix */}
+                        <div>
+                          <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('eventTypes.form.slugPrefix', 'URL Prefix')}</span><Input
+                                                      placeholder={t('eventTypes.form.slugPrefixPlaceholder', 'e.g., family')}
+                                                      value={form.slug_prefix}
+                                                      onChange={(e) => {
+                                                        const value = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-');
+                                                        setForm({ ...form, slug_prefix: value });
+                                                        setErrors({ ...errors, slug_prefix: undefined });
+                                                      }} aria-invalid={!!(errors.slug_prefix)} aria-describedby={(errors.slug_prefix) ? `${__fieldId}-1-error` : undefined}
+                                                    />{(errors.slug_prefix) && <p id={`${__fieldId}-1-error`} className="mt-1.5 text-sm text-destructive">{errors.slug_prefix}</p>}</Label></div>
+                          {form.slug_prefix && (
+                            <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                              {t('eventTypes.form.slugPreview', 'Example URL:')}{' '}
+                              <code className="bg-neutral-100 dark:bg-neutral-700 px-1 rounded-sm">
+                                {form.slug_prefix}-event-name-2025-01-22
+                              </code>
+                            </p>
+                          )}
+                        </div>
 
-              {/* Emoji */}
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                  {t('eventTypes.form.emoji', 'Icon')}
-                </label>
-                <div className="flex flex-wrap gap-2">
-                  {EMOJI_OPTIONS.map((emoji) => (
-                    <button
-                      key={emoji}
-                      type="button"
-                      onClick={() => setForm({ ...form, emoji })}
-                      className={`p-2 text-xl rounded-lg border-2 transition-all ${
-                        form.emoji === emoji
-                          ? 'tile-selected'
-                          : 'border-neutral-200 dark:border-neutral-600 hover:border-neutral-300 dark:hover:border-neutral-500'
-                      }`}
-                    >
-                      {emoji}
-                    </button>
-                  ))}
-                </div>
-              </div>
+                        {/* Emoji */}
+                        <div>
+                          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+                            {t('eventTypes.form.emoji', 'Icon')}
+                          </label>
+                          <div className="flex flex-wrap gap-2">
+                            {EMOJI_OPTIONS.map((emoji) => (
+                              <button
+                                key={emoji}
+                                type="button"
+                                onClick={() => setForm({ ...form, emoji })}
+                                className={`p-2 text-xl rounded-lg border-2 transition-all ${
+                                  form.emoji === emoji
+                                    ? 'tile-selected'
+                                    : 'border-neutral-200 dark:border-neutral-600 hover:border-neutral-300 dark:hover:border-neutral-500'
+                                }`}
+                              >
+                                {emoji}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
 
-              {/* Theme Preset */}
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                  {t('eventTypes.form.themePreset', 'Default Theme')}
-                </label>
-                <select
-                  value={form.theme_preset}
-                  onChange={(e) => setForm({ ...form, theme_preset: e.target.value })}
-                  className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
-                >
-                  {Object.entries(GALLERY_THEME_PRESETS).map(([key, preset]) => (
-                    <option key={key} value={key}>
-                      {preset.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+                        {/* Theme Preset */}
+                        <div>
+                          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+                            {t('eventTypes.form.themePreset', 'Default Theme')}
+                          </label>
+                          <select
+                            value={form.theme_preset}
+                            onChange={(e) => setForm({ ...form, theme_preset: e.target.value })}
+                            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
+                          >
+                            {Object.entries(GALLERY_THEME_PRESETS).map(([key, preset]) => (
+                              <option key={key} value={key}>
+                                {preset.name}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
 
-              {/* Active toggle for editing */}
-              {isEditing && (
-                <label className="flex items-center gap-3 pt-2">
-                  <input
-                    type="checkbox"
-                    checked={eventType?.is_active}
-                    onChange={(e) => onSubmit({ is_active: e.target.checked })}
-                    className="rounded-sm border-neutral-300 dark:border-neutral-600 text-brand focus:ring-brand-500"
-                  />
-                  <span className="text-sm text-neutral-700 dark:text-neutral-300">
-                    {t('eventTypes.form.isActive', 'Active (visible in event creation)')}
-                  </span>
-                </label>
-              )}
-            </div>
+                        {/* Active toggle for editing */}
+                        {isEditing && (
+                          <label className="flex items-center gap-3 pt-2">
+                            <input
+                              type="checkbox"
+                              checked={eventType?.is_active}
+                              onChange={(e) => onSubmit({ is_active: e.target.checked })}
+                              className="rounded-sm border-neutral-300 dark:border-neutral-600 text-brand focus:ring-brand-500"
+                            />
+                            <span className="text-sm text-neutral-700 dark:text-neutral-300">
+                              {t('eventTypes.form.isActive', 'Active (visible in event creation)')}
+                            </span>
+                          </label>
+                        )}
+                      </div>
 
-            <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-neutral-200 dark:border-neutral-700">
-              <Button variant="outline" onClick={onClose} disabled={isLoading}>
-                {t('common.cancel', 'Cancel')}
-              </Button>
-              <Button variant="primary" type="submit" isLoading={isLoading}>
-                {isEditing ? t('common.save', 'Save') : t('common.create', 'Create')}
-              </Button>
-            </div>
-          </form>
-        </div>
-      </Card>
+                      <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-neutral-200 dark:border-neutral-700">
+                        <Button variant="outline" onClick={onClose} disabled={isLoading}>
+                          {t('common.cancel', 'Cancel')}
+                        </Button>
+                        <Button type="submit" disabled={isLoading}>
+                                                    {isLoading && <Loader2 className="animate-spin" />}{isEditing ? t('common.save', 'Save') : t('common.create', 'Create')}</Button>
+                      </div>
+                    </form>
+                  </div></CardContent></Card>
     </div>
   );
 };
@@ -502,40 +491,35 @@ const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <Card className="w-full max-w-md">
-        <div className="p-6">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="p-2 bg-red-100 dark:bg-red-900/40 rounded-full">
-              <AlertTriangle className="w-6 h-6 text-red-600 dark:text-red-400" />
-            </div>
-            <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-              {t('eventTypes.deleteConfirm.title', 'Delete Event Type')}
-            </h2>
-          </div>
+      <Card className="w-full max-w-md"><CardContent><div className="p-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="p-2 bg-red-100 dark:bg-red-900/40 rounded-full">
+                        <AlertTriangle className="w-6 h-6 text-red-600 dark:text-red-400" />
+                      </div>
+                      <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+                        {t('eventTypes.deleteConfirm.title', 'Delete Event Type')}
+                      </h2>
+                    </div>
 
-          <p className="text-neutral-600 dark:text-neutral-400 mb-4">
-            {t('eventTypes.deleteConfirm.message', 'Are you sure you want to delete')} "{eventType.name}"?
-          </p>
+                    <p className="text-neutral-600 dark:text-neutral-400 mb-4">
+                      {t('eventTypes.deleteConfirm.message', 'Are you sure you want to delete')} "{eventType.name}"?
+                    </p>
 
-          <p className="text-sm text-neutral-500 dark:text-neutral-400 bg-neutral-50 dark:bg-neutral-700 p-3 rounded-lg mb-6">
-            {t('eventTypes.deleteConfirm.warning', 'This action cannot be undone. Make sure no events are using this type.')}
-          </p>
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400 bg-neutral-50 dark:bg-neutral-700 p-3 rounded-lg mb-6">
+                      {t('eventTypes.deleteConfirm.warning', 'This action cannot be undone. Make sure no events are using this type.')}
+                    </p>
 
-          <div className="flex justify-end gap-3">
-            <Button variant="outline" onClick={onClose} disabled={isLoading}>
-              {t('common.cancel', 'Cancel')}
-            </Button>
-            <Button
-              variant="primary"
-              onClick={onConfirm}
-              isLoading={isLoading}
-              className="bg-red-600 hover:bg-red-700"
-            >
-              {t('common.delete', 'Delete')}
-            </Button>
-          </div>
-        </div>
-      </Card>
+                    <div className="flex justify-end gap-3">
+                      <Button variant="outline" onClick={onClose} disabled={isLoading}>
+                        {t('common.cancel', 'Cancel')}
+                      </Button>
+                      <Button
+                                              onClick={onConfirm}
+                                              className="bg-red-600 hover:bg-red-700" disabled={isLoading}
+                                            >
+                                              {isLoading && <Loader2 className="animate-spin" />}{t('common.delete', 'Delete')}</Button>
+                    </div>
+                  </div></CardContent></Card>
     </div>
   );
 };

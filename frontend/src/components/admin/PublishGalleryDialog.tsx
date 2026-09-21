@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { X, Send, Lock, Eye, EyeOff } from 'lucide-react';
+import { X, Send, Lock, Eye, EyeOff, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Button, Card, Input } from '../common';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface PublishGalleryDialogProps {
   eventName: string;
@@ -38,6 +41,7 @@ export const PublishGalleryDialog: React.FC<PublishGalleryDialogProps> = ({
   onConfirm,
   onClose,
 }) => {
+    const __fieldId = React.useId();
   const { t } = useTranslation();
   // Someone gets notified if there's an inline email, an assigned account (the
   // account "your galleries" email), OR a phone — publish queues a WhatsApp
@@ -72,144 +76,124 @@ export const PublishGalleryDialog: React.FC<PublishGalleryDialogProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <Card className="max-w-md w-full">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-            {t('events.publishDialog.title', 'Publish gallery')}
-          </h2>
-          <button
-            onClick={onClose}
-            className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300"
-            aria-label={t('common.close', 'Close')}
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        <p className="text-neutral-600 dark:text-neutral-400 mb-4">
-          {/* Follows the checkbox. Left static it contradicted itself — the
-              text promised an email to the customer while the box beneath it
-              said none would be sent. */}
-          {willNotify && !notifyCustomer
-            ? t('events.publishDialog.descriptionQuiet', {
-                eventName,
-                defaultValue:
-                  'Publishing "{{eventName}}" makes the gallery accessible. No email will be sent — you can send it later from this page.',
-              })
-            : customerEmail
-            ? t('events.publishDialog.descriptionWithEmail', {
-                eventName,
-                customerEmail,
-                defaultValue:
-                  'Publishing "{{eventName}}" makes the gallery accessible and sends the notification email to {{customerEmail}}.',
-              })
-            : assignedCustomerCount > 0
-              ? t('events.publishDialog.descriptionAssignedAccount', {
-                  eventName,
-                  count: assignedCustomerCount,
-                  defaultValue:
-                    'Publishing "{{eventName}}" makes the gallery accessible. The assigned customer account(s) will be notified by email (in their language) that it is available.',
-                })
-              : customerPhone
-                ? t('events.publishDialog.descriptionWhatsapp', {
-                    eventName,
-                    defaultValue:
-                      'Publishing "{{eventName}}" makes the gallery accessible. If WhatsApp is configured, the customer is notified there.',
-                  })
-              : t('events.publishDialog.descriptionNoEmail', {
-                  eventName,
-                  defaultValue:
-                    'Publishing "{{eventName}}" makes the gallery accessible. No customer email is set, so no notification will be sent.',
-                })}
-        </p>
-
-        {willNotify && (
-          <label className="flex items-start gap-3 mb-4 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={notifyCustomer}
-              onChange={(e) => {
-                setNotifyCustomer(e.target.checked);
-                if (error) setError(undefined);
-              }}
-              className="mt-1 h-4 w-4 rounded-sm border-neutral-300 dark:border-neutral-600"
-            />
-            <span className="text-sm">
-              <span className="font-medium text-neutral-900 dark:text-neutral-100">
-                {t('events.publishDialog.notifyLabel', 'Send the gallery email now')}
-              </span>
-              <span className="block text-neutral-600 dark:text-neutral-400">
-                {t(
-                  'events.publishDialog.notifyHelp',
-                  'Uncheck to publish quietly — the gallery goes live and nothing is sent. You can send the email later from this page.',
-                )}
-              </span>
-            </span>
-          </label>
-        )}
-
-        {needsPassword && (
-          <div className="space-y-3 mb-4">
-            <Input
-              type={showPassword ? 'text' : 'password'}
-              label={t('events.publishDialog.passwordLabel', 'Gallery password')}
-              placeholder={t('events.publishDialog.passwordPlaceholder', 'Enter the gallery password')}
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-                if (error) setError(undefined);
-              }}
-              error={error}
-              helperText={t(
-                'events.publishDialog.passwordHelp',
-                'Re-type the password set at creation (or pick a new one). The email includes this exact text; the backend re-hashes it so the gallery login still works.',
-              )}
-              leftIcon={<Lock className="w-5 h-5" />}
-              rightIcon={
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="p-1"
-                  aria-label={showPassword ? t('events.passwordReset.hide', 'Hide') : t('events.passwordReset.show', 'Show')}
-                >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
-              }
-            />
-          </div>
-        )}
-
-        {/* Stack both buttons vertically (always). The German primary label
-            "Veröffentlichen & Kunden benachrichtigen" is ~40 chars including
-            the icon — at max-w-md, no side-by-side row layout fits it on one
-            line, and the base .btn class has @apply whitespace-nowrap (see
-            index.css:149) which overrides a whitespace-normal className via
-            CSS cascade order, so the text won't wrap either. Side-by-side
-            would silently push the button past the modal frame (#670).
-            col-reverse keeps the DOM order semantically secondary-then-primary
-            while putting the primary action visually on top — standard
-            confirmation-dialog pattern. */}
-        <div className="flex flex-col-reverse gap-3">
-          <Button
-            variant="outline"
-            onClick={onClose}
-            disabled={isPublishing}
-          >
-            {t('common.cancel', 'Cancel')}
-          </Button>
-          <Button
-            variant="primary"
-            onClick={handleSubmit}
-            disabled={isPublishing}
-            isLoading={isPublishing}
-            leftIcon={willNotify && notifyCustomer ? <Send className="w-4 h-4" /> : undefined}
-          >
-            {willNotify && notifyCustomer
-              ? t('events.publishAndNotify')
-              : t('events.publishDialog.justPublish', 'Publish')}
-          </Button>
-        </div>
-      </Card>
+      <Card className="max-w-md w-full"><CardContent><div className="flex items-center justify-between mb-4">
+                    <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+                      {t('events.publishDialog.title', 'Publish gallery')}
+                    </h2>
+                    <button
+                      onClick={onClose}
+                      className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300"
+                      aria-label={t('common.close', 'Close')}
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div><p className="text-neutral-600 dark:text-neutral-400 mb-4">
+                    {/* Follows the checkbox. Left static it contradicted itself — the
+                        text promised an email to the customer while the box beneath it
+                        said none would be sent. */}
+                    {willNotify && !notifyCustomer
+                      ? t('events.publishDialog.descriptionQuiet', {
+                          eventName,
+                          defaultValue:
+                            'Publishing "{{eventName}}" makes the gallery accessible. No email will be sent — you can send it later from this page.',
+                        })
+                      : customerEmail
+                      ? t('events.publishDialog.descriptionWithEmail', {
+                          eventName,
+                          customerEmail,
+                          defaultValue:
+                            'Publishing "{{eventName}}" makes the gallery accessible and sends the notification email to {{customerEmail}}.',
+                        })
+                      : assignedCustomerCount > 0
+                        ? t('events.publishDialog.descriptionAssignedAccount', {
+                            eventName,
+                            count: assignedCustomerCount,
+                            defaultValue:
+                              'Publishing "{{eventName}}" makes the gallery accessible. The assigned customer account(s) will be notified by email (in their language) that it is available.',
+                          })
+                        : customerPhone
+                          ? t('events.publishDialog.descriptionWhatsapp', {
+                              eventName,
+                              defaultValue:
+                                'Publishing "{{eventName}}" makes the gallery accessible. If WhatsApp is configured, the customer is notified there.',
+                            })
+                        : t('events.publishDialog.descriptionNoEmail', {
+                            eventName,
+                            defaultValue:
+                              'Publishing "{{eventName}}" makes the gallery accessible. No customer email is set, so no notification will be sent.',
+                          })}
+                  </p>{willNotify && (
+                    <label className="flex items-start gap-3 mb-4 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={notifyCustomer}
+                        onChange={(e) => {
+                          setNotifyCustomer(e.target.checked);
+                          if (error) setError(undefined);
+                        }}
+                        className="mt-1 h-4 w-4 rounded-sm border-neutral-300 dark:border-neutral-600"
+                      />
+                      <span className="text-sm">
+                        <span className="font-medium text-neutral-900 dark:text-neutral-100">
+                          {t('events.publishDialog.notifyLabel', 'Send the gallery email now')}
+                        </span>
+                        <span className="block text-neutral-600 dark:text-neutral-400">
+                          {t(
+                            'events.publishDialog.notifyHelp',
+                            'Uncheck to publish quietly — the gallery goes live and nothing is sent. You can send the email later from this page.',
+                          )}
+                        </span>
+                      </span>
+                    </label>
+                  )}{needsPassword && (
+                    <div className="space-y-3 mb-4">
+                      <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('events.publishDialog.passwordLabel', 'Gallery password')}</span><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5" />}</div><Input
+                                              type={showPassword ? 'text' : 'password'}
+                                              placeholder={t('events.publishDialog.passwordPlaceholder', 'Enter the gallery password')}
+                                              value={password}
+                                              onChange={(e) => {
+                                                setPassword(e.target.value);
+                                                if (error) setError(undefined);
+                                              }} className="pl-10 pr-10" aria-invalid={!!(error)} aria-describedby={(error) ? `${__fieldId}-0-error` : undefined}
+                                            /><div className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground">{<button
+                                                  type="button"
+                                                  onClick={() => setShowPassword(!showPassword)}
+                                                  className="p-1"
+                                                  aria-label={showPassword ? t('events.passwordReset.hide', 'Hide') : t('events.passwordReset.show', 'Show')}
+                                                >
+                                                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                                </button>}</div></div>{(error) && <p id={`${__fieldId}-0-error`} className="mt-1.5 text-sm text-destructive">{error}</p>}{(t(
+                                                'events.publishDialog.passwordHelp',
+                                                'Re-type the password set at creation (or pick a new one). The email includes this exact text; the backend re-hashes it so the gallery login still works.',
+                                              )) && <p className="mt-1.5 text-sm text-muted-foreground">{t(
+                                                'events.publishDialog.passwordHelp',
+                                                'Re-type the password set at creation (or pick a new one). The email includes this exact text; the backend re-hashes it so the gallery login still works.',
+                                              )}</p>}</Label></div>
+                    </div>
+                  )}{/* Stack both buttons vertically (always). The German primary label
+                      "Veröffentlichen & Kunden benachrichtigen" is ~40 chars including
+                      the icon — at max-w-md, no side-by-side row layout fits it on one
+                      line, and the base .btn class has @apply whitespace-nowrap (see
+                      index.css:149) which overrides a whitespace-normal className via
+                      CSS cascade order, so the text won't wrap either. Side-by-side
+                      would silently push the button past the modal frame (#670).
+                      col-reverse keeps the DOM order semantically secondary-then-primary
+                      while putting the primary action visually on top — standard
+                      confirmation-dialog pattern. */}<div className="flex flex-col-reverse gap-3">
+                    <Button
+                      variant="outline"
+                      onClick={onClose}
+                      disabled={isPublishing}
+                    >
+                      {t('common.cancel', 'Cancel')}
+                    </Button>
+                    <Button
+                                        onClick={handleSubmit} disabled={isPublishing || isPublishing}
+                                      >
+                                        {isPublishing && <Loader2 className="animate-spin" />}{willNotify && notifyCustomer ? <Send className="w-4 h-4" /> : undefined}{willNotify && notifyCustomer
+                                          ? t('events.publishAndNotify')
+                                          : t('events.publishDialog.justPublish', 'Publish')}</Button>
+                  </div></CardContent></Card>
     </div>
   );
 };

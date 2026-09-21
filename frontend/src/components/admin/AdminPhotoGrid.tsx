@@ -10,10 +10,10 @@ import { photosService } from '../../services/photos.service';
 import { uploadsService } from '../../services/uploads.service';
 import { useLocalizedDate } from '../../hooks/useLocalizedDate';
 import { getPhotoViewMode, setPhotoViewMode, type PhotoViewMode } from '../../utils/photoViewPrefs';
-import { Button } from '../common';
 import { PermissionGate } from './PermissionGate';
 import { AdminAuthenticatedImage } from './AdminAuthenticatedImage';
 import { BulkCategoryModal } from './BulkCategoryModal';
+import { Button } from "@/components/ui/button";
 
 interface CategoryOption {
   id: number;
@@ -234,13 +234,11 @@ export const AdminPhotoGrid: React.FC<AdminPhotoGridProps> = ({
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Button
-            variant={isSelectionMode ? "primary" : "outline"}
-            size="sm"
-            onClick={toggleSelectionMode}
-            leftIcon={<Package className="w-4 h-4" />}
-          >
-            {isSelectionMode ? t('gallery.cancelSelection', 'Cancel Selection') : t('gallery.selectPhotos', 'Select Photos')}
-          </Button>
+                              variant={isSelectionMode ? "default" : "outline"}
+                              size="sm"
+                              onClick={toggleSelectionMode}
+                            >
+                              <Package className="w-4 h-4" />{isSelectionMode ? t('gallery.cancelSelection', 'Cancel Selection') : t('gallery.selectPhotos', 'Select Photos')}</Button>
           
           {(isSelectionMode || selectedPhotos.size > 0) && (
             <>
@@ -259,41 +257,35 @@ export const AdminPhotoGrid: React.FC<AdminPhotoGridProps> = ({
                   </span>
                   <PermissionGate permission="photos.edit">
                     <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setIsCategoryModalOpen(true)}
-                      leftIcon={<FolderOpen className="w-4 h-4" />}
-                    >
-                      {t('photos.moveToCategory', 'Move to Category')}
-                    </Button>
+                                                            variant="outline"
+                                                            size="sm"
+                                                            onClick={() => setIsCategoryModalOpen(true)}
+                                                          >
+                                                            <FolderOpen className="w-4 h-4" />{t('photos.moveToCategory', 'Move to Category')}</Button>
                     <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={async () => {
-                        try {
-                          await photosService.bulkUpdatePhotos(eventId, Array.from(selectedPhotos), { visibility: 'hidden' });
-                          toast.success(t('admin.photos.hiddenSuccess', 'Photos hidden'));
-                          onPhotosDeleted();
-                        } catch { toast.error(t('common.error')); }
-                      }}
-                      leftIcon={<EyeOff className="w-4 h-4" />}
-                    >
-                      {t('admin.photos.hideSelected', 'Hide')}
-                    </Button>
+                                                            variant="outline"
+                                                            size="sm"
+                                                            onClick={async () => {
+                                                              try {
+                                                                await photosService.bulkUpdatePhotos(eventId, Array.from(selectedPhotos), { visibility: 'hidden' });
+                                                                toast.success(t('admin.photos.hiddenSuccess', 'Photos hidden'));
+                                                                onPhotosDeleted();
+                                                              } catch { toast.error(t('common.error')); }
+                                                            }}
+                                                          >
+                                                            <EyeOff className="w-4 h-4" />{t('admin.photos.hideSelected', 'Hide')}</Button>
                     <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={async () => {
-                        try {
-                          await photosService.bulkUpdatePhotos(eventId, Array.from(selectedPhotos), { visibility: 'visible' });
-                          toast.success(t('admin.photos.visibleSuccess', 'Photos visible'));
-                          onPhotosDeleted();
-                        } catch { toast.error(t('common.error')); }
-                      }}
-                      leftIcon={<Eye className="w-4 h-4" />}
-                    >
-                      {t('admin.photos.showSelected', 'Show')}
-                    </Button>
+                                                            variant="outline"
+                                                            size="sm"
+                                                            onClick={async () => {
+                                                              try {
+                                                                await photosService.bulkUpdatePhotos(eventId, Array.from(selectedPhotos), { visibility: 'visible' });
+                                                                toast.success(t('admin.photos.visibleSuccess', 'Photos visible'));
+                                                                onPhotosDeleted();
+                                                              } catch { toast.error(t('common.error')); }
+                                                            }}
+                                                          >
+                                                            <Eye className="w-4 h-4" />{t('admin.photos.showSelected', 'Show')}</Button>
                   </PermissionGate>
                   <PermissionGate permission="photos.delete">
                     <button

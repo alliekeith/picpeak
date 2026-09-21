@@ -15,10 +15,11 @@ import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { FileText, ExternalLink, Download } from 'lucide-react';
 import { customerService, type CustomerQuote } from '../../services/customer.service';
-import { Card, Loading } from '../../components/common';
+import { Loading } from '../../components/common';
 import { toast } from 'react-toastify';
 import { formatMoney } from '../../utils/money';
 import { formatShortDate } from '../../utils/dateShort';
+import { Card, CardContent } from "@/components/ui/card";
 
 type SortKey = 'newest' | 'oldest' | 'price_desc' | 'price_asc';
 type StatusFilter = 'all' | 'sent' | 'accepted' | 'declined' | 'expired' | 'converted';
@@ -105,11 +106,9 @@ export const CustomerQuotesPage: React.FC = () => {
       </div>
 
       {allQuotes.length === 0 ? (
-        <Card padding="lg">
-          <p className="text-center text-muted-foreground py-8">
-            {t('customer.quotes.empty', 'No quotes yet.')}
-          </p>
-        </Card>
+        <Card className="py-8"><CardContent className="px-8"><p className="text-center text-muted-foreground py-8">
+                          {t('customer.quotes.empty', 'No quotes yet.')}
+                        </p></CardContent></Card>
       ) : (
         <>
           <FilterSortBar
@@ -119,13 +118,11 @@ export const CustomerQuotesPage: React.FC = () => {
             totalRowCount={allQuotes.length}
             visibleRowCount={visible.length}
           />
-          <Card padding="none">
-            <ul className="divide-y" style={{ borderColor: 'var(--border)' }}>
-              {visible.map((q: CustomerQuote) => (
-                <QuoteRow key={q.id} q={q} />
-              ))}
-            </ul>
-          </Card>
+          <Card className="py-0"><CardContent className="px-0"><ul className="divide-y" style={{ borderColor: 'var(--border)' }}>
+                                    {visible.map((q: CustomerQuote) => (
+                                      <QuoteRow key={q.id} q={q} />
+                                    ))}
+                                  </ul></CardContent></Card>
         </>
       )}
     </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Search, Filter, SortAsc, SortDesc } from 'lucide-react';
-import { Input } from '../common';
 import { useTranslation } from 'react-i18next';
+import { Input } from "@/components/ui/input";
 
 interface PhotoFiltersProps {
   categories: Array<{ id: number | string; name: string; slug: string }>;
@@ -40,13 +40,12 @@ export const PhotoFilters: React.FC<PhotoFiltersProps> = ({
       <div className="flex flex-col lg:flex-row gap-4">
         {/* Search */}
         <div className="flex-1">
-          <Input
-            type="text"
-            placeholder={t('gallery.searchByFilename', 'Search by filename...')}
-            value={searchTerm}
-            onChange={(e) => onSearchChange(e.target.value)}
-            leftIcon={<Search className="w-5 h-5 text-neutral-400" />}
-          />
+          <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Search className="w-5 h-5 text-neutral-400" />}</div><Input
+                              type="text"
+                              placeholder={t('gallery.searchByFilename', 'Search by filename...')}
+                              value={searchTerm}
+                              onChange={(e) => onSearchChange(e.target.value)} className="pl-10"
+                            /></div>
         </div>
 
         {/* Category Filter */}

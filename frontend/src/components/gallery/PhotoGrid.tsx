@@ -7,9 +7,10 @@ import { useTranslation } from 'react-i18next';
 import type { Photo } from '../../types';
 import { useDownloadPhoto } from '../../hooks/useGallery';
 import { PhotoLightbox } from './PhotoLightbox';
-import { Button, AuthenticatedImage } from '../common';
+import { AuthenticatedImage } from '../common';
 import { galleryService } from '../../services/gallery.service';
 import { analyticsService } from '../../services/analytics.service';
+import { Button } from "@/components/ui/button";
 
 interface PhotoGridProps {
   photos: Photo[];
@@ -167,15 +168,11 @@ export const PhotoGrid: React.FC<PhotoGridProps> = ({
                 </Button>
                 {selectedPhotos.size > 0 && (
                   <Button
-                    variant="primary"
-                    size="sm"
-                    leftIcon={<Package className="w-4 h-4" />}
-                    onClick={handleDownloadSelected}
-                    className="text-xs sm:text-sm"
-                  >
-                    <span className="hidden sm:inline">{t('gallery.downloadSelected', { count: selectedPhotos.size })}</span>
-                    <span className="sm:hidden">{t('common.download')} ({selectedPhotos.size})</span>
-                  </Button>
+                                                      size="sm"
+                                                      onClick={handleDownloadSelected}
+                                                      className="text-xs sm:text-sm"
+                                                    >
+                                                      <Package className="w-4 h-4" /><span className="hidden sm:inline">{t('gallery.downloadSelected', { count: selectedPhotos.size })}</span><span className="sm:hidden">{t('common.download')} ({selectedPhotos.size})</span></Button>
                 )}
               </div>
             </div>

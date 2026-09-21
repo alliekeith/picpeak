@@ -9,12 +9,15 @@ import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { X } from 'lucide-react';
 import { toast } from 'react-toastify';
-import { Button, Input, LocalizedDateInput } from '../../common';
+import { LocalizedDateInput } from '../../common';
 import { DecimalInput } from '../../common/DecimalInput';
 import { CustomerPicker } from '../CustomerPicker';
 import { PermissionGate } from '../PermissionGate';
 import { quoteCatalogService } from '../../../services/quoteCatalog.service';
 import { quoteErrorText } from '../../../utils/quoteErrors';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface Props {
   open: boolean;
@@ -113,8 +116,8 @@ export const TemplatePickerModal: React.FC<Props> = ({ open, onClose }) => {
                 onClear={() => setCustomer({ id: null, label: '', isPassive: false })}
                 searchPlaceholder={t('quotes.customerSearch', 'Search customer by email or company…') as string}
               />
-              <Input label={t('quotes.field.eventName', 'Event') as string} value={eventName}
-                onChange={(e) => setEventName(e.target.value)} />
+              <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('quotes.field.eventName', 'Event') as string}</span><Input value={eventName}
+                                          onChange={(e) => setEventName(e.target.value)} /></Label></div>
               <LocalizedDateInput label={t('quotes.field.eventDate', 'Event date') as string} value={eventDate}
                 onChange={(iso) => setEventDate(iso)} />
               <div>

@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { AlertCircle, Lock } from 'lucide-react';
+import { AlertCircle, Lock, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-import { Card, CardContent, Input, Button, Loading, PoweredBy } from '../components/common';
+import { Loading, PoweredBy } from '../components/common';
 import { useGalleryAuth } from '../contexts';
 import { useGalleryInfo } from '../hooks/useGallery';
 import { usePublicSettings } from '../hooks/usePublicSettings';
 import { usePublicDarkMode } from '../hooks/usePublicDarkMode';
 import { buildResourceUrl } from '../utils/url';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export const ClientAccessPage: React.FC = () => {
+    const __fieldId = React.useId();
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const { isAuthenticated, isClient, clientLogin, isLoading: authLoading } = useGalleryAuth();
@@ -139,29 +144,22 @@ export const ClientAccessPage: React.FC = () => {
               </div>
 
               <form onSubmit={handleLogin} className="space-y-4">
-                <Input
-                  type="password"
-                  label={t('clientAccess.pinLabel')}
-                  placeholder={t('clientAccess.pinPlaceholder')}
-                  value={pin}
-                  onChange={(e) => {
-                    setPin(e.target.value);
-                    setLoginError(null);
-                  }}
-                  error={loginError || undefined}
-                  leftIcon={<Lock className="w-5 h-5" />}
-                  autoFocus
-                />
+                <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('clientAccess.pinLabel')}</span><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5" />}</div><Input
+                                                type="password"
+                                                placeholder={t('clientAccess.pinPlaceholder')}
+                                                value={pin}
+                                                onChange={(e) => {
+                                                  setPin(e.target.value);
+                                                  setLoginError(null);
+                                                }}
+                                                autoFocus className="pl-10" aria-invalid={!!(loginError || undefined)} aria-describedby={(loginError || undefined) ? `${__fieldId}-0-error` : undefined}
+                                              /></div>{(loginError || undefined) && <p id={`${__fieldId}-0-error`} className="mt-1.5 text-sm text-destructive">{loginError || undefined}</p>}</Label></div>
 
                 <Button
-                  type="submit"
-                  variant="primary"
-                  className="w-full"
-                  isLoading={isLoggingIn}
-                  disabled={isLoggingIn}
-                >
-                  {t('clientAccess.loginButton')}
-                </Button>
+                                                type="submit"
+                                                className="w-full" disabled={isLoggingIn || isLoggingIn}
+                                              >
+                                                {isLoggingIn && <Loader2 className="animate-spin" />}{t('clientAccess.loginButton')}</Button>
               </form>
 
               <div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700 text-center">

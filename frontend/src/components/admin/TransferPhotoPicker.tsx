@@ -9,13 +9,15 @@
 import React, { useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { X, Check, Image as ImageIcon, Maximize2, Search } from 'lucide-react';
+import { X, Check, Image as ImageIcon, Maximize2, Search, Loader2 } from 'lucide-react';
 
-import { Button, Input, Loading } from '../common';
+import { Loading } from '../common';
 import { AdminAuthenticatedImage } from './AdminAuthenticatedImage';
 import { eventsService } from '../../services/events.service';
 import { photosService, type AdminPhoto } from '../../services/photos.service';
 import { useAdminAuth } from '../../contexts/AdminAuthContext';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export interface PickedPhoto {
   id: number;
@@ -107,13 +109,11 @@ export const TransferPhotoPicker: React.FC<TransferPhotoPickerProps> = ({
           </h2>
           <div className="flex items-center gap-2">
             <Button
-              variant={lightboxEnabled ? 'primary' : 'outline'}
-              size="sm"
-              leftIcon={<Maximize2 className="h-4 w-4" />}
-              onClick={() => setLightboxEnabled((v) => !v)}
-            >
-              {t('transfers.picker.lightbox', 'Lightbox')}
-            </Button>
+                                    variant={lightboxEnabled ? 'default' : 'outline'}
+                                    size="sm"
+                                    onClick={() => setLightboxEnabled((v) => !v)}
+                                  >
+                                    <Maximize2 className="h-4 w-4" />{t('transfers.picker.lightbox', 'Lightbox')}</Button>
             <button onClick={onClose} className="rounded-sm p-1 text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800">
               <X className="h-5 w-5" />
             </button>
@@ -124,12 +124,11 @@ export const TransferPhotoPicker: React.FC<TransferPhotoPickerProps> = ({
           {/* Event list */}
           <div className="flex w-64 flex-col border-r border-neutral-200 dark:border-neutral-700">
             <div className="p-3">
-              <Input
-                leftIcon={<Search className="h-4 w-4" />}
-                placeholder={t('transfers.picker.searchEvents', 'Search events…')}
-                value={eventSearch}
-                onChange={(e) => setEventSearch(e.target.value)}
-              />
+              <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Search className="h-4 w-4" />}</div><Input
+                                          placeholder={t('transfers.picker.searchEvents', 'Search events…')}
+                                          value={eventSearch}
+                                          onChange={(e) => setEventSearch(e.target.value)} className="pl-10"
+                                        /></div>
             </div>
             <div className="min-h-0 flex-1 overflow-y-auto">
               {eventsLoading ? (
@@ -211,12 +210,9 @@ export const TransferPhotoPicker: React.FC<TransferPhotoPickerProps> = ({
           <div className="flex gap-2">
             <Button variant="outline" onClick={onClose}>{t('common.cancel', 'Cancel')}</Button>
             <Button
-              onClick={() => onConfirm(Array.from(selected.values()))}
-              disabled={selected.size === 0}
-              isLoading={isSaving}
-            >
-              {t('transfers.picker.addSelected', 'Add selected')}
-            </Button>
+                                    onClick={() => onConfirm(Array.from(selected.values()))} disabled={selected.size === 0 || isSaving}
+                                  >
+                                    {isSaving && <Loader2 className="animate-spin" />}{t('transfers.picker.addSelected', 'Add selected')}</Button>
           </div>
         </div>
       </div>
@@ -240,7 +236,7 @@ export const TransferPhotoPicker: React.FC<TransferPhotoPickerProps> = ({
               <span className="text-sm text-white/80">{previewPhoto.original_filename || previewPhoto.filename}</span>
               <Button
                 size="sm"
-                variant={selected.has(previewPhoto.id) ? 'outline' : 'primary'}
+                variant={selected.has(previewPhoto.id) ? 'outline' : 'default'}
                 onClick={() => togglePhoto(previewPhoto)}
               >
                 {selected.has(previewPhoto.id) ? t('transfers.picker.deselect', 'Deselect') : t('transfers.picker.select', 'Select')}

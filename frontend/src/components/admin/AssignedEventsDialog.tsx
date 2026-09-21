@@ -20,14 +20,14 @@
  * token-blacklist step needed on the frontend.
  */
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Search, X, Calendar as CalendarIcon } from 'lucide-react';
+import { Search, X, Calendar as CalendarIcon, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Button } from '../common';
 import { customerAdminService } from '../../services/customerAdmin.service';
 import { eventsService } from '../../services/events.service';
 import type { Event as AdminEvent } from '../../types';
+import { Button } from "@/components/ui/button";
 
 interface SelectedEvent {
   id: number;
@@ -320,13 +320,9 @@ export const AssignedEventsDialog: React.FC<Props> = ({ customerId, isOpen, init
             {t('common.cancel', 'Cancel')}
           </Button>
           <Button
-            variant="primary"
-            onClick={() => saveMutation.mutate()}
-            disabled={!isDirty || saveMutation.isPending}
-            isLoading={saveMutation.isPending}
-          >
-            {t('customers.assignedEvents.save', 'Save assignments')}
-          </Button>
+                              onClick={() => saveMutation.mutate()} disabled={!isDirty || saveMutation.isPending || saveMutation.isPending}
+                            >
+                              {saveMutation.isPending && <Loader2 className="animate-spin" />}{t('customers.assignedEvents.save', 'Save assignments')}</Button>
         </div>
       </div>
     </div>

@@ -27,9 +27,12 @@ import { useTranslation } from 'react-i18next';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Lock, Trash2 } from 'lucide-react';
 import { toast } from 'react-toastify';
-import { Button, Card, Input, TimeField } from '../../../components/common';
+import { TimeField } from '../../../components/common';
 import { customerAdminService } from '../../../services/customerAdmin.service';
 import type { CalendarHoursItem } from '../../../services/calendar.service';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 export interface HourEntryInlinePopoverProps {
   item: CalendarHoursItem;
@@ -138,96 +141,90 @@ export const HourEntryInlinePopover: React.FC<HourEntryInlinePopoverProps> = ({
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <Card padding="lg" className="w-full max-w-md">
-        <div className="flex items-start justify-between mb-2">
-          <div>
-            <h2 className="font-semibold text-lg">
-              {item.customerName || t('calendar.hourEntry.untitledCustomer', 'Hours')}
-            </h2>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400">
-              {item.entryDate} · {item.startTime}–{item.endTime}
-            </p>
-          </div>
-          {item.locked && (
-            <span
-              className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded
-                         bg-neutral-200 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-200"
-              title={t('calendar.hourEntry.lockedTooltip',
-                'Already billed — Storno the invoice to edit.') as string}
-            >
-              <Lock className="w-3 h-3" aria-hidden />
-              {t('calendar.hourEntry.lockedBadge', 'Locked')}
-            </span>
-          )}
-        </div>
-
-        {item.locked ? (
-          // Read-only summary. We deliberately don't render any inputs
-          // here so the admin can't accidentally type into a locked
-          // entry. The invoice link is omitted for now — clicking
-          // through to the bill belongs on a follow-up commit.
-          <p className="text-sm text-neutral-500 dark:text-neutral-400">
-            {item.description || t('calendar.hourEntry.noDescription', 'No description.')}
-          </p>
-        ) : (
-          <form onSubmit={submit} className="space-y-3" id="hour-entry-edit-form">
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  {t('calendar.hourEntry.startLabel', 'Start')}
-                </label>
-                <TimeField value={startTime} onChange={setStartTime} />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  {t('calendar.hourEntry.endLabel', 'End')}
-                </label>
-                <TimeField value={endTime} onChange={setEndTime} />
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                {t('calendar.hourEntry.descriptionLabel', 'Description (optional)')}
-              </label>
-              <Input
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                maxLength={1000}
-              />
-            </div>
-          </form>
-        )}
-
-        <div className="mt-5 flex items-center justify-between gap-2">
-          {item.locked ? <span /> : (
-            <Button
-              variant="outline"
-              onClick={() => {
-                if (window.confirm(t('calendar.hourEntry.confirmDelete',
-                  'Delete these logged hours? This cannot be undone.') as string)) {
-                  deleteMutation.mutate();
-                }
-              }}
-              disabled={busy}
-            >
-              <Trash2 className="w-4 h-4 mr-1" aria-hidden />
-              {t('calendar.hourEntry.delete', 'Delete')}
-            </Button>
-          )}
-          <div className="flex items-center gap-2 ml-auto">
-            <Button type="button" variant="outline" onClick={onClose} disabled={busy}>
-              {t('calendar.hourEntry.close', 'Close')}
-            </Button>
-            {!item.locked && (
-              <Button type="submit" form="hour-entry-edit-form" disabled={busy}>
-                {updateMutation.isPending
-                  ? t('calendar.hourEntry.saving', 'Saving…')
-                  : t('calendar.hourEntry.submit', 'Save')}
-              </Button>
-            )}
-          </div>
-        </div>
-      </Card>
+      <Card className="py-8 w-full max-w-md"><CardContent className="px-8"><div className="flex items-start justify-between mb-2">
+                    <div>
+                      <h2 className="font-semibold text-lg">
+                        {item.customerName || t('calendar.hourEntry.untitledCustomer', 'Hours')}
+                      </h2>
+                      <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                        {item.entryDate} · {item.startTime}–{item.endTime}
+                      </p>
+                    </div>
+                    {item.locked && (
+                      <span
+                        className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded
+                                   bg-neutral-200 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-200"
+                        title={t('calendar.hourEntry.lockedTooltip',
+                          'Already billed — Storno the invoice to edit.') as string}
+                      >
+                        <Lock className="w-3 h-3" aria-hidden />
+                        {t('calendar.hourEntry.lockedBadge', 'Locked')}
+                      </span>
+                    )}
+                  </div>{item.locked ? (
+                    // Read-only summary. We deliberately don't render any inputs
+                    // here so the admin can't accidentally type into a locked
+                    // entry. The invoice link is omitted for now — clicking
+                    // through to the bill belongs on a follow-up commit.
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                      {item.description || t('calendar.hourEntry.noDescription', 'No description.')}
+                    </p>
+                  ) : (
+                    <form onSubmit={submit} className="space-y-3" id="hour-entry-edit-form">
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-sm font-medium mb-1">
+                            {t('calendar.hourEntry.startLabel', 'Start')}
+                          </label>
+                          <TimeField value={startTime} onChange={setStartTime} />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium mb-1">
+                            {t('calendar.hourEntry.endLabel', 'End')}
+                          </label>
+                          <TimeField value={endTime} onChange={setEndTime} />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">
+                          {t('calendar.hourEntry.descriptionLabel', 'Description (optional)')}
+                        </label>
+                        <Input
+                          value={description}
+                          onChange={(e) => setDescription(e.target.value)}
+                          maxLength={1000}
+                        />
+                      </div>
+                    </form>
+                  )}<div className="mt-5 flex items-center justify-between gap-2">
+                    {item.locked ? <span /> : (
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          if (window.confirm(t('calendar.hourEntry.confirmDelete',
+                            'Delete these logged hours? This cannot be undone.') as string)) {
+                            deleteMutation.mutate();
+                          }
+                        }}
+                        disabled={busy}
+                      >
+                        <Trash2 className="w-4 h-4 mr-1" aria-hidden />
+                        {t('calendar.hourEntry.delete', 'Delete')}
+                      </Button>
+                    )}
+                    <div className="flex items-center gap-2 ml-auto">
+                      <Button type="button" variant="outline" onClick={onClose} disabled={busy}>
+                        {t('calendar.hourEntry.close', 'Close')}
+                      </Button>
+                      {!item.locked && (
+                        <Button type="submit" form="hour-entry-edit-form" disabled={busy}>
+                          {updateMutation.isPending
+                            ? t('calendar.hourEntry.saving', 'Saving…')
+                            : t('calendar.hourEntry.submit', 'Save')}
+                        </Button>
+                      )}
+                    </div>
+                  </div></CardContent></Card>
     </div>
   );
 };

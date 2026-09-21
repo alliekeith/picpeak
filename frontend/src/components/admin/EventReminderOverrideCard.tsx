@@ -25,10 +25,13 @@
 
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Bell, BellOff, Save } from 'lucide-react';
-import { Button, Card, Input } from '../common';
+import { Bell, BellOff, Save, Loader2 } from 'lucide-react';
 import { api } from '../../config/api';
 import { useMutationWithToast } from '../../hooks';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export interface EventReminderOverrideCardProps {
   eventId: number;
@@ -97,77 +100,66 @@ export const EventReminderOverrideCard: React.FC<EventReminderOverrideCardProps>
   });
 
   return (
-    <Card padding="lg" className="mt-4">
-      <div className="flex items-start justify-between gap-3 mb-2 flex-wrap">
-        <div className="flex items-center gap-2">
-          {disabled
-            ? <BellOff className="w-5 h-5 text-muted-foreground" aria-hidden />
-            : <Bell className="w-5 h-5" aria-hidden />}
-          <h2 className="text-lg font-semibold">
-            {t('eventReminderOverride.title', 'Pre-event reminder')}
-          </h2>
-        </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => save.mutate()}
-          isLoading={save.isPending}
-          disabled={save.isPending}
-          leftIcon={<Save className="w-4 h-4" />}
-        >
-          {t('eventReminderOverride.save', 'Save override')}
-        </Button>
-      </div>
+    <Card className="py-8 mt-4"><CardContent className="px-8"><div className="flex items-start justify-between gap-3 mb-2 flex-wrap">
+              <div className="flex items-center gap-2">
+                {disabled
+                  ? <BellOff className="w-5 h-5 text-muted-foreground" aria-hidden />
+                  : <Bell className="w-5 h-5" aria-hidden />}
+                <h2 className="text-lg font-semibold">
+                  {t('eventReminderOverride.title', 'Pre-event reminder')}
+                </h2>
+              </div>
+              <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => save.mutate()} disabled={save.isPending || save.isPending}
+                            >
+                              {save.isPending && <Loader2 className="animate-spin" />}<Save className="w-4 h-4" />{t('eventReminderOverride.save', 'Save override')}</Button>
+            </div><p className="text-xs text-muted-foreground mb-3">
+              {t('eventReminderOverride.help',
+                'Per-event override for the customer reminder. Global on-off + default offset live under Settings → Reminder emails. Anything left blank here inherits the global setting / resolved template.')}
+            </p><div className="space-y-3">
+              <label className="flex items-center gap-2 text-sm cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={disabled}
+                  onChange={(e) => setDisabled(e.target.checked)}
+                />
+                {t('eventReminderOverride.disabledLabel',
+                  'Disable the reminder for this event (no email goes out)')}
+              </label>
 
-      <p className="text-xs text-muted-foreground mb-3">
-        {t('eventReminderOverride.help',
-          'Per-event override for the customer reminder. Global on-off + default offset live under Settings → Reminder emails. Anything left blank here inherits the global setting / resolved template.')}
-      </p>
+              <div>
+                <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('eventReminderOverride.offsetLabel',
+                                      'Days before the event (override) — leave blank to inherit') as string}</span><Input
+                                    type="number"
+                                    min={0}
+                                    max={365}
+                                    value={offsetDays}
+                                    onChange={(e) => setOffsetDays(e.target.value)}
+                                    placeholder={t('eventReminderOverride.offsetPlaceholder',
+                                      'Leave blank to use the global default') as string}
+                                    disabled={disabled}
+                                    className="md:w-80"
+                                  /></Label></div>
+              </div>
 
-      <div className="space-y-3">
-        <label className="flex items-center gap-2 text-sm cursor-pointer">
-          <input
-            type="checkbox"
-            checked={disabled}
-            onChange={(e) => setDisabled(e.target.checked)}
-          />
-          {t('eventReminderOverride.disabledLabel',
-            'Disable the reminder for this event (no email goes out)')}
-        </label>
-
-        <div>
-          <Input
-            type="number"
-            min={0}
-            max={365}
-            label={t('eventReminderOverride.offsetLabel',
-              'Days before the event (override) — leave blank to inherit') as string}
-            value={offsetDays}
-            onChange={(e) => setOffsetDays(e.target.value)}
-            placeholder={t('eventReminderOverride.offsetPlaceholder',
-              'Leave blank to use the global default') as string}
-            disabled={disabled}
-            className="md:w-80"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-1">
-            {t('eventReminderOverride.bodyOverrideLabel',
-              'Custom body for this event (overrides the resolved template body)')}
-          </label>
-          <textarea
-            rows={6}
-            className="input w-full text-sm"
-            placeholder={t('eventReminderOverride.bodyOverridePlaceholder',
-              'Leave blank to use the template body. Variables like {{customer_name}}, {{event_name}}, {{event_date}} still work here.') as string}
-            value={bodyOverride}
-            onChange={(e) => setBodyOverride(e.target.value)}
-            disabled={disabled}
-          />
-        </div>
-      </div>
-    </Card>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  {t('eventReminderOverride.bodyOverrideLabel',
+                    'Custom body for this event (overrides the resolved template body)')}
+                </label>
+                <textarea
+                  rows={6}
+                  className="input w-full text-sm"
+                  placeholder={t('eventReminderOverride.bodyOverridePlaceholder',
+                    'Leave blank to use the template body. Variables like {{customer_name}}, {{event_name}}, {{event_date}} still work here.') as string}
+                  value={bodyOverride}
+                  onChange={(e) => setBodyOverride(e.target.value)}
+                  disabled={disabled}
+                />
+              </div>
+            </div></CardContent></Card>
   );
 };
 

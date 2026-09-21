@@ -14,12 +14,14 @@ import { useQuery } from '@tanstack/react-query';
 import { ArrowLeft, Calendar, Clock, Download, ExternalLink } from 'lucide-react';
 import { toast } from 'react-toastify';
 
-import { Button, Card, Loading } from '../../components/common';
+import { Loading } from '../../components/common';
 import { useLocalizedDate } from '../../hooks/useLocalizedDate';
 import { formatMoneyMinor } from '../../utils/money';
 import { customerService } from '../../services/customer.service';
 import { storeGalleryToken, setActiveGallerySlug } from '../../utils/galleryAuthStorage';
 import { CustomerDocumentList } from './CustomerDocumentsPage';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 /** Open a blob URL produced by `load` in a new tab, keeping the click gesture. */
 async function openPdf(load: () => Promise<string>, blockedMessage: string, failedMessage: string) {
@@ -37,10 +39,7 @@ async function openPdf(load: () => Promise<string>, blockedMessage: string, fail
 }
 
 const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
-  <Card padding="none" className="mb-4">
-    <h2 className="px-4 pt-4 pb-2 text-base font-semibold text-foreground">{title}</h2>
-    {children}
-  </Card>
+  <Card className="py-0 mb-4"><CardContent className="px-0"><h2 className="px-4 pt-4 pb-2 text-base font-semibold text-foreground">{title}</h2>{children}</CardContent></Card>
 );
 
 export const CustomerEventPage: React.FC = () => {
@@ -117,31 +116,25 @@ export const CustomerEventPage: React.FC = () => {
         )}
       </div>
 
-      <Card padding="lg" className="mb-4">
-        <h2 className="text-base font-semibold text-foreground mb-2">{t('customer.event.gallery', 'Gallery')}</h2>
-        {event.availability === 'active' ? (
-          <Button
-            type="button"
-            variant="primary"
-            size="sm"
-            onClick={openGallery}
-            disabled={opening}
-            leftIcon={<ExternalLink className="w-4 h-4" />}
-          >
-            {opening ? t('customer.dashboard.opening', 'Opening…') : t('customer.event.openGallery', 'Open gallery')}
-          </Button>
-        ) : event.availability === 'expired' ? (
-          <p className="text-sm text-muted-foreground">
-            {t('customer.event.galleryExpired', 'This gallery expired on {{date}} and can no longer be opened. Contact your photographer if you still need the photos.', {
-              date: event.expiresAt ? fmtDate(event.expiresAt) : '',
-            })}
-          </p>
-        ) : (
-          <p className="text-sm text-muted-foreground">
-            {t('customer.event.galleryUnavailable', 'This gallery is not available yet.')}
-          </p>
-        )}
-      </Card>
+      <Card className="py-8 mb-4"><CardContent className="px-8"><h2 className="text-base font-semibold text-foreground mb-2">{t('customer.event.gallery', 'Gallery')}</h2>{event.availability === 'active' ? (
+                    <Button
+                                        type="button"
+                                        size="sm"
+                                        onClick={openGallery}
+                                        disabled={opening}
+                                      >
+                                        <ExternalLink className="w-4 h-4" />{opening ? t('customer.dashboard.opening', 'Opening…') : t('customer.event.openGallery', 'Open gallery')}</Button>
+                  ) : event.availability === 'expired' ? (
+                    <p className="text-sm text-muted-foreground">
+                      {t('customer.event.galleryExpired', 'This gallery expired on {{date}} and can no longer be opened. Contact your photographer if you still need the photos.', {
+                        date: event.expiresAt ? fmtDate(event.expiresAt) : '',
+                      })}
+                    </p>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">
+                      {t('customer.event.galleryUnavailable', 'This gallery is not available yet.')}
+                    </p>
+                  )}</CardContent></Card>
 
       {sections.quotes && data.quotes.length > 0 && (
         <Section title={t('customer.nav.quotes', 'Quotes')}>
@@ -155,10 +148,9 @@ export const CustomerEventPage: React.FC = () => {
                     {q.issueDate && fmtDate(q.issueDate)}{' · '}{formatMoneyMinor(q.totalAmountMinor, q.currency)}
                   </p>
                 </div>
-                <Button type="button" variant="outline" size="sm" leftIcon={<Download className="w-4 h-4" />}
-                  onClick={() => openPdf(() => customerService.quotePdfUrl(q.id), blocked, failed)}>
-                  {t('customer.event.pdf', 'PDF')}
-                </Button>
+                <Button type="button" variant="outline" size="sm"
+                                      onClick={() => openPdf(() => customerService.quotePdfUrl(q.id), blocked, failed)}>
+                                      <Download className="w-4 h-4" />{t('customer.event.pdf', 'PDF')}</Button>
               </li>
             ))}
           </ul>
@@ -176,10 +168,9 @@ export const CustomerEventPage: React.FC = () => {
                   {c.title && <p className="text-xs text-muted-foreground mt-0.5">{c.title}</p>}
                 </div>
                 {(c.hasPdf || c.hasSignedPdf) && (
-                  <Button type="button" variant="outline" size="sm" leftIcon={<Download className="w-4 h-4" />}
-                    onClick={() => openPdf(() => customerService.contractPdfUrl(c.id), blocked, failed)}>
-                    {t('customer.event.pdf', 'PDF')}
-                  </Button>
+                  <Button type="button" variant="outline" size="sm"
+                                            onClick={() => openPdf(() => customerService.contractPdfUrl(c.id), blocked, failed)}>
+                                            <Download className="w-4 h-4" />{t('customer.event.pdf', 'PDF')}</Button>
                 )}
               </li>
             ))}
@@ -200,10 +191,9 @@ export const CustomerEventPage: React.FC = () => {
                     {' · '}{formatMoneyMinor(i.totalAmountMinor, i.currency)}
                   </p>
                 </div>
-                <Button type="button" variant="outline" size="sm" leftIcon={<Download className="w-4 h-4" />}
-                  onClick={() => openPdf(() => customerService.invoicePdfUrl(i.id), blocked, failed)}>
-                  {t('customer.event.pdf', 'PDF')}
-                </Button>
+                <Button type="button" variant="outline" size="sm"
+                                      onClick={() => openPdf(() => customerService.invoicePdfUrl(i.id), blocked, failed)}>
+                                      <Download className="w-4 h-4" />{t('customer.event.pdf', 'PDF')}</Button>
               </li>
             ))}
           </ul>

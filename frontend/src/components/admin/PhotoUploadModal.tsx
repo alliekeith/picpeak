@@ -1,8 +1,8 @@
 import React from 'react';
 import { X } from 'lucide-react';
-import { Button } from '../common';
 import { PhotoUpload } from './PhotoUpload';
 import { useTranslation } from 'react-i18next';
+import { Button } from "@/components/ui/button";
 
 interface PhotoUploadModalProps {
   isOpen: boolean;

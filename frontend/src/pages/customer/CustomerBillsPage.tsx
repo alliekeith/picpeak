@@ -16,10 +16,11 @@ import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import { Receipt, Download } from 'lucide-react';
 import { customerService, type CustomerInvoice } from '../../services/customer.service';
-import { Card, Loading } from '../../components/common';
+import { Loading } from '../../components/common';
 import { toast } from 'react-toastify';
 import { formatMoney } from '../../utils/money';
 import { formatShortDate } from '../../utils/dateShort';
+import { Card, CardContent } from "@/components/ui/card";
 
 type SortKey = 'newest' | 'oldest' | 'price_desc' | 'price_asc';
 type StatusFilter = 'all' | 'sent' | 'paid' | 'overdue' | 'outstanding';
@@ -126,11 +127,9 @@ export const CustomerBillsPage: React.FC = () => {
       </div>
 
       {invoices.length === 0 ? (
-        <Card padding="lg">
-          <p className="text-center text-muted-foreground py-8">
-            {t('customer.bills.empty', 'No invoices yet.')}
-          </p>
-        </Card>
+        <Card className="py-8"><CardContent className="px-8"><p className="text-center text-muted-foreground py-8">
+                          {t('customer.bills.empty', 'No invoices yet.')}
+                        </p></CardContent></Card>
       ) : (
         <>
           <FilterSortBar
@@ -140,13 +139,11 @@ export const CustomerBillsPage: React.FC = () => {
             totalRowCount={invoices.length}
             visibleRowCount={visible.length}
           />
-          <Card padding="none">
-            <ul className="divide-y" style={{ borderColor: 'var(--border)' }}>
-              {visible.map((inv) => (
-                <InvoiceRow key={inv.id} inv={inv} onViewPdf={() => handleViewPdf(inv)} />
-              ))}
-            </ul>
-          </Card>
+          <Card className="py-0"><CardContent className="px-0"><ul className="divide-y" style={{ borderColor: 'var(--border)' }}>
+                                    {visible.map((inv) => (
+                                      <InvoiceRow key={inv.id} inv={inv} onViewPdf={() => handleViewPdf(inv)} />
+                                    ))}
+                                  </ul></CardContent></Card>
         </>
       )}
     </div>

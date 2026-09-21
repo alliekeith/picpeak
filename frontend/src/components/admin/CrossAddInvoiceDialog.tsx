@@ -8,7 +8,7 @@
  */
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from '../common';
+import { Button } from "@/components/ui/button";
 
 interface Props {
   open: boolean;

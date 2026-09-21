@@ -11,11 +11,15 @@ import { Skeleton, SkeletonGalleryGrid, SkeletonCard } from '../Skeleton';
  * track whatever the theme defines for both light and dark modes.
  */
 describe('Skeleton — theme-aware colour', () => {
-  it('uses var(--border) for the placeholder background', () => {
+  // The placeholder colour is no longer an inline style. The stock shadcn
+  // Skeleton carries bg-accent, which resolves through the same theme
+  // variables ThemeContext writes, so the guard against #358 becomes "does it
+  // use a theme token" rather than "is this exact inline value present".
+  it('uses a theme token for the placeholder background', () => {
     const { container } = render(<Skeleton />);
     const div = container.querySelector('div');
     expect(div).not.toBeNull();
-    expect(div!.style.backgroundColor).toBe('var(--border, #e5e5e5)');
+    expect(div!.className).toMatch(/\bbg-accent\b/);
   });
 
   it('does NOT add the legacy hard-coded bg-neutral-200 class', () => {
@@ -26,14 +30,15 @@ describe('Skeleton — theme-aware colour', () => {
 
   it('SkeletonGalleryGrid tiles inherit the theme colour', () => {
     const { container } = render(<SkeletonGalleryGrid count={3} />);
-    // Tiles are the Skeleton components — direct children of the
-    // gallery-grid wrapper. They carry aria-busy="true" while the
-    // wrapper does not, which is the cleanest way to select them.
-    const tiles = container.querySelectorAll('[aria-busy="true"]');
+    // aria-busy now sits on the grid wrapper rather than on each tile: the
+    // stock Skeleton sets no aria attributes, and one busy region per loading
+    // block reads better than one announcement per placeholder.
+    expect(container.querySelector('[aria-busy="true"]')).not.toBeNull();
+    const tiles = container.querySelectorAll('[data-slot="skeleton"]');
     expect(tiles.length).toBe(3);
     tiles.forEach((tile) => {
-      expect((tile as HTMLElement).style.backgroundColor).toBe(
-        'var(--border, #e5e5e5)'
+      expect((tile as HTMLElement).className).toMatch(
+        /\bbg-accent\b/
       );
     });
   });

@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import { X, Download, Filter, SortAsc, SortDesc, Search, Calendar, Type, HardDrive, Check, Star, Upload, Camera } from 'lucide-react';
-import { Button } from '../common';
 import { PhotoCategory } from '../../types';
 import { useTranslation } from 'react-i18next';
 import { GalleryFilter, type FilterType, type FeedbackFilterType } from './GalleryFilter';
 import { ColorLabelFilterChips } from './ColorLabelFilterChips';
 import type { ColorLabel } from '../../services/feedback.service';
+import { Button } from "@/components/ui/button";
 
 interface GallerySidebarProps {
   isOpen: boolean;
@@ -169,17 +169,15 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
           {allowUploads && onUploadClick && (
             <div className="gallery-sidebar-section gallery-sidebar-upload p-4 border-b border-border">
               <Button
-                variant="outline"
-                size="sm"
-                leftIcon={<Upload className="w-4 h-4" />}
-                onClick={() => {
-                  onUploadClick();
-                  if (isMobile) onClose();
-                }}
-                className="gallery-btn w-full"
-              >
-                {t('upload.uploadPhotos')}
-              </Button>
+                                          variant="outline"
+                                          size="sm"
+                                          onClick={() => {
+                                            onUploadClick();
+                                            if (isMobile) onClose();
+                                          }}
+                                          className="gallery-btn w-full"
+                                        >
+                                          <Upload className="w-4 h-4" />{t('upload.uploadPhotos')}</Button>
             </div>
           )}
 
@@ -209,15 +207,13 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
 
               <div className="space-y-2">
                 <Button
-                  variant="primary"
-                  size="sm"
-                  leftIcon={<Download className="w-4 h-4" />}
-                  onClick={onDownloadAll}
-                  disabled={isDownloading || (downloadAllTotal ?? totalPhotos) === 0}
-                  className="gallery-btn gallery-btn-download w-full"
-                >
-                  {t('gallery.downloadAll')} ({downloadAllTotal ?? totalPhotos})
-                </Button>
+                                                size="sm"
+                                                onClick={onDownloadAll}
+                                                disabled={isDownloading || (downloadAllTotal ?? totalPhotos) === 0}
+                                                className="gallery-btn gallery-btn-download w-full"
+                                              >
+                                                <Download className="w-4 h-4" />{t('gallery.downloadAll')}({downloadAllTotal ?? totalPhotos})
+                                              </Button>
 
                 <Button
                   variant={isSelectionMode ? 'secondary' : 'outline'}
@@ -230,15 +226,13 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
 
                 {isSelectionMode && selectedCount > 0 && (
                   <Button
-                    variant="primary"
-                    size="sm"
-                    leftIcon={<Download className="w-4 h-4" />}
-                    onClick={onDownloadSelected}
-                    disabled={isDownloading}
-                    className="gallery-btn gallery-btn-download w-full"
-                  >
-                    {t('gallery.downloadSelected', { count: selectedCount })} ({selectedCount})
-                  </Button>
+                                                      size="sm"
+                                                      onClick={onDownloadSelected}
+                                                      disabled={isDownloading}
+                                                      className="gallery-btn gallery-btn-download w-full"
+                                                    >
+                                                      <Download className="w-4 h-4" />{t('gallery.downloadSelected', { count: selectedCount })}({selectedCount})
+                                                    </Button>
                 )}
               </div>
             </div>
@@ -337,7 +331,7 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
               </h3>
               <div className="flex items-center gap-2 flex-wrap">
                 <Button
-                  variant={mediaFilter === 'all' ? 'primary' : 'outline'}
+                  variant={mediaFilter === 'all' ? 'default' : 'outline'}
                   size="sm"
                   className="gallery-btn"
                   onClick={() => {
@@ -348,7 +342,7 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
                   {t('gallery.allMedia', 'All')}
                 </Button>
                 <Button
-                  variant={mediaFilter === 'photo' ? 'primary' : 'outline'}
+                  variant={mediaFilter === 'photo' ? 'default' : 'outline'}
                   size="sm"
                   className="gallery-btn"
                   onClick={() => {
@@ -359,7 +353,7 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
                   {t('gallery.photosOnly', 'Photos')}
                 </Button>
                 <Button
-                  variant={mediaFilter === 'video' ? 'primary' : 'outline'}
+                  variant={mediaFilter === 'video' ? 'default' : 'outline'}
                   size="sm"
                   className="gallery-btn"
                   onClick={() => {
@@ -413,23 +407,19 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
               {onSortDescChange && (
                 <div className="flex items-center gap-2 mt-3">
                   <Button
-                    variant={!sortDesc ? 'primary' : 'outline'}
-                    size="sm"
-                    leftIcon={<SortAsc className="w-4 h-4" />}
-                    onClick={() => onSortDescChange(false)}
-                    className="gallery-btn flex-1"
-                  >
-                    {t('gallery.sortAscending', 'Sort ascending')}
-                  </Button>
+                                                      variant={!sortDesc ? 'default' : 'outline'}
+                                                      size="sm"
+                                                      onClick={() => onSortDescChange(false)}
+                                                      className="gallery-btn flex-1"
+                                                    >
+                                                      <SortAsc className="w-4 h-4" />{t('gallery.sortAscending', 'Sort ascending')}</Button>
                   <Button
-                    variant={sortDesc ? 'primary' : 'outline'}
-                    size="sm"
-                    leftIcon={<SortDesc className="w-4 h-4" />}
-                    onClick={() => onSortDescChange(true)}
-                    className="gallery-btn flex-1"
-                  >
-                    {t('gallery.sortDescending', 'Sort descending')}
-                  </Button>
+                                                      variant={sortDesc ? 'default' : 'outline'}
+                                                      size="sm"
+                                                      onClick={() => onSortDescChange(true)}
+                                                      className="gallery-btn flex-1"
+                                                    >
+                                                      <SortDesc className="w-4 h-4" />{t('gallery.sortDescending', 'Sort descending')}</Button>
                 </div>
               )}
             </div>

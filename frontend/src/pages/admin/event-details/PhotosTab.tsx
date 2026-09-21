@@ -2,14 +2,16 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
-import { AlertCircle, Upload, X } from 'lucide-react';
+import { AlertCircle, Upload, X, Loader2 } from 'lucide-react';
 import type { Event } from '../../../types';
-import { Button, Card, Loading } from '../../../components/common';
+import { Loading } from '../../../components/common';
 import { AdminPhotoGrid, AdminPhotoViewer, PhotoFilters, PhotoUploadModal, PhotoFilterPanel, PhotoExportMenu } from '../../../components/admin';
 import { PermissionGate } from '../../../components/admin/PermissionGate';
 import { externalMediaService } from '../../../services/externalMedia.service';
 import { AdminPhoto, type PhotoFilters as PhotoFilterParams, type FeedbackFilters, type FilterSummary } from '../../../services/photos.service';
 import { ExternalFolderPicker } from './ExternalFolderPicker';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface PhotosTabProps {
   event: Event;
@@ -102,13 +104,10 @@ export const PhotosTab: React.FC<PhotosTabProps> = ({
         <div className="flex items-center gap-3">
           <PermissionGate permission="photos.upload">
             <Button
-              variant="primary"
-              size="sm"
-              leftIcon={<Upload className="w-4 h-4" />}
-              onClick={() => setShowPhotoUpload(true)}
-            >
-              {t('events.uploadPhotos')}
-            </Button>
+                                    size="sm"
+                                    onClick={() => setShowPhotoUpload(true)}
+                                  >
+                                    <Upload className="w-4 h-4" />{t('events.uploadPhotos')}</Button>
           </PermissionGate>
           {event.source_mode === 'reference' && (
             <PermissionGate permission="photos.upload">
@@ -140,17 +139,15 @@ export const PhotosTab: React.FC<PhotosTabProps> = ({
         // Without this branch a failed fetch (offline, 5xx) fell through to the
         // grid's "no media uploaded yet" empty state, which reads as "your
         // photos are gone" rather than "we couldn't load them" (QA follow-up).
-        <Card padding="lg">
-          <div className="flex items-start gap-3 text-amber-700 dark:text-amber-400">
-            <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
-            <div>
-              <p className="font-medium">{t('gallery.failedToLoad')}</p>
-              <Button variant="outline" size="sm" onClick={() => refetchPhotos()} className="mt-3">
-                {t('common.retry')}
-              </Button>
-            </div>
-          </div>
-        </Card>
+        <Card className="py-8"><CardContent className="px-8"><div className="flex items-start gap-3 text-amber-700 dark:text-amber-400">
+                              <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                              <div>
+                                <p className="font-medium">{t('gallery.failedToLoad')}</p>
+                                <Button variant="outline" size="sm" onClick={() => refetchPhotos()} className="mt-3">
+                                  {t('common.retry')}
+                                </Button>
+                              </div>
+                            </div></CardContent></Card>
       ) : (
         <AdminPhotoGrid
           photos={photos}
@@ -184,53 +181,42 @@ export const PhotosTab: React.FC<PhotosTabProps> = ({
       {/* External Import Modal */}
       {showExternalImport && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <Card className="max-w-2xl w-full">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">{t('events.importExternal', 'Import from External Folder')}</h2>
-              <button onClick={() => setShowExternalImport(false)} className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="mb-3 text-sm text-neutral-700 dark:text-neutral-300">
-              {t('events.externalImportInfo', 'All pictures from the selected folder will be imported.')}
-            </div>
-            <div className="mb-2 text-sm text-neutral-700 dark:text-neutral-300">
-              {t('events.selectExternalFolder', 'Select external folder under /external-media')}
-            </div>
-            <ExternalFolderPicker value={externalPath || event.external_path || ''} onChange={setExternalPath} />
-
-            <div className="mt-4 flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setShowExternalImport(false)}>
-                {t('common.cancel')}
-              </Button>
-              <Button
-                variant="primary"
-                isLoading={importing}
-                onClick={async () => {
-                  try {
-                    setImporting(true);
-                    const selected = externalPath || event.external_path || '';
-                    if (!selected) {
-                      toast.error(t('errors.somethingWentWrong', 'Something went wrong'));
-                      return;
-                    }
-                    await externalMediaService.importEvent(parseInt(id!), selected, { recursive: true });
-                    toast.success(t('toast.saveSuccess'));
-                    queryClient.invalidateQueries({ queryKey: ['admin-event', id] });
-                    queryClient.invalidateQueries({ queryKey: ['admin-event-photos', id] });
-                    setShowExternalImport(false);
-                  } catch (e: any) {
-                    toast.error(e?.response?.data?.error || 'Import failed');
-                  } finally {
-                    setImporting(false);
-                  }
-                }}
-              >
-                {t('events.importFromSelectedFolder', 'Import from selected folder')}
-              </Button>
-            </div>
-          </Card>
+          <Card className="max-w-2xl w-full"><CardContent><div className="flex items-center justify-between mb-4">
+                                <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">{t('events.importExternal', 'Import from External Folder')}</h2>
+                                <button onClick={() => setShowExternalImport(false)} className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300">
+                                  <X className="w-5 h-5" />
+                                </button>
+                              </div><div className="mb-3 text-sm text-neutral-700 dark:text-neutral-300">
+                                {t('events.externalImportInfo', 'All pictures from the selected folder will be imported.')}
+                              </div><div className="mb-2 text-sm text-neutral-700 dark:text-neutral-300">
+                                {t('events.selectExternalFolder', 'Select external folder under /external-media')}
+                              </div><ExternalFolderPicker value={externalPath || event.external_path || ''} onChange={setExternalPath} /><div className="mt-4 flex justify-end gap-2">
+                                <Button variant="outline" onClick={() => setShowExternalImport(false)}>
+                                  {t('common.cancel')}
+                                </Button>
+                                <Button
+                                                            onClick={async () => {
+                                                              try {
+                                                                setImporting(true);
+                                                                const selected = externalPath || event.external_path || '';
+                                                                if (!selected) {
+                                                                  toast.error(t('errors.somethingWentWrong', 'Something went wrong'));
+                                                                  return;
+                                                                }
+                                                                await externalMediaService.importEvent(parseInt(id!), selected, { recursive: true });
+                                                                toast.success(t('toast.saveSuccess'));
+                                                                queryClient.invalidateQueries({ queryKey: ['admin-event', id] });
+                                                                queryClient.invalidateQueries({ queryKey: ['admin-event-photos', id] });
+                                                                setShowExternalImport(false);
+                                                              } catch (e: any) {
+                                                                toast.error(e?.response?.data?.error || 'Import failed');
+                                                              } finally {
+                                                                setImporting(false);
+                                                              }
+                                                            }} disabled={importing}
+                                                          >
+                                                            {importing && <Loader2 className="animate-spin" />}{t('events.importFromSelectedFolder', 'Import from selected folder')}</Button>
+                              </div></CardContent></Card>
         </div>
       )}
     </div>

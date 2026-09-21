@@ -23,9 +23,8 @@ import SignaturePad from 'signature_pad';
 import {
   ArrowLeft, Edit2, Send, X, FileDown, Upload, CheckSquare, ScrollText,
   ArrowRightCircle, Receipt, RotateCcw, MailCheck,
-  ShieldCheck, CheckCircle2, XCircle,
-} from 'lucide-react';
-import { Button, Card, Loading } from '../../../components/common';
+  ShieldCheck, CheckCircle2, XCircle, Loader2 } from 'lucide-react';
+import { Loading } from '../../../components/common';
 import { DocumentLineageCard } from '../../../components/admin/DocumentLineageCard';
 import {
   contractsService,
@@ -37,6 +36,8 @@ import { formatAttachmentSize } from '../../../services/documentAttachments.serv
 import { PermissionGate } from '../../../components/admin/PermissionGate';
 import { SignaturePadField, type SignaturePadHandle } from '../../../components/contracts/SignaturePadField';
 import { SigningOverviewCard } from './SigningOverviewCard';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 function statusBadgeClass(status: ContractStatus): string {
   return status === 'fully_signed'         ? 'bg-green-100 text-green-800'
@@ -186,9 +187,7 @@ export const ContractDetailPage: React.FC = () => {
   if (isLoading) return <Loading />;
   if (!data || !data.contract) {
     return (
-      <Card padding="lg">
-        <p>{t('contracts.detail.notFound', 'Contract not found.')}</p>
-      </Card>
+      <Card className="py-8"><CardContent className="px-8"><p>{t('contracts.detail.notFound', 'Contract not found.')}</p></CardContent></Card>
     );
   }
   const c = data.contract;
@@ -432,94 +431,87 @@ export const ContractDetailPage: React.FC = () => {
           (which re-stamps from the immutable pdf_path) without having
           to discover the orphan state via monitoring. */}
       {c.signedPdfRenderFailedAt && (
-        <Card padding="lg" className="mb-4 border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-950/30">
-          <h2 className="font-semibold mb-1 text-red-900 dark:text-red-200">
-            {t('contracts.detail.renderFailedTitle',
-              'Signed PDF stamp failed — re-stamp required')}
-          </h2>
-          <p className="text-sm text-red-900 dark:text-red-200">
-            {t('contracts.detail.renderFailedBody',
-              'The signature evidence is recorded, but the stamped PDF was not generated on the last attempt. Click "Re-send signed PDF" above to re-stamp from the original document and resend.')}
-          </p>
-          {c.signedPdfRenderError && (
-            <p className="mt-2 text-xs font-mono text-red-800 dark:text-red-300 wrap-break-word">
-              {c.signedPdfRenderError}
-            </p>
-          )}
-        </Card>
+        <Card className="py-8 mb-4 border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-950/30"><CardContent className="px-8"><h2 className="font-semibold mb-1 text-red-900 dark:text-red-200">
+                          {t('contracts.detail.renderFailedTitle',
+                            'Signed PDF stamp failed — re-stamp required')}
+                        </h2><p className="text-sm text-red-900 dark:text-red-200">
+                          {t('contracts.detail.renderFailedBody',
+                            'The signature evidence is recorded, but the stamped PDF was not generated on the last attempt. Click "Re-send signed PDF" above to re-stamp from the original document and resend.')}
+                        </p>{c.signedPdfRenderError && (
+                          <p className="mt-2 text-xs font-mono text-red-800 dark:text-red-300 wrap-break-word">
+                            {c.signedPdfRenderError}
+                          </p>
+                        )}</CardContent></Card>
       )}
 
       {/* Recipient + dates */}
-      <Card padding="lg" className="mb-4">
-        <h2 className="font-semibold mb-2">{t('contracts.detail.parties', 'Parties')}</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-          <div>
-            <p className="text-xs uppercase text-neutral-500 dark:text-neutral-400 tracking-wide">
-              {t('contracts.detail.customer', 'Customer')}
-            </p>
-            <p className="font-medium">
-              {c.customer.companyName
-                || [c.customer.firstName, c.customer.lastName].filter(Boolean).join(' ')
-                || c.customer.displayName
-                || c.customer.email}
-            </p>
-            <p className="text-xs text-neutral-600 dark:text-neutral-300">{c.customer.email}</p>
-          </div>
-          <div>
-            <p className="text-xs uppercase text-neutral-500 dark:text-neutral-400 tracking-wide">
-              {t('contracts.detail.dates', 'Dates')}
-            </p>
-            <p className="text-xs">
-              <span className="text-neutral-600 dark:text-neutral-300">{t('contracts.detail.issued', 'Issued')}: </span>
-              {formatDate(c.issueDate)}
-            </p>
-            {c.validUntil && (
-              <p className="text-xs">
-                <span className="text-neutral-600 dark:text-neutral-300">{t('contracts.detail.signBy', 'Sign by')}: </span>
-                {formatDate(c.validUntil)}
-              </p>
-            )}
-            {c.sentAt && (
-              <p className="text-xs">
-                <span className="text-neutral-600 dark:text-neutral-300">{t('contracts.detail.sentAt', 'Sent at')}: </span>
-                {formatDateTime(c.sentAt)}
-              </p>
-            )}
-            {/* Inline lineage badges so the linked invoice / source
-                quote numbers are visible at-a-glance, matching the
-                "From contract" badge layout on BillDetailPage's top
-                stats. The full lineage card below still lists all
-                linked invoices with status, but the most common
-                lookup ("which invoice did this contract become?") now
-                surfaces without scrolling. */}
-            {sourceQuoteId && (
-              <p className="text-xs">
-                <span className="text-neutral-600 dark:text-neutral-300">{t('contracts.detail.fromQuote', 'From quote')}: </span>
-                <Link
-                  to={`/admin/clients/quotes/${sourceQuoteId}`}
-                  className="text-primary hover:underline font-mono"
-                >
-                  {sourceQuoteData?.quote?.quoteNumber || `#${sourceQuoteId}`}
-                </Link>
-              </p>
-            )}
-            {linkedInvoices && linkedInvoices.length > 0 && (
-              <p className="text-xs">
-                <span className="text-neutral-600 dark:text-neutral-300">{t('contracts.detail.linkedInvoice', 'Invoice')}: </span>
-                <Link
-                  to={`/admin/clients/bills/${linkedInvoices[0].id}`}
-                  className="text-primary hover:underline font-mono"
-                >
-                  {linkedInvoices[0].invoiceNumber}
-                </Link>
-                {linkedInvoices.length > 1 && (
-                  <span className="text-neutral-600 dark:text-neutral-300"> (+{linkedInvoices.length - 1})</span>
-                )}
-              </p>
-            )}
-          </div>
-        </div>
-      </Card>
+      <Card className="py-8 mb-4"><CardContent className="px-8"><h2 className="font-semibold mb-2">{t('contracts.detail.parties', 'Parties')}</h2><div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <p className="text-xs uppercase text-neutral-500 dark:text-neutral-400 tracking-wide">
+                        {t('contracts.detail.customer', 'Customer')}
+                      </p>
+                      <p className="font-medium">
+                        {c.customer.companyName
+                          || [c.customer.firstName, c.customer.lastName].filter(Boolean).join(' ')
+                          || c.customer.displayName
+                          || c.customer.email}
+                      </p>
+                      <p className="text-xs text-neutral-600 dark:text-neutral-300">{c.customer.email}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs uppercase text-neutral-500 dark:text-neutral-400 tracking-wide">
+                        {t('contracts.detail.dates', 'Dates')}
+                      </p>
+                      <p className="text-xs">
+                        <span className="text-neutral-600 dark:text-neutral-300">{t('contracts.detail.issued', 'Issued')}: </span>
+                        {formatDate(c.issueDate)}
+                      </p>
+                      {c.validUntil && (
+                        <p className="text-xs">
+                          <span className="text-neutral-600 dark:text-neutral-300">{t('contracts.detail.signBy', 'Sign by')}: </span>
+                          {formatDate(c.validUntil)}
+                        </p>
+                      )}
+                      {c.sentAt && (
+                        <p className="text-xs">
+                          <span className="text-neutral-600 dark:text-neutral-300">{t('contracts.detail.sentAt', 'Sent at')}: </span>
+                          {formatDateTime(c.sentAt)}
+                        </p>
+                      )}
+                      {/* Inline lineage badges so the linked invoice / source
+                          quote numbers are visible at-a-glance, matching the
+                          "From contract" badge layout on BillDetailPage's top
+                          stats. The full lineage card below still lists all
+                          linked invoices with status, but the most common
+                          lookup ("which invoice did this contract become?") now
+                          surfaces without scrolling. */}
+                      {sourceQuoteId && (
+                        <p className="text-xs">
+                          <span className="text-neutral-600 dark:text-neutral-300">{t('contracts.detail.fromQuote', 'From quote')}: </span>
+                          <Link
+                            to={`/admin/clients/quotes/${sourceQuoteId}`}
+                            className="text-primary hover:underline font-mono"
+                          >
+                            {sourceQuoteData?.quote?.quoteNumber || `#${sourceQuoteId}`}
+                          </Link>
+                        </p>
+                      )}
+                      {linkedInvoices && linkedInvoices.length > 0 && (
+                        <p className="text-xs">
+                          <span className="text-neutral-600 dark:text-neutral-300">{t('contracts.detail.linkedInvoice', 'Invoice')}: </span>
+                          <Link
+                            to={`/admin/clients/bills/${linkedInvoices[0].id}`}
+                            className="text-primary hover:underline font-mono"
+                          >
+                            {linkedInvoices[0].invoiceNumber}
+                          </Link>
+                          {linkedInvoices.length > 1 && (
+                            <span className="text-neutral-600 dark:text-neutral-300"> (+{linkedInvoices.length - 1})</span>
+                          )}
+                        </p>
+                      )}
+                    </div>
+                  </div></CardContent></Card>
 
       {/* Signatures v2: every signer, the signing log, the evidence. */}
       {isV2 && signersQuery.data && numericId !== null && (
@@ -529,49 +521,46 @@ export const ContractDetailPage: React.FC = () => {
       {/* Signature evidence — contracts sent before v2 (the Signers card
           above covers v2). */}
       {legacySigning && (c.signedByCustomerAt || c.signedByAdminAt) && (
-        <Card padding="lg" className="mb-4">
-          <h2 className="font-semibold mb-2">{t('contracts.detail.signatures', 'Signatures')}</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-            <div className="p-3 rounded-sm border border-neutral-200 dark:border-neutral-700">
-              <p className="text-xs uppercase text-neutral-500 dark:text-neutral-400 tracking-wide">
-                {t('contracts.detail.signedByCustomer', 'Signed by customer')}
-              </p>
-              {c.signedByCustomerAt ? (
-                <>
-                  <p className="font-medium">{c.signedCustomerName}</p>
-                  <p className="text-xs text-neutral-600 dark:text-neutral-300">{formatDateTime(c.signedByCustomerAt)}</p>
-                  {!c.signedCustomerSignaturePath && (
-                    <p className="text-xs text-amber-700 dark:text-amber-300 mt-1">
-                      {t('contracts.detail.noSignatureImage',
-                        'No signature image captured — use "Re-stamp signatures" below to add one.')}
-                    </p>
-                  )}
-                </>
-              ) : (
-                <p className="text-xs text-neutral-600 dark:text-neutral-300">—</p>
-              )}
-            </div>
-            <div className="p-3 rounded-sm border border-neutral-200 dark:border-neutral-700">
-              <p className="text-xs uppercase text-neutral-500 dark:text-neutral-400 tracking-wide">
-                {t('contracts.detail.signedByAdmin', 'Counter-signed')}
-              </p>
-              {c.signedByAdminAt ? (
-                <>
-                  <p className="font-medium">{c.signedAdminName}</p>
-                  <p className="text-xs text-neutral-600 dark:text-neutral-300">{formatDateTime(c.signedByAdminAt)}</p>
-                  {!c.signedAdminSignaturePath && (
-                    <p className="text-xs text-amber-700 dark:text-amber-300 mt-1">
-                      {t('contracts.detail.noSignatureImage',
-                        'No signature image captured — use "Re-stamp signatures" below to add one.')}
-                    </p>
-                  )}
-                </>
-              ) : (
-                <p className="text-xs text-neutral-600 dark:text-neutral-300">—</p>
-              )}
-            </div>
-          </div>
-        </Card>
+        <Card className="py-8 mb-4"><CardContent className="px-8"><h2 className="font-semibold mb-2">{t('contracts.detail.signatures', 'Signatures')}</h2><div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                          <div className="p-3 rounded-sm border border-neutral-200 dark:border-neutral-700">
+                            <p className="text-xs uppercase text-neutral-500 dark:text-neutral-400 tracking-wide">
+                              {t('contracts.detail.signedByCustomer', 'Signed by customer')}
+                            </p>
+                            {c.signedByCustomerAt ? (
+                              <>
+                                <p className="font-medium">{c.signedCustomerName}</p>
+                                <p className="text-xs text-neutral-600 dark:text-neutral-300">{formatDateTime(c.signedByCustomerAt)}</p>
+                                {!c.signedCustomerSignaturePath && (
+                                  <p className="text-xs text-amber-700 dark:text-amber-300 mt-1">
+                                    {t('contracts.detail.noSignatureImage',
+                                      'No signature image captured — use "Re-stamp signatures" below to add one.')}
+                                  </p>
+                                )}
+                              </>
+                            ) : (
+                              <p className="text-xs text-neutral-600 dark:text-neutral-300">—</p>
+                            )}
+                          </div>
+                          <div className="p-3 rounded-sm border border-neutral-200 dark:border-neutral-700">
+                            <p className="text-xs uppercase text-neutral-500 dark:text-neutral-400 tracking-wide">
+                              {t('contracts.detail.signedByAdmin', 'Counter-signed')}
+                            </p>
+                            {c.signedByAdminAt ? (
+                              <>
+                                <p className="font-medium">{c.signedAdminName}</p>
+                                <p className="text-xs text-neutral-600 dark:text-neutral-300">{formatDateTime(c.signedByAdminAt)}</p>
+                                {!c.signedAdminSignaturePath && (
+                                  <p className="text-xs text-amber-700 dark:text-amber-300 mt-1">
+                                    {t('contracts.detail.noSignatureImage',
+                                      'No signature image captured — use "Re-stamp signatures" below to add one.')}
+                                  </p>
+                                )}
+                              </>
+                            ) : (
+                              <p className="text-xs text-neutral-600 dark:text-neutral-300">—</p>
+                            )}
+                          </div>
+                        </div></CardContent></Card>
       )}
 
       {/* Counter-sign form. Mirrors the public sign page: typed name +
@@ -615,56 +604,48 @@ export const ContractDetailPage: React.FC = () => {
         className="mb-4"
       />
       {c.convertedEventId && (
-        <Card padding="md" className="mb-4">
-          <p className="text-sm">
-            <span className="text-neutral-500 dark:text-neutral-400 mr-2">
-              {t('contracts.detail.convertedToEvent', 'Converted to event')}:
-            </span>
-            <Link to={`/admin/events/${c.convertedEventId}`} className="font-medium text-brand-600 dark:text-brand-400 hover:underline">
-              #{c.convertedEventId}
-            </Link>
-          </p>
-        </Card>
+        <Card className="mb-4"><CardContent><p className="text-sm">
+                          <span className="text-neutral-500 dark:text-neutral-400 mr-2">
+                            {t('contracts.detail.convertedToEvent', 'Converted to event')}:
+                          </span>
+                          <Link to={`/admin/events/${c.convertedEventId}`} className="font-medium text-brand-600 dark:text-brand-400 hover:underline">
+                            #{c.convertedEventId}
+                          </Link>
+                        </p></CardContent></Card>
       )}
 
       {/* Block summary */}
-      <Card padding="lg">
-        <h2 className="font-semibold mb-2">{t('contracts.detail.blocks', 'Included blocks')}</h2>
-        {c.inclusions && c.inclusions.length > 0 ? (
-          <ul className="space-y-1 text-sm">
-            {c.inclusions
-              .filter((inc) => inc.included)
-              .map((inc) => (
-                <li key={inc.id} className="flex items-center gap-2">
-                  <span className="text-xs uppercase tracking-wide text-neutral-500 w-24">{inc.section}</span>
-                  <span>{inc.block?.name || `Block ${inc.blockId}`}</span>
-                </li>
-              ))}
-          </ul>
-        ) : (
-          <p className="text-sm text-neutral-500">
-            {t('contracts.detail.noBlocks', 'No blocks included.')}
-          </p>
-        )}
-      </Card>
+      <Card className="py-8"><CardContent className="px-8"><h2 className="font-semibold mb-2">{t('contracts.detail.blocks', 'Included blocks')}</h2>{c.inclusions && c.inclusions.length > 0 ? (
+                    <ul className="space-y-1 text-sm">
+                      {c.inclusions
+                        .filter((inc) => inc.included)
+                        .map((inc) => (
+                          <li key={inc.id} className="flex items-center gap-2">
+                            <span className="text-xs uppercase tracking-wide text-neutral-500 w-24">{inc.section}</span>
+                            <span>{inc.block?.name || `Block ${inc.blockId}`}</span>
+                          </li>
+                        ))}
+                    </ul>
+                  ) : (
+                    <p className="text-sm text-neutral-500">
+                      {t('contracts.detail.noBlocks', 'No blocks included.')}
+                    </p>
+                  )}</CardContent></Card>
 
       {(c.attachments || []).length > 0 && (
-        <Card padding="lg" className="mt-4">
-          <h2 className="font-semibold mb-2">{t('contracts.attachments.heading', 'Attachments')}</h2>
-          <ul className="space-y-1 text-sm">
-            {(c.attachments || []).map((a) => (
-              <li key={a.attachmentId} className="flex flex-wrap items-center gap-2">
-                <span className="font-medium text-neutral-900 dark:text-neutral-100">{a.name}</span>
-                <span className="text-xs text-neutral-500 dark:text-neutral-400">
-                  {a.delivery === 'merged'
-                    ? t('contracts.attachments.merged', 'In the contract PDF')
-                    : t('contracts.attachments.separate', 'Separate file')}
-                  {' · '}{t('contracts.attachments.pages', '{{count}} pages', { count: a.pages })} · {formatAttachmentSize(a.bytes)}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </Card>
+        <Card className="py-8 mt-4"><CardContent className="px-8"><h2 className="font-semibold mb-2">{t('contracts.attachments.heading', 'Attachments')}</h2><ul className="space-y-1 text-sm">
+                          {(c.attachments || []).map((a) => (
+                            <li key={a.attachmentId} className="flex flex-wrap items-center gap-2">
+                              <span className="font-medium text-neutral-900 dark:text-neutral-100">{a.name}</span>
+                              <span className="text-xs text-neutral-500 dark:text-neutral-400">
+                                {a.delivery === 'merged'
+                                  ? t('contracts.attachments.merged', 'In the contract PDF')
+                                  : t('contracts.attachments.separate', 'Separate file')}
+                                {' · '}{t('contracts.attachments.pages', '{{count}} pages', { count: a.pages })} · {formatAttachmentSize(a.bytes)}
+                              </span>
+                            </li>
+                          ))}
+                        </ul></CardContent></Card>
       )}
 
       {/* Audit trail (issue #5 from the maintainer plan) — a
@@ -763,40 +744,32 @@ const IntegrityCheckCard: React.FC<{ contractId: number }> = ({ contractId }) =>
   };
 
   return (
-    <Card padding="lg" className="mt-4">
-      <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
-        <h2 className="font-semibold flex items-center gap-2">
-          <ShieldCheck className="w-4 h-4" />
-          {t('contracts.detail.integrity.title', 'PDF integrity check')}
-        </h2>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => refetch()}
-          disabled={isFetching}
-          isLoading={isFetching}
-        >
-          {isSuccess
-            ? t('contracts.detail.integrity.reverify', 'Re-verify')
-            : t('contracts.detail.integrity.verify', 'Verify')}
-        </Button>
-      </div>
-      <p className="text-xs text-neutral-500 mb-3">
-        {t('contracts.detail.integrity.help',
-          'Re-hashes the unsigned + signed PDFs on disk and compares them to the SHA-256 stored when the document was issued. Catches backup corruption or manual edits since the customer received their copy.')}
-      </p>
-      {error && (
-        <p className="text-sm text-red-700 dark:text-red-300">
-          {t('contracts.detail.integrity.error', 'Integrity check failed.')}
-        </p>
-      )}
-      {data && (
-        <div className="space-y-2">
-          {renderLeg('unsigned')}
-          {renderLeg('signed')}
-        </div>
-      )}
-    </Card>
+    <Card className="py-8 mt-4"><CardContent className="px-8"><div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
+              <h2 className="font-semibold flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4" />
+                {t('contracts.detail.integrity.title', 'PDF integrity check')}
+              </h2>
+              <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => refetch()} disabled={isFetching || isFetching}
+                            >
+                              {isFetching && <Loader2 className="animate-spin" />}{isSuccess
+                                ? t('contracts.detail.integrity.reverify', 'Re-verify')
+                                : t('contracts.detail.integrity.verify', 'Verify')}</Button>
+            </div><p className="text-xs text-neutral-500 mb-3">
+              {t('contracts.detail.integrity.help',
+                'Re-hashes the unsigned + signed PDFs on disk and compares them to the SHA-256 stored when the document was issued. Catches backup corruption or manual edits since the customer received their copy.')}
+            </p>{error && (
+              <p className="text-sm text-red-700 dark:text-red-300">
+                {t('contracts.detail.integrity.error', 'Integrity check failed.')}
+              </p>
+            )}{data && (
+              <div className="space-y-2">
+                {renderLeg('unsigned')}
+                {renderLeg('signed')}
+              </div>
+            )}</CardContent></Card>
   );
 };
 
@@ -820,35 +793,31 @@ const GeneratedDocumentsCard: React.FC<{ contractId: number }> = ({ contractId }
   });
   const documents = data?.documents || [];
   return (
-    <Card padding="lg" className="mt-4">
-      <h3 className="text-lg font-semibold mb-1">{t('contracts.detail.documents', 'Generated documents')}</h3>
-      <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-3">
-        {t('contracts.detail.documentsHelp', 'Every PDF made for this contract, with its checksum. Re-hash a copy to confirm it matches.')}
-      </p>
-      {documents.length === 0 ? (
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('contracts.detail.documentsEmpty', 'No PDFs generated yet.')}</p>
-      ) : (
-        <ul className="divide-y divide-neutral-200 dark:divide-neutral-700 text-sm">
-          {documents.map((d) => (
-            <li key={d.id} className="py-2 flex flex-wrap items-center gap-3">
-              <span className="font-medium text-neutral-900 dark:text-neutral-100">
-                {t(`contracts.detail.documentKind.${d.kind}`, d.kind)}
-              </span>
-              <span className="text-neutral-600 dark:text-neutral-400">{fmtDateTime(d.generatedAt)}</span>
-              {d.pages != null && (
-                <span className="text-neutral-600 dark:text-neutral-400">
-                  {t('contracts.detail.documentPages', 'Pages: {{count}}', { count: d.pages })}
-                </span>
-              )}
-              <span className="text-neutral-600 dark:text-neutral-400">{Math.max(1, Math.round(d.bytes / 1024))} KB</span>
-              <span className="font-mono text-xs text-neutral-500 dark:text-neutral-400 break-all" title={d.sha256}>
-                {d.sha256.slice(0, 16)}…
-              </span>
-            </li>
-          ))}
-        </ul>
-      )}
-    </Card>
+    <Card className="py-8 mt-4"><CardContent className="px-8"><h3 className="text-lg font-semibold mb-1">{t('contracts.detail.documents', 'Generated documents')}</h3><p className="text-xs text-neutral-500 dark:text-neutral-400 mb-3">
+              {t('contracts.detail.documentsHelp', 'Every PDF made for this contract, with its checksum. Re-hash a copy to confirm it matches.')}
+            </p>{documents.length === 0 ? (
+              <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('contracts.detail.documentsEmpty', 'No PDFs generated yet.')}</p>
+            ) : (
+              <ul className="divide-y divide-neutral-200 dark:divide-neutral-700 text-sm">
+                {documents.map((d) => (
+                  <li key={d.id} className="py-2 flex flex-wrap items-center gap-3">
+                    <span className="font-medium text-neutral-900 dark:text-neutral-100">
+                      {t(`contracts.detail.documentKind.${d.kind}`, d.kind)}
+                    </span>
+                    <span className="text-neutral-600 dark:text-neutral-400">{fmtDateTime(d.generatedAt)}</span>
+                    {d.pages != null && (
+                      <span className="text-neutral-600 dark:text-neutral-400">
+                        {t('contracts.detail.documentPages', 'Pages: {{count}}', { count: d.pages })}
+                      </span>
+                    )}
+                    <span className="text-neutral-600 dark:text-neutral-400">{Math.max(1, Math.round(d.bytes / 1024))} KB</span>
+                    <span className="font-mono text-xs text-neutral-500 dark:text-neutral-400 break-all" title={d.sha256}>
+                      {d.sha256.slice(0, 16)}…
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}</CardContent></Card>
   );
 };
 
@@ -868,69 +837,62 @@ const AuditTrailCard: React.FC<{ contractId: number }> = ({ contractId }) => {
   const entries = data?.entries || [];
   if (entries.length === 0) {
     return (
-      <Card padding="lg" className="mt-4">
-        <h2 className="font-semibold mb-2">
-          {t('contracts.detail.auditTrail', 'Audit trail')}
-        </h2>
-        <p className="text-sm text-neutral-500">
-          {t('contracts.detail.auditEmpty', 'No audit-log entries yet.')}
-        </p>
-      </Card>
+      <Card className="py-8 mt-4"><CardContent className="px-8"><h2 className="font-semibold mb-2">
+                  {t('contracts.detail.auditTrail', 'Audit trail')}
+                </h2><p className="text-sm text-neutral-500">
+                  {t('contracts.detail.auditEmpty', 'No audit-log entries yet.')}
+                </p></CardContent></Card>
     );
   }
 
   return (
-    <Card padding="lg" className="mt-4">
-      <h2 className="font-semibold mb-2 flex items-center gap-2">
-        <ScrollText className="w-4 h-4" />
-        {t('contracts.detail.auditTrail', 'Audit trail')}
-      </h2>
-      <p className="text-xs text-neutral-500 mb-3">
-        {t('contracts.detail.auditTrailHelp',
-          'Every event recorded on this contract. The list is append-only and is the source of truth if the contract is challenged.')}
-      </p>
-      <ol className="space-y-2">
-        {entries.map((e) => {
-          // Friendly label per activity_type. Falls back to the raw
-          // type when an unrecognised entry shows up (forward-
-          // compatible — new activity_types just render their key).
-          const labelKey = `contracts.audit.${e.activity_type}`;
-          const label = t(labelKey, e.activity_type.replace(/^contract_/, '').replace(/_/g, ' '));
-          // Compact metadata preview for the right-hand column.
-          const meta = e.metadata || {};
-          const metaChips = Object.entries(meta)
-            .filter(([k]) => k !== 'contractId')
-            .slice(0, 3) // cap to avoid wall-of-text on conversion entries
-            .map(([k, v]) => {
-              // Tokens are 64-char hex — show only the first 8 chars
-              // in the UI. Full token is in the DB for forensic
-              // correlation; showing it here would just be noise (and
-              // a small leak if anyone screenshots the audit timeline
-              // before the token is used).
-              if (k === 'token' && typeof v === 'string' && v.length >= 16) {
-                return `token: ${v.slice(0, 8)}…`;
-              }
-              return `${k}: ${typeof v === 'string' ? v.slice(0, 24) : v}`;
-            });
-          return (
-            <li key={e.id} className="flex items-start gap-3 text-sm border-l-2 border-primary pl-3">
-              <div className="flex-1 min-w-0">
-                <div className="font-medium">{label}</div>
-                <div className="text-xs text-neutral-500">
-                  {e.actor_name || e.actor_type || 'system'}
-                  {metaChips.length > 0 && (
-                    <span className="ml-2 font-mono">· {metaChips.join(' · ')}</span>
-                  )}
-                </div>
-              </div>
-              <div className="text-xs text-neutral-500 whitespace-nowrap font-mono">
-                {fmtDateTime(e.created_at)}
-              </div>
-            </li>
-          );
-        })}
-      </ol>
-    </Card>
+    <Card className="py-8 mt-4"><CardContent className="px-8"><h2 className="font-semibold mb-2 flex items-center gap-2">
+              <ScrollText className="w-4 h-4" />
+              {t('contracts.detail.auditTrail', 'Audit trail')}
+            </h2><p className="text-xs text-neutral-500 mb-3">
+              {t('contracts.detail.auditTrailHelp',
+                'Every event recorded on this contract. The list is append-only and is the source of truth if the contract is challenged.')}
+            </p><ol className="space-y-2">
+              {entries.map((e) => {
+                // Friendly label per activity_type. Falls back to the raw
+                // type when an unrecognised entry shows up (forward-
+                // compatible — new activity_types just render their key).
+                const labelKey = `contracts.audit.${e.activity_type}`;
+                const label = t(labelKey, e.activity_type.replace(/^contract_/, '').replace(/_/g, ' '));
+                // Compact metadata preview for the right-hand column.
+                const meta = e.metadata || {};
+                const metaChips = Object.entries(meta)
+                  .filter(([k]) => k !== 'contractId')
+                  .slice(0, 3) // cap to avoid wall-of-text on conversion entries
+                  .map(([k, v]) => {
+                    // Tokens are 64-char hex — show only the first 8 chars
+                    // in the UI. Full token is in the DB for forensic
+                    // correlation; showing it here would just be noise (and
+                    // a small leak if anyone screenshots the audit timeline
+                    // before the token is used).
+                    if (k === 'token' && typeof v === 'string' && v.length >= 16) {
+                      return `token: ${v.slice(0, 8)}…`;
+                    }
+                    return `${k}: ${typeof v === 'string' ? v.slice(0, 24) : v}`;
+                  });
+                return (
+                  <li key={e.id} className="flex items-start gap-3 text-sm border-l-2 border-primary pl-3">
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium">{label}</div>
+                      <div className="text-xs text-neutral-500">
+                        {e.actor_name || e.actor_type || 'system'}
+                        {metaChips.length > 0 && (
+                          <span className="ml-2 font-mono">· {metaChips.join(' · ')}</span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="text-xs text-neutral-500 whitespace-nowrap font-mono">
+                      {fmtDateTime(e.created_at)}
+                    </div>
+                  </li>
+                );
+              })}
+            </ol></CardContent></Card>
   );
 };
 
@@ -956,67 +918,63 @@ const CountersignCard: React.FC<CountersignProps> = ({
   const drawn = !modeChoice || modeChoice.mode === 'drawn';
 
   return (
-    <Card padding="lg" className="mb-4">
-      <h2 className="font-semibold mb-2">
-        {t('contracts.detail.countersignTitle', 'Counter-sign to make it binding')}
-      </h2>
-      <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-3">
-        {modeChoice
-          ? t('contracts.detail.countersignHelpV2', 'Every customer has signed. Your signature goes into the issuer\'s field on the PDF, and the signing certificate is issued once you sign.')
-          : t('contracts.detail.countersignHelp',
-            'Type your name AND draw your signature below — both are stamped onto the re-rendered PDF. IP and timestamp are recorded for audit.')}
-      </p>
-      <div className="space-y-3">
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder={t('contracts.detail.signedNamePlaceholder', 'Your full name') as string}
-          className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm"
-        />
-        {modeChoice && (
-          <div role="radiogroup" aria-label={t('contracts.detail.countersignModeLabel', 'How do you want to sign?') as string} className="flex gap-4 text-sm text-neutral-800 dark:text-neutral-200">
-            {(['drawn', 'typed'] as const).map((value) => (
-              <label key={value} className="inline-flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="countersign-mode"
-                  checked={modeChoice.mode === value}
-                  onChange={() => modeChoice.setMode(value)}
-                />
-                {value === 'drawn'
-                  ? t('contracts.detail.countersignModeDrawn', 'Draw my signature')
-                  : t('contracts.detail.countersignModeTyped', 'Use my typed name')}
-              </label>
-            ))}
-          </div>
-        )}
-        {drawn ? (
-          <div>
-            <label className="block text-xs text-neutral-600 dark:text-neutral-400 mb-1">
-              {t('contracts.detail.countersignSignaturePrompt', 'Draw your signature')}
-            </label>
-            <SignaturePadField
-              ref={padRef}
-              label={t('contracts.detail.countersignSignaturePrompt', 'Draw your signature') as string}
-            />
-          </div>
-        ) : (
-          <p className="text-xs text-neutral-600 dark:text-neutral-400">
-            {t('contracts.detail.countersignTypedHint', 'Your name, as typed above, is placed in the signature field.')}
-          </p>
-        )}
-        <div className="flex justify-end">
-          <Button
-            onClick={onSubmit}
-            disabled={!name.trim() || pending}
-          >
-            <CheckSquare className="w-4 h-4 mr-1" />
-            {t('contracts.detail.confirmCountersign', 'Counter-sign')}
-          </Button>
-        </div>
-      </div>
-    </Card>
+    <Card className="py-8 mb-4"><CardContent className="px-8"><h2 className="font-semibold mb-2">
+              {t('contracts.detail.countersignTitle', 'Counter-sign to make it binding')}
+            </h2><p className="text-sm text-neutral-600 dark:text-neutral-400 mb-3">
+              {modeChoice
+                ? t('contracts.detail.countersignHelpV2', 'Every customer has signed. Your signature goes into the issuer\'s field on the PDF, and the signing certificate is issued once you sign.')
+                : t('contracts.detail.countersignHelp',
+                  'Type your name AND draw your signature below — both are stamped onto the re-rendered PDF. IP and timestamp are recorded for audit.')}
+            </p><div className="space-y-3">
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder={t('contracts.detail.signedNamePlaceholder', 'Your full name') as string}
+                className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm"
+              />
+              {modeChoice && (
+                <div role="radiogroup" aria-label={t('contracts.detail.countersignModeLabel', 'How do you want to sign?') as string} className="flex gap-4 text-sm text-neutral-800 dark:text-neutral-200">
+                  {(['drawn', 'typed'] as const).map((value) => (
+                    <label key={value} className="inline-flex items-center gap-2">
+                      <input
+                        type="radio"
+                        name="countersign-mode"
+                        checked={modeChoice.mode === value}
+                        onChange={() => modeChoice.setMode(value)}
+                      />
+                      {value === 'drawn'
+                        ? t('contracts.detail.countersignModeDrawn', 'Draw my signature')
+                        : t('contracts.detail.countersignModeTyped', 'Use my typed name')}
+                    </label>
+                  ))}
+                </div>
+              )}
+              {drawn ? (
+                <div>
+                  <label className="block text-xs text-neutral-600 dark:text-neutral-400 mb-1">
+                    {t('contracts.detail.countersignSignaturePrompt', 'Draw your signature')}
+                  </label>
+                  <SignaturePadField
+                    ref={padRef}
+                    label={t('contracts.detail.countersignSignaturePrompt', 'Draw your signature') as string}
+                  />
+                </div>
+              ) : (
+                <p className="text-xs text-neutral-600 dark:text-neutral-400">
+                  {t('contracts.detail.countersignTypedHint', 'Your name, as typed above, is placed in the signature field.')}
+                </p>
+              )}
+              <div className="flex justify-end">
+                <Button
+                  onClick={onSubmit}
+                  disabled={!name.trim() || pending}
+                >
+                  <CheckSquare className="w-4 h-4 mr-1" />
+                  {t('contracts.detail.confirmCountersign', 'Counter-sign')}
+                </Button>
+              </div>
+            </div></CardContent></Card>
   );
 };
 
@@ -1115,65 +1073,60 @@ const RestampSignaturesCard: React.FC<RestampCardProps> = ({ contract, onSuccess
   const missingAdmin = !contract.signedAdminSignaturePath && contract.signedByAdminAt;
 
   return (
-    <Card padding="lg" className="mb-4 border-amber-300 dark:border-amber-700">
-      <h2 className="font-semibold mb-2">
-        {t('contracts.detail.restampTitle', 'Re-stamp missing signatures')}
-      </h2>
-      <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-3">
-        {t('contracts.detail.restampHelp',
-          'One or both signatures didn\'t capture an image. Draw the missing signature(s) here and we\'ll re-render the PDF. The typed names, timestamps, and IPs already on file stay untouched.')}
-      </p>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {missingCustomer && (
-          <div>
-            <label className="block text-xs text-neutral-600 dark:text-neutral-400 mb-1">
-              {t('contracts.detail.restampCustomer', 'Customer signature')}{' '}
-              <span className="font-medium">({contract.signedCustomerName})</span>
-            </label>
-            <canvas
-              ref={customerCanvasRef}
-              className="w-full h-24 bg-white rounded-sm border border-neutral-300 dark:border-neutral-600 touch-none"
-            />
-            <button
-              type="button"
-              onClick={() => customerPadRef.current?.clear()}
-              className="mt-1 text-xs text-neutral-600 dark:text-neutral-400 hover:underline inline-flex items-center gap-1"
-            >
-              <RotateCcw className="w-3 h-3" />
-              {t('contracts.detail.clearSignature', 'Clear')}
-            </button>
-          </div>
-        )}
-        {missingAdmin && (
-          <div>
-            <label className="block text-xs text-neutral-600 dark:text-neutral-400 mb-1">
-              {t('contracts.detail.restampAdmin', 'Admin signature')}{' '}
-              <span className="font-medium">({contract.signedAdminName})</span>
-            </label>
-            <canvas
-              ref={adminCanvasRef}
-              className="w-full h-24 bg-white rounded-sm border border-neutral-300 dark:border-neutral-600 touch-none"
-            />
-            <button
-              type="button"
-              onClick={() => adminPadRef.current?.clear()}
-              className="mt-1 text-xs text-neutral-600 dark:text-neutral-400 hover:underline inline-flex items-center gap-1"
-            >
-              <RotateCcw className="w-3 h-3" />
-              {t('contracts.detail.clearSignature', 'Clear')}
-            </button>
-          </div>
-        )}
-      </div>
-      <div className="mt-3 flex justify-end">
-        <Button
-          onClick={() => mutation.mutate()}
-          disabled={mutation.isPending}
-        >
-          <CheckSquare className="w-4 h-4 mr-1" />
-          {t('contracts.detail.confirmRestamp', 'Re-stamp & re-render PDF')}
-        </Button>
-      </div>
-    </Card>
+    <Card className="py-8 mb-4 border-amber-300 dark:border-amber-700"><CardContent className="px-8"><h2 className="font-semibold mb-2">
+              {t('contracts.detail.restampTitle', 'Re-stamp missing signatures')}
+            </h2><p className="text-sm text-neutral-600 dark:text-neutral-400 mb-3">
+              {t('contracts.detail.restampHelp',
+                'One or both signatures didn\'t capture an image. Draw the missing signature(s) here and we\'ll re-render the PDF. The typed names, timestamps, and IPs already on file stay untouched.')}
+            </p><div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {missingCustomer && (
+                <div>
+                  <label className="block text-xs text-neutral-600 dark:text-neutral-400 mb-1">
+                    {t('contracts.detail.restampCustomer', 'Customer signature')}{' '}
+                    <span className="font-medium">({contract.signedCustomerName})</span>
+                  </label>
+                  <canvas
+                    ref={customerCanvasRef}
+                    className="w-full h-24 bg-white rounded-sm border border-neutral-300 dark:border-neutral-600 touch-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => customerPadRef.current?.clear()}
+                    className="mt-1 text-xs text-neutral-600 dark:text-neutral-400 hover:underline inline-flex items-center gap-1"
+                  >
+                    <RotateCcw className="w-3 h-3" />
+                    {t('contracts.detail.clearSignature', 'Clear')}
+                  </button>
+                </div>
+              )}
+              {missingAdmin && (
+                <div>
+                  <label className="block text-xs text-neutral-600 dark:text-neutral-400 mb-1">
+                    {t('contracts.detail.restampAdmin', 'Admin signature')}{' '}
+                    <span className="font-medium">({contract.signedAdminName})</span>
+                  </label>
+                  <canvas
+                    ref={adminCanvasRef}
+                    className="w-full h-24 bg-white rounded-sm border border-neutral-300 dark:border-neutral-600 touch-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => adminPadRef.current?.clear()}
+                    className="mt-1 text-xs text-neutral-600 dark:text-neutral-400 hover:underline inline-flex items-center gap-1"
+                  >
+                    <RotateCcw className="w-3 h-3" />
+                    {t('contracts.detail.clearSignature', 'Clear')}
+                  </button>
+                </div>
+              )}
+            </div><div className="mt-3 flex justify-end">
+              <Button
+                onClick={() => mutation.mutate()}
+                disabled={mutation.isPending}
+              >
+                <CheckSquare className="w-4 h-4 mr-1" />
+                {t('contracts.detail.confirmRestamp', 'Re-stamp & re-render PDF')}
+              </Button>
+            </div></CardContent></Card>
   );
 };

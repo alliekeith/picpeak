@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Button, Input } from '../common';
 import { useGuestIdentity } from '../../contexts/GuestIdentityContext';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface GuestNamePromptModalProps {
   requireEmail?: boolean;
@@ -23,6 +25,7 @@ export const GuestNamePromptModal: React.FC<GuestNamePromptModalProps> = ({
   allowCancel = true,
   onCancel,
 }) => {
+    const __fieldId = React.useId();
   const { t } = useTranslation();
   const { promptOpen, closePrompt, register, openRecovery } = useGuestIdentity();
   const [name, setName] = useState('');
@@ -96,29 +99,23 @@ export const GuestNamePromptModal: React.FC<GuestNamePromptModalProps> = ({
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            label={t('gallery.guestPrompt.nameLabel', 'Your name')}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            error={errors.name}
-            placeholder={t('gallery.guestPrompt.namePlaceholder', 'Enter your name')}
-            autoFocus
-            required
-            maxLength={100}
-          />
-          <Input
-            type="email"
-            label={
-              requireEmail
-                ? t('gallery.guestPrompt.emailLabelRequired', 'Email')
-                : t('gallery.guestPrompt.emailLabel', 'Email (optional)')
-            }
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            error={errors.email}
-            placeholder={t('gallery.guestPrompt.emailPlaceholder', 'you@example.com')}
-            maxLength={255}
-          />
+          <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('gallery.guestPrompt.nameLabel', 'Your name')}</span><Input
+                              value={name}
+                              onChange={(e) => setName(e.target.value)}
+                              placeholder={t('gallery.guestPrompt.namePlaceholder', 'Enter your name')}
+                              autoFocus
+                              required
+                              maxLength={100} aria-invalid={!!(errors.name)} aria-describedby={(errors.name) ? `${__fieldId}-0-error` : undefined}
+                            />{(errors.name) && <p id={`${__fieldId}-0-error`} className="mt-1.5 text-sm text-destructive">{errors.name}</p>}</Label></div>
+          <div className="w-full"><Label className="block"><span className="mb-1.5 block">{requireEmail
+                                  ? t('gallery.guestPrompt.emailLabelRequired', 'Email')
+                                  : t('gallery.guestPrompt.emailLabel', 'Email (optional)')}</span><Input
+                              type="email"
+                              value={email}
+                              onChange={(e) => setEmail(e.target.value)}
+                              placeholder={t('gallery.guestPrompt.emailPlaceholder', 'you@example.com')}
+                              maxLength={255} aria-invalid={!!(errors.email)} aria-describedby={(errors.email) ? `${__fieldId}-1-error` : undefined}
+                            />{(errors.email) && <p id={`${__fieldId}-1-error`} className="mt-1.5 text-sm text-destructive">{errors.email}</p>}</Label></div>
 
           {submitError && (
             <div className="text-sm text-red-600 bg-red-50 dark:bg-red-900/20 rounded-sm px-3 py-2">
@@ -127,7 +124,7 @@ export const GuestNamePromptModal: React.FC<GuestNamePromptModalProps> = ({
           )}
 
           <div className="flex gap-2 pt-2">
-            <Button type="submit" variant="primary" className="flex-1" disabled={submitting}>
+            <Button type="submit" className="flex-1" disabled={submitting}>
               {submitting
                 ? t('common.submitting', 'Submitting...')
                 : t('gallery.guestPrompt.submit', 'Continue')}

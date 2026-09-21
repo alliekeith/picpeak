@@ -1,6 +1,6 @@
 import React from 'react';
 import { Info } from 'lucide-react';
-import { Input } from '../../common';
+import { Input } from "@/components/ui/input";
 
 /**
  * Compact color-picker row used by the 8-token palette.

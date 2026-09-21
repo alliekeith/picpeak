@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Trash2, Eye, Download, UserPlus, Grid3x3, List } from 'lucide-react';
-import { Card, Button, Loading } from '../common';
+import { Loading } from '../common';
 import { guestsService, AdminGuest } from '../../services/guests.service';
 import { AdminGuestDetail } from './AdminGuestDetail';
 import { GuestSelectionsAggregate } from './GuestSelectionsAggregate';
@@ -10,6 +10,8 @@ import { GuestInviteDialog } from './GuestInviteDialog';
 import { toast } from 'react-toastify';
 import { useLocalizedDate } from '../../hooks/useLocalizedDate';
 import { useMutationWithToast, useModal } from '../../hooks';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface AdminGuestsListProps {
   eventId: number;
@@ -161,9 +163,8 @@ export const AdminGuestsList: React.FC<AdminGuestsListProps> = ({ eventId, event
       <div>
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={() => setView('list')} leftIcon={<List className="w-4 h-4" />}>
-              {t('admin.guests.backToList', 'Back to list')}
-            </Button>
+            <Button variant="outline" size="sm" onClick={() => setView('list')}>
+                                  <List className="w-4 h-4" />{t('admin.guests.backToList', 'Back to list')}</Button>
           </div>
         </div>
         <GuestSelectionsAggregate eventId={eventId} />
@@ -188,7 +189,7 @@ export const AdminGuestsList: React.FC<AdminGuestsListProps> = ({ eventId, event
                   {t('admin.guests.mergePickKeepHint', 'Pick the entry to keep')}
                 </span>
               )}
-              <Button variant="primary" size="sm" onClick={performMerge} disabled={mergeSelection.length < 2 || keepId === null}>
+              <Button size="sm" onClick={performMerge} disabled={mergeSelection.length < 2 || keepId === null}>
                 {t('admin.guests.mergeNow', 'Merge selected')}
               </Button>
               <Button variant="ghost" size="sm" onClick={() => { setMergeMode(false); setMergeSelection([]); setKeepId(null); }}>
@@ -198,21 +199,17 @@ export const AdminGuestsList: React.FC<AdminGuestsListProps> = ({ eventId, event
           ) : (
             <>
               <Button
-                variant="outline"
-                size="sm"
-                leftIcon={<UserPlus className="w-4 h-4" />}
-                onClick={inviteModal.open}
-              >
-                {t('admin.guests.createInvite', 'Create invite')}
-              </Button>
+                                              variant="outline"
+                                              size="sm"
+                                              onClick={inviteModal.open}
+                                            >
+                                              <UserPlus className="w-4 h-4" />{t('admin.guests.createInvite', 'Create invite')}</Button>
               <Button
-                variant="outline"
-                size="sm"
-                leftIcon={<Grid3x3 className="w-4 h-4" />}
-                onClick={() => setView('aggregate')}
-              >
-                {t('admin.guests.aggregateView', 'By popularity')}
-              </Button>
+                                              variant="outline"
+                                              size="sm"
+                                              onClick={() => setView('aggregate')}
+                                            >
+                                              <Grid3x3 className="w-4 h-4" />{t('admin.guests.aggregateView', 'By popularity')}</Button>
               <Button
                 variant="outline"
                 size="sm"
@@ -222,9 +219,8 @@ export const AdminGuestsList: React.FC<AdminGuestsListProps> = ({ eventId, event
                 {t('admin.guests.mergeMode', 'Merge')}
               </Button>
               <div className="relative group">
-                <Button variant="outline" size="sm" leftIcon={<Download className="w-4 h-4" />}>
-                  {t('admin.guests.exportAll', 'Export all')}
-                </Button>
+                <Button variant="outline" size="sm">
+                                                    <Download className="w-4 h-4" />{t('admin.guests.exportAll', 'Export all')}</Button>
                 <div className="absolute right-0 top-full mt-1 hidden group-hover:block bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-sm shadow-lg z-10 min-w-[120px]">
                   {(['csv', 'txt', 'json'] as const).map((fmt) => (
                     <button
@@ -277,166 +273,162 @@ export const AdminGuestsList: React.FC<AdminGuestsListProps> = ({ eventId, event
       )}
 
       {guests.length === 0 ? (
-        <Card>
-          <div className="p-8 text-center text-neutral-500 dark:text-neutral-400">
-            {t('admin.guests.empty', 'No guests have registered yet.')}
-          </div>
-        </Card>
+        <Card><CardContent><div className="p-8 text-center text-neutral-500 dark:text-neutral-400">
+                          {t('admin.guests.empty', 'No guests have registered yet.')}
+                        </div></CardContent></Card>
       ) : (
-        <Card>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700">
-                <tr>
-                  {mergeMode && <th className="px-4 py-3 w-8" />}
-                  {mergeMode && (
-                    <th className="px-4 py-3 w-16 text-left text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase">
-                      {t('admin.guests.mergeKeepColumn', 'Keep')}
-                    </th>
-                  )}
-                  <th className="px-4 py-3 text-left text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase">
-                    {t('admin.guests.columns.name', 'Name')}
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase">
-                    {t('admin.guests.columns.email', 'Email')}
-                  </th>
-                  <th className="px-4 py-3 text-right text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase">
-                    {t('admin.guests.columns.likes', 'Likes')}
-                  </th>
-                  <th className="px-4 py-3 text-right text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase">
-                    {t('admin.guests.columns.favorites', 'Favorites')}
-                  </th>
-                  <th className="px-4 py-3 text-right text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase">
-                    {t('admin.guests.columns.comments', 'Comments')}
-                  </th>
-                  <th className="px-4 py-3 text-right text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase">
-                    {t('admin.guests.columns.ratings', 'Ratings')}
-                  </th>
-                  <th className="px-4 py-3 text-right text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase">
-                    {t('admin.guests.columns.reactions', 'Reactions')}
-                  </th>
-                  <th className="px-4 py-3 text-right text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase">
-                    {t('admin.guests.columns.colorLabels', 'Color labels')}
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase">
-                    {t('admin.guests.columns.lastSeen', 'Last seen')}
-                  </th>
-                  <th className="px-4 py-3" />
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-neutral-200 dark:divide-neutral-700">
-                {guests.map((guest) => (
-                  <tr key={guest.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800">
-                    {mergeMode && (
-                      <td className="px-4 py-3">
-                        <input
-                          type="checkbox"
-                          aria-label={t('admin.guests.mergeInclude', 'Include {{name}} in the merge', { name: guest.name })}
-                          checked={mergeSelection.includes(guest.id)}
-                          onChange={() => toggleMergeSelection(guest.id)}
-                          className="w-4 h-4 text-brand rounded-sm focus:ring-brand-500"
-                        />
-                      </td>
-                    )}
-                    {mergeMode && (
-                      <td className="px-4 py-3">
-                        {/* The survivor, chosen rather than derived. Only
-                            selectable among the rows actually being merged. */}
-                        <input
-                          type="radio"
-                          name="merge-keep"
-                          aria-label={t('admin.guests.mergeKeepRow', 'Keep {{name}}', { name: guest.name })}
-                          checked={keepId === guest.id}
-                          disabled={!mergeSelection.includes(guest.id)}
-                          onChange={() => setKeepId(guest.id)}
-                          className="w-4 h-4 text-brand focus:ring-brand-500 disabled:opacity-40"
-                        />
-                      </td>
-                    )}
-                    <td className="px-4 py-3 font-medium text-neutral-900 dark:text-neutral-100">
-                      {guest.name}
-                      {guest.email_verified_at && (
-                        <span className="ml-2 text-xs text-green-600">✓</span>
-                      )}
-                    </td>
-                    <td className="px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400">
-                      {guest.email || '—'}
-                      {guest.duplicate_group && (
-                        <span
-                          className="ml-2 inline-block rounded-sm px-1.5 py-0.5 text-xs bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-200"
-                          title={t('admin.guests.duplicateHint', 'Another entry on this gallery uses the same email — likely the same person registered twice.')}
-                        >
-                          {t('admin.guests.duplicateBadge', 'duplicate?')}
-                        </span>
-                      )}
-                    </td>
-                    <td className="px-4 py-3 text-right text-sm text-neutral-900 dark:text-neutral-100">
-                      {guest.stats.likes}
-                    </td>
-                    <td className="px-4 py-3 text-right text-sm text-neutral-900 dark:text-neutral-100">
-                      {guest.stats.favorites}
-                    </td>
-                    <td className="px-4 py-3 text-right text-sm text-neutral-900 dark:text-neutral-100">
-                      {guest.stats.comments}
-                    </td>
-                    <td className="px-4 py-3 text-right text-sm text-neutral-900 dark:text-neutral-100">
-                      {guest.stats.ratings}
-                    </td>
-                    <td className="px-4 py-3 text-right text-sm text-neutral-900 dark:text-neutral-100">
-                      {guest.stats.reactions}
-                    </td>
-                    <td className="px-4 py-3 text-right text-sm text-neutral-900 dark:text-neutral-100">
-                      {guest.stats.color_labels ?? 0}
-                    </td>
-                    <td className="px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400">
-                      {fmtDate(guest.last_seen_at)}
-                    </td>
-                    <td className="px-4 py-3 text-right">
-                      <div className="flex items-center justify-end gap-1">
-                        <button
-                          type="button"
-                          onClick={() => setSelectedGuest(guest)}
-                          className="p-1 text-neutral-500 hover:text-brand"
-                          title={t('admin.guests.view', 'View details')}
-                        >
-                          <Eye className="w-4 h-4" />
-                        </button>
-                        <div className="relative group">
-                          <button
-                            type="button"
-                            className="p-1 text-neutral-500 hover:text-brand"
-                            title={t('admin.guests.export', 'Export')}
-                          >
-                            <Download className="w-4 h-4" />
-                          </button>
-                          <div className="absolute right-0 top-full mt-1 hidden group-hover:block bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-sm shadow-lg z-10 min-w-[100px]">
-                            {(['csv', 'txt', 'json'] as const).map((fmt) => (
-                              <button
-                                key={fmt}
-                                onClick={() => handleExport(guest, fmt)}
-                                className="block w-full text-left px-3 py-2 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-700"
-                              >
-                                {fmt.toUpperCase()}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => handleDelete(guest)}
-                          className="p-1 text-neutral-500 hover:text-red-600"
-                          title={t('admin.guests.forgetGuest', 'Remove guest')}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </Card>
+        <Card><CardContent><div className="overflow-x-auto">
+                              <table className="w-full">
+                                <thead className="bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700">
+                                  <tr>
+                                    {mergeMode && <th className="px-4 py-3 w-8" />}
+                                    {mergeMode && (
+                                      <th className="px-4 py-3 w-16 text-left text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase">
+                                        {t('admin.guests.mergeKeepColumn', 'Keep')}
+                                      </th>
+                                    )}
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase">
+                                      {t('admin.guests.columns.name', 'Name')}
+                                    </th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase">
+                                      {t('admin.guests.columns.email', 'Email')}
+                                    </th>
+                                    <th className="px-4 py-3 text-right text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase">
+                                      {t('admin.guests.columns.likes', 'Likes')}
+                                    </th>
+                                    <th className="px-4 py-3 text-right text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase">
+                                      {t('admin.guests.columns.favorites', 'Favorites')}
+                                    </th>
+                                    <th className="px-4 py-3 text-right text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase">
+                                      {t('admin.guests.columns.comments', 'Comments')}
+                                    </th>
+                                    <th className="px-4 py-3 text-right text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase">
+                                      {t('admin.guests.columns.ratings', 'Ratings')}
+                                    </th>
+                                    <th className="px-4 py-3 text-right text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase">
+                                      {t('admin.guests.columns.reactions', 'Reactions')}
+                                    </th>
+                                    <th className="px-4 py-3 text-right text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase">
+                                      {t('admin.guests.columns.colorLabels', 'Color labels')}
+                                    </th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase">
+                                      {t('admin.guests.columns.lastSeen', 'Last seen')}
+                                    </th>
+                                    <th className="px-4 py-3" />
+                                  </tr>
+                                </thead>
+                                <tbody className="divide-y divide-neutral-200 dark:divide-neutral-700">
+                                  {guests.map((guest) => (
+                                    <tr key={guest.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800">
+                                      {mergeMode && (
+                                        <td className="px-4 py-3">
+                                          <input
+                                            type="checkbox"
+                                            aria-label={t('admin.guests.mergeInclude', 'Include {{name}} in the merge', { name: guest.name })}
+                                            checked={mergeSelection.includes(guest.id)}
+                                            onChange={() => toggleMergeSelection(guest.id)}
+                                            className="w-4 h-4 text-brand rounded-sm focus:ring-brand-500"
+                                          />
+                                        </td>
+                                      )}
+                                      {mergeMode && (
+                                        <td className="px-4 py-3">
+                                          {/* The survivor, chosen rather than derived. Only
+                                              selectable among the rows actually being merged. */}
+                                          <input
+                                            type="radio"
+                                            name="merge-keep"
+                                            aria-label={t('admin.guests.mergeKeepRow', 'Keep {{name}}', { name: guest.name })}
+                                            checked={keepId === guest.id}
+                                            disabled={!mergeSelection.includes(guest.id)}
+                                            onChange={() => setKeepId(guest.id)}
+                                            className="w-4 h-4 text-brand focus:ring-brand-500 disabled:opacity-40"
+                                          />
+                                        </td>
+                                      )}
+                                      <td className="px-4 py-3 font-medium text-neutral-900 dark:text-neutral-100">
+                                        {guest.name}
+                                        {guest.email_verified_at && (
+                                          <span className="ml-2 text-xs text-green-600">✓</span>
+                                        )}
+                                      </td>
+                                      <td className="px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400">
+                                        {guest.email || '—'}
+                                        {guest.duplicate_group && (
+                                          <span
+                                            className="ml-2 inline-block rounded-sm px-1.5 py-0.5 text-xs bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-200"
+                                            title={t('admin.guests.duplicateHint', 'Another entry on this gallery uses the same email — likely the same person registered twice.')}
+                                          >
+                                            {t('admin.guests.duplicateBadge', 'duplicate?')}
+                                          </span>
+                                        )}
+                                      </td>
+                                      <td className="px-4 py-3 text-right text-sm text-neutral-900 dark:text-neutral-100">
+                                        {guest.stats.likes}
+                                      </td>
+                                      <td className="px-4 py-3 text-right text-sm text-neutral-900 dark:text-neutral-100">
+                                        {guest.stats.favorites}
+                                      </td>
+                                      <td className="px-4 py-3 text-right text-sm text-neutral-900 dark:text-neutral-100">
+                                        {guest.stats.comments}
+                                      </td>
+                                      <td className="px-4 py-3 text-right text-sm text-neutral-900 dark:text-neutral-100">
+                                        {guest.stats.ratings}
+                                      </td>
+                                      <td className="px-4 py-3 text-right text-sm text-neutral-900 dark:text-neutral-100">
+                                        {guest.stats.reactions}
+                                      </td>
+                                      <td className="px-4 py-3 text-right text-sm text-neutral-900 dark:text-neutral-100">
+                                        {guest.stats.color_labels ?? 0}
+                                      </td>
+                                      <td className="px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400">
+                                        {fmtDate(guest.last_seen_at)}
+                                      </td>
+                                      <td className="px-4 py-3 text-right">
+                                        <div className="flex items-center justify-end gap-1">
+                                          <button
+                                            type="button"
+                                            onClick={() => setSelectedGuest(guest)}
+                                            className="p-1 text-neutral-500 hover:text-brand"
+                                            title={t('admin.guests.view', 'View details')}
+                                          >
+                                            <Eye className="w-4 h-4" />
+                                          </button>
+                                          <div className="relative group">
+                                            <button
+                                              type="button"
+                                              className="p-1 text-neutral-500 hover:text-brand"
+                                              title={t('admin.guests.export', 'Export')}
+                                            >
+                                              <Download className="w-4 h-4" />
+                                            </button>
+                                            <div className="absolute right-0 top-full mt-1 hidden group-hover:block bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-sm shadow-lg z-10 min-w-[100px]">
+                                              {(['csv', 'txt', 'json'] as const).map((fmt) => (
+                                                <button
+                                                  key={fmt}
+                                                  onClick={() => handleExport(guest, fmt)}
+                                                  className="block w-full text-left px-3 py-2 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                                                >
+                                                  {fmt.toUpperCase()}
+                                                </button>
+                                              ))}
+                                            </div>
+                                          </div>
+                                          <button
+                                            type="button"
+                                            onClick={() => handleDelete(guest)}
+                                            className="p-1 text-neutral-500 hover:text-red-600"
+                                            title={t('admin.guests.forgetGuest', 'Remove guest')}
+                                          >
+                                            <Trash2 className="w-4 h-4" />
+                                          </button>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div></CardContent></Card>
       )}
 
       {selectedGuest && (

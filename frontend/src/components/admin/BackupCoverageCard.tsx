@@ -16,13 +16,13 @@ import {
 import { useQuery } from '@tanstack/react-query';
 // Locale-aware formatters per [[feedback_respect_general_format_settings]].
 import { useLocalizedDate } from '../../hooks/useLocalizedDate';
-
-import { Card, Button } from '../common';
 import {
   adminService,
   BackupCoverageReport,
   BackupPathCoverage,
 } from '../../services/admin.service';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 /**
  * BackupCoverageCard — Stage C of the backup-hardening plan.
@@ -53,36 +53,30 @@ export const BackupCoverageCard: React.FC = () => {
   });
 
   return (
-    <Card className="p-6">
-      <Header report={data} loading={isLoading} onRefresh={() => refetch()} refreshing={isFetching} />
+    <Card className="p-6"><CardContent><Header report={data} loading={isLoading} onRefresh={() => refetch()} refreshing={isFetching} />{isError && (
+              <ErrorBanner message={(error as Error)?.message ?? 'unknown error'} />
+            )}{data && (
+              <>
+                {data.summary.tableMissingFallbackInUse && (
+                  <FallbackWarning />
+                )}
 
-      {isError && (
-        <ErrorBanner message={(error as Error)?.message ?? 'unknown error'} />
-      )}
+                <SectionGrid>
+                  <DatabaseStatusCard database={data.database} />
+                  <SummaryCard summary={data.summary} />
+                </SectionGrid>
 
-      {data && (
-        <>
-          {data.summary.tableMissingFallbackInUse && (
-            <FallbackWarning />
-          )}
+                <PathsTable paths={data.paths} />
 
-          <SectionGrid>
-            <DatabaseStatusCard database={data.database} />
-            <SummaryCard summary={data.summary} />
-          </SectionGrid>
+                <DriftSection drift={data.drift} />
 
-          <PathsTable paths={data.paths} />
-
-          <DriftSection drift={data.drift} />
-
-          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-4">
-            {t('backup.coverage.generatedAt', 'Coverage generated: {{when}}', {
-              when: formatDateTime(new Date(data.generatedAt)),
-            })}
-          </p>
-        </>
-      )}
-    </Card>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-4">
+                  {t('backup.coverage.generatedAt', 'Coverage generated: {{when}}', {
+                    when: formatDateTime(new Date(data.generatedAt)),
+                  })}
+                </p>
+              </>
+            )}</CardContent></Card>
   );
 };
 
@@ -119,17 +113,13 @@ const Header: React.FC<{
         </p>
       </div>
       <Button
-        variant="ghost"
-        onClick={onRefresh}
-        disabled={loading || refreshing}
-        leftIcon={
-          refreshing
-            ? <Loader2 className="w-4 h-4 animate-spin" />
-            : <RefreshCw className="w-4 h-4" />
-        }
-      >
-        {t('backup.coverage.refresh', 'Refresh')}
-      </Button>
+                  variant="ghost"
+                  onClick={onRefresh}
+                  disabled={loading || refreshing}
+                >
+                  {refreshing
+                      ? <Loader2 className="w-4 h-4 animate-spin" />
+                      : <RefreshCw className="w-4 h-4" />}{t('backup.coverage.refresh', 'Refresh')}</Button>
     </div>
   );
 };

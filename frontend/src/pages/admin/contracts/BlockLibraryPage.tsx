@@ -26,8 +26,8 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
-import { ArrowLeft, Plus, Trash2, Save } from 'lucide-react';
-import { Button, Card, Loading } from '../../../components/common';
+import { ArrowLeft, Plus, Trash2, Save, Loader2 } from 'lucide-react';
+import { Loading } from '../../../components/common';
 import { SUPPORTED_LANGUAGES } from '../../../components/common/LanguageSelector';
 import { useMutationWithToast } from '../../../hooks';
 import {
@@ -36,6 +36,8 @@ import {
   type ContractBlockSection,
   CONTRACT_SECTIONS,
 } from '../../../services/contracts.service';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 // Locale → block column mapping. Keys mirror SUPPORTED_LANGUAGES.code;
 // values are the ContractBlock field names. Used to resolve which body
@@ -291,272 +293,250 @@ export const BlockLibraryPage: React.FC = () => {
           {/* Sidebar — same shape as EmailConfigPage templates sidebar:
               Card padding="sm" + h3 + +New button up top, then a
               section-grouped list of block tiles. */}
-          <Card padding="sm" className="lg:col-span-2">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                {t('contracts.blocks.sidebarHeading', 'Blocks')}
-              </h3>
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={() => setSelection({ mode: 'new' })}
-                leftIcon={<Plus className="w-4 h-4" />}
-              >
-                {t('contracts.blocks.new', 'New block')}
-              </Button>
-            </div>
-            <div className="space-y-5">
-              {CONTRACT_SECTIONS.map((sec) => {
-                const items = grouped[sec];
-                if (!items || items.length === 0) return null;
-                return (
-                  <div key={sec}>
-                    <h4 className="px-1 mb-2 text-[11px] font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
-                      {t(`contracts.sections.${sec}`, sec)}
-                    </h4>
-                    <div className="space-y-2">
-                      {items.map((b) => {
-                        const isSelected = selection?.mode === 'edit' && selection.block.id === b.id;
-                        const count = translationCount(b);
-                        return (
-                          <button
-                            key={b.id}
-                            onClick={() => setSelection({ mode: 'edit', block: b })}
-                            className={`w-full text-left p-3 rounded-lg transition-colors ${
-                              isSelected
-                                ? 'tile-selected'
-                                : 'bg-neutral-50 dark:bg-neutral-700 border-2 border-transparent hover:bg-neutral-100 dark:hover:bg-neutral-600'
-                            } ${!b.isActive ? 'opacity-50' : ''}`}
-                          >
-                            <div className="flex items-center justify-between gap-2">
-                              {/* `title` is the only way to read a long block
-                                  name here — the column is narrow enough that
-                                  CSS truncation can cut names to a few
-                                  characters ("Vertr…"), which made the list
-                                  unscannable without clicking each block (QA
-                                  S13). `min-w-0` lets the name shrink instead
-                                  of pushing the badges out of the row. */}
-                              <p
-                                className="font-medium text-neutral-900 dark:text-neutral-100 truncate min-w-0"
-                                title={b.name}
-                              >
-                                {b.name}
-                              </p>
-                              <div className="flex items-center gap-1.5 shrink-0">
-                                {b.isSystem && (
-                                  <span
-                                    className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-sm font-semibold bg-neutral-200 dark:bg-neutral-600 text-neutral-700 dark:text-neutral-300"
-                                    title={t('contracts.blocks.systemBadge', 'System') as string}
-                                  >
-                                    {t('contracts.blocks.systemBadge', 'System')}
-                                  </span>
+          <Card className="py-4 lg:col-span-2"><CardContent className="px-4"><div className="flex items-center justify-between mb-4">
+                                <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                                  {t('contracts.blocks.sidebarHeading', 'Blocks')}
+                                </h3>
+                                <Button
+                                                            size="sm"
+                                                            onClick={() => setSelection({ mode: 'new' })}
+                                                          >
+                                                            <Plus className="w-4 h-4" />{t('contracts.blocks.new', 'New block')}</Button>
+                              </div><div className="space-y-5">
+                                {CONTRACT_SECTIONS.map((sec) => {
+                                  const items = grouped[sec];
+                                  if (!items || items.length === 0) return null;
+                                  return (
+                                    <div key={sec}>
+                                      <h4 className="px-1 mb-2 text-[11px] font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+                                        {t(`contracts.sections.${sec}`, sec)}
+                                      </h4>
+                                      <div className="space-y-2">
+                                        {items.map((b) => {
+                                          const isSelected = selection?.mode === 'edit' && selection.block.id === b.id;
+                                          const count = translationCount(b);
+                                          return (
+                                            <button
+                                              key={b.id}
+                                              onClick={() => setSelection({ mode: 'edit', block: b })}
+                                              className={`w-full text-left p-3 rounded-lg transition-colors ${
+                                                isSelected
+                                                  ? 'tile-selected'
+                                                  : 'bg-neutral-50 dark:bg-neutral-700 border-2 border-transparent hover:bg-neutral-100 dark:hover:bg-neutral-600'
+                                              } ${!b.isActive ? 'opacity-50' : ''}`}
+                                            >
+                                              <div className="flex items-center justify-between gap-2">
+                                                {/* `title` is the only way to read a long block
+                                                    name here — the column is narrow enough that
+                                                    CSS truncation can cut names to a few
+                                                    characters ("Vertr…"), which made the list
+                                                    unscannable without clicking each block (QA
+                                                    S13). `min-w-0` lets the name shrink instead
+                                                    of pushing the badges out of the row. */}
+                                                <p
+                                                  className="font-medium text-neutral-900 dark:text-neutral-100 truncate min-w-0"
+                                                  title={b.name}
+                                                >
+                                                  {b.name}
+                                                </p>
+                                                <div className="flex items-center gap-1.5 shrink-0">
+                                                  {b.isSystem && (
+                                                    <span
+                                                      className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-sm font-semibold bg-neutral-200 dark:bg-neutral-600 text-neutral-700 dark:text-neutral-300"
+                                                      title={t('contracts.blocks.systemBadge', 'System') as string}
+                                                    >
+                                                      {t('contracts.blocks.systemBadge', 'System')}
+                                                    </span>
+                                                  )}
+                                                  <span className="text-xs px-2 py-0.5 rounded-full bg-neutral-200 dark:bg-neutral-600 text-neutral-600 dark:text-neutral-300">
+                                                    {count}/{SUPPORTED_LANGUAGES.length}
+                                                  </span>
+                                                </div>
+                                              </div>
+                                              {b.description && (
+                                                <p
+                                                  className="text-sm text-neutral-500 dark:text-neutral-400 mt-1 truncate"
+                                                  title={b.description}
+                                                >
+                                                  {b.description}
+                                                </p>
+                                              )}
+                                            </button>
+                                          );
+                                        })}
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                                {blocks.length === 0 && (
+                                  <p className="text-center text-sm text-neutral-500 dark:text-neutral-400 py-6">
+                                    {t('contracts.blocks.empty', 'No blocks yet.')}
+                                  </p>
                                 )}
-                                <span className="text-xs px-2 py-0.5 rounded-full bg-neutral-200 dark:bg-neutral-600 text-neutral-600 dark:text-neutral-300">
-                                  {count}/{SUPPORTED_LANGUAGES.length}
-                                </span>
-                              </div>
-                            </div>
-                            {b.description && (
-                              <p
-                                className="text-sm text-neutral-500 dark:text-neutral-400 mt-1 truncate"
-                                title={b.description}
-                              >
-                                {b.description}
-                              </p>
-                            )}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                );
-              })}
-              {blocks.length === 0 && (
-                <p className="text-center text-sm text-neutral-500 dark:text-neutral-400 py-6">
-                  {t('contracts.blocks.empty', 'No blocks yet.')}
-                </p>
-              )}
-            </div>
-          </Card>
+                              </div></CardContent></Card>
 
           {/* Right panel — edit / create form. */}
           <div className="lg:col-span-3">
             {selection === null ? (
-              <Card padding="md">
-                <p className="text-center text-neutral-500 dark:text-neutral-400 py-8">
-                  {t('contracts.blocks.selectPrompt', 'Select a block on the left or create a new one to start editing.')}
-                </p>
-              </Card>
+              <Card><CardContent><p className="text-center text-neutral-500 dark:text-neutral-400 py-8">
+                                            {t('contracts.blocks.selectPrompt', 'Select a block on the left or create a new one to start editing.')}
+                                          </p></CardContent></Card>
             ) : (
-              <Card padding="md">
-                <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
-                  <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                    {selection.mode === 'new'
-                      ? t('contracts.blocks.dialog.createTitle', 'New block')
-                      : t('contracts.blocks.dialog.editTitle', 'Edit block')}
-                  </h3>
-                  <div className="flex gap-2 items-center flex-wrap">
-                    {selection.mode === 'edit' && (
-                      <label className="flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400 mr-2">
-                        <input
-                          type="checkbox"
-                          checked={selection.block.isActive}
-                          onChange={handleToggleActive}
-                        />
-                        {selection.block.isActive
-                          ? t('contracts.blocks.active', 'Active')
-                          : t('contracts.blocks.inactive', 'Inactive')}
-                      </label>
-                    )}
-                    {selection.mode === 'edit' && !selection.block.isSystem && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                          if (window.confirm(t('contracts.blocks.deleteConfirm', 'Delete this block?') as string)) {
-                            deleteMutation.mutate(selection.block.id);
-                          }
-                        }}
-                        leftIcon={<Trash2 className="w-4 h-4" />}
-                      >
-                        {t('contracts.blocks.delete', 'Delete')}
-                      </Button>
-                    )}
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      onClick={handleSave}
-                      isLoading={isPending}
-                      disabled={!canSave}
-                      leftIcon={<Save className="w-4 h-4" />}
-                    >
-                      {t('contracts.blocks.save', 'Save')}
-                    </Button>
-                  </div>
-                </div>
+              <Card><CardContent><div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+                                                <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                                                  {selection.mode === 'new'
+                                                    ? t('contracts.blocks.dialog.createTitle', 'New block')
+                                                    : t('contracts.blocks.dialog.editTitle', 'Edit block')}
+                                                </h3>
+                                                <div className="flex gap-2 items-center flex-wrap">
+                                                  {selection.mode === 'edit' && (
+                                                    <label className="flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400 mr-2">
+                                                      <input
+                                                        type="checkbox"
+                                                        checked={selection.block.isActive}
+                                                        onChange={handleToggleActive}
+                                                      />
+                                                      {selection.block.isActive
+                                                        ? t('contracts.blocks.active', 'Active')
+                                                        : t('contracts.blocks.inactive', 'Inactive')}
+                                                    </label>
+                                                  )}
+                                                  {selection.mode === 'edit' && !selection.block.isSystem && (
+                                                    <Button
+                                                                                                    variant="outline"
+                                                                                                    size="sm"
+                                                                                                    onClick={() => {
+                                                                                                      if (window.confirm(t('contracts.blocks.deleteConfirm', 'Delete this block?') as string)) {
+                                                                                                        deleteMutation.mutate(selection.block.id);
+                                                                                                      }
+                                                                                                    }}
+                                                                                                  >
+                                                                                                    <Trash2 className="w-4 h-4" />{t('contracts.blocks.delete', 'Delete')}</Button>
+                                                  )}
+                                                  <Button
+                                                                                              size="sm"
+                                                                                              onClick={handleSave} disabled={!canSave || isPending}
+                                                                                            >
+                                                                                              {isPending && <Loader2 className="animate-spin" />}<Save className="w-4 h-4" />{t('contracts.blocks.save', 'Save')}</Button>
+                                                </div>
+                                              </div>{/* Language tabs — identical pill row to EmailConfigPage. */}<div className="flex flex-wrap gap-1 mb-4 p-1 bg-neutral-100 dark:bg-neutral-700 rounded-lg">
+                                                {SUPPORTED_LANGUAGES.map((lang) => {
+                                                  const filled = !!(bodies[lang.code] || '').trim();
+                                                  return (
+                                                    <button
+                                                      key={lang.code}
+                                                      onClick={() => setEditingLang(lang.code)}
+                                                      className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors flex items-center gap-1.5 ${
+                                                        editingLang === lang.code
+                                                          ? 'bg-white dark:bg-neutral-800 text-primary shadow-xs'
+                                                          : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200'
+                                                      }`}
+                                                    >
+                                                      <lang.Flag />
+                                                      <span>{lang.name}</span>
+                                                      {!filled && lang.code !== 'en' && (
+                                                        <span
+                                                          className="w-1.5 h-1.5 rounded-full bg-amber-400"
+                                                          title={t('contracts.blocks.noTranslation', 'No translation yet') as string}
+                                                        />
+                                                      )}
+                                                    </button>
+                                                  );
+                                                })}
+                                              </div><div className="space-y-4">
+                                                {/* Name above Section, stacked vertically — Name is
+                                                    the primary identifier and reads best at full
+                                                    width; Section is a one-of-six dropdown that
+                                                    doesn't need to share row space. Section stays
+                                                    locked when editing a system block. */}
+                                                <div>
+                                                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                                                    {t('contracts.blocks.dialog.name', 'Name')}
+                                                  </label>
+                                                  <input
+                                                    type="text"
+                                                    value={name}
+                                                    onChange={(e) => setName(e.target.value)}
+                                                    className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm"
+                                                  />
+                                                </div>
+                                                <div>
+                                                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                                                    {t('contracts.blocks.dialog.section', 'Section')}
+                                                  </label>
+                                                  <select
+                                                    value={section}
+                                                    onChange={(e) => setSection(e.target.value as ContractBlockSection)}
+                                                    disabled={selection.mode === 'edit' && selection.block.isSystem}
+                                                    className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm disabled:opacity-50"
+                                                  >
+                                                    {CONTRACT_SECTIONS.map((s) => (
+                                                      <option key={s} value={s}>{t(`contracts.sections.${s}`, s)}</option>
+                                                    ))}
+                                                  </select>
+                                                </div>
 
-                {/* Language tabs — identical pill row to EmailConfigPage. */}
-                <div className="flex flex-wrap gap-1 mb-4 p-1 bg-neutral-100 dark:bg-neutral-700 rounded-lg">
-                  {SUPPORTED_LANGUAGES.map((lang) => {
-                    const filled = !!(bodies[lang.code] || '').trim();
-                    return (
-                      <button
-                        key={lang.code}
-                        onClick={() => setEditingLang(lang.code)}
-                        className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors flex items-center gap-1.5 ${
-                          editingLang === lang.code
-                            ? 'bg-white dark:bg-neutral-800 text-primary shadow-xs'
-                            : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200'
-                        }`}
-                      >
-                        <lang.Flag />
-                        <span>{lang.name}</span>
-                        {!filled && lang.code !== 'en' && (
-                          <span
-                            className="w-1.5 h-1.5 rounded-full bg-amber-400"
-                            title={t('contracts.blocks.noTranslation', 'No translation yet') as string}
-                          />
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
+                                                <div>
+                                                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                                                    {t('contracts.blocks.dialog.description', 'Description (admin hint)')}
+                                                  </label>
+                                                  <input
+                                                    type="text"
+                                                    value={description}
+                                                    onChange={(e) => setDescription(e.target.value)}
+                                                    className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm"
+                                                  />
+                                                </div>
 
-                <div className="space-y-4">
-                  {/* Name above Section, stacked vertically — Name is
-                      the primary identifier and reads best at full
-                      width; Section is a one-of-six dropdown that
-                      doesn't need to share row space. Section stays
-                      locked when editing a system block. */}
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                      {t('contracts.blocks.dialog.name', 'Name')}
-                    </label>
-                    <input
-                      type="text"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                      {t('contracts.blocks.dialog.section', 'Section')}
-                    </label>
-                    <select
-                      value={section}
-                      onChange={(e) => setSection(e.target.value as ContractBlockSection)}
-                      disabled={selection.mode === 'edit' && selection.block.isSystem}
-                      className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm disabled:opacity-50"
-                    >
-                      {CONTRACT_SECTIONS.map((s) => (
-                        <option key={s} value={s}>{t(`contracts.sections.${s}`, s)}</option>
-                      ))}
-                    </select>
-                  </div>
+                                                <div>
+                                                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                                                    {t('contracts.blocks.dialog.body', 'Body')} ({SUPPORTED_LANGUAGES.find((l) => l.code === editingLang)?.name || editingLang})
+                                                  </label>
+                                                  <textarea
+                                                    rows={14}
+                                                    value={currentBody}
+                                                    onChange={(e) => setCurrentBody(e.target.value)}
+                                                    className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm font-mono"
+                                                  />
+                                                </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                      {t('contracts.blocks.dialog.description', 'Description (admin hint)')}
-                    </label>
-                    <input
-                      type="text"
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                      className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                      {t('contracts.blocks.dialog.body', 'Body')} ({SUPPORTED_LANGUAGES.find((l) => l.code === editingLang)?.name || editingLang})
-                    </label>
-                    <textarea
-                      rows={14}
-                      value={currentBody}
-                      onChange={(e) => setCurrentBody(e.target.value)}
-                      className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm font-mono"
-                    />
-                  </div>
-
-                  {/* Special-block preview: quote_line_items_table
-                      generates an actual PDF table from the source
-                      quote's line items at render time. The block's
-                      body text is just the intro paragraph above the
-                      table; without this callout the admin had no way
-                      to know the table existed (it appears in the PDF
-                      but nowhere in the block editor). */}
-                  {selection.mode === 'edit' && selection.block.slug === 'quote_line_items_table' && (
-                    <div className="rounded-md border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/30 p-3 text-sm text-blue-900 dark:text-blue-200">
-                      <p className="font-medium mb-1">
-                        {t('contracts.blocks.quoteLineItems.calloutTitle',
-                          'Auto-generated table follows the body')}
-                      </p>
-                      <p className="text-xs">
-                        {t('contracts.blocks.quoteLineItems.calloutBody',
-                          'When this block is included in a contract that was created from a quote, the PDF inserts a real table of the source quote\'s line items (#, Description, Qty, Unit, Total) immediately after the body text above. Sub-items render indented with a ↳ marker. Contracts without a source quote skip the table and render only the body.')}
-                      </p>
-                      <p className="text-xs mt-2 opacity-80">
-                        {t('contracts.blocks.quoteLineItems.previewExample',
-                          'Example rendered output:')}
-                      </p>
-                      <pre className="mt-1 text-[11px] font-mono bg-white/50 dark:bg-neutral-900/40 rounded-sm p-2 overflow-x-auto">
-{`#   Description                      Qty    Unit       Total
+                                                {/* Special-block preview: quote_line_items_table
+                                                    generates an actual PDF table from the source
+                                                    quote's line items at render time. The block's
+                                                    body text is just the intro paragraph above the
+                                                    table; without this callout the admin had no way
+                                                    to know the table existed (it appears in the PDF
+                                                    but nowhere in the block editor). */}
+                                                {selection.mode === 'edit' && selection.block.slug === 'quote_line_items_table' && (
+                                                  <div className="rounded-md border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/30 p-3 text-sm text-blue-900 dark:text-blue-200">
+                                                    <p className="font-medium mb-1">
+                                                      {t('contracts.blocks.quoteLineItems.calloutTitle',
+                                                        'Auto-generated table follows the body')}
+                                                    </p>
+                                                    <p className="text-xs">
+                                                      {t('contracts.blocks.quoteLineItems.calloutBody',
+                                                        'When this block is included in a contract that was created from a quote, the PDF inserts a real table of the source quote\'s line items (#, Description, Qty, Unit, Total) immediately after the body text above. Sub-items render indented with a ↳ marker. Contracts without a source quote skip the table and render only the body.')}
+                                                    </p>
+                                                    <p className="text-xs mt-2 opacity-80">
+                                                      {t('contracts.blocks.quoteLineItems.previewExample',
+                                                        'Example rendered output:')}
+                                                    </p>
+                                                    <pre className="mt-1 text-[11px] font-mono bg-white/50 dark:bg-neutral-900/40 rounded-sm p-2 overflow-x-auto">
+                              {`#   Description                      Qty    Unit       Total
 1   Photography session              1      CHF 800    CHF 800
 2   Photo prints                     2      CHF 15     CHF 30
        ↳ Extra retouching            1      CHF 20     CHF 20`}
-                      </pre>
-                    </div>
-                  )}
+                                                    </pre>
+                                                  </div>
+                                                )}
 
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                    {t(
-                      'contracts.blocks.dialog.placeholderHint',
-                      'You can use {{customer_name}}, {{event_name}}, {{event_date}}, {{net_days}}, {{skonto_percent}}, {{skonto_within_days}}, {{cancellation_30d_percent}}, {{currency}}, {{issuer_company_name}}, {{issuer_address}}, {{contract_number}}, {{source_quote_number}} as placeholders — substituted when the contract is rendered.',
-                    )}
-                  </p>
-                </div>
-              </Card>
+                                                <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                                                  {t(
+                                                    'contracts.blocks.dialog.placeholderHint',
+                                                    'You can use {{customer_name}}, {{event_name}}, {{event_date}}, {{net_days}}, {{skonto_percent}}, {{skonto_within_days}}, {{cancellation_30d_percent}}, {{currency}}, {{issuer_company_name}}, {{issuer_address}}, {{contract_number}}, {{source_quote_number}} as placeholders — substituted when the contract is rendered.',
+                                                  )}
+                                                </p>
+                                              </div></CardContent></Card>
             )}
           </div>
         </div>

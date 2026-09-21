@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Skeleton, SkeletonGalleryGrid } from '../common';
+import { SkeletonGalleryGrid } from '../common';
+import { Skeleton } from "@/components/ui/skeleton";
 
 /**
  * Loading placeholder shown while a gallery is resolving (slug → info →
@@ -20,19 +21,19 @@ export const GallerySkeleton: React.FC = () => {
         <div className="container py-4">
           <div className="flex items-center justify-between">
             <div>
-              <Skeleton height={32} width={200} className="mb-2" />
-              <Skeleton height={20} width={300} />
+              <Skeleton className="mb-2" style={{ width: '200px', height: '32px' }} />
+              <Skeleton style={{ width: '300px', height: '20px' }} />
             </div>
             <div className="flex items-center gap-2">
-              <Skeleton height={40} width={120} />
-              <Skeleton height={40} width={100} />
+              <Skeleton style={{ width: '120px', height: '40px' }} />
+              <Skeleton style={{ width: '100px', height: '40px' }} />
             </div>
           </div>
         </div>
       </header>
       {showGrid && (
         <div className="container mt-6">
-          <Skeleton height={80} className="mb-6" />
+          <Skeleton className="mb-6" style={{ height: '80px' }} />
           <SkeletonGalleryGrid count={12} />
         </div>
       )}

@@ -2,10 +2,11 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Users } from 'lucide-react';
-import { Card, Loading } from '../common';
+import { Loading } from '../common';
 import { guestsService } from '../../services/guests.service';
 import { AuthenticatedImage } from '../common/AuthenticatedImage';
 import { buildResourceUrl } from '../../utils/url';
+import { Card, CardContent } from "@/components/ui/card";
 
 interface GuestSelectionsAggregateProps {
   eventId: number;
@@ -30,11 +31,9 @@ export const GuestSelectionsAggregate: React.FC<GuestSelectionsAggregateProps> =
 
   if (photos.length === 0) {
     return (
-      <Card>
-        <div className="p-8 text-center text-neutral-500 dark:text-neutral-400">
-          {t('admin.guests.aggregate.empty', 'No guest picks yet.')}
-        </div>
-      </Card>
+      <Card><CardContent><div className="p-8 text-center text-neutral-500 dark:text-neutral-400">
+                  {t('admin.guests.aggregate.empty', 'No guest picks yet.')}
+                </div></CardContent></Card>
     );
   }
 

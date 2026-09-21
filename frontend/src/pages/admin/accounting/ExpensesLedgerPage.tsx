@@ -12,7 +12,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { X, Plus, Paperclip, Car, CalendarDays, Coins, Pencil, FileText, CheckCircle2, Circle, Lock } from 'lucide-react';
-import { Button, Card, CardContent, Input, LocalizedDateInput, Loading } from '../../../components/common';
+import { LocalizedDateInput, Loading } from '../../../components/common';
 import { DecimalInput } from '../../../components/common/DecimalInput';
 import { EventBookingSelect } from '../../../components/admin/EventBookingSelect';
 import { CustomerAccountPicker, type SelectedCustomer } from '../../../components/admin/CustomerAccountPicker';
@@ -23,6 +23,9 @@ import {
   accountingService, categoryLabel,
   type Expense, type ExpenseKind, type ExpenseCategory, type MarkupType, type PaymentMethod,
 } from '../../../services/accounting.service';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 const PAYMENT_METHODS: PaymentMethod[] = ['bank_transfer', 'cash', 'twint', 'paypal', 'card', 'other'];
 

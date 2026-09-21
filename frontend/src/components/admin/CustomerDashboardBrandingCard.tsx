@@ -15,10 +15,12 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
-import { Save, Image as ImageIcon, Type, UserCog } from 'lucide-react';
-import { Button, Card, Loading } from '../common';
+import { Save, Image as ImageIcon, Type, UserCog, Loader2 } from 'lucide-react';
+import { Loading } from '../common';
 import { api } from '../../config/api';
 import { useMutationWithToast } from '../../hooks';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface CustomerSurfaceSettings {
   customer_show_logo: boolean;
@@ -107,59 +109,46 @@ export const CustomerDashboardBrandingCard: React.FC = () => {
 
   if (isLoading) {
     return (
-      <Card padding="md">
-        <div className="py-6 flex justify-center"><Loading size="md" /></div>
-      </Card>
+      <Card><CardContent><div className="py-6 flex justify-center"><Loading size="md" /></div></CardContent></Card>
     );
   }
 
   return (
-    <Card padding="md">
-      <div className="flex items-start gap-3 mb-4">
-        <div className="w-10 h-10 rounded-lg bg-brand-soft text-on-brand-soft flex items-center justify-center shrink-0">
-          <UserCog className="w-5 h-5" />
-        </div>
-        <div>
-          <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-            {t('settings.customerSurface.brandingTitle', 'Customer dashboard header')}
-          </h2>
-          <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">
-            {t(
-              'settings.customerSurface.brandingHint',
-              'Controls what shows in the header of /customer/dashboard. Public galleries and admin surfaces are not affected.',
-            )}
-          </p>
-        </div>
-      </div>
-
-      <div className="divide-y divide-neutral-200 dark:divide-neutral-700">
-        <Toggle
-          enabled={form.customer_show_logo}
-          onChange={() => toggle('customer_show_logo')}
-          label={t('settings.customerSurface.showLogo', 'Show logo in customer header')}
-          hint={t('settings.customerSurface.showLogoHint', 'Uses the same branding logo configured above.')}
-          icon={ImageIcon}
-        />
-        <Toggle
-          enabled={form.customer_show_company_name}
-          onChange={() => toggle('customer_show_company_name')}
-          label={t('settings.customerSurface.showCompanyName', 'Show company name in customer header')}
-          hint={t('settings.customerSurface.showCompanyNameHint', 'Hide if your logo already includes the company name.')}
-          icon={Type}
-        />
-      </div>
-
-      <div className="flex justify-end mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
-        <Button
-          variant="primary"
-          leftIcon={<Save className="w-4 h-4" />}
-          isLoading={saveMutation.isPending}
-          disabled={!isDirty || saveMutation.isPending}
-          onClick={() => saveMutation.mutate()}
-        >
-          {t('settings.customerSurface.save', 'Save changes')}
-        </Button>
-      </div>
-    </Card>
+    <Card><CardContent><div className="flex items-start gap-3 mb-4">
+              <div className="w-10 h-10 rounded-lg bg-brand-soft text-on-brand-soft flex items-center justify-center shrink-0">
+                <UserCog className="w-5 h-5" />
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                  {t('settings.customerSurface.brandingTitle', 'Customer dashboard header')}
+                </h2>
+                <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">
+                  {t(
+                    'settings.customerSurface.brandingHint',
+                    'Controls what shows in the header of /customer/dashboard. Public galleries and admin surfaces are not affected.',
+                  )}
+                </p>
+              </div>
+            </div><div className="divide-y divide-neutral-200 dark:divide-neutral-700">
+              <Toggle
+                enabled={form.customer_show_logo}
+                onChange={() => toggle('customer_show_logo')}
+                label={t('settings.customerSurface.showLogo', 'Show logo in customer header')}
+                hint={t('settings.customerSurface.showLogoHint', 'Uses the same branding logo configured above.')}
+                icon={ImageIcon}
+              />
+              <Toggle
+                enabled={form.customer_show_company_name}
+                onChange={() => toggle('customer_show_company_name')}
+                label={t('settings.customerSurface.showCompanyName', 'Show company name in customer header')}
+                hint={t('settings.customerSurface.showCompanyNameHint', 'Hide if your logo already includes the company name.')}
+                icon={Type}
+              />
+            </div><div className="flex justify-end mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
+              <Button
+                              onClick={() => saveMutation.mutate()} disabled={!isDirty || saveMutation.isPending || saveMutation.isPending}
+                            >
+                              {saveMutation.isPending && <Loader2 className="animate-spin" />}<Save className="w-4 h-4" />{t('settings.customerSurface.save', 'Save changes')}</Button>
+            </div></CardContent></Card>
   );
 };

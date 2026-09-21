@@ -28,7 +28,6 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
-import { Button, Card, Input } from '../../../components/common';
 import {
   CustomerPicker,
   type CustomerSummary,
@@ -37,6 +36,9 @@ import {
   customerAdminService,
   type CustomerAccountDetail,
 } from '../../../services/customerAdmin.service';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 export interface HourEntryDragCreateModalProps {
   /** Drag start day, YYYY-MM-DD. */
@@ -234,113 +236,108 @@ export const HourEntryDragCreateModal: React.FC<HourEntryDragCreateModalProps> =
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <Card padding="lg" className="w-full max-w-md">
-        <h2 className="font-semibold text-lg mb-1">
-          {t('calendar.hourEntry.createTitle', 'Log hours')}
-        </h2>
-        <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-4">
-          {/* The pre-filled range is part of the page state, not editable
-              from this modal. Admin can edit start/end after creating
-              via the inline-edit popover (also in this commit). */}
-          {entryDate} · {startTime}–{endTime}
-        </p>
-        {/* Wrap fields in a form so pressing Enter inside the
-            description input fires the submit handler — matches the
-            keyboard expectation on every other admin modal. The Save
-            button keeps its onClick for users who navigate via mouse. */}
-        <form onSubmit={submit}>
+      <Card className="py-8 w-full max-w-md"><CardContent className="px-8"><h2 className="font-semibold text-lg mb-1">
+                    {t('calendar.hourEntry.createTitle', 'Log hours')}
+                  </h2><p className="text-xs text-neutral-500 dark:text-neutral-400 mb-4">
+                    {/* The pre-filled range is part of the page state, not editable
+                        from this modal. Admin can edit start/end after creating
+                        via the inline-edit popover (also in this commit). */}
+                    {entryDate} · {startTime}–{endTime}
+                  </p>{/* Wrap fields in a form so pressing Enter inside the
+                      description input fires the submit handler — matches the
+                      keyboard expectation on every other admin modal. The Save
+                      button keeps its onClick for users who navigate via mouse. */}<form onSubmit={submit}>
 
-        <div className="space-y-3">
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              {t('calendar.hourEntry.customerLabel', 'Customer')}
-            </label>
-            <CustomerPicker
-              value={customerId}
-              label={customerLabel}
-              isPassive={customerIsPassive}
-              // F.6 — surface the hours-logging-eligible badge so admin
-              // sees up front that a customer with feature_hours_logging
-              // OFF would 409 the save.
-              requireFeature="hoursLogging"
-              onSelect={(c: CustomerSummary) => {
-                setCustomerId(c.id);
-                setCustomerLabel(
-                  c.companyName
-                    || [c.firstName, c.lastName].filter(Boolean).join(' ')
-                    || c.displayName
-                    || c.email
-                    || `#${c.id}`,
-                );
-                setCustomerIsPassive(Boolean(c.isPassive));
-                // H.2 — refuse Save when feature_hours_logging is OFF.
-                // featureHoursLogging is optional on the search summary
-                // (defaults false on un-G.2 backends); treat undefined
-                // as eligible so older backends don't block all saves.
-                setCustomerHoursAllowed(c.featureHoursLogging !== false);
-              }}
-              onCreate={(c: CustomerAccountDetail) => {
-                setCustomerId(c.id);
-                setCustomerLabel(c.companyName || c.displayName || c.email || `#${c.id}`);
-                setCustomerIsPassive(Boolean(c.isPassive));
-                // Freshly-created customers default with hour-logging
-                // disabled until admin flips it on per-customer.
-                setCustomerHoursAllowed(c.featureHoursLogging !== false);
-              }}
-              onClear={() => {
-                setCustomerId(null);
-                setCustomerLabel('');
-                setCustomerIsPassive(false);
-                setCustomerHoursAllowed(true);
-              }}
-              searchPlaceholder={t('calendar.hourEntry.customerSearch', 'Search by email or company…') as string}
-            />
-            {/* H.2 — explicit warning when the picked customer is
-                ineligible. Without this the admin sees only the
-                badge on the option row, then a 409 toast after Save.
-                With this, the Save button is disabled and the reason
-                is visible. */}
-            {customerId && !customerHoursAllowed && (
-              <p className="mt-2 text-xs text-amber-700 dark:text-amber-300">
-                {t('calendar.hourEntry.customerLoggingDisabled',
-                  "This customer has hour logging disabled. Enable it on the customer's detail page to log hours.")}
-              </p>
-            )}
-          </div>
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-sm font-medium mb-1">
+                        {t('calendar.hourEntry.customerLabel', 'Customer')}
+                      </label>
+                      <CustomerPicker
+                        value={customerId}
+                        label={customerLabel}
+                        isPassive={customerIsPassive}
+                        // F.6 — surface the hours-logging-eligible badge so admin
+                        // sees up front that a customer with feature_hours_logging
+                        // OFF would 409 the save.
+                        requireFeature="hoursLogging"
+                        onSelect={(c: CustomerSummary) => {
+                          setCustomerId(c.id);
+                          setCustomerLabel(
+                            c.companyName
+                              || [c.firstName, c.lastName].filter(Boolean).join(' ')
+                              || c.displayName
+                              || c.email
+                              || `#${c.id}`,
+                          );
+                          setCustomerIsPassive(Boolean(c.isPassive));
+                          // H.2 — refuse Save when feature_hours_logging is OFF.
+                          // featureHoursLogging is optional on the search summary
+                          // (defaults false on un-G.2 backends); treat undefined
+                          // as eligible so older backends don't block all saves.
+                          setCustomerHoursAllowed(c.featureHoursLogging !== false);
+                        }}
+                        onCreate={(c: CustomerAccountDetail) => {
+                          setCustomerId(c.id);
+                          setCustomerLabel(c.companyName || c.displayName || c.email || `#${c.id}`);
+                          setCustomerIsPassive(Boolean(c.isPassive));
+                          // Freshly-created customers default with hour-logging
+                          // disabled until admin flips it on per-customer.
+                          setCustomerHoursAllowed(c.featureHoursLogging !== false);
+                        }}
+                        onClear={() => {
+                          setCustomerId(null);
+                          setCustomerLabel('');
+                          setCustomerIsPassive(false);
+                          setCustomerHoursAllowed(true);
+                        }}
+                        searchPlaceholder={t('calendar.hourEntry.customerSearch', 'Search by email or company…') as string}
+                      />
+                      {/* H.2 — explicit warning when the picked customer is
+                          ineligible. Without this the admin sees only the
+                          badge on the option row, then a 409 toast after Save.
+                          With this, the Save button is disabled and the reason
+                          is visible. */}
+                      {customerId && !customerHoursAllowed && (
+                        <p className="mt-2 text-xs text-amber-700 dark:text-amber-300">
+                          {t('calendar.hourEntry.customerLoggingDisabled',
+                            "This customer has hour logging disabled. Enable it on the customer's detail page to log hours.")}
+                        </p>
+                      )}
+                    </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              {t('calendar.hourEntry.descriptionLabel', 'Description (optional)')}
-            </label>
-            <Input
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              maxLength={1000}
-              placeholder={t('calendar.hourEntry.descriptionPlaceholder', 'Editing / shoot / travel…') as string}
-            />
-          </div>
-        </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">
+                        {t('calendar.hourEntry.descriptionLabel', 'Description (optional)')}
+                      </label>
+                      <Input
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        maxLength={1000}
+                        placeholder={t('calendar.hourEntry.descriptionPlaceholder', 'Editing / shoot / travel…') as string}
+                      />
+                    </div>
+                  </div>
 
-        <div className="mt-5 flex items-center justify-end gap-2">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onClose}
-            disabled={createMutation.isPending}
-          >
-            {t('calendar.hourEntry.cancel', 'Cancel')}
-          </Button>
-          <Button
-            type="submit"
-            disabled={!canSubmit}
-          >
-            {createMutation.isPending
-              ? t('calendar.hourEntry.saving', 'Saving…')
-              : t('calendar.hourEntry.submit', 'Save hours')}
-          </Button>
-        </div>
-        </form>
-      </Card>
+                  <div className="mt-5 flex items-center justify-end gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={onClose}
+                      disabled={createMutation.isPending}
+                    >
+                      {t('calendar.hourEntry.cancel', 'Cancel')}
+                    </Button>
+                    <Button
+                      type="submit"
+                      disabled={!canSubmit}
+                    >
+                      {createMutation.isPending
+                        ? t('calendar.hourEntry.saving', 'Saving…')
+                        : t('calendar.hourEntry.submit', 'Save hours')}
+                    </Button>
+                  </div>
+                  </form></CardContent></Card>
     </div>
   );
 };

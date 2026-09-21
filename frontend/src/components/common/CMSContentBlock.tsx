@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import DOMPurify from 'dompurify';
-import { Card } from './Card';
 import { Loading } from './Loading';
 import { PoweredBy } from './PoweredBy';
 import { cmsService } from '../../services/cms.service';
 import { usePublicSettings } from '../../hooks/usePublicSettings';
 import { buildResourceUrl } from '../../utils/url';
 import '../../styles/prose-overrides.css';
+import { Card, CardContent } from "@/components/ui/card";
 
 interface CMSContentBlockProps {
   /** CMS page slug, e.g. "not-found" or "gallery-not-found". */
@@ -89,45 +89,39 @@ export const CMSContentBlock: React.FC<CMSContentBlockProps> = ({ slug, fallback
            * text below rendered near-white text on a white card (QA S3/S4).
            */}
           <Card
-            padding="lg"
-            style={{
-              backgroundColor: 'var(--card)',
-              borderColor: 'var(--border)',
-            }}
-          >
-            {/*
-             * Heading + body now read from theme tokens so dark themes
-             * (and force-dark mode) render correctly without dark: variants
-             * fighting the CSS variables.
-             */}
-            <h1
-              className="text-2xl sm:text-3xl font-bold mb-6"
-              style={{ color: 'var(--foreground)' }}
-            >
-              {page.title}
-            </h1>
-            <div
-              className="prose prose-neutral dark:prose-invert max-w-none text-foreground"
-              style={{ color: 'var(--foreground)' }}
-              dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(page.content, {
-                  ALLOWED_TAGS,
-                  ALLOWED_ATTR,
-                  ALLOW_DATA_ATTR: false,
-                  KEEP_CONTENT: true,
-                }),
-              }}
-            />
-            <div className="mt-8">
-              <Link
-                to="/"
-                className="text-sm font-medium hover:underline"
-                style={{ color: 'var(--brand)' }}
-              >
-                {lang === 'de' ? '← Zur Startseite' : '← Back to home'}
-              </Link>
-            </div>
-          </Card>
+                              style={{
+                                backgroundColor: 'var(--card)',
+                                borderColor: 'var(--border)',
+                              }} className="py-8"
+                            ><CardContent className="px-8">{/*
+                               * Heading + body now read from theme tokens so dark themes
+                               * (and force-dark mode) render correctly without dark: variants
+                               * fighting the CSS variables.
+                               */}<h1
+                                className="text-2xl sm:text-3xl font-bold mb-6"
+                                style={{ color: 'var(--foreground)' }}
+                              >
+                                {page.title}
+                              </h1><div
+                                className="prose prose-neutral dark:prose-invert max-w-none text-foreground"
+                                style={{ color: 'var(--foreground)' }}
+                                dangerouslySetInnerHTML={{
+                                  __html: DOMPurify.sanitize(page.content, {
+                                    ALLOWED_TAGS,
+                                    ALLOWED_ATTR,
+                                    ALLOW_DATA_ATTR: false,
+                                    KEEP_CONTENT: true,
+                                  }),
+                                }}
+                              /><div className="mt-8">
+                                <Link
+                                  to="/"
+                                  className="text-sm font-medium hover:underline"
+                                  style={{ color: 'var(--brand)' }}
+                                >
+                                  {lang === 'de' ? '← Zur Startseite' : '← Back to home'}
+                                </Link>
+                              </div></CardContent></Card>
         </div>
       </main>
 

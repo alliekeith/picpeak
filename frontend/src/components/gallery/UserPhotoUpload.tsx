@@ -2,10 +2,10 @@ import React, { useState, useMemo } from 'react';
 import { Upload, X, CheckCircle, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { Button } from '../common';
 import { api } from '../../config/api';
 import { usePublicSettings } from '../../hooks/usePublicSettings';
 import { extensionsToMimeTypes, buildUploadAcceptString, extensionsToLabel, normalizeFileMimeType } from '../../utils/fileTypes';
+import { Button } from "@/components/ui/button";
 
 interface UserPhotoUploadProps {
   eventId: number;
@@ -372,14 +372,11 @@ export const UserPhotoUpload: React.FC<UserPhotoUploadProps> = ({
             {t('common.cancel')}
           </Button>
           <Button
-            variant="primary"
-            onClick={handleUpload}
-            disabled={files.length === 0 || uploading}
-            isLoading={uploading}
-            className="text-sm sm:text-base"
-          >
-            {uploading ? t('upload.uploading') : t('common.upload')} ({files.length})
-          </Button>
+                              onClick={handleUpload}
+                              className="text-sm sm:text-base" disabled={files.length === 0 || uploading || uploading}
+                            >
+                              {uploading && <Loader2 className="animate-spin" />}{uploading ? t('upload.uploading') : t('common.upload')}({files.length})
+                            </Button>
         </div>
       </div>
     </div>

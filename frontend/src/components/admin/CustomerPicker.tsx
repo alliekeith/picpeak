@@ -52,13 +52,14 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
-import { Button, Input } from '../common';
 import { InlineCustomerCreate } from './InlineCustomerCreate';
 import {
   customerAdminService,
   type CustomerAccountDetail,
   type CustomerAccountSummary,
 } from '../../services/customerAdmin.service';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 // Alias for clarity at the call-site: search returns the Summary shape.
 export type CustomerSummary = CustomerAccountSummary;

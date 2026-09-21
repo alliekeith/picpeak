@@ -11,13 +11,17 @@ import { Link } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft, Upload } from 'lucide-react';
 import { toast } from 'react-toastify';
-import { Button, Card, Input, Loading } from '../../../components/common';
+import { Loading } from '../../../components/common';
 import { PermissionGate } from '../../../components/admin/PermissionGate';
 import { useLocalizedDate } from '../../../hooks/useLocalizedDate';
 import {
   documentAttachmentsService, formatAttachmentSize, ATTACHMENT_MAX_BYTES, type DocumentAttachment,
 } from '../../../services/documentAttachments.service';
 import { templateError } from '../../../services/contractTemplates.service';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const UPLOAD_ERRORS: Record<string, [string, string]> = {
   PDF_TOO_LARGE: ['contracts.attachments.errors.tooLarge', 'The file is larger than 20 MB.'],
@@ -114,83 +118,79 @@ export const ContractAttachmentsPage: React.FC = () => {
       </p>
 
       <PermissionGate permission="contracts.templates.manage">
-        <Card padding="md">
-          <form onSubmit={upload} className="space-y-3">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <div>
-                <label htmlFor="attachment-file" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                  {t('contracts.attachments.file', 'PDF (up to 20 MB)')}
-                </label>
-                <input
-                  id="attachment-file"
-                  ref={fileRef}
-                  type="file"
-                  accept="application/pdf,.pdf"
-                  className="block w-full text-sm text-neutral-700 dark:text-neutral-300"
-                  onChange={(e) => {
-                    const picked = e.target.files?.[0] || null;
-                    setFile(picked);
-                    if (picked && !name) setName(picked.name.replace(/\.pdf$/i, ''));
-                  }}
-                />
-              </div>
-              <Input id="attachment-name" label={t('contracts.attachments.name', 'Name') as string} value={name}
-                maxLength={255} onChange={(e) => setName(e.target.value)} />
-              <div className="md:col-span-2">
-                <Input id="attachment-description" label={t('contracts.attachments.description', 'Description (optional)') as string}
-                  value={description} maxLength={2000} onChange={(e) => setDescription(e.target.value)} />
-              </div>
-            </div>
-            {problem && (
-              <p role="alert" className="text-sm text-red-700 dark:text-red-300">{problem}</p>
-            )}
-            <div className="flex justify-end">
-              <Button type="submit" disabled={busy || !file}>
-                <Upload className="w-4 h-4 mr-1" />{t('contracts.attachments.upload', 'Upload')}
-              </Button>
-            </div>
-          </form>
-        </Card>
+        <Card><CardContent><form onSubmit={upload} className="space-y-3">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div>
+                              <label htmlFor="attachment-file" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                                {t('contracts.attachments.file', 'PDF (up to 20 MB)')}
+                              </label>
+                              <input
+                                id="attachment-file"
+                                ref={fileRef}
+                                type="file"
+                                accept="application/pdf,.pdf"
+                                className="block w-full text-sm text-neutral-700 dark:text-neutral-300"
+                                onChange={(e) => {
+                                  const picked = e.target.files?.[0] || null;
+                                  setFile(picked);
+                                  if (picked && !name) setName(picked.name.replace(/\.pdf$/i, ''));
+                                }}
+                              />
+                            </div>
+                            <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('contracts.attachments.name', 'Name') as string}</span><Input id="attachment-name" value={name}
+                                                    maxLength={255} onChange={(e) => setName(e.target.value)} /></Label></div>
+                            <div className="md:col-span-2">
+                              <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('contracts.attachments.description', 'Description (optional)') as string}</span><Input id="attachment-description"
+                                                          value={description} maxLength={2000} onChange={(e) => setDescription(e.target.value)} /></Label></div>
+                            </div>
+                          </div>
+                          {problem && (
+                            <p role="alert" className="text-sm text-red-700 dark:text-red-300">{problem}</p>
+                          )}
+                          <div className="flex justify-end">
+                            <Button type="submit" disabled={busy || !file}>
+                              <Upload className="w-4 h-4 mr-1" />{t('contracts.attachments.upload', 'Upload')}
+                            </Button>
+                          </div>
+                        </form></CardContent></Card>
       </PermissionGate>
 
       {isLoading ? <Loading /> : (
-        <Card padding="md">
-          {attachments.length === 0 ? (
-            <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('contracts.attachments.empty', 'No attachments yet.')}</p>
-          ) : (
-            <ul className="divide-y divide-neutral-200 dark:divide-neutral-700">
-              {attachments.map((a) => (
-                <li key={a.id} className={`py-3 flex flex-wrap items-center gap-3 ${a.isActive ? '' : 'opacity-60'}`}>
-                  <div className="flex-1 min-w-[200px]">
-                    <p className="font-medium text-neutral-900 dark:text-neutral-100">
-                      {a.name}
-                      {!a.isActive && (
-                        <span className="ml-2 text-[10px] uppercase tracking-wide px-1.5 py-0.5 rounded-sm bg-neutral-200 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-200">
-                          {t('contracts.attachments.archived', 'Archived')}
-                        </span>
-                      )}
-                    </p>
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                      {t('contracts.attachments.pages', '{{count}} pages', { count: a.pages })} · {formatAttachmentSize(a.bytes)} · {formatDateTime(a.createdAt)}
-                      {a.description ? ` · ${a.description}` : ''}
-                    </p>
-                    <p className="font-mono text-[11px] text-neutral-500 dark:text-neutral-400 break-all" title={a.sha256}>
-                      {a.sha256.slice(0, 16)}…
-                    </p>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    <Button variant="outline" size="sm" onClick={() => open(a)}>{t('contracts.attachments.open', 'Open')}</Button>
-                    <PermissionGate permission="contracts.templates.manage">
-                      <Button variant="outline" size="sm" disabled={busy} onClick={() => toggle(a)}>
-                        {a.isActive ? t('contracts.templates.archive', 'Archive') : t('contracts.templates.restore', 'Restore')}
-                      </Button>
-                    </PermissionGate>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </Card>
+        <Card><CardContent>{attachments.length === 0 ? (
+                          <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('contracts.attachments.empty', 'No attachments yet.')}</p>
+                        ) : (
+                          <ul className="divide-y divide-neutral-200 dark:divide-neutral-700">
+                            {attachments.map((a) => (
+                              <li key={a.id} className={`py-3 flex flex-wrap items-center gap-3 ${a.isActive ? '' : 'opacity-60'}`}>
+                                <div className="flex-1 min-w-[200px]">
+                                  <p className="font-medium text-neutral-900 dark:text-neutral-100">
+                                    {a.name}
+                                    {!a.isActive && (
+                                      <span className="ml-2 text-[10px] uppercase tracking-wide px-1.5 py-0.5 rounded-sm bg-neutral-200 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-200">
+                                        {t('contracts.attachments.archived', 'Archived')}
+                                      </span>
+                                    )}
+                                  </p>
+                                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                                    {t('contracts.attachments.pages', '{{count}} pages', { count: a.pages })} · {formatAttachmentSize(a.bytes)} · {formatDateTime(a.createdAt)}
+                                    {a.description ? ` · ${a.description}` : ''}
+                                  </p>
+                                  <p className="font-mono text-[11px] text-neutral-500 dark:text-neutral-400 break-all" title={a.sha256}>
+                                    {a.sha256.slice(0, 16)}…
+                                  </p>
+                                </div>
+                                <div className="flex flex-wrap gap-2">
+                                  <Button variant="outline" size="sm" onClick={() => open(a)}>{t('contracts.attachments.open', 'Open')}</Button>
+                                  <PermissionGate permission="contracts.templates.manage">
+                                    <Button variant="outline" size="sm" disabled={busy} onClick={() => toggle(a)}>
+                                      {a.isActive ? t('contracts.templates.archive', 'Archive') : t('contracts.templates.restore', 'Restore')}
+                                    </Button>
+                                  </PermissionGate>
+                                </div>
+                              </li>
+                            ))}
+                          </ul>
+                        )}</CardContent></Card>
       )}
     </div>
   );

@@ -17,9 +17,9 @@
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
-import { Calculator, Download, FileDown, FileSpreadsheet, AlertCircle } from 'lucide-react';
+import { Calculator, Download, FileDown, FileSpreadsheet, AlertCircle, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Button, Card, Loading, LocalizedDateInput } from '../../../components/common';
+import { Loading, LocalizedDateInput } from '../../../components/common';
 
 // Lightweight native select styled to match Input — the common barrel
 // doesn't export a Select component, and the form pieces here are
@@ -31,6 +31,8 @@ import { ledgerService, type ExportFormat } from '../../../services/ledger.servi
 import { useFeatureFlags } from '../../../contexts/FeatureFlagsContext';
 import { useLocalizedDate } from '../../../hooks/useLocalizedDate';
 import { toast } from 'react-toastify';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 const LEDGER_FORMATS: ExportFormat[] = ['generic', 'banana', 'banana_ie', 'bexio'];
 
@@ -210,182 +212,164 @@ export const TaxReportPage: React.FC = () => {
           above the table so the table gets the full content width. */}
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-6 items-start">
         {/* Filter card (left) */}
-        <Card padding="md">
-          <div className="flex items-start gap-3 mb-4">
-            <div className="w-10 h-10 rounded-lg bg-brand-soft text-on-brand-soft flex items-center justify-center shrink-0">
-              <Calculator className="w-5 h-5" />
-            </div>
-            <div className="min-w-0">
-              <h1 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                {t('taxReport.title', 'Tax report')}
-              </h1>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-0.5">
-                {t(
-                  'taxReport.intro',
-                  'Period-scoped revenue list with net + VAT breakdown grouped by VAT rate. Cancelled invoices stay visible for audit-trail continuity but are excluded from totals.',
-                )}
-              </p>
-            </div>
-          </div>
+        <Card><CardContent><div className="flex items-start gap-3 mb-4">
+                          <div className="w-10 h-10 rounded-lg bg-brand-soft text-on-brand-soft flex items-center justify-center shrink-0">
+                            <Calculator className="w-5 h-5" />
+                          </div>
+                          <div className="min-w-0">
+                            <h1 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                              {t('taxReport.title', 'Tax report')}
+                            </h1>
+                            <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-0.5">
+                              {t(
+                                'taxReport.intro',
+                                'Period-scoped revenue list with net + VAT breakdown grouped by VAT rate. Cancelled invoices stay visible for audit-trail continuity but are excluded from totals.',
+                              )}
+                            </p>
+                          </div>
+                        </div>{/* Filters stacked vertically per the agreed layout:
+                            Row 1: period preset (full width)
+                            Row 2: from / to (side-by-side)
+                            Row 3: currency (full width)
+                            Row 4: export buttons (right-aligned) */}<div className="space-y-3">
+                          <div>
+                            <label htmlFor="period-preset" className="block text-xs font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                              {t('taxReport.filters.period', 'Period')}
+                            </label>
+                            <select
+                              id="period-preset"
+                              value={preset}
+                              onChange={(e) => onPresetChange(e.target.value as PeriodPreset)}
+                              className={selectClassName}
+                            >
+                              <option value="thisYear">{t('taxReport.filters.thisYear', 'This year')}</option>
+                              <option value="lastYear">{t('taxReport.filters.lastYear', 'Last year')}</option>
+                              <option value="thisQuarter">{t('taxReport.filters.thisQuarter', 'This quarter')}</option>
+                              <option value="lastQuarter">{t('taxReport.filters.lastQuarter', 'Last quarter')}</option>
+                              <option value="custom">{t('taxReport.filters.custom', 'Custom range')}</option>
+                            </select>
+                          </div>
 
-          {/* Filters stacked vertically per the agreed layout:
-              Row 1: period preset (full width)
-              Row 2: from / to (side-by-side)
-              Row 3: currency (full width)
-              Row 4: export buttons (right-aligned) */}
-          <div className="space-y-3">
-            <div>
-              <label htmlFor="period-preset" className="block text-xs font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                {t('taxReport.filters.period', 'Period')}
-              </label>
-              <select
-                id="period-preset"
-                value={preset}
-                onChange={(e) => onPresetChange(e.target.value as PeriodPreset)}
-                className={selectClassName}
-              >
-                <option value="thisYear">{t('taxReport.filters.thisYear', 'This year')}</option>
-                <option value="lastYear">{t('taxReport.filters.lastYear', 'Last year')}</option>
-                <option value="thisQuarter">{t('taxReport.filters.thisQuarter', 'This quarter')}</option>
-                <option value="lastQuarter">{t('taxReport.filters.lastQuarter', 'Last quarter')}</option>
-                <option value="custom">{t('taxReport.filters.custom', 'Custom range')}</option>
-              </select>
-            </div>
+                          <div className="grid grid-cols-2 gap-3">
+                            <div>
+                              <label className="block text-xs font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                                {t('taxReport.filters.from', 'From')}
+                              </label>
+                              <LocalizedDateInput
+                                value={from}
+                                onChange={(iso) => { setFrom(iso); setPreset('custom'); }}
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-xs font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                                {t('taxReport.filters.to', 'To')}
+                              </label>
+                              <LocalizedDateInput
+                                value={to}
+                                onChange={(iso) => { setTo(iso); setPreset('custom'); }}
+                              />
+                            </div>
+                          </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-xs font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                  {t('taxReport.filters.from', 'From')}
-                </label>
-                <LocalizedDateInput
-                  value={from}
-                  onChange={(iso) => { setFrom(iso); setPreset('custom'); }}
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                  {t('taxReport.filters.to', 'To')}
-                </label>
-                <LocalizedDateInput
-                  value={to}
-                  onChange={(iso) => { setTo(iso); setPreset('custom'); }}
-                />
-              </div>
-            </div>
+                          <div>
+                            <label htmlFor="currency" className="block text-xs font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                              {t('taxReport.filters.currency', 'Currency')}
+                            </label>
+                            <select
+                              id="currency"
+                              value={currency}
+                              onChange={(e) => setCurrency(e.target.value)}
+                              className={selectClassName}
+                            >
+                              <option value="CHF">CHF</option>
+                              <option value="EUR">EUR</option>
+                              <option value="USD">USD</option>
+                              <option value="GBP">GBP</option>
+                            </select>
+                          </div>
 
-            <div>
-              <label htmlFor="currency" className="block text-xs font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                {t('taxReport.filters.currency', 'Currency')}
-              </label>
-              <select
-                id="currency"
-                value={currency}
-                onChange={(e) => setCurrency(e.target.value)}
-                className={selectClassName}
-              >
-                <option value="CHF">CHF</option>
-                <option value="EUR">EUR</option>
-                <option value="USD">USD</option>
-                <option value="GBP">GBP</option>
-              </select>
-            </div>
+                          {/* Export area — two clearly-separated groups so it's obvious
+                              what each file is and who it's for: the human-readable Report
+                              (PDF/CSV) and the accounting Journal (for the Treuhänder). The
+                              Journal group only shows when the accounting layer is on, since
+                              it needs the Chart-of-accounts mapping. */}
+                          <div className="pt-3 mt-1 border-t border-neutral-200 dark:border-neutral-700 space-y-3">
+                            {/* Group 1 — Report (for you) */}
+                            <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
+                              <div className="min-w-0">
+                                <div className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+                                  {t('taxReport.export.reportTitle', 'Report')}
+                                </div>
+                                <div className="text-[11px] text-neutral-400 dark:text-neutral-500">
+                                  {t('taxReport.export.reportHint', 'Readable list — for your own records.')}
+                                </div>
+                              </div>
+                              <div className="flex flex-wrap items-center gap-2">
+                                <label className="flex items-center gap-1.5 text-xs font-medium text-neutral-500 dark:text-neutral-400">
+                                  {t('taxReport.export.scopeLabel', 'Scope')}
+                                  <select
+                                    value={exportScope}
+                                    onChange={(e) => setExportScope(e.target.value as 'all' | 'income' | 'cost')}
+                                    disabled={exportsDisabled}
+                                    className={`${selectClassName} w-auto min-w-[140px]`}
+                                  >
+                                    <option value="all">{t('taxReport.export.scopeAll', 'Complete')}</option>
+                                    <option value="income">{t('taxReport.export.scopeIncome', 'Income only')}</option>
+                                    <option value="cost">{t('taxReport.export.scopeCost', 'Cost only')}</option>
+                                  </select>
+                                </label>
+                                <Button
+                                                                    className="min-w-[150px]"
+                                                                    variant="outline"
+                                                                    onClick={() => handleExport('csv')} disabled={exportsDisabled || isExporting === 'csv'}
+                                                                  >
+                                                                    {isExporting === 'csv' && <Loader2 className="animate-spin" />}<FileDown className="w-4 h-4" />{t('taxReport.exportCsv', 'Export CSV')}</Button>
+                                <Button
+                                                                    className="min-w-[150px]"
+                                                                    onClick={() => handleExport('pdf')} disabled={exportsDisabled || isExporting === 'pdf'}
+                                                                  >
+                                                                    {isExporting === 'pdf' && <Loader2 className="animate-spin" />}<Download className="w-4 h-4" />{t('taxReport.exportPdf', 'Export PDF')}</Button>
+                              </div>
+                            </div>
 
-            {/* Export area — two clearly-separated groups so it's obvious
-                what each file is and who it's for: the human-readable Report
-                (PDF/CSV) and the accounting Journal (for the Treuhänder). The
-                Journal group only shows when the accounting layer is on, since
-                it needs the Chart-of-accounts mapping. */}
-            <div className="pt-3 mt-1 border-t border-neutral-200 dark:border-neutral-700 space-y-3">
-              {/* Group 1 — Report (for you) */}
-              <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
-                <div className="min-w-0">
-                  <div className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
-                    {t('taxReport.export.reportTitle', 'Report')}
-                  </div>
-                  <div className="text-[11px] text-neutral-400 dark:text-neutral-500">
-                    {t('taxReport.export.reportHint', 'Readable list — for your own records.')}
-                  </div>
-                </div>
-                <div className="flex flex-wrap items-center gap-2">
-                  <label className="flex items-center gap-1.5 text-xs font-medium text-neutral-500 dark:text-neutral-400">
-                    {t('taxReport.export.scopeLabel', 'Scope')}
-                    <select
-                      value={exportScope}
-                      onChange={(e) => setExportScope(e.target.value as 'all' | 'income' | 'cost')}
-                      disabled={exportsDisabled}
-                      className={`${selectClassName} w-auto min-w-[140px]`}
-                    >
-                      <option value="all">{t('taxReport.export.scopeAll', 'Complete')}</option>
-                      <option value="income">{t('taxReport.export.scopeIncome', 'Income only')}</option>
-                      <option value="cost">{t('taxReport.export.scopeCost', 'Cost only')}</option>
-                    </select>
-                  </label>
-                  <Button
-                    className="min-w-[150px]"
-                    variant="outline"
-                    onClick={() => handleExport('csv')}
-                    disabled={exportsDisabled}
-                    isLoading={isExporting === 'csv'}
-                    leftIcon={<FileDown className="w-4 h-4" />}
-                  >
-                    {t('taxReport.exportCsv', 'Export CSV')}
-                  </Button>
-                  <Button
-                    className="min-w-[150px]"
-                    variant="primary"
-                    onClick={() => handleExport('pdf')}
-                    disabled={exportsDisabled}
-                    isLoading={isExporting === 'pdf'}
-                    leftIcon={<Download className="w-4 h-4" />}
-                  >
-                    {t('taxReport.exportPdf', 'Export PDF')}
-                  </Button>
-                </div>
-              </div>
-
-              {/* Group 2 — Accounting journal (for your accountant). Solid
-                  divider above to separate it from the Report group. */}
-              {flags.accounting && (
-                <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 pt-3 border-t border-neutral-200 dark:border-neutral-700">
-                  <div className="min-w-0">
-                    <div className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
-                      {t('taxReport.export.journalTitle', 'Accounting journal')}
-                    </div>
-                    <div className="text-[11px] text-neutral-400 dark:text-neutral-500">
-                      {t('taxReport.ledgerExportHint', 'Double-entry postings for your accountant, mapped via your Chart of accounts.')}{' '}
-                      <Link to="/admin/settings?tab=accounting" className="underline hover:text-neutral-600 dark:hover:text-neutral-300">
-                        {t('taxReport.ledgerExportConfigure', 'Configure →')}
-                      </Link>
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <select
-                      value={ledgerFormat}
-                      onChange={(e) => setLedgerFormat(e.target.value as ExportFormat)}
-                      disabled={exportsDisabled}
-                      aria-label={t('ledger.export.format', 'Target tool') as string}
-                      className={`${selectClassName} min-w-[150px] w-auto`}
-                    >
-                      {LEDGER_FORMATS.map((f) => (
-                        <option key={f} value={f}>{t(`ledger.export.format_${f}`, f)}</option>
-                      ))}
-                    </select>
-                    <Button
-                      className="min-w-[150px]"
-                      variant="outline"
-                      onClick={handleLedgerExport}
-                      disabled={exportsDisabled}
-                      isLoading={isExporting === 'ledger'}
-                      leftIcon={<FileSpreadsheet className="w-4 h-4" />}
-                    >
-                      {t('taxReport.ledgerExport', 'Accountant export')}
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </Card>
+                            {/* Group 2 — Accounting journal (for your accountant). Solid
+                                divider above to separate it from the Report group. */}
+                            {flags.accounting && (
+                              <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 pt-3 border-t border-neutral-200 dark:border-neutral-700">
+                                <div className="min-w-0">
+                                  <div className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+                                    {t('taxReport.export.journalTitle', 'Accounting journal')}
+                                  </div>
+                                  <div className="text-[11px] text-neutral-400 dark:text-neutral-500">
+                                    {t('taxReport.ledgerExportHint', 'Double-entry postings for your accountant, mapped via your Chart of accounts.')}{' '}
+                                    <Link to="/admin/settings?tab=accounting" className="underline hover:text-neutral-600 dark:hover:text-neutral-300">
+                                      {t('taxReport.ledgerExportConfigure', 'Configure →')}
+                                    </Link>
+                                  </div>
+                                </div>
+                                <div className="flex flex-wrap items-center gap-2">
+                                  <select
+                                    value={ledgerFormat}
+                                    onChange={(e) => setLedgerFormat(e.target.value as ExportFormat)}
+                                    disabled={exportsDisabled}
+                                    aria-label={t('ledger.export.format', 'Target tool') as string}
+                                    className={`${selectClassName} min-w-[150px] w-auto`}
+                                  >
+                                    {LEDGER_FORMATS.map((f) => (
+                                      <option key={f} value={f}>{t(`ledger.export.format_${f}`, f)}</option>
+                                    ))}
+                                  </select>
+                                  <Button
+                                                                          className="min-w-[150px]"
+                                                                          variant="outline"
+                                                                          onClick={handleLedgerExport} disabled={exportsDisabled || isExporting === 'ledger'}
+                                                                        >
+                                                                          {isExporting === 'ledger' && <Loader2 className="animate-spin" />}<FileSpreadsheet className="w-4 h-4" />{t('taxReport.ledgerExport', 'Accountant export')}</Button>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </div></CardContent></Card>
 
         {/* Totals card (right) — compact summary. Headline is the
             grand totals; the per-VAT-rate breakdown appears only when
@@ -393,283 +377,264 @@ export const TaxReportPage: React.FC = () => {
             the grand totals). Cancelled footnote at the bottom when
             applicable. */}
         {hasAnyData && report && (
-          <Card padding="md">
-            <h2 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2">
-              {t('taxReport.summary.outgoingTitle', 'Outgoing invoices')}
-            </h2>
-            <div className="space-y-1.5 text-sm">
-              <div className="flex justify-between gap-3">
-                <span className="text-neutral-700 dark:text-neutral-300">{t('taxReport.grandTotalNet', 'Total net')}</span>
-                <span className="tabular-nums font-medium text-neutral-900 dark:text-neutral-100">
-                  {formatMinor(report.grandTotalNet, report.currency, intlLocale)}
-                </span>
-              </div>
-              <div className="flex justify-between gap-3">
-                <span className="text-neutral-700 dark:text-neutral-300">{t('taxReport.grandTotalVat', 'Total VAT')}</span>
-                <span className="tabular-nums font-medium text-neutral-900 dark:text-neutral-100">
-                  {formatMinor(report.grandTotalVat, report.currency, intlLocale)}
-                </span>
-              </div>
-              <div className="flex justify-between gap-3 pt-1.5 border-t border-neutral-200 dark:border-neutral-700">
-                <span className="font-semibold text-neutral-900 dark:text-neutral-100">{t('taxReport.grandTotalGross', 'Total gross')}</span>
-                <span className="tabular-nums font-semibold text-neutral-900 dark:text-neutral-100">
-                  {formatMinor(report.grandTotal, report.currency, intlLocale)}
-                </span>
-              </div>
-            </div>
-
-            {/* Einnahmen-Ausgaben summary (#4): income vs costs vs result.
-                Always shown when the cost side loaded (even with zero costs)
-                so the result/income is visible, not just revenue. Hidden only
-                if the cost side errored (a banner explains that separately). */}
-            {report.summary && !report.costsError && (
-              <div className="mt-4 pt-3 border-t border-neutral-200 dark:border-neutral-700">
-                <h2 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2">
-                  {t('taxReport.summary.title', 'Income / costs')}
-                </h2>
-                <div className="space-y-1.5 text-sm">
-                  <div className="flex justify-between gap-3">
-                    <span className="text-neutral-700 dark:text-neutral-300">{t('taxReport.summary.income', 'Income')}</span>
-                    <span className="tabular-nums text-emerald-700 dark:text-emerald-400">
-                      {formatMinor(report.summary.incomeGrossMinor, report.currency, intlLocale)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between gap-3">
-                    <span className="text-neutral-700 dark:text-neutral-300">{t('taxReport.summary.costs', 'Costs')}</span>
-                    <span className="tabular-nums text-rose-700 dark:text-rose-400">
-                      −{formatMinor(report.summary.costGrossMinor, report.currency, intlLocale)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between gap-3 pt-1.5 border-t border-neutral-200 dark:border-neutral-700">
-                    <span className="font-semibold text-neutral-900 dark:text-neutral-100">{t('taxReport.summary.result', 'Result')}</span>
-                    <span className="tabular-nums font-semibold text-neutral-900 dark:text-neutral-100">
-                      {formatMinor(report.summary.resultGrossMinor, report.currency, intlLocale)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between gap-3 text-xs text-neutral-500 dark:text-neutral-400">
-                    <span>{t('taxReport.summary.vatPayable', 'VAT payable (output − input)')}</span>
-                    <span className="tabular-nums">
-                      {report.summary.vatRegistrationConfigured === false || report.summary.vatPayableMinor == null
-                        ? '—'
-                        : formatMinor(report.summary.vatPayableMinor, report.currency, intlLocale)}
-                    </span>
-                  </div>
-                  {report.summary.vatRegistrationConfigured === false && (
-                    <p className="flex items-start gap-1.5 text-xs text-amber-600 dark:text-amber-400 pt-1">
-                      <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
-                      <span>{t('taxReport.summary.vatUnconfigured', 'VAT registration isn’t configured, so VAT payable can’t be computed. Set it under Settings → Accounting.')}</span>
-                    </p>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {showPerRateBreakdown && (
-              <div className="mt-4 pt-3 border-t border-neutral-200 dark:border-neutral-700">
-                <h2 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2">
-                  {t('taxReport.totalsByVatRate', 'Totals by VAT rate')}
-                </h2>
-                <div className="space-y-2 text-sm">
-                  {report.totalsByVatRate.map((b) => (
-                    <div key={b.vatRate}>
-                      <div className="text-xs text-neutral-500 dark:text-neutral-400">
-                        {Number(b.vatRate).toFixed(1)}%
-                      </div>
-                      <div className="flex justify-between gap-3 tabular-nums">
-                        <span className="text-neutral-700 dark:text-neutral-300">{t('taxReport.col.net', 'Net')}</span>
-                        <span>{formatMinor(b.netMinor, report.currency, intlLocale)}</span>
-                      </div>
-                      <div className="flex justify-between gap-3 tabular-nums">
-                        <span className="text-neutral-700 dark:text-neutral-300">{t('taxReport.col.vat', 'VAT')}</span>
-                        <span>{formatMinor(b.vatMinor, report.currency, intlLocale)}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {report.cancelledCount > 0 && (
-              <p className="mt-3 pt-3 border-t border-neutral-200 dark:border-neutral-700 text-xs text-neutral-500 dark:text-neutral-400">
-                {t('taxReport.cancelledFootnote', '{{count}} cancelled invoice(s) — amounts excluded from totals (shown for audit-trail continuity).', { count: report.cancelledCount })}
-              </p>
-            )}
-          </Card>
+          <Card><CardContent><h2 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2">
+                                {t('taxReport.summary.outgoingTitle', 'Outgoing invoices')}
+                              </h2><div className="space-y-1.5 text-sm">
+                                <div className="flex justify-between gap-3">
+                                  <span className="text-neutral-700 dark:text-neutral-300">{t('taxReport.grandTotalNet', 'Total net')}</span>
+                                  <span className="tabular-nums font-medium text-neutral-900 dark:text-neutral-100">
+                                    {formatMinor(report.grandTotalNet, report.currency, intlLocale)}
+                                  </span>
+                                </div>
+                                <div className="flex justify-between gap-3">
+                                  <span className="text-neutral-700 dark:text-neutral-300">{t('taxReport.grandTotalVat', 'Total VAT')}</span>
+                                  <span className="tabular-nums font-medium text-neutral-900 dark:text-neutral-100">
+                                    {formatMinor(report.grandTotalVat, report.currency, intlLocale)}
+                                  </span>
+                                </div>
+                                <div className="flex justify-between gap-3 pt-1.5 border-t border-neutral-200 dark:border-neutral-700">
+                                  <span className="font-semibold text-neutral-900 dark:text-neutral-100">{t('taxReport.grandTotalGross', 'Total gross')}</span>
+                                  <span className="tabular-nums font-semibold text-neutral-900 dark:text-neutral-100">
+                                    {formatMinor(report.grandTotal, report.currency, intlLocale)}
+                                  </span>
+                                </div>
+                              </div>{/* Einnahmen-Ausgaben summary (#4): income vs costs vs result.
+                                  Always shown when the cost side loaded (even with zero costs)
+                                  so the result/income is visible, not just revenue. Hidden only
+                                  if the cost side errored (a banner explains that separately). */}{report.summary && !report.costsError && (
+                                <div className="mt-4 pt-3 border-t border-neutral-200 dark:border-neutral-700">
+                                  <h2 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2">
+                                    {t('taxReport.summary.title', 'Income / costs')}
+                                  </h2>
+                                  <div className="space-y-1.5 text-sm">
+                                    <div className="flex justify-between gap-3">
+                                      <span className="text-neutral-700 dark:text-neutral-300">{t('taxReport.summary.income', 'Income')}</span>
+                                      <span className="tabular-nums text-emerald-700 dark:text-emerald-400">
+                                        {formatMinor(report.summary.incomeGrossMinor, report.currency, intlLocale)}
+                                      </span>
+                                    </div>
+                                    <div className="flex justify-between gap-3">
+                                      <span className="text-neutral-700 dark:text-neutral-300">{t('taxReport.summary.costs', 'Costs')}</span>
+                                      <span className="tabular-nums text-rose-700 dark:text-rose-400">
+                                        −{formatMinor(report.summary.costGrossMinor, report.currency, intlLocale)}
+                                      </span>
+                                    </div>
+                                    <div className="flex justify-between gap-3 pt-1.5 border-t border-neutral-200 dark:border-neutral-700">
+                                      <span className="font-semibold text-neutral-900 dark:text-neutral-100">{t('taxReport.summary.result', 'Result')}</span>
+                                      <span className="tabular-nums font-semibold text-neutral-900 dark:text-neutral-100">
+                                        {formatMinor(report.summary.resultGrossMinor, report.currency, intlLocale)}
+                                      </span>
+                                    </div>
+                                    <div className="flex justify-between gap-3 text-xs text-neutral-500 dark:text-neutral-400">
+                                      <span>{t('taxReport.summary.vatPayable', 'VAT payable (output − input)')}</span>
+                                      <span className="tabular-nums">
+                                        {report.summary.vatRegistrationConfigured === false || report.summary.vatPayableMinor == null
+                                          ? '—'
+                                          : formatMinor(report.summary.vatPayableMinor, report.currency, intlLocale)}
+                                      </span>
+                                    </div>
+                                    {report.summary.vatRegistrationConfigured === false && (
+                                      <p className="flex items-start gap-1.5 text-xs text-amber-600 dark:text-amber-400 pt-1">
+                                        <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+                                        <span>{t('taxReport.summary.vatUnconfigured', 'VAT registration isn’t configured, so VAT payable can’t be computed. Set it under Settings → Accounting.')}</span>
+                                      </p>
+                                    )}
+                                  </div>
+                                </div>
+                              )}{showPerRateBreakdown && (
+                                <div className="mt-4 pt-3 border-t border-neutral-200 dark:border-neutral-700">
+                                  <h2 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2">
+                                    {t('taxReport.totalsByVatRate', 'Totals by VAT rate')}
+                                  </h2>
+                                  <div className="space-y-2 text-sm">
+                                    {report.totalsByVatRate.map((b) => (
+                                      <div key={b.vatRate}>
+                                        <div className="text-xs text-neutral-500 dark:text-neutral-400">
+                                          {Number(b.vatRate).toFixed(1)}%
+                                        </div>
+                                        <div className="flex justify-between gap-3 tabular-nums">
+                                          <span className="text-neutral-700 dark:text-neutral-300">{t('taxReport.col.net', 'Net')}</span>
+                                          <span>{formatMinor(b.netMinor, report.currency, intlLocale)}</span>
+                                        </div>
+                                        <div className="flex justify-between gap-3 tabular-nums">
+                                          <span className="text-neutral-700 dark:text-neutral-300">{t('taxReport.col.vat', 'VAT')}</span>
+                                          <span>{formatMinor(b.vatMinor, report.currency, intlLocale)}</span>
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}{report.cancelledCount > 0 && (
+                                <p className="mt-3 pt-3 border-t border-neutral-200 dark:border-neutral-700 text-xs text-neutral-500 dark:text-neutral-400">
+                                  {t('taxReport.cancelledFootnote', '{{count}} cancelled invoice(s) — amounts excluded from totals (shown for audit-trail continuity).', { count: report.cancelledCount })}
+                                </p>
+                              )}</CardContent></Card>
         )}
       </div>
 
       {/* Non-fatal: the revenue report loaded but the cost side errored. */}
       {report?.costsError && (
-        <Card padding="md">
-          <div className="flex items-start gap-3 text-amber-700 dark:text-amber-400">
-            <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
-            <div>
-              <p className="font-medium">{t('taxReport.costsErrorTitle', 'Costs could not be loaded')}</p>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1 wrap-break-word">{report.costsError}</p>
-            </div>
-          </div>
-        </Card>
+        <Card><CardContent><div className="flex items-start gap-3 text-amber-700 dark:text-amber-400">
+                          <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                          <div>
+                            <p className="font-medium">{t('taxReport.costsErrorTitle', 'Costs could not be loaded')}</p>
+                            <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1 wrap-break-word">{report.costsError}</p>
+                          </div>
+                        </div></CardContent></Card>
       )}
 
       {/* Results */}
       {isLoading ? (
-        <Card padding="lg"><Loading /></Card>
+        <Card className="py-8"><CardContent className="px-8"><Loading /></CardContent></Card>
       ) : isError ? (
-        <Card padding="lg">
-          <div className="flex items-start gap-3 text-amber-700 dark:text-amber-400">
-            <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
-            <div>
-              <p className="font-medium">{t('taxReport.errorTitle', 'Could not load tax report')}</p>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
-                {(error as Error)?.message || String(error)}
-              </p>
-              <Button variant="outline" size="sm" onClick={() => refetch()} className="mt-3">
-                {t('common.retry', 'Retry')}
-              </Button>
-            </div>
-          </div>
-        </Card>
+        <Card className="py-8"><CardContent className="px-8"><div className="flex items-start gap-3 text-amber-700 dark:text-amber-400">
+                              <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                              <div>
+                                <p className="font-medium">{t('taxReport.errorTitle', 'Could not load tax report')}</p>
+                                <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
+                                  {(error as Error)?.message || String(error)}
+                                </p>
+                                <Button variant="outline" size="sm" onClick={() => refetch()} className="mt-3">
+                                  {t('common.retry', 'Retry')}
+                                </Button>
+                              </div>
+                            </div></CardContent></Card>
       ) : !hasAnyData ? (
-        <Card padding="lg">
-          <p className="text-center text-sm text-neutral-600 dark:text-neutral-400">
-            {t('taxReport.empty', 'No invoices in this period.')}
-          </p>
-        </Card>
+        <Card className="py-8"><CardContent className="px-8"><p className="text-center text-sm text-neutral-600 dark:text-neutral-400">
+                                  {t('taxReport.empty', 'No invoices in this period.')}
+                                </p></CardContent></Card>
       ) : (
         <>
           {report && report.ledger.length > 0 && (
           /* Unified ledger (#5) — one typed, signed, sortable table.
               Outgoing invoices are positive; incoming invoices + expenses
               negative so the amount columns net toward the Result. */
-          <Card padding="none">
-            {/* Two nested wrappers: the OUTER clips the header row's
-                solid fill so the top corners stay rounded (matches
-                the Card's own rounded-xl). The INNER provides
-                horizontal scroll when the table is wider than the
-                viewport. Combining `overflow-hidden` + `overflow-x-auto`
-                on a single element would cancel the auto-scroll. */}
-            <div className="rounded-xl overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                <thead className="bg-neutral-50 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300">
-                  <tr>
-                    <th className="px-2 py-2 text-right font-medium w-10">#</th>
-                    <th className="px-2 py-2 text-left font-medium whitespace-nowrap">
-                      <button type="button" onClick={() => toggleSort('type')} className="font-medium hover:text-brand-600 dark:hover:text-brand-400">
-                        {t('taxReport.col.type', 'Type')}{sortIndicator('type')}
-                      </button>
-                    </th>
-                    <th className="px-2 py-2 text-left font-medium whitespace-nowrap">
-                      <button type="button" onClick={() => toggleSort('date')} className="font-medium hover:text-brand-600 dark:hover:text-brand-400">
-                        {t('taxReport.col.date', 'Date')}{sortIndicator('date')}
-                      </button>
-                    </th>
-                    <th className="px-2 py-2 text-left font-medium whitespace-nowrap">{t('taxReport.col.reference', 'Reference')}</th>
-                    <th className="px-2 py-2 text-left font-medium">
-                      <button type="button" onClick={() => toggleSort('party')} className="font-medium hover:text-brand-600 dark:hover:text-brand-400">
-                        {t('taxReport.col.party', 'Customer / supplier')}{sortIndicator('party')}
-                      </button>
-                    </th>
-                    <th className="px-2 py-2 text-left font-medium">{t('taxReport.col.event', 'Event')}</th>
-                    <th className="px-2 py-2 text-left font-medium whitespace-nowrap">{t('taxReport.col.tax', 'Tax')}</th>
-                    <th className="px-2 py-2 text-right font-medium whitespace-nowrap">
-                      <button type="button" onClick={() => toggleSort('net')} className="font-medium hover:text-brand-600 dark:hover:text-brand-400">
-                        {t('taxReport.col.net', 'Net')}{sortIndicator('net')}
-                      </button>
-                    </th>
-                    <th className="px-2 py-2 text-right font-medium whitespace-nowrap">
-                      <button type="button" onClick={() => toggleSort('vat')} className="font-medium hover:text-brand-600 dark:hover:text-brand-400">
-                        {t('taxReport.col.vat', 'VAT')}{sortIndicator('vat')}
-                      </button>
-                    </th>
-                    <th className="px-2 py-2 text-right font-medium whitespace-nowrap">
-                      <button type="button" onClick={() => toggleSort('gross')} className="font-medium hover:text-brand-600 dark:hover:text-brand-400">
-                        {t('taxReport.col.total', 'Gross')}{sortIndicator('gross')}
-                      </button>
-                    </th>
-                    <th className="px-2 py-2 text-right font-medium whitespace-nowrap">{t('taxReport.col.skonto', 'Skonto')}</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
-                  {sortedLedger.map((row, i) => (
-                    <tr
-                      key={row.key}
-                      className={row.isCancelled
-                        ? 'text-neutral-400 dark:text-neutral-500 italic'
-                        : 'text-neutral-900 dark:text-neutral-100'}
-                    >
-                      <td className="px-2 py-1.5 text-right tabular-nums">{i + 1}</td>
-                      <td className="px-2 py-1.5 whitespace-nowrap">
-                        <span className={`inline-block px-1.5 py-0.5 text-[10px] uppercase tracking-wider rounded font-semibold not-italic ${
-                          row.type === 'outgoing'
-                            ? 'bg-teal-100 text-teal-800 dark:bg-teal-900/40 dark:text-teal-300'
-                            : row.type === 'incoming'
-                              ? 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/40 dark:text-indigo-300'
-                              : 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300'
-                        }`}>
-                          {t(`taxReport.type.${row.type}`, row.type)}
-                        </span>
-                      </td>
-                      <td className="px-2 py-1.5 whitespace-nowrap tabular-nums">{fmtDate(String(row.date).slice(0, 10))}</td>
-                      <td className="px-2 py-1.5 whitespace-nowrap">
-                        <span className="font-medium">{row.reference}</span>
-                        {row.isCancelled && (
-                          <span className="ml-2 inline-block px-1.5 py-0.5 text-[10px] uppercase tracking-wider rounded-sm bg-neutral-200 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 font-semibold not-italic">
-                            {t('taxReport.statusCancelled', 'Cancelled')}
-                          </span>
-                        )}
-                        {/* Storno + Reissue lineage markers — parity
-                            with the admin invoices list so the same
-                            colour scheme distinguishes the row kinds at
-                            a glance across both surfaces. */}
-                        {row.kind === 'storno' && (
-                          <span className="ml-2 inline-block px-1.5 py-0.5 text-[10px] uppercase tracking-wider rounded-sm bg-purple-100 dark:bg-purple-900/40 text-purple-800 dark:text-purple-300 font-semibold not-italic">
-                            {t('bills.kind.storno', 'Storno')}
-                          </span>
-                        )}
-                        {row.isReissue && (
-                          <span className="ml-2 inline-block px-1.5 py-0.5 text-[10px] uppercase tracking-wider rounded-sm bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300 font-semibold not-italic">
-                            {t('bills.kind.reissue', 'Reissue')}
-                          </span>
-                        )}
-                      </td>
-                      <td className="px-2 py-1.5 truncate max-w-[180px]" title={row.party}>{row.party}</td>
-                      <td className="px-2 py-1.5 truncate max-w-[180px]" title={row.eventName}>
-                        {row.eventName || (row.type !== 'outgoing'
-                          ? <span className="text-neutral-400 dark:text-neutral-500">{t('taxReport.cost.company', 'Company')}</span>
-                          : '')}
-                      </td>
-                      <td className="px-2 py-1.5 whitespace-nowrap">
-                        {row.type === 'outgoing'
-                          ? <span className="tabular-nums">{Number(row.vatRate).toFixed(1)}%</span>
-                          : <span className="text-xs text-neutral-500 dark:text-neutral-400">{row.taxTreatment}</span>}
-                      </td>
-                      <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap">
-                        {formatMinor(row.netMinor, report.currency, intlLocale)}
-                      </td>
-                      <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap">
-                        {formatMinor(row.vatMinor, report.currency, intlLocale)}
-                      </td>
-                      <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap font-medium">
-                        {formatMinor(row.totalMinor, report.currency, intlLocale)}
-                      </td>
-                      <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap"
-                        title={row.skontoApplied
-                          ? t('taxReport.skontoTooltip', 'Paid with Skonto') as string
-                          : undefined}>
-                        {row.skontoApplied ? (
-                          <span className="text-teal-700 dark:text-teal-300">
-                            −{formatMinor(row.skontoAmountMinor, report.currency, intlLocale)}
-                          </span>
-                        ) : ''}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              </div>
-            </div>
-          </Card>
+          <Card className="py-0"><CardContent className="px-0">{/* Two nested wrappers: the OUTER clips the header row's
+                                                  solid fill so the top corners stay rounded (matches
+                                                  the Card's own rounded-xl). The INNER provides
+                                                  horizontal scroll when the table is wider than the
+                                                  viewport. Combining `overflow-hidden` + `overflow-x-auto`
+                                                  on a single element would cancel the auto-scroll. */}<div className="rounded-xl overflow-hidden">
+                                                <div className="overflow-x-auto">
+                                                  <table className="w-full text-sm">
+                                                  <thead className="bg-neutral-50 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300">
+                                                    <tr>
+                                                      <th className="px-2 py-2 text-right font-medium w-10">#</th>
+                                                      <th className="px-2 py-2 text-left font-medium whitespace-nowrap">
+                                                        <button type="button" onClick={() => toggleSort('type')} className="font-medium hover:text-brand-600 dark:hover:text-brand-400">
+                                                          {t('taxReport.col.type', 'Type')}{sortIndicator('type')}
+                                                        </button>
+                                                      </th>
+                                                      <th className="px-2 py-2 text-left font-medium whitespace-nowrap">
+                                                        <button type="button" onClick={() => toggleSort('date')} className="font-medium hover:text-brand-600 dark:hover:text-brand-400">
+                                                          {t('taxReport.col.date', 'Date')}{sortIndicator('date')}
+                                                        </button>
+                                                      </th>
+                                                      <th className="px-2 py-2 text-left font-medium whitespace-nowrap">{t('taxReport.col.reference', 'Reference')}</th>
+                                                      <th className="px-2 py-2 text-left font-medium">
+                                                        <button type="button" onClick={() => toggleSort('party')} className="font-medium hover:text-brand-600 dark:hover:text-brand-400">
+                                                          {t('taxReport.col.party', 'Customer / supplier')}{sortIndicator('party')}
+                                                        </button>
+                                                      </th>
+                                                      <th className="px-2 py-2 text-left font-medium">{t('taxReport.col.event', 'Event')}</th>
+                                                      <th className="px-2 py-2 text-left font-medium whitespace-nowrap">{t('taxReport.col.tax', 'Tax')}</th>
+                                                      <th className="px-2 py-2 text-right font-medium whitespace-nowrap">
+                                                        <button type="button" onClick={() => toggleSort('net')} className="font-medium hover:text-brand-600 dark:hover:text-brand-400">
+                                                          {t('taxReport.col.net', 'Net')}{sortIndicator('net')}
+                                                        </button>
+                                                      </th>
+                                                      <th className="px-2 py-2 text-right font-medium whitespace-nowrap">
+                                                        <button type="button" onClick={() => toggleSort('vat')} className="font-medium hover:text-brand-600 dark:hover:text-brand-400">
+                                                          {t('taxReport.col.vat', 'VAT')}{sortIndicator('vat')}
+                                                        </button>
+                                                      </th>
+                                                      <th className="px-2 py-2 text-right font-medium whitespace-nowrap">
+                                                        <button type="button" onClick={() => toggleSort('gross')} className="font-medium hover:text-brand-600 dark:hover:text-brand-400">
+                                                          {t('taxReport.col.total', 'Gross')}{sortIndicator('gross')}
+                                                        </button>
+                                                      </th>
+                                                      <th className="px-2 py-2 text-right font-medium whitespace-nowrap">{t('taxReport.col.skonto', 'Skonto')}</th>
+                                                    </tr>
+                                                  </thead>
+                                                  <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
+                                                    {sortedLedger.map((row, i) => (
+                                                      <tr
+                                                        key={row.key}
+                                                        className={row.isCancelled
+                                                          ? 'text-neutral-400 dark:text-neutral-500 italic'
+                                                          : 'text-neutral-900 dark:text-neutral-100'}
+                                                      >
+                                                        <td className="px-2 py-1.5 text-right tabular-nums">{i + 1}</td>
+                                                        <td className="px-2 py-1.5 whitespace-nowrap">
+                                                          <span className={`inline-block px-1.5 py-0.5 text-[10px] uppercase tracking-wider rounded font-semibold not-italic ${
+                                                            row.type === 'outgoing'
+                                                              ? 'bg-teal-100 text-teal-800 dark:bg-teal-900/40 dark:text-teal-300'
+                                                              : row.type === 'incoming'
+                                                                ? 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/40 dark:text-indigo-300'
+                                                                : 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300'
+                                                          }`}>
+                                                            {t(`taxReport.type.${row.type}`, row.type)}
+                                                          </span>
+                                                        </td>
+                                                        <td className="px-2 py-1.5 whitespace-nowrap tabular-nums">{fmtDate(String(row.date).slice(0, 10))}</td>
+                                                        <td className="px-2 py-1.5 whitespace-nowrap">
+                                                          <span className="font-medium">{row.reference}</span>
+                                                          {row.isCancelled && (
+                                                            <span className="ml-2 inline-block px-1.5 py-0.5 text-[10px] uppercase tracking-wider rounded-sm bg-neutral-200 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 font-semibold not-italic">
+                                                              {t('taxReport.statusCancelled', 'Cancelled')}
+                                                            </span>
+                                                          )}
+                                                          {/* Storno + Reissue lineage markers — parity
+                                                              with the admin invoices list so the same
+                                                              colour scheme distinguishes the row kinds at
+                                                              a glance across both surfaces. */}
+                                                          {row.kind === 'storno' && (
+                                                            <span className="ml-2 inline-block px-1.5 py-0.5 text-[10px] uppercase tracking-wider rounded-sm bg-purple-100 dark:bg-purple-900/40 text-purple-800 dark:text-purple-300 font-semibold not-italic">
+                                                              {t('bills.kind.storno', 'Storno')}
+                                                            </span>
+                                                          )}
+                                                          {row.isReissue && (
+                                                            <span className="ml-2 inline-block px-1.5 py-0.5 text-[10px] uppercase tracking-wider rounded-sm bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300 font-semibold not-italic">
+                                                              {t('bills.kind.reissue', 'Reissue')}
+                                                            </span>
+                                                          )}
+                                                        </td>
+                                                        <td className="px-2 py-1.5 truncate max-w-[180px]" title={row.party}>{row.party}</td>
+                                                        <td className="px-2 py-1.5 truncate max-w-[180px]" title={row.eventName}>
+                                                          {row.eventName || (row.type !== 'outgoing'
+                                                            ? <span className="text-neutral-400 dark:text-neutral-500">{t('taxReport.cost.company', 'Company')}</span>
+                                                            : '')}
+                                                        </td>
+                                                        <td className="px-2 py-1.5 whitespace-nowrap">
+                                                          {row.type === 'outgoing'
+                                                            ? <span className="tabular-nums">{Number(row.vatRate).toFixed(1)}%</span>
+                                                            : <span className="text-xs text-neutral-500 dark:text-neutral-400">{row.taxTreatment}</span>}
+                                                        </td>
+                                                        <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap">
+                                                          {formatMinor(row.netMinor, report.currency, intlLocale)}
+                                                        </td>
+                                                        <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap">
+                                                          {formatMinor(row.vatMinor, report.currency, intlLocale)}
+                                                        </td>
+                                                        <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap font-medium">
+                                                          {formatMinor(row.totalMinor, report.currency, intlLocale)}
+                                                        </td>
+                                                        <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap"
+                                                          title={row.skontoApplied
+                                                            ? t('taxReport.skontoTooltip', 'Paid with Skonto') as string
+                                                            : undefined}>
+                                                          {row.skontoApplied ? (
+                                                            <span className="text-teal-700 dark:text-teal-300">
+                                                              −{formatMinor(row.skontoAmountMinor, report.currency, intlLocale)}
+                                                            </span>
+                                                          ) : ''}
+                                                        </td>
+                                                      </tr>
+                                                    ))}
+                                                  </tbody>
+                                                </table>
+                                                </div>
+                                              </div></CardContent></Card>
           )}
 
           {/* Legal disclaimer — tax figures are a guideline. Per project

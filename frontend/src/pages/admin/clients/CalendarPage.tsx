@@ -52,7 +52,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 // `locale` prop then resolves to it by code. Other locales (fr/nl/
 // pt/ru) fall back to English day/month names.
 import deLocale from '@fullcalendar/core/locales/de';
-import { Card, Button, Loading } from '../../../components/common';
+import { Loading } from '../../../components/common';
 import {
   calendarService,
   type CalendarItem,
@@ -63,6 +63,8 @@ import { customerAdminService } from '../../../services/customerAdmin.service';
 import { getCalendarView, setCalendarView, type CalendarView } from '../../../utils/calendarPrefs';
 import { HourEntryDragCreateModal } from './HourEntryDragCreateModal';
 import { HourEntryInlinePopover } from './HourEntryInlinePopover';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 // Color tokens. Hex literals (rather than tailwind utility classes)
 // because FullCalendar applies these as inline `background-color` /
@@ -478,14 +480,14 @@ export const CalendarPage: React.FC = () => {
         </div>
         <div className="flex items-center gap-2">
           <Button
-            variant={view === 'dayGridMonth' ? 'primary' : 'outline'}
+            variant={view === 'dayGridMonth' ? 'default' : 'outline'}
             size="sm"
             onClick={() => setView('dayGridMonth')}
           >
             {t('calendar.viewMonth', 'Month')}
           </Button>
           <Button
-            variant={view === 'timeGridWeek' ? 'primary' : 'outline'}
+            variant={view === 'timeGridWeek' ? 'default' : 'outline'}
             size="sm"
             onClick={() => setView('timeGridWeek')}
           >
@@ -496,65 +498,62 @@ export const CalendarPage: React.FC = () => {
 
       <Legend />
 
-      <Card padding="md">
-        {itemsLoading && !itemsResp && (
-          <div className="mb-3 flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400">
-            <Loading />
-            <span>{t('calendar.loading', 'Loading items…')}</span>
-          </div>
-        )}
-        <FullCalendar
-          ref={calendarRef}
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-          initialView={view}
-          timeZone={resolvedTz}
-          // F.4 — language + time format come from picpeak settings.
-          // `locales` registers the locales we ship; `locale` picks the
-          // active one by i18next language code. Unknown languages
-          // fall back to FC's default English. Times are gated on the
-          // admin's general_time_format via the shared fcTimeFormat
-          // object below.
-          locales={[deLocale]}
-          locale={i18n.language || 'en'}
-          slotLabelFormat={fcTimeFormat}
-          eventTimeFormat={fcTimeFormat}
-          // Column headers — see formatDayHeader above for the per-view
-          // semantics (month headers carry no date).
-          dayHeaderContent={(arg) => formatDayHeader(arg.date, arg.view.type, i18n.language)}
-          headerToolbar={{
-            left: 'prev,next today',
-            center: 'title',
-            right: '',
-          }}
-          // Week starts on Monday for the operator's EU market.
-          firstDay={1}
-          // Per user spec: full 24h in week view (was 06:00-22:00).
-          slotMinTime="00:00:00"
-          slotMaxTime="24:00:00"
-          slotDuration="00:30:00"
-          height="auto"
-          expandRows
-          events={fcEvents}
-          eventClick={handleEventClick}
-          datesSet={handleDatesSet}
-          // E.7 — interactions enabled. Per-event `editable` already
-          // filters the draggable surface to unlocked hour entries
-          // (mapItemToFcEvent above). `selectable` enables the
-          // drag-to-create gesture on empty slots in week view.
-          // I.3 — master hoursLogging gates all drag interactions
-          // (drag-to-create, drag-move, drag-resize). When off, the
-          // calendar is read-only; existing entries still render so
-          // history stays visible.
-          selectable={hoursLoggingEnabled}
-          selectMirror
-          editable={hoursLoggingEnabled}
-          // FullCalendar quirk: selecting on the all-day row fires
-          // with allDay=true; the drag-create handler ignores those.
-          eventDrop={handleEventDrop}
-          eventResize={handleEventResize}
-          select={handleDateSelect}
-        />
-      </Card>
+      <Card><CardContent>{itemsLoading && !itemsResp && (
+                    <div className="mb-3 flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400">
+                      <Loading />
+                      <span>{t('calendar.loading', 'Loading items…')}</span>
+                    </div>
+                  )}<FullCalendar
+                    ref={calendarRef}
+                    plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                    initialView={view}
+                    timeZone={resolvedTz}
+                    // F.4 — language + time format come from picpeak settings.
+                    // `locales` registers the locales we ship; `locale` picks the
+                    // active one by i18next language code. Unknown languages
+                    // fall back to FC's default English. Times are gated on the
+                    // admin's general_time_format via the shared fcTimeFormat
+                    // object below.
+                    locales={[deLocale]}
+                    locale={i18n.language || 'en'}
+                    slotLabelFormat={fcTimeFormat}
+                    eventTimeFormat={fcTimeFormat}
+                    // Column headers — see formatDayHeader above for the per-view
+                    // semantics (month headers carry no date).
+                    dayHeaderContent={(arg) => formatDayHeader(arg.date, arg.view.type, i18n.language)}
+                    headerToolbar={{
+                      left: 'prev,next today',
+                      center: 'title',
+                      right: '',
+                    }}
+                    // Week starts on Monday for the operator's EU market.
+                    firstDay={1}
+                    // Per user spec: full 24h in week view (was 06:00-22:00).
+                    slotMinTime="00:00:00"
+                    slotMaxTime="24:00:00"
+                    slotDuration="00:30:00"
+                    height="auto"
+                    expandRows
+                    events={fcEvents}
+                    eventClick={handleEventClick}
+                    datesSet={handleDatesSet}
+                    // E.7 — interactions enabled. Per-event `editable` already
+                    // filters the draggable surface to unlocked hour entries
+                    // (mapItemToFcEvent above). `selectable` enables the
+                    // drag-to-create gesture on empty slots in week view.
+                    // I.3 — master hoursLogging gates all drag interactions
+                    // (drag-to-create, drag-move, drag-resize). When off, the
+                    // calendar is read-only; existing entries still render so
+                    // history stays visible.
+                    selectable={hoursLoggingEnabled}
+                    selectMirror
+                    editable={hoursLoggingEnabled}
+                    // FullCalendar quirk: selecting on the all-day row fires
+                    // with allDay=true; the drag-create handler ignores those.
+                    eventDrop={handleEventDrop}
+                    eventResize={handleEventResize}
+                    select={handleDateSelect}
+                  /></CardContent></Card>
 
       {dragCreateState && (
         <HourEntryDragCreateModal
@@ -719,26 +718,24 @@ export const CalendarPage: React.FC = () => {
 const Legend: React.FC = () => {
   const { t } = useTranslation();
   return (
-    <Card padding="sm">
-      <div className="flex flex-wrap gap-4 text-xs text-neutral-500 dark:text-neutral-400">
-        <LegendSwatch color={COLOR_EVENT} label={t('calendar.legend.events', 'Events')} />
-        <LegendSwatch color={COLOR_HOURS} label={t('calendar.legend.hours', 'Hours')} />
-        <LegendSwatch
-          color={COLOR_QUOTE_BORDER}
-          label={t('calendar.legend.pendingQuotes', 'Pending quotes')}
-          dashed
-        />
-        <LegendSwatch
-          color={COLOR_CONTRACT_BORDER}
-          label={t('calendar.legend.pendingContracts', 'Pending contracts')}
-          dashed
-        />
-        <LegendSwatch
-          color={COLOR_HOURS_LOCKED}
-          label={t('calendar.legend.hoursLocked', 'Locked (billed)')}
-        />
-      </div>
-    </Card>
+    <Card className="py-4"><CardContent className="px-4"><div className="flex flex-wrap gap-4 text-xs text-neutral-500 dark:text-neutral-400">
+              <LegendSwatch color={COLOR_EVENT} label={t('calendar.legend.events', 'Events')} />
+              <LegendSwatch color={COLOR_HOURS} label={t('calendar.legend.hours', 'Hours')} />
+              <LegendSwatch
+                color={COLOR_QUOTE_BORDER}
+                label={t('calendar.legend.pendingQuotes', 'Pending quotes')}
+                dashed
+              />
+              <LegendSwatch
+                color={COLOR_CONTRACT_BORDER}
+                label={t('calendar.legend.pendingContracts', 'Pending contracts')}
+                dashed
+              />
+              <LegendSwatch
+                color={COLOR_HOURS_LOCKED}
+                label={t('calendar.legend.hoursLocked', 'Locked (billed)')}
+              />
+            </div></CardContent></Card>
   );
 };
 

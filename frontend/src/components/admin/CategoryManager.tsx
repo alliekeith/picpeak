@@ -3,8 +3,8 @@ import { useQuery } from '@tanstack/react-query';
 import { Plus, Edit2, Trash2, Loader2, ArrowUp, ArrowDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { categoriesService, type PhotoCategory } from '../../services/categories.service';
-import { Button } from '../common';
 import { useMutationWithToast, useModal } from '../../hooks';
+import { Button } from "@/components/ui/button";
 
 export const CategoryManager: React.FC = () => {
   const { t } = useTranslation();
@@ -119,13 +119,10 @@ export const CategoryManager: React.FC = () => {
         <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">{t('categories.title')}</h3>
         {!addingModal.isOpen && (
           <Button
-            variant="primary"
-            size="sm"
-            onClick={addingModal.open}
-            leftIcon={<Plus className="w-4 h-4" />}
-          >
-            {t('categories.addCategory')}
-          </Button>
+                              size="sm"
+                              onClick={addingModal.open}
+                            >
+                              <Plus className="w-4 h-4" />{t('categories.addCategory')}</Button>
         )}
       </div>
 
@@ -143,7 +140,6 @@ export const CategoryManager: React.FC = () => {
             autoFocus
           />
           <Button
-            variant="primary"
             size="sm"
             onClick={handleCreate}
             disabled={!newCategoryName.trim() || createMutation.isPending}
@@ -194,7 +190,6 @@ export const CategoryManager: React.FC = () => {
                     autoFocus
                   />
                   <Button
-                    variant="primary"
                     size="sm"
                     onClick={() => handleUpdate(category.id)}
                     disabled={!editingName.trim() || updateMutation.isPending}

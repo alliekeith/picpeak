@@ -11,15 +11,18 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import {
   Plus, Send, Link2, Download, Trash2, Upload, X, Copy, Image as ImageIcon,
-  Clock, Ban, RefreshCw, Mail, Paperclip, FileText,
-} from 'lucide-react';
+  Clock, Ban, RefreshCw, Mail, Paperclip, FileText, Loader2 } from 'lucide-react';
 
-import { Button, Input, Card, CardContent, Loading, useConfirm } from '../../../components/common';
+import { Loading, useConfirm } from '../../../components/common';
 import { AdminAuthenticatedImage } from '../../../components/admin/AdminAuthenticatedImage';
 import { TransferPhotoPicker, type PickedPhoto } from '../../../components/admin/TransferPhotoPicker';
 import { useMutationWithToast } from '../../../hooks/useMutationWithToast';
 import { useLocalizedDate } from '../../../hooks/useLocalizedDate';
 import { transfersService } from '../../../services/transfers.service';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 function formatBytes(bytes: number | null | undefined): string {
   if (!bytes) return '0 B';
@@ -73,9 +76,8 @@ export const TransfersPage: React.FC = () => {
             {t('transfers.subtitle', 'Send original files from any event as a download link.')}
           </p>
         </div>
-        <Button leftIcon={<Plus className="h-4 w-4" />} onClick={() => setShowCreate(true)}>
-          {t('transfers.new', 'New transfer')}
-        </Button>
+        <Button onClick={() => setShowCreate(true)}>
+                        <Plus className="h-4 w-4" />{t('transfers.new', 'New transfer')}</Button>
       </div>
 
       {isLoading ? (
@@ -88,46 +90,44 @@ export const TransfersPage: React.FC = () => {
           </CardContent>
         </Card>
       ) : (
-        <Card>
-          <div className="overflow-x-auto">
-            <table className="min-w-full text-sm">
-              <thead>
-                <tr className="border-b border-neutral-200 text-left text-neutral-500 dark:border-neutral-700">
-                  <th className="px-4 py-3 font-medium">{t('transfers.col.title', 'Title')}</th>
-                  <th className="px-4 py-3 font-medium">{t('transfers.col.files', 'Files')}</th>
-                  <th className="px-4 py-3 font-medium">{t('transfers.col.status', 'Status')}</th>
-                  <th className="px-4 py-3 font-medium">{t('transfers.col.downloads', 'Downloads')}</th>
-                  <th className="px-4 py-3 font-medium">{t('transfers.col.expires', 'Expires')}</th>
-                  <th className="px-4 py-3 font-medium">{t('transfers.col.uploads', 'Uploads')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {transfers.map((tr) => (
-                  <tr
-                    key={tr.id}
-                    className="cursor-pointer border-b border-neutral-100 hover:bg-neutral-50 dark:border-neutral-800 dark:hover:bg-neutral-800/50"
-                    onClick={() => setDetailId(tr.id)}
-                  >
-                    <td className="px-4 py-3 font-medium text-neutral-900 dark:text-neutral-100">
-                      {tr.title || t('transfers.untitled', 'Untitled transfer')}
-                    </td>
-                    <td className="px-4 py-3">{tr.file_count}</td>
-                    <td className="px-4 py-3">
-                      <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_STYLES[tr.status] || ''}`}>
-                        {t(`transfers.status.${tr.status}`, tr.status)}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3">
-                      {tr.download_count}{tr.max_downloads ? ` / ${tr.max_downloads}` : ''}
-                    </td>
-                    <td className="px-4 py-3 text-neutral-500 dark:text-neutral-400">{fmtDate(tr.expires_at)}</td>
-                    <td className="px-4 py-3">{tr.allow_uploads ? tr.upload_count : '—'}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </Card>
+        <Card><CardContent><div className="overflow-x-auto">
+                                  <table className="min-w-full text-sm">
+                                    <thead>
+                                      <tr className="border-b border-neutral-200 text-left text-neutral-500 dark:border-neutral-700">
+                                        <th className="px-4 py-3 font-medium">{t('transfers.col.title', 'Title')}</th>
+                                        <th className="px-4 py-3 font-medium">{t('transfers.col.files', 'Files')}</th>
+                                        <th className="px-4 py-3 font-medium">{t('transfers.col.status', 'Status')}</th>
+                                        <th className="px-4 py-3 font-medium">{t('transfers.col.downloads', 'Downloads')}</th>
+                                        <th className="px-4 py-3 font-medium">{t('transfers.col.expires', 'Expires')}</th>
+                                        <th className="px-4 py-3 font-medium">{t('transfers.col.uploads', 'Uploads')}</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {transfers.map((tr) => (
+                                        <tr
+                                          key={tr.id}
+                                          className="cursor-pointer border-b border-neutral-100 hover:bg-neutral-50 dark:border-neutral-800 dark:hover:bg-neutral-800/50"
+                                          onClick={() => setDetailId(tr.id)}
+                                        >
+                                          <td className="px-4 py-3 font-medium text-neutral-900 dark:text-neutral-100">
+                                            {tr.title || t('transfers.untitled', 'Untitled transfer')}
+                                          </td>
+                                          <td className="px-4 py-3">{tr.file_count}</td>
+                                          <td className="px-4 py-3">
+                                            <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_STYLES[tr.status] || ''}`}>
+                                              {t(`transfers.status.${tr.status}`, tr.status)}
+                                            </span>
+                                          </td>
+                                          <td className="px-4 py-3">
+                                            {tr.download_count}{tr.max_downloads ? ` / ${tr.max_downloads}` : ''}
+                                          </td>
+                                          <td className="px-4 py-3 text-neutral-500 dark:text-neutral-400">{fmtDate(tr.expires_at)}</td>
+                                          <td className="px-4 py-3">{tr.allow_uploads ? tr.upload_count : '—'}</td>
+                                        </tr>
+                                      ))}
+                                    </tbody>
+                                  </table>
+                                </div></CardContent></Card>
       )}
 
       {showCreate && (
@@ -212,7 +212,7 @@ const CreateTransferModal: React.FC<{ onClose: () => void; onCreated: () => void
         </div>
 
         <div className="min-h-0 flex-1 space-y-4 overflow-y-auto p-5">
-          <Input label={t('transfers.field.title', 'Title')} value={title} onChange={(e) => setTitle(e.target.value)} placeholder={t('transfers.field.titlePlaceholder', 'e.g. Wedding finals for the Smiths')} />
+          <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('transfers.field.title', 'Title')}</span><Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder={t('transfers.field.titlePlaceholder', 'e.g. Wedding finals for the Smiths')} /></Label></div>
           <div>
             <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">{t('transfers.field.message', 'Message (optional)')}</label>
             <textarea
@@ -224,8 +224,8 @@ const CreateTransferModal: React.FC<{ onClose: () => void; onCreated: () => void
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <Input type="number" min={1} label={t('transfers.field.expiresInDays', 'Link active for (days)')} value={expiresInDays} onChange={(e) => setExpiresInDays(e.target.value)} />
-            <Input type="number" min={0} label={t('transfers.field.maxDownloads', 'Max downloads (0 = unlimited)')} value={maxDownloads} onChange={(e) => setMaxDownloads(e.target.value)} placeholder="0" />
+            <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('transfers.field.expiresInDays', 'Link active for (days)')}</span><Input type="number" min={1} value={expiresInDays} onChange={(e) => setExpiresInDays(e.target.value)} /></Label></div>
+            <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('transfers.field.maxDownloads', 'Max downloads (0 = unlimited)')}</span><Input type="number" min={0} value={maxDownloads} onChange={(e) => setMaxDownloads(e.target.value)} placeholder="0" /></Label></div>
           </div>
           <label className="flex items-center gap-2 text-sm text-neutral-700 dark:text-neutral-300">
             <input type="checkbox" checked={allowUploads} onChange={(e) => setAllowUploads(e.target.checked)} className="rounded-sm" />
@@ -238,9 +238,8 @@ const CreateTransferModal: React.FC<{ onClose: () => void; onCreated: () => void
               <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
                 {t('transfers.field.files', 'Files')} · {picked.length}
               </span>
-              <Button size="sm" variant="outline" leftIcon={<ImageIcon className="h-4 w-4" />} onClick={() => setShowPicker(true)}>
-                {t('transfers.picker.title', 'Select images from other events')}
-              </Button>
+              <Button size="sm" variant="outline" onClick={() => setShowPicker(true)}>
+                                          <ImageIcon className="h-4 w-4" />{t('transfers.picker.title', 'Select images from other events')}</Button>
             </div>
             {picked.length === 0 ? (
               <p className="text-sm text-neutral-400">{t('transfers.field.noFiles', 'No images selected yet.')}</p>
@@ -311,23 +310,19 @@ const CreateTransferModal: React.FC<{ onClose: () => void; onCreated: () => void
             </span>
             <div className="flex gap-2">
               <Button
-                type="button"
-                variant={deliveryMethod === 'link' ? 'primary' : 'outline'}
-                className="flex-1"
-                leftIcon={<Link2 className="h-4 w-4" />}
-                onClick={() => setDeliveryMethod('link')}
-              >
-                {t('transfers.delivery.link', 'Share a link')}
-              </Button>
+                                          type="button"
+                                          variant={deliveryMethod === 'link' ? 'default' : 'outline'}
+                                          className="flex-1"
+                                          onClick={() => setDeliveryMethod('link')}
+                                        >
+                                          <Link2 className="h-4 w-4" />{t('transfers.delivery.link', 'Share a link')}</Button>
               <Button
-                type="button"
-                variant={deliveryMethod === 'email' ? 'primary' : 'outline'}
-                className="flex-1"
-                leftIcon={<Mail className="h-4 w-4" />}
-                onClick={() => setDeliveryMethod('email')}
-              >
-                {t('transfers.delivery.email', 'Send by email')}
-              </Button>
+                                          type="button"
+                                          variant={deliveryMethod === 'email' ? 'default' : 'outline'}
+                                          className="flex-1"
+                                          onClick={() => setDeliveryMethod('email')}
+                                        >
+                                          <Mail className="h-4 w-4" />{t('transfers.delivery.email', 'Send by email')}</Button>
             </div>
             {deliveryMethod === 'email' && (
               <div className="mt-3">
@@ -354,17 +349,12 @@ const CreateTransferModal: React.FC<{ onClose: () => void; onCreated: () => void
         <div className="flex justify-end gap-2 border-t border-neutral-200 px-5 py-3 dark:border-neutral-700">
           <Button variant="outline" onClick={onClose}>{t('common.cancel', 'Cancel')}</Button>
           <Button
-            onClick={() => createMutation.mutate()}
-            isLoading={createMutation.isPending}
-            disabled={
-              (picked.length === 0 && files.length === 0 && !allowUploads)
-              || (deliveryMethod === 'email' && parsedEmails.length === 0)
-            }
-          >
-            {deliveryMethod === 'email'
-              ? t('transfers.createAndSend', 'Create & send')
-              : t('transfers.create', 'Create transfer')}
-          </Button>
+                              onClick={() => createMutation.mutate()} disabled={(picked.length === 0 && files.length === 0 && !allowUploads)
+                                                      || (deliveryMethod === 'email' && parsedEmails.length === 0) || createMutation.isPending}
+                            >
+                              {createMutation.isPending && <Loader2 className="animate-spin" />}{deliveryMethod === 'email'
+                                ? t('transfers.createAndSend', 'Create & send')
+                                : t('transfers.create', 'Create transfer')}</Button>
         </div>
       </div>
 
@@ -471,11 +461,11 @@ const TransferDetailModal: React.FC<DetailProps> = ({ transferId, onClose, onCop
             <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-4 dark:border-neutral-700 dark:bg-neutral-800/50">
               <div className="flex flex-wrap items-center gap-2">
                 <Input readOnly value={recipientUrl(transfer.token)} className="flex-1 min-w-[220px]" />
-                <Button variant="outline" leftIcon={<Copy className="h-4 w-4" />} onClick={() => onCopy(recipientUrl(transfer.token))}>
-                  {t('transfers.copyLink', 'Copy link')}
-                </Button>
+                <Button variant="outline" onClick={() => onCopy(recipientUrl(transfer.token))}>
+                                                    <Copy className="h-4 w-4" />{t('transfers.copyLink', 'Copy link')}</Button>
                 <a href={transfersService.adminDownloadUrl(transfer.id)}>
-                  <Button leftIcon={<Download className="h-4 w-4" />}>{t('transfers.downloadAll', 'Download all')}</Button>
+                  <Button>
+                                                          <Download className="h-4 w-4" />{t('transfers.downloadAll', 'Download all')}</Button>
                 </a>
               </div>
               <div className="mt-3 flex flex-wrap gap-4 text-sm text-neutral-600 dark:text-neutral-400">
@@ -485,17 +475,14 @@ const TransferDetailModal: React.FC<DetailProps> = ({ transferId, onClose, onCop
               </div>
               <div className="mt-3 flex gap-2">
                 {transfer.is_active ? (
-                  <Button size="sm" variant="outline" leftIcon={<Ban className="h-4 w-4" />} onClick={() => disableMutation.mutate()} isLoading={disableMutation.isPending}>
-                    {t('transfers.disableLink', 'Disable link')}
-                  </Button>
+                  <Button size="sm" variant="outline" onClick={() => disableMutation.mutate()} disabled={disableMutation.isPending}>
+                                                          {disableMutation.isPending && <Loader2 className="animate-spin" />}<Ban className="h-4 w-4" />{t('transfers.disableLink', 'Disable link')}</Button>
                 ) : (
-                  <Button size="sm" variant="outline" leftIcon={<RefreshCw className="h-4 w-4" />} onClick={() => reactivateMutation.mutate()} isLoading={reactivateMutation.isPending}>
-                    {t('transfers.reactivate', 'Re-activate (14 days)')}
-                  </Button>
+                  <Button size="sm" variant="outline" onClick={() => reactivateMutation.mutate()} disabled={reactivateMutation.isPending}>
+                                                              {reactivateMutation.isPending && <Loader2 className="animate-spin" />}<RefreshCw className="h-4 w-4" />{t('transfers.reactivate', 'Re-activate (14 days)')}</Button>
                 )}
-                <Button size="sm" variant="ghost" className="text-red-600" leftIcon={<Trash2 className="h-4 w-4" />} onClick={handleDelete}>
-                  {t('common.delete', 'Delete')}
-                </Button>
+                <Button size="sm" variant="ghost" className="text-red-600" onClick={handleDelete}>
+                                                    <Trash2 className="h-4 w-4" />{t('common.delete', 'Delete')}</Button>
               </div>
             </div>
 
@@ -503,9 +490,8 @@ const TransferDetailModal: React.FC<DetailProps> = ({ transferId, onClose, onCop
             <div>
               <div className="mb-2 flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">{t('transfers.field.files', 'Files')} · {transfer.file_count}</h3>
-                <Button size="sm" variant="outline" leftIcon={<ImageIcon className="h-4 w-4" />} onClick={() => setShowPicker(true)}>
-                  {t('transfers.addImages', 'Add images')}
-                </Button>
+                <Button size="sm" variant="outline" onClick={() => setShowPicker(true)}>
+                                                    <ImageIcon className="h-4 w-4" />{t('transfers.addImages', 'Add images')}</Button>
               </div>
               {transfer.files && transfer.files.length > 0 ? (
                 <div className="grid grid-cols-4 gap-3 sm:grid-cols-6">
@@ -600,9 +586,8 @@ const TransferDetailModal: React.FC<DetailProps> = ({ transferId, onClose, onCop
                     {t('transfers.disableUploads', 'Disable')}
                   </Button>
                 ) : (
-                  <Button size="sm" variant="outline" onClick={() => enableUploadsMutation.mutate()} isLoading={enableUploadsMutation.isPending}>
-                    {t('transfers.enableUploads', 'Enable upload link')}
-                  </Button>
+                  <Button size="sm" variant="outline" onClick={() => enableUploadsMutation.mutate()} disabled={enableUploadsMutation.isPending}>
+                                                              {enableUploadsMutation.isPending && <Loader2 className="animate-spin" />}{t('transfers.enableUploads', 'Enable upload link')}</Button>
                 )}
               </div>
               {transfer.allow_uploads && transfer.upload_token ? (
@@ -610,9 +595,8 @@ const TransferDetailModal: React.FC<DetailProps> = ({ transferId, onClose, onCop
                   <div className="flex flex-wrap items-center gap-2">
                     <div className="rounded-sm bg-neutral-100 px-3 py-1.5 font-mono text-lg tracking-widest dark:bg-neutral-800">{transfer.upload_token}</div>
                     <Input readOnly value={uploadUrl(transfer.upload_token)} className="flex-1 min-w-[200px]" />
-                    <Button variant="outline" size="sm" leftIcon={<Copy className="h-4 w-4" />} onClick={() => onCopy(uploadUrl(transfer.upload_token as string))}>
-                      {t('transfers.copyLink', 'Copy link')}
-                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => onCopy(uploadUrl(transfer.upload_token as string))}>
+                                                                <Copy className="h-4 w-4" />{t('transfers.copyLink', 'Copy link')}</Button>
                   </div>
                   {transfer.uploads && transfer.uploads.length > 0 ? (
                     <ul className="mt-3 divide-y divide-neutral-100 dark:divide-neutral-800">

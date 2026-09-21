@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { Plus, X } from 'lucide-react';
+import { Plus, X, Loader2 } from 'lucide-react';
 
-import { Button, Input, Loading } from '../common';
+import { Loading } from '../common';
 import { eventTypesService, EventType } from '../../services/eventTypes.service';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 interface Props {
   onDone: () => void;
@@ -164,7 +166,7 @@ export const SetupEventTypesStep: React.FC<Props> = ({ onDone }) => {
       // remain editable later in Settings → Event Types.
       <div className="space-y-6">
         <p className="text-sm text-neutral-600">{t('setup.eventTypes.loadFailed')}</p>
-        <Button type="button" variant="primary" size="lg" className="w-full" onClick={onDone}>
+        <Button type="button" size="lg" className="w-full" onClick={onDone}>
           {t('setup.continue')}
         </Button>
       </div>
@@ -224,15 +226,12 @@ export const SetupEventTypesStep: React.FC<Props> = ({ onDone }) => {
       <p className="text-xs text-neutral-500">{t('setup.eventTypes.hint')}</p>
 
       <Button
-        type="button"
-        variant="primary"
-        size="lg"
-        isLoading={saving}
-        className="w-full"
-        onClick={handleContinue}
-      >
-        {t('setup.continue')}
-      </Button>
+                  type="button"
+                  size="lg"
+                  className="w-full"
+                  onClick={handleContinue} disabled={saving}
+                >
+                  {saving && <Loader2 className="animate-spin" />}{t('setup.continue')}</Button>
     </div>
   );
 };

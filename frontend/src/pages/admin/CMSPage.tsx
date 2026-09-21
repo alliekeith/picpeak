@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
-import { FileText, Globe, Clock, Sparkles, ShieldCheck, Image as ImageIcon, Trash2 } from 'lucide-react';
+import { FileText, Globe, Clock, Sparkles, ShieldCheck, Image as ImageIcon, Trash2, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { debounce } from 'lodash';
 import DOMPurify from 'dompurify';
 
-import { Button, Card, Input, Loading } from '../../components/common';
+import { Loading } from '../../components/common';
 import { CMSEditor } from '../../components/admin/CMSEditor';
 import { cmsService } from '../../services/cms.service';
 import type { CMSPage as CMSPageType } from '../../services/cms.service';
@@ -14,8 +14,13 @@ import { settingsService, PublicSiteBranding } from '../../services/settings.ser
 import { buildResourceUrl } from '../../utils/url';
 import { useLocalizedDate } from '../../hooks/useLocalizedDate';
 import { useMutationWithToast } from '../../hooks';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export const CMSPage: React.FC = () => {
+    const __fieldId = React.useId();
   const { t } = useTranslation();
   const { formatDateTime: fmtDateTime, formatTime: fmtTime } = useLocalizedDate();
   const queryClient = useQueryClient();
@@ -381,403 +386,370 @@ export const CMSPage: React.FC = () => {
       </div>
 
       <div className="mb-8">
-        <Card className="space-y-6">
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-2 text-brand mb-1">
-                <Globe className="w-5 h-5" />
-                <span className="text-sm font-semibold uppercase tracking-wide">{t('settings.publicSite.badge')}</span>
-              </div>
-              <h2 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">{t('settings.publicSite.title')}</h2>
-              <p className="text-neutral-600 dark:text-neutral-400 mt-1 max-w-2xl">{t('settings.publicSite.subtitle')}</p>
-            </div>
-            <label className="flex items-center gap-2 cursor-pointer select-none">
-              <input
-                type="checkbox"
-                className="sr-only"
-                checked={publicSiteEnabled}
-                onChange={() => setPublicSiteEnabled((prev) => !prev)}
-              />
-              <span
-                aria-hidden="true"
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                  publicSiteEnabled ? 'bg-primary' : 'bg-neutral-300'
-                }`}
-              >
-                <span
-                  className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition ${
-                    publicSiteEnabled ? 'translate-x-5' : 'translate-x-1'
-                  }`}
-                />
-              </span>
-              <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                {publicSiteEnabled ? t('settings.publicSite.enabled') : t('settings.publicSite.disabled')}
-              </span>
-            </label>
-          </div>
+        <Card className="space-y-6"><CardContent><div className="flex items-start justify-between gap-4">
+                          <div>
+                            <div className="flex items-center gap-2 text-brand mb-1">
+                              <Globe className="w-5 h-5" />
+                              <span className="text-sm font-semibold uppercase tracking-wide">{t('settings.publicSite.badge')}</span>
+                            </div>
+                            <h2 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">{t('settings.publicSite.title')}</h2>
+                            <p className="text-neutral-600 dark:text-neutral-400 mt-1 max-w-2xl">{t('settings.publicSite.subtitle')}</p>
+                          </div>
+                          <label className="flex items-center gap-2 cursor-pointer select-none">
+                            <input
+                              type="checkbox"
+                              className="sr-only"
+                              checked={publicSiteEnabled}
+                              onChange={() => setPublicSiteEnabled((prev) => !prev)}
+                            />
+                            <span
+                              aria-hidden="true"
+                              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                                publicSiteEnabled ? 'bg-primary' : 'bg-neutral-300'
+                              }`}
+                            >
+                              <span
+                                className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition ${
+                                  publicSiteEnabled ? 'translate-x-5' : 'translate-x-1'
+                                }`}
+                              />
+                            </span>
+                            <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                              {publicSiteEnabled ? t('settings.publicSite.enabled') : t('settings.publicSite.disabled')}
+                            </span>
+                          </label>
+                        </div>{publicSiteLoading ? (
+                          <div className="flex items-center justify-center min-h-[240px]">
+                            <Loading size="lg" text={t('settings.publicSite.loading')} />
+                          </div>
+                        ) : (
+                          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                            <div className="space-y-4">
+                              <div>
+                                <label className="flex items-center gap-2 text-sm font-medium text-neutral-800 dark:text-neutral-200 mb-2">
+                                  <Sparkles className="w-4 h-4 text-brand" />
+                                  {t('settings.publicSite.htmlLabel')}
+                                </label>
+                                <textarea
+                                  className="w-full h-64 font-mono text-sm rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:border-primary disabled:bg-neutral-100 dark:disabled:bg-neutral-700 disabled:text-neutral-500 dark:disabled:text-neutral-400"
+                                  value={publicSiteHtml}
+                                  onChange={(event) => setPublicSiteHtml(event.target.value)}
+                                  disabled={!publicSiteEnabled}
+                                  placeholder={t('settings.publicSite.htmlPlaceholder') || ''}
+                                />
+                                <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                                  {t('settings.publicSite.htmlHelp')}
+                                </p>
+                              </div>
 
-          {publicSiteLoading ? (
-            <div className="flex items-center justify-center min-h-[240px]">
-              <Loading size="lg" text={t('settings.publicSite.loading')} />
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <div>
-                  <label className="flex items-center gap-2 text-sm font-medium text-neutral-800 dark:text-neutral-200 mb-2">
-                    <Sparkles className="w-4 h-4 text-brand" />
-                    {t('settings.publicSite.htmlLabel')}
-                  </label>
-                  <textarea
-                    className="w-full h-64 font-mono text-sm rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:border-primary disabled:bg-neutral-100 dark:disabled:bg-neutral-700 disabled:text-neutral-500 dark:disabled:text-neutral-400"
-                    value={publicSiteHtml}
-                    onChange={(event) => setPublicSiteHtml(event.target.value)}
-                    disabled={!publicSiteEnabled}
-                    placeholder={t('settings.publicSite.htmlPlaceholder') || ''}
-                  />
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-                    {t('settings.publicSite.htmlHelp')}
-                  </p>
-                </div>
+                              <div>
+                                <label className="flex items-center gap-2 text-sm font-medium text-neutral-800 dark:text-neutral-200 mb-2">
+                                  <ShieldCheck className="w-4 h-4 text-brand" />
+                                  {t('settings.publicSite.cssLabel')}
+                                </label>
+                                <textarea
+                                  className="w-full h-48 font-mono text-sm rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:border-primary disabled:bg-neutral-100 dark:disabled:bg-neutral-700 disabled:text-neutral-500 dark:disabled:text-neutral-400"
+                                  value={publicSiteCss}
+                                  onChange={(event) => setPublicSiteCss(event.target.value)}
+                                  disabled={!publicSiteEnabled}
+                                  placeholder={t('settings.publicSite.cssPlaceholder') || ''}
+                                />
+                                <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                                  {t('settings.publicSite.cssHelp')}
+                                </p>
+                              </div>
 
-                <div>
-                  <label className="flex items-center gap-2 text-sm font-medium text-neutral-800 dark:text-neutral-200 mb-2">
-                    <ShieldCheck className="w-4 h-4 text-brand" />
-                    {t('settings.publicSite.cssLabel')}
-                  </label>
-                  <textarea
-                    className="w-full h-48 font-mono text-sm rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:border-primary disabled:bg-neutral-100 dark:disabled:bg-neutral-700 disabled:text-neutral-500 dark:disabled:text-neutral-400"
-                    value={publicSiteCss}
-                    onChange={(event) => setPublicSiteCss(event.target.value)}
-                    disabled={!publicSiteEnabled}
-                    placeholder={t('settings.publicSite.cssPlaceholder') || ''}
-                  />
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-                    {t('settings.publicSite.cssHelp')}
-                  </p>
-                </div>
+                              <div className="flex flex-wrap gap-3">
+                                <Button
+                                                                        onClick={() => publicSiteSaveMutation.mutate()} disabled={publicSiteSaveMutation.isPending || publicSiteSaveMutation.isPending}
+                                                                      >
+                                                                        {publicSiteSaveMutation.isPending && <Loader2 className="animate-spin" />}{publicSiteSaveMutation.isPending ? t('settings.publicSite.saving') : t('settings.publicSite.saveCta')}</Button>
+                                <Button
+                                                                        variant="secondary"
+                                                                        onClick={() => publicSiteResetMutation.mutate()} disabled={publicSiteResetMutation.isPending || publicSiteResetMutation.isPending}
+                                                                      >
+                                                                        {publicSiteResetMutation.isPending && <Loader2 className="animate-spin" />}{publicSiteResetMutation.isPending ? t('settings.publicSite.resetting') : t('settings.publicSite.resetCta')}</Button>
+                              </div>
 
-                <div className="flex flex-wrap gap-3">
-                  <Button
-                    variant="primary"
-                    onClick={() => publicSiteSaveMutation.mutate()}
-                    disabled={publicSiteSaveMutation.isPending}
-                    isLoading={publicSiteSaveMutation.isPending}
-                  >
-                    {publicSiteSaveMutation.isPending ? t('settings.publicSite.saving') : t('settings.publicSite.saveCta')}
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    onClick={() => publicSiteResetMutation.mutate()}
-                    disabled={publicSiteResetMutation.isPending}
-                    isLoading={publicSiteResetMutation.isPending}
-                  >
-                    {publicSiteResetMutation.isPending ? t('settings.publicSite.resetting') : t('settings.publicSite.resetCta')}
-                  </Button>
-                </div>
+                              <div className="rounded-lg bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700 p-3 text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
+                                <p className="font-semibold mb-1">{t('settings.publicSite.sanitizationNotice')}</p>
+                                <p>{t('settings.publicSite.htmlHelp')}</p>
+                              </div>
+                            </div>
 
-                <div className="rounded-lg bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700 p-3 text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
-                  <p className="font-semibold mb-1">{t('settings.publicSite.sanitizationNotice')}</p>
-                  <p>{t('settings.publicSite.htmlHelp')}</p>
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-semibold text-neutral-800 dark:text-neutral-200 uppercase tracking-wide">
-                    {t('settings.publicSite.previewTitle')}
-                  </h3>
-                  <span className="text-xs text-neutral-500 dark:text-neutral-400">{t('settings.publicSite.previewSandboxed')}</span>
-                </div>
-                {publicSiteEnabled ? (
-                  <div className="rounded-xl border border-neutral-200 dark:border-neutral-700 overflow-hidden shadow-xs bg-white dark:bg-neutral-800">
-                    <iframe
-                      title="public-site-preview"
-                      sandbox="allow-same-origin"
-                      className="w-full h-[480px] bg-white"
-                      srcDoc={publicSitePreview}
-                    />
-                  </div>
-                ) : (
-                  <div className="rounded-xl border border-dashed border-neutral-300 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-800/50 p-8 text-center text-sm text-neutral-500 dark:text-neutral-400">
-                    {t('settings.publicSite.previewDisabled')}
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-        </Card>
+                            <div className="flex flex-col gap-4">
+                              <div className="flex items-center justify-between">
+                                <h3 className="text-sm font-semibold text-neutral-800 dark:text-neutral-200 uppercase tracking-wide">
+                                  {t('settings.publicSite.previewTitle')}
+                                </h3>
+                                <span className="text-xs text-neutral-500 dark:text-neutral-400">{t('settings.publicSite.previewSandboxed')}</span>
+                              </div>
+                              {publicSiteEnabled ? (
+                                <div className="rounded-xl border border-neutral-200 dark:border-neutral-700 overflow-hidden shadow-xs bg-white dark:bg-neutral-800">
+                                  <iframe
+                                    title="public-site-preview"
+                                    sandbox="allow-same-origin"
+                                    className="w-full h-[480px] bg-white"
+                                    srcDoc={publicSitePreview}
+                                  />
+                                </div>
+                              ) : (
+                                <div className="rounded-xl border border-dashed border-neutral-300 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-800/50 p-8 text-center text-sm text-neutral-500 dark:text-neutral-400">
+                                  {t('settings.publicSite.previewDisabled')}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}</CardContent></Card>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Page Selection */}
         <div className="lg:col-span-1">
-          <Card padding="md">
-            <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">{t('cms.pages')}</h2>
-            <div className="space-y-2">
-              {pages?.map((page) => (
-                <button
-                  key={page.slug}
-                  onClick={() => {
-                    if (hasUnsavedChanges) {
-                      if (confirm('You have unsaved changes. Do you want to save them?')) {
-                        handleSave();
-                      }
-                    }
-                    setSelectedPage(page.slug);
-                  }}
-                  className={`w-full text-left px-4 py-3 rounded-lg transition-colors flex items-center gap-3 border ${
-                    selectedPage === page.slug
-                      ? 'tile-selected'
-                      : 'bg-white dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 text-neutral-900 dark:text-neutral-100'
-                  }`}
-                >
-                  <FileText className="w-5 h-5 shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    {/* Fall back to the page's own English title for slugs
-                        that don't have a fixed translation key (e.g. the new
-                        not-found / gallery-not-found error pages). */}
-                    <p className="font-medium truncate">
-                      {t(`legal.${page.slug}`, { defaultValue: page.title_en || page.slug })}
-                    </p>
-                    <p className="text-sm text-neutral-500 dark:text-neutral-400">/{page.slug}</p>
-                  </div>
-                  {selectedPage === page.slug && hasUnsavedChanges && (
-                    <div className="w-2 h-2 bg-yellow-500 rounded-full shrink-0" />
-                  )}
-                </button>
-              ))}
-            </div>
-          </Card>
+          <Card><CardContent><h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">{t('cms.pages')}</h2><div className="space-y-2">
+                                {pages?.map((page) => (
+                                  <button
+                                    key={page.slug}
+                                    onClick={() => {
+                                      if (hasUnsavedChanges) {
+                                        if (confirm('You have unsaved changes. Do you want to save them?')) {
+                                          handleSave();
+                                        }
+                                      }
+                                      setSelectedPage(page.slug);
+                                    }}
+                                    className={`w-full text-left px-4 py-3 rounded-lg transition-colors flex items-center gap-3 border ${
+                                      selectedPage === page.slug
+                                        ? 'tile-selected'
+                                        : 'bg-white dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 text-neutral-900 dark:text-neutral-100'
+                                    }`}
+                                  >
+                                    <FileText className="w-5 h-5 shrink-0" />
+                                    <div className="flex-1 min-w-0">
+                                      {/* Fall back to the page's own English title for slugs
+                                          that don't have a fixed translation key (e.g. the new
+                                          not-found / gallery-not-found error pages). */}
+                                      <p className="font-medium truncate">
+                                        {t(`legal.${page.slug}`, { defaultValue: page.title_en || page.slug })}
+                                      </p>
+                                      <p className="text-sm text-neutral-500 dark:text-neutral-400">/{page.slug}</p>
+                                    </div>
+                                    {selectedPage === page.slug && hasUnsavedChanges && (
+                                      <div className="w-2 h-2 bg-yellow-500 rounded-full shrink-0" />
+                                    )}
+                                  </button>
+                                ))}
+                              </div></CardContent></Card>
 
-          <Card padding="md" className="mt-4">
-            <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 mb-3">{t('cms.previewLinks')}</h3>
-            <div className="space-y-2 text-sm">
-              <a
-                href={`${window.location.origin}/${selectedPage}?lang=en`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-brand hover:opacity-80"
-              >
-                <Globe className="w-4 h-4" />
-                {t('cms.englishVersion')}
-              </a>
-              <a
-                href={`${window.location.origin}/${selectedPage}?lang=de`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-brand hover:opacity-80"
-              >
-                <Globe className="w-4 h-4" />
-                {t('cms.germanVersion')}
-              </a>
-            </div>
-          </Card>
+          <Card className="mt-4"><CardContent><h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 mb-3">{t('cms.previewLinks')}</h3><div className="space-y-2 text-sm">
+                                <a
+                                  href={`${window.location.origin}/${selectedPage}?lang=en`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center gap-2 text-brand hover:opacity-80"
+                                >
+                                  <Globe className="w-4 h-4" />
+                                  {t('cms.englishVersion')}
+                                </a>
+                                <a
+                                  href={`${window.location.origin}/${selectedPage}?lang=de`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center gap-2 text-brand hover:opacity-80"
+                                >
+                                  <Globe className="w-4 h-4" />
+                                  {t('cms.germanVersion')}
+                                </a>
+                              </div></CardContent></Card>
 
           {/* Auto-save status */}
           {(hasUnsavedChanges || lastSaved) && (
-            <Card padding="md" className="mt-4">
-              <div className="text-sm">
-                {isAutoSaving && (
-                  <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-300">
-                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                    Auto-saving...
-                  </div>
-                )}
-                {!isAutoSaving && hasUnsavedChanges && (
-                  <div className="flex items-center gap-2 text-yellow-600">
-                    <div className="w-2 h-2 bg-yellow-500 rounded-full" />
-                    Unsaved changes
-                  </div>
-                )}
-                {!hasUnsavedChanges && lastSaved && (
-                  <div className="flex items-center gap-2 text-green-600">
-                    <Clock className="w-4 h-4" />
-                    Saved {fmtTime(new Date(lastSaved))}
-                  </div>
-                )}
-              </div>
-            </Card>
+            <Card className="mt-4"><CardContent><div className="text-sm">
+                                      {isAutoSaving && (
+                                        <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-300">
+                                          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                                          Auto-saving...
+                                        </div>
+                                      )}
+                                      {!isAutoSaving && hasUnsavedChanges && (
+                                        <div className="flex items-center gap-2 text-yellow-600">
+                                          <div className="w-2 h-2 bg-yellow-500 rounded-full" />
+                                          Unsaved changes
+                                        </div>
+                                      )}
+                                      {!hasUnsavedChanges && lastSaved && (
+                                        <div className="flex items-center gap-2 text-green-600">
+                                          <Clock className="w-4 h-4" />
+                                          Saved {fmtTime(new Date(lastSaved))}
+                                        </div>
+                                      )}
+                                    </div></CardContent></Card>
           )}
         </div>
 
         {/* Editor */}
         <div className="lg:col-span-3">
-          <Card padding="md">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                {t('cms.editPage', { page: t(`legal.${selectedPage}`, { defaultValue: currentPage?.title_en || selectedPage }) })}
-              </h2>
+          <Card><CardContent><div className="flex items-center justify-between mb-6">
+                                <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                                  {t('cms.editPage', { page: t(`legal.${selectedPage}`, { defaultValue: currentPage?.title_en || selectedPage }) })}
+                                </h2>
 
-              {/* Language Tabs */}
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setEditingLang('en')}
-                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-                    editingLang === 'en'
-                      ? 'bg-primary/15 text-primary'
-                      : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-600'
-                  }`}
-                >
-                  English
-                </button>
-                <button
-                  onClick={() => setEditingLang('de')}
-                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-                    editingLang === 'de'
-                      ? 'bg-primary/15 text-primary'
-                      : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-600'
-                  }`}
-                >
-                  Deutsch
-                </button>
-              </div>
-            </div>
+                                {/* Language Tabs */}
+                                <div className="flex gap-2">
+                                  <button
+                                    onClick={() => setEditingLang('en')}
+                                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                                      editingLang === 'en'
+                                        ? 'bg-primary/15 text-primary'
+                                        : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-600'
+                                    }`}
+                                  >
+                                    English
+                                  </button>
+                                  <button
+                                    onClick={() => setEditingLang('de')}
+                                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                                      editingLang === 'de'
+                                        ? 'bg-primary/15 text-primary'
+                                        : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-600'
+                                    }`}
+                                  >
+                                    Deutsch
+                                  </button>
+                                </div>
+                              </div><div className="space-y-4">
+                                {/* External URL override */}
+                                <div className="rounded-lg border border-neutral-200 dark:border-neutral-700 p-4 bg-neutral-50 dark:bg-neutral-800/40">
+                                  <label className="flex items-start gap-3 cursor-pointer">
+                                    <input
+                                      type="checkbox"
+                                      className="mt-1 h-4 w-4 rounded-sm border-neutral-300 dark:border-neutral-600 text-brand focus:ring-brand-500"
+                                      checked={!!editForm.use_external_url}
+                                      onChange={(e) => handleUseExternalUrlChange(e.target.checked)}
+                                    />
+                                    <span className="flex-1">
+                                      <span className="block text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                                        {t('cms.useExternalUrl')}
+                                      </span>
+                                      <span className="block text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                                        {t('cms.useExternalUrlHelp')}
+                                      </span>
+                                    </span>
+                                  </label>
+                                  {editForm.use_external_url && (
+                                    <div className="mt-3">
+                                      <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('cms.externalUrl')}</span><Input
+                                                                              type="url"
+                                                                              value={editForm.external_url || ''}
+                                                                              onChange={(e) => handleExternalUrlChange(e.target.value)}
+                                                                              placeholder={t('cms.externalUrlPlaceholder')} aria-invalid={!!(externalUrlError || undefined)} aria-describedby={(externalUrlError || undefined) ? `${__fieldId}-0-error` : undefined}
+                                                                            />{(externalUrlError || undefined) && <p id={`${__fieldId}-0-error`} className="mt-1.5 text-sm text-destructive">{externalUrlError || undefined}</p>}</Label></div>
+                                      <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-2">
+                                        {t('cms.externalUrlActive')}
+                                      </p>
+                                    </div>
+                                  )}
+                                </div>
 
-            <div className="space-y-4">
-              {/* External URL override */}
-              <div className="rounded-lg border border-neutral-200 dark:border-neutral-700 p-4 bg-neutral-50 dark:bg-neutral-800/40">
-                <label className="flex items-start gap-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    className="mt-1 h-4 w-4 rounded-sm border-neutral-300 dark:border-neutral-600 text-brand focus:ring-brand-500"
-                    checked={!!editForm.use_external_url}
-                    onChange={(e) => handleUseExternalUrlChange(e.target.checked)}
-                  />
-                  <span className="flex-1">
-                    <span className="block text-sm font-medium text-neutral-900 dark:text-neutral-100">
-                      {t('cms.useExternalUrl')}
-                    </span>
-                    <span className="block text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-                      {t('cms.useExternalUrlHelp')}
-                    </span>
-                  </span>
-                </label>
-                {editForm.use_external_url && (
-                  <div className="mt-3">
-                    <Input
-                      type="url"
-                      label={t('cms.externalUrl')}
-                      value={editForm.external_url || ''}
-                      onChange={(e) => handleExternalUrlChange(e.target.value)}
-                      placeholder={t('cms.externalUrlPlaceholder')}
-                      error={externalUrlError || undefined}
-                    />
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-2">
-                      {t('cms.externalUrlActive')}
-                    </p>
-                  </div>
-                )}
-              </div>
+                                {/* Footer visibility (#441). Lets admins hide a CMS page
+                                    from the gallery footer when their jurisdiction
+                                    doesn't require it. Defaults to true on existing rows. */}
+                                <div className="rounded-lg border border-neutral-200 dark:border-neutral-700 p-4 bg-neutral-50 dark:bg-neutral-800/40">
+                                  <label className="flex items-start gap-3 cursor-pointer">
+                                    <input
+                                      type="checkbox"
+                                      className="mt-1 h-4 w-4 rounded-sm border-neutral-300 dark:border-neutral-600 text-brand focus:ring-brand-500"
+                                      checked={editForm.show_in_footer !== false}
+                                      onChange={(e) => setEditForm(prev => ({ ...prev, show_in_footer: e.target.checked }))}
+                                    />
+                                    <span className="flex-1">
+                                      <span className="block text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                                        {t('cms.showInFooter', 'Show in gallery footer')}
+                                      </span>
+                                      <span className="block text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                                        {t('cms.showInFooterHelp', 'When off, this page is hidden from the public gallery footer. The page itself remains accessible at its direct URL.')}
+                                      </span>
+                                    </span>
+                                  </label>
+                                </div>
 
-              {/* Footer visibility (#441). Lets admins hide a CMS page
-                  from the gallery footer when their jurisdiction
-                  doesn't require it. Defaults to true on existing rows. */}
-              <div className="rounded-lg border border-neutral-200 dark:border-neutral-700 p-4 bg-neutral-50 dark:bg-neutral-800/40">
-                <label className="flex items-start gap-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    className="mt-1 h-4 w-4 rounded-sm border-neutral-300 dark:border-neutral-600 text-brand focus:ring-brand-500"
-                    checked={editForm.show_in_footer !== false}
-                    onChange={(e) => setEditForm(prev => ({ ...prev, show_in_footer: e.target.checked }))}
-                  />
-                  <span className="flex-1">
-                    <span className="block text-sm font-medium text-neutral-900 dark:text-neutral-100">
-                      {t('cms.showInFooter', 'Show in gallery footer')}
-                    </span>
-                    <span className="block text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-                      {t('cms.showInFooterHelp', 'When off, this page is hidden from the public gallery footer. The page itself remains accessible at its direct URL.')}
-                    </span>
-                  </span>
-                </label>
-              </div>
+                                {/* Title */}
+                                <div>
+                                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                                    {t('cms.pageTitle')} ({editingLang === 'en' ? 'English' : 'German'})
+                                  </label>
+                                  <Input
+                                    value={editingLang === 'en' ? editForm.title_en || '' : editForm.title_de || ''}
+                                    onChange={(e) => handleTitleChange(e.target.value)}
+                                    placeholder={t('cms.pageTitlePlaceholder')}
+                                  />
+                                </div>
 
-              {/* Title */}
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                  {t('cms.pageTitle')} ({editingLang === 'en' ? 'English' : 'German'})
-                </label>
-                <Input
-                  value={editingLang === 'en' ? editForm.title_en || '' : editForm.title_de || ''}
-                  onChange={(e) => handleTitleChange(e.target.value)}
-                  placeholder={t('cms.pageTitlePlaceholder')}
-                />
-              </div>
+                                {/* Content */}
+                                <div>
+                                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                                    {t('cms.pageContent')} ({editingLang === 'en' ? 'English' : 'German'})
+                                  </label>
+                                  <CMSEditor
+                                    content={editingLang === 'en' ? editForm.content_en || '' : editForm.content_de || ''}
+                                    onChange={handleContentChange}
+                                    onSave={handleSave}
+                                    isSaving={updateMutation.isPending}
+                                  />
+                                </div>
 
-              {/* Content */}
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                  {t('cms.pageContent')} ({editingLang === 'en' ? 'English' : 'German'})
-                </label>
-                <CMSEditor
-                  content={editingLang === 'en' ? editForm.content_en || '' : editForm.content_de || ''}
-                  onChange={handleContentChange}
-                  onSave={handleSave}
-                  isSaving={updateMutation.isPending}
-                />
-              </div>
-
-              {/* Per-page logo override (#324) */}
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                  {t('cms.pageLogo', 'Page Logo')}
-                </label>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-3">
-                  {t('cms.pageLogoHelp', 'Optional. If set, used in place of the global branding logo on this page.')}
-                </p>
-                <div className="flex items-center gap-4">
-                  {editForm.logo_url ? (
-                    <img
-                      src={buildResourceUrl(editForm.logo_url)}
-                      alt="Page logo"
-                      className="h-16 w-auto object-contain bg-neutral-50 dark:bg-neutral-700 rounded-sm border border-neutral-200 dark:border-neutral-600 px-3 py-1"
-                    />
-                  ) : (
-                    <div className="h-16 w-32 flex items-center justify-center bg-neutral-50 dark:bg-neutral-700 rounded-sm border border-dashed border-neutral-300 dark:border-neutral-600 text-xs text-neutral-500 dark:text-neutral-400">
-                      {t('cms.noLogo', 'no override')}
-                    </div>
-                  )}
-                  <input
-                    ref={logoInputRef}
-                    type="file"
-                    accept="image/png,image/jpeg,image/gif,image/svg+xml"
-                    className="hidden"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) uploadLogoMutation.mutate(file);
-                      if (logoInputRef.current) logoInputRef.current.value = '';
-                    }}
-                  />
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    leftIcon={<ImageIcon className="w-4 h-4" />}
-                    onClick={() => logoInputRef.current?.click()}
-                    isLoading={uploadLogoMutation.isPending}
-                  >
-                    {editForm.logo_url ? t('cms.replaceLogo', 'Replace Logo') : t('cms.uploadLogo', 'Upload Logo')}
-                  </Button>
-                  {editForm.logo_url && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      leftIcon={<Trash2 className="w-4 h-4" />}
-                      onClick={() => clearLogoMutation.mutate()}
-                      isLoading={clearLogoMutation.isPending}
-                    >
-                      {t('cms.clearLogo', 'Use site default')}
-                    </Button>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {currentPage?.updated_at && (
-              <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-4">
-                {t('cms.lastUpdated')} {fmtDateTime(currentPage.updated_at)}
-              </p>
-            )}
-          </Card>
+                                {/* Per-page logo override (#324) */}
+                                <div>
+                                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                                    {t('cms.pageLogo', 'Page Logo')}
+                                  </label>
+                                  <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-3">
+                                    {t('cms.pageLogoHelp', 'Optional. If set, used in place of the global branding logo on this page.')}
+                                  </p>
+                                  <div className="flex items-center gap-4">
+                                    {editForm.logo_url ? (
+                                      <img
+                                        src={buildResourceUrl(editForm.logo_url)}
+                                        alt="Page logo"
+                                        className="h-16 w-auto object-contain bg-neutral-50 dark:bg-neutral-700 rounded-sm border border-neutral-200 dark:border-neutral-600 px-3 py-1"
+                                      />
+                                    ) : (
+                                      <div className="h-16 w-32 flex items-center justify-center bg-neutral-50 dark:bg-neutral-700 rounded-sm border border-dashed border-neutral-300 dark:border-neutral-600 text-xs text-neutral-500 dark:text-neutral-400">
+                                        {t('cms.noLogo', 'no override')}
+                                      </div>
+                                    )}
+                                    <input
+                                      ref={logoInputRef}
+                                      type="file"
+                                      accept="image/png,image/jpeg,image/gif,image/svg+xml"
+                                      className="hidden"
+                                      onChange={(e) => {
+                                        const file = e.target.files?.[0];
+                                        if (file) uploadLogoMutation.mutate(file);
+                                        if (logoInputRef.current) logoInputRef.current.value = '';
+                                      }}
+                                    />
+                                    <Button
+                                                                        variant="outline"
+                                                                        size="sm"
+                                                                        onClick={() => logoInputRef.current?.click()} disabled={uploadLogoMutation.isPending}
+                                                                      >
+                                                                        {uploadLogoMutation.isPending && <Loader2 className="animate-spin" />}<ImageIcon className="w-4 h-4" />{editForm.logo_url ? t('cms.replaceLogo', 'Replace Logo') : t('cms.uploadLogo', 'Upload Logo')}</Button>
+                                    {editForm.logo_url && (
+                                      <Button
+                                                                              variant="ghost"
+                                                                              size="sm"
+                                                                              onClick={() => clearLogoMutation.mutate()} disabled={clearLogoMutation.isPending}
+                                                                            >
+                                                                              {clearLogoMutation.isPending && <Loader2 className="animate-spin" />}<Trash2 className="w-4 h-4" />{t('cms.clearLogo', 'Use site default')}</Button>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>{currentPage?.updated_at && (
+                                <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-4">
+                                  {t('cms.lastUpdated')} {fmtDateTime(currentPage.updated_at)}
+                                </p>
+                              )}</CardContent></Card>
         </div>
       </div>
     </div>

@@ -7,7 +7,6 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AdminPhoto } from '../../services/photos.service';
 import { photosService } from '../../services/photos.service';
 import { feedbackService, type PhotoFeedback, type FeedbackSummary } from '../../services/feedback.service';
-import { Button } from '../common';
 import { AdminAuthenticatedImage } from './AdminAuthenticatedImage';
 import { AdminAuthenticatedVideo } from './AdminAuthenticatedVideo';
 import { useLocalizedDate } from '../../hooks/useLocalizedDate';
@@ -15,6 +14,7 @@ import { COLOR_LABELS, COLOR_LABEL_SWATCHES, type ColorLabel, type KeybindMode }
 import { resolveFeedbackKey, colorShortcutHints } from '../../utils/feedbackKeybinds';
 import { useTranslation } from 'react-i18next';
 import { useMutationWithToast, useModal } from '../../hooks';
+import { Button } from "@/components/ui/button";
 
 type AdminFeedbackResponse = {
   feedback: PhotoFeedback[];
@@ -306,14 +306,12 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
           {/* Actions */}
           <div className="flex gap-2 mb-6">
             <Button
-              variant="primary"
-              size="sm"
-              onClick={handleDownload}
-              leftIcon={<Download className="w-4 h-4" />}
-              className="flex-1"
-            >
-              Download
-            </Button>
+                                    size="sm"
+                                    onClick={handleDownload}
+                                    className="flex-1"
+                                  >
+                                    <Download className="w-4 h-4" />Download
+                                  </Button>
             <button
               onClick={handleDelete}
               disabled={isDeleting}

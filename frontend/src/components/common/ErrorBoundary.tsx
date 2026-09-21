@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import type { ReactNode } from 'react';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
-import { Button } from './Button';
 import i18n from '../../i18n/config';
+import { Button } from "@/components/ui/button";
 
 interface Props {
   children: ReactNode;
@@ -55,11 +55,9 @@ export class ErrorBoundary extends Component<Props, State> {
               {this.state.error?.message || i18n.t('errors.tryAgainLater')}
             </p>
             <Button
-              onClick={this.handleReset}
-              leftIcon={<RefreshCw className="w-4 h-4" />}
-            >
-              {i18n.t('errors.refreshPage')}
-            </Button>
+                                onClick={this.handleReset}
+                              >
+                                <RefreshCw className="w-4 h-4" />{i18n.t('errors.refreshPage')}</Button>
           </div>
         </div>
       );
@@ -105,13 +103,10 @@ export class PageErrorBoundary extends Component<Props, State> {
             </p>
             <div className="space-y-3">
               <Button
-                variant="primary"
-                onClick={this.handleReset}
-                leftIcon={<RefreshCw className="w-4 h-4" />}
-                className="w-full"
-              >
-                {i18n.t('errors.goToHomepage')}
-              </Button>
+                                      onClick={this.handleReset}
+                                      className="w-full"
+                                    >
+                                      <RefreshCw className="w-4 h-4" />{i18n.t('errors.goToHomepage')}</Button>
               <Button
                 variant="outline"
                 onClick={() => window.location.reload()}

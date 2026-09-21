@@ -16,10 +16,12 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Copy, Link as LinkIcon, Trash2, Plus, Check } from 'lucide-react';
-import { Button, Card, Input } from '../common';
 import { shortUrlsService, type GalleryShortUrl } from '../../services/shortUrls.service';
 import { useLocalizedDate } from '../../hooks/useLocalizedDate';
 import { toast } from 'react-toastify';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 interface Props {
   eventId: number;
@@ -34,6 +36,7 @@ function buildShortUrl(slug: string): string {
 }
 
 export const ShortUrlsCard: React.FC<Props> = ({ eventId }) => {
+    const __fieldId = React.useId();
   const { t } = useTranslation();
   const { formatDateTime } = useLocalizedDate();
   const qc = useQueryClient();
@@ -120,119 +123,106 @@ export const ShortUrlsCard: React.FC<Props> = ({ eventId }) => {
   };
 
   return (
-    <Card padding="md">
-      <div className="flex items-center gap-2 mb-3">
-        <LinkIcon className="w-5 h-5 text-brand-600 dark:text-brand-400" />
-        <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-          {t('events.shortUrls.title', 'Branded short URLs')}
-        </h3>
-      </div>
-      <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
-        {t(
-          'events.shortUrls.description',
-          'Create memorable links like /s/sofia-graduation that resolve to this gallery. The short URL itself shows the rich social preview when shared — so iMessage, Facebook, WhatsApp etc. see the gallery photo + name even when pasting the short link.',
-        )}
-      </p>
-
-      {/* Create form */}
-      <form onSubmit={handleSubmit} className="mb-4">
-        <div className="flex flex-col sm:flex-row gap-2">
-          <div className="flex-1">
-            <Input
-              value={customSlug}
-              onChange={(e) => {
-                setCustomSlug(e.target.value.toLowerCase());
-                if (error) setError(undefined);
-                if (suggested) setSuggested(undefined);
-              }}
-              placeholder={t('events.shortUrls.slugPlaceholder', 'sofia-graduation (optional)') as string}
-              maxLength={64}
-              error={error}
-            />
-          </div>
-          <Button
-            type="submit"
-            variant="primary"
-            disabled={createMutation.isPending}
-            leftIcon={<Plus className="w-4 h-4" />}
-          >
-            {t('events.shortUrls.create', 'Create')}
-          </Button>
-        </div>
-        {suggested && (
-          <button
-            type="button"
-            onClick={handleUseSuggested}
-            className="mt-2 text-xs text-brand-600 dark:text-brand-400 underline hover:no-underline"
-          >
-            {t('events.shortUrls.useSuggested', 'Use “{{suggested}}” instead', { suggested })}
-          </button>
-        )}
-        <p className="mt-2 text-xs text-neutral-500 dark:text-neutral-400">
-          {t(
-            'events.shortUrls.slugHelp',
-            'Leave empty to auto-generate from the gallery name. Allowed characters: lowercase letters, digits, hyphens.',
-          )}
-        </p>
-      </form>
-
-      {/* Existing short URLs */}
-      {isLoading ? (
-        <p className="text-sm text-neutral-500 dark:text-neutral-400">
-          {t('common.loading', 'Loading…')}
-        </p>
-      ) : shortUrls.length === 0 ? (
-        <p className="text-sm text-neutral-500 dark:text-neutral-400">
-          {t('events.shortUrls.empty', 'No short URLs yet. Create one above to share this gallery with a memorable link.')}
-        </p>
-      ) : (
-        <ul className="divide-y divide-neutral-200 dark:divide-neutral-700">
-          {shortUrls.map((row) => (
-            <li key={row.id} className="py-3 flex items-start justify-between gap-3">
-              <div className="flex-1 min-w-0">
-                <div className="font-mono text-sm text-neutral-900 dark:text-neutral-100 break-all">
-                  /s/{row.short_slug}
+    <Card><CardContent><div className="flex items-center gap-2 mb-3">
+              <LinkIcon className="w-5 h-5 text-brand-600 dark:text-brand-400" />
+              <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                {t('events.shortUrls.title', 'Branded short URLs')}
+              </h3>
+            </div><p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
+              {t(
+                'events.shortUrls.description',
+                'Create memorable links like /s/sofia-graduation that resolve to this gallery. The short URL itself shows the rich social preview when shared — so iMessage, Facebook, WhatsApp etc. see the gallery photo + name even when pasting the short link.',
+              )}
+            </p>{/* Create form */}<form onSubmit={handleSubmit} className="mb-4">
+              <div className="flex flex-col sm:flex-row gap-2">
+                <div className="flex-1">
+                  <div className="w-full"><Input
+                                          value={customSlug}
+                                          onChange={(e) => {
+                                            setCustomSlug(e.target.value.toLowerCase());
+                                            if (error) setError(undefined);
+                                            if (suggested) setSuggested(undefined);
+                                          }}
+                                          placeholder={t('events.shortUrls.slugPlaceholder', 'sofia-graduation (optional)') as string}
+                                          maxLength={64} aria-invalid={!!(error)} aria-describedby={(error) ? `${__fieldId}-0-error` : undefined}
+                                        />{(error) && <p id={`${__fieldId}-0-error`} className="mt-1.5 text-sm text-destructive">{error}</p>}</div>
                 </div>
-                <div className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
-                  {t('events.shortUrls.hits', '{{count}} hits', { count: row.hit_count })}
-                  {row.last_hit_at && (
-                    <>
-                      {' · '}
-                      {t('events.shortUrls.lastHit', 'last {{when}}', { when: formatDateTime(row.last_hit_at) })}
-                    </>
-                  )}
-                  {' · '}
-                  {t('events.shortUrls.createdAt', 'created {{when}}', { when: formatDateTime(row.created_at) })}
-                </div>
-                <div className="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400 truncate">
-                  → {row.target_path}
-                </div>
+                <Button
+                                    type="submit"
+                                    disabled={createMutation.isPending}
+                                  >
+                                    <Plus className="w-4 h-4" />{t('events.shortUrls.create', 'Create')}</Button>
               </div>
-              <div className="flex items-center gap-1 shrink-0">
+              {suggested && (
                 <button
                   type="button"
-                  onClick={() => handleCopy(row)}
-                  className="p-2 text-neutral-500 hover:text-brand-600 dark:hover:text-brand-400"
-                  title={t('common.copy', 'Copy') as string}
-                  aria-label={t('common.copy', 'Copy') as string}
+                  onClick={handleUseSuggested}
+                  className="mt-2 text-xs text-brand-600 dark:text-brand-400 underline hover:no-underline"
                 >
-                  {copiedId === row.id ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
+                  {t('events.shortUrls.useSuggested', 'Use “{{suggested}}” instead', { suggested })}
                 </button>
-                <button
-                  type="button"
-                  onClick={() => handleDelete(row)}
-                  disabled={deleteMutation.isPending}
-                  className="p-2 text-neutral-500 hover:text-red-600"
-                  title={t('common.delete', 'Delete') as string}
-                  aria-label={t('common.delete', 'Delete') as string}
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
-    </Card>
+              )}
+              <p className="mt-2 text-xs text-neutral-500 dark:text-neutral-400">
+                {t(
+                  'events.shortUrls.slugHelp',
+                  'Leave empty to auto-generate from the gallery name. Allowed characters: lowercase letters, digits, hyphens.',
+                )}
+              </p>
+            </form>{/* Existing short URLs */}{isLoading ? (
+              <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                {t('common.loading', 'Loading…')}
+              </p>
+            ) : shortUrls.length === 0 ? (
+              <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                {t('events.shortUrls.empty', 'No short URLs yet. Create one above to share this gallery with a memorable link.')}
+              </p>
+            ) : (
+              <ul className="divide-y divide-neutral-200 dark:divide-neutral-700">
+                {shortUrls.map((row) => (
+                  <li key={row.id} className="py-3 flex items-start justify-between gap-3">
+                    <div className="flex-1 min-w-0">
+                      <div className="font-mono text-sm text-neutral-900 dark:text-neutral-100 break-all">
+                        /s/{row.short_slug}
+                      </div>
+                      <div className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                        {t('events.shortUrls.hits', '{{count}} hits', { count: row.hit_count })}
+                        {row.last_hit_at && (
+                          <>
+                            {' · '}
+                            {t('events.shortUrls.lastHit', 'last {{when}}', { when: formatDateTime(row.last_hit_at) })}
+                          </>
+                        )}
+                        {' · '}
+                        {t('events.shortUrls.createdAt', 'created {{when}}', { when: formatDateTime(row.created_at) })}
+                      </div>
+                      <div className="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400 truncate">
+                        → {row.target_path}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1 shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => handleCopy(row)}
+                        className="p-2 text-neutral-500 hover:text-brand-600 dark:hover:text-brand-400"
+                        title={t('common.copy', 'Copy') as string}
+                        aria-label={t('common.copy', 'Copy') as string}
+                      >
+                        {copiedId === row.id ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(row)}
+                        disabled={deleteMutation.isPending}
+                        className="p-2 text-neutral-500 hover:text-red-600"
+                        title={t('common.delete', 'Delete') as string}
+                        aria-label={t('common.delete', 'Delete') as string}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}</CardContent></Card>
   );
 };

@@ -5,8 +5,9 @@ import { toast } from 'react-toastify';
 import { usePermissions } from '../../contexts/PermissionsContext';
 import { productUsageService } from '../../services/productUsage.service';
 import { ProductUsageConsentDialog } from '../../features/settings/components/ProductUsageConsentDialog';
-import { Button } from '../common/Button';
 import { UsageReportingPoints } from './UsageReportingPitch';
+import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 
 /** The invitation is acknowledged once per installation; consent is a separate, explicit choice. */
 export default function UsageReportingPrompt() {
@@ -89,10 +90,8 @@ export default function UsageReportingPrompt() {
           {data.collector_error && (
             <p role="alert" className="text-sm text-neutral-700 dark:text-neutral-300">{t('setup.usageReporting.enableFailed')}</p>
           )}
-          <Button type="button" size="lg" className="w-full h-auto min-h-12 whitespace-normal"
-            isLoading={isEnabling} disabled={!data.collector_url} onClick={() => setShowConsent(true)}>
-            {t('productUsage.review')}
-          </Button>
+          <Button type="button" size="lg" className="w-full h-auto min-h-12 whitespace-normal" onClick={() => setShowConsent(true)} disabled={!data.collector_url || isEnabling}>
+                              {isEnabling && <Loader2 className="animate-spin" />}{t('productUsage.review')}</Button>
           <Button type="button" variant="outline" size="lg" className="w-full h-auto min-h-12 whitespace-normal"
             disabled={isEnabling} onClick={dismiss}>
             {t('setup.usageReporting.skip')}

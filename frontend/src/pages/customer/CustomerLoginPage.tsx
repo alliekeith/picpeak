@@ -6,16 +6,19 @@
  */
 import React, { useState } from 'react';
 import { Navigate, useSearchParams } from 'react-router-dom';
-import { Lock, Mail, Eye, EyeOff, AlertCircle } from 'lucide-react';
+import { Lock, Mail, Eye, EyeOff, AlertCircle, Loader2 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
-import { Button, Input, Card, ReCaptcha, PoweredBy } from '../../components/common';
+import { ReCaptcha, PoweredBy } from '../../components/common';
 import { useCustomerAuth } from '../../contexts/CustomerAuthContext';
 import { customerService } from '../../services/customer.service';
 import { usePublicSettings } from '../../hooks/usePublicSettings';
 import { usePublicDarkMode } from '../../hooks/usePublicDarkMode';
 import { resolveLoginLogoClasses } from '../../utils/loginLogoSize';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 /**
  * Where to go after login. Only paths inside the authenticated customer
@@ -175,89 +178,80 @@ export const CustomerLoginPage: React.FC = () => {
           </p>
         </div>
 
-        <Card padding="lg">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {errors.form && (
-              <div
-                role="alert"
-                className="flex items-start gap-2 p-3 rounded-lg border"
-                style={{
-                  borderColor: 'var(--border, #e5e5e5)',
-                  color: 'var(--foreground)',
-                  backgroundColor: 'var(--muted, rgba(220, 38, 38, 0.05))',
-                }}
-              >
-                <AlertCircle className="w-4 h-4 mt-0.5 shrink-0 text-red-600" />
-                <span className="text-sm">{errors.form}</span>
-              </div>
-            )}
+        <Card className="py-8"><CardContent className="px-8"><form onSubmit={handleSubmit} className="space-y-6">
+                          {errors.form && (
+                            <div
+                              role="alert"
+                              className="flex items-start gap-2 p-3 rounded-lg border"
+                              style={{
+                                borderColor: 'var(--border, #e5e5e5)',
+                                color: 'var(--foreground)',
+                                backgroundColor: 'var(--muted, rgba(220, 38, 38, 0.05))',
+                              }}
+                            >
+                              <AlertCircle className="w-4 h-4 mt-0.5 shrink-0 text-red-600" />
+                              <span className="text-sm">{errors.form}</span>
+                            </div>
+                          )}
 
-            <div>
-              <label htmlFor="customer-email" className="block text-sm font-medium text-foreground mb-1">
-                {t('customer.login.email', 'Email')}
-              </label>
-              <Input
-                id="customer-email"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleInputChange('email')}
-                error={errors.email}
-                placeholder={t('customer.login.emailPlaceholder', 'you@example.com')}
-                leftIcon={<Mail className="w-5 h-5 text-neutral-400" />}
-                autoComplete="email"
-                autoFocus
-              />
-            </div>
+                          <div>
+                            <label htmlFor="customer-email" className="block text-sm font-medium text-foreground mb-1">
+                              {t('customer.login.email', 'Email')}
+                            </label>
+                            <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Mail className="w-5 h-5 text-neutral-400" />}</div><Input
+                                                    id="customer-email"
+                                                    name="email"
+                                                    type="email"
+                                                    value={formData.email}
+                                                    onChange={handleInputChange('email')}
+                                                    placeholder={t('customer.login.emailPlaceholder', 'you@example.com')}
+                                                    autoComplete="email"
+                                                    autoFocus className="pl-10" aria-invalid={!!(errors.email)} aria-describedby={(errors.email) ? "customer-email-error" : undefined}
+                                                  /></div>{(errors.email) && <p id={"customer-email-error"} className="mt-1.5 text-sm text-destructive">{errors.email}</p>}</div>
+                          </div>
 
-            <div>
-              <label htmlFor="customer-password" className="block text-sm font-medium text-foreground mb-1">
-                {t('customer.login.password', 'Password')}
-              </label>
-              <div className="relative">
-                <Input
-                  id="customer-password"
-                  name="current-password"
-                  type={showPassword ? 'text' : 'password'}
-                  value={formData.password}
-                  onChange={handleInputChange('password')}
-                  error={errors.password}
-                  placeholder={t('customer.login.passwordPlaceholder', 'Your password')}
-                  leftIcon={<Lock className="w-5 h-5 text-neutral-400" />}
-                  autoComplete="current-password"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword((p) => !p)}
-                  className="absolute right-3 top-3 text-neutral-400 hover:text-neutral-600 transition-colors"
-                  tabIndex={-1}
-                  aria-label={showPassword
-                    ? t('customer.login.hidePassword', 'Hide password')
-                    : t('customer.login.showPassword', 'Show password')}
-                >
-                  {showPassword
-                    ? <EyeOff className="w-5 h-5" />
-                    : <Eye className="w-5 h-5" />}
-                </button>
-              </div>
-            </div>
+                          <div>
+                            <label htmlFor="customer-password" className="block text-sm font-medium text-foreground mb-1">
+                              {t('customer.login.password', 'Password')}
+                            </label>
+                            <div className="relative">
+                              <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-neutral-400" />}</div><Input
+                                                          id="customer-password"
+                                                          name="current-password"
+                                                          type={showPassword ? 'text' : 'password'}
+                                                          value={formData.password}
+                                                          onChange={handleInputChange('password')}
+                                                          placeholder={t('customer.login.passwordPlaceholder', 'Your password')}
+                                                          autoComplete="current-password" className="pl-10" aria-invalid={!!(errors.password)} aria-describedby={(errors.password) ? "customer-password-error" : undefined}
+                                                        /></div>{(errors.password) && <p id={"customer-password-error"} className="mt-1.5 text-sm text-destructive">{errors.password}</p>}</div>
+                              <button
+                                type="button"
+                                onClick={() => setShowPassword((p) => !p)}
+                                className="absolute right-3 top-3 text-neutral-400 hover:text-neutral-600 transition-colors"
+                                tabIndex={-1}
+                                aria-label={showPassword
+                                  ? t('customer.login.hidePassword', 'Hide password')
+                                  : t('customer.login.showPassword', 'Show password')}
+                              >
+                                {showPassword
+                                  ? <EyeOff className="w-5 h-5" />
+                                  : <Eye className="w-5 h-5" />}
+                              </button>
+                            </div>
+                          </div>
 
-            <ReCaptcha
-              onChange={setRecaptchaToken}
-              onExpired={() => setRecaptchaToken(null)}
-            />
+                          <ReCaptcha
+                            onChange={setRecaptchaToken}
+                            onExpired={() => setRecaptchaToken(null)}
+                          />
 
-            <Button
-              type="submit"
-              variant="primary"
-              size="lg"
-              isLoading={isLoading}
-              className="w-full"
-            >
-              {t('customer.login.signIn', 'Sign in')}
-            </Button>
-          </form>
-        </Card>
+                          <Button
+                                                  type="submit"
+                                                  size="lg"
+                                                  className="w-full" disabled={isLoading}
+                                                >
+                                                  {isLoading && <Loader2 className="animate-spin" />}{t('customer.login.signIn', 'Sign in')}</Button>
+                        </form></CardContent></Card>
 
         {/* Footer — mirrors AdminLoginPage. Support email links to
             mailto: with the address from Branding settings; falls back

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { AlertCircle, Check, Clock, Copy } from 'lucide-react';
+import { AlertCircle, Check, Clock, Copy, Loader2 } from 'lucide-react';
 import { differenceInDays, parseISO } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { useLocalizedDate } from '../hooks/useLocalizedDate';
 import { usePublicSettings } from '../hooks/usePublicSettings';
 
-import { Card, CardContent, Input, Button, ReCaptcha, CMSContentBlock, PoweredBy } from '../components/common';
+import { ReCaptcha, CMSContentBlock, PoweredBy } from '../components/common';
 import { useGalleryAuth, useTheme } from '../contexts';
 import { useGalleryInfo } from '../hooks/useGallery';
 import { GalleryView } from '../components/gallery';
@@ -19,8 +19,13 @@ import { buildResourceUrl } from '../utils/url';
 import { isGalleryPublic, normalizeRequirePassword } from '../utils/accessControl';
 import { detectInAppBrowser } from '../utils/inAppBrowser';
 import { isAdminSessionExpired, isPasswordChangeRequired } from '../utils/passwordChangeRequired';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export const GalleryPage: React.FC = () => {
+    const __fieldId = React.useId();
   const { slug: rawSlug, token: rawToken } = useParams<{ slug: string; token?: string }>();
   const { isAuthenticated, login, event } = useGalleryAuth();
   const { t, i18n } = useTranslation();
@@ -560,17 +565,14 @@ export const GalleryPage: React.FC = () => {
                     </div>
                   </div>
                   <Button
-                    type="button"
-                    variant="primary"
-                    size="lg"
-                    className="w-full mt-4 text-sm sm:text-base"
-                    onClick={handleCopyLink}
-                    leftIcon={linkCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                  >
-                    {linkCopied
-                      ? t('auth.iab.instagram.linkCopied', 'Link copied')
-                      : t('auth.iab.instagram.copyLink', 'Copy link')}
-                  </Button>
+                                                      type="button"
+                                                      size="lg"
+                                                      className="w-full mt-4 text-sm sm:text-base"
+                                                      onClick={handleCopyLink}
+                                                    >
+                                                      {linkCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}{linkCopied
+                                                        ? t('auth.iab.instagram.linkCopied', 'Link copied')
+                                                        : t('auth.iab.instagram.copyLink', 'Copy link')}</Button>
                   <button
                     type="button"
                     onClick={() => setIabOverride(true)}
@@ -583,27 +585,25 @@ export const GalleryPage: React.FC = () => {
 
               {!iabBlocked && (
               <form onSubmit={handleLogin} className="space-y-4">
-                <Input
-                  type="password"
-                  label={t('auth.password')}
-                  placeholder={t('auth.passwordPlaceholder')}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  error={loginError || undefined}
-                  autoFocus
-                  // Defend against in-app-browser keyboard mangling (#654):
-                  //   - autoCapitalize: stop iOS autocaps turning `wedding2026`
-                  //     into `Wedding2026` inside IAB WKWebViews
-                  //   - autoCorrect / spellCheck: stop predictive-text rewrites
-                  //   - autoComplete: tell password managers this is the
-                  //     current-password slot so they autofill the right value
-                  //     (vs the IAB's older saved-password store)
-                  autoCapitalize="none"
-                  autoCorrect="off"
-                  spellCheck={false}
-                  autoComplete="current-password"
-                  className="text-sm sm:text-base"
-                />
+                <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('auth.password')}</span><Input
+                                                    type="password"
+                                                    placeholder={t('auth.passwordPlaceholder')}
+                                                    value={password}
+                                                    onChange={(e) => setPassword(e.target.value)}
+                                                    autoFocus
+                                                    // Defend against in-app-browser keyboard mangling (#654):
+                                                    //   - autoCapitalize: stop iOS autocaps turning `wedding2026`
+                                                    //     into `Wedding2026` inside IAB WKWebViews
+                                                    //   - autoCorrect / spellCheck: stop predictive-text rewrites
+                                                    //   - autoComplete: tell password managers this is the
+                                                    //     current-password slot so they autofill the right value
+                                                    //     (vs the IAB's older saved-password store)
+                                                    autoCapitalize="none"
+                                                    autoCorrect="off"
+                                                    spellCheck={false}
+                                                    autoComplete="current-password"
+                                                    className="text-sm sm:text-base" aria-invalid={!!(loginError || undefined)} aria-describedby={(loginError || undefined) ? `${__fieldId}-0-error` : undefined}
+                                                  />{(loginError || undefined) && <p id={`${__fieldId}-0-error`} className="mt-1.5 text-sm text-destructive">{loginError || undefined}</p>}</Label></div>
 
                 <ReCaptcha
                   onChange={setRecaptchaToken}
@@ -611,15 +611,11 @@ export const GalleryPage: React.FC = () => {
                 />
 
                 <Button
-                  type="submit"
-                  variant="primary"
-                  size="lg"
-                  className="w-full text-sm sm:text-base"
-                  isLoading={isLoggingIn}
-                  disabled={isLoggingIn}
-                >
-                  {t('gallery.viewGallery')}
-                </Button>
+                                                    type="submit"
+                                                    size="lg"
+                                                    className="w-full text-sm sm:text-base" disabled={isLoggingIn || isLoggingIn}
+                                                  >
+                                                    {isLoggingIn && <Loader2 className="animate-spin" />}{t('gallery.viewGallery')}</Button>
               </form>
               )}
 

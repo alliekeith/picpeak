@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
-import { X, Copy } from 'lucide-react';
+import { X, Copy, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Button, Card, Input, LocalizedDateInput } from '../common';
+import { LocalizedDateInput } from '../common';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface DuplicateEventDialogProps {
   sourceEventName: string;
@@ -30,6 +34,7 @@ export const DuplicateEventDialog: React.FC<DuplicateEventDialogProps> = ({
   onConfirm,
   onClose,
 }) => {
+    const __fieldId = React.useId();
   const { t } = useTranslation();
   const [eventName, setEventName] = useState('');
   const [eventDate, setEventDate] = useState('');
@@ -53,89 +58,72 @@ export const DuplicateEventDialog: React.FC<DuplicateEventDialogProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <Card className="max-w-md w-full">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-            {t('events.duplicateDialog.title', 'Duplicate gallery')}
-          </h2>
-          <button
-            onClick={onClose}
-            className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300"
-            aria-label={t('common.close', 'Close')}
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
+      <Card className="max-w-md w-full"><CardContent><div className="flex items-center justify-between mb-4">
+                    <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+                      {t('events.duplicateDialog.title', 'Duplicate gallery')}
+                    </h2>
+                    <button
+                      onClick={onClose}
+                      className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300"
+                      aria-label={t('common.close', 'Close')}
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div><p className="text-neutral-600 dark:text-neutral-400 mb-4">
+                    {t('events.duplicateDialog.description', {
+                      sourceEventName,
+                      defaultValue:
+                        'Creates a new draft gallery that inherits the branding, behaviour, feedback, and category configuration from "{{sourceEventName}}". Photos, password, and share tokens are NOT carried over.',
+                    })}
+                  </p><div className="space-y-3 mb-4">
+                    <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('events.duplicateDialog.eventNameLabel', 'New event name *')}</span><Input
+                                        type="text"
+                                        placeholder={t('events.duplicateDialog.eventNamePlaceholder', 'e.g. Müller Wedding 2026')}
+                                        value={eventName}
+                                        onChange={(e) => {
+                                          setEventName(e.target.value);
+                                          if (error) setError(undefined);
+                                        }} aria-invalid={!!(error)} aria-describedby={(error) ? `${__fieldId}-0-error` : undefined}
+                                      />{(error) && <p id={`${__fieldId}-0-error`} className="mt-1.5 text-sm text-destructive">{error}</p>}</Label></div>
 
-        <p className="text-neutral-600 dark:text-neutral-400 mb-4">
-          {t('events.duplicateDialog.description', {
-            sourceEventName,
-            defaultValue:
-              'Creates a new draft gallery that inherits the branding, behaviour, feedback, and category configuration from "{{sourceEventName}}". Photos, password, and share tokens are NOT carried over.',
-          })}
-        </p>
+                    <LocalizedDateInput
+                      label={t('events.duplicateDialog.eventDateLabel', 'Event date')}
+                      value={eventDate}
+                      onChange={setEventDate}
+                      helperText={t(
+                        'events.duplicateDialog.eventDateHelp',
+                        'Leave blank to use a random suffix in the gallery URL. Expiration is recomputed from this date plus the source gallery’s expiration window.',
+                      )}
+                    />
 
-        <div className="space-y-3 mb-4">
-          <Input
-            type="text"
-            label={t('events.duplicateDialog.eventNameLabel', 'New event name *')}
-            placeholder={t('events.duplicateDialog.eventNamePlaceholder', 'e.g. Müller Wedding 2026')}
-            value={eventName}
-            onChange={(e) => {
-              setEventName(e.target.value);
-              if (error) setError(undefined);
-            }}
-            error={error}
-          />
+                    <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('events.duplicateDialog.customerNameLabel', 'Customer name')}</span><Input
+                                        type="text"
+                                        placeholder={t('events.duplicateDialog.customerNamePlaceholder', 'Optional — fill in later if unknown')}
+                                        value={customerName}
+                                        onChange={(e) => setCustomerName(e.target.value)}
+                                      /></Label></div>
 
-          <LocalizedDateInput
-            label={t('events.duplicateDialog.eventDateLabel', 'Event date')}
-            value={eventDate}
-            onChange={setEventDate}
-            helperText={t(
-              'events.duplicateDialog.eventDateHelp',
-              'Leave blank to use a random suffix in the gallery URL. Expiration is recomputed from this date plus the source gallery’s expiration window.',
-            )}
-          />
-
-          <Input
-            type="text"
-            label={t('events.duplicateDialog.customerNameLabel', 'Customer name')}
-            placeholder={t('events.duplicateDialog.customerNamePlaceholder', 'Optional — fill in later if unknown')}
-            value={customerName}
-            onChange={(e) => setCustomerName(e.target.value)}
-          />
-
-          <Input
-            type="email"
-            label={t('events.duplicateDialog.customerEmailLabel', 'Customer email')}
-            placeholder={t('events.duplicateDialog.customerEmailPlaceholder', 'Optional')}
-            value={customerEmail}
-            onChange={(e) => setCustomerEmail(e.target.value)}
-          />
-        </div>
-
-        <div className="flex gap-3">
-          <Button
-            variant="outline"
-            onClick={onClose}
-            disabled={isDuplicating}
-            className="flex-1"
-          >
-            {t('common.cancel', 'Cancel')}
-          </Button>
-          <Button
-            variant="primary"
-            onClick={handleSubmit}
-            disabled={isDuplicating}
-            isLoading={isDuplicating}
-            leftIcon={<Copy className="w-4 h-4" />}
-            className="flex-1"
-          >
-            {t('events.duplicateDialog.confirm', 'Create duplicate')}
-          </Button>
-        </div>
-      </Card>
+                    <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('events.duplicateDialog.customerEmailLabel', 'Customer email')}</span><Input
+                                        type="email"
+                                        placeholder={t('events.duplicateDialog.customerEmailPlaceholder', 'Optional')}
+                                        value={customerEmail}
+                                        onChange={(e) => setCustomerEmail(e.target.value)}
+                                      /></Label></div>
+                  </div><div className="flex gap-3">
+                    <Button
+                      variant="outline"
+                      onClick={onClose}
+                      disabled={isDuplicating}
+                      className="flex-1"
+                    >
+                      {t('common.cancel', 'Cancel')}
+                    </Button>
+                    <Button
+                                        onClick={handleSubmit}
+                                        className="flex-1" disabled={isDuplicating || isDuplicating}
+                                      >
+                                        {isDuplicating && <Loader2 className="animate-spin" />}<Copy className="w-4 h-4" />{t('events.duplicateDialog.confirm', 'Create duplicate')}</Button>
+                  </div></CardContent></Card>
     </div>
   );
 };

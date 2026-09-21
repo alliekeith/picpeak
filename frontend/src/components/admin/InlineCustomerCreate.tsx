@@ -27,8 +27,8 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { Save, Send, X } from 'lucide-react';
-import { Button, CountrySelect, Input } from '../common';
+import { Save, Send, X, Loader2 } from 'lucide-react';
+import { CountrySelect } from '../common';
 import {
   customerAdminService,
   type CustomerAccountDetail,
@@ -36,6 +36,9 @@ import {
 } from '../../services/customerAdmin.service';
 import { businessProfileService } from '../../services/businessProfile.service';
 import { useQuery } from '@tanstack/react-query';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface Props {
   /**
@@ -260,19 +263,17 @@ export const InlineCustomerCreate: React.FC<Props> = ({ onCreated, onCancel, mod
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <Input
-          type="email"
-          label={`${t('customers.detail.email', 'Email')} *`}
-          value={form.email}
-          onChange={setField('email')}
-          placeholder="name@example.com"
-          required
-        />
-        <Input
-          label={t('customers.detail.companyName', 'Company name') as string}
-          value={form.companyName}
-          onChange={setField('companyName')}
-        />
+        <div className="w-full"><Label className="block"><span className="mb-1.5 block">{`${t('customers.detail.email', 'Email')} *`}</span><Input
+                        type="email"
+                        value={form.email}
+                        onChange={setField('email')}
+                        placeholder="name@example.com"
+                        required
+                      /></Label></div>
+        <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('customers.detail.companyName', 'Company name') as string}</span><Input
+                        value={form.companyName}
+                        onChange={setField('companyName')}
+                      /></Label></div>
         <div>
           <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
             {t('customers.detail.salutation', 'Salutation')}
@@ -294,60 +295,50 @@ export const InlineCustomerCreate: React.FC<Props> = ({ onCreated, onCancel, mod
             <option value="Dr">{t('customer.profile.salutation.dr', 'Dr.')}</option>
           </select>
         </div>
-        <Input
-          label={t('customers.detail.phone', 'Phone') as string}
-          value={form.phone}
-          onChange={setField('phone')}
-        />
-        <Input
-          label={t('customers.detail.firstName', 'First name') as string}
-          value={form.firstName}
-          onChange={setField('firstName')}
-        />
-        <Input
-          label={t('customers.detail.lastName', 'Last name') as string}
-          value={form.lastName}
-          onChange={setField('lastName')}
-        />
-        <Input
-          label={t('customers.detail.displayName', 'Display name') as string}
-          value={form.displayName}
-          onChange={setField('displayName')}
-        />
-        <Input
-          label={t('customers.detail.vatId', 'VAT ID') as string}
-          value={form.vatId}
-          onChange={setField('vatId')}
-        />
+        <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('customers.detail.phone', 'Phone') as string}</span><Input
+                        value={form.phone}
+                        onChange={setField('phone')}
+                      /></Label></div>
+        <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('customers.detail.firstName', 'First name') as string}</span><Input
+                        value={form.firstName}
+                        onChange={setField('firstName')}
+                      /></Label></div>
+        <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('customers.detail.lastName', 'Last name') as string}</span><Input
+                        value={form.lastName}
+                        onChange={setField('lastName')}
+                      /></Label></div>
+        <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('customers.detail.displayName', 'Display name') as string}</span><Input
+                        value={form.displayName}
+                        onChange={setField('displayName')}
+                      /></Label></div>
+        <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('customers.detail.vatId', 'VAT ID') as string}</span><Input
+                        value={form.vatId}
+                        onChange={setField('vatId')}
+                      /></Label></div>
         <div className="md:col-span-2">
-          <Input
-            label={t('customers.detail.addressLine1', 'Address line 1') as string}
-            value={form.addressLine1}
-            onChange={setField('addressLine1')}
-          />
+          <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('customers.detail.addressLine1', 'Address line 1') as string}</span><Input
+                              value={form.addressLine1}
+                              onChange={setField('addressLine1')}
+                            /></Label></div>
         </div>
         <div className="md:col-span-2">
-          <Input
-            label={t('customers.detail.addressLine2', 'Address line 2') as string}
-            value={form.addressLine2}
-            onChange={setField('addressLine2')}
-          />
+          <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('customers.detail.addressLine2', 'Address line 2') as string}</span><Input
+                              value={form.addressLine2}
+                              onChange={setField('addressLine2')}
+                            /></Label></div>
         </div>
-        <Input
-          label={t('customers.detail.postalCode', 'Postal code') as string}
-          value={form.postalCode}
-          onChange={setField('postalCode')}
-        />
-        <Input
-          label={t('customers.detail.city', 'City') as string}
-          value={form.city}
-          onChange={setField('city')}
-        />
-        <Input
-          label={t('customers.detail.state', 'State / canton') as string}
-          value={form.state}
-          onChange={setField('state')}
-        />
+        <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('customers.detail.postalCode', 'Postal code') as string}</span><Input
+                        value={form.postalCode}
+                        onChange={setField('postalCode')}
+                      /></Label></div>
+        <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('customers.detail.city', 'City') as string}</span><Input
+                        value={form.city}
+                        onChange={setField('city')}
+                      /></Label></div>
+        <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('customers.detail.state', 'State / canton') as string}</span><Input
+                        value={form.state}
+                        onChange={setField('state')}
+                      /></Label></div>
         <CountrySelect
           label={t('customers.detail.country', 'Country') as string}
           value={form.countryCode}
@@ -378,29 +369,19 @@ export const InlineCustomerCreate: React.FC<Props> = ({ onCreated, onCancel, mod
         </Button>
         {(mode === 'both' || mode === 'passive') && (
           <Button
-            variant={mode === 'passive' ? 'primary' : 'outline'}
-            onClick={() => handleSave('passive')}
-            disabled={busy !== null || !isValid}
-            isLoading={busy === 'passive'}
-            leftIcon={<Save className="w-4 h-4" />}
-          >
-            {/* Mode 'passive' is the dedicated CTA: promote it to the
-                primary variant so the button hierarchy mirrors what
-                an admin who opened the modal from "Create passive
-                customer" expects. */}
-            {t('customers.create.saveAsPassive', 'Save as passive customer')}
-          </Button>
+                              variant={mode === 'passive' ? 'default' : 'outline'}
+                              onClick={() => handleSave('passive')} disabled={busy !== null || !isValid || busy === 'passive'}
+                            >
+                              {busy === 'passive' && <Loader2 className="animate-spin" />}<Save className="w-4 h-4" />{/* Mode 'passive' is the dedicated CTA: promote it to the
+                                  primary variant so the button hierarchy mirrors what
+                                  an admin who opened the modal from "Create passive
+                                  customer" expects. */}{t('customers.create.saveAsPassive', 'Save as passive customer')}</Button>
         )}
         {(mode === 'both' || mode === 'invite') && (
           <Button
-            variant="primary"
-            onClick={() => handleSave('invite')}
-            disabled={busy !== null || !isValid}
-            isLoading={busy === 'invite'}
-            leftIcon={<Send className="w-4 h-4" />}
-          >
-            {t('customers.create.saveAndInvite', 'Save & send portal invitation')}
-          </Button>
+                              onClick={() => handleSave('invite')} disabled={busy !== null || !isValid || busy === 'invite'}
+                            >
+                              {busy === 'invite' && <Loader2 className="animate-spin" />}<Send className="w-4 h-4" />{t('customers.create.saveAndInvite', 'Save & send portal invitation')}</Button>
         )}
       </div>
     </div>

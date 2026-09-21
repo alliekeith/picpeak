@@ -21,10 +21,11 @@ import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { FileText, ScrollText, Receipt, AlertTriangle, Pencil } from 'lucide-react';
-import { Button, Card } from '../common';
 import { formatMoneyMinor } from '../../utils/money';
 import { api } from '../../config/api';
 import { EditInstallmentPlanModal } from './EditInstallmentPlanModal';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 export interface DocumentLineageCardProps {
   dealUuid: string | null | undefined;
@@ -90,21 +91,17 @@ export const DocumentLineageCard: React.FC<DocumentLineageCardProps> = ({
 
   if (isLoading) {
     return (
-      <Card padding="md" className={className}>
-        <p className="text-sm text-neutral-500 dark:text-neutral-400">
-          {t('dealLineage.loading', 'Loading related documents…')}
-        </p>
-      </Card>
+      <Card className={className}><CardContent><p className="text-sm text-neutral-500 dark:text-neutral-400">
+                  {t('dealLineage.loading', 'Loading related documents…')}
+                </p></CardContent></Card>
     );
   }
   if (error) {
     return (
-      <Card padding="md" className={className}>
-        <p className="text-sm text-red-700 dark:text-red-300 flex items-center gap-2">
-          <AlertTriangle className="w-4 h-4" />
-          {t('dealLineage.error', 'Could not load related documents.')}
-        </p>
-      </Card>
+      <Card className={className}><CardContent><p className="text-sm text-red-700 dark:text-red-300 flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4" />
+                  {t('dealLineage.error', 'Could not load related documents.')}
+                </p></CardContent></Card>
     );
   }
   if (!data) return null;
@@ -124,127 +121,112 @@ export const DocumentLineageCard: React.FC<DocumentLineageCardProps> = ({
   // Only ONE doc total = the current one. No siblings to surface.
   if (totalCount <= 1) {
     return (
-      <Card padding="md" className={className}>
-        <h2 className="font-semibold mb-1 flex items-center gap-2">
-          {t('dealLineage.title', 'Related documents')}
-        </h2>
-        <p className="text-xs text-neutral-500 dark:text-neutral-400">
-          {t('dealLineage.empty', 'No other documents share this deal yet. New invoices, contracts, or installments will show up here once created.')}
-        </p>
-      </Card>
+      <Card className={className}><CardContent><h2 className="font-semibold mb-1 flex items-center gap-2">
+                  {t('dealLineage.title', 'Related documents')}
+                </h2><p className="text-xs text-neutral-500 dark:text-neutral-400">
+                  {t('dealLineage.empty', 'No other documents share this deal yet. New invoices, contracts, or installments will show up here once created.')}
+                </p></CardContent></Card>
     );
   }
 
   return (
-    <Card padding="md" className={className}>
-      <h2 className="font-semibold mb-3">
-        {t('dealLineage.title', 'Related documents')}
-      </h2>
-
-      {quotes.length > 0 && (
-        <Group
-          icon={<FileText className="w-4 h-4" />}
-          label={t('dealLineage.quotes', 'Quotes')}
-          count={quotes.length}
-        >
-          {quotes.map((q) => (
-            <Row
-              key={`q-${q.id}`}
-              isCurrent={current.kind === 'quote' && current.id === q.id}
-              href={`/admin/clients/quotes/${q.id}`}
-              number={q.number}
-              statusKey={`quotes.status.${q.status}`}
-              statusFallback={q.status}
-              right={q.totalAmountMinor != null && q.currency
-                ? formatMoneyMinor(q.totalAmountMinor, q.currency)
-                : null}
-              meta={q.eventName || undefined}
-            />
-          ))}
-        </Group>
-      )}
-
-      {contracts.length > 0 && (
-        <Group
-          icon={<ScrollText className="w-4 h-4" />}
-          label={t('dealLineage.contracts', 'Contracts')}
-          count={contracts.length}
-        >
-          {contracts.map((c) => (
-            <Row
-              key={`c-${c.id}`}
-              isCurrent={current.kind === 'contract' && current.id === c.id}
-              href={`/admin/clients/contracts/${c.id}`}
-              number={c.number}
-              statusKey={`contracts.status.${c.status}`}
-              statusFallback={c.status}
-              meta={c.title || c.eventName || undefined}
-            />
-          ))}
-        </Group>
-      )}
-
-      {invoices.length > 0 && (
-        <Group
-          icon={<Receipt className="w-4 h-4" />}
-          label={t('dealLineage.invoices', 'Invoices')}
-          count={invoices.length}
-          action={canEditPlan ? (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowEditPlan(true)}
-              leftIcon={<Pencil className="w-3.5 h-3.5" />}
-              className="ml-auto"
-            >
-              {t('dealLineage.editPlan', 'Edit plan')}
-            </Button>
-          ) : undefined}
-        >
-          {invoices.map((i) => {
-            const isStorno = i.invoiceKind === 'storno';
-            const installmentTag = i.installmentTotal && i.installmentTotal > 1
-              ? ` · ${i.installmentLabel || `${i.installmentIndex! + 1}/${i.installmentTotal}`}`
-              : '';
-            return (
-              <Row
-                key={`i-${i.id}`}
-                isCurrent={current.kind === 'invoice' && current.id === i.id}
-                href={`/admin/clients/bills/${i.id}`}
-                number={i.number}
-                statusKey={`bills.status.${i.status}`}
-                statusFallback={i.status}
-                right={i.totalAmountMinor != null && i.currency
-                  ? formatMoneyMinor(i.totalAmountMinor, i.currency)
-                  : null}
-                badge={isStorno ? t('bills.kind.storno', 'Storno') as string : undefined}
-                meta={installmentTag.replace(/^ · /, '') || undefined}
+    <Card className={className}><CardContent><h2 className="font-semibold mb-3">
+              {t('dealLineage.title', 'Related documents')}
+            </h2>{quotes.length > 0 && (
+              <Group
+                icon={<FileText className="w-4 h-4" />}
+                label={t('dealLineage.quotes', 'Quotes')}
+                count={quotes.length}
+              >
+                {quotes.map((q) => (
+                  <Row
+                    key={`q-${q.id}`}
+                    isCurrent={current.kind === 'quote' && current.id === q.id}
+                    href={`/admin/clients/quotes/${q.id}`}
+                    number={q.number}
+                    statusKey={`quotes.status.${q.status}`}
+                    statusFallback={q.status}
+                    right={q.totalAmountMinor != null && q.currency
+                      ? formatMoneyMinor(q.totalAmountMinor, q.currency)
+                      : null}
+                    meta={q.eventName || undefined}
+                  />
+                ))}
+              </Group>
+            )}{contracts.length > 0 && (
+              <Group
+                icon={<ScrollText className="w-4 h-4" />}
+                label={t('dealLineage.contracts', 'Contracts')}
+                count={contracts.length}
+              >
+                {contracts.map((c) => (
+                  <Row
+                    key={`c-${c.id}`}
+                    isCurrent={current.kind === 'contract' && current.id === c.id}
+                    href={`/admin/clients/contracts/${c.id}`}
+                    number={c.number}
+                    statusKey={`contracts.status.${c.status}`}
+                    statusFallback={c.status}
+                    meta={c.title || c.eventName || undefined}
+                  />
+                ))}
+              </Group>
+            )}{invoices.length > 0 && (
+              <Group
+                icon={<Receipt className="w-4 h-4" />}
+                label={t('dealLineage.invoices', 'Invoices')}
+                count={invoices.length}
+                action={canEditPlan ? (
+                  <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => setShowEditPlan(true)}
+                                  className="ml-auto"
+                                >
+                                  <Pencil className="w-3.5 h-3.5" />{t('dealLineage.editPlan', 'Edit plan')}</Button>
+                ) : undefined}
+              >
+                {invoices.map((i) => {
+                  const isStorno = i.invoiceKind === 'storno';
+                  const installmentTag = i.installmentTotal && i.installmentTotal > 1
+                    ? ` · ${i.installmentLabel || `${i.installmentIndex! + 1}/${i.installmentTotal}`}`
+                    : '';
+                  return (
+                    <Row
+                      key={`i-${i.id}`}
+                      isCurrent={current.kind === 'invoice' && current.id === i.id}
+                      href={`/admin/clients/bills/${i.id}`}
+                      number={i.number}
+                      statusKey={`bills.status.${i.status}`}
+                      statusFallback={i.status}
+                      right={i.totalAmountMinor != null && i.currency
+                        ? formatMoneyMinor(i.totalAmountMinor, i.currency)
+                        : null}
+                      badge={isStorno ? t('bills.kind.storno', 'Storno') as string : undefined}
+                      meta={installmentTag.replace(/^ · /, '') || undefined}
+                    />
+                  );
+                })}
+              </Group>
+            )}{canEditPlan && dealUuid && (
+              <EditInstallmentPlanModal
+                isOpen={showEditPlan}
+                onClose={() => setShowEditPlan(false)}
+                dealUuid={dealUuid}
+                siblings={invoices.map((i) => ({
+                  id: i.id,
+                  number: i.number,
+                  status: i.status,
+                  totalAmountMinor: i.totalAmountMinor,
+                  installmentIndex: i.installmentIndex,
+                  installmentTotal: i.installmentTotal,
+                  installmentLabel: i.installmentLabel,
+                  installmentTrigger: i.installmentTrigger,
+                  installmentOffsetDays: i.installmentOffsetDays,
+                }))}
+                eventDate={invoices.find((i) => i.eventDate)?.eventDate || null}
               />
-            );
-          })}
-        </Group>
-      )}
-
-      {canEditPlan && dealUuid && (
-        <EditInstallmentPlanModal
-          isOpen={showEditPlan}
-          onClose={() => setShowEditPlan(false)}
-          dealUuid={dealUuid}
-          siblings={invoices.map((i) => ({
-            id: i.id,
-            number: i.number,
-            status: i.status,
-            totalAmountMinor: i.totalAmountMinor,
-            installmentIndex: i.installmentIndex,
-            installmentTotal: i.installmentTotal,
-            installmentLabel: i.installmentLabel,
-            installmentTrigger: i.installmentTrigger,
-            installmentOffsetDays: i.installmentOffsetDays,
-          }))}
-          eventDate={invoices.find((i) => i.eventDate)?.eventDate || null}
-        />
-      )}
-    </Card>
+            )}</CardContent></Card>
   );
 };
 

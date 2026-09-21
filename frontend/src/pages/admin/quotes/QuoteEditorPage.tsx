@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft, Eye, RefreshCw, Send } from 'lucide-react';
-import { Button, Card, Loading, Input, LocalizedDateInput, TimeField } from '../../../components/common';
+import { Loading, LocalizedDateInput, TimeField } from '../../../components/common';
 import {
   quotesService,
   type QuoteCreatePayload,
@@ -44,6 +44,10 @@ import { settingsService } from '../../../services/settings.service';
 import { useAdminAuth } from '../../../contexts/AdminAuthContext';
 import { toast } from 'react-toastify';
 import { quoteErrorText } from '../../../utils/quoteErrors';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface FormState {
   customerAccountId: number | null;
@@ -556,300 +560,275 @@ export const QuoteEditorPage: React.FC = () => {
       </div>
 
       {/* Section: Customer */}
-      <Card>
-        <h3 className="font-semibold mb-2">1. {t('quotes.section.customer', 'Customer')}</h3>
-        <CustomerPicker
-          value={form.customerAccountId}
-          label={form.customerLabel}
-          isPassive={form.customerIsPassive}
-          onSelect={(c) => setForm((f) => ({
-            ...f,
-            customerAccountId: c.id,
-            customerLabel: c.companyName || c.displayName || c.email,
-            customerIsPassive: Boolean(c.isPassive),
-          }))}
-          onCreate={(c) => setForm((f) => ({
-            ...f,
-            customerAccountId: c.id,
-            customerLabel: c.companyName || c.displayName || c.email,
-            customerIsPassive: Boolean(c.isPassive),
-            // Inherit the new customer's language so the quote
-            // gets rendered in their locale by default.
-            language: f.language || c.preferredLanguage || 'de',
-          }))}
-          onClear={() => setForm((f) => ({
-            ...f, customerAccountId: null, customerLabel: '', customerIsPassive: false,
-          }))}
-          searchPlaceholder={t('quotes.customerSearch', 'Search customer by email or company…') as string}
-        />
-        {/* Project link (renders only when the projects feature is on). */}
-        <div className="mt-3">
-          <ProjectSelect
-            label={t('projects.picker.label', 'Project') as string}
-            value={form.projectId}
-            customerAccountId={form.customerAccountId}
-            onChange={(projectId) => setForm((f) => ({ ...f, projectId }))}
-          />
-        </div>
-      </Card>
+      <Card><CardContent><h3 className="font-semibold mb-2">1. {t('quotes.section.customer', 'Customer')}</h3><CustomerPicker
+                    value={form.customerAccountId}
+                    label={form.customerLabel}
+                    isPassive={form.customerIsPassive}
+                    onSelect={(c) => setForm((f) => ({
+                      ...f,
+                      customerAccountId: c.id,
+                      customerLabel: c.companyName || c.displayName || c.email,
+                      customerIsPassive: Boolean(c.isPassive),
+                    }))}
+                    onCreate={(c) => setForm((f) => ({
+                      ...f,
+                      customerAccountId: c.id,
+                      customerLabel: c.companyName || c.displayName || c.email,
+                      customerIsPassive: Boolean(c.isPassive),
+                      // Inherit the new customer's language so the quote
+                      // gets rendered in their locale by default.
+                      language: f.language || c.preferredLanguage || 'de',
+                    }))}
+                    onClear={() => setForm((f) => ({
+                      ...f, customerAccountId: null, customerLabel: '', customerIsPassive: false,
+                    }))}
+                    searchPlaceholder={t('quotes.customerSearch', 'Search customer by email or company…') as string}
+                  />{/* Project link (renders only when the projects feature is on). */}<div className="mt-3">
+                    <ProjectSelect
+                      label={t('projects.picker.label', 'Project') as string}
+                      value={form.projectId}
+                      customerAccountId={form.customerAccountId}
+                      onChange={(projectId) => setForm((f) => ({ ...f, projectId }))}
+                    />
+                  </div></CardContent></Card>
 
       {/* Section: Event */}
-      <Card>
-        <h3 className="font-semibold mb-2">2. {t('quotes.section.event', 'Event details')}</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <Input label={t('quotes.field.eventName', 'Event name') as string} value={form.eventName}
-            onChange={(e) => setForm((f) => ({ ...f, eventName: e.target.value }))} />
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-              {t('quotes.field.eventType', 'Event type')}
-            </label>
-            <select
-              value={form.eventType}
-              onChange={(e) => setForm((f) => ({ ...f, eventType: e.target.value }))}
-              className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100"
-            >
-              <option value="">{t('quotes.field.eventTypeNone', '— Use default —')}</option>
-              {eventTypes.map((et) => (
-                <option key={et.id} value={et.slug_prefix}>{et.emoji ? `${et.emoji} ` : ''}{et.name}</option>
-              ))}
-            </select>
-            <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
-              {t('quotes.field.eventTypeHint', 'Used for the event created when this quote is accepted.')}
-            </p>
-          </div>
-          {workflowsLive && (
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                {t('quotes.field.bookingWorkflow', 'Booking workflow (on acceptance)')}
-              </label>
-              <select
-                value={form.bookingWorkflowId ?? ''}
-                onChange={(e) => setForm((f) => ({ ...f, bookingWorkflowId: e.target.value ? Number(e.target.value) : null }))}
-                className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100"
-              >
-                <option value="">{t('quotes.field.bookingWorkflowNone', '— None —')}</option>
-                {bookingWorkflows.map((w) => (
-                  <option key={w.id} value={w.id}>
-                    {w.name}{(w.enabled === true || w.enabled === 1) ? '' : ` ${t('quotes.field.bookingWorkflowDisabled', '(disabled)')}`}
-                  </option>
-                ))}
-              </select>
-              <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
-                {t('quotes.field.bookingWorkflowHint', 'The flow that runs when the customer accepts. Leave as None to run no booking flow. The flow must be enabled to fire.')}
-              </p>
-            </div>
-          )}
-          <LocalizedDateInput label={t('quotes.field.eventDate', 'Event date') as string} value={form.eventDate}
-            onChange={(iso) => setForm((f) => ({ ...f, eventDate: iso }))} />
-          <TimeField label={t('quotes.field.eventTimeStart', 'Start time') as string} value={form.eventTimeStart}
-            onChange={(v) => setForm((f) => ({ ...f, eventTimeStart: v }))} />
-          <TimeField label={t('quotes.field.eventTimeEnd', 'End time') as string} value={form.eventTimeEnd}
-            onChange={(v) => setForm((f) => ({ ...f, eventTimeEnd: v }))} />
-          <Input type="number" step="0.5" label={t('quotes.field.expectedDuration', 'Expected duration (h)') as string}
-            value={form.expectedDurationHours}
-            onChange={(e) => setForm((f) => ({ ...f, expectedDurationHours: e.target.value }))} />
-          {/* Migration 220 — lines set to follow the quote hours / days take these. */}
-          <div>
-            <label htmlFor="quote-hours" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-              {t('quotes.field.hours', 'Hours')}
-            </label>
-            <DecimalInput
-              id="quote-hours"
-              value={form.hours ?? NaN}
-              fractionDigits={2}
-              onChange={(n) => setForm((f) => ({ ...f, hours: Number.isFinite(n) ? n : null }))}
-              className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100"
-            />
-            <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
-              {t('quotes.field.hoursHint', 'Lines set to follow the quote hours use this quantity.')}
-            </p>
-          </div>
-          <div>
-            <label htmlFor="quote-days" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-              {t('quotes.field.days', 'Days')}
-            </label>
-            <DecimalInput
-              id="quote-days"
-              value={form.days ?? NaN}
-              fractionDigits={2}
-              onChange={(n) => setForm((f) => ({ ...f, days: Number.isFinite(n) ? n : null }))}
-              className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100"
-            />
-            <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
-              {t('quotes.field.daysHint', 'Lines set to follow the quote days use this quantity.')}
-            </p>
-          </div>
-          <LocalizedDateInput label={t('quotes.field.validUntil', 'Valid until') as string} value={form.validUntil}
-            onChange={(iso) => setForm((f) => ({ ...f, validUntil: iso }))} />
-        </div>
-      </Card>
+      <Card><CardContent><h3 className="font-semibold mb-2">2. {t('quotes.section.event', 'Event details')}</h3><div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('quotes.field.eventName', 'Event name') as string}</span><Input value={form.eventName}
+                                    onChange={(e) => setForm((f) => ({ ...f, eventName: e.target.value }))} /></Label></div>
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                        {t('quotes.field.eventType', 'Event type')}
+                      </label>
+                      <select
+                        value={form.eventType}
+                        onChange={(e) => setForm((f) => ({ ...f, eventType: e.target.value }))}
+                        className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100"
+                      >
+                        <option value="">{t('quotes.field.eventTypeNone', '— Use default —')}</option>
+                        {eventTypes.map((et) => (
+                          <option key={et.id} value={et.slug_prefix}>{et.emoji ? `${et.emoji} ` : ''}{et.name}</option>
+                        ))}
+                      </select>
+                      <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                        {t('quotes.field.eventTypeHint', 'Used for the event created when this quote is accepted.')}
+                      </p>
+                    </div>
+                    {workflowsLive && (
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                          {t('quotes.field.bookingWorkflow', 'Booking workflow (on acceptance)')}
+                        </label>
+                        <select
+                          value={form.bookingWorkflowId ?? ''}
+                          onChange={(e) => setForm((f) => ({ ...f, bookingWorkflowId: e.target.value ? Number(e.target.value) : null }))}
+                          className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100"
+                        >
+                          <option value="">{t('quotes.field.bookingWorkflowNone', '— None —')}</option>
+                          {bookingWorkflows.map((w) => (
+                            <option key={w.id} value={w.id}>
+                              {w.name}{(w.enabled === true || w.enabled === 1) ? '' : ` ${t('quotes.field.bookingWorkflowDisabled', '(disabled)')}`}
+                            </option>
+                          ))}
+                        </select>
+                        <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                          {t('quotes.field.bookingWorkflowHint', 'The flow that runs when the customer accepts. Leave as None to run no booking flow. The flow must be enabled to fire.')}
+                        </p>
+                      </div>
+                    )}
+                    <LocalizedDateInput label={t('quotes.field.eventDate', 'Event date') as string} value={form.eventDate}
+                      onChange={(iso) => setForm((f) => ({ ...f, eventDate: iso }))} />
+                    <TimeField label={t('quotes.field.eventTimeStart', 'Start time') as string} value={form.eventTimeStart}
+                      onChange={(v) => setForm((f) => ({ ...f, eventTimeStart: v }))} />
+                    <TimeField label={t('quotes.field.eventTimeEnd', 'End time') as string} value={form.eventTimeEnd}
+                      onChange={(v) => setForm((f) => ({ ...f, eventTimeEnd: v }))} />
+                    <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('quotes.field.expectedDuration', 'Expected duration (h)') as string}</span><Input type="number" step="0.5"
+                                    value={form.expectedDurationHours}
+                                    onChange={(e) => setForm((f) => ({ ...f, expectedDurationHours: e.target.value }))} /></Label></div>
+                    {/* Migration 220 — lines set to follow the quote hours / days take these. */}
+                    <div>
+                      <label htmlFor="quote-hours" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                        {t('quotes.field.hours', 'Hours')}
+                      </label>
+                      <DecimalInput
+                        id="quote-hours"
+                        value={form.hours ?? NaN}
+                        fractionDigits={2}
+                        onChange={(n) => setForm((f) => ({ ...f, hours: Number.isFinite(n) ? n : null }))}
+                        className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100"
+                      />
+                      <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                        {t('quotes.field.hoursHint', 'Lines set to follow the quote hours use this quantity.')}
+                      </p>
+                    </div>
+                    <div>
+                      <label htmlFor="quote-days" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                        {t('quotes.field.days', 'Days')}
+                      </label>
+                      <DecimalInput
+                        id="quote-days"
+                        value={form.days ?? NaN}
+                        fractionDigits={2}
+                        onChange={(n) => setForm((f) => ({ ...f, days: Number.isFinite(n) ? n : null }))}
+                        className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100"
+                      />
+                      <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                        {t('quotes.field.daysHint', 'Lines set to follow the quote days use this quantity.')}
+                      </p>
+                    </div>
+                    <LocalizedDateInput label={t('quotes.field.validUntil', 'Valid until') as string} value={form.validUntil}
+                      onChange={(iso) => setForm((f) => ({ ...f, validUntil: iso }))} />
+                  </div></CardContent></Card>
 
       {/* Section: Line items */}
-      <Card>
-        <h3 className="font-semibold mb-2">3. {t('quotes.section.lineItems', 'Line items')}</h3>
-        <LineItemsTable
-          items={form.lineItems}
-          currency={form.currency}
-          showDiscount={true}
-          vatRate={form.vatRate / 100}
-          shippingAmount={form.shippingAmount}
-          roundTotal={appSettings?.crm_invoice_round_total === true}
-          presets={liPresets?.presets || []}
-          mode="quote"
-          hours={form.hours}
-          days={form.days}
-          packages={packages}
-          onChange={(items) => setForm((f) => ({ ...f, lineItems: items }))}
-        />
-        <DiscountsPanel
-          promotions={promotions}
-          items={form.lineItems}
-          currency={form.currency}
-          onChange={(items) => setForm((f) => ({ ...f, lineItems: items }))}
-        />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
-          <VatRateSelect
-            label={t('quotes.field.vatRate', 'VAT rate %') as string}
-            rate={form.vatRate}
-            code={form.vatCode}
-            onChange={(rate, code) => setForm((f) => ({ ...f, vatRate: rate, vatCode: code }))} />
-          <Input type="number" step="0.01" label={t('quotes.field.shipping', 'Shipping amount') as string}
-            value={form.shippingAmount}
-            onChange={(e) => setForm((f) => ({ ...f, shippingAmount: Number(e.target.value) }))} />
-          <div>
-            <label className="block text-sm font-medium mb-1">{t('quotes.field.currency', 'Currency')}</label>
-            <select value={form.currency} onChange={(e) => setForm((f) => ({ ...f, currency: e.target.value }))}
-              className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm">
-              <option>CHF</option><option>EUR</option><option>USD</option><option>GBP</option>
-            </select>
-          </div>
-        </div>
-      </Card>
+      <Card><CardContent><h3 className="font-semibold mb-2">3. {t('quotes.section.lineItems', 'Line items')}</h3><LineItemsTable
+                    items={form.lineItems}
+                    currency={form.currency}
+                    showDiscount={true}
+                    vatRate={form.vatRate / 100}
+                    shippingAmount={form.shippingAmount}
+                    roundTotal={appSettings?.crm_invoice_round_total === true}
+                    presets={liPresets?.presets || []}
+                    mode="quote"
+                    hours={form.hours}
+                    days={form.days}
+                    packages={packages}
+                    onChange={(items) => setForm((f) => ({ ...f, lineItems: items }))}
+                  /><DiscountsPanel
+                    promotions={promotions}
+                    items={form.lineItems}
+                    currency={form.currency}
+                    onChange={(items) => setForm((f) => ({ ...f, lineItems: items }))}
+                  /><div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
+                    <VatRateSelect
+                      label={t('quotes.field.vatRate', 'VAT rate %') as string}
+                      rate={form.vatRate}
+                      code={form.vatCode}
+                      onChange={(rate, code) => setForm((f) => ({ ...f, vatRate: rate, vatCode: code }))} />
+                    <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('quotes.field.shipping', 'Shipping amount') as string}</span><Input type="number" step="0.01"
+                                        value={form.shippingAmount}
+                                        onChange={(e) => setForm((f) => ({ ...f, shippingAmount: Number(e.target.value) }))} /></Label></div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">{t('quotes.field.currency', 'Currency')}</label>
+                      <select value={form.currency} onChange={(e) => setForm((f) => ({ ...f, currency: e.target.value }))}
+                        className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm">
+                        <option>CHF</option><option>EUR</option><option>USD</option><option>GBP</option>
+                      </select>
+                    </div>
+                  </div></CardContent></Card>
 
       {/* Section: Payment — migration 124 split picker. Two orthogonal
           dropdowns (Net days × Payment timing) replace the single
           legacy "Payment conditions" dropdown. The installment preview
           below now reads from the timing template. */}
-      <Card>
-        <h3 className="font-semibold mb-2">4. {t('quotes.section.payment', 'Payment conditions')}</h3>
-        <Link to="/admin/settings?tab=crm"
-          className="text-xs text-brand hover:underline mb-2 inline-block">
-          {t('common.configureInSettings', 'Configure defaults in Settings ↗')}
-        </Link>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div>
-            <label className="block text-sm font-medium mb-1">{t('quotes.field.paymentNetDays', 'Net days')}</label>
-            <select
-              className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm"
-              value={form.paymentNetDaysTemplateId || ''}
-              onChange={(e) => setForm((f) => ({ ...f, paymentNetDaysTemplateId: e.target.value ? Number(e.target.value) : null }))}
-            >
-              <option value="">{t('quotes.field.selectNetDays', '— Select net days —')}</option>
-              {netDaysTemplates?.templates.map((tpl) => (
-                <option key={tpl.id} value={tpl.id}>{tpl.name}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">{t('quotes.field.paymentTiming', 'Payment schedule')}</label>
-            <select
-              className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm"
-              value={form.paymentTimingTemplateId || ''}
-              onChange={(e) => setForm((f) => ({ ...f, paymentTimingTemplateId: e.target.value ? Number(e.target.value) : null }))}
-            >
-              <option value="">{t('quotes.field.selectTiming', '— Select schedule —')}</option>
-              {timingTemplates?.templates.map((tpl) => (
-                <option key={tpl.id} value={tpl.id}>{tpl.name}</option>
-              ))}
-            </select>
-          </div>
-        </div>
-        {installmentPreview.length > 0 && (
-          <ul className="mt-3 text-sm space-y-1 text-neutral-600 dark:text-neutral-400">
-            {installmentPreview.map((inst, i) => (
-              <li key={i}>• {inst.percent}% — {inst.label} ({t(`quotes.trigger.${inst.trigger}`, inst.trigger)}{inst.offset_days ? `, ${inst.offset_days}d` : ''})</li>
-            ))}
-          </ul>
-        )}
-
-        {/* Ad-hoc installments panel (commit #6). Overrides the
-            timing-template preview above when set. The plan is
-            snapshotted onto the quote and spawns N invoices on
-            conversion via convertQuoteToInvoices. */}
-        <div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
-          <InstallmentsPanel
-            value={form.installments ?? null}
-            onChange={(next) => setForm((f) => ({ ...f, installments: next }))}
-            onValidityChange={setInstallmentsValid}
-            eventDate={form.eventDate || null}
-          />
-        </div>
-      </Card>
+      <Card><CardContent><h3 className="font-semibold mb-2">4. {t('quotes.section.payment', 'Payment conditions')}</h3><Link to="/admin/settings?tab=crm"
+                    className="text-xs text-brand hover:underline mb-2 inline-block">
+                    {t('common.configureInSettings', 'Configure defaults in Settings ↗')}
+                  </Link><div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-sm font-medium mb-1">{t('quotes.field.paymentNetDays', 'Net days')}</label>
+                      <select
+                        className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm"
+                        value={form.paymentNetDaysTemplateId || ''}
+                        onChange={(e) => setForm((f) => ({ ...f, paymentNetDaysTemplateId: e.target.value ? Number(e.target.value) : null }))}
+                      >
+                        <option value="">{t('quotes.field.selectNetDays', '— Select net days —')}</option>
+                        {netDaysTemplates?.templates.map((tpl) => (
+                          <option key={tpl.id} value={tpl.id}>{tpl.name}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">{t('quotes.field.paymentTiming', 'Payment schedule')}</label>
+                      <select
+                        className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm"
+                        value={form.paymentTimingTemplateId || ''}
+                        onChange={(e) => setForm((f) => ({ ...f, paymentTimingTemplateId: e.target.value ? Number(e.target.value) : null }))}
+                      >
+                        <option value="">{t('quotes.field.selectTiming', '— Select schedule —')}</option>
+                        {timingTemplates?.templates.map((tpl) => (
+                          <option key={tpl.id} value={tpl.id}>{tpl.name}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>{installmentPreview.length > 0 && (
+                    <ul className="mt-3 text-sm space-y-1 text-neutral-600 dark:text-neutral-400">
+                      {installmentPreview.map((inst, i) => (
+                        <li key={i}>• {inst.percent}% — {inst.label} ({t(`quotes.trigger.${inst.trigger}`, inst.trigger)}{inst.offset_days ? `, ${inst.offset_days}d` : ''})</li>
+                      ))}
+                    </ul>
+                  )}{/* Ad-hoc installments panel (commit #6). Overrides the
+                      timing-template preview above when set. The plan is
+                      snapshotted onto the quote and spawns N invoices on
+                      conversion via convertQuoteToInvoices. */}<div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
+                    <InstallmentsPanel
+                      value={form.installments ?? null}
+                      onChange={(next) => setForm((f) => ({ ...f, installments: next }))}
+                      onValidityChange={setInstallmentsValid}
+                      eventDate={form.eventDate || null}
+                    />
+                  </div></CardContent></Card>
 
       {/* Section: Extras */}
-      <Card>
-        <h3 className="font-semibold mb-2">5. {t('quotes.section.extras', 'Intro / outro / extras')}</h3>
-        <div className="space-y-3">
-          <div>
-            <div className="flex items-center justify-between gap-2 mb-1">
-              <label className="block text-sm font-medium">{t('quotes.field.introText', 'Intro text')}</label>
-              <TextBlockPicker id="quote-intro-block" blocks={textBlocks}
-                onPick={(body) => setForm((f) => ({ ...f, introText: appendTextBlock(f.introText, body) }))} />
-            </div>
-            <textarea rows={3} className="w-full rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:border-primary"
-              value={form.introText} onChange={(e) => setForm((f) => ({ ...f, introText: e.target.value }))} />
-          </div>
-          <div>
-            <div className="flex items-center justify-between gap-2 mb-1">
-              <label className="block text-sm font-medium">{t('quotes.field.outroText', 'Outro text')}</label>
-              <TextBlockPicker id="quote-outro-block" blocks={textBlocks}
-                onPick={(body) => setForm((f) => ({ ...f, outroText: appendTextBlock(f.outroText, body) }))} />
-            </div>
-            <textarea rows={3} className="w-full rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:border-primary"
-              value={form.outroText} onChange={(e) => setForm((f) => ({ ...f, outroText: e.target.value }))} />
-          </div>
+      <Card><CardContent><h3 className="font-semibold mb-2">5. {t('quotes.section.extras', 'Intro / outro / extras')}</h3><div className="space-y-3">
+                    <div>
+                      <div className="flex items-center justify-between gap-2 mb-1">
+                        <label className="block text-sm font-medium">{t('quotes.field.introText', 'Intro text')}</label>
+                        <TextBlockPicker id="quote-intro-block" blocks={textBlocks}
+                          onPick={(body) => setForm((f) => ({ ...f, introText: appendTextBlock(f.introText, body) }))} />
+                      </div>
+                      <textarea rows={3} className="w-full rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:border-primary"
+                        value={form.introText} onChange={(e) => setForm((f) => ({ ...f, introText: e.target.value }))} />
+                    </div>
+                    <div>
+                      <div className="flex items-center justify-between gap-2 mb-1">
+                        <label className="block text-sm font-medium">{t('quotes.field.outroText', 'Outro text')}</label>
+                        <TextBlockPicker id="quote-outro-block" blocks={textBlocks}
+                          onPick={(body) => setForm((f) => ({ ...f, outroText: appendTextBlock(f.outroText, body) }))} />
+                      </div>
+                      <textarea rows={3} className="w-full rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:border-primary"
+                        value={form.outroText} onChange={(e) => setForm((f) => ({ ...f, outroText: e.target.value }))} />
+                    </div>
 
-          {/* CC PDF — admin email prefilled, with a picker when more
-              than one admin exists. Mirrors the admin_email field on
-              CreateEventPage so the muscle memory carries over. */}
-          <div className="space-y-1">
-            <Input
-              type="email"
-              label={t('quotes.field.ccPdfEmail', 'CC PDF to (extra recipient)') as string}
-              placeholder={t('quotes.field.ccPdfEmailPlaceholder', 'name@example.com') as string}
-              value={form.ccPdfEmail}
-              onChange={(e) => setForm((f) => ({ ...f, ccPdfEmail: e.target.value }))}
-            />
-            {activeAdmins.length > 1 && (
-              <div className="flex items-center gap-2">
-                <label htmlFor="cc-pdf-picker" className="text-xs text-neutral-600 dark:text-neutral-400 whitespace-nowrap">
-                  {t('quotes.field.ccPdfPickFromAdmins', 'Pick from admins:')}
-                </label>
-                <select
-                  id="cc-pdf-picker"
-                  value={activeAdmins.some((a: any) => a.email === form.ccPdfEmail) ? form.ccPdfEmail : ''}
-                  onChange={(e) => {
-                    const email = e.target.value;
-                    if (email) setForm((prev) => ({ ...prev, ccPdfEmail: email }));
-                  }}
-                  className="text-xs px-2 py-1 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-sm focus:ring-2 focus:ring-brand-500 focus:border-primary"
-                >
-                  <option value="">{t('quotes.field.ccPdfCustom', 'Custom email')}</option>
-                  {activeAdmins.map((a: any) => (
-                    <option key={a.id} value={a.email}>{a.email}</option>
-                  ))}
-                </select>
-              </div>
-            )}
-          </div>
+                    {/* CC PDF — admin email prefilled, with a picker when more
+                        than one admin exists. Mirrors the admin_email field on
+                        CreateEventPage so the muscle memory carries over. */}
+                    <div className="space-y-1">
+                      <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('quotes.field.ccPdfEmail', 'CC PDF to (extra recipient)') as string}</span><Input
+                                          type="email"
+                                          placeholder={t('quotes.field.ccPdfEmailPlaceholder', 'name@example.com') as string}
+                                          value={form.ccPdfEmail}
+                                          onChange={(e) => setForm((f) => ({ ...f, ccPdfEmail: e.target.value }))}
+                                        /></Label></div>
+                      {activeAdmins.length > 1 && (
+                        <div className="flex items-center gap-2">
+                          <label htmlFor="cc-pdf-picker" className="text-xs text-neutral-600 dark:text-neutral-400 whitespace-nowrap">
+                            {t('quotes.field.ccPdfPickFromAdmins', 'Pick from admins:')}
+                          </label>
+                          <select
+                            id="cc-pdf-picker"
+                            value={activeAdmins.some((a: any) => a.email === form.ccPdfEmail) ? form.ccPdfEmail : ''}
+                            onChange={(e) => {
+                              const email = e.target.value;
+                              if (email) setForm((prev) => ({ ...prev, ccPdfEmail: email }));
+                            }}
+                            className="text-xs px-2 py-1 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-sm focus:ring-2 focus:ring-brand-500 focus:border-primary"
+                          >
+                            <option value="">{t('quotes.field.ccPdfCustom', 'Custom email')}</option>
+                            {activeAdmins.map((a: any) => (
+                              <option key={a.id} value={a.email}>{a.email}</option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
+                    </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">{t('quotes.field.internalNotes', 'Internal notes (not on PDF)')}</label>
-            <textarea rows={3} className="w-full rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:border-primary"
-              value={form.internalNotes} onChange={(e) => setForm((f) => ({ ...f, internalNotes: e.target.value }))} />
-          </div>
-        </div>
-      </Card>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">{t('quotes.field.internalNotes', 'Internal notes (not on PDF)')}</label>
+                      <textarea rows={3} className="w-full rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:border-primary"
+                        value={form.internalNotes} onChange={(e) => setForm((f) => ({ ...f, internalNotes: e.target.value }))} />
+                    </div>
+                  </div></CardContent></Card>
     </div>
   );
 };

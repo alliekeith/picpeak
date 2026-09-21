@@ -25,11 +25,12 @@ import { useTranslation } from 'react-i18next';
 import { useLocalizedDate } from '../../hooks/useLocalizedDate';
 import { useQuery } from '@tanstack/react-query';
 
-import { Button, Loading } from '../../components/common';
+import { Loading } from '../../components/common';
 import { formatMoneyMinor } from '../../utils/money';
 import { customerService, type CustomerDashboard, type CustomerEvent } from '../../services/customer.service';
 import { galleryService } from '../../services/gallery.service';
 import { storeGalleryToken, setActiveGallerySlug } from '../../utils/galleryAuthStorage';
+import { Button } from "@/components/ui/button";
 
 type SortKey = 'newest' | 'oldest' | 'name';
 
@@ -317,34 +318,29 @@ export const CustomerDashboardPage: React.FC = () => {
                         {detailsLink(ev)}
                         {!unavailable && (
                           <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            onClick={() => quickDownload(ev.slug, ev.eventName)}
-                            disabled={rowDisabled}
-                            leftIcon={<Download className="w-4 h-4" />}
-                            aria-label={t('customer.dashboard.quickDownloadAria', 'Download all photos for {{name}}', { name: ev.eventName })}
-                          >
-                            <span className="hidden sm:inline">
-                              {isDownloading
-                                ? t('customer.dashboard.preparingDownload', 'Preparing…')
-                                : t('customer.dashboard.download', 'Download')}
-                            </span>
-                          </Button>
+                                                              type="button"
+                                                              variant="outline"
+                                                              size="sm"
+                                                              onClick={() => quickDownload(ev.slug, ev.eventName)}
+                                                              disabled={rowDisabled}
+                                                              aria-label={t('customer.dashboard.quickDownloadAria', 'Download all photos for {{name}}', { name: ev.eventName })}
+                                                            >
+                                                              <Download className="w-4 h-4" /><span className="hidden sm:inline">
+                                                                {isDownloading
+                                                                  ? t('customer.dashboard.preparingDownload', 'Preparing…')
+                                                                  : t('customer.dashboard.download', 'Download')}
+                                                              </span></Button>
                         )}
                         <Button
-                          type="button"
-                          variant="primary"
-                          size="sm"
-                          onClick={() => openEvent(ev.slug)}
-                          disabled={rowDisabled}
-                          leftIcon={<ExternalLink className="w-4 h-4" />}
-                          aria-label={t('customer.dashboard.openAria', 'Open gallery {{name}}', { name: ev.eventName })}
-                        >
-                          <span className="hidden sm:inline">
-                            {t('customer.dashboard.open', 'Open')}
-                          </span>
-                        </Button>
+                                                        type="button"
+                                                        size="sm"
+                                                        onClick={() => openEvent(ev.slug)}
+                                                        disabled={rowDisabled}
+                                                        aria-label={t('customer.dashboard.openAria', 'Open gallery {{name}}', { name: ev.eventName })}
+                                                      >
+                                                        <ExternalLink className="w-4 h-4" /><span className="hidden sm:inline">
+                                                          {t('customer.dashboard.open', 'Open')}
+                                                        </span></Button>
                       </div>
                     </li>
                   );

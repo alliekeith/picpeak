@@ -9,12 +9,13 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
-import { Button, Card } from '../../../components/common';
 import { AddOnBookButton, AddOnBookingState } from '../../../components/common/AddOnBookButton';
 import { PermissionGate } from '../../../components/admin/PermissionGate';
 import { quotesService, type QuoteDetail, type QuoteLineItem } from '../../../services/quotes.service';
 import { formatMoneyMinor } from '../../../utils/money';
 import { useLocalizedDate } from '../../../hooks/useLocalizedDate';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface AddOnRow {
   position: number;
@@ -106,112 +107,103 @@ export const QuoteAddOnsCard: React.FC<{ quote: QuoteDetail; lineItems: QuoteLin
   const changes = [...(quote.selectionChanges || [])].reverse();
 
   return (
-    <Card>
-      <h3 className="font-semibold mb-2 text-neutral-900 dark:text-neutral-100">{t('quotes.selection.title', 'Add-ons at acceptance')}</h3>
-      {quote.selectionAcceptedAt && quote.optionalSelection && (
-        <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-2">
-          {quote.optionalSelection.by === 'customer'
-            ? t('quotes.selection.byCustomer', 'Chosen by the customer on {{date}}', { date: fmtDateTime(quote.selectionAcceptedAt) })
-            : t('quotes.selection.byAdmin', 'Recorded when you accepted on {{date}}', { date: fmtDateTime(quote.selectionAcceptedAt) })}
-        </p>
-      )}
-      {editable && (
-        <PermissionGate permission="quotes.manage">
-          <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-2">
-            {t('quotes.addOns.editHint', 'Book or remove add-ons, then save. The customer is emailed the updated quote.')}
-          </p>
-        </PermissionGate>
-      )}
-      {converted && (
-        <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-2">
-          {t('quotes.addOns.convertedHint', 'Change the add-ons on the contract or invoice.')}
-        </p>
-      )}
-      {chosen.size === 0 && (
-        <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-2">{t('quotes.selection.none', 'No add-ons chosen')}</p>
-      )}
-      <ul className="text-sm divide-y divide-neutral-100 dark:divide-neutral-800">
-        {rows.map((row) => {
-          const booked = chosen.has(row.position);
-          // A not-booked add-on is dimmed — except its Book button.
-          const dim = booked ? '' : 'opacity-60';
-          // Title, then details, then the status (with the button) as the last line.
-          return (
-            <li key={row.position} className="py-2">
-              <div className={`flex items-start justify-between gap-4 ${dim}`}>
-                <span className="text-neutral-900 dark:text-neutral-100">{row.description}</span>
-                {row.lineTotalMinor != null && (
-                  <span className="shrink-0 tabular-nums text-neutral-900 dark:text-neutral-100">
-                    {formatMoneyMinor(row.lineTotalMinor, quote.currency)}
-                  </span>
-                )}
-              </div>
-              {row.detailsText && (
-                <p className={`mt-0.5 text-xs italic whitespace-pre-line text-neutral-500 dark:text-neutral-400 ${dim}`}>
-                  {row.detailsText}
+    <Card><CardContent><h3 className="font-semibold mb-2 text-neutral-900 dark:text-neutral-100">{t('quotes.selection.title', 'Add-ons at acceptance')}</h3>{quote.selectionAcceptedAt && quote.optionalSelection && (
+              <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-2">
+                {quote.optionalSelection.by === 'customer'
+                  ? t('quotes.selection.byCustomer', 'Chosen by the customer on {{date}}', { date: fmtDateTime(quote.selectionAcceptedAt) })
+                  : t('quotes.selection.byAdmin', 'Recorded when you accepted on {{date}}', { date: fmtDateTime(quote.selectionAcceptedAt) })}
+              </p>
+            )}{editable && (
+              <PermissionGate permission="quotes.manage">
+                <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-2">
+                  {t('quotes.addOns.editHint', 'Book or remove add-ons, then save. The customer is emailed the updated quote.')}
                 </p>
-              )}
-              <div className="mt-1 flex items-center gap-2 flex-wrap text-xs">
-                {editable ? (
-                  <>
-                    <span className={`italic text-neutral-500 dark:text-neutral-400 ${dim}`}>
-                      <AddOnBookingState booked={booked} />
-                    </span>
-                    <PermissionGate permission="quotes.manage">
-                      <AddOnBookButton booked={booked} disabled={saving} onToggle={() => toggle(row.position)} />
-                    </PermissionGate>
-                  </>
-                ) : (
-                  <span className={booked ? 'text-green-700 dark:text-green-400' : 'text-neutral-500 dark:text-neutral-400'}>
-                    {booked ? t('quotes.selection.chosen', 'Booked') : t('quotes.selection.notChosen', 'Not booked')}
-                  </span>
-                )}
+              </PermissionGate>
+            )}{converted && (
+              <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-2">
+                {t('quotes.addOns.convertedHint', 'Change the add-ons on the contract or invoice.')}
+              </p>
+            )}{chosen.size === 0 && (
+              <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-2">{t('quotes.selection.none', 'No add-ons chosen')}</p>
+            )}<ul className="text-sm divide-y divide-neutral-100 dark:divide-neutral-800">
+              {rows.map((row) => {
+                const booked = chosen.has(row.position);
+                // A not-booked add-on is dimmed — except its Book button.
+                const dim = booked ? '' : 'opacity-60';
+                // Title, then details, then the status (with the button) as the last line.
+                return (
+                  <li key={row.position} className="py-2">
+                    <div className={`flex items-start justify-between gap-4 ${dim}`}>
+                      <span className="text-neutral-900 dark:text-neutral-100">{row.description}</span>
+                      {row.lineTotalMinor != null && (
+                        <span className="shrink-0 tabular-nums text-neutral-900 dark:text-neutral-100">
+                          {formatMoneyMinor(row.lineTotalMinor, quote.currency)}
+                        </span>
+                      )}
+                    </div>
+                    {row.detailsText && (
+                      <p className={`mt-0.5 text-xs italic whitespace-pre-line text-neutral-500 dark:text-neutral-400 ${dim}`}>
+                        {row.detailsText}
+                      </p>
+                    )}
+                    <div className="mt-1 flex items-center gap-2 flex-wrap text-xs">
+                      {editable ? (
+                        <>
+                          <span className={`italic text-neutral-500 dark:text-neutral-400 ${dim}`}>
+                            <AddOnBookingState booked={booked} />
+                          </span>
+                          <PermissionGate permission="quotes.manage">
+                            <AddOnBookButton booked={booked} disabled={saving} onToggle={() => toggle(row.position)} />
+                          </PermissionGate>
+                        </>
+                      ) : (
+                        <span className={booked ? 'text-green-700 dark:text-green-400' : 'text-neutral-500 dark:text-neutral-400'}>
+                          {booked ? t('quotes.selection.chosen', 'Booked') : t('quotes.selection.notChosen', 'Not booked')}
+                        </span>
+                      )}
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>{editable && (
+              <PermissionGate permission="quotes.manage">
+                <div className="flex justify-end mt-3">
+                  <Button size="sm" onClick={handleSave} disabled={!dirty || saving}>
+                    {t('quotes.addOns.save', 'Save add-on changes')}
+                  </Button>
+                </div>
+              </PermissionGate>
+            )}{changes.length > 0 && (
+              <div className="mt-4 pt-3 border-t border-neutral-200 dark:border-neutral-700">
+                <h4 className="text-sm font-semibold mb-2 text-neutral-900 dark:text-neutral-100">
+                  {t('quotes.addOns.historyTitle', 'Changes')}
+                </h4>
+                <ol className="space-y-2 text-sm">
+                  {changes.map((change, index) => (
+                    <li key={`${change.at}-${index}`} className="text-neutral-700 dark:text-neutral-300">
+                      <div className="text-neutral-900 dark:text-neutral-100">
+                        <span className="font-medium">{fmtDateTime(change.at)}</span>
+                        {' · '}
+                        {change.by === 'customer'
+                          ? t('quotes.addOns.byCustomer', 'by the customer')
+                          : t('quotes.addOns.byYou', 'by you')}
+                      </div>
+                      {change.booked.length > 0 && (
+                        <div>{t('quotes.addOns.booked', 'Booked: {{items}}', { items: change.booked.join(', ') })}</div>
+                      )}
+                      {change.removed.length > 0 && (
+                        <div>{t('quotes.addOns.removed', 'Removed: {{items}}', { items: change.removed.join(', ') })}</div>
+                      )}
+                      <div className="tabular-nums text-neutral-600 dark:text-neutral-400">
+                        {t('quotes.addOns.totalChange', 'Total {{before}} → {{after}}', {
+                          before: formatMoneyMinor(Number(change.totalBeforeMinor), quote.currency),
+                          after: formatMoneyMinor(Number(change.totalAfterMinor), quote.currency),
+                        })}
+                      </div>
+                    </li>
+                  ))}
+                </ol>
               </div>
-            </li>
-          );
-        })}
-      </ul>
-      {editable && (
-        <PermissionGate permission="quotes.manage">
-          <div className="flex justify-end mt-3">
-            <Button size="sm" onClick={handleSave} disabled={!dirty || saving}>
-              {t('quotes.addOns.save', 'Save add-on changes')}
-            </Button>
-          </div>
-        </PermissionGate>
-      )}
-      {changes.length > 0 && (
-        <div className="mt-4 pt-3 border-t border-neutral-200 dark:border-neutral-700">
-          <h4 className="text-sm font-semibold mb-2 text-neutral-900 dark:text-neutral-100">
-            {t('quotes.addOns.historyTitle', 'Changes')}
-          </h4>
-          <ol className="space-y-2 text-sm">
-            {changes.map((change, index) => (
-              <li key={`${change.at}-${index}`} className="text-neutral-700 dark:text-neutral-300">
-                <div className="text-neutral-900 dark:text-neutral-100">
-                  <span className="font-medium">{fmtDateTime(change.at)}</span>
-                  {' · '}
-                  {change.by === 'customer'
-                    ? t('quotes.addOns.byCustomer', 'by the customer')
-                    : t('quotes.addOns.byYou', 'by you')}
-                </div>
-                {change.booked.length > 0 && (
-                  <div>{t('quotes.addOns.booked', 'Booked: {{items}}', { items: change.booked.join(', ') })}</div>
-                )}
-                {change.removed.length > 0 && (
-                  <div>{t('quotes.addOns.removed', 'Removed: {{items}}', { items: change.removed.join(', ') })}</div>
-                )}
-                <div className="tabular-nums text-neutral-600 dark:text-neutral-400">
-                  {t('quotes.addOns.totalChange', 'Total {{before}} → {{after}}', {
-                    before: formatMoneyMinor(Number(change.totalBeforeMinor), quote.currency),
-                    after: formatMoneyMinor(Number(change.totalAfterMinor), quote.currency),
-                  })}
-                </div>
-              </li>
-            ))}
-          </ol>
-        </div>
-      )}
-    </Card>
+            )}</CardContent></Card>
   );
 };

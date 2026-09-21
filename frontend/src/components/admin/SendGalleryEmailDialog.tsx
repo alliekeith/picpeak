@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { X, Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { X, Mail, Lock, Eye, EyeOff, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Button, Card, Input } from '../common';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface SendGalleryEmailDialogProps {
   eventName: string;
@@ -34,6 +37,7 @@ export const SendGalleryEmailDialog: React.FC<SendGalleryEmailDialogProps> = ({
   onConfirm,
   onClose,
 }) => {
+    const __fieldId = React.useId();
   const { t } = useTranslation();
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -52,74 +56,57 @@ export const SendGalleryEmailDialog: React.FC<SendGalleryEmailDialogProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <Card className="max-w-md w-full">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-            {t('events.sendGalleryEmail.title', 'Send gallery email')}
-          </h2>
-          <button
-            onClick={onClose}
-            className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300"
-            aria-label={t('common.close', 'Close')}
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        <p className="text-neutral-600 dark:text-neutral-400 mb-4">
-          {t('events.sendGalleryEmail.description', {
-            eventName,
-            recipient,
-            defaultValue: 'Sends the gallery link for "{{eventName}}" to {{recipient}}.',
-          })}
-        </p>
-
-        {requirePassword && (
-          <div className="space-y-3 mb-4">
-            <Input
-              type={showPassword ? 'text' : 'password'}
-              label={t('events.publishDialog.passwordLabel', 'Gallery password')}
-              placeholder={t('events.publishDialog.passwordPlaceholder', 'Enter the gallery password')}
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-                if (error) setError(undefined);
-              }}
-              error={error}
-              helperText={t(
-                'events.sendGalleryEmail.passwordHelp',
-                'The email includes this exact text. Re-type the gallery password (or pick a new one) — the backend re-hashes it so the login still works.',
-              )}
-              leftIcon={<Lock className="w-5 h-5" />}
-              rightIcon={
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="p-1"
-                  aria-label={showPassword ? t('events.passwordReset.hide', 'Hide') : t('events.passwordReset.show', 'Show')}
-                >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
-              }
-            />
-          </div>
-        )}
-
-        <div className="flex flex-col-reverse gap-3">
-          <Button variant="outline" onClick={onClose} disabled={isSending}>
-            {t('common.cancel', 'Cancel')}
-          </Button>
-          <Button
-            variant="primary"
-            onClick={handleSubmit}
-            disabled={isSending}
-            isLoading={isSending}
-            leftIcon={<Mail className="w-4 h-4" />}
-          >
-            {t('events.sendGalleryEmail.button', 'Send gallery email')}
-          </Button>
-        </div>
-      </Card>
+      <Card className="max-w-md w-full"><CardContent><div className="flex items-center justify-between mb-4">
+                    <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+                      {t('events.sendGalleryEmail.title', 'Send gallery email')}
+                    </h2>
+                    <button
+                      onClick={onClose}
+                      className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300"
+                      aria-label={t('common.close', 'Close')}
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div><p className="text-neutral-600 dark:text-neutral-400 mb-4">
+                    {t('events.sendGalleryEmail.description', {
+                      eventName,
+                      recipient,
+                      defaultValue: 'Sends the gallery link for "{{eventName}}" to {{recipient}}.',
+                    })}
+                  </p>{requirePassword && (
+                    <div className="space-y-3 mb-4">
+                      <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('events.publishDialog.passwordLabel', 'Gallery password')}</span><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5" />}</div><Input
+                                              type={showPassword ? 'text' : 'password'}
+                                              placeholder={t('events.publishDialog.passwordPlaceholder', 'Enter the gallery password')}
+                                              value={password}
+                                              onChange={(e) => {
+                                                setPassword(e.target.value);
+                                                if (error) setError(undefined);
+                                              }} className="pl-10 pr-10" aria-invalid={!!(error)} aria-describedby={(error) ? `${__fieldId}-0-error` : undefined}
+                                            /><div className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground">{<button
+                                                  type="button"
+                                                  onClick={() => setShowPassword(!showPassword)}
+                                                  className="p-1"
+                                                  aria-label={showPassword ? t('events.passwordReset.hide', 'Hide') : t('events.passwordReset.show', 'Show')}
+                                                >
+                                                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                                </button>}</div></div>{(error) && <p id={`${__fieldId}-0-error`} className="mt-1.5 text-sm text-destructive">{error}</p>}{(t(
+                                                'events.sendGalleryEmail.passwordHelp',
+                                                'The email includes this exact text. Re-type the gallery password (or pick a new one) — the backend re-hashes it so the login still works.',
+                                              )) && <p className="mt-1.5 text-sm text-muted-foreground">{t(
+                                                'events.sendGalleryEmail.passwordHelp',
+                                                'The email includes this exact text. Re-type the gallery password (or pick a new one) — the backend re-hashes it so the login still works.',
+                                              )}</p>}</Label></div>
+                    </div>
+                  )}<div className="flex flex-col-reverse gap-3">
+                    <Button variant="outline" onClick={onClose} disabled={isSending}>
+                      {t('common.cancel', 'Cancel')}
+                    </Button>
+                    <Button
+                                        onClick={handleSubmit} disabled={isSending || isSending}
+                                      >
+                                        {isSending && <Loader2 className="animate-spin" />}<Mail className="w-4 h-4" />{t('events.sendGalleryEmail.button', 'Send gallery email')}</Button>
+                  </div></CardContent></Card>
     </div>
   );
 };

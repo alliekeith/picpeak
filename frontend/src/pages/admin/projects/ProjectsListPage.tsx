@@ -11,11 +11,14 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
-import { Plus, Search, FolderKanban } from 'lucide-react';
-import { Button, Card, Input, Loading } from '../../../components/common';
+import { Plus, Search, FolderKanban, Loader2 } from 'lucide-react';
+import { Loading } from '../../../components/common';
 import { projectsService, type ProjectSummary } from '../../../services/projects.service';
 import { useLocalizedDate } from '../../../hooks/useLocalizedDate';
 import { formatMoneyMinor } from '../../../utils/money';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 /** Render a project's rolled-up value (newest stage per deal, cumulative),
  *  one entry per currency. Convention (deliberately differs from the Events
@@ -69,29 +72,23 @@ export const ProjectsListPage: React.FC = () => {
       </div>
 
       {/* Inline create */}
-      <Card className="mb-4">
-        <div className="flex flex-col sm:flex-row gap-3 sm:items-end">
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-              {t('projects.create.label', 'New project name')}
-            </label>
-            <Input
-              value={newName}
-              onChange={(e) => setNewName(e.target.value)}
-              onKeyDown={(e) => { if (e.key === 'Enter' && newName.trim()) createMutation.mutate(); }}
-              placeholder={t('projects.create.placeholder', 'e.g. Müller wedding 2026') as string}
-            />
-          </div>
-          <Button
-            variant="primary"
-            disabled={!newName.trim() || createMutation.isPending}
-            isLoading={createMutation.isPending}
-            onClick={() => createMutation.mutate()}
-          >
-            <Plus className="w-4 h-4 mr-1" />{t('projects.create.button', 'Create project')}
-          </Button>
-        </div>
-      </Card>
+      <Card className="mb-4"><CardContent><div className="flex flex-col sm:flex-row gap-3 sm:items-end">
+                    <div className="flex-1">
+                      <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                        {t('projects.create.label', 'New project name')}
+                      </label>
+                      <Input
+                        value={newName}
+                        onChange={(e) => setNewName(e.target.value)}
+                        onKeyDown={(e) => { if (e.key === 'Enter' && newName.trim()) createMutation.mutate(); }}
+                        placeholder={t('projects.create.placeholder', 'e.g. Müller wedding 2026') as string}
+                      />
+                    </div>
+                    <Button
+                                        onClick={() => createMutation.mutate()} disabled={!newName.trim() || createMutation.isPending || createMutation.isPending}
+                                      >
+                                        {createMutation.isPending && <Loader2 className="animate-spin" />}<Plus className="w-4 h-4 mr-1" />{t('projects.create.button', 'Create project')}</Button>
+                  </div></CardContent></Card>
 
       {/* Search */}
       <div className="relative mb-3 max-w-sm">
@@ -107,11 +104,9 @@ export const ProjectsListPage: React.FC = () => {
       {isLoading ? (
         <Loading />
       ) : !projects || projects.length === 0 ? (
-        <Card>
-          <div className="text-center py-10 text-neutral-500 dark:text-neutral-400">
-            {t('projects.empty', 'No projects yet. Create one above, or events you already have were grouped automatically.')}
-          </div>
-        </Card>
+        <Card><CardContent><div className="text-center py-10 text-neutral-500 dark:text-neutral-400">
+                              {t('projects.empty', 'No projects yet. Create one above, or events you already have were grouped automatically.')}
+                            </div></CardContent></Card>
       ) : (
         <div className="rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden">
           <div className="overflow-x-auto">

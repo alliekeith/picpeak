@@ -17,8 +17,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Clock, AlertTriangle } from 'lucide-react';
-import { Button, Card, LocalizedDateInput, TimeField } from '../common';
+import { Clock, AlertTriangle, Loader2 } from 'lucide-react';
+import { LocalizedDateInput, TimeField } from '../common';
 import { DecimalInput } from '../common/DecimalInput';
 import { parseLocaleDecimal, parseDuration } from '../../utils/parsers';
 import { customerAdminService } from '../../services/customerAdmin.service';
@@ -30,6 +30,8 @@ import { useLocalizedDate } from '../../hooks/useLocalizedDate';
 import { useMutationWithToast } from '../../hooks';
 import { ProjectSelect } from './ProjectSelect';
 import { CrossAddInvoiceDialog } from './CrossAddInvoiceDialog';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 export interface HoursSectionProps {
   customerId: number;
@@ -247,310 +249,284 @@ export const HoursSection: React.FC<HoursSectionProps> = ({
   };
 
   return (
-    <Card padding="lg">
-      {/* Explicit neutral colours (not `text-foreground` / `text-muted-foreground`):
-          those resolve to the gallery branding theme's --foreground, which
-          is applied globally on <html> and renders near-white inside the
-          light admin chrome (QA S13). */}
-      <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-1 flex items-center gap-2">
-        <Clock className="w-5 h-5" />
-        {t('customers.hours.section', 'Hours')}
-      </h2>
-      <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-4">
-        {isMonthly
-          ? t('customers.hours.monthlyHint',
-            'Entries auto-append to the current monthly draft. Edit / delete remains possible until the scheduler arms the draft for send.')
-          : t('customers.hours.perEventHint',
-            'Logged entries stay unbilled until you click "Create draft invoice" — one scheduled invoice is generated with a line per entry and opened in the editor, so you can add other items before it ships.')}
-      </p>
-
-      {/* Rate summary — hidden in compact mode (history-only on the
-          customer detail page). When a caller wires onHourlyRateChange
-          the field is editable; otherwise (the standalone hours page)
-          we show the RESOLVED rate read-only so a disabled input can't
-          masquerade as an editable value, and surface a CTA when no rate
-          is configured anywhere along the chain. */}
-      {!compact && (
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-            {t('customers.field.hourlyRate', 'Default hourly rate')}
-          </label>
-          {onHourlyRateChange ? (
-            <>
-              <DecimalInput
-                value={customerHourlyRateMinor != null ? customerHourlyRateMinor / 100 : NaN}
-                fractionDigits={2}
-                onChange={(n) => {
-                  if (!Number.isFinite(n)) { onHourlyRateChange(null); return; }
-                  onHourlyRateChange(Math.max(0, Math.round(n * 100)));
-                }}
-                className="w-40 input"
-                placeholder="150.00"
-              />
-              <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-                {t('customers.field.hourlyRateHint',
-                  'Major units (e.g. 150.00 for {{currency}} 150). Leave blank to require a per-entry override on every block.',
-                  { currency: profileDefaultCurrency })}
-              </p>
-            </>
-          ) : noRateConfigured ? (
-            <div className="rounded-md border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 p-3 text-sm">
-              <div className="flex items-start gap-2 text-amber-800 dark:text-amber-200">
-                <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" />
-                <div>
-                  <p className="font-medium">
-                    {t('customers.hours.noRate.title', 'No hourly rate configured')}
-                  </p>
-                  <p className="mt-0.5 text-amber-700 dark:text-amber-300">
-                    {t('customers.hours.noRate.body',
-                      'Logging needs a rate. Set one for this customer, type a per-entry override below, or configure an install-wide default.')}
-                  </p>
-                  <div className="mt-2 flex flex-wrap gap-3">
-                    <Link to={`/admin/clients/accounts/${customerId}`}
-                      className="text-primary hover:underline font-medium">
-                      {t('customers.hours.noRate.setForCustomer', 'Set a rate for this customer')}
-                    </Link>
-                    <Link to="/admin/settings?tab=businessProfile" target="_blank" rel="noopener noreferrer"
-                      className="text-primary hover:underline font-medium">
-                      {t('customers.hours.noRate.setInstallDefault', 'Set an install-wide default')}
-                    </Link>
+    <Card className="py-8"><CardContent className="px-8">{/* Explicit neutral colours (not `text-foreground` / `text-muted-foreground`):
+                those resolve to the gallery branding theme's --foreground, which
+                is applied globally on <html> and renders near-white inside the
+                light admin chrome (QA S13). */}<h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-1 flex items-center gap-2">
+              <Clock className="w-5 h-5" />
+              {t('customers.hours.section', 'Hours')}
+            </h2><p className="text-xs text-neutral-500 dark:text-neutral-400 mb-4">
+              {isMonthly
+                ? t('customers.hours.monthlyHint',
+                  'Entries auto-append to the current monthly draft. Edit / delete remains possible until the scheduler arms the draft for send.')
+                : t('customers.hours.perEventHint',
+                  'Logged entries stay unbilled until you click "Create draft invoice" — one scheduled invoice is generated with a line per entry and opened in the editor, so you can add other items before it ships.')}
+            </p>{/* Rate summary — hidden in compact mode (history-only on the
+                customer detail page). When a caller wires onHourlyRateChange
+                the field is editable; otherwise (the standalone hours page)
+                we show the RESOLVED rate read-only so a disabled input can't
+                masquerade as an editable value, and surface a CTA when no rate
+                is configured anywhere along the chain. */}{!compact && (
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                  {t('customers.field.hourlyRate', 'Default hourly rate')}
+                </label>
+                {onHourlyRateChange ? (
+                  <>
+                    <DecimalInput
+                      value={customerHourlyRateMinor != null ? customerHourlyRateMinor / 100 : NaN}
+                      fractionDigits={2}
+                      onChange={(n) => {
+                        if (!Number.isFinite(n)) { onHourlyRateChange(null); return; }
+                        onHourlyRateChange(Math.max(0, Math.round(n * 100)));
+                      }}
+                      className="w-40 input"
+                      placeholder="150.00"
+                    />
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                      {t('customers.field.hourlyRateHint',
+                        'Major units (e.g. 150.00 for {{currency}} 150). Leave blank to require a per-entry override on every block.',
+                        { currency: profileDefaultCurrency })}
+                    </p>
+                  </>
+                ) : noRateConfigured ? (
+                  <div className="rounded-md border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 p-3 text-sm">
+                    <div className="flex items-start gap-2 text-amber-800 dark:text-amber-200">
+                      <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" />
+                      <div>
+                        <p className="font-medium">
+                          {t('customers.hours.noRate.title', 'No hourly rate configured')}
+                        </p>
+                        <p className="mt-0.5 text-amber-700 dark:text-amber-300">
+                          {t('customers.hours.noRate.body',
+                            'Logging needs a rate. Set one for this customer, type a per-entry override below, or configure an install-wide default.')}
+                        </p>
+                        <div className="mt-2 flex flex-wrap gap-3">
+                          <Link to={`/admin/clients/accounts/${customerId}`}
+                            className="text-primary hover:underline font-medium">
+                            {t('customers.hours.noRate.setForCustomer', 'Set a rate for this customer')}
+                          </Link>
+                          <Link to="/admin/settings?tab=businessProfile" target="_blank" rel="noopener noreferrer"
+                            className="text-primary hover:underline font-medium">
+                            {t('customers.hours.noRate.setInstallDefault', 'Set an install-wide default')}
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
                   </div>
+                ) : (
+                  <p className="text-sm text-neutral-900 dark:text-neutral-100">
+                    <span className="tabular-nums font-medium">
+                      {profileDefaultCurrency} {((effectiveDefaultRateMinor as number) / 100).toFixed(2)}
+                    </span>
+                    <span className="text-xs text-neutral-500 dark:text-neutral-400 ml-2">
+                      {customerHourlyRateMinor != null
+                        ? t('customers.hours.rateSource.customer', 'from this customer')
+                        : t('customers.hours.rateSource.installDefault', 'install-wide default')}
+                    </span>
+                  </p>
+                )}
+              </div>
+            )}{/* Inline log-new-entry form — hidden in compact mode. Logging
+                lives on the standalone /admin/clients/hours surface. */}{!compact && (
+            <div className="border-t border-neutral-200 dark:border-neutral-700 pt-4 mb-4">
+              <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 mb-3">{t('customers.hours.form.title', 'Log new entry')}</h3>
+              <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
+                <div>
+                  <label className="block text-xs text-neutral-500 dark:text-neutral-400 mb-1">
+                    {t('customers.hours.form.date', 'Date')}
+                  </label>
+                  <LocalizedDateInput value={entryDate} onChange={setEntryDate} />
+                </div>
+                <div>
+                  <label className="block text-xs text-neutral-500 dark:text-neutral-400 mb-1">
+                    {t('customers.hours.form.start', 'Start')}
+                  </label>
+                  <TimeField value={startTime} onChange={setStartTime} />
+                </div>
+                <div>
+                  <label className="block text-xs text-neutral-500 dark:text-neutral-400 mb-1">
+                    {t('customers.hours.form.end', 'End')}
+                  </label>
+                  <TimeField value={endTime} onChange={setEndTime} />
+                </div>
+                <div>
+                  <label className="block text-xs text-neutral-500 dark:text-neutral-400 mb-1">
+                    {t('customers.hours.form.duration', 'Duration')}
+                  </label>
+                  <input
+                    type="text"
+                    inputMode="decimal"
+                    value={duration}
+                    onChange={(e) => setDuration(e.target.value)}
+                    onBlur={(e) => applyDuration(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        applyDuration((e.target as HTMLInputElement).value);
+                      }
+                    }}
+                    placeholder={t('customers.hours.form.durationPlaceholder', '1h · 1.5 · 1:30') as string}
+                    title={t('customers.hours.form.durationHint',
+                      'Type a duration to auto-fill End: 1h, 1.5, 1,5 or 1:30') as string}
+                    className="input w-full" />
+                </div>
+                <div>
+                  <label className="block text-xs text-neutral-500 dark:text-neutral-400 mb-1">
+                    {t('customers.hours.form.rateOverride', 'Rate override')}
+                  </label>
+                  <input
+                    type="text"
+                    inputMode="decimal"
+                    value={rateOverride}
+                    onChange={(e) => setRateOverride(e.target.value)}
+                    placeholder={effectiveDefaultRateMinor != null
+                      ? (effectiveDefaultRateMinor / 100).toFixed(2)
+                      : '—'}
+                    className="input w-full" />
                 </div>
               </div>
+              <div className="mt-3">
+                <label className="block text-xs text-neutral-500 dark:text-neutral-400 mb-1">
+                  {t('customers.hours.form.note', 'Note / description')}
+                </label>
+                <textarea rows={2} value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  className="input w-full text-sm"
+                  placeholder={t('customers.hours.form.notePlaceholder',
+                    'What was worked on?') as string} />
+              </div>
+              {/* Book to project — renders only when the projects feature is on. */}
+              <ProjectSelect
+                className="mt-3"
+                label={t('customers.hours.form.bookToProject', 'Book to project') as string}
+                value={projectId}
+                customerAccountId={customerId}
+                onChange={setProjectId}
+              />
+              <div className="mt-3 flex items-center justify-end gap-3">
+                {noRateConfigured && !overrideTyped && (
+                  <span className="text-xs text-amber-700 dark:text-amber-300">
+                    {t('customers.hours.form.needRate', 'Set a rate or enter an override to log time.')}
+                  </span>
+                )}
+                <Button
+                                        onClick={() => createMutation.mutate()} disabled={createMutation.isPending || (noRateConfigured && !overrideTyped) || createMutation.isPending}
+                                      >
+                                        {createMutation.isPending && <Loader2 className="animate-spin" />}{t('customers.hours.form.save', 'Add entry')}</Button>
+              </div>
             </div>
-          ) : (
-            <p className="text-sm text-neutral-900 dark:text-neutral-100">
-              <span className="tabular-nums font-medium">
-                {profileDefaultCurrency} {((effectiveDefaultRateMinor as number) / 100).toFixed(2)}
-              </span>
-              <span className="text-xs text-neutral-500 dark:text-neutral-400 ml-2">
-                {customerHourlyRateMinor != null
-                  ? t('customers.hours.rateSource.customer', 'from this customer')
-                  : t('customers.hours.rateSource.installDefault', 'install-wide default')}
-              </span>
-            </p>
-          )}
-        </div>
-      )}
-
-      {/* Inline log-new-entry form — hidden in compact mode. Logging
-          lives on the standalone /admin/clients/hours surface. */}
-      {!compact && (
-      <div className="border-t border-neutral-200 dark:border-neutral-700 pt-4 mb-4">
-        <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 mb-3">{t('customers.hours.form.title', 'Log new entry')}</h3>
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
-          <div>
-            <label className="block text-xs text-neutral-500 dark:text-neutral-400 mb-1">
-              {t('customers.hours.form.date', 'Date')}
-            </label>
-            <LocalizedDateInput value={entryDate} onChange={setEntryDate} />
-          </div>
-          <div>
-            <label className="block text-xs text-neutral-500 dark:text-neutral-400 mb-1">
-              {t('customers.hours.form.start', 'Start')}
-            </label>
-            <TimeField value={startTime} onChange={setStartTime} />
-          </div>
-          <div>
-            <label className="block text-xs text-neutral-500 dark:text-neutral-400 mb-1">
-              {t('customers.hours.form.end', 'End')}
-            </label>
-            <TimeField value={endTime} onChange={setEndTime} />
-          </div>
-          <div>
-            <label className="block text-xs text-neutral-500 dark:text-neutral-400 mb-1">
-              {t('customers.hours.form.duration', 'Duration')}
-            </label>
-            <input
-              type="text"
-              inputMode="decimal"
-              value={duration}
-              onChange={(e) => setDuration(e.target.value)}
-              onBlur={(e) => applyDuration(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  e.preventDefault();
-                  applyDuration((e.target as HTMLInputElement).value);
-                }
-              }}
-              placeholder={t('customers.hours.form.durationPlaceholder', '1h · 1.5 · 1:30') as string}
-              title={t('customers.hours.form.durationHint',
-                'Type a duration to auto-fill End: 1h, 1.5, 1,5 or 1:30') as string}
-              className="input w-full" />
-          </div>
-          <div>
-            <label className="block text-xs text-neutral-500 dark:text-neutral-400 mb-1">
-              {t('customers.hours.form.rateOverride', 'Rate override')}
-            </label>
-            <input
-              type="text"
-              inputMode="decimal"
-              value={rateOverride}
-              onChange={(e) => setRateOverride(e.target.value)}
-              placeholder={effectiveDefaultRateMinor != null
-                ? (effectiveDefaultRateMinor / 100).toFixed(2)
-                : '—'}
-              className="input w-full" />
-          </div>
-        </div>
-        <div className="mt-3">
-          <label className="block text-xs text-neutral-500 dark:text-neutral-400 mb-1">
-            {t('customers.hours.form.note', 'Note / description')}
-          </label>
-          <textarea rows={2} value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="input w-full text-sm"
-            placeholder={t('customers.hours.form.notePlaceholder',
-              'What was worked on?') as string} />
-        </div>
-        {/* Book to project — renders only when the projects feature is on. */}
-        <ProjectSelect
-          className="mt-3"
-          label={t('customers.hours.form.bookToProject', 'Book to project') as string}
-          value={projectId}
-          customerAccountId={customerId}
-          onChange={setProjectId}
-        />
-        <div className="mt-3 flex items-center justify-end gap-3">
-          {noRateConfigured && !overrideTyped && (
-            <span className="text-xs text-amber-700 dark:text-amber-300">
-              {t('customers.hours.form.needRate', 'Set a rate or enter an override to log time.')}
-            </span>
-          )}
-          <Button
-            variant="primary"
-            disabled={createMutation.isPending || (noRateConfigured && !overrideTyped)}
-            isLoading={createMutation.isPending}
-            onClick={() => createMutation.mutate()}
-          >
-            {t('customers.hours.form.save', 'Add entry')}
-          </Button>
-        </div>
-      </div>
-      )}
-
-      {/* Bill-these-hours button for per-event customers only. Stays
-          visible in compact mode so the customer-detail page can
-          still trigger the on-demand billing action. */}
-      {!isMonthly && unbilledCount > 0 && canBill && (
-        <div className="mb-4 flex items-center justify-between bg-blue-50 dark:bg-blue-900/20 rounded-sm p-3">
-          <span className="text-sm">
-            {t('customers.hours.unbilledCount',
-              '{{count}} unbilled entries totaling {{total}}',
-              {
-                count: unbilledCount,
-                total: unbilledTotalMajor.toFixed(2),
-              })}
-          </span>
-          <Button
-            variant="primary"
-            disabled={billBusy}
-            isLoading={billBusy}
-            onClick={handleBillHours}
-          >
-            {t('customers.hours.billButton', 'Create draft invoice')}
-          </Button>
-        </div>
-      )}
-
-      <CrossAddInvoiceDialog
-        open={crossAddOpen}
-        primary="hours"
-        otherCount={openRebills}
-        busy={billBusy}
-        onConfirm={runBill}
-        onClose={() => setCrossAddOpen(false)}
-      />
-
-      {/* Entry list table. */}
-      {isLoading ? (
-        <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('common.loading', 'Loading…')}</p>
-      ) : entries.length === 0 ? (
-        <p className="text-sm text-neutral-500 dark:text-neutral-400">
-          {t('customers.hours.empty', 'No entries logged yet.')}
-        </p>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="text-left text-xs uppercase text-neutral-500 dark:text-neutral-400">
-                <th className="py-2 pr-3">{t('customers.hours.col.date', 'Date')}</th>
-                <th className="py-2 pr-3">{t('customers.hours.col.range', 'Time')}</th>
-                <th className="py-2 pr-3 text-right">{t('customers.hours.col.hours', 'Hours')}</th>
-                <th className="py-2 pr-3 text-right">{t('customers.hours.col.rate', 'Rate')}</th>
-                <th className="py-2 pr-3 text-right">{t('customers.hours.col.total', 'Total')}</th>
-                <th className="py-2 pr-3">{t('customers.hours.col.note', 'Note')}</th>
-                <th className="py-2 pr-3">{t('customers.hours.col.status', 'Status')}</th>
-                <th className="py-2 pr-3"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {entries.map((e) => {
-                const rate = e.hourlyRateMinorOverride ?? effectiveDefaultRateMinor ?? 0;
-                const hours = e.durationMinutes / 60;
-                const total = (hours * rate) / 100;
-                const locked = isLocked(e);
-                return (
-                  <tr key={e.id} className="border-t border-neutral-200 dark:border-neutral-700">
-                    <td className="py-1.5 pr-3 tabular-nums">{fmtDate(e.entryDate)}</td>
-                    <td className="py-1.5 pr-3 tabular-nums">{fmtTime(e.startTime)}–{fmtTime(e.endTime)}</td>
-                    <td className="py-1.5 pr-3 text-right tabular-nums">{hours.toFixed(2)}</td>
-                    <td className="py-1.5 pr-3 text-right tabular-nums">{(rate / 100).toFixed(2)}</td>
-                    <td className="py-1.5 pr-3 text-right tabular-nums font-medium">{total.toFixed(2)}</td>
-                    <td className="py-1.5 pr-3 max-w-xs truncate" title={e.description || ''}>
-                      {e.description || '—'}
-                    </td>
-                    <td className="py-1.5 pr-3">
-                      {e.status === 'billed' ? (
-                        e.invoiceId ? (
-                          // Link straight to the invoice so a "Billed: R-…" entry
-                          // is one click from its (possibly draft) invoice.
-                          <Link
-                            to={`/admin/clients/bills/${e.invoiceId}`}
-                            className="text-xs text-green-700 dark:text-green-300 underline hover:no-underline"
-                          >
-                            {e.invoiceNumber
-                              ? t('customers.hours.status.billedOn', 'Billed: {{number}}', { number: e.invoiceNumber })
-                              : t('customers.hours.status.billed', 'Billed')}
-                          </Link>
-                        ) : (
-                          <span className="text-xs text-green-700 dark:text-green-300">
-                            {e.invoiceNumber
-                              ? t('customers.hours.status.billedOn', 'Billed: {{number}}', { number: e.invoiceNumber })
-                              : t('customers.hours.status.billed', 'Billed')}
-                          </span>
-                        )
-                      ) : (
-                        <span className="text-xs text-amber-700 dark:text-amber-300">
-                          {t('customers.hours.status.unbilled', 'Unbilled')}
-                        </span>
-                      )}
-                    </td>
-                    <td className="py-1.5 pr-3 text-right">
-                      <button
-                        type="button"
-                        disabled={locked || deleteMutation.isPending}
-                        onClick={() => {
-                          if (window.confirm(t('customers.hours.confirmDelete',
-                            'Delete this entry? If it has been billed onto a draft, the matching invoice line will also be removed.') as string)) {
-                            deleteMutation.mutate(e.id);
-                          }
-                        }}
-                        className="text-xs text-red-600 hover:underline disabled:text-neutral-400 disabled:cursor-not-allowed"
-                        title={locked ? t('customers.hours.locked',
-                          'Locked: invoice already armed for send') as string : undefined}
-                      >
-                        {t('common.delete', 'Delete')}
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </Card>
+            )}{/* Bill-these-hours button for per-event customers only. Stays
+                visible in compact mode so the customer-detail page can
+                still trigger the on-demand billing action. */}{!isMonthly && unbilledCount > 0 && canBill && (
+              <div className="mb-4 flex items-center justify-between bg-blue-50 dark:bg-blue-900/20 rounded-sm p-3">
+                <span className="text-sm">
+                  {t('customers.hours.unbilledCount',
+                    '{{count}} unbilled entries totaling {{total}}',
+                    {
+                      count: unbilledCount,
+                      total: unbilledTotalMajor.toFixed(2),
+                    })}
+                </span>
+                <Button
+                                    onClick={handleBillHours} disabled={billBusy || billBusy}
+                                  >
+                                    {billBusy && <Loader2 className="animate-spin" />}{t('customers.hours.billButton', 'Create draft invoice')}</Button>
+              </div>
+            )}<CrossAddInvoiceDialog
+              open={crossAddOpen}
+              primary="hours"
+              otherCount={openRebills}
+              busy={billBusy}
+              onConfirm={runBill}
+              onClose={() => setCrossAddOpen(false)}
+            />{/* Entry list table. */}{isLoading ? (
+              <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('common.loading', 'Loading…')}</p>
+            ) : entries.length === 0 ? (
+              <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                {t('customers.hours.empty', 'No entries logged yet.')}
+              </p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="text-left text-xs uppercase text-neutral-500 dark:text-neutral-400">
+                      <th className="py-2 pr-3">{t('customers.hours.col.date', 'Date')}</th>
+                      <th className="py-2 pr-3">{t('customers.hours.col.range', 'Time')}</th>
+                      <th className="py-2 pr-3 text-right">{t('customers.hours.col.hours', 'Hours')}</th>
+                      <th className="py-2 pr-3 text-right">{t('customers.hours.col.rate', 'Rate')}</th>
+                      <th className="py-2 pr-3 text-right">{t('customers.hours.col.total', 'Total')}</th>
+                      <th className="py-2 pr-3">{t('customers.hours.col.note', 'Note')}</th>
+                      <th className="py-2 pr-3">{t('customers.hours.col.status', 'Status')}</th>
+                      <th className="py-2 pr-3"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {entries.map((e) => {
+                      const rate = e.hourlyRateMinorOverride ?? effectiveDefaultRateMinor ?? 0;
+                      const hours = e.durationMinutes / 60;
+                      const total = (hours * rate) / 100;
+                      const locked = isLocked(e);
+                      return (
+                        <tr key={e.id} className="border-t border-neutral-200 dark:border-neutral-700">
+                          <td className="py-1.5 pr-3 tabular-nums">{fmtDate(e.entryDate)}</td>
+                          <td className="py-1.5 pr-3 tabular-nums">{fmtTime(e.startTime)}–{fmtTime(e.endTime)}</td>
+                          <td className="py-1.5 pr-3 text-right tabular-nums">{hours.toFixed(2)}</td>
+                          <td className="py-1.5 pr-3 text-right tabular-nums">{(rate / 100).toFixed(2)}</td>
+                          <td className="py-1.5 pr-3 text-right tabular-nums font-medium">{total.toFixed(2)}</td>
+                          <td className="py-1.5 pr-3 max-w-xs truncate" title={e.description || ''}>
+                            {e.description || '—'}
+                          </td>
+                          <td className="py-1.5 pr-3">
+                            {e.status === 'billed' ? (
+                              e.invoiceId ? (
+                                // Link straight to the invoice so a "Billed: R-…" entry
+                                // is one click from its (possibly draft) invoice.
+                                <Link
+                                  to={`/admin/clients/bills/${e.invoiceId}`}
+                                  className="text-xs text-green-700 dark:text-green-300 underline hover:no-underline"
+                                >
+                                  {e.invoiceNumber
+                                    ? t('customers.hours.status.billedOn', 'Billed: {{number}}', { number: e.invoiceNumber })
+                                    : t('customers.hours.status.billed', 'Billed')}
+                                </Link>
+                              ) : (
+                                <span className="text-xs text-green-700 dark:text-green-300">
+                                  {e.invoiceNumber
+                                    ? t('customers.hours.status.billedOn', 'Billed: {{number}}', { number: e.invoiceNumber })
+                                    : t('customers.hours.status.billed', 'Billed')}
+                                </span>
+                              )
+                            ) : (
+                              <span className="text-xs text-amber-700 dark:text-amber-300">
+                                {t('customers.hours.status.unbilled', 'Unbilled')}
+                              </span>
+                            )}
+                          </td>
+                          <td className="py-1.5 pr-3 text-right">
+                            <button
+                              type="button"
+                              disabled={locked || deleteMutation.isPending}
+                              onClick={() => {
+                                if (window.confirm(t('customers.hours.confirmDelete',
+                                  'Delete this entry? If it has been billed onto a draft, the matching invoice line will also be removed.') as string)) {
+                                  deleteMutation.mutate(e.id);
+                                }
+                              }}
+                              className="text-xs text-red-600 hover:underline disabled:text-neutral-400 disabled:cursor-not-allowed"
+                              title={locked ? t('customers.hours.locked',
+                                'Locked: invoice already armed for send') as string : undefined}
+                            >
+                              {t('common.delete', 'Delete')}
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}</CardContent></Card>
   );
 };
 

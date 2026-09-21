@@ -18,13 +18,14 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import dagre from '@dagrejs/dagre';
-import { ArrowLeft, Save, Trash2, Wand2, Code } from 'lucide-react';
-import { Button, Loading } from '../../../components/common';
+import { ArrowLeft, Save, Trash2, Wand2, Code, Loader2 } from 'lucide-react';
+import { Loading } from '../../../components/common';
 import { api } from '../../../config/api';
 import { useAdminDarkMode } from '../../../contexts/AdminDarkModeContext';
 import { useMutationWithToast } from '../../../hooks';
 import { workflowsService, type WorkflowNodeType } from '../../../services/workflows.service';
 import { NodeConfigPanel } from './NodeConfigPanel';
+import { Button } from "@/components/ui/button";
 
 const PALETTE: WorkflowNodeType[] = ['trigger', 'condition', 'branch', 'loop', 'wait', 'action', 'gate', 'webhook'];
 const TRIGGERS = [
@@ -298,12 +299,10 @@ export const WorkflowEditorPage: React.FC = () => {
           {t('workflows.enabled', 'Enabled')}
         </label>
         <div className="ml-auto flex items-center gap-2">
-          <Button variant="outline" onClick={() => (textMode ? setTextMode(false) : openText())} leftIcon={<Code className="w-4 h-4" />}>
-            {textMode ? t('workflows.editor.canvasView', 'Canvas') : t('workflows.editor.textView', 'Text')}
-          </Button>
-          <Button variant="primary" isLoading={saveMutation.isPending} onClick={() => saveMutation.mutate()} leftIcon={<Save className="w-4 h-4" />}>
-            {t('common.saveChanges', 'Save changes')}
-          </Button>
+          <Button variant="outline" onClick={() => (textMode ? setTextMode(false) : openText())}>
+                              <Code className="w-4 h-4" />{textMode ? t('workflows.editor.canvasView', 'Canvas') : t('workflows.editor.textView', 'Text')}</Button>
+          <Button onClick={() => saveMutation.mutate()} disabled={saveMutation.isPending}>
+                              {saveMutation.isPending && <Loader2 className="animate-spin" />}<Save className="w-4 h-4" />{t('common.saveChanges', 'Save changes')}</Button>
         </div>
       </div>
 
@@ -339,7 +338,7 @@ export const WorkflowEditorPage: React.FC = () => {
           {textErr && <p className="text-xs text-red-600 dark:text-red-400">{textErr}</p>}
           <div className="flex gap-2">
             <Button variant="outline" onClick={copyText}>{t('common.copy', 'Copy')}</Button>
-            <Button variant="primary" onClick={applyText}>{t('workflows.editor.loadText', 'Load into editor')}</Button>
+            <Button onClick={applyText}>{t('workflows.editor.loadText', 'Load into editor')}</Button>
           </div>
         </div>
       ) : (

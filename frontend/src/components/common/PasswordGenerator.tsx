@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { Key, RefreshCw, Copy, Check, Zap } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { generateEventPassword, generatePasswordSuggestions, validatePassword } from '../../utils/passwordGenerator';
-import { Button } from './Button';
+import { Button } from "@/components/ui/button";
 
 interface PasswordGeneratorProps {
   eventName?: string;

@@ -3,12 +3,15 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { Save, Send, Eye, EyeOff, ChevronUp, ChevronDown } from 'lucide-react';
-import { Button, Card, CardContent, Input, Loading } from '../../../components/common';
+import { Loading } from '../../../components/common';
 import {
   whatsappService,
   WHATSAPP_TEMPLATE_PARAMS,
   type WhatsAppTemplateParam,
 } from '../../../services/whatsapp.service';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 /**
  * WhatsApp Business API configuration tab (#640D).
@@ -171,22 +174,19 @@ export const WhatsAppTab: React.FC = () => {
             <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
               {t('settings.whatsapp.accessToken', 'Access token')}
             </label>
-            <Input
-              type={showToken ? 'text' : 'password'}
-              value={accessToken}
-              onChange={(e) => setAccessToken(e.target.value)}
-              placeholder={t('settings.whatsapp.accessTokenPlaceholder', 'EAAB… (system-user token recommended)') as string}
-              rightIcon={
-                <button
-                  type="button"
-                  onClick={() => setShowToken((v) => !v)}
-                  className="p-1"
-                  aria-label={showToken ? t('common.hide', 'Hide') : t('common.show', 'Show')}
-                >
-                  {showToken ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
-              }
-            />
+            <div className="relative"><Input
+                                    type={showToken ? 'text' : 'password'}
+                                    value={accessToken}
+                                    onChange={(e) => setAccessToken(e.target.value)}
+                                    placeholder={t('settings.whatsapp.accessTokenPlaceholder', 'EAAB… (system-user token recommended)') as string} className="pr-10"
+                                  /><div className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground">{<button
+                                        type="button"
+                                        onClick={() => setShowToken((v) => !v)}
+                                        className="p-1"
+                                        aria-label={showToken ? t('common.hide', 'Hide') : t('common.show', 'Show')}
+                                      >
+                                        {showToken ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                      </button>}</div></div>
             <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
               {t(
                 'settings.whatsapp.accessTokenHint',
@@ -315,12 +315,10 @@ export const WhatsAppTab: React.FC = () => {
           </label>
 
           <Button
-            onClick={() => save.mutate()}
-            disabled={save.isPending}
-            leftIcon={<Save className="w-4 h-4" />}
-          >
-            {save.isPending ? t('common.saving', 'Saving…') : t('common.save', 'Save')}
-          </Button>
+                              onClick={() => save.mutate()}
+                              disabled={save.isPending}
+                            >
+                              <Save className="w-4 h-4" />{save.isPending ? t('common.saving', 'Saving…') : t('common.save', 'Save')}</Button>
         </CardContent>
       </Card>
 
@@ -345,15 +343,13 @@ export const WhatsAppTab: React.FC = () => {
               className="max-w-xs"
             />
             <Button
-              variant="outline"
-              onClick={() => sendTest.mutate()}
-              disabled={!testPhone.trim() || sendTest.isPending}
-              leftIcon={<Send className="w-4 h-4" />}
-            >
-              {sendTest.isPending
-                ? t('settings.whatsapp.testSending', 'Sending…')
-                : t('settings.whatsapp.testSend', 'Send test')}
-            </Button>
+                                    variant="outline"
+                                    onClick={() => sendTest.mutate()}
+                                    disabled={!testPhone.trim() || sendTest.isPending}
+                                  >
+                                    <Send className="w-4 h-4" />{sendTest.isPending
+                                      ? t('settings.whatsapp.testSending', 'Sending…')
+                                      : t('settings.whatsapp.testSend', 'Send test')}</Button>
           </div>
         </CardContent>
       </Card>

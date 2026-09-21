@@ -12,8 +12,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
-import { AlertTriangle, CheckCircle2, Eye, EyeOff, Send, ShieldCheck, Users, XCircle } from 'lucide-react';
-import { Button, Card } from '../../../components/common';
+import { AlertTriangle, CheckCircle2, Eye, EyeOff, Send, ShieldCheck, Users, XCircle, Loader2 } from 'lucide-react';
 import { PermissionGate } from '../../../components/admin/PermissionGate';
 import { useLocalizedDate } from '../../../hooks/useLocalizedDate';
 import { useMutationWithToast } from '../../../hooks';
@@ -23,6 +22,8 @@ import {
   type ContractSignersOverview,
   type ContractStatus,
 } from '../../../services/contracts.service';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 const STATUS_CHIP: Record<string, string> = {
   pending: 'bg-neutral-100 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-200',
@@ -82,158 +83,147 @@ export const SigningOverviewCard: React.FC<SigningOverviewCardProps> = ({ contra
 
   return (
     <>
-      <Card padding="lg" className="mb-4">
-        <div className="flex items-center justify-between gap-2 flex-wrap mb-1">
-          <h2 className="font-semibold flex items-center gap-2 text-neutral-900 dark:text-neutral-100">
-            <Users className="w-4 h-4" />
-            {t('contracts.signers.title', 'Signers')}
-          </h2>
-          <span className="text-xs text-neutral-600 dark:text-neutral-400">
-            {overview.order === 'sequential'
-              ? t('contracts.signers.orderSequential', 'One after the other')
-              : t('contracts.signers.orderParallel', 'All at once')}
-          </span>
-        </div>
-        {contractStatus === 'sent' && (
-          <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-3">
-            {t('contracts.signers.countersignLater', 'You counter-sign here once every customer signer has signed.')}
-          </p>
-        )}
-        {overview.followUp && (
-          <div
-            role="alert"
-            className="mb-3 p-3 rounded-md text-sm border border-amber-300 bg-amber-50 text-amber-900
-              dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-200"
-          >
-            <p className="font-medium flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 shrink-0" />
-              {t('contracts.signers.followUpFailed', 'A step after the signature didn\'t go through')}
-            </p>
-            <p className="mt-1">
-              {t(
-                'contracts.signers.followUpFailedBody',
-                'The signature itself is on record. Since {{date}} one step is still outstanding: {{error}}. Use "Re-send the signed contract" to run it again, or send the next signer their link.',
-                { date: formatDateTime(overview.followUp.failedAt), error: overview.followUp.error || '—' },
-              )}
-            </p>
-          </div>
-        )}
-        <ol className="divide-y divide-neutral-200 dark:divide-neutral-700">
-          {signers.map((s) => {
-            const via = viaLabel(s.verifiedVia);
-            const canResend = s.role === 'customer' && s.status === 'invited' && contractStatus === 'sent';
-            return (
-              <li key={s.id} className="py-2 flex flex-wrap items-start gap-3 text-sm">
-                <span className="w-5 text-neutral-500 dark:text-neutral-400">{s.position}.</span>
-                <div className="flex-1 min-w-[180px]">
-                  <p className="font-medium text-neutral-900 dark:text-neutral-100">
-                    {s.name || '—'}
-                    <span className="ml-2 text-xs font-normal text-neutral-500 dark:text-neutral-400">
-                      {s.role === 'issuer'
-                        ? t('contracts.signers.role.issuer', 'Issuer')
-                        : t('contracts.signers.role.customer', 'Customer')}
+      <Card className="py-8 mb-4"><CardContent className="px-8"><div className="flex items-center justify-between gap-2 flex-wrap mb-1">
+                    <h2 className="font-semibold flex items-center gap-2 text-neutral-900 dark:text-neutral-100">
+                      <Users className="w-4 h-4" />
+                      {t('contracts.signers.title', 'Signers')}
+                    </h2>
+                    <span className="text-xs text-neutral-600 dark:text-neutral-400">
+                      {overview.order === 'sequential'
+                        ? t('contracts.signers.orderSequential', 'One after the other')
+                        : t('contracts.signers.orderParallel', 'All at once')}
                     </span>
-                  </p>
-                  {s.email && <p className="text-xs text-neutral-600 dark:text-neutral-400">{s.email}</p>}
-                  <p className="text-xs text-neutral-600 dark:text-neutral-400">
-                    {[
-                      s.status === 'invited' && s.invitedAt
-                        ? t('contracts.signers.invitedAt', 'Link sent {{date}}', { date: formatDateTime(s.invitedAt) })
-                        : null,
-                      via,
-                      s.signedAt ? t('contracts.signers.signedAt', 'Signed {{date}}', { date: formatDateTime(s.signedAt) }) : null,
-                      s.signatureMode === 'drawn' ? t('contracts.signers.mode.drawn', 'Drawn signature') : null,
-                      s.signatureMode === 'typed' ? t('contracts.signers.mode.typed', 'Typed name') : null,
-                      s.declinedAt ? t('contracts.signers.declinedAt', 'Declined {{date}}', { date: formatDateTime(s.declinedAt) }) : null,
-                    ].filter(Boolean).join(' · ')}
-                  </p>
-                </div>
-                <span className={`px-2 py-0.5 rounded-sm text-xs font-medium ${STATUS_CHIP[s.status] || STATUS_CHIP.pending}`}>
-                  {statusLabel(s)}
-                </span>
-                {canResend && (
-                  <PermissionGate permission="contracts.manage">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      disabled={resendMutation.isPending}
-                      onClick={() => {
-                        if (window.confirm(t('contracts.signers.resendConfirm', 'Send {{name}} a new signing link? The previous link stops working.', { name: s.name || s.email || '' }) as string)) {
-                          resendMutation.mutate(s);
-                        }
-                      }}
+                  </div>{contractStatus === 'sent' && (
+                    <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-3">
+                      {t('contracts.signers.countersignLater', 'You counter-sign here once every customer signer has signed.')}
+                    </p>
+                  )}{overview.followUp && (
+                    <div
+                      role="alert"
+                      className="mb-3 p-3 rounded-md text-sm border border-amber-300 bg-amber-50 text-amber-900
+                        dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-200"
                     >
-                      <Send className="w-4 h-4 mr-1" />
-                      {t('contracts.signers.resend', 'Send the link again')}
-                    </Button>
-                  </PermissionGate>
-                )}
-              </li>
-            );
-          })}
-        </ol>
-        <PermissionGate permission="contracts.manage">
-          <EvidencePanel contractId={contractId} />
-        </PermissionGate>
-      </Card>
+                      <p className="font-medium flex items-center gap-2">
+                        <AlertTriangle className="w-4 h-4 shrink-0" />
+                        {t('contracts.signers.followUpFailed', 'A step after the signature didn\'t go through')}
+                      </p>
+                      <p className="mt-1">
+                        {t(
+                          'contracts.signers.followUpFailedBody',
+                          'The signature itself is on record. Since {{date}} one step is still outstanding: {{error}}. Use "Re-send the signed contract" to run it again, or send the next signer their link.',
+                          { date: formatDateTime(overview.followUp.failedAt), error: overview.followUp.error || '—' },
+                        )}
+                      </p>
+                    </div>
+                  )}<ol className="divide-y divide-neutral-200 dark:divide-neutral-700">
+                    {signers.map((s) => {
+                      const via = viaLabel(s.verifiedVia);
+                      const canResend = s.role === 'customer' && s.status === 'invited' && contractStatus === 'sent';
+                      return (
+                        <li key={s.id} className="py-2 flex flex-wrap items-start gap-3 text-sm">
+                          <span className="w-5 text-neutral-500 dark:text-neutral-400">{s.position}.</span>
+                          <div className="flex-1 min-w-[180px]">
+                            <p className="font-medium text-neutral-900 dark:text-neutral-100">
+                              {s.name || '—'}
+                              <span className="ml-2 text-xs font-normal text-neutral-500 dark:text-neutral-400">
+                                {s.role === 'issuer'
+                                  ? t('contracts.signers.role.issuer', 'Issuer')
+                                  : t('contracts.signers.role.customer', 'Customer')}
+                              </span>
+                            </p>
+                            {s.email && <p className="text-xs text-neutral-600 dark:text-neutral-400">{s.email}</p>}
+                            <p className="text-xs text-neutral-600 dark:text-neutral-400">
+                              {[
+                                s.status === 'invited' && s.invitedAt
+                                  ? t('contracts.signers.invitedAt', 'Link sent {{date}}', { date: formatDateTime(s.invitedAt) })
+                                  : null,
+                                via,
+                                s.signedAt ? t('contracts.signers.signedAt', 'Signed {{date}}', { date: formatDateTime(s.signedAt) }) : null,
+                                s.signatureMode === 'drawn' ? t('contracts.signers.mode.drawn', 'Drawn signature') : null,
+                                s.signatureMode === 'typed' ? t('contracts.signers.mode.typed', 'Typed name') : null,
+                                s.declinedAt ? t('contracts.signers.declinedAt', 'Declined {{date}}', { date: formatDateTime(s.declinedAt) }) : null,
+                              ].filter(Boolean).join(' · ')}
+                            </p>
+                          </div>
+                          <span className={`px-2 py-0.5 rounded-sm text-xs font-medium ${STATUS_CHIP[s.status] || STATUS_CHIP.pending}`}>
+                            {statusLabel(s)}
+                          </span>
+                          {canResend && (
+                            <PermissionGate permission="contracts.manage">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                disabled={resendMutation.isPending}
+                                onClick={() => {
+                                  if (window.confirm(t('contracts.signers.resendConfirm', 'Send {{name}} a new signing link? The previous link stops working.', { name: s.name || s.email || '' }) as string)) {
+                                    resendMutation.mutate(s);
+                                  }
+                                }}
+                              >
+                                <Send className="w-4 h-4 mr-1" />
+                                {t('contracts.signers.resend', 'Send the link again')}
+                              </Button>
+                            </PermissionGate>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ol><PermissionGate permission="contracts.manage">
+                    <EvidencePanel contractId={contractId} />
+                  </PermissionGate></CardContent></Card>
 
-      <Card padding="lg" className="mb-4">
-        <div className="flex items-center justify-between gap-2 flex-wrap mb-1">
-          <h2 className="font-semibold flex items-center gap-2 text-neutral-900 dark:text-neutral-100">
-            <ShieldCheck className="w-4 h-4" />
-            {t('contracts.signers.log.title', 'Signing log')}
-          </h2>
-          {overview.chain && (overview.chain.ok ? (
-            <span className="inline-flex items-center gap-1 text-xs text-green-700 dark:text-green-300">
-              <CheckCircle2 className="w-3.5 h-3.5" />
-              {t('contracts.signers.log.chainOk', 'Chain intact')}
-              <span className="text-neutral-500 dark:text-neutral-400">
-                {' · '}{t('contracts.signers.log.chainCount', 'Entries checked: {{count}}', { count: overview.chain.count })}
-              </span>
-            </span>
-          ) : (
-            <span className="inline-flex items-center gap-1 text-xs text-red-700 dark:text-red-300">
-              <XCircle className="w-3.5 h-3.5" />
-              {t('contracts.signers.log.chainBroken', 'Chain broken at #{{seq}}', { seq: overview.chain.brokenAt ?? '?' })}
-            </span>
-          ))}
-        </div>
-        <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-3">
-          {t('contracts.signers.log.help', 'Every step of the signing, in order. Each entry is chained to the one before, so a change to any entry shows up in the check.')}
-        </p>
-        {overview.chain && !overview.chain.ok && overview.chain.reason && (
-          <p className="text-sm text-red-700 dark:text-red-300 mb-3">
-            {t(`contracts.signers.log.reason.${overview.chain.reason}`, overview.chain.reason)}
-          </p>
-        )}
-        {overview.events.length === 0 ? (
-          <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('contracts.signers.log.empty', 'No entries yet.')}</p>
-        ) : (
-          <ol className="space-y-2">
-            {overview.events.map((e) => {
-              const actor = e.actorLabel || t(`contracts.signers.log.actor.${e.actorType}`, e.actorType);
-              const signer = nameOf(e.signerId);
-              return (
-                <li key={e.seq} className="flex items-start gap-3 text-sm border-l-2 border-primary pl-3">
-                  <span className="font-mono text-xs text-neutral-500 dark:text-neutral-400 w-8 shrink-0">#{e.seq}</span>
-                  <div className="flex-1 min-w-0">
-                    <div className="font-medium text-neutral-900 dark:text-neutral-100">
-                      {t(`contracts.signers.log.type.${e.type}`, e.type.replace(/_/g, ' '))}
-                    </div>
-                    <div className="text-xs text-neutral-600 dark:text-neutral-400">
-                      {actor}
-                      {signer && signer !== e.actorLabel && ` · ${signer}`}
-                    </div>
-                  </div>
-                  <div className="text-xs text-neutral-600 dark:text-neutral-400 whitespace-nowrap font-mono">
-                    {formatDateTime(e.occurredAt)}
-                  </div>
-                </li>
-              );
-            })}
-          </ol>
-        )}
-      </Card>
+      <Card className="py-8 mb-4"><CardContent className="px-8"><div className="flex items-center justify-between gap-2 flex-wrap mb-1">
+                    <h2 className="font-semibold flex items-center gap-2 text-neutral-900 dark:text-neutral-100">
+                      <ShieldCheck className="w-4 h-4" />
+                      {t('contracts.signers.log.title', 'Signing log')}
+                    </h2>
+                    {overview.chain && (overview.chain.ok ? (
+                      <span className="inline-flex items-center gap-1 text-xs text-green-700 dark:text-green-300">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        {t('contracts.signers.log.chainOk', 'Chain intact')}
+                        <span className="text-neutral-500 dark:text-neutral-400">
+                          {' · '}{t('contracts.signers.log.chainCount', 'Entries checked: {{count}}', { count: overview.chain.count })}
+                        </span>
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 text-xs text-red-700 dark:text-red-300">
+                        <XCircle className="w-3.5 h-3.5" />
+                        {t('contracts.signers.log.chainBroken', 'Chain broken at #{{seq}}', { seq: overview.chain.brokenAt ?? '?' })}
+                      </span>
+                    ))}
+                  </div><p className="text-xs text-neutral-500 dark:text-neutral-400 mb-3">
+                    {t('contracts.signers.log.help', 'Every step of the signing, in order. Each entry is chained to the one before, so a change to any entry shows up in the check.')}
+                  </p>{overview.chain && !overview.chain.ok && overview.chain.reason && (
+                    <p className="text-sm text-red-700 dark:text-red-300 mb-3">
+                      {t(`contracts.signers.log.reason.${overview.chain.reason}`, overview.chain.reason)}
+                    </p>
+                  )}{overview.events.length === 0 ? (
+                    <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('contracts.signers.log.empty', 'No entries yet.')}</p>
+                  ) : (
+                    <ol className="space-y-2">
+                      {overview.events.map((e) => {
+                        const actor = e.actorLabel || t(`contracts.signers.log.actor.${e.actorType}`, e.actorType);
+                        const signer = nameOf(e.signerId);
+                        return (
+                          <li key={e.seq} className="flex items-start gap-3 text-sm border-l-2 border-primary pl-3">
+                            <span className="font-mono text-xs text-neutral-500 dark:text-neutral-400 w-8 shrink-0">#{e.seq}</span>
+                            <div className="flex-1 min-w-0">
+                              <div className="font-medium text-neutral-900 dark:text-neutral-100">
+                                {t(`contracts.signers.log.type.${e.type}`, e.type.replace(/_/g, ' '))}
+                              </div>
+                              <div className="text-xs text-neutral-600 dark:text-neutral-400">
+                                {actor}
+                                {signer && signer !== e.actorLabel && ` · ${signer}`}
+                              </div>
+                            </div>
+                            <div className="text-xs text-neutral-600 dark:text-neutral-400 whitespace-nowrap font-mono">
+                              {formatDateTime(e.occurredAt)}
+                            </div>
+                          </li>
+                        );
+                      })}
+                    </ol>
+                  )}</CardContent></Card>
     </>
   );
 };
@@ -261,24 +251,20 @@ const EvidencePanel: React.FC<{ contractId: number }> = ({ contractId }) => {
     <div className="mt-3 pt-3 border-t border-neutral-200 dark:border-neutral-700">
       <div className="flex items-center gap-3 flex-wrap">
         <Button
-          variant="outline"
-          size="sm"
-          disabled={isFetching}
-          isLoading={isFetching}
-          onClick={() => {
-            if (shown) {
-              setShown(false);
-              return;
-            }
-            setShown(true);
-            refetch();
-          }}
-        >
-          {shown ? <EyeOff className="w-4 h-4 mr-1" /> : <Eye className="w-4 h-4 mr-1" />}
-          {shown
-            ? t('contracts.signers.evidence.hide', 'Hide evidence')
-            : t('contracts.signers.evidence.show', 'Show evidence')}
-        </Button>
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          if (shown) {
+                            setShown(false);
+                            return;
+                          }
+                          setShown(true);
+                          refetch();
+                        }} disabled={isFetching || isFetching}
+                      >
+                        {isFetching && <Loader2 className="animate-spin" />}{shown ? <EyeOff className="w-4 h-4 mr-1" /> : <Eye className="w-4 h-4 mr-1" />}{shown
+                          ? t('contracts.signers.evidence.hide', 'Hide evidence')
+                          : t('contracts.signers.evidence.show', 'Show evidence')}</Button>
         <span className="text-xs text-neutral-500 dark:text-neutral-400">
           {t('contracts.signers.evidence.note', 'Shows the IP address, browser and decline reason recorded for each signer. Each time you open it, that is recorded in the activity log.')}
         </span>

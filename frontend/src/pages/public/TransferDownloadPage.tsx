@@ -17,9 +17,10 @@ import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Download, FileDown, Clock, PackageOpen, AlertCircle } from 'lucide-react';
 
-import { Button, Loading } from '../../components/common';
+import { Loading } from '../../components/common';
 import { useLocalizedDate } from '../../hooks/useLocalizedDate';
 import { transfersService } from '../../services/transfers.service';
+import { Button } from "@/components/ui/button";
 
 function formatBytes(bytes: number | null | undefined): string {
   if (!bytes) return '';
@@ -99,9 +100,8 @@ export const TransferDownloadPage: React.FC = () => {
 
       {/* Prominent download-all */}
       <a href={transfersService.publicDownloadAllUrl(token as string)} className="block">
-        <Button size="lg" leftIcon={<Download className="h-5 w-5" />} className="w-full">
-          {t('transfers.downloadAll', 'Download all')}
-        </Button>
+        <Button size="lg" className="w-full">
+                        <Download className="h-5 w-5" />{t('transfers.downloadAll', 'Download all')}</Button>
       </a>
 
       {data.files && data.files.length > 0 && (

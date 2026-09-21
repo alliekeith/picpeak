@@ -1,8 +1,8 @@
 import { useEffect, useId, useRef, useState, type ComponentType } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowUpFromLine, Globe, ListChecks, MessageSquare, Send, ShieldOff, Sparkles, Trash2 } from 'lucide-react';
-import { Button } from '../../../components/common/Button';
 import { UsageCatalog } from '../UsageCatalog';
+import { Button } from "@/components/ui/button";
 
 /**
  * Sections of the disclosure, in reading order. Each is a translated

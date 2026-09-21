@@ -26,9 +26,9 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Lock, Save, User as UserIcon, MapPin, Phone, Mail } from 'lucide-react';
+import { Lock, Save, User as UserIcon, MapPin, Phone, Mail, Loader2 } from 'lucide-react';
 
-import { Button, Input, Loading, CountrySelect } from '../../components/common';
+import { Loading, CountrySelect } from '../../components/common';
 
 /**
  * Inline tile wrapper used in place of <Card> on this page.
@@ -55,6 +55,8 @@ import {
   type CustomerProfileFull,
   type CustomerProfileUpdate,
 } from '../../services/customer.service';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 const SALUTATION_OPTIONS = [
   { value: '', labelKey: 'customer.profile.salutation.none', fallback: '— Not specified —' },
@@ -85,6 +87,7 @@ function profileToForm(p: CustomerProfileFull): CustomerProfileUpdate {
 }
 
 export const CustomerProfilePage: React.FC = () => {
+    const __fieldId = React.useId();
   const { t } = useTranslation();
   const qc = useQueryClient();
 
@@ -224,12 +227,11 @@ export const CustomerProfilePage: React.FC = () => {
               <label className="block text-sm font-medium text-foreground mb-1">
                 {t('customer.profile.field.email', 'Email (login)')}
               </label>
-              <Input
-                value={profile.email}
-                readOnly
-                disabled
-                leftIcon={<Mail className="w-5 h-5 text-neutral-400" />}
-              />
+              <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Mail className="w-5 h-5 text-neutral-400" />}</div><Input
+                                          value={profile.email}
+                                          readOnly
+                                          disabled className="pl-10"
+                                        /></div>
               <p className="mt-1 text-xs text-muted-foreground">
                 {t('customer.profile.field.emailHint', 'Contact your photographer if you need to change your login email.')}
               </p>
@@ -459,9 +461,8 @@ export const CustomerProfilePage: React.FC = () => {
         )}
 
         <div className="flex justify-end">
-          <Button type="submit" variant="primary" leftIcon={<Save className="w-4 h-4" />} isLoading={savingProfile}>
-            {t('customer.profile.save', 'Save changes')}
-          </Button>
+          <Button type="submit" disabled={savingProfile}>
+                              {savingProfile && <Loader2 className="animate-spin" />}<Save className="w-4 h-4" />{t('customer.profile.save', 'Save changes')}</Button>
         </div>
       </form>
 
@@ -481,37 +482,34 @@ export const CustomerProfilePage: React.FC = () => {
             <label className="block text-sm font-medium text-foreground mb-1">
               {t('customer.profile.password.current', 'Current password')}
             </label>
-            <Input
-              type="password"
-              value={pwForm.current}
-              onChange={(e) => setPwForm((p) => ({ ...p, current: e.target.value }))}
-              error={pwErrors.current}
-              autoComplete="current-password"
-            />
+            <div className="w-full"><Input
+                                    type="password"
+                                    value={pwForm.current}
+                                    onChange={(e) => setPwForm((p) => ({ ...p, current: e.target.value }))}
+                                    autoComplete="current-password" aria-invalid={!!(pwErrors.current)} aria-describedby={(pwErrors.current) ? `${__fieldId}-0-error` : undefined}
+                                  />{(pwErrors.current) && <p id={`${__fieldId}-0-error`} className="mt-1.5 text-sm text-destructive">{pwErrors.current}</p>}</div>
           </div>
           <div>
             <label className="block text-sm font-medium text-foreground mb-1">
               {t('customer.profile.password.next', 'New password')}
             </label>
-            <Input
-              type="password"
-              value={pwForm.next}
-              onChange={(e) => setPwForm((p) => ({ ...p, next: e.target.value }))}
-              error={pwErrors.next}
-              autoComplete="new-password"
-            />
+            <div className="w-full"><Input
+                                    type="password"
+                                    value={pwForm.next}
+                                    onChange={(e) => setPwForm((p) => ({ ...p, next: e.target.value }))}
+                                    autoComplete="new-password" aria-invalid={!!(pwErrors.next)} aria-describedby={(pwErrors.next) ? `${__fieldId}-1-error` : undefined}
+                                  />{(pwErrors.next) && <p id={`${__fieldId}-1-error`} className="mt-1.5 text-sm text-destructive">{pwErrors.next}</p>}</div>
           </div>
           <div>
             <label className="block text-sm font-medium text-foreground mb-1">
               {t('customer.profile.password.confirm', 'Confirm new password')}
             </label>
-            <Input
-              type="password"
-              value={pwForm.confirm}
-              onChange={(e) => setPwForm((p) => ({ ...p, confirm: e.target.value }))}
-              error={pwErrors.confirm}
-              autoComplete="new-password"
-            />
+            <div className="w-full"><Input
+                                    type="password"
+                                    value={pwForm.confirm}
+                                    onChange={(e) => setPwForm((p) => ({ ...p, confirm: e.target.value }))}
+                                    autoComplete="new-password" aria-invalid={!!(pwErrors.confirm)} aria-describedby={(pwErrors.confirm) ? `${__fieldId}-2-error` : undefined}
+                                  />{(pwErrors.confirm) && <p id={`${__fieldId}-2-error`} className="mt-1.5 text-sm text-destructive">{pwErrors.confirm}</p>}</div>
           </div>
           <div className="sm:col-span-3">
             <p className="mt-1 text-xs text-muted-foreground">
@@ -519,9 +517,8 @@ export const CustomerProfilePage: React.FC = () => {
             </p>
           </div>
           <div className="sm:col-span-3 flex justify-end">
-            <Button type="submit" variant="primary" leftIcon={<Lock className="w-4 h-4" />} isLoading={savingPassword}>
-              {t('customer.profile.password.submit', 'Update password')}
-            </Button>
+            <Button type="submit" disabled={savingPassword}>
+                                    {savingPassword && <Loader2 className="animate-spin" />}<Lock className="w-4 h-4" />{t('customer.profile.password.submit', 'Update password')}</Button>
           </div>
         </form>
       </ProfileTile>

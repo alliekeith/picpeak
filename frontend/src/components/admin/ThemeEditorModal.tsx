@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { X, Save, RotateCcw, Grid3X3, Layers, Play, Clock, LayoutGrid, Check, Columns, Film } from 'lucide-react';
-import { Button } from '../common';
 import { ThemeCustomizerEnhanced } from './ThemeCustomizerEnhanced';
 import { GalleryPreview } from './GalleryPreview';
 import { ThemeConfig, GALLERY_THEME_PRESETS, GalleryLayoutType } from '../../types/theme.types';
 import { cssTemplatesService, type EnabledTemplate } from '../../services/cssTemplates.service';
 import { useTranslation } from 'react-i18next';
+import { Button } from "@/components/ui/button";
 
 interface ThemeEditorModalProps {
   isOpen: boolean;
@@ -210,23 +210,18 @@ export const ThemeEditorModal: React.FC<ThemeEditorModalProps> = ({
         {/* Footer */}
         <div className="px-6 py-4 border-t border-neutral-200 flex items-center justify-between">
           <Button
-            variant="outline"
-            leftIcon={<RotateCcw className="w-4 h-4" />}
-            onClick={handleReset}
-          >
-            {t('branding.resetToDefault')}
-          </Button>
+                              variant="outline"
+                              onClick={handleReset}
+                            >
+                              <RotateCcw className="w-4 h-4" />{t('branding.resetToDefault')}</Button>
           <div className="flex gap-3">
             <Button variant="outline" onClick={onClose}>
               {t('common.cancel')}
             </Button>
             <Button
-              variant="primary"
-              leftIcon={<Save className="w-4 h-4" />}
-              onClick={handleSave}
-            >
-              {t('branding.saveTheme')}
-            </Button>
+                                    onClick={handleSave}
+                                  >
+                                    <Save className="w-4 h-4" />{t('branding.saveTheme')}</Button>
           </div>
         </div>
       </div>

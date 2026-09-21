@@ -9,10 +9,10 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { ArrowDown, ArrowUp, Plus, Trash2 } from 'lucide-react';
-import { Button } from '../common';
 import {
   documentAttachmentsService, formatAttachmentSize, type AttachmentDelivery,
 } from '../../services/documentAttachments.service';
+import { Button } from "@/components/ui/button";
 
 export interface AttachmentRow {
   attachmentId: number;

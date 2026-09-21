@@ -37,11 +37,10 @@ import {
   Columns,
   Maximize2,
   HelpCircle,
-  Save
-} from 'lucide-react';
-import { Button } from '../common';
+  Save, Loader2 } from 'lucide-react';
 import DOMPurify from 'dompurify';
 import '../../styles/prose-overrides.css';
+import { Button } from "@/components/ui/button";
 
 interface CMSEditorProps {
   content: string;
@@ -257,13 +256,10 @@ export const CMSEditor: React.FC<CMSEditorProps> = ({ content, onChange, onSave,
             <div className="flex items-center gap-2">
               {onSave && (
                 <Button
-                  size="sm"
-                  onClick={onSave}
-                  isLoading={isSaving}
-                  leftIcon={<Save className="w-4 h-4" />}
-                >
-                  {t('cms.editor.save', 'Save')}
-                </Button>
+                                                size="sm"
+                                                onClick={onSave} disabled={isSaving}
+                                              >
+                                                {isSaving && <Loader2 className="animate-spin" />}<Save className="w-4 h-4" />{t('cms.editor.save', 'Save')}</Button>
               )}
 
               <MenuButton

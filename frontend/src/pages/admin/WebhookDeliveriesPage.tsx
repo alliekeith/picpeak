@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
-import { ArrowLeft, RefreshCw, RotateCw, Send, X, AlertCircle, CheckCircle2, Clock } from 'lucide-react';
-import { Button, Card, Loading } from '../../components/common';
+import { ArrowLeft, RefreshCw, RotateCw, Send, X, AlertCircle, CheckCircle2, Clock, Loader2 } from 'lucide-react';
+import { Loading } from '../../components/common';
 import { api } from '../../config/api';
 import { useModal, useMutationWithToast } from '../../hooks';
 import { useLocalizedDate } from '../../hooks/useLocalizedDate';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 const WEBHOOK_EVENT_TYPES = [
   'event.created',
@@ -174,111 +176,101 @@ export const WebhookDeliveriesPage: React.FC = () => {
         </div>
         <div className="flex items-center gap-2">
           <Button
-            variant="outline"
-            size="sm"
-            leftIcon={<Send className="w-4 h-4" />}
-            onClick={() => testDialog.open()}
-          >
-            {t('settings.webhooks.deliveries.sendTest', 'Send test event')}
-          </Button>
+                              variant="outline"
+                              size="sm"
+                              onClick={() => testDialog.open()}
+                            >
+                              <Send className="w-4 h-4" />{t('settings.webhooks.deliveries.sendTest', 'Send test event')}</Button>
           <Button
-            variant="ghost"
-            size="sm"
-            leftIcon={<RefreshCw className="w-4 h-4" />}
-            onClick={() => deliveriesQuery.refetch()}
-          >
-            {t('settings.webhooks.deliveries.refresh', 'Refresh')}
-          </Button>
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => deliveriesQuery.refetch()}
+                            >
+                              <RefreshCw className="w-4 h-4" />{t('settings.webhooks.deliveries.refresh', 'Refresh')}</Button>
         </div>
       </div>
 
-      <Card padding="md">
-        <div className="flex items-center gap-2 mb-3">
-          {STATUS_FILTERS.map((s) => (
-            <button
-              key={s}
-              onClick={() => setFilter(s)}
-              className={`text-xs px-3 py-1 rounded-full ${
-                filter === s
-                  ? 'bg-primary text-white'
-                  : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200'
-              }`}
-            >
-              {t(`settings.webhooks.deliveries.status.${s}`, s)}
-            </button>
-          ))}
-          <span className="ml-auto text-xs text-neutral-500">
-            {t('settings.webhooks.deliveries.total', '{{count}} total', { count: total })}
-          </span>
-        </div>
-
-        {deliveriesQuery.isLoading ? (
-          <Loading size="md" />
-        ) : deliveries.length === 0 ? (
-          <p className="text-sm text-neutral-500 dark:text-neutral-400 py-8 text-center">
-            {t(
-              'settings.webhooks.deliveries.empty',
-              'No deliveries yet. Create an event or send a test event to see something here.'
-            )}
-          </p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="text-left text-neutral-500 dark:text-neutral-400 border-b border-neutral-200 dark:border-neutral-700">
-                  <th className="py-2 pr-3">{t('settings.webhooks.deliveries.colTime', 'Time')}</th>
-                  <th className="py-2 pr-3">{t('settings.webhooks.deliveries.colEvent', 'Event')}</th>
-                  <th className="py-2 pr-3">{t('settings.webhooks.deliveries.colStatus', 'Status')}</th>
-                  <th className="py-2 pr-3">{t('settings.webhooks.deliveries.colAttempts', 'Attempts')}</th>
-                  <th className="py-2 pr-3">{t('settings.webhooks.deliveries.colHttp', 'HTTP')}</th>
-                  <th className="py-2 pr-3">{t('settings.webhooks.deliveries.colLatency', 'Latency')}</th>
-                  <th className="py-2 text-right"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {deliveries.map((d) => (
-                  <tr
-                    key={d.id}
-                    className="border-b border-neutral-100 dark:border-neutral-800 last:border-0 cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-800/40"
-                    onClick={() => setOpenDeliveryId(d.id)}
-                  >
-                    <td className="py-2.5 pr-3 text-xs text-neutral-600 dark:text-neutral-400">
-                      {fmtDateTime(d.created_at)}
-                    </td>
-                    <td className="py-2.5 pr-3 font-mono text-xs">{d.event_type}</td>
-                    <td className="py-2.5 pr-3">
-                      <span className={`text-xs px-2 py-0.5 rounded-sm ${statusBadge(d.status)}`}>
-                        {d.status === 'success' && <CheckCircle2 className="w-3 h-3 inline mr-1" />}
-                        {d.status === 'pending' && <Clock className="w-3 h-3 inline mr-1" />}
-                        {d.status === 'failed' && <AlertCircle className="w-3 h-3 inline mr-1" />}
-                        {t(`settings.webhooks.deliveries.status.${d.status}`, d.status)}
-                      </span>
-                    </td>
-                    <td className="py-2.5 pr-3 text-xs">{d.attempt_count}</td>
-                    <td className="py-2.5 pr-3 text-xs font-mono">{d.response_status ?? '—'}</td>
-                    <td className="py-2.5 pr-3 text-xs text-neutral-500">{d.latency_ms != null ? `${d.latency_ms}ms` : '—'}</td>
-                    <td className="py-2.5 text-right">
-                      {d.status === 'failed' && (
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          leftIcon={<RotateCw className="w-3.5 h-3.5" />}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            replayMutation.mutate(d.id);
-                          }}
-                        >
-                          {t('settings.webhooks.deliveries.replay', 'Replay')}
-                        </Button>
+      <Card><CardContent><div className="flex items-center gap-2 mb-3">
+                    {STATUS_FILTERS.map((s) => (
+                      <button
+                        key={s}
+                        onClick={() => setFilter(s)}
+                        className={`text-xs px-3 py-1 rounded-full ${
+                          filter === s
+                            ? 'bg-primary text-white'
+                            : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200'
+                        }`}
+                      >
+                        {t(`settings.webhooks.deliveries.status.${s}`, s)}
+                      </button>
+                    ))}
+                    <span className="ml-auto text-xs text-neutral-500">
+                      {t('settings.webhooks.deliveries.total', '{{count}} total', { count: total })}
+                    </span>
+                  </div>{deliveriesQuery.isLoading ? (
+                    <Loading size="md" />
+                  ) : deliveries.length === 0 ? (
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400 py-8 text-center">
+                      {t(
+                        'settings.webhooks.deliveries.empty',
+                        'No deliveries yet. Create an event or send a test event to see something here.'
                       )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </Card>
+                    </p>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-sm">
+                        <thead>
+                          <tr className="text-left text-neutral-500 dark:text-neutral-400 border-b border-neutral-200 dark:border-neutral-700">
+                            <th className="py-2 pr-3">{t('settings.webhooks.deliveries.colTime', 'Time')}</th>
+                            <th className="py-2 pr-3">{t('settings.webhooks.deliveries.colEvent', 'Event')}</th>
+                            <th className="py-2 pr-3">{t('settings.webhooks.deliveries.colStatus', 'Status')}</th>
+                            <th className="py-2 pr-3">{t('settings.webhooks.deliveries.colAttempts', 'Attempts')}</th>
+                            <th className="py-2 pr-3">{t('settings.webhooks.deliveries.colHttp', 'HTTP')}</th>
+                            <th className="py-2 pr-3">{t('settings.webhooks.deliveries.colLatency', 'Latency')}</th>
+                            <th className="py-2 text-right"></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {deliveries.map((d) => (
+                            <tr
+                              key={d.id}
+                              className="border-b border-neutral-100 dark:border-neutral-800 last:border-0 cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-800/40"
+                              onClick={() => setOpenDeliveryId(d.id)}
+                            >
+                              <td className="py-2.5 pr-3 text-xs text-neutral-600 dark:text-neutral-400">
+                                {fmtDateTime(d.created_at)}
+                              </td>
+                              <td className="py-2.5 pr-3 font-mono text-xs">{d.event_type}</td>
+                              <td className="py-2.5 pr-3">
+                                <span className={`text-xs px-2 py-0.5 rounded-sm ${statusBadge(d.status)}`}>
+                                  {d.status === 'success' && <CheckCircle2 className="w-3 h-3 inline mr-1" />}
+                                  {d.status === 'pending' && <Clock className="w-3 h-3 inline mr-1" />}
+                                  {d.status === 'failed' && <AlertCircle className="w-3 h-3 inline mr-1" />}
+                                  {t(`settings.webhooks.deliveries.status.${d.status}`, d.status)}
+                                </span>
+                              </td>
+                              <td className="py-2.5 pr-3 text-xs">{d.attempt_count}</td>
+                              <td className="py-2.5 pr-3 text-xs font-mono">{d.response_status ?? '—'}</td>
+                              <td className="py-2.5 pr-3 text-xs text-neutral-500">{d.latency_ms != null ? `${d.latency_ms}ms` : '—'}</td>
+                              <td className="py-2.5 text-right">
+                                {d.status === 'failed' && (
+                                  <Button
+                                                                    size="sm"
+                                                                    variant="ghost"
+                                                                    onClick={(e) => {
+                                                                      e.stopPropagation();
+                                                                      replayMutation.mutate(d.id);
+                                                                    }}
+                                                                  >
+                                                                    <RotateCw className="w-3.5 h-3.5" />{t('settings.webhooks.deliveries.replay', 'Replay')}</Button>
+                                )}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}</CardContent></Card>
 
       {/* Slide-over with delivery detail */}
       {openDeliveryId !== null && (
@@ -382,9 +374,8 @@ export const WebhookDeliveriesPage: React.FC = () => {
             </select>
             <div className="flex justify-end gap-2">
               <Button variant="ghost" onClick={() => testDialog.close()}>{t('common.cancel', 'Cancel')}</Button>
-              <Button variant="primary" isLoading={testMutation.isPending} onClick={() => testMutation.mutate()}>
-                {t('settings.webhooks.deliveries.send', 'Send')}
-              </Button>
+              <Button onClick={() => testMutation.mutate()} disabled={testMutation.isPending}>
+                                          {testMutation.isPending && <Loader2 className="animate-spin" />}{t('settings.webhooks.deliveries.send', 'Send')}</Button>
             </div>
           </div>
         </div>

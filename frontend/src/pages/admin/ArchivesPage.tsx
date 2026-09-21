@@ -15,13 +15,17 @@ import {
 import { format, parseISO, isValid } from 'date-fns';
 import { toast } from 'react-toastify';
 
-import { Button, Input, Card, Loading } from '../../components/common';
+import { Loading } from '../../components/common';
 import { PermissionGate } from '../../components/admin/PermissionGate';
 import { useQuery } from '@tanstack/react-query';
 import { archiveService, type ArchiveSortBy } from '../../services/archive.service';
 import { useTranslation } from 'react-i18next';
 import { useLocalizedDate } from '../../hooks/useLocalizedDate';
 import { useMutationWithToast } from '../../hooks';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+
 // import { useNavigate } from 'react-router-dom';
 
 export const ArchivesPage: React.FC = () => {
@@ -134,210 +138,191 @@ export const ArchivesPage: React.FC = () => {
 
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <Card padding="sm">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('archives.totalArchives')}</p>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{totals.archives}</p>
-            </div>
-            <Archive className="w-8 h-8 text-brand" />
-          </div>
-        </Card>
+        <Card className="py-4"><CardContent className="px-4"><div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('archives.totalArchives')}</p>
+                            <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{totals.archives}</p>
+                          </div>
+                          <Archive className="w-8 h-8 text-brand" />
+                        </div></CardContent></Card>
 
-        <Card padding="sm">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('archives.storageUsed')}</p>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{archiveService.formatBytes(totals.archiveSize)}</p>
-            </div>
-            <HardDrive className="w-8 h-8 text-blue-600" />
-          </div>
-        </Card>
+        <Card className="py-4"><CardContent className="px-4"><div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('archives.storageUsed')}</p>
+                            <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{archiveService.formatBytes(totals.archiveSize)}</p>
+                          </div>
+                          <HardDrive className="w-8 h-8 text-blue-600" />
+                        </div></CardContent></Card>
 
-        <Card padding="sm">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('archives.totalPhotos')}</p>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
-                {totals.photos === 0 ? '0' : totals.photos.toLocaleString()}
-              </p>
-            </div>
-            <FileArchive className="w-8 h-8 text-green-600" />
-          </div>
-        </Card>
+        <Card className="py-4"><CardContent className="px-4"><div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('archives.totalPhotos')}</p>
+                            <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
+                              {totals.photos === 0 ? '0' : totals.photos.toLocaleString()}
+                            </p>
+                          </div>
+                          <FileArchive className="w-8 h-8 text-green-600" />
+                        </div></CardContent></Card>
 
-        <Card padding="sm">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('archives.avgArchiveSize')}</p>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
-                {totals.archives > 0
-                  ? archiveService.formatBytes(totals.archiveSize / totals.archives)
-                  : '0 Bytes'
-                }
-              </p>
-            </div>
-            <Calendar className="w-8 h-8 text-purple-600" />
-          </div>
-        </Card>
+        <Card className="py-4"><CardContent className="px-4"><div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('archives.avgArchiveSize')}</p>
+                            <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
+                              {totals.archives > 0
+                                ? archiveService.formatBytes(totals.archiveSize / totals.archives)
+                                : '0 Bytes'
+                              }
+                            </p>
+                          </div>
+                          <Calendar className="w-8 h-8 text-purple-600" />
+                        </div></CardContent></Card>
       </div>
 
       {/* Filters and Search */}
-      <Card padding="sm" className="mb-6">
-        <div className="flex flex-col lg:flex-row gap-4">
-          <div className="flex-1">
-            <Input
-              type="text"
-              placeholder={t('archives.searchPlaceholder')}
-              leftIcon={<Search className="w-5 h-5 text-neutral-400" />}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          
-          <div className="flex gap-2">
-            <select
-              value={filterType}
-              onChange={(e) => setFilterType(e.target.value)}
-              className="px-4 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
-            >
-              <option value="all">{t('archives.allTypes')}</option>
-              <option value="wedding">{t('archives.wedding')}</option>
-              <option value="birthday">{t('archives.birthday')}</option>
-              <option value="corporate">{t('archives.corporate')}</option>
-              <option value="party">Party</option>
-              <option value="other">{t('archives.other')}</option>
-            </select>
+      <Card className="py-4 mb-6"><CardContent className="px-4"><div className="flex flex-col lg:flex-row gap-4">
+                    <div className="flex-1">
+                      <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Search className="w-5 h-5 text-neutral-400" />}</div><Input
+                                          type="text"
+                                          placeholder={t('archives.searchPlaceholder')}
+                                          value={searchTerm}
+                                          onChange={(e) => setSearchTerm(e.target.value)} className="pl-10"
+                                        /></div>
+                    </div>
+                    
+                    <div className="flex gap-2">
+                      <select
+                        value={filterType}
+                        onChange={(e) => setFilterType(e.target.value)}
+                        className="px-4 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
+                      >
+                        <option value="all">{t('archives.allTypes')}</option>
+                        <option value="wedding">{t('archives.wedding')}</option>
+                        <option value="birthday">{t('archives.birthday')}</option>
+                        <option value="corporate">{t('archives.corporate')}</option>
+                        <option value="party">Party</option>
+                        <option value="other">{t('archives.other')}</option>
+                      </select>
 
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as any)}
-              className="px-4 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
-            >
-              <option value="date">{t('archives.sortByDate')}</option>
-              <option value="name">{t('archives.sortByName')}</option>
-              <option value="size">{t('archives.sortBySize')}</option>
-            </select>
-          </div>
-        </div>
-      </Card>
+                      <select
+                        value={sortBy}
+                        onChange={(e) => setSortBy(e.target.value as any)}
+                        className="px-4 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
+                      >
+                        <option value="date">{t('archives.sortByDate')}</option>
+                        <option value="name">{t('archives.sortByName')}</option>
+                        <option value="size">{t('archives.sortBySize')}</option>
+                      </select>
+                    </div>
+                  </div></CardContent></Card>
 
       {/* Archives Table */}
-      <Card className="overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                  {t('archives.tableHeaders.event')}
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                  {t('archives.tableHeaders.type')}
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                  {t('archives.tableHeaders.archivedDate')}
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                  {t('archives.tableHeaders.size')}
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                  {t('archives.tableHeaders.photos')}
-                </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                  {t('archives.tableHeaders.actions')}
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white dark:bg-neutral-800 divide-y divide-neutral-200 dark:divide-neutral-700">
-              {archives.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-neutral-500 dark:text-neutral-400">
-                    {t('archives.noArchivesFound')}
-                  </td>
-                </tr>
-              ) : (
-                archives.map((archive) => (
-                  <tr key={archive.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-700/50">
-                    <td className="px-6 py-4">
-                      <div>
-                        <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">{archive.eventName}</p>
-                        <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                          {t('archives.eventDateNA').replace('N/A', formatDate(archive.eventDate, 'MMM d, yyyy') || 'N/A')}
-                        </p>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-sm text-neutral-700 dark:text-neutral-300 capitalize">
-                      {archive.eventType}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-neutral-700 dark:text-neutral-300">
-                      <div>
-                        <p>{formatDate(archive.archivedAt, 'MMM d, yyyy') || t('archives.processing')}</p>
-                        <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                          {archive.archivedAt ? fmtTime(archive.archivedAt) : ''}
-                        </p>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-sm text-neutral-700 dark:text-neutral-300">
-                      {archiveService.formatBytes(archive.archiveSize)}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-neutral-700 dark:text-neutral-300">
-                      {archive.photoCount}
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        {/* Details view not implemented yet
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleViewDetails(archive)}
-                          leftIcon={<Eye className="w-4 h-4" />}
-                        >
-                          Details
-                        </Button>
-                        */}
-                        <PermissionGate permission="archives.download">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleDownload(archive)}
-                            leftIcon={<Download className="w-4 h-4" />}
-                            disabled={!archive.archivePath}
-                          >
-                            {t('archives.download')}
-                          </Button>
-                        </PermissionGate>
-                        <PermissionGate permission="archives.restore">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleRestore(archive)}
-                            leftIcon={<RotateCcw className="w-4 h-4" />}
-                            disabled={restoreMutation.isPending}
-                          >
-                            {t('archives.restore')}
-                          </Button>
-                        </PermissionGate>
-                        <PermissionGate permission="archives.delete">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleDelete(archive)}
-                            leftIcon={<Trash2 className="w-4 h-4" />}
-                            className="text-red-600 hover:text-red-700"
-                            disabled={deleteMutation.isPending}
-                          >
-                            {t('archives.delete')}
-                          </Button>
-                        </PermissionGate>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-      </Card>
+      <Card className="overflow-hidden"><CardContent><div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead className="bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700">
+                        <tr>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            {t('archives.tableHeaders.event')}
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            {t('archives.tableHeaders.type')}
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            {t('archives.tableHeaders.archivedDate')}
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            {t('archives.tableHeaders.size')}
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            {t('archives.tableHeaders.photos')}
+                          </th>
+                          <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            {t('archives.tableHeaders.actions')}
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white dark:bg-neutral-800 divide-y divide-neutral-200 dark:divide-neutral-700">
+                        {archives.length === 0 ? (
+                          <tr>
+                            <td colSpan={6} className="px-6 py-12 text-center text-neutral-500 dark:text-neutral-400">
+                              {t('archives.noArchivesFound')}
+                            </td>
+                          </tr>
+                        ) : (
+                          archives.map((archive) => (
+                            <tr key={archive.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-700/50">
+                              <td className="px-6 py-4">
+                                <div>
+                                  <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">{archive.eventName}</p>
+                                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                                    {t('archives.eventDateNA').replace('N/A', formatDate(archive.eventDate, 'MMM d, yyyy') || 'N/A')}
+                                  </p>
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 text-sm text-neutral-700 dark:text-neutral-300 capitalize">
+                                {archive.eventType}
+                              </td>
+                              <td className="px-6 py-4 text-sm text-neutral-700 dark:text-neutral-300">
+                                <div>
+                                  <p>{formatDate(archive.archivedAt, 'MMM d, yyyy') || t('archives.processing')}</p>
+                                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                                    {archive.archivedAt ? fmtTime(archive.archivedAt) : ''}
+                                  </p>
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 text-sm text-neutral-700 dark:text-neutral-300">
+                                {archiveService.formatBytes(archive.archiveSize)}
+                              </td>
+                              <td className="px-6 py-4 text-sm text-neutral-700 dark:text-neutral-300">
+                                {archive.photoCount}
+                              </td>
+                              <td className="px-6 py-4 text-right">
+                                <div className="flex items-center justify-end gap-2">
+                                  {/* Details view not implemented yet
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => handleViewDetails(archive)}
+                                    leftIcon={<Eye className="w-4 h-4" />}
+                                  >
+                                    Details
+                                  </Button>
+                                  */}
+                                  <PermissionGate permission="archives.download">
+                                    <Button
+                                                                          variant="ghost"
+                                                                          size="sm"
+                                                                          onClick={() => handleDownload(archive)}
+                                                                          disabled={!archive.archivePath}
+                                                                        >
+                                                                          <Download className="w-4 h-4" />{t('archives.download')}</Button>
+                                  </PermissionGate>
+                                  <PermissionGate permission="archives.restore">
+                                    <Button
+                                                                          variant="ghost"
+                                                                          size="sm"
+                                                                          onClick={() => handleRestore(archive)}
+                                                                          disabled={restoreMutation.isPending}
+                                                                        >
+                                                                          <RotateCcw className="w-4 h-4" />{t('archives.restore')}</Button>
+                                  </PermissionGate>
+                                  <PermissionGate permission="archives.delete">
+                                    <Button
+                                                                          variant="ghost"
+                                                                          size="sm"
+                                                                          onClick={() => handleDelete(archive)}
+                                                                          className="text-red-600 hover:text-red-700"
+                                                                          disabled={deleteMutation.isPending}
+                                                                        >
+                                                                          <Trash2 className="w-4 h-4" />{t('archives.delete')}</Button>
+                                  </PermissionGate>
+                                </div>
+                              </td>
+                            </tr>
+                          ))
+                        )}
+                      </tbody>
+                    </table>
+                  </div></CardContent></Card>
 
       {/* Pagination. The count is shown for any non-empty result — it used to
           be inside the totalPages > 1 guard, so a search that narrowed to a
@@ -356,26 +341,22 @@ export const ArchivesPage: React.FC = () => {
           {archivesData.pagination.totalPages > 1 && (
             <div className="flex items-center gap-2">
               <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                disabled={currentPage === 1}
-                leftIcon={<ChevronLeft className="w-4 h-4" />}
-              >
-                {t('common.previous')}
-              </Button>
+                                          variant="outline"
+                                          size="sm"
+                                          onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                                          disabled={currentPage === 1}
+                                        >
+                                          <ChevronLeft className="w-4 h-4" />{t('common.previous')}</Button>
               <span className="px-3 text-sm">
                 {t('archives.page', { current: currentPage, total: archivesData.pagination.totalPages })}
               </span>
               <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setCurrentPage(prev => Math.min(archivesData.pagination.totalPages, prev + 1))}
-                disabled={currentPage === archivesData.pagination.totalPages}
-                rightIcon={<ChevronRight className="w-4 h-4" />}
-              >
-                {t('common.next')}
-              </Button>
+                                          variant="outline"
+                                          size="sm"
+                                          onClick={() => setCurrentPage(prev => Math.min(archivesData.pagination.totalPages, prev + 1))}
+                                          disabled={currentPage === archivesData.pagination.totalPages}
+                                        >{t('common.next')}
+                                          <ChevronRight className="w-4 h-4" /></Button>
             </div>
           )}
         </div>

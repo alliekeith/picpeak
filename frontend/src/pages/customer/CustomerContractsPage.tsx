@@ -16,10 +16,11 @@ import { useNavigate } from 'react-router-dom';
 import { ScrollText, PenLine, Download } from 'lucide-react';
 import { customerService, type CustomerContract } from '../../services/customer.service';
 import { PORTAL_SIGNING_SCOPE, signingSessionStore } from '../../services/publicContractSigning.service';
-import { Card, Loading } from '../../components/common';
+import { Loading } from '../../components/common';
 import { toast } from 'react-toastify';
 
 import { formatShortDate } from '../../utils/dateShort';
+import { Card, CardContent } from "@/components/ui/card";
 
 type SortKey = 'newest' | 'oldest';
 type StatusFilter =
@@ -97,11 +98,9 @@ export const CustomerContractsPage: React.FC = () => {
       </div>
 
       {all.length === 0 ? (
-        <Card padding="lg">
-          <p className="text-center text-muted-foreground py-8">
-            {t('customer.contracts.empty', 'No contracts yet.')}
-          </p>
-        </Card>
+        <Card className="py-8"><CardContent className="px-8"><p className="text-center text-muted-foreground py-8">
+                          {t('customer.contracts.empty', 'No contracts yet.')}
+                        </p></CardContent></Card>
       ) : (
         <>
           <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
@@ -146,11 +145,9 @@ export const CustomerContractsPage: React.FC = () => {
                 : t('customer.filter.countFiltered', '{{visible}} of {{total}}', { visible: visible.length, total: all.length })}
             </div>
           </div>
-          <Card padding="none">
-            <ul className="divide-y" style={{ borderColor: 'var(--border)' }}>
-              {visible.map((c) => <ContractRow key={c.id} c={c} />)}
-            </ul>
-          </Card>
+          <Card className="py-0"><CardContent className="px-0"><ul className="divide-y" style={{ borderColor: 'var(--border)' }}>
+                                    {visible.map((c) => <ContractRow key={c.id} c={c} />)}
+                                  </ul></CardContent></Card>
         </>
       )}
     </div>

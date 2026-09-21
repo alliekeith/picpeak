@@ -3,9 +3,11 @@ import { useQuery } from '@tanstack/react-query';
 import { Plus, X, Loader2, Image as ImageIcon, Check, Download, DownloadCloud, ArrowUp, ArrowDown, RotateCcw, Folder, FolderOpen } from 'lucide-react';
 import { categoriesService, type PhotoCategory } from '../../services/categories.service';
 import { photosService } from '../../services/photos.service';
-import { Button, Card, AuthenticatedImage } from '../common';
+import { AuthenticatedImage } from '../common';
 import { useTranslation } from 'react-i18next';
 import { useMutationWithToast, useModal } from '../../hooks';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface EventCategoryManagerProps {
   eventId: number;
@@ -168,24 +170,20 @@ export const EventCategoryManager: React.FC<EventCategoryManagerProps> = ({ even
         <div className="flex items-center gap-2">
           {isCustomised && (
             <Button
-              variant="outline"
-              size="sm"
-              onClick={() => resetMutation.mutate()}
-              disabled={busy}
-              leftIcon={<RotateCcw className="w-3 h-3" />}
-            >
-              {t('categories.resetToDefault', 'Reset to default')}
-            </Button>
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => resetMutation.mutate()}
+                                    disabled={busy}
+                                  >
+                                    <RotateCcw className="w-3 h-3" />{t('categories.resetToDefault', 'Reset to default')}</Button>
           )}
           {!addingModal.isOpen && (
             <Button
-              variant="outline"
-              size="sm"
-              onClick={addingModal.open}
-              leftIcon={<Plus className="w-3 h-3" />}
-            >
-              {t('common.add')}
-            </Button>
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={addingModal.open}
+                                  >
+                                    <Plus className="w-3 h-3" />{t('common.add')}</Button>
           )}
         </div>
       </div>
@@ -211,7 +209,6 @@ export const EventCategoryManager: React.FC<EventCategoryManagerProps> = ({ even
             autoFocus
           />
           <Button
-            variant="primary"
             size="sm"
             onClick={handleCreate}
             disabled={!newCategoryName.trim() || createMutation.isPending}
@@ -380,80 +377,74 @@ export const EventCategoryManager: React.FC<EventCategoryManagerProps> = ({ even
       {/* Hero Photo Picker Modal */}
       {heroPickerCategoryId !== null && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-          <Card className="max-w-4xl w-full max-h-[90vh] overflow-hidden">
-            <div className="p-6 border-b border-neutral-200 dark:border-neutral-700">
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">{t('categories.setCoverPhoto')}</h2>
-                <button
-                  onClick={() => setHeroPickerCategoryId(null)}
-                  className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-
-            <div className="p-6 overflow-y-auto max-h-[calc(90vh-180px)]">
-              {photos.length === 0 ? (
-                <p className="text-center text-neutral-500 dark:text-neutral-400 py-8">
-                  {t('events.noPhotosAvailable')}
-                </p>
-              ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                  {photos.map((photo) => {
-                    const currentCategory = ordered.find(c => c.id === heroPickerCategoryId);
-                    const isSelected = photo.id === currentCategory?.hero_photo_id;
-                    return (
-                      <div
-                        key={photo.id}
-                        onClick={() => handleSelectHeroPhoto(heroPickerCategoryId, photo.id)}
-                        className={`relative cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${
-                          isSelected
-                            ? 'border-primary ring-2 ring-brand-500 ring-offset-2'
-                            : 'border-transparent hover:border-neutral-300'
-                        }`}
-                      >
-                        <div className="aspect-square bg-neutral-100 dark:bg-neutral-700">
-                          <AuthenticatedImage
-                            src={photo.thumbnail_url || photo.url}
-                            alt={photo.filename}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                        {isSelected && (
-                          <div className="absolute top-2 right-2 bg-primary text-white rounded-full p-1">
-                            <Check className="w-4 h-4" />
-                          </div>
-                        )}
-                        <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/60 to-transparent p-2">
-                          <p className="text-white text-xs truncate">{photo.filename}</p>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-
-            <div className="p-6 border-t border-neutral-200 dark:border-neutral-700 flex justify-between gap-3">
-              {ordered.find(c => c.id === heroPickerCategoryId)?.hero_photo_id && (
-                <Button
-                  variant="outline"
-                  onClick={() => handleRemoveHeroPhoto(heroPickerCategoryId)}
-                  disabled={heroMutation.isPending}
-                >
-                  {t('categories.removeCoverPhoto')}
-                </Button>
-              )}
-              <div className="flex-1" />
-              <Button
-                variant="outline"
-                onClick={() => setHeroPickerCategoryId(null)}
-              >
-                {t('common.cancel')}
-              </Button>
-            </div>
-          </Card>
+          <Card className="max-w-4xl w-full max-h-[90vh] overflow-hidden"><CardContent><div className="p-6 border-b border-neutral-200 dark:border-neutral-700">
+                                <div className="flex items-center justify-between">
+                                  <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">{t('categories.setCoverPhoto')}</h2>
+                                  <button
+                                    onClick={() => setHeroPickerCategoryId(null)}
+                                    className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors"
+                                  >
+                                    <X className="w-5 h-5" />
+                                  </button>
+                                </div>
+                              </div><div className="p-6 overflow-y-auto max-h-[calc(90vh-180px)]">
+                                {photos.length === 0 ? (
+                                  <p className="text-center text-neutral-500 dark:text-neutral-400 py-8">
+                                    {t('events.noPhotosAvailable')}
+                                  </p>
+                                ) : (
+                                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                                    {photos.map((photo) => {
+                                      const currentCategory = ordered.find(c => c.id === heroPickerCategoryId);
+                                      const isSelected = photo.id === currentCategory?.hero_photo_id;
+                                      return (
+                                        <div
+                                          key={photo.id}
+                                          onClick={() => handleSelectHeroPhoto(heroPickerCategoryId, photo.id)}
+                                          className={`relative cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${
+                                            isSelected
+                                              ? 'border-primary ring-2 ring-brand-500 ring-offset-2'
+                                              : 'border-transparent hover:border-neutral-300'
+                                          }`}
+                                        >
+                                          <div className="aspect-square bg-neutral-100 dark:bg-neutral-700">
+                                            <AuthenticatedImage
+                                              src={photo.thumbnail_url || photo.url}
+                                              alt={photo.filename}
+                                              className="w-full h-full object-cover"
+                                            />
+                                          </div>
+                                          {isSelected && (
+                                            <div className="absolute top-2 right-2 bg-primary text-white rounded-full p-1">
+                                              <Check className="w-4 h-4" />
+                                            </div>
+                                          )}
+                                          <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/60 to-transparent p-2">
+                                            <p className="text-white text-xs truncate">{photo.filename}</p>
+                                          </div>
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                )}
+                              </div><div className="p-6 border-t border-neutral-200 dark:border-neutral-700 flex justify-between gap-3">
+                                {ordered.find(c => c.id === heroPickerCategoryId)?.hero_photo_id && (
+                                  <Button
+                                    variant="outline"
+                                    onClick={() => handleRemoveHeroPhoto(heroPickerCategoryId)}
+                                    disabled={heroMutation.isPending}
+                                  >
+                                    {t('categories.removeCoverPhoto')}
+                                  </Button>
+                                )}
+                                <div className="flex-1" />
+                                <Button
+                                  variant="outline"
+                                  onClick={() => setHeroPickerCategoryId(null)}
+                                >
+                                  {t('common.cancel')}
+                                </Button>
+                              </div></CardContent></Card>
         </div>
       )}
     </div>

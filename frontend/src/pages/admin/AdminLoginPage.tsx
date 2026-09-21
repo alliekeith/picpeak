@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Navigate, useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { Lock, Mail, Eye, EyeOff, AlertCircle, ShieldCheck, KeyRound, ArrowLeft } from 'lucide-react';
+import { Lock, Mail, Eye, EyeOff, AlertCircle, ShieldCheck, KeyRound, ArrowLeft, Loader2 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
-import { Button, Input, Card, ReCaptcha, PoweredBy } from '../../components/common';
+import { ReCaptcha, PoweredBy } from '../../components/common';
 import { useAdminAuth } from '../../contexts';
 import { authService } from '../../services/auth.service';
 import { isMfaChallenge } from '../../types';
@@ -15,6 +15,9 @@ import { useAdminDarkMode } from '../../contexts/AdminDarkModeContext';
 import { resolveLoginLogoClasses } from '../../utils/loginLogoSize';
 import { buildResourceUrl } from '../../utils/url';
 import { api } from '../../config/api';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 export const AdminLoginPage: React.FC = () => {
   const { t } = useTranslation();
@@ -263,220 +266,202 @@ export const AdminLoginPage: React.FC = () => {
         </div>
 
         {/* Login Form */}
-        <Card padding="lg">
-          {step === 'credentials' && settingsData?.oidc_enabled === true && settingsData?.oidc_local_login_disabled === true ? (
-          // SSO-only mode (#798 phase 2): the backend refuses password logins
-          // while oidc_disable_local_login is effective, so the form would
-          // only produce 403s — show the SSO entry alone instead.
-          <div className="space-y-6">
-            <p className="text-sm text-center text-neutral-600">
-              {t('adminLogin.ssoOnlyHint', 'Password login is disabled on this instance — sign in through your identity provider.')}
-            </p>
-            <Button
-              type="button"
-              variant="primary"
-              size="lg"
-              className="w-full"
-              leftIcon={<KeyRound className="w-4 h-4" />}
-              onClick={() => { window.location.href = buildResourceUrl('/api/auth/admin/sso/login'); }}
-            >
-              {settingsData.oidc_button_label?.trim() || t('adminLogin.ssoSignIn', 'Sign in with SSO')}
-            </Button>
-          </div>
-          ) : step === 'credentials' ? (
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Form Error */}
-            {errors.form && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
-                <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
-                <p className="text-sm text-red-800">{errors.form}</p>
-              </div>
-            )}
+        <Card className="py-8"><CardContent className="px-8">{step === 'credentials' && settingsData?.oidc_enabled === true && settingsData?.oidc_local_login_disabled === true ? (
+                        // SSO-only mode (#798 phase 2): the backend refuses password logins
+                        // while oidc_disable_local_login is effective, so the form would
+                        // only produce 403s — show the SSO entry alone instead.
+                        <div className="space-y-6">
+                          <p className="text-sm text-center text-neutral-600">
+                            {t('adminLogin.ssoOnlyHint', 'Password login is disabled on this instance — sign in through your identity provider.')}
+                          </p>
+                          <Button
+                                                      type="button"
+                                                      size="lg"
+                                                      className="w-full"
+                                                      onClick={() => { window.location.href = buildResourceUrl('/api/auth/admin/sso/login'); }}
+                                                    >
+                                                      <KeyRound className="w-4 h-4" />{settingsData.oidc_button_label?.trim() || t('adminLogin.ssoSignIn', 'Sign in with SSO')}</Button>
+                        </div>
+                        ) : step === 'credentials' ? (
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                          {/* Form Error */}
+                          {errors.form && (
+                            <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
+                              <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+                              <p className="text-sm text-red-800">{errors.form}</p>
+                            </div>
+                          )}
 
-            {/* Email Field */}
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-neutral-700 mb-1">
-                {t('adminLogin.emailLabel')}
-              </label>
-              <Input
-                id="email"
-                type="email"
-                value={formData.email}
-                onChange={handleInputChange('email')}
-                error={errors.email}
-                placeholder={t('adminLogin.emailPlaceholder')}
-                leftIcon={<Mail className="w-5 h-5 text-neutral-400" />}
-                autoComplete="email"
-                autoFocus
-              />
-            </div>
+                          {/* Email Field */}
+                          <div>
+                            <label htmlFor="email" className="block text-sm font-medium text-neutral-700 mb-1">
+                              {t('adminLogin.emailLabel')}
+                            </label>
+                            <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Mail className="w-5 h-5 text-neutral-400" />}</div><Input
+                                                            id="email"
+                                                            type="email"
+                                                            value={formData.email}
+                                                            onChange={handleInputChange('email')}
+                                                            placeholder={t('adminLogin.emailPlaceholder')}
+                                                            autoComplete="email"
+                                                            autoFocus className="pl-10" aria-invalid={!!(errors.email)} aria-describedby={(errors.email) ? "email-error" : undefined}
+                                                          /></div>{(errors.email) && <p id={"email-error"} className="mt-1.5 text-sm text-destructive">{errors.email}</p>}</div>
+                          </div>
 
-            {/* Password Field */}
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-neutral-700 mb-1">
-                {t('adminLogin.passwordLabel')}
-              </label>
-              <div className="relative">
-                <Input
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
-                  value={formData.password}
-                  onChange={handleInputChange('password')}
-                  error={errors.password}
-                  placeholder={t('adminLogin.passwordPlaceholder')}
-                  leftIcon={<Lock className="w-5 h-5 text-neutral-400" />}
-                  autoComplete="current-password"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-3 text-neutral-400 hover:text-neutral-600 transition-colors"
-                  tabIndex={-1}
-                >
-                  {showPassword ? (
-                    <EyeOff className="w-5 h-5" />
-                  ) : (
-                    <Eye className="w-5 h-5" />
-                  )}
-                </button>
-              </div>
-            </div>
+                          {/* Password Field */}
+                          <div>
+                            <label htmlFor="password" className="block text-sm font-medium text-neutral-700 mb-1">
+                              {t('adminLogin.passwordLabel')}
+                            </label>
+                            <div className="relative">
+                              <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-neutral-400" />}</div><Input
+                                                                  id="password"
+                                                                  type={showPassword ? 'text' : 'password'}
+                                                                  value={formData.password}
+                                                                  onChange={handleInputChange('password')}
+                                                                  placeholder={t('adminLogin.passwordPlaceholder')}
+                                                                  autoComplete="current-password" className="pl-10" aria-invalid={!!(errors.password)} aria-describedby={(errors.password) ? "password-error" : undefined}
+                                                                /></div>{(errors.password) && <p id={"password-error"} className="mt-1.5 text-sm text-destructive">{errors.password}</p>}</div>
+                              <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-3 top-3 text-neutral-400 hover:text-neutral-600 transition-colors"
+                                tabIndex={-1}
+                              >
+                                {showPassword ? (
+                                  <EyeOff className="w-5 h-5" />
+                                ) : (
+                                  <Eye className="w-5 h-5" />
+                                )}
+                              </button>
+                            </div>
+                          </div>
 
-            {/* Remember Me */}
-            <div className="flex items-center justify-between">
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  className="w-4 h-4 text-brand border-neutral-300 rounded-sm focus:ring-brand-500"
-                />
-                <span className="ml-2 text-sm text-neutral-700">{t('adminLogin.rememberMe')}</span>
-              </label>
-            </div>
+                          {/* Remember Me */}
+                          <div className="flex items-center justify-between">
+                            <label className="flex items-center">
+                              <input
+                                type="checkbox"
+                                checked={rememberMe}
+                                onChange={(e) => setRememberMe(e.target.checked)}
+                                className="w-4 h-4 text-brand border-neutral-300 rounded-sm focus:ring-brand-500"
+                              />
+                              <span className="ml-2 text-sm text-neutral-700">{t('adminLogin.rememberMe')}</span>
+                            </label>
+                          </div>
 
-            {/* reCAPTCHA */}
-            <ReCaptcha
-              onChange={setRecaptchaToken}
-              onExpired={() => setRecaptchaToken(null)}
-            />
+                          {/* reCAPTCHA */}
+                          <ReCaptcha
+                            onChange={setRecaptchaToken}
+                            onExpired={() => setRecaptchaToken(null)}
+                          />
 
-            {/* Submit Button */}
-            <Button
-              type="submit"
-              variant="primary"
-              size="lg"
-              isLoading={isLoading}
-              className="w-full"
-            >
-              {t('adminLogin.signIn')}
-            </Button>
+                          {/* Submit Button */}
+                          <Button
+                                                          type="submit"
+                                                          size="lg"
+                                                          className="w-full" disabled={isLoading}
+                                                        >
+                                                          {isLoading && <Loader2 className="animate-spin" />}{t('adminLogin.signIn')}</Button>
 
-            {/* SSO (#798): plain navigation — the backend route redirects to
-                the IdP; the callback sets the same admin cookie as the local
-                login and lands on the dashboard. */}
-            {settingsData?.oidc_enabled === true && (
-              <>
-                <div className="flex items-center gap-3">
-                  <div className="flex-1 border-t border-neutral-200" />
-                  <span className="text-xs uppercase tracking-wide text-neutral-400">
-                    {t('adminLogin.ssoDivider', 'or')}
-                  </span>
-                  <div className="flex-1 border-t border-neutral-200" />
-                </div>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="lg"
-                  className="w-full"
-                  leftIcon={<KeyRound className="w-4 h-4" />}
-                  // buildResourceUrl respects an absolute VITE_API_URL, so
-                  // split-origin deployments start the flow on the API host
-                  // (where the state cookie must live) instead of 404ing on
-                  // the frontend origin.
-                  onClick={() => { window.location.href = buildResourceUrl('/api/auth/admin/sso/login'); }}
-                >
-                  {settingsData.oidc_button_label?.trim() || t('adminLogin.ssoSignIn', 'Sign in with SSO')}
-                </Button>
-              </>
-            )}
-          </form>
-          ) : (
-          <form onSubmit={handleMfaSubmit} className="space-y-6">
-            <div className="text-center">
-              <div className="mx-auto mb-3 w-12 h-12 rounded-full flex items-center justify-center bg-brand-50 dark:bg-brand-900/30">
-                <ShieldCheck className="w-6 h-6" style={{ color: 'var(--primary, #5C8762)' }} />
-              </div>
-              <h2 className="text-lg font-semibold" style={{ color: 'var(--foreground, #171717)' }}>
-                {t('adminLogin.mfa.title')}
-              </h2>
-              <p className="mt-1 text-sm" style={{ color: 'var(--foreground, #171717)', opacity: 0.7 }}>
-                {useRecoveryCode ? t('adminLogin.mfa.recoverySubtitle') : t('adminLogin.mfa.subtitle')}
-              </p>
-            </div>
+                          {/* SSO (#798): plain navigation — the backend route redirects to
+                              the IdP; the callback sets the same admin cookie as the local
+                              login and lands on the dashboard. */}
+                          {settingsData?.oidc_enabled === true && (
+                            <>
+                              <div className="flex items-center gap-3">
+                                <div className="flex-1 border-t border-neutral-200" />
+                                <span className="text-xs uppercase tracking-wide text-neutral-400">
+                                  {t('adminLogin.ssoDivider', 'or')}
+                                </span>
+                                <div className="flex-1 border-t border-neutral-200" />
+                              </div>
+                              <Button
+                                                                      type="button"
+                                                                      variant="outline"
+                                                                      size="lg"
+                                                                      className="w-full"
+                                                                      // buildResourceUrl respects an absolute VITE_API_URL, so
+                                                                      // split-origin deployments start the flow on the API host
+                                                                      // (where the state cookie must live) instead of 404ing on
+                                                                      // the frontend origin.
+                                                                      onClick={() => { window.location.href = buildResourceUrl('/api/auth/admin/sso/login'); }}
+                                                                    >
+                                                                      <KeyRound className="w-4 h-4" />{settingsData.oidc_button_label?.trim() || t('adminLogin.ssoSignIn', 'Sign in with SSO')}</Button>
+                            </>
+                          )}
+                        </form>
+                        ) : (
+                        <form onSubmit={handleMfaSubmit} className="space-y-6">
+                          <div className="text-center">
+                            <div className="mx-auto mb-3 w-12 h-12 rounded-full flex items-center justify-center bg-brand-50 dark:bg-brand-900/30">
+                              <ShieldCheck className="w-6 h-6" style={{ color: 'var(--primary, #5C8762)' }} />
+                            </div>
+                            <h2 className="text-lg font-semibold" style={{ color: 'var(--foreground, #171717)' }}>
+                              {t('adminLogin.mfa.title')}
+                            </h2>
+                            <p className="mt-1 text-sm" style={{ color: 'var(--foreground, #171717)', opacity: 0.7 }}>
+                              {useRecoveryCode ? t('adminLogin.mfa.recoverySubtitle') : t('adminLogin.mfa.subtitle')}
+                            </p>
+                          </div>
 
-            {mfaError && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
-                <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
-                <p className="text-sm text-red-800">{mfaError}</p>
-              </div>
-            )}
+                          {mfaError && (
+                            <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
+                              <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+                              <p className="text-sm text-red-800">{mfaError}</p>
+                            </div>
+                          )}
 
-            <div>
-              <label htmlFor="mfa-code" className="block text-sm font-medium text-neutral-700 mb-1">
-                {useRecoveryCode ? t('adminLogin.mfa.recoveryCodeLabel') : t('adminLogin.mfa.codeLabel')}
-              </label>
-              <Input
-                id="mfa-code"
-                type="text"
-                value={mfaCode}
-                onChange={(e) => {
-                  setMfaCode(e.target.value);
-                  if (mfaError) setMfaError(null);
-                }}
-                placeholder={useRecoveryCode ? t('adminLogin.mfa.recoveryCodePlaceholder') : t('adminLogin.mfa.codePlaceholder')}
-                leftIcon={<KeyRound className="w-5 h-5 text-neutral-400" />}
-                inputMode={useRecoveryCode ? 'text' : 'numeric'}
-                autoComplete="one-time-code"
-                autoFocus
-              />
-            </div>
+                          <div>
+                            <label htmlFor="mfa-code" className="block text-sm font-medium text-neutral-700 mb-1">
+                              {useRecoveryCode ? t('adminLogin.mfa.recoveryCodeLabel') : t('adminLogin.mfa.codeLabel')}
+                            </label>
+                            <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<KeyRound className="w-5 h-5 text-neutral-400" />}</div><Input
+                                                                id="mfa-code"
+                                                                type="text"
+                                                                value={mfaCode}
+                                                                onChange={(e) => {
+                                                                  setMfaCode(e.target.value);
+                                                                  if (mfaError) setMfaError(null);
+                                                                }}
+                                                                placeholder={useRecoveryCode ? t('adminLogin.mfa.recoveryCodePlaceholder') : t('adminLogin.mfa.codePlaceholder')}
+                                                                inputMode={useRecoveryCode ? 'text' : 'numeric'}
+                                                                autoComplete="one-time-code"
+                                                                autoFocus className="pl-10"
+                                                              /></div>
+                          </div>
 
-            <Button
-              type="submit"
-              variant="primary"
-              size="lg"
-              isLoading={isLoading}
-              className="w-full"
-            >
-              {t('adminLogin.mfa.verify')}
-            </Button>
+                          <Button
+                                                              type="submit"
+                                                              size="lg"
+                                                              className="w-full" disabled={isLoading}
+                                                            >
+                                                              {isLoading && <Loader2 className="animate-spin" />}{t('adminLogin.mfa.verify')}</Button>
 
-            <div className="flex items-center justify-between text-sm">
-              <button
-                type="button"
-                onClick={backToCredentials}
-                className="inline-flex items-center gap-1 text-neutral-500 hover:text-neutral-700 transition-colors"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                {t('adminLogin.mfa.back')}
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setUseRecoveryCode((v) => !v);
-                  setMfaCode('');
-                  setMfaError(null);
-                }}
-                className="hover:underline"
-                style={{ color: 'var(--primary, #5C8762)' }}
-              >
-                {useRecoveryCode ? t('adminLogin.mfa.useAuthenticator') : t('adminLogin.mfa.useRecoveryCode')}
-              </button>
-            </div>
-          </form>
-          )}
-        </Card>
+                          <div className="flex items-center justify-between text-sm">
+                            <button
+                              type="button"
+                              onClick={backToCredentials}
+                              className="inline-flex items-center gap-1 text-neutral-500 hover:text-neutral-700 transition-colors"
+                            >
+                              <ArrowLeft className="w-4 h-4" />
+                              {t('adminLogin.mfa.back')}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setUseRecoveryCode((v) => !v);
+                                setMfaCode('');
+                                setMfaError(null);
+                              }}
+                              className="hover:underline"
+                              style={{ color: 'var(--primary, #5C8762)' }}
+                            >
+                              {useRecoveryCode ? t('adminLogin.mfa.useAuthenticator') : t('adminLogin.mfa.useRecoveryCode')}
+                            </button>
+                          </div>
+                        </form>
+                        )}</CardContent></Card>
 
         {/* Footer */}
         <div className="text-center mt-8">

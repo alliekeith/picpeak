@@ -11,10 +11,13 @@ import React, { useEffect, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { Save, Server, User, Lock, Eye, EyeOff, FolderSearch, PlugZap, Mailbox, RefreshCw } from 'lucide-react';
-import { Button, Card, Input, Loading } from '../common';
+import { Save, Server, User, Lock, Eye, EyeOff, FolderSearch, PlugZap, Mailbox, RefreshCw, Loader2 } from 'lucide-react';
+import { Loading } from '../common';
 import { emailService, type IncomingMailConfig, type ImapFolder } from '../../services/email.service';
 import { useMutationWithToast, useModal } from '../../hooks';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 const labelCls = 'block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1';
 const selectCls = 'w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary';
@@ -99,129 +102,104 @@ export const IncomingMailConfigCard: React.FC = () => {
   if (isLoading) return <Loading />;
 
   return (
-    <Card padding="md" className="mt-6">
-      <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-1">{t('email.incoming.title', 'Incoming mail (IMAP)')}</h2>
-      <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">{t('email.incoming.subtitle', 'A dedicated mailbox polled every minute; attachments land in Accounting → Incoming invoices.')}</p>
+    <Card className="mt-6"><CardContent><h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-1">{t('email.incoming.title', 'Incoming mail (IMAP)')}</h2><p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">{t('email.incoming.subtitle', 'A dedicated mailbox polled every minute; attachments land in Accounting → Incoming invoices.')}</p><div className="space-y-4">
+              <div>
+                <label className={labelCls}>{t('email.incoming.host', 'IMAP Host')} <span className="text-red-500">*</span></label>
+                <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Server className="w-5 h-5 text-neutral-400" />}</div><Input
+                                type="text"
+                                value={cfg.imap_host}
+                                onChange={(e) => set('imap_host', e.target.value)}
+                                placeholder="imap.example.com" className="pl-10"
+                              /></div>
+              </div>
 
-      <div className="space-y-4">
-        <div>
-          <label className={labelCls}>{t('email.incoming.host', 'IMAP Host')} <span className="text-red-500">*</span></label>
-          <Input
-            type="text"
-            value={cfg.imap_host}
-            onChange={(e) => set('imap_host', e.target.value)}
-            placeholder="imap.example.com"
-            leftIcon={<Server className="w-5 h-5 text-neutral-400" />}
-          />
-        </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className={labelCls}>{t('email.incoming.port', 'Port')} <span className="text-red-500">*</span></label>
+                  <Input type="number" value={cfg.imap_port} onChange={(e) => set('imap_port', parseInt(e.target.value, 10) || 0)} placeholder="993" />
+                </div>
+                <div>
+                  <label className={labelCls}>{t('email.incoming.security', 'Security')}</label>
+                  <select className={selectCls} value={cfg.imap_secure ? 'ssl' : 'plain'} onChange={(e) => set('imap_secure', e.target.value === 'ssl')}>
+                    <option value="ssl">{t('email.incoming.ssl', 'SSL/TLS')}</option>
+                    <option value="plain">{t('email.incoming.plain', 'None / STARTTLS')}</option>
+                  </select>
+                </div>
+              </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className={labelCls}>{t('email.incoming.port', 'Port')} <span className="text-red-500">*</span></label>
-            <Input type="number" value={cfg.imap_port} onChange={(e) => set('imap_port', parseInt(e.target.value, 10) || 0)} placeholder="993" />
-          </div>
-          <div>
-            <label className={labelCls}>{t('email.incoming.security', 'Security')}</label>
-            <select className={selectCls} value={cfg.imap_secure ? 'ssl' : 'plain'} onChange={(e) => set('imap_secure', e.target.value === 'ssl')}>
-              <option value="ssl">{t('email.incoming.ssl', 'SSL/TLS')}</option>
-              <option value="plain">{t('email.incoming.plain', 'None / STARTTLS')}</option>
-            </select>
-          </div>
-        </div>
+              <div>
+                <label className={labelCls}>{t('email.incoming.user', 'Username')} <span className="text-red-500">*</span></label>
+                <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<User className="w-5 h-5 text-neutral-400" />}</div><Input
+                                type="text"
+                                value={cfg.imap_user}
+                                onChange={(e) => set('imap_user', e.target.value)}
+                                autoComplete="off"
+                                placeholder="rechnungen@yourdomain.com" className="pl-10"
+                              /></div>
+              </div>
 
-        <div>
-          <label className={labelCls}>{t('email.incoming.user', 'Username')} <span className="text-red-500">*</span></label>
-          <Input
-            type="text"
-            value={cfg.imap_user}
-            onChange={(e) => set('imap_user', e.target.value)}
-            autoComplete="off"
-            placeholder="rechnungen@yourdomain.com"
-            leftIcon={<User className="w-5 h-5 text-neutral-400" />}
-          />
-        </div>
+              <div>
+                <label className={labelCls}>{t('email.incoming.pass', 'Password')}</label>
+                <div className="relative">
+                  <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-neutral-400" />}</div><Input
+                                      type={passwordVisibilityModal.isOpen ? 'text' : 'password'}
+                                      value={cfg.imap_pass}
+                                      onChange={(e) => set('imap_pass', e.target.value)}
+                                      autoComplete="new-password"
+                                      placeholder={t('email.enterPassword', 'Enter password')} className="pl-10"
+                                    /></div>
+                  <button type="button" onClick={passwordVisibilityModal.toggle} className="absolute right-3 top-3 text-neutral-400 hover:text-neutral-600">
+                    {passwordVisibilityModal.isOpen ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
+                </div>
+              </div>
 
-        <div>
-          <label className={labelCls}>{t('email.incoming.pass', 'Password')}</label>
-          <div className="relative">
-            <Input
-              type={passwordVisibilityModal.isOpen ? 'text' : 'password'}
-              value={cfg.imap_pass}
-              onChange={(e) => set('imap_pass', e.target.value)}
-              autoComplete="new-password"
-              placeholder={t('email.enterPassword', 'Enter password')}
-              leftIcon={<Lock className="w-5 h-5 text-neutral-400" />}
-            />
-            <button type="button" onClick={passwordVisibilityModal.toggle} className="absolute right-3 top-3 text-neutral-400 hover:text-neutral-600">
-              {passwordVisibilityModal.isOpen ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-            </button>
-          </div>
-        </div>
+              <div>
+                <label className={labelCls}>{t('email.incoming.folder', 'Folder')}</label>
+                <div className="flex gap-2">
+                  {folders && folders.length > 0 ? (
+                    <select className={selectCls} value={cfg.imap_folder} onChange={(e) => set('imap_folder', e.target.value)}>
+                      {folders.some((f) => f.path === cfg.imap_folder) ? null : <option value={cfg.imap_folder}>{cfg.imap_folder}</option>}
+                      {folders.map((f) => <option key={f.path} value={f.path}>{f.path}</option>)}
+                    </select>
+                  ) : (
+                    <Input type="text" value={cfg.imap_folder} onChange={(e) => set('imap_folder', e.target.value)} placeholder="INBOX" />
+                  )}
+                  <Button
+                                          variant="outline"
+                                          onClick={() => detect.mutate()}
+                                          className="whitespace-nowrap" disabled={!cfg.imap_host || !cfg.imap_user || detect.isPending}
+                                        >
+                                          {detect.isPending && <Loader2 className="animate-spin" />}<FolderSearch className="w-4 h-4" />{t('email.incoming.detectFolders', 'Detect')}</Button>
+                </div>
+                <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">{t('email.incoming.folderHint', 'Enter host, username and password, then Detect to list the mailbox folders.')}</p>
+              </div>
 
-        <div>
-          <label className={labelCls}>{t('email.incoming.folder', 'Folder')}</label>
-          <div className="flex gap-2">
-            {folders && folders.length > 0 ? (
-              <select className={selectCls} value={cfg.imap_folder} onChange={(e) => set('imap_folder', e.target.value)}>
-                {folders.some((f) => f.path === cfg.imap_folder) ? null : <option value={cfg.imap_folder}>{cfg.imap_folder}</option>}
-                {folders.map((f) => <option key={f.path} value={f.path}>{f.path}</option>)}
-              </select>
-            ) : (
-              <Input type="text" value={cfg.imap_folder} onChange={(e) => set('imap_folder', e.target.value)} placeholder="INBOX" />
-            )}
-            <Button
-              variant="outline"
-              onClick={() => detect.mutate()}
-              isLoading={detect.isPending}
-              disabled={!cfg.imap_host || !cfg.imap_user}
-              leftIcon={<FolderSearch className="w-4 h-4" />}
-              className="whitespace-nowrap"
-            >
-              {t('email.incoming.detectFolders', 'Detect')}
-            </Button>
-          </div>
-          <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">{t('email.incoming.folderHint', 'Enter host, username and password, then Detect to list the mailbox folders.')}</p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Button
-            variant="outline"
-            onClick={() => test.mutate()}
-            isLoading={test.isPending}
-            disabled={!cfg.imap_host || !cfg.imap_user}
-            leftIcon={<PlugZap className="w-5 h-5" />}
-            className="whitespace-nowrap"
-          >
-            {t('email.incoming.test', 'Test connection')}
-          </Button>
-          <Button
-            variant="outline"
-            onClick={() => roundTrip.mutate()}
-            isLoading={roundTrip.isPending}
-            disabled={!cfg.imap_host || !cfg.imap_user}
-            leftIcon={<Mailbox className="w-5 h-5" />}
-            className="whitespace-nowrap"
-            title={t('email.incoming.roundTripHint', 'Sends a test email via your SMTP settings to this mailbox and confirms it arrives. Save both first.') as string}
-          >
-            {t('email.incoming.roundTrip', 'Round-trip test')}
-          </Button>
-          <Button
-            variant="outline"
-            onClick={() => poll.mutate()}
-            isLoading={poll.isPending}
-            disabled={!cfg.imap_host || !cfg.imap_user}
-            leftIcon={<RefreshCw className="w-5 h-5" />}
-            className="whitespace-nowrap"
-            title={t('email.incoming.pollHint', 'Check the mailbox now instead of waiting for the 60-second poll. Ingests unread attachments into Incoming invoices.') as string}
-          >
-            {t('email.incoming.poll', 'Check now')}
-          </Button>
-          <Button variant="primary" onClick={() => save.mutate()} isLoading={save.isPending} leftIcon={<Save className="w-5 h-5" />} className="flex-1 min-w-48">
-            {t('email.incoming.save', 'Save Incoming Mail Settings')}
-          </Button>
-        </div>
-      </div>
-    </Card>
+              <div className="flex flex-wrap gap-2">
+                <Button
+                                    variant="outline"
+                                    onClick={() => test.mutate()}
+                                    className="whitespace-nowrap" disabled={!cfg.imap_host || !cfg.imap_user || test.isPending}
+                                  >
+                                    {test.isPending && <Loader2 className="animate-spin" />}<PlugZap className="w-5 h-5" />{t('email.incoming.test', 'Test connection')}</Button>
+                <Button
+                                    variant="outline"
+                                    onClick={() => roundTrip.mutate()}
+                                    className="whitespace-nowrap"
+                                    title={t('email.incoming.roundTripHint', 'Sends a test email via your SMTP settings to this mailbox and confirms it arrives. Save both first.') as string} disabled={!cfg.imap_host || !cfg.imap_user || roundTrip.isPending}
+                                  >
+                                    {roundTrip.isPending && <Loader2 className="animate-spin" />}<Mailbox className="w-5 h-5" />{t('email.incoming.roundTrip', 'Round-trip test')}</Button>
+                <Button
+                                    variant="outline"
+                                    onClick={() => poll.mutate()}
+                                    className="whitespace-nowrap"
+                                    title={t('email.incoming.pollHint', 'Check the mailbox now instead of waiting for the 60-second poll. Ingests unread attachments into Incoming invoices.') as string} disabled={!cfg.imap_host || !cfg.imap_user || poll.isPending}
+                                  >
+                                    {poll.isPending && <Loader2 className="animate-spin" />}<RefreshCw className="w-5 h-5" />{t('email.incoming.poll', 'Check now')}</Button>
+                <Button onClick={() => save.mutate()} className="flex-1 min-w-48" disabled={save.isPending}>
+                                    {save.isPending && <Loader2 className="animate-spin" />}<Save className="w-5 h-5" />{t('email.incoming.save', 'Save Incoming Mail Settings')}</Button>
+              </div>
+            </div></CardContent></Card>
   );
 };
 
