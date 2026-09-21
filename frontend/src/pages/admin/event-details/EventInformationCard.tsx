@@ -19,7 +19,6 @@ import {
 import type { Event } from '../../../types';
 import { Input, Card, Loading, MarkdownContent, LocalizedDateInput } from '../../../components/common';
 import { HeroPhotoSelector, FocalPointPicker, FeedbackSettings } from '../../../components/admin';
-import { CustomerAccountPicker } from '../../../components/admin/CustomerAccountPicker';
 import { api } from '../../../config/api';
 import { buildResourceUrl } from '../../../utils/url';
 import { useLocalizedDate } from '../../../hooks/useLocalizedDate';
@@ -162,13 +161,6 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
               />
             </div>
           )}
-
-          {/* Customer accounts (#354). Picker self-hides when the
-              customerPortal feature flag is off. */}
-          <CustomerAccountPicker
-            value={editForm.customer_accounts}
-            onChange={(next) => setEditForm((prev) => ({ ...prev, customer_accounts: next }))}
-          />
 
           <div>
             <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">

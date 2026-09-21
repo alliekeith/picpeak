@@ -9,7 +9,6 @@ const { db } = require('../database/db');
 const { formatBoolean } = require('../utils/dbCompat');
 const { hasColumnCached } = require('../utils/schemaCache');
 const logger = require('../utils/logger');
-const { auditedUpdate } = require('./accountingHistory');
 
 /**
  * Get all event types
@@ -242,17 +241,11 @@ const updateEventType = async (id, updates, actor = null) => {
   // Resolve schema lookups BEFORE opening the transaction — hasColumnCached
   // reads via the global db, and a global read inside a SQLite transaction
   // (single connection) deadlocks.
-  const quotesHasEventType = await hasColumnCached('quotes', 'event_type');
 
   await db.transaction(async (trx) => {
     await trx('event_types').where('id', id).update(updateData);
     // Re-point existing documents from the old slug to the new one.
     const evCount = await trx('events').where('event_type', oldSlug).update({ event_type: newSlug });
-    let qCount = 0;
-    if (quotesHasEventType) {
-      qCount = await auditedUpdate(trx, 'quotes', { event_type: oldSlug }, { event_type: newSlug },
-        { actor, source: 'event_type.rename' });
-    }
     // Carry the authored per-type reminder template along (subject/body follow the
     // rename). Guard: never clobber an existing target template for the new slug.
     const oldKey = `event_reminder_${oldSlug}`;
@@ -265,7 +258,7 @@ const updateEventType = async (id, updates, actor = null) => {
       tplMoved = true;
     }
     logger.info('Event type slug renamed — cascaded references', {
-      id, oldSlug, newSlug, events: evCount, quotes: qCount, reminderTemplateMoved: tplMoved,
+      id, oldSlug, newSlug, events: evCount, reminderTemplateMoved: tplMoved,
     });
   });
 

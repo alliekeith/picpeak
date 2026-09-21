@@ -439,27 +439,6 @@ async function createEvent(data, { actor, source = 'admin', frontendUrl } = {}) 
   // #1271 — the setting was read before the hashes; re-check after the write
   await dropCopiesIfStorageOff(eventId);
 
-  // Apply customer-account assignments (#354). Skip when the customer
-  // portal flag is off — the frontend hides the picker in that case,
-  // but a stale tab could still POST customer_account_ids; we ignore
-  // them rather than 403 the entire create.
-  if (Array.isArray(input.customer_account_ids)) {
-    try {
-      const customerAccountsService = require('./customerAccountsService');
-      if (await customerAccountsService.isCustomerPortalEnabled()) {
-        await customerAccountsService.setAssignmentsForEvent(
-          eventId,
-          input.customer_account_ids,
-          actor.id
-        );
-      }
-    } catch (e) {
-      logger.error('Failed to set customer assignments on event create', {
-        eventId, error: e.message,
-      });
-    }
-  }
-
   // Log activity
   await logActivity('event_created',
     { event_type, expires_at, require_password: requirePassword, password_strength: passwordValidation?.score },

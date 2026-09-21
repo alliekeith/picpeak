@@ -13,20 +13,8 @@ export { CMSPage } from './CMSPage';
 export { BackupManagement } from './BackupManagement';
 export { EventFeedbackPage } from './EventFeedbackPage';
 export { UserManagementPage } from './UserManagementPage';
-export { CustomerManagementPage } from './CustomerManagementPage';
-export { CustomerDetailPage } from './CustomerDetailPage';
 export { EventTypesPage } from './EventTypesPage';
 export { WebhookDeliveriesPage } from './WebhookDeliveriesPage';
 
 // CRM (Quotes + Invoices) — gated by the `quotes` / `bills` feature flags.
-export { QuotesListPage } from './quotes/QuotesListPage';
-export { QuoteEditorPage } from './quotes/QuoteEditorPage';
-export { QuoteDetailPage } from './quotes/QuoteDetailPage';
 // Quote catalogue + templates (#1451).
-export { QuoteCatalogPage } from './quotes/catalog/QuoteCatalogPage';
-export { QuoteTemplateEditorPage } from './quotes/catalog/QuoteTemplateEditorPage';
-export { BillsListPage } from './bills/BillsListPage';
-export { BillEditorPage } from './bills/BillEditorPage';
-export { BillDetailPage } from './bills/BillDetailPage';
-export { SettingsBusinessProfilePage } from './settings/SettingsBusinessProfilePage';
-export { CrmSettingsPage } from './settings/CrmSettingsPage';

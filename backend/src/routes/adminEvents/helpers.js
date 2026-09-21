@@ -3,7 +3,6 @@ const fs = require('fs').promises;
 const path = require('path');
 const logger = require('../../utils/logger');
 const settings = require('../../services/eventSettings');
-const { deleteWithAccountingHistory } = require('../../services/accountingHistory');
 
 async function deleteEventCascade(eventId, adminContext) {
   const event = await db('events').where('id', eventId).first();
@@ -155,8 +154,7 @@ async function deleteEventCascade(eventId, adminContext) {
     // 4. Delete photos (also handles hero_photo_id foreign key)
     await trx('photos').where('event_id', eventId).del();
     // 5. Finally delete the event row
-    await deleteWithAccountingHistory(trx, 'events', { id: eventId },
-      { actor: adminContext?.id ?? null, source: 'event.delete' });
+    await trx('events').where({ id: eventId }).del();
 
     // Best-effort filesystem cleanup. Failures are logged but don't unwind
     // the transaction — the canonical state lives in the DB; orphan files

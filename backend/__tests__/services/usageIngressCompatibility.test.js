@@ -20,7 +20,7 @@ describe.each(['usage.v1', 'usage.v2', 'usage.v3', 'usage.v4', 'usage.v5'])('%s 
     expect(p.verifyReceivedEnvelope(envelope, now)).toEqual(packet);
   });
 
-  test.each([undefined, null, {}, { crm: { used: true, configured: null } }])('accepts partial incoming measurements %p without rewriting them', features => {
+  test.each([undefined, null, {}, { whatsapp: { used: true, configured: null } }])('accepts partial incoming measurements %p without rewriting them', features => {
     const id = p.generateIdentity();
     const packet = p.makePacket(id, 'report', 1, {
       report_date: '2020-01-02', generated_at: '2020-01-02T12:00:00.000Z',

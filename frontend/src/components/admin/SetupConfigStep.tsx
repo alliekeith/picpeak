@@ -26,9 +26,9 @@ interface Props {
 // is optional — "Skip for now" always leaves — but a section the user DID fill
 // in is validated before it is posted, and a save that fails keeps them on the
 // step with their input intact rather than advancing into a silent data loss.
-export const SetupConfigStep: React.FC<Props> = ({ selectedFeatures, onDone }) => {
+export const SetupConfigStep: React.FC<Props> = ({ onDone }) => {
   const { t } = useTranslation();
-  const showInvoicing = selectedFeatures.has('bills');
+  const showInvoicing = false;
   const [saving, setSaving] = useState(false);
 
   const [inv, setInv] = useState({

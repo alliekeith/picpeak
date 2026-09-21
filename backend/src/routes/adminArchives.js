@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs').promises;
 const { db } = require('../database/db');
-const { deleteWithAccountingHistory } = require('../services/accountingHistory');
 const { formatBoolean } = require('../utils/dbCompat');
 const { slugify } = require('../utils/slug');
 const { adminAuth } = require('../middleware/auth');
@@ -715,8 +714,7 @@ router.delete('/:id', adminAuth, requirePermission('archives.delete'), requireEv
     }
 
     // Delete from database (cascade will delete photos and logs)
-    await deleteWithAccountingHistory(db, 'events', { id: req.params.id },
-      { actor: req.admin.id, source: 'archive.delete' });
+    await db('events').where({ id: req.params.id }).del();
 
     // Log activity
     await db('activity_logs').insert({
