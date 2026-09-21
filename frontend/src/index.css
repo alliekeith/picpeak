@@ -48,7 +48,27 @@
 
     /* Tailwind RGB values for primary color (legacy, used by primary-* utilities) */
     --tw-color-primary: 92 135 98;
-    --radius: 0.5rem;
+
+    /*
+     * shadcn/ui bridge variables.
+     *
+     * The *-fg pair are the readable foreground colours placed on top of the
+     * accent fills. ThemeContext.applyTheme() overwrites them per theme via
+     * getReadableForeground(); the values here are the static defaults used
+     * before React mounts and on pages that never call applyTheme().
+     */
+    --color-accent-fg: #ffffff;
+    --color-accent-dark-fg: #ffffff;
+
+    /* Destructive (delete / danger) actions. Not part of the 8-token CI
+     * palette — intentionally NOT photographer-brandable, so a destructive
+     * action always reads as destructive regardless of branding. */
+    --color-destructive: #dc2626;
+    --color-destructive-fg: #ffffff;
+
+    /* shadcn reads --radius; keep it following the customizer's setting so
+     * shadcn primitives pick up the theme's border-radius automatically. */
+    --radius: var(--border-radius);
   }
 
   /*
@@ -71,6 +91,10 @@
     --color-muted-text: #a3a3a3;
     --color-accent: #22c55e;
     --color-accent-dark: #5C8762;
+    --color-accent-fg: #ffffff;
+    --color-accent-dark-fg: #ffffff;
+    --color-destructive: #ef4444;
+    --color-destructive-fg: #ffffff;
   }
 
   * {

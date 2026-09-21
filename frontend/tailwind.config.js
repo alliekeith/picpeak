@@ -1,3 +1,37 @@
+/**
+ * shadcn/ui token bridge.
+ *
+ * PicPeak stores its theme colours as HEX in CSS variables that
+ * ThemeContext.applyTheme() writes at runtime (per-gallery photographer
+ * branding) — e.g. `--color-surface: #ffffff`. Upstream shadcn instead
+ * expects HSL *channel triplets* so it can do `hsl(var(--x) / <alpha>)`.
+ *
+ * Converting PicPeak to triplets would mean changing the colour format the
+ * admin colour pickers and the backend persist, so instead we bridge: this
+ * helper keeps the hex variables as the single source of truth and
+ * re-implements Tailwind's opacity modifier (`bg-primary/90`) with
+ * color-mix(), which this project already relies on elsewhere in index.css
+ * and which every browser we ship supports (Chromium 111+, Safari 16.2+,
+ * Firefox 113+).
+ *
+ * Net effect: shadcn components inherit white-label branding and admin dark
+ * mode automatically, because both simply rewrite the same `--color-*` vars.
+ */
+const themeColor = (variable) => ({ opacityValue } = {}) => {
+  // Tailwind calls this three ways:
+  //   1. no opacity modifier at all          -> opacityValue === undefined
+  //   2. an opacity modifier, e.g. bg-x/90   -> opacityValue === '0.9'
+  //   3. no modifier, but an opacity utility -> opacityValue === 'var(--tw-bg-opacity, 1)'
+  // Only case 2 may become a color-mix(). Feeding the case-3 CSS variable
+  // string through Number() yields NaN, and `color-mix(... NaN% ...)` is
+  // invalid CSS that the browser drops entirely — which renders the element
+  // transparent rather than branded.
+  if (opacityValue === undefined) return `var(${variable})`
+  const alpha = Number(opacityValue)
+  if (!Number.isFinite(alpha) || alpha >= 1) return `var(${variable})`
+  return `color-mix(in srgb, var(${variable}) ${alpha * 100}%, transparent)`
+}
+
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: 'class',
@@ -19,9 +53,50 @@ export default {
         'border-token': 'var(--color-surface-border)',
         'text-primary': 'var(--color-text)',
         'text-secondary': 'var(--color-muted-text)',
-        accent: 'var(--color-accent)',
-        'accent-dark': 'var(--color-accent-dark)',
+        // `accent` / `accent-dark` keep their existing PicPeak meaning (the
+        // brand colour), so the ~370 existing bg-accent/text-accent call
+        // sites are untouched. The `.foreground` keys are additive and give
+        // shadcn components a guaranteed-readable colour to place on top —
+        // ThemeContext computes them with getReadableForeground().
+        accent: {
+          DEFAULT: themeColor('--color-accent'),
+          foreground: themeColor('--color-accent-fg'),
+        },
+        'accent-dark': {
+          DEFAULT: themeColor('--color-accent-dark'),
+          foreground: themeColor('--color-accent-dark-fg'),
+        },
+
+        // --- shadcn/ui semantic tokens -------------------------------------
+        // All additive. Each points at an existing PicPeak theme variable so
+        // there is exactly one source of truth per colour.
+        foreground: themeColor('--color-text'),
+        muted: {
+          DEFAULT: themeColor('--color-elevated'),
+          foreground: themeColor('--color-muted-text'),
+        },
+        card: {
+          DEFAULT: themeColor('--color-surface'),
+          foreground: themeColor('--color-text'),
+        },
+        popover: {
+          DEFAULT: themeColor('--color-surface'),
+          foreground: themeColor('--color-text'),
+        },
+        destructive: {
+          DEFAULT: themeColor('--color-destructive'),
+          foreground: themeColor('--color-destructive-fg'),
+        },
+        border: themeColor('--color-surface-border'),
+        input: themeColor('--color-surface-border'),
+        ring: themeColor('--color-accent'),
         primary: {
+          // DEFAULT/foreground are additive: `bg-primary` now resolves to the
+          // themed CTA colour used by .btn-primary, while the numeric scale
+          // below (413 existing call sites such as `bg-primary-600`) keeps
+          // its exact hardcoded values.
+          DEFAULT: themeColor('--color-accent-dark'),
+          foreground: themeColor('--color-accent-dark-fg'),
           50: '#f0fdf4',
           100: '#dcfce7',
           200: '#bbf7d0',
@@ -89,6 +164,10 @@ export default {
       borderRadius: {
         'xl': '1rem',
         '2xl': '1.25rem',
+        // Bound to the customizer's border-radius setting. shadcn components
+        // use `rounded-theme` rather than redefining Tailwind's built-in
+        // rounded-md/lg, which would have restyled every existing call site.
+        theme: 'var(--border-radius)',
       },
       boxShadow: {
         'soft': '0 2px 8px rgba(0, 0, 0, 0.04)',
@@ -116,6 +195,9 @@ export default {
     // screen: the toolbar button lit up (the editor state was correct) while
     // the text stayed visually a paragraph. That is issue #1288.
     require('@tailwindcss/typography'),
+    // Enter/exit animations (data-[state=open]:animate-in etc.) used by the
+    // Radix-backed shadcn primitives in src/components/ui.
+    require('tailwindcss-animate'),
   ],
 }
 
