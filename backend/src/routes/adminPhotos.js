@@ -782,15 +782,6 @@ router.delete('/:eventId/photos/:photoId', adminAuth, requirePermission('photos.
     }
 
     // Remove from database
-    // Face data (#1074): the FK cascade is inert on SQLite, and cannot fix up
-    // event_people counts anyway. See faceProcessor.purgePhotoFaces.
-    try {
-      const { purgePhotoFaces } = require('../services/faceProcessor');
-      await purgePhotoFaces(photoId);
-    } catch (err) {
-      logger.warn(`deletePhoto: face purge failed for photo ${photoId}`, { error: err.message });
-    }
-
     // An external photo's file stays on the NAS; make sure the folder watcher
     // (issue 1187) does not re-import it on its next pass.
     await require('../services/externalImportService').recordExclusions(Number(eventId), [photo]);
@@ -1014,23 +1005,6 @@ router.post('/:eventId/photos/bulk-delete', adminAuth, requirePermission('photos
       await require('../services/imageProcessor').deleteThumbnailTiers(photo);
       if (photo.watermark_path) {
         await watermarkGeneratorService.deleteForPhoto(photo.id);
-      }
-    }
-
-    // Face data (#1074), bulk path. Same reasoning as the single delete: the
-    // SQLite FK cascade never fires, and event_people counts need rebuilding
-    // regardless of engine.
-    // Iterate the VALIDATED rows, not the raw request ids. `photos` is already
-    // scoped to this event; `photoIds` is user input, and purgePhotoFaces has
-    // no event scope of its own — so looping the raw ids let an editor delete
-    // face data (and recompute people) in a gallery they do not own, even
-    // though the photo deletion below is correctly scoped.
-    for (const photo of photos) {
-      try {
-        const { purgePhotoFaces } = require('../services/faceProcessor');
-        await purgePhotoFaces(photo.id);
-      } catch (err) {
-        logger.warn(`bulk delete: face purge failed for photo ${photo.id}`, { error: err.message });
       }
     }
 

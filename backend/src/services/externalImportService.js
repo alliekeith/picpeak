@@ -4,7 +4,7 @@
  * This used to live inline in POST /events/:id/import-external. It moved here
  * because the folder watcher (issue 1187) needs to run the exact same pass
  * the Import button runs — same walk, same dedupe, same insert, same
- * thumbnail and face handling — without going through HTTP.
+ * thumbnail handling — without going through HTTP.
  *
  * Mutual exclusion is the database claim from maintenanceJobState, keyed per
  * event. It replaces the in-process Set the route used to keep (#1162): that
@@ -306,10 +306,7 @@ async function importExternalFolder({
     // update used to run after the loop, so an import that died at photo 500
     // of 1000 left those 500 rows carrying external_relpath into the NEW tree
     // while the event still resolved against the OLD one — every one of them
-    // unreadable. And with face detection on, enqueueEvent accepts
-    // processing_status NULL (faceProcessor.js:243-246), which these inserts
-    // leave unset, so an admin hitting the toggle or Re-scan mid-import could
-    // queue those same rows against the stale path and burn them to 'failed'.
+    // unreadable.
     //
     // Safe to do first for existing MANAGED photos: photo.source_origin takes
     // precedence over event.source_mode in both resolvers (photoResolver.js:23,
@@ -328,27 +325,6 @@ async function importExternalFolder({
     let imported = 0;
     let thumbnailsGenerated = 0;
     let thumbnailsFailed = 0;
-
-    // Face detection (#1090). Managed uploads are enqueued by photoProcessor,
-    // which sets face_status 'pending' once a photo is processed
-    // (photoProcessor.js:573) — but external media never goes through it, it
-    // is inserted directly here. Before #1090 that was invisible, because
-    // faceProcessor skipped externals anyway; now that they are scannable, an
-    // import into an already-enabled event would still sit unscanned until
-    // someone pressed Re-scan.
-    //
-    // Ids are collected unconditionally and the setting is read at the END,
-    // not here: this loop can run for many minutes on a large library, and an
-    // admin who enables detection during it would otherwise leave every photo
-    // imported after that moment stuck at NULL forever — the toggle endpoint
-    // only queues rows that already existed when it fired.
-    //
-    // The event path is already committed (above), so the enqueue below is
-    // free of the ordering hazard it used to carry. It stays at the end anyway
-    // so the setting can be read after the loop, and it only touches rows that
-    // are still untouched — see the whereNull there. No video guard needed:
-    // walkDir collects only jpg/jpeg/png/webp.
-    const importedPhotoIds = [];
 
     let superseded = false;
 
@@ -497,7 +473,6 @@ async function importExternalFolder({
           }
         }
 
-        if (photoId != null) importedPhotoIds.push(photoId);
         imported += (inserted?.length ? 1 : 0);
 
         // The manual Import is the explicit intent the exclusion list exists
@@ -508,42 +483,6 @@ async function importExternalFolder({
       } catch (e) {
         skipped++;
       }
-    }
-
-    // The event already resolves to the new directory (set before the loop),
-    // so the queue is safe to open. Still done here rather than on insert so
-    // the setting below is read after the loop. Guarded the same way
-    // photoProcessor guards it
-    // (both the global flag and the per-event toggle), so installs without the
-    // feature still never write a face_status. Re-read here rather than before
-    // the loop so a toggle flipped mid-import is honoured.
-    let queueFaces = false;
-    try {
-      const { isEnabledForEvent } = require('./faceSettings');
-      const freshEvent = await db('events').where('id', eventId).first();
-      queueFaces = await isEnabledForEvent(freshEvent);
-    } catch (err) {
-      // Never let the face feature break an import — the photos are the point.
-      logger.warn(`Could not resolve face settings for event ${eventId}: ${err.message}`);
-    }
-
-    // Chunked because SQLite caps a statement at 999 bound parameters and an
-    // import can be far larger than that.
-    if (queueFaces && importedPhotoIds.length) {
-      let queued = 0;
-      for (let i = 0; i < importedPhotoIds.length; i += 500) {
-        // whereNull, not a blanket set. Committing the event path before the
-        // loop means a toggle or Re-scan firing mid-import can now genuinely
-        // queue and even finish some of these rows — so an unconditional
-        // update would drag 'done' rows back to 'pending' for a duplicate
-        // scan, and knock 'processing' rows out from under the worker
-        // mid-flight. Only rows nothing has touched are ours to queue.
-        queued += await db('photos')
-          .whereIn('id', importedPhotoIds.slice(i, i + 500))
-          .whereNull('face_status')
-          .update({ face_status: 'pending' });
-      }
-      logger.info(`Queued ${queued} of ${importedPhotoIds.length} imported external photo(s) for face scanning (event ${eventId})`);
     }
 
     const result = { imported, skipped, deferred, excluded, thumbnailsGenerated, thumbnailsFailed };

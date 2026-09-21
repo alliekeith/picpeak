@@ -19,7 +19,7 @@
  * does not set `PRAGMA foreign_keys = ON` — the codebase says so in as many
  * words where it deletes an event (adminEvents/helpers.js:245-249) — so on
  * every SQLite install the cascade is inert and a bare delete would leave
- * dangling face embeddings, feedback and marks behind. The same reason
+ * dangling feedback and marks behind. The same reason
  * `hero_photo_id` is repointed by hand: its SET NULL is inert there too, so
  * without it a SQLite install keeps a hero pointing at a row that is gone.
  *
@@ -31,11 +31,6 @@
  * the same photo, the same admin's mark, the same transfer's entry — the loser
  * is dropped instead, because those tables mean "one per (photo, actor)" and
  * moving would either violate a unique constraint or double-count.
- *
- * photo_faces is the deliberate exception: both rows were scanned
- * independently, so the survivor already has its own embeddings and moving the
- * duplicate's would fabricate a second copy of every face and split the
- * person clusters built from them.
  */
 
 const { isUniqueViolation } = require('../utils/dbErrors');
@@ -183,47 +178,6 @@ async function deleteDuplicatePhotos(knex, doomedToSurvivor) {
   for (const [table, column] of LOG_TABLES) {
     if (!(await knex.schema.hasTable(table))) continue;
     for (const ids of chunked(doomed)) await knex(table).whereIn(column, ids).del();
-  }
-
-  // Both rows were scanned, so the survivor has its own faces; moving the
-  // duplicate's would double every embedding and split the person clusters.
-  //
-  // Through purgePhotoFaces, not a raw delete: deleting the rows is only half
-  // of it. event_people counts and centroids are derived from the faces being
-  // removed, and #1132's separation snapshots hold a COPY of each side's
-  // centroid — so a bare delete leaves ghost or inflated people and vectors
-  // built from photos that no longer exist. faceProcessor says as much: it is
-  // "called from every photo-deletion path".
-  if (await knex.schema.hasTable('photo_faces')) {
-    // If the ONLY completed scan of this file belonged to the duplicate, the
-    // purge below takes the sole embeddings with it and nothing re-queues the
-    // survivor — it just silently stops having a face. Mark those for a
-    // rescan; the worker picks up 'pending' on its own.
-    const needsRescan = [];
-    for (const [doomedId, survivorId] of doomedToSurvivor) {
-      if (!(await knex('photo_faces').where('photo_id', doomedId).first())) continue;
-      if (!(await knex('photo_faces').where('photo_id', survivorId).first())) needsRescan.push(survivorId);
-    }
-
-    let purgePhotoFaces = null;
-    try {
-      ({ purgePhotoFaces } = require('./faceProcessor'));
-    } catch (err) {
-      // Face detection is optional; an install without it still needs the rows
-      // gone so nothing dangles on SQLite.
-      purgePhotoFaces = null;
-    }
-    if (purgePhotoFaces) {
-      for (const id of doomed) await purgePhotoFaces(id, knex);
-    } else {
-      for (const ids of chunked(doomed)) await knex('photo_faces').whereIn('photo_id', ids).del();
-    }
-
-    if (needsRescan.length && await knex.schema.hasColumn('photos', 'face_status')) {
-      for (const ids of chunked(needsRescan)) {
-        await knex('photos').whereIn('id', ids).update({ face_status: 'pending' });
-      }
-    }
   }
 
   // Real interactions, recorded per row. Deleting the duplicate would quietly

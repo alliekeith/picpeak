@@ -64,8 +64,6 @@ export const GalleryStoryLayout: React.FC<GalleryStoryLayoutProps> = ({
   onLogout,
   showOriginalFilename = false,
 
-  people,
-  onSelectPerson,
 }) => {
   // These props are passed by parent but we use our own feedback system, so mark as intentionally unused
   void _onPhotoClick;
@@ -340,11 +338,6 @@ export const GalleryStoryLayout: React.FC<GalleryStoryLayoutProps> = ({
           useCanvasRendering={useCanvasRendering}
           onFeedbackChange={onFeedbackChange}
           showOriginalFilename={showOriginalFilename}
-          // #1074: this layout renders its own lightbox, so the people props
-          // have to be threaded through explicitly or the "In this photo"
-          // chips silently disappear on the Story theme.
-          people={people}
-          onSelectPerson={onSelectPerson}
         />
       )}
     </div>

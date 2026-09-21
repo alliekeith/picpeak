@@ -80,7 +80,6 @@ its original definition in the collector's earlier-measurements view/history.
 | `accounting` — Accounting | Enabled switch/capability; may be a default. | A documented successful authenticated admin capability operation was observed since consent to this schema. No actor, operation history, parameters or counts. |
 | `workflows` — Workflows | Enabled switch/capability; may be a default. | A documented successful authenticated admin capability operation was observed since consent to this schema. No actor, operation history, parameters or counts. |
 | `newsletters` — Newsletters | Enabled switch/capability; may be a default. | A documented successful authenticated admin capability operation was observed since consent to this schema. No actor, operation history, parameters or counts. |
-| `face_recognition` — ML face recognition | Enabled switch/capability; may be a default. | A documented successful authenticated admin capability operation was observed since consent to this schema. No actor, operation history, parameters or counts. |
 | `custom_css` — Custom CSS | Technical configuration exists; may be a default, not activity. | Applied CSS observed after consent, without observing visitors. |
 | `oauth` — Admin SSO | Technical configuration exists; may be a default, not activity. | Successful admin SSO login; no account, identity-provider or session details. |
 | `smtp` — SMTP delivery | Technical configuration exists; may be a default, not activity. | A successful explicitly initiated admin SMTP test/send; no recipients or messages. |

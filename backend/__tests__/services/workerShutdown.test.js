@@ -1,10 +1,9 @@
 jest.mock('../../src/utils/logger', () => ({ info: jest.fn(), warn: jest.fn(), error: jest.fn() }));
 
-describe.each(['backgroundProcessor', 'faceQueue'])('%s shutdown', name => {
-  let worker, db, processPhoto, featureEnabled, janitorUpdate, releases;
-  const prefix = name === 'faceQueue' ? 'FACE_PROCESSOR' : 'UPLOAD_PROCESSOR';
+describe.each(['backgroundProcessor'])('%s shutdown', name => {
+  let worker, db, processPhoto, janitorUpdate, releases;
+  const prefix = 'UPLOAD_PROCESSOR';
   let previousEnv;
-  class SidecarUnavailableError extends Error {}
 
   function deferred() {
     let resolve;
@@ -21,9 +20,7 @@ describe.each(['backgroundProcessor', 'faceQueue'])('%s shutdown', name => {
     delete process.env[`${prefix}_DISABLED`];
     process.env[`${prefix}_CONCURRENCY`] = '2';
     process.env[`${prefix}_POLL_MS`] = '2000';
-    process.env.FACE_PROCESSOR_BACKOFF_MS = '30000';
     processPhoto = jest.fn().mockResolvedValue({ status: 'skipped' });
-    featureEnabled = jest.fn().mockResolvedValue(true);
     janitorUpdate = jest.fn().mockResolvedValue(0);
     const chain = { where: jest.fn().mockReturnThis(), update: janitorUpdate };
     db = jest.fn(() => chain);
@@ -33,13 +30,6 @@ describe.each(['backgroundProcessor', 'faceQueue'])('%s shutdown', name => {
     db.transaction = jest.fn().mockResolvedValue(null);
     jest.doMock('../../src/database/db', () => ({ db }));
     jest.doMock('../../src/services/photoProcessor', () => ({ processPhoto }));
-    jest.doMock('../../src/services/faceProcessor', () => ({
-      processPhotoFaces: processPhoto, TransientSourceError: class extends Error {},
-    }));
-    jest.doMock('../../src/services/faceClient', () => ({ SidecarUnavailableError }));
-    jest.doMock('../../src/services/faceSettings', () => ({
-      isFeatureEnabled: featureEnabled, isEnabledForEvent: jest.fn().mockResolvedValue(false),
-    }));
     worker = require(`../../src/services/${name}`);
   });
 
@@ -133,35 +123,4 @@ describe.each(['backgroundProcessor', 'faceQueue'])('%s shutdown', name => {
     janitor.resolve(0);
     await expectPromptStop(() => stopped);
   });
-
-  if (name === 'faceQueue') {
-    it('interrupts the ten-second sleep with faces disabled by default', async () => {
-      featureEnabled.mockResolvedValue(false);
-      worker.start();
-      await jest.advanceTimersByTimeAsync(0);
-      expect(db.transaction).not.toHaveBeenCalled();
-      expect(jest.getTimerCount()).toBe(3);
-      await expectPromptStop();
-    });
-
-    it('releases a claimed photo and interrupts the sidecar outage backoff', async () => {
-      db.transaction.mockResolvedValueOnce({ id: 3, event_id: 5 });
-      processPhoto.mockRejectedValue(new SidecarUnavailableError('offline'));
-      worker.start();
-      await jest.advanceTimersByTimeAsync(0);
-      expect(janitorUpdate).toHaveBeenCalledWith({ face_status: 'pending', face_started_at: null });
-      await expectPromptStop();
-      expect(worker.inFlightByEvent.size).toBe(0);
-    });
-
-    it('does not claim new work after a pending feature check resolves during shutdown', async () => {
-      const feature = deferred();
-      featureEnabled.mockReturnValue(feature.promise);
-      worker.start();
-      const stopped = worker.stop();
-      feature.resolve(true);
-      await expectPromptStop(() => stopped);
-      expect(db.transaction).not.toHaveBeenCalled();
-    });
-  }
 });

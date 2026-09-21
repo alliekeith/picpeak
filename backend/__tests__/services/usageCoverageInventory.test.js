@@ -57,7 +57,7 @@ test('v1/v2/v3 wire validation is immutable; v5 catalog, UI and translated descr
     .toBe('cc8d0a865d21e36d2b24d23ca6aa8dd8d48000cb17aef83996786f70755bc922');
   expect(crypto.createHash('sha256').update(JSON.stringify(protocol.envelopeSchemas['usage.v2'].properties)).digest('hex'))
     .toBe('159821cf45c1951016d33a4ed9ca55a0a7ee1b60dd715b803fcfed33e5c8a846');
-  expect(protocol.FEATURE_KEYS).toHaveLength(87);
+  expect(protocol.FEATURE_KEYS).toHaveLength(86);
   expect(crypto.createHash('sha256').update(JSON.stringify(protocol.envelopeSchemas['usage.v3'].properties)).digest('hex'))
     .toBe('93214702c79f47823f154544ebad6612dd313604f69e60b86de4c0e4c904571a');
   expect(protocol.FEATURE_KEYS).toContain('gallery_downloads_restricted');

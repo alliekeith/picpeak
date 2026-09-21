@@ -10,8 +10,8 @@
  * A first attempt at this was reverted from #1194 after review. These tests
  * pin the five things that went wrong with it:
  *
- *   1. requeueing faces without clearing the cached preview, so the rescan
- *      re-read unrotated pixels;
+ *   1. leaving the cached preview in place after a correction, so readers
+ *      kept getting unrotated pixels;
  *   2. reading originals in a way that cannot see S3 or RAW;
  *   3. deciding "did this change" from a dimension delta, which never fires
  *      for orientations 2, 3 and 4;
@@ -74,7 +74,7 @@ describe('orientation backfill (#1198)', () => {
   });
 
   async function seed({
-    orientation, storedWidth, storedHeight, faceStatus = null,
+    orientation, storedWidth, storedHeight,
     previewPath = 'previews/prev_orientbf.jpg', archived = false, filename = 'p.jpg',
     thumbnailPath = 'thumbnails/thumb_orientbf.jpg', heroPath = 'heroes/hero_orientbf.jpg',
     watermarkPath = 'watermarks/wm_orientbf.jpg', checkedAt = null,
@@ -95,7 +95,7 @@ describe('orientation backfill (#1198)', () => {
 
     const [p] = await db('photos').insert({
       event_id: eventId, filename, path: `orientbf/${filename}`, type: 'individual',
-      width: storedWidth, height: storedHeight, face_status: faceStatus,
+      width: storedWidth, height: storedHeight,
       preview_path: previewPath, thumbnail_path: thumbnailPath, hero_path: heroPath,
       watermark_path: watermarkPath, orientation_checked_at: checkedAt,
       uploaded_at: new Date().toISOString(),
@@ -119,11 +119,10 @@ describe('orientation backfill (#1198)', () => {
 
   it('clears the cached preview before requeueing, not after', async () => {
     // The reverted attempt's own-goal: ensurePreviewImage hands back a cached
-    // preview whenever it is still a valid image, so a rescan against the
-    // pre-fix preview produced boxes in the old coordinate system and scaled
-    // them by the corrected dimensions.
+    // preview whenever it is still a valid image, so readers kept getting the
+    // pre-fix preview in the old coordinate system.
     const { photoId } = await seed({
-      orientation: 6, storedWidth: 400, storedHeight: 200, faceStatus: 'done',
+      orientation: 6, storedWidth: 400, storedHeight: 200,
     });
 
     await run();
@@ -131,15 +130,13 @@ describe('orientation backfill (#1198)', () => {
 
     const row = await db('photos').where({ id: photoId }).first();
     expect(row.preview_path).toBeNull();
-    expect(row.face_status).toBe('pending');
-    expect(done.body.lastResult.requeuedFaces).toBe(1);
   });
 
   it('clears the thumbnail and hero too, not just the preview', async () => {
     // The miss that mattered most: ensureThumbnail and ensureHeroImage return
     // their cached file whenever it is merely VALID, and a pre-fix sideways
-    // thumbnail is perfectly valid. Clearing only the preview fixed the face
-    // data and left the gallery rendering the old sideways image inside a
+    // thumbnail is perfectly valid. Clearing only the preview
+    // left the gallery rendering the old sideways image inside a
     // newly-corrected portrait tile.
     const { photoId } = await seed({ orientation: 6, storedWidth: 400, storedHeight: 200 });
 
@@ -173,7 +170,7 @@ describe('orientation backfill (#1198)', () => {
     // left entirely alone rather than being given the previous file's
     // dimensions and having its fresh renditions cleared.
     const { photoId } = await seed({
-      orientation: 6, storedWidth: 400, storedHeight: 200, faceStatus: 'done',
+      orientation: 6, storedWidth: 400, storedHeight: 200,
     });
 
     const res = await run();
@@ -185,16 +182,14 @@ describe('orientation backfill (#1198)', () => {
 
     const row = await db('photos').where({ id: photoId }).first();
     expect(row.width).toBe(400);            // untouched
-    expect(row.face_status).toBe('done');   // not requeued
     expect(row.thumbnail_path).toBe('thumbnails/thumb_orientbf.jpg');
   });
 
   it('is idempotent — a second run finds nothing left to do', async () => {
     // The trigger is the EXIF tag on the ORIGINAL, which correcting a photo
     // never changes. Without a marker every re-run would throw away the
-    // renditions it had just regenerated and requeue every completed face
-    // scan — on a face-enabled install, re-detecting the whole library.
-    await seed({ orientation: 6, storedWidth: 400, storedHeight: 200, faceStatus: 'done' });
+    // renditions it had just regenerated, on every run.
+    await seed({ orientation: 6, storedWidth: 400, storedHeight: 200 });
 
     expect((await run()).body.count).toBe(1);
     const first = await settle();
@@ -238,11 +233,11 @@ describe('orientation backfill (#1198)', () => {
     expect(done.body.lastResult.staleTiers).toBe(0);
   });
 
-  it('requeues faces when only the dimensions were wrong', async () => {
+  it('corrects the stored dimensions when only they were wrong', async () => {
     // No rotation involved: boxes are scaled by photo.width at read time, so
-    // any change to the stored dimensions invalidates them.
+    // any change to the stored dimensions invalidates the cached renditions.
     const { photoId } = await seed({
-      orientation: null, storedWidth: 999, storedHeight: 111, faceStatus: 'done',
+      orientation: null, storedWidth: 999, storedHeight: 111,
     });
 
     await run();
@@ -250,15 +245,13 @@ describe('orientation backfill (#1198)', () => {
 
     const row = await db('photos').where({ id: photoId }).first();
     expect(row.width).toBe(400);
-    expect(row.face_status).toBe('pending');
-    expect(done.body.lastResult.requeuedFaces).toBe(1);
   });
 
-  it('requeues an orientation that moves pixels without moving dimensions', async () => {
+  it('invalidates an orientation that moves pixels without moving dimensions', async () => {
     // Orientation 3 is a 180° turn: every pixel moves, width and height do
     // not. A dimension-delta check sees nothing and skips exactly this row.
     const { photoId } = await seed({
-      orientation: 3, storedWidth: 400, storedHeight: 200, faceStatus: 'done',
+      orientation: 3, storedWidth: 400, storedHeight: 200,
     });
 
     await run();
@@ -266,19 +259,16 @@ describe('orientation backfill (#1198)', () => {
 
     const row = await db('photos').where({ id: photoId }).first();
     expect(row.width).toBe(400);          // unchanged, correctly
-    expect(row.face_status).toBe('pending');
     expect(row.preview_path).toBeNull();
-    expect(done.body.lastResult.requeuedFaces).toBe(1);
     expect(done.body.lastResult.corrected).toBe(0);
   });
 
   it('leaves a post-fix import alone, renditions and all', async () => {
     // A 5-8 rotation changes the dimensions, so a tagged photo whose stored
     // dimensions are already oriented must have been ingested after #1185.
-    // Re-clearing its renditions would delete valid files and rescan a
-    // completed face detection for nothing.
+    // Re-clearing its renditions would delete valid files for nothing.
     const { photoId } = await seed({
-      orientation: 6, storedWidth: 200, storedHeight: 400, faceStatus: 'done',
+      orientation: 6, storedWidth: 200, storedHeight: 400,
     });
 
     await run();
@@ -286,8 +276,7 @@ describe('orientation backfill (#1198)', () => {
 
     const row = await db('photos').where({ id: photoId }).first();
     expect(row.thumbnail_path).toBe('thumbnails/thumb_orientbf.jpg');
-    expect(row.face_status).toBe('done');
-    expect(done.body.lastResult).toMatchObject({ corrected: 0, requeuedFaces: 0 });
+    expect(done.body.lastResult).toMatchObject({ corrected: 0 });
     // ...and it is marked, so it is not re-read next time either.
     expect(row.orientation_checked_at).toBeTruthy();
   });
@@ -296,7 +285,7 @@ describe('orientation backfill (#1198)', () => {
     // Orientation 3 leaves the dimensions identical whether or not it has been
     // processed, so there is nothing to infer from and it must be done once.
     const { photoId } = await seed({
-      orientation: 3, storedWidth: 400, storedHeight: 200, faceStatus: 'done',
+      orientation: 3, storedWidth: 400, storedHeight: 200,
     });
 
     await run();
@@ -304,12 +293,11 @@ describe('orientation backfill (#1198)', () => {
 
     const row = await db('photos').where({ id: photoId }).first();
     expect(row.thumbnail_path).toBeNull();
-    expect(row.face_status).toBe('pending');
   });
 
   it('leaves an untagged photo completely alone', async () => {
     const { photoId } = await seed({
-      orientation: null, storedWidth: 400, storedHeight: 200, faceStatus: 'done',
+      orientation: null, storedWidth: 400, storedHeight: 200,
     });
 
     await run();
@@ -317,23 +305,8 @@ describe('orientation backfill (#1198)', () => {
 
     const row = await db('photos').where({ id: photoId }).first();
     expect(row.width).toBe(400);
-    expect(row.face_status).toBe('done');
     expect(row.preview_path).toBe('previews/prev_orientbf.jpg');
-    expect(done.body.lastResult).toMatchObject({ corrected: 0, requeuedFaces: 0, failed: 0 });
-  });
-
-  it('does not start face scanning on an install that never enabled it', async () => {
-    const { photoId } = await seed({
-      orientation: 6, storedWidth: 400, storedHeight: 200, faceStatus: null,
-    });
-
-    await run();
-    const done = await settle();
-
-    expect((await db('photos').where({ id: photoId }).first()).face_status).toBeNull();
-    expect(done.body.lastResult.requeuedFaces).toBe(0);
-    // ...but the dimensions are still corrected.
-    expect(done.body.lastResult.corrected).toBe(1);
+    expect(done.body.lastResult).toMatchObject({ corrected: 0, failed: 0 });
   });
 
   it('skips archived events, whose originals were deleted on archive', async () => {

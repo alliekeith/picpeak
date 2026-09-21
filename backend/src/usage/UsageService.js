@@ -48,7 +48,6 @@ const FLAG_MAP = {
   accounting: 'accounting',
   workflows: 'workflows',
   newsletters: 'newsletters',
-  face_recognition: 'faces',
   whatsapp: 'whatsapp'
 };
 const SETTING_KEYS = [

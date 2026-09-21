@@ -33,8 +33,7 @@ describe('migration 186 — unique (event_id, external_relpath) (#1162)', () => 
   beforeEach(async () => {
     for (const table of [
       'photos', 'events', 'photo_categories', 'photo_feedback',
-      'photo_admin_marks', 'photo_faces', 'image_access_logs', 'transfer_files',
-      'event_people', 'event_people_merge_dismissals',
+      'photo_admin_marks', 'image_access_logs', 'transfer_files',
     ]) {
       await knex.schema.dropTableIfExists(table);
     }
@@ -60,12 +59,8 @@ describe('migration 186 — unique (event_id, external_relpath) (#1162)', () => 
       t.integer('favorite_count').defaultTo(0);
       t.integer('reaction_count').defaultTo(0);
       t.integer('color_label_count').defaultTo(0);
-      t.string('face_status');
       t.integer('view_count').defaultTo(0);
       t.integer('download_count').defaultTo(0);
-      t.integer('face_count');
-      t.string('face_started_at');
-      t.text('face_error');
     });
     // Declared exactly as the real schema declares them — CASCADE and all.
     // The point of these tables here is that SQLite does NOT enforce any of
@@ -94,29 +89,6 @@ describe('migration 186 — unique (event_id, external_relpath) (#1162)', () => 
       // Independently writable alongside rating, per photoAdminMarksService.
       t.string('color_label', 16);
       t.unique(['photo_id', 'admin_id'], 'photo_admin_marks_photo_admin_uniq');
-    });
-    await knex.schema.createTable('photo_faces', (t) => {
-      t.increments('id').primary();
-      t.integer('photo_id').references('id').inTable('photos').onDelete('CASCADE');
-      t.integer('event_id');
-      // purgePhotoFaces rebuilds the people that lose members, so the cluster
-      // link and the vectors recomputeCentroid reads have to be here for this
-      // to exercise the real path rather than a stub.
-      t.integer('person_id');
-      t.binary('embedding');
-      t.float('det_score');
-    });
-    await knex.schema.createTable('event_people', (t) => {
-      t.increments('id').primary();
-      t.integer('event_id');
-      t.binary('centroid');
-      t.integer('face_count').defaultTo(0);
-    });
-    await knex.schema.createTable('event_people_merge_dismissals', (t) => {
-      t.increments('id').primary();
-      t.integer('event_id');
-      t.binary('centroid_a');
-      t.binary('centroid_b');
     });
     await knex.schema.createTable('image_access_logs', (t) => {
       t.increments('id').primary();
@@ -253,28 +225,14 @@ describe('migration 186 — unique (event_id, external_relpath) (#1162)', () => 
 
   it('leaves nothing dangling behind the deleted row', async () => {
     // SQLite never enforces the ON DELETE CASCADE these tables declare, so a
-    // bare delete strands biometric embeddings, feedback and marks pointing at
+    // bare delete strands feedback, marks and access logs pointing at
     // a photo id that no longer exists — on every SQLite install.
     await seedPair();
-    await knex('photo_faces').insert({ photo_id: 2, event_id: 1 });
     await knex('image_access_logs').insert({ photo_id: 2 });
 
     await migration.up(knex);
 
-    expect(await knex('photo_faces').where('photo_id', 2).first()).toBeUndefined();
     expect(await knex('image_access_logs').where('photo_id', 2).first()).toBeUndefined();
-  });
-
-  it('does not carry the duplicate\'s faces over to the survivor', async () => {
-    // Both rows were scanned independently, so the survivor already holds its
-    // own embeddings. Moving these would fabricate a second copy of every face
-    // and split the person clusters built from them.
-    await seedPair();
-    await knex('photo_faces').insert([{ photo_id: 1, event_id: 1 }, { photo_id: 2, event_id: 1 }]);
-
-    await migration.up(knex);
-
-    expect(await knex('photo_faces').count('* as c').first()).toEqual({ c: 1 });
   });
 
   it('moves a guest comment to the survivor rather than deleting it', async () => {
@@ -414,21 +372,6 @@ describe('migration 186 — unique (event_id, external_relpath) (#1162)', () => 
     expect(await knex('photo_feedback').count('* as c').first()).toEqual({ c: 1 });
   });
 
-  it('rebuilds the people that lose members, rather than deleting faces raw', async () => {
-    // purgePhotoFaces is "called from every photo-deletion path" precisely
-    // because event_people counts and centroids are derived from the rows
-    // being removed. A bare delete leaves a ghost person behind.
-    await seedPair();
-    await knex('event_people').insert({ id: 5, event_id: 1, face_count: 1 });
-    await knex('photo_faces').insert({ photo_id: 2, event_id: 1, person_id: 5 });
-
-    await migration.up(knex);
-
-    expect(await knex('photo_faces').count('* as c').first()).toEqual({ c: 0 });
-    // The person had exactly one member and loses it, so it goes with it.
-    expect(await knex('event_people').where('id', 5).first()).toBeUndefined();
-  });
-
   it('keeps a hidden moderation record from swallowing the visible replacement', async () => {
     // feedbackService lets both coexist and counts only the visible one.
     await seedPair();
@@ -456,17 +399,6 @@ describe('migration 186 — unique (event_id, external_relpath) (#1162)', () => 
     const rows = await knex('photo_admin_marks');
     expect(rows).toHaveLength(1);
     expect([rows[0].rating, rows[0].color_label]).toEqual([5, 'red']);
-  });
-
-  it('requeues the survivor when the duplicate held the only scan', async () => {
-    // Otherwise the sole embeddings go with the purge and nothing re-queues:
-    // the photo just silently stops having a face.
-    await seedPair();
-    await knex('photo_faces').insert({ photo_id: 2, event_id: 1 });
-
-    await migration.up(knex);
-
-    expect((await knex('photos').where('id', 1).first()).face_status).toBe('pending');
   });
 
   it('carries the duplicate\'s views and downloads over', async () => {

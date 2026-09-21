@@ -3,7 +3,7 @@ import { Package } from 'lucide-react';
 import { toast as toastify } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
-import type { Photo, DownloadResolutionChoice, GalleryPerson } from '../../types';
+import type { Photo, DownloadResolutionChoice } from '../../types';
 import { useDownloadPhoto } from '../../hooks/useGallery';
 import { PhotoLightbox } from './PhotoLightbox';
 import { DownloadResolutionModal } from './DownloadResolutionModal';
@@ -80,10 +80,6 @@ interface PhotoGridWithLayoutsProps {
   // Mirror of the admin original-filename toggle (#508). When true, the
   // lightbox bottom toolbar surfaces each photo's original camera name.
   showOriginalFilename?: boolean;
-  // People in this gallery (#1074) — forwarded to the lightbox so it can
-  // show "In this photo: …". Undefined when the feature is off.
-  people?: GalleryPerson[];
-  onSelectPerson?: (personId: number) => void;
   /**
    * Suppress the "no photos found" message (#1160). A gallery whose photos all
    * live in folders has an empty root grid while its folder tiles sit directly
@@ -137,8 +133,6 @@ export const PhotoGridWithLayouts: React.FC<PhotoGridWithLayoutsProps> = ({
   isClient = false,
   onToggleVisibility,
   showOriginalFilename = false,
-  people,
-  onSelectPerson,
 }) => {
   const { t } = useTranslation();
   const { theme } = useTheme();
@@ -268,8 +262,6 @@ export const PhotoGridWithLayouts: React.FC<PhotoGridWithLayoutsProps> = ({
     // their OWN lightbox rather than the one below, so without this the
     // "In this photo" chips silently vanish on gallery-premium and
     // gallery-story even when the feature is fully enabled.
-    people,
-    onSelectPerson,
     // Full-page layouts own their bulk-download control, so the resolution
     // picker has to reach them too (#858) — otherwise premium/story galleries
     // silently skip the choice the admin enabled.
@@ -443,8 +435,6 @@ export const PhotoGridWithLayouts: React.FC<PhotoGridWithLayoutsProps> = ({
           initialShowFeedback={openFeedbackInitially}
           onFeedbackChange={onFeedbackChange}
           showOriginalFilename={showOriginalFilename}
-          people={people}
-          onSelectPerson={onSelectPerson}
         />
       )}
 

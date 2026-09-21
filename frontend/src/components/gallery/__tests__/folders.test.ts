@@ -8,7 +8,6 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 
 import {
   filterCategories,
-  peopleInScope,
   SELECTED_DOWNLOAD_LIMIT,
   findFolderByKey,
   folderKey,
@@ -161,64 +160,6 @@ describe('filterCategories / folderCategoryIds', () => {
 
   it('collects folder ids', () => {
     expect([...folderCategoryIds(CATEGORIES)]).toEqual([2, 3]);
-  });
-});
-
-describe('peopleInScope', () => {
-  // photo 10 -> Anna; 11 -> Anna+Ben; folder photos 20,21 -> Chris; 30 -> Ben
-  const withPeople: Photo[] = [
-    { ...photo(10, 1), person_ids: [1] },
-    { ...photo(11, null), person_ids: [1, 2] },
-    { ...photo(20, 2), person_ids: [3] },
-    { ...photo(21, 2), person_ids: [3] },
-    { ...photo(22, 2), person_ids: [] },
-    { ...photo(30, 3), person_ids: [2] },
-  ] as unknown as Photo[];
-
-  const PEOPLE = [
-    { id: 1, face_count: 99 },
-    { id: 2, face_count: 99 },
-    { id: 3, face_count: 99 },
-  ];
-
-  it('recounts against the photos actually on screen', () => {
-    const atRoot = peopleInScope(PEOPLE, photosInScope(withPeople, CATEGORIES, null));
-    expect(atRoot).toEqual([
-      { id: 1, face_count: 2 },
-      { id: 2, face_count: 1 },
-    ]);
-  });
-
-  it('drops a person whose photos all live in a folder — no dead chip at root', () => {
-    const atRoot = peopleInScope(PEOPLE, photosInScope(withPeople, CATEGORIES, null));
-    expect(atRoot.map((p) => p.id)).not.toContain(3);
-  });
-
-  it('counts only the folder’s photos while inside it', () => {
-    const inFolder = peopleInScope(PEOPLE, photosInScope(withPeople, CATEGORIES, 2));
-    expect(inFolder).toEqual([{ id: 3, face_count: 2 }]);
-  });
-
-  // PeopleStrip only shows the first 12 inline, so keeping /people's event-wide
-  // ordering after rescoping could push a folder's most-photographed person
-  // behind "Show all".
-  it('re-sorts by the recomputed scoped count', () => {
-    const people = [
-      { id: 3, face_count: 99 }, // 2 in the folder
-      { id: 1, face_count: 99 }, // 0 in the folder
-      { id: 2, face_count: 99 }, // 0 in the folder
-    ];
-    const inFolder = peopleInScope(people, photosInScope(withPeople, CATEGORIES, 2));
-    expect(inFolder.map((p) => p.id)).toEqual([3]);
-
-    const atRoot = peopleInScope(people, photosInScope(withPeople, CATEGORIES, null));
-    expect(atRoot.map((p) => [p.id, p.face_count])).toEqual([[1, 2], [2, 1]]);
-  });
-
-  it('is a no-op for a gallery without folders', () => {
-    const noFolders = [cat({ id: 1, slug: 'ceremony' })];
-    const scoped = peopleInScope(PEOPLE, photosInScope(withPeople, noFolders, null));
-    expect(scoped.map((p) => [p.id, p.face_count]).sort()).toEqual([[1, 2], [2, 2], [3, 2]]);
   });
 });
 

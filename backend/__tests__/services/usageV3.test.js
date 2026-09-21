@@ -73,11 +73,11 @@ for (const engine of ['sqlite3', ...(process.env.PICPEAK_PG_TEST_URL ? ['pg'] : 
       await db('product_usage_state').where({ id: 1 }).update({ consent_version: p.CONSENT_VERSIONS[version] });
       const queries = [];
       db.on('query', q => queries.push(q.sql));
-      await client.markUsed(['crm_invoice_import', 'photo_admin_marks', 'face_recognition']);
+      await client.markUsed(['crm_invoice_import', 'photo_admin_marks', 'whatsapp']);
       const report = await client.preview();
       expect(report).not.toHaveProperty('inventory');
       expect(report.features).not.toHaveProperty('crm_invoice_import');
-      expect(await db('product_usage_markers').pluck('feature')).toEqual(['face_recognition']);
+      expect(await db('product_usage_markers').pluck('feature')).toEqual(['whatsapp']);
       expect(queries.filter(sql => /from ["`]photos["`]/.test(sql))).toEqual([]);
       expect(queries.some(sql => /count\(\*\)/.test(sql))).toBe(false);
       expect((await client.status()).consent_update_available).toBe(true);
@@ -96,8 +96,8 @@ for (const engine of ['sqlite3', ...(process.env.PICPEAK_PG_TEST_URL ? ['pg'] : 
       expect(report.features.gallery_folders).not.toHaveProperty('used');
       expect(await db('product_usage_markers').orderBy('feature')).toEqual(before);
       await db('product_usage_state').where({ id: 1 }).update({ status: 'deletion_pending' });
-      await client.markUsed(['face_recognition']);
-      expect(await db('product_usage_markers').where({ feature: 'face_recognition' })).toHaveLength(0);
+      await client.markUsed(['whatsapp']);
+      expect(await db('product_usage_markers').where({ feature: 'whatsapp' })).toHaveLength(0);
     });
 
     test('configuration reflects effective modules, applicable folders and unexpired upload permission', async () => {
@@ -124,15 +124,6 @@ for (const engine of ['sqlite3', ...(process.env.PICPEAK_PG_TEST_URL ? ['pg'] : 
       expect((await snap({ transfers: true })).transfer_upload_links.configured).toBe(false);
       await db('photo_categories').update({ event_id: 999 });
       expect((await snap({})).gallery_folders.configured).toBe(false);
-    });
-
-    test('ML recognition is already represented without querying faces or results', async () => {
-      await db('feature_flags').insert({ key: 'faces', value: true });
-      await client.markUsed(['face_recognition']);
-      expect((await client.snapshot()).features.face_recognition).toEqual({ configured: true, used: true });
-      process.env.PICPEAK_SINGLE_CONTAINER = 'true';
-      expect((await client.snapshot()).features.face_recognition).toEqual({ configured: false, used: true });
-      // No faces, people, embeddings or recognition-result tables exist in this fixture.
     });
 
     test.each([

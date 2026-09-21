@@ -631,32 +631,6 @@
         "PATCH /:id/download-resolutions"
       ]
     },
-    "adminEvents/faces.js": {
-      "decision": "partial",
-      "signals": [
-        "face_recognition"
-      ],
-      "reason": "Effective flag plus successful admin faces/people operation. No health polling, embeddings, names, groups, detections or visitor searches.",
-      "route_signatures": [
-        "GET /faces/health",
-        "GET /:id/faces",
-        "PATCH /:id/faces",
-        "GET /:id/people",
-        "GET /:id/people/suggestions",
-        "POST /:id/people/suggestions/dismiss",
-        "PATCH /:id/people/:personId",
-        "POST /:id/people/merge",
-        "POST /:id/people/:personId/split",
-        "GET /:id/people/:personId/faces",
-        "POST /:id/faces/rescan",
-        "POST /:id/faces/recluster",
-        "GET /faces/auto-categories",
-        "PUT /faces/auto-categories",
-        "POST /:id/faces/categorize",
-        "DELETE /:id/faces/categorize",
-        "DELETE /:id/faces"
-      ]
-    },
     "adminEvents/helpers.js": {
       "decision": "composition",
       "signals": [],
@@ -804,7 +778,6 @@
         "accounting",
         "workflows",
         "newsletters",
-        "face_recognition",
         "slideshow",
         "transfers",
         "messaging",
@@ -1679,7 +1652,6 @@
       "reason": "Public/customer/gallery/visitor surface or existing optional third-party analytics proxy: no product-usage middleware, callbacks, counters or report triggers.",
       "route_signatures": [
         "GET /:slug/photos",
-        "GET /:slug/people",
         "PATCH /:slug/photos/:photoId/visibility",
         "PATCH /:slug/photos/visibility/bulk"
       ]
@@ -1862,12 +1834,6 @@
     "expenses": {
       "signals": [
         "accounting_expenses"
-      ],
-      "reason": "Only effective configuration boolean; dependency rules apply, no flag values/history beyond this boolean."
-    },
-    "faces": {
-      "signals": [
-        "face_recognition"
       ],
       "reason": "Only effective configuration boolean; dependency rules apply, no flag values/history beyond this boolean."
     },

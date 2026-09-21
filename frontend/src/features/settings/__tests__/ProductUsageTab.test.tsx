@@ -18,7 +18,7 @@ vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key }),
   // The tab imports from the components/common barrel, which reaches
   // ErrorBoundary -> i18n/config, and that calls .use(initReactI18next) at
-  // import time. Same shim as FaceRecognitionCard.sidecarHealth.test.tsx.
+  // import time.
   initReactI18next: { type: '3rdParty', init: () => {} }
 }));
 vi.mock('../../../components/common/ConfirmDialog', () => ({
@@ -72,7 +72,7 @@ afterEach(cleanup);
 it('shows every v5 signal locally before participation, without collector calls', async () => {
   mount();
   await screen.findByText('productUsage.catalogTitle');
-  expect(screen.getAllByRole('heading', { level: 4, hidden: true })).toHaveLength(88);
+  expect(screen.getAllByRole('heading', { level: 4, hidden: true })).toHaveLength(87);
   expect(service.enable).not.toHaveBeenCalled();
   expect(service.preview).not.toHaveBeenCalled();
   expect(service.upgradeConsent).not.toHaveBeenCalled();

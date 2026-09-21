@@ -95,7 +95,7 @@ async function list(relativePath = '') {
  *
  * Still the right resolver for anything that means "the folder this event was
  * imported from" — the import walk, and the mount-health probe in
- * faceProcessor. It is NOT how a photo's original is found any more: see
+ * the photo pipeline. It is NOT how a photo's original is found any more: see
  * resolveExternalPhotoPath (#1163).
  */
 function resolveExternalPath(event, relpath) {

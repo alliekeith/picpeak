@@ -76,16 +76,6 @@ export type FeatureKey =
   // conditions, branches, loops, approval gates) built on a canvas. Strictly
   // opt-in; gates the Workflows admin area and the engine runtime.
   | 'workflows'
-  // Face recognition — "People in this gallery" (migration 177, #1074).
-  // Requires the optional picpeak-ml sidecar container. THIS FLAG IS THE
-  // GATE for the whole feature: the backend's FACE_ML_URL has a working
-  // default, so the sidecar's presence can't be detected from config alone.
-  // While this is off, no face UI renders anywhere — no admin panel, no
-  // people strip, no lightbox chips — and the backend never contacts the
-  // sidecar. Face embeddings are biometric data (GDPR Art. 9); turning this
-  // on is only the first of two deliberate actions, since detection is still
-  // enabled per event.
-  | 'faces'
   // Newsletter campaigns (migration 199, #1264). Child of `clients` —
   // mass marketing mail to customer accounts, with per-customer opt-out
   // and an unsubscribe link on every send. Strictly opt-in.

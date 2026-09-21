@@ -153,22 +153,6 @@ async function deleteEventCascade(eventId, adminContext) {
     // 3. Delete email queue entries
     await trx('email_queue').where('event_id', eventId).del();
     // 4. Delete photos (also handles hero_photo_id foreign key)
-    // Face data (#1074). The FK declares ON DELETE CASCADE, but SQLite only
-    // honours that when `PRAGMA foreign_keys = ON`, which PicPeak does not set
-    // — so on the SQLite path the cascade is inert and biometric embeddings
-    // would outlive the gallery they belong to. Delete explicitly, before the
-    // photos, so the guarantee holds on both engines.
-    await trx('photo_faces').where('event_id', eventId).del();
-    await trx('event_people').where('event_id', eventId).del();
-    // Separations carry a COPY of each side's centroid since #1132, so this
-    // table holds biometric data too — and it deliberately has no event FK, so
-    // nothing else would ever reach it. hasTable rather than a catch: a failed
-    // statement aborts the surrounding transaction on Postgres, which would
-    // take the whole delete down on a pre-migration install.
-    if (await trx.schema.hasTable('event_people_merge_dismissals')) {
-      await trx('event_people_merge_dismissals').where('event_id', eventId).del();
-    }
-
     await trx('photos').where('event_id', eventId).del();
     // 5. Finally delete the event row
     await deleteWithAccountingHistory(trx, 'events', { id: eventId },
