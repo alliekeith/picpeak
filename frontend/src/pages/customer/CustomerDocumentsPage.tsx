@@ -96,7 +96,7 @@ export const CustomerDocumentList: React.FC<{ documents: CustomerDocument[]; sho
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 flex-wrap">
               <span className="text-sm font-medium text-theme break-all">{doc.name}</span>
-              <span className={`px-2 py-0.5 rounded text-xs font-medium ${STATUS_STYLE[doc.status]}`}>
+              <span className={`px-2 py-0.5 rounded-sm text-xs font-medium ${STATUS_STYLE[doc.status]}`}>
                 {statusLabel(t, doc.status)}
               </span>
             </div>

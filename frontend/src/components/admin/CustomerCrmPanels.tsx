@@ -212,7 +212,7 @@ const InvoicesPanel: React.FC<Props> = ({ customerAccountId }) => {
               </div>
               <span className="text-sm tabular-nums">{formatMoney(Number(inv.totalAmountMinor) / 100, inv.currency)}</span>
               {isDraftInvoice(inv) ? (
-                <span className="px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-200">
+                <span className="px-2 py-0.5 rounded-sm text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-200">
                   {t('bills.status.draft', 'Draft')}
                 </span>
               ) : (
@@ -352,7 +352,7 @@ const RebillsPanel: React.FC<Props> = ({ customerAccountId }) => {
                       <div className="min-w-0 flex-1">
                         <div className="text-sm text-neutral-900 dark:text-neutral-100 truncate">
                           {r.supplierName || t('rebills.unknownSupplier', 'Supplier')}
-                          <span className="ml-2 text-xs px-1.5 py-0.5 rounded bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300">
+                          <span className="ml-2 text-xs px-1.5 py-0.5 rounded-sm bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300">
                             {r.mode === 'passthrough' ? t('rebills.mode.passthrough', 'Passthrough') : t('rebills.mode.rebill', 'Re-bill')}
                           </span>
                         </div>

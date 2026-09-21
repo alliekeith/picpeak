@@ -39,7 +39,7 @@ export const CustomerComingSoonPage: React.FC<CustomerComingSoonPageProps> = ({
           <Icon className="w-7 h-7" style={{ color: 'var(--color-accent)' }} />
         </div>
         <span
-          className="inline-block text-[10px] uppercase tracking-wider px-2 py-0.5 rounded font-semibold mb-3"
+          className="inline-block text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-sm font-semibold mb-3"
           style={{
             backgroundColor: 'color-mix(in srgb, var(--color-accent) 14%, transparent)',
             color: 'var(--color-accent)',

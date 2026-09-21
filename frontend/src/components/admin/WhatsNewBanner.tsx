@@ -47,7 +47,7 @@ export const WhatsNewBanner: React.FC = () => {
       <div className="bg-green-50 dark:bg-green-900/30 border-l-4 border-green-500 p-4 mb-4 rounded-r-lg">
         <div className="flex items-start justify-between">
           <div className="flex items-start">
-            <Sparkles className="w-5 h-5 text-green-600 mt-0.5 mr-3 flex-shrink-0" />
+            <Sparkles className="w-5 h-5 text-green-600 mt-0.5 mr-3 shrink-0" />
             <div>
               <h4 className="text-sm font-semibold text-green-800 dark:text-green-200">
                 {t('admin.whatsnew.title', "What's new in {{version}}", { version: data.toVersion })}

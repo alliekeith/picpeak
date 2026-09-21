@@ -116,7 +116,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick }) => {
     if (brandingLoading) {
       return (
         <div className="flex items-center gap-2 min-w-0">
-          <div className="h-8 w-8 sm:w-32 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse" />
+          <div className="h-8 w-8 sm:w-32 bg-neutral-200 dark:bg-neutral-700 rounded-sm animate-pulse" />
         </div>
       );
     }
@@ -129,7 +129,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick }) => {
           <img
             src={logoImgSrc}
             alt={companyName}
-            className="h-8 w-auto object-contain flex-shrink-0"
+            className="h-8 w-auto object-contain shrink-0"
             onError={() => {
               // First failure: configured URL → try the bundled fallback.
               // Second failure: bundled fallback → hide entirely, let

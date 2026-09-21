@@ -108,7 +108,7 @@ const HeaderDownloadButton: React.FC<{
     onClick={onClick}
     disabled={isDownloading}
     aria-label={label}
-    className="gallery-btn gallery-btn-download inline-flex items-center gap-2 px-3 sm:px-4 h-9 rounded-lg text-sm font-medium transition-opacity hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+    className="gallery-btn gallery-btn-download inline-flex items-center gap-2 px-3 sm:px-4 h-9 rounded-lg text-sm font-medium transition-opacity hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2"
     style={{
       backgroundColor: 'var(--color-accent)',
       color: 'var(--color-accent-fg, #ffffff)',
@@ -335,7 +335,7 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
       <DynamicFavicon />
 
       {/* Header structure */}
-      <header className={`gallery-header bg-surface border-b border-surface sticky top-0 z-40 ${isHeroHeader || isBannerHeader ? 'shadow-sm' : ''}`}>
+      <header className={`gallery-header bg-surface border-b border-surface sticky top-0 z-40 ${isHeroHeader || isBannerHeader ? 'shadow-xs' : ''}`}>
         {/* Standard / Banner header - full bar with logo, event info, and actions (all layouts) */}
         {!isHeroHeader && !isMinimalHeader && !isNoHeader && (
           <div className="container py-3 relative">
@@ -353,10 +353,10 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
             )}
             <div className="flex items-center justify-between gap-2 sm:gap-4">
               {/* Left side - Logo (menu lives in the absolute wrapper above) */}
-              <div className={`flex items-center gap-2 sm:gap-4 flex-shrink-0 ${menuButton ? 'pl-12 sm:pl-14' : ''}`}>
+              <div className={`flex items-center gap-2 sm:gap-4 shrink-0 ${menuButton ? 'pl-12 sm:pl-14' : ''}`}>
                 {/* Logo - Show custom logo or fallback to PicPeak logo */}
                 {shouldShowLogo('header') && (
-                  <div className={`gallery-logo-wrapper flex-shrink-0 flex items-center gap-2 ${brandingSettings?.logo_position === 'center' ? 'flex-1' : ''} ${getLogoPositionClass()}`}>
+                  <div className={`gallery-logo-wrapper shrink-0 flex items-center gap-2 ${brandingSettings?.logo_position === 'center' ? 'flex-1' : ''} ${getLogoPositionClass()}`}>
                     <img
                       src={brandLogoUrl ?
                         buildResourceUrl(brandLogoUrl) :
@@ -374,7 +374,7 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
                   </div>
                 )}
                 {!shouldShowLogo('header') && shouldShowCompanyName() && brandingSettings?.company_name && (
-                  <div className={`flex-shrink-0 ${brandingSettings?.logo_position === 'center' ? 'flex-1' : ''} ${getLogoPositionClass()}`}>
+                  <div className={`shrink-0 ${brandingSettings?.logo_position === 'center' ? 'flex-1' : ''} ${getLogoPositionClass()}`}>
                     <span className="text-lg font-semibold text-theme">
                       {brandingSettings.company_name || 'PicPeak'}
                     </span>
@@ -394,13 +394,13 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
                   <div className="hidden sm:flex flex-wrap gap-x-3 gap-y-1 mt-1 text-xs sm:text-sm text-muted-theme">
                     {event.event_date && (
                       <span className="flex items-center">
-                        <Calendar className="w-3 h-3 sm:w-4 sm:h-4 mr-1 flex-shrink-0" />
+                        <Calendar className="w-3 h-3 sm:w-4 sm:h-4 mr-1 shrink-0" />
                         <span>{format(parseISO(event.event_date), 'PP')}</span>
                       </span>
                     )}
                     {event.expires_at && (
                       <span className="flex items-center">
-                        <Clock className="w-3 h-3 sm:w-4 sm:h-4 mr-1 flex-shrink-0" />
+                        <Clock className="w-3 h-3 sm:w-4 sm:h-4 mr-1 shrink-0" />
                         <span>{t('gallery.expires')} {format(parseISO(event.expires_at), 'PP')}</span>
                       </span>
                     )}
@@ -409,7 +409,7 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
               </div>
               
               {/* Right side - Action buttons */}
-              <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+              <div className="flex items-center gap-2 sm:gap-3 shrink-0">
                 {/* Extra header items (upload button, etc.) */}
                 {headerExtra}
                 
@@ -462,13 +462,13 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
               <div className="flex sm:hidden justify-center gap-x-3 mt-2 text-xs text-muted-theme">
                 {event.event_date && (
                   <span className="flex items-center">
-                    <Calendar className="w-3 h-3 mr-1 flex-shrink-0" />
+                    <Calendar className="w-3 h-3 mr-1 shrink-0" />
                     <span>{format(parseISO(event.event_date), 'PP')}</span>
                   </span>
                 )}
                 {event.expires_at && (
                   <span className="flex items-center">
-                    <Clock className="w-3 h-3 mr-1 flex-shrink-0" />
+                    <Clock className="w-3 h-3 mr-1 shrink-0" />
                     <span>{t('gallery.expires')} {format(parseISO(event.expires_at), 'PP')}</span>
                   </span>
                 )}
@@ -490,7 +490,7 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
                   {event.event_name}
                 </h1>
               </div>
-              <div className="flex items-center gap-2 flex-shrink-0">
+              <div className="flex items-center gap-2 shrink-0">
                 {headerExtra}
                 {showDownloadAll && onDownloadAll && (
                   <Button
@@ -538,7 +538,7 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
                 {menuButton}
                 {headerExtra}
               </div>
-              <div className="flex items-center gap-2 flex-shrink-0">
+              <div className="flex items-center gap-2 shrink-0">
                 {showDownloadAll && onDownloadAll && (
                   <Button
                     variant="primary"
@@ -589,7 +589,7 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
               </div>
 
               {/* Right side - Action buttons */}
-              <div className="flex items-center gap-3 flex-shrink-0">
+              <div className="flex items-center gap-3 shrink-0">
                 {/* Download all button */}
                 {showDownloadAll && onDownloadAll && (
                   <Button

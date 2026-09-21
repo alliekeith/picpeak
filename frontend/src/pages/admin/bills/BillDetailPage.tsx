@@ -303,11 +303,11 @@ export const BillDetailPage: React.FC = () => {
                 the admin sees at a glance that this row is a
                 cancellation document, not an invoice. */}
             {inv.kind === 'storno' && (
-              <span className="ml-2 text-xs font-semibold px-2 py-0.5 rounded bg-purple-100 text-purple-800">
+              <span className="ml-2 text-xs font-semibold px-2 py-0.5 rounded-sm bg-purple-100 text-purple-800">
                 {t('bills.kind.storno', 'Stornorechnung')}
               </span>
             )}
-            <span className="ml-2 text-xs font-medium px-2 py-0.5 rounded bg-neutral-100 text-neutral-700">
+            <span className="ml-2 text-xs font-medium px-2 py-0.5 rounded-sm bg-neutral-100 text-neutral-700">
               {/* Held invoice ('scheduled' with no send date, incl. the
                   monthly/manual accumulator) never auto-ships — read it as
                   "Draft", matching the Bills list. */}
@@ -538,7 +538,7 @@ export const BillDetailPage: React.FC = () => {
                 <li key={p.id} className="flex items-center gap-3 px-3 py-2">
                   <input
                     type="checkbox"
-                    className="rounded border-neutral-300 dark:border-neutral-600"
+                    className="rounded-sm border-neutral-300 dark:border-neutral-600"
                     disabled={!p.hasProof}
                     checked={selectedProofIds.has(p.id)}
                     onChange={(e) => setSelectedProofIds((prev) => {
@@ -634,7 +634,7 @@ export const BillDetailPage: React.FC = () => {
                   id="pay-method"
                   value={payMethod}
                   onChange={(e) => setPayMethod(e.target.value)}
-                  className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-accent-dark"
+                  className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:border-accent-dark"
                 >
                   <option value="">{t('bills.payment.methodPlaceholder', 'Select method…')}</option>
                   <option value="bank_transfer">{t('bills.payment.methods.bankTransfer', 'Bank transfer')}</option>

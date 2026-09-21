@@ -236,7 +236,7 @@ export const CrmSettingsPage: React.FC = () => {
             </label>
             <textarea
               rows={6}
-              className="w-full rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-accent-dark"
+              className="w-full rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:border-accent-dark"
               value={values.crm_quotes_tos_text ?? ''}
               onChange={(e) => setVal('crm_quotes_tos_text', e.target.value)}
               placeholder={t('crmSettings.crm_quotes_tos_text.placeholder',

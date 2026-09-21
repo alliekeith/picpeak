@@ -72,7 +72,7 @@ export const GuestNamePromptModal: React.FC<GuestNamePromptModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-60 flex items-center justify-center p-4">
       <div className="fixed inset-0 bg-black bg-opacity-50" onClick={allowCancel ? handleClose : undefined} />
       <div className="relative bg-surface rounded-lg shadow-xl max-w-md w-full p-6">
         {allowCancel && (
@@ -121,7 +121,7 @@ export const GuestNamePromptModal: React.FC<GuestNamePromptModalProps> = ({
           />
 
           {submitError && (
-            <div className="text-sm text-red-600 bg-red-50 dark:bg-red-900/20 rounded px-3 py-2">
+            <div className="text-sm text-red-600 bg-red-50 dark:bg-red-900/20 rounded-sm px-3 py-2">
               {submitError}
             </div>
           )}

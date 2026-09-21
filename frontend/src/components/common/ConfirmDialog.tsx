@@ -128,7 +128,7 @@ export const ConfirmDialogProvider: React.FC<{ children: React.ReactNode }> = ({
       {children}
       {options && (
         <div
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999] p-4"
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-9999 p-4"
           onClick={() => settle(false)}
           role="dialog"
           aria-modal="true"
@@ -138,14 +138,14 @@ export const ConfirmDialogProvider: React.FC<{ children: React.ReactNode }> = ({
             onClick={(e: React.MouseEvent) => e.stopPropagation()}
           >
             <div className="flex items-start gap-3 mb-4">
-              {Icon && <Icon className={`w-6 h-6 flex-shrink-0 mt-0.5 ${iconClass}`} />}
+              {Icon && <Icon className={`w-6 h-6 shrink-0 mt-0.5 ${iconClass}`} />}
               <div className="flex-1 min-w-0">
                 {options.title && (
                   <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-1">
                     {options.title}
                   </h2>
                 )}
-                <p className="text-sm text-neutral-700 dark:text-neutral-300 whitespace-pre-line break-words">
+                <p className="text-sm text-neutral-700 dark:text-neutral-300 whitespace-pre-line wrap-break-word">
                   {options.message}
                 </p>
               </div>

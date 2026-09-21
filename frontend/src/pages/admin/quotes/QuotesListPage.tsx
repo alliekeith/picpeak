@@ -60,7 +60,7 @@ export const QuotesListPage: React.FC = () => {
             {/* Beta badge — feature is functional but the surface is
                 still evolving (matches Customers + Invoices). */}
             <span
-              className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
+              className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-sm font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
               title="Beta — feature is functional but still evolving"
             >
               {t('navigation.betaTag', 'Beta')}

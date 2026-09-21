@@ -46,7 +46,7 @@ export const TransferDownloadPage: React.FC = () => {
       style={{ backgroundColor: 'var(--color-background)', color: 'var(--color-text)' }}
     >
       <div
-        className="w-full max-w-lg rounded-lg border shadow-sm"
+        className="w-full max-w-lg rounded-lg border shadow-xs"
         style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-surface-border)' }}
       >
         {children}
@@ -117,7 +117,7 @@ export const TransferDownloadPage: React.FC = () => {
                 {f.size_bytes ? <span>{formatBytes(f.size_bytes)}</span> : null}
                 <a
                   href={transfersService.publicFileUrl(token as string, f.file_id)}
-                  className="rounded p-1.5 hover:opacity-70"
+                  className="rounded-sm p-1.5 hover:opacity-70"
                   style={{ color: 'var(--color-accent)' }}
                   title={t('transfers.public.downloadFile', 'Download')}
                 >

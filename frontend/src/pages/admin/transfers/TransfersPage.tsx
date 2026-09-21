@@ -208,7 +208,7 @@ const CreateTransferModal: React.FC<{ onClose: () => void; onCreated: () => void
       <div className="flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-lg bg-white shadow-xl dark:bg-neutral-900">
         <div className="flex items-center justify-between border-b border-neutral-200 px-5 py-3 dark:border-neutral-700">
           <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">{t('transfers.new', 'New transfer')}</h2>
-          <button onClick={onClose} className="rounded p-1 text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800"><X className="h-5 w-5" /></button>
+          <button onClick={onClose} className="rounded-sm p-1 text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800"><X className="h-5 w-5" /></button>
         </div>
 
         <div className="min-h-0 flex-1 space-y-4 overflow-y-auto p-5">
@@ -228,7 +228,7 @@ const CreateTransferModal: React.FC<{ onClose: () => void; onCreated: () => void
             <Input type="number" min={0} label={t('transfers.field.maxDownloads', 'Max downloads (0 = unlimited)')} value={maxDownloads} onChange={(e) => setMaxDownloads(e.target.value)} placeholder="0" />
           </div>
           <label className="flex items-center gap-2 text-sm text-neutral-700 dark:text-neutral-300">
-            <input type="checkbox" checked={allowUploads} onChange={(e) => setAllowUploads(e.target.checked)} className="rounded" />
+            <input type="checkbox" checked={allowUploads} onChange={(e) => setAllowUploads(e.target.checked)} className="rounded-sm" />
             {t('transfers.field.allowUploads', 'Also give the client an upload link (to send logos etc.)')}
           </label>
 
@@ -247,7 +247,7 @@ const CreateTransferModal: React.FC<{ onClose: () => void; onCreated: () => void
             ) : (
               <div className="grid grid-cols-6 gap-2">
                 {picked.slice(0, 18).map((p) => (
-                  <div key={p.id} className="relative aspect-square overflow-hidden rounded">
+                  <div key={p.id} className="relative aspect-square overflow-hidden rounded-sm">
                     {p.thumbnail_url ? (
                       <AdminAuthenticatedImage src={p.thumbnail_url} alt={p.filename} className="h-full w-full object-cover" />
                     ) : <div className="h-full w-full bg-neutral-100 dark:bg-neutral-800" />}
@@ -258,7 +258,7 @@ const CreateTransferModal: React.FC<{ onClose: () => void; onCreated: () => void
                   </div>
                 ))}
                 {picked.length > 18 && (
-                  <div className="flex aspect-square items-center justify-center rounded bg-neutral-100 text-xs text-neutral-500 dark:bg-neutral-800">
+                  <div className="flex aspect-square items-center justify-center rounded-sm bg-neutral-100 text-xs text-neutral-500 dark:bg-neutral-800">
                     +{picked.length - 18}
                   </div>
                 )}
@@ -296,7 +296,7 @@ const CreateTransferModal: React.FC<{ onClose: () => void; onCreated: () => void
                     <button
                       type="button"
                       onClick={() => setFiles((prev) => prev.filter((_, i) => i !== idx))}
-                      className="rounded p-1 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600 dark:hover:bg-neutral-700"
+                      className="rounded-sm p-1 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600 dark:hover:bg-neutral-700"
                     ><X className="h-3.5 w-3.5" /></button>
                   </li>
                 ))}
@@ -460,7 +460,7 @@ const TransferDetailModal: React.FC<DetailProps> = ({ transferId, onClose, onCop
           <h2 className="truncate text-lg font-semibold text-neutral-900 dark:text-neutral-100">
             {transfer?.title || t('transfers.untitled', 'Untitled transfer')}
           </h2>
-          <button onClick={onClose} className="rounded p-1 text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800"><X className="h-5 w-5" /></button>
+          <button onClick={onClose} className="rounded-sm p-1 text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800"><X className="h-5 w-5" /></button>
         </div>
 
         {isLoading || !transfer ? (
@@ -510,7 +510,7 @@ const TransferDetailModal: React.FC<DetailProps> = ({ transferId, onClose, onCop
               {transfer.files && transfer.files.length > 0 ? (
                 <div className="grid grid-cols-4 gap-3 sm:grid-cols-6">
                   {transfer.files.map((f) => (
-                    <div key={f.file_id} className="group relative aspect-square overflow-hidden rounded">
+                    <div key={f.file_id} className="group relative aspect-square overflow-hidden rounded-sm">
                       <AdminAuthenticatedImage src={f.thumbnail_url} alt={f.filename} className="h-full w-full object-cover" />
                       <button
                         onClick={() => removeFileMutation.mutate(f.file_id)}
@@ -561,7 +561,7 @@ const TransferDetailModal: React.FC<DetailProps> = ({ transferId, onClose, onCop
                         </a>
                         <button
                           onClick={() => removeExtraFileMutation.mutate(f.id)}
-                          className="rounded p-1 text-neutral-400 hover:bg-neutral-100 hover:text-red-600 dark:hover:bg-neutral-700"
+                          className="rounded-sm p-1 text-neutral-400 hover:bg-neutral-100 hover:text-red-600 dark:hover:bg-neutral-700"
                           title={t('common.remove', 'Remove')}
                         ><X className="h-3.5 w-3.5" /></button>
                       </span>
@@ -608,7 +608,7 @@ const TransferDetailModal: React.FC<DetailProps> = ({ transferId, onClose, onCop
               {transfer.allow_uploads && transfer.upload_token ? (
                 <>
                   <div className="flex flex-wrap items-center gap-2">
-                    <div className="rounded bg-neutral-100 px-3 py-1.5 font-mono text-lg tracking-widest dark:bg-neutral-800">{transfer.upload_token}</div>
+                    <div className="rounded-sm bg-neutral-100 px-3 py-1.5 font-mono text-lg tracking-widest dark:bg-neutral-800">{transfer.upload_token}</div>
                     <Input readOnly value={uploadUrl(transfer.upload_token)} className="flex-1 min-w-[200px]" />
                     <Button variant="outline" size="sm" leftIcon={<Copy className="h-4 w-4" />} onClick={() => onCopy(uploadUrl(transfer.upload_token as string))}>
                       {t('transfers.copyLink', 'Copy link')}

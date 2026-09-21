@@ -27,7 +27,7 @@ const ProxiedNotice: React.FC = () => {
   return (
     <div className="p-4 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg">
       <div className="flex items-start gap-3">
-        <ShieldCheck className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+        <ShieldCheck className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0" />
         <div className="text-sm text-blue-800 dark:text-blue-200">
           <p className="font-medium mb-1">
             {t('settings.analytics.proxiedNotice', 'Served from your own domain')}
@@ -55,7 +55,7 @@ const CspWarning: React.FC = () => {
   return (
     <div className="p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
       <div className="flex items-start gap-3">
-        <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0" />
+        <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0" />
         <div className="text-sm text-amber-800 dark:text-amber-200">
           <p className="font-medium mb-1">
             {t('settings.analytics.customCspWarning', 'Content-Security-Policy reminder')}
@@ -294,7 +294,7 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({
         {provider === 'none' && (
           <div className="p-4 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg">
             <div className="flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+              <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0" />
               <div className="text-sm text-blue-800 dark:text-blue-200">
                 {t(
                   'settings.analytics.providerNoneInfo',

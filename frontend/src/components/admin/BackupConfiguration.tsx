@@ -211,7 +211,7 @@ export const BackupConfiguration: React.FC<BackupConfigurationProps> = ({
               onChange={(e) => handleChange('backup_enabled', e.target.checked)}
               className="sr-only peer"
             />
-            <div className="w-11 h-6 bg-neutral-200 dark:bg-neutral-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-neutral-300 dark:after:border-neutral-500 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+            <div className="w-11 h-6 bg-neutral-200 dark:bg-neutral-600 peer-focus:outline-hidden peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-neutral-300 dark:after:border-neutral-500 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
           </label>
         </div>
       </Card>
@@ -324,7 +324,7 @@ export const BackupConfiguration: React.FC<BackupConfigurationProps> = ({
                     value={formData.backup_rsync_ssh_key}
                     onChange={(e) => handleChange('backup_rsync_ssh_key', e.target.value)}
                     placeholder={t('backup.configuration.fields.rsyncSshKeyPlaceholder')}
-                    className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-md focus:outline-none focus:ring-primary focus:border-primary font-mono text-sm"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-md focus:outline-hidden focus:ring-primary focus:border-primary font-mono text-sm"
                     rows={4}
                   />
                   <button
@@ -462,7 +462,7 @@ export const BackupConfiguration: React.FC<BackupConfigurationProps> = ({
             <select
               value={formData.backup_schedule}
               onChange={(e) => handleChange('backup_schedule', e.target.value)}
-              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-md focus:outline-none focus:ring-primary focus:border-primary"
+              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-md focus:outline-hidden focus:ring-primary focus:border-primary"
             >
               {scheduleOptions.map(option => (
                 <option key={option.value} value={option.value}>
@@ -518,7 +518,7 @@ export const BackupConfiguration: React.FC<BackupConfigurationProps> = ({
               checked={formData.backup_include_database}
               onChange={(e) => handleChange('backup_include_database', e.target.checked)}
               disabled={!canManageDestination}
-              className="h-4 w-4 text-primary focus:ring-primary border-neutral-300 dark:border-neutral-600 rounded bg-white dark:bg-neutral-700"
+              className="h-4 w-4 text-primary focus:ring-primary border-neutral-300 dark:border-neutral-600 rounded-sm bg-white dark:bg-neutral-700"
             />
             <div className="ml-3">
               <div className="flex items-center space-x-2">
@@ -534,7 +534,7 @@ export const BackupConfiguration: React.FC<BackupConfigurationProps> = ({
               type="checkbox"
               checked={formData.backup_include_photos}
               onChange={(e) => handleChange('backup_include_photos', e.target.checked)}
-              className="h-4 w-4 text-primary focus:ring-primary border-neutral-300 dark:border-neutral-600 rounded bg-white dark:bg-neutral-700"
+              className="h-4 w-4 text-primary focus:ring-primary border-neutral-300 dark:border-neutral-600 rounded-sm bg-white dark:bg-neutral-700"
             />
             <div className="ml-3">
               <div className="flex items-center space-x-2">
@@ -550,7 +550,7 @@ export const BackupConfiguration: React.FC<BackupConfigurationProps> = ({
               type="checkbox"
               checked={formData.backup_include_archives}
               onChange={(e) => handleChange('backup_include_archives', e.target.checked)}
-              className="h-4 w-4 text-primary focus:ring-primary border-neutral-300 dark:border-neutral-600 rounded bg-white dark:bg-neutral-700"
+              className="h-4 w-4 text-primary focus:ring-primary border-neutral-300 dark:border-neutral-600 rounded-sm bg-white dark:bg-neutral-700"
             />
             <div className="ml-3">
               <div className="flex items-center space-x-2">
@@ -566,7 +566,7 @@ export const BackupConfiguration: React.FC<BackupConfigurationProps> = ({
               type="checkbox"
               checked={formData.backup_include_thumbnails}
               onChange={(e) => handleChange('backup_include_thumbnails', e.target.checked)}
-              className="h-4 w-4 text-primary focus:ring-primary border-neutral-300 dark:border-neutral-600 rounded bg-white dark:bg-neutral-700"
+              className="h-4 w-4 text-primary focus:ring-primary border-neutral-300 dark:border-neutral-600 rounded-sm bg-white dark:bg-neutral-700"
             />
             <div className="ml-3">
               <div className="flex items-center space-x-2">

@@ -131,7 +131,7 @@ export const BackupHistory = () => {
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-md focus:outline-none focus:ring-primary focus:border-primary"
+              className="px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-md focus:outline-hidden focus:ring-primary focus:border-primary"
             >
               <option value="all">All Status</option>
               <option value="completed">Completed</option>
@@ -384,7 +384,7 @@ export const BackupHistory = () => {
                               {backup.error_message && (
                                 <div className="space-y-2">
                                   <h4 className="font-medium text-red-900 dark:text-red-200">{t('backup.history.details.errorDetails')}</h4>
-                                  <p className="text-sm text-red-700 dark:text-red-300 bg-red-50 dark:bg-red-900/30 p-2 rounded">
+                                  <p className="text-sm text-red-700 dark:text-red-300 bg-red-50 dark:bg-red-900/30 p-2 rounded-sm">
                                     {backup.error_message}
                                   </p>
                                 </div>
@@ -444,7 +444,7 @@ export const BackupHistory = () => {
                   </p>
                 </div>
                 <div>
-                  <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
+                  <nav className="relative z-0 inline-flex rounded-md shadow-xs -space-x-px">
                     <button
                       onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                       disabled={currentPage === 1}

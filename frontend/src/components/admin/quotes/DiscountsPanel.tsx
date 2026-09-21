@@ -88,7 +88,7 @@ export const DiscountsPanel: React.FC<Props> = ({ promotions, items, currency, o
               type="checkbox"
               checked={appliedIds.has(p.id)}
               onChange={(e) => toggle(p, e.target.checked)}
-              className="rounded border-neutral-300"
+              className="rounded-sm border-neutral-300"
             />
             <span>{p.name}</span>
             <span className="text-neutral-500 dark:text-neutral-400 tabular-nums">{valueLabel(p)}</span>

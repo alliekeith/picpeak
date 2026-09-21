@@ -511,7 +511,7 @@ export const GalleryPage: React.FC = () => {
           {daysUntilExpiration !== null && daysUntilExpiration <= 7 && (
             <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
               <div className="flex items-start">
-                <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600 mt-0.5 mr-2 flex-shrink-0" />
+                <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600 mt-0.5 mr-2 shrink-0" />
                 <div>
                   <p className="text-xs sm:text-sm font-medium text-amber-800">
                     {t('gallery.expiresIn', { count: daysUntilExpiration })}
@@ -541,7 +541,7 @@ export const GalleryPage: React.FC = () => {
                   className="rounded-lg border border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-950/40 p-4 text-sm text-red-900 dark:text-red-100"
                 >
                   <div className="flex items-start">
-                    <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5 mr-2 flex-shrink-0" />
+                    <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5 mr-2 shrink-0" />
                     <div>
                       <p className="font-medium">
                         {t('auth.iab.instagram.blockedTitle', "Instagram's browser can't open this gallery")}

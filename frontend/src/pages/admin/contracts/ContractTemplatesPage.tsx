@@ -15,7 +15,7 @@ import {
   contractTemplatesService, templateError, type ContractTemplateSummary,
 } from '../../../services/contractTemplates.service';
 
-const badgeClass = 'text-[10px] uppercase tracking-wide px-1.5 py-0.5 rounded';
+const badgeClass = 'text-[10px] uppercase tracking-wide px-1.5 py-0.5 rounded-sm';
 
 export const ContractTemplatesPage: React.FC = () => {
   const { t } = useTranslation();
@@ -76,7 +76,7 @@ export const ContractTemplatesPage: React.FC = () => {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3">
-        <Link to="/admin/clients/contracts" className="p-1 rounded hover:bg-neutral-100 dark:hover:bg-neutral-800"
+        <Link to="/admin/clients/contracts" className="p-1 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-800"
           aria-label={t('contracts.templates.back', 'Back to contracts') as string}>
           <ArrowLeft className="w-5 h-5" />
         </Link>

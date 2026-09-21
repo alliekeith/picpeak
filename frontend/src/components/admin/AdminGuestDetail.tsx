@@ -101,7 +101,7 @@ export const AdminGuestDetail: React.FC<AdminGuestDetailProps> = ({ eventId, gue
           <div className="overflow-y-auto p-4">
             {/* Stats */}
             <div className="grid grid-cols-5 gap-2 mb-4">
-              <div className="p-3 bg-neutral-50 dark:bg-neutral-800 rounded text-center">
+              <div className="p-3 bg-neutral-50 dark:bg-neutral-800 rounded-sm text-center">
                 <div className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
                   {liked.length}
                 </div>
@@ -110,7 +110,7 @@ export const AdminGuestDetail: React.FC<AdminGuestDetailProps> = ({ eventId, gue
                   {t('admin.guests.columns.likes', 'Likes')}
                 </div>
               </div>
-              <div className="p-3 bg-neutral-50 dark:bg-neutral-800 rounded text-center">
+              <div className="p-3 bg-neutral-50 dark:bg-neutral-800 rounded-sm text-center">
                 <div className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
                   {favorited.length}
                 </div>
@@ -119,7 +119,7 @@ export const AdminGuestDetail: React.FC<AdminGuestDetailProps> = ({ eventId, gue
                   {t('admin.guests.columns.favorites', 'Favorites')}
                 </div>
               </div>
-              <div className="p-3 bg-neutral-50 dark:bg-neutral-800 rounded text-center">
+              <div className="p-3 bg-neutral-50 dark:bg-neutral-800 rounded-sm text-center">
                 <div className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
                   {rated.length}
                 </div>
@@ -128,7 +128,7 @@ export const AdminGuestDetail: React.FC<AdminGuestDetailProps> = ({ eventId, gue
                   {t('admin.guests.columns.ratings', 'Ratings')}
                 </div>
               </div>
-              <div className="p-3 bg-neutral-50 dark:bg-neutral-800 rounded text-center">
+              <div className="p-3 bg-neutral-50 dark:bg-neutral-800 rounded-sm text-center">
                 <div className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
                   {commented.length}
                 </div>
@@ -137,7 +137,7 @@ export const AdminGuestDetail: React.FC<AdminGuestDetailProps> = ({ eventId, gue
                   {t('admin.guests.columns.comments', 'Comments')}
                 </div>
               </div>
-              <div className="p-3 bg-neutral-50 dark:bg-neutral-800 rounded text-center">
+              <div className="p-3 bg-neutral-50 dark:bg-neutral-800 rounded-sm text-center">
                 <div className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
                   {reacted.length}
                 </div>
@@ -146,7 +146,7 @@ export const AdminGuestDetail: React.FC<AdminGuestDetailProps> = ({ eventId, gue
                   {t('admin.guests.columns.reactions', 'Reactions')}
                 </div>
               </div>
-              <div className="p-3 bg-neutral-50 dark:bg-neutral-800 rounded text-center">
+              <div className="p-3 bg-neutral-50 dark:bg-neutral-800 rounded-sm text-center">
                 <div className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
                   {labeled.length}
                 </div>
@@ -184,11 +184,11 @@ export const AdminGuestDetail: React.FC<AdminGuestDetailProps> = ({ eventId, gue
               ) : (
                 <div className="space-y-3">
                   {commented.map((c, idx) => (
-                    <div key={idx} className="flex gap-3 p-3 bg-neutral-50 dark:bg-neutral-800 rounded">
+                    <div key={idx} className="flex gap-3 p-3 bg-neutral-50 dark:bg-neutral-800 rounded-sm">
                       <AuthenticatedImage
                         src={buildResourceUrl(c.photo.thumbnail_url)}
                         alt={c.photo.filename}
-                        className="w-16 h-16 object-cover rounded flex-shrink-0"
+                        className="w-16 h-16 object-cover rounded-sm shrink-0"
                       />
                       <div className="flex-1">
                         <div className="text-xs text-neutral-500 dark:text-neutral-400">
@@ -211,19 +211,19 @@ export const AdminGuestDetail: React.FC<AdminGuestDetailProps> = ({ eventId, gue
                     <AuthenticatedImage
                       src={buildResourceUrl(item.photo.thumbnail_url)}
                       alt={item.photo.filename}
-                      className="w-full aspect-square object-cover rounded"
+                      className="w-full aspect-square object-cover rounded-sm"
                     />
                     <div className="absolute top-1 right-1 flex gap-1">
                       {item.badges.map((b, i) => (
                         <span
                           key={i}
-                          className="bg-black/60 text-white text-xs px-1.5 py-0.5 rounded"
+                          className="bg-black/60 text-white text-xs px-1.5 py-0.5 rounded-sm"
                         >
                           {b === 'like' ? '♥' : b === 'favorite' ? '★' : b}
                         </span>
                       ))}
                     </div>
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity text-white text-xs p-2 rounded-b">
+                    <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity text-white text-xs p-2 rounded-b">
                       {item.photo.filename}
                     </div>
                   </div>

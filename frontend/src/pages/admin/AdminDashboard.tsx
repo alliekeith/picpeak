@@ -374,7 +374,7 @@ export const AdminDashboard: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => navigate(href)}
-                          className="min-w-0 text-left rounded -m-1 p-1 hover:bg-purple-100/60 dark:hover:bg-purple-900/40 transition-colors cursor-pointer"
+                          className="min-w-0 text-left rounded-sm -m-1 p-1 hover:bg-purple-100/60 dark:hover:bg-purple-900/40 transition-colors cursor-pointer"
                           title={t('workflows.approvals.openEntity', 'Open {{type}} #{{id}}', { type: a.entity_type, id: a.entity_id }) as string}
                         >
                           {info}
@@ -454,9 +454,9 @@ export const AdminDashboard: React.FC = () => {
 
                 return (
                   <div key={activity.id} className="flex items-start gap-3">
-                    <div className={`w-2 h-2 rounded-full mt-1.5 flex-shrink-0 ${getActivityColor(activity.type)}`} />
+                    <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${getActivityColor(activity.type)}`} />
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm text-neutral-900 dark:text-neutral-100 break-words">
+                      <p className="text-sm text-neutral-900 dark:text-neutral-100 wrap-break-word">
                         {getActivityMessage()}
                       </p>
                       <p className="text-xs text-neutral-500 dark:text-neutral-400">{activity.actorName}</p>

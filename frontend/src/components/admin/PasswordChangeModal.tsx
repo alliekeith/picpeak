@@ -129,7 +129,7 @@ export const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({ isOpen
                 <button
                   type="button"
                   onClick={() => setShowPasswords(prev => ({ ...prev, current: !prev.current }))}
-                  className="absolute right-3 top-2 p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded"
+                  className="absolute right-3 top-2 p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-sm"
                 >
                   {showPasswords.current ? 
                     <EyeOff className="w-4 h-4 text-neutral-500" /> : 
@@ -157,7 +157,7 @@ export const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({ isOpen
                 <button
                   type="button"
                   onClick={() => setShowPasswords(prev => ({ ...prev, new: !prev.new }))}
-                  className="absolute right-3 top-2 p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded"
+                  className="absolute right-3 top-2 p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-sm"
                 >
                   {showPasswords.new ? 
                     <EyeOff className="w-4 h-4 text-neutral-500" /> : 
@@ -185,7 +185,7 @@ export const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({ isOpen
                 <button
                   type="button"
                   onClick={() => setShowPasswords(prev => ({ ...prev, confirm: !prev.confirm }))}
-                  className="absolute right-3 top-2 p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded"
+                  className="absolute right-3 top-2 p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-sm"
                 >
                   {showPasswords.confirm ? 
                     <EyeOff className="w-4 h-4 text-neutral-500" /> : 
@@ -198,7 +198,7 @@ export const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({ isOpen
             {/* Password Requirements */}
             <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
               <div className="flex items-start gap-2">
-                <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+                <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
                 <div className="text-sm text-blue-800 dark:text-blue-200">
                   <p className="font-medium">{t('passwordChange.requirements')}</p>
                   <ul className="list-disc list-inside mt-1 space-y-1">

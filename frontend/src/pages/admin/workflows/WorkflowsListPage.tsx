@@ -120,7 +120,7 @@ export const WorkflowsListPage: React.FC = () => {
                   <div className="flex items-center gap-2">
                     <Link to={`/admin/workflows/${w.id}`} className="font-medium text-neutral-900 dark:text-neutral-100 truncate hover:underline">{w.name}</Link>
                     {isBuiltin(w) && (
-                      <span className="text-[11px] px-1.5 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300">{t('workflows.builtin', 'built-in')}</span>
+                      <span className="text-[11px] px-1.5 py-0.5 rounded-sm bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300">{t('workflows.builtin', 'built-in')}</span>
                     )}
                   </div>
                   <div className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
@@ -171,7 +171,7 @@ export const WorkflowsListPage: React.FC = () => {
             <input
               value={testEntityId} onChange={(e) => setTestEntityId(e.target.value)}
               placeholder={t('workflows.test.entityId', 'Entity id (optional, e.g. invoice id)') as string}
-              className="w-full px-2 py-1.5 rounded border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 text-sm"
+              className="w-full px-2 py-1.5 rounded-sm border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 text-sm"
             />
             <Button variant="primary" isLoading={testMutation.isPending} onClick={() => testMutation.mutate()}>
               {t('workflows.test.run', 'Run dry test')}

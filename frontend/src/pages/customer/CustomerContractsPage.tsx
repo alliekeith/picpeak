@@ -112,7 +112,7 @@ export const CustomerContractsPage: React.FC = () => {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
-                className="text-sm px-2 py-1 rounded border"
+                className="text-sm px-2 py-1 rounded-sm border"
                 style={{
                   backgroundColor: 'var(--color-surface)',
                   borderColor: 'var(--color-surface-border)',
@@ -129,7 +129,7 @@ export const CustomerContractsPage: React.FC = () => {
               <select
                 value={sort}
                 onChange={(e) => setSort(e.target.value as SortKey)}
-                className="text-sm px-2 py-1 rounded border"
+                className="text-sm px-2 py-1 rounded-sm border"
                 style={{
                   backgroundColor: 'var(--color-surface)',
                   borderColor: 'var(--color-surface-border)',
@@ -218,7 +218,7 @@ const ContractRow: React.FC<{ c: CustomerContract }> = ({ c }) => {
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2 flex-wrap">
           <span className="font-mono text-sm">{c.contractNumber}</span>
-          <span className={`px-2 py-0.5 rounded text-xs font-medium ${statusBadge}`}>
+          <span className={`px-2 py-0.5 rounded-sm text-xs font-medium ${statusBadge}`}>
             {t(`contracts.status.${c.status}`, c.status)}
           </span>
         </div>
@@ -252,7 +252,7 @@ const ContractRow: React.FC<{ c: CustomerContract }> = ({ c }) => {
             type="button"
             onClick={handleSign}
             disabled={opening}
-            className="inline-flex items-center gap-1 px-3 py-1.5 rounded text-sm bg-accent-dark text-white hover:opacity-90 disabled:opacity-50"
+            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-sm text-sm bg-accent-dark text-white hover:opacity-90 disabled:opacity-50"
           >
             <PenLine className="w-4 h-4" />
             {opening
@@ -264,7 +264,7 @@ const ContractRow: React.FC<{ c: CustomerContract }> = ({ c }) => {
           <button
             type="button"
             onClick={handleDownload}
-            className="inline-flex items-center gap-1 px-3 py-1.5 rounded text-sm border"
+            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-sm text-sm border"
             style={{
               backgroundColor: 'var(--color-surface)',
               borderColor: 'var(--color-surface-border)',

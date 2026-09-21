@@ -151,7 +151,7 @@ export const CustomerMailboxCard: React.FC = () => {
           <Button variant="outline" onClick={() => test.mutate()} isLoading={test.isPending} disabled={!cfg.imap_host || !cfg.imap_user} leftIcon={<PlugZap className="w-5 h-5" />} className="whitespace-nowrap">
             {t('email.incoming.test', 'Test connection')}
           </Button>
-          <Button variant="primary" onClick={() => save.mutate()} isLoading={save.isPending} leftIcon={<Save className="w-5 h-5" />} className="flex-1 min-w-[12rem]">
+          <Button variant="primary" onClick={() => save.mutate()} isLoading={save.isPending} leftIcon={<Save className="w-5 h-5" />} className="flex-1 min-w-48">
             {t('email.customerMailbox.save', 'Save Customer Mailbox')}
           </Button>
         </div>

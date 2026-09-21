@@ -679,7 +679,7 @@ export const BrandingPage: React.FC = () => {
                       <img 
                         src={brandingSettings.logo_url.startsWith('http') ? brandingSettings.logo_url : buildResourceUrl(brandingSettings.logo_url)} 
                         alt="Logo"
-                        className="h-16 object-contain bg-neutral-100 dark:bg-neutral-700 rounded p-2"
+                        className="h-16 object-contain bg-neutral-100 dark:bg-neutral-700 rounded-sm p-2"
                       />
                       <button
                         type="button"
@@ -723,7 +723,7 @@ export const BrandingPage: React.FC = () => {
                       <img
                         src={logoDarkUrl.startsWith('http') ? logoDarkUrl : buildResourceUrl(logoDarkUrl)}
                         alt="Dark logo"
-                        className="h-16 object-contain bg-neutral-800 rounded p-2"
+                        className="h-16 object-contain bg-neutral-800 rounded-sm p-2"
                       />
                       <button
                         type="button"
@@ -852,7 +852,7 @@ export const BrandingPage: React.FC = () => {
                     type="checkbox"
                     checked={brandingSettings.logo_display_header !== false}
                     onChange={(e) => handleBrandingChange('logo_display_header', e.target.checked)}
-                    className="rounded border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
+                    className="rounded-sm border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
                   />
                   <div>
                     <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
@@ -869,7 +869,7 @@ export const BrandingPage: React.FC = () => {
                     type="checkbox"
                     checked={brandingSettings.logo_display_hero !== false}
                     onChange={(e) => handleBrandingChange('logo_display_hero', e.target.checked)}
-                    className="rounded border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
+                    className="rounded-sm border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
                   />
                   <div>
                     <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
@@ -902,7 +902,7 @@ export const BrandingPage: React.FC = () => {
                   type="checkbox"
                   checked={brandingSettings.login_logo_frame_enabled !== false}
                   onChange={(e) => handleBrandingChange('login_logo_frame_enabled', e.target.checked)}
-                  className="mt-0.5 rounded border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
+                  className="mt-0.5 rounded-sm border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
                 />
                 <div>
                   <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
@@ -944,7 +944,7 @@ export const BrandingPage: React.FC = () => {
                 type="checkbox"
                 checked={brandingSettings.hide_powered_by === true}
                 onChange={(e) => handleBrandingChange('hide_powered_by', e.target.checked)}
-                className="rounded border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
+                className="rounded-sm border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
               />
               <div>
                 <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
@@ -963,7 +963,7 @@ export const BrandingPage: React.FC = () => {
                 type="checkbox"
                 checked={brandingSettings.watermark_enabled}
                 onChange={(e) => handleBrandingChange('watermark_enabled', e.target.checked)}
-                className="rounded border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
+                className="rounded-sm border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
               />
               <div>
                 <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100">{t('branding.enableWatermarks')}</span>
@@ -988,7 +988,7 @@ export const BrandingPage: React.FC = () => {
                       <img 
                         src={brandingSettings.watermark_logo_url.startsWith('http') ? brandingSettings.watermark_logo_url : buildResourceUrl(brandingSettings.watermark_logo_url)} 
                         alt="Current watermark" 
-                        className="h-16 w-auto object-contain bg-neutral-100 dark:bg-neutral-700 p-2 rounded"
+                        className="h-16 w-auto object-contain bg-neutral-100 dark:bg-neutral-700 p-2 rounded-sm"
                       />
                       <span className="text-sm text-neutral-600 dark:text-neutral-400">{t('branding.currentWatermark')}</span>
                       <Button
@@ -1133,7 +1133,7 @@ export const BrandingPage: React.FC = () => {
                 type="checkbox"
                 checked={isPreviewMode}
                 onChange={(e) => setIsPreviewMode(e.target.checked)}
-                className="rounded border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
+                className="rounded-sm border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
               />
               <span className="text-sm text-neutral-700 dark:text-neutral-300">{t('branding.applyLivePreview')}</span>
             </label>
@@ -1186,7 +1186,7 @@ export const BrandingPage: React.FC = () => {
         {/* Event-Specific Themes Info */}
         <Card padding="md" className="bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800">
           <div className="flex items-start gap-3">
-            <Palette className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+            <Palette className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
             <div>
               <h3 className="text-sm font-medium text-blue-900 dark:text-blue-200">{t('branding.eventSpecificThemes')}</h3>
               <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">

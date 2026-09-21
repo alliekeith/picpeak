@@ -129,7 +129,7 @@ export const DownloadResolutionModal: React.FC<DownloadResolutionModalProps> = (
 
   return (
     <div
-      className="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999] p-4"
+      className="fixed inset-0 bg-black/50 flex items-center justify-center z-9999 p-4"
       onClick={onClose}
       role="dialog"
       aria-modal="true"

@@ -223,7 +223,7 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
                     size="sm"
                     onClick={() => onCategoryChange(null)}
                     leftIcon={<Grid className="w-3 h-3 md:w-4 md:h-4" />}
-                    className="text-xs md:text-sm whitespace-nowrap flex-shrink-0"
+                    className="text-xs md:text-sm whitespace-nowrap shrink-0"
                   >
                     {showMediaFilter ? t('gallery.allMedia', 'All media') : t('gallery.allPhotos')} ({photos.length})
                   </Button>
@@ -237,7 +237,7 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
                         variant={selectedCategoryId === category.id ? 'primary' : 'outline'}
                         size="sm"
                         onClick={() => onCategoryChange(category.id)}
-                        className="text-xs md:text-sm whitespace-nowrap flex-shrink-0"
+                        className="text-xs md:text-sm whitespace-nowrap shrink-0"
                       >
                         {category.name} ({categoryPhotoCount})
                       </Button>
@@ -249,7 +249,7 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
 
             {/* Desktop: compact horizontal feedback filter with headline (icons only) */}
             {feedbackEnabled && onFilterChange && (
-              <div className="hidden lg:flex items-center gap-2 mx-2 flex-shrink-0">
+              <div className="hidden lg:flex items-center gap-2 mx-2 shrink-0">
                 <span className="text-sm text-muted-theme whitespace-nowrap">
                   {t('gallery.feedbackFilter', 'Feedback Filter')}
                 </span>
@@ -306,7 +306,7 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
             {/* Colour filter (#1044), desktop */}
             {feedbackEnabled && colorLabelsEnabled && onColorFilterChange && (
               <ColorLabelFilterChips
-                className="hidden lg:flex flex-shrink-0"
+                className="hidden lg:flex shrink-0"
                 activeColors={activeColorFilters}
                 onToggle={onColorFilterChange}
                 counts={colorLabelCounts}
@@ -316,7 +316,7 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
             {/* Without categories this row only carries desktop content (the
                 chips are lg-only; mobile has its own block below), so hide
                 the count below lg to keep the mobile layout unchanged. */}
-            <p className={`text-xs md:text-sm text-muted-theme flex-shrink-0 ml-auto ${categories && categories.length > 0 ? '' : 'hidden lg:block'}`}>
+            <p className={`text-xs md:text-sm text-muted-theme shrink-0 ml-auto ${categories && categories.length > 0 ? '' : 'hidden lg:block'}`}>
               {photoCount} {t('common.media', 'media')}
             </p>
           </div>

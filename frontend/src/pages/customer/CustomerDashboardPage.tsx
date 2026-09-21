@@ -213,7 +213,7 @@ export const CustomerDashboardPage: React.FC = () => {
         <div className="flex justify-center py-16"><Loading size="lg" /></div>
       ) : error || !data ? (
         <div role="alert" className="rounded-xl border p-6 flex items-start gap-3" style={surfaceStyle}>
-          <AlertCircle className="w-5 h-5 mt-0.5 flex-shrink-0 text-red-500" />
+          <AlertCircle className="w-5 h-5 mt-0.5 shrink-0 text-red-500" />
           <p className="text-theme">
             {t('customer.dashboard.loadError', 'Could not load your galleries. Please try again.')}
           </p>
@@ -242,7 +242,7 @@ export const CustomerDashboardPage: React.FC = () => {
                   id="customer-events-sort"
                   value={sort}
                   onChange={(e) => setSort(e.target.value as SortKey)}
-                  className="rounded-lg border px-3 h-9 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+                  className="rounded-lg border px-3 h-9 text-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2"
                   style={{ ...surfaceStyle, color: 'var(--color-text)' }}
                 >
                   {SORT_OPTIONS.map((opt) => (
@@ -292,13 +292,13 @@ export const CustomerDashboardPage: React.FC = () => {
                         <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs sm:text-sm text-muted-theme">
                           {date && (
                             <span className="inline-flex items-center gap-1.5">
-                              <Calendar className="w-3.5 h-3.5 flex-shrink-0" />
+                              <Calendar className="w-3.5 h-3.5 shrink-0" />
                               {date}
                             </span>
                           )}
                           {expires && (
                             <span className="inline-flex items-center gap-1.5">
-                              <Clock className="w-3.5 h-3.5 flex-shrink-0" />
+                              <Clock className="w-3.5 h-3.5 shrink-0" />
                               {t('customer.dashboard.expiresOn', 'Expires {{date}}', { date: expires })}
                             </span>
                           )}
@@ -313,7 +313,7 @@ export const CustomerDashboardPage: React.FC = () => {
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-2 flex-shrink-0">
+                      <div className="flex items-center gap-2 shrink-0">
                         {detailsLink(ev)}
                         {!unavailable && (
                           <Button

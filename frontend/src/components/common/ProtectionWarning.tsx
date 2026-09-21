@@ -71,7 +71,7 @@ export const ProtectionWarning: React.FC<ProtectionWarningProps> = ({
   return (
     <div className={`fixed top-4 right-4 ${config.bgColor} ${config.textColor} p-4 rounded-lg shadow-lg z-50 max-w-sm`}>
       <div className="flex items-start gap-3">
-        <div className="flex-shrink-0 mt-0.5">
+        <div className="shrink-0 mt-0.5">
           {config.icon}
         </div>
         <div className="flex-1 min-w-0">
@@ -85,7 +85,7 @@ export const ProtectionWarning: React.FC<ProtectionWarningProps> = ({
         {onClose && (
           <button
             onClick={onClose}
-            className="flex-shrink-0 ml-2 -mr-1 -mt-1 p-1 rounded-full hover:bg-white/20 transition-colors"
+            className="shrink-0 ml-2 -mr-1 -mt-1 p-1 rounded-full hover:bg-white/20 transition-colors"
             aria-label="Close warning"
           >
             <X className="w-4 h-4" />

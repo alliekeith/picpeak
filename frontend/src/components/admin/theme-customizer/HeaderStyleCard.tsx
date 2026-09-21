@@ -40,7 +40,7 @@ export const HeaderStyleCard: React.FC<HeaderStyleCardProps> = ({ localTheme, ha
                 : 'border-neutral-200 dark:border-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600'
             }`}
           >
-            {/* min-w-0 + break-words: a grid item will not shrink below its
+            {/* min-w-0 + wrap-break-word: a grid item will not shrink below its
                 min-content width, and German compounds here are long enough to
                 exceed a narrow column — "Veranstaltungsinfo-Overlay" and
                 "Veranstaltungsdetails" spilled out of the card and over the
@@ -51,10 +51,10 @@ export const HeaderStyleCard: React.FC<HeaderStyleCardProps> = ({ localTheme, ha
               <div className="mb-2 text-neutral-700 dark:text-neutral-300">
                 {headerStyleIcons[style]}
               </div>
-              <span className="w-full break-words font-medium text-sm capitalize text-neutral-900 dark:text-neutral-100">
+              <span className="w-full wrap-break-word font-medium text-sm capitalize text-neutral-900 dark:text-neutral-100">
                 {t(`branding.headerStyleOptions.${style}`, style)}
               </span>
-              <span className="w-full break-words text-xs text-neutral-600 dark:text-neutral-400 mt-1">
+              <span className="w-full wrap-break-word text-xs text-neutral-600 dark:text-neutral-400 mt-1">
                 {t(`branding.headerStyleDescriptions.${style}`, '')}
               </span>
             </div>
@@ -91,7 +91,7 @@ export const HeaderStyleCard: React.FC<HeaderStyleCardProps> = ({ localTheme, ha
                     <div className="h-8"></div>
                     {dividerStylePreviews[divider]}
                   </div>
-                  <span className="w-full break-words text-xs font-medium capitalize text-neutral-900 dark:text-neutral-100">
+                  <span className="w-full wrap-break-word text-xs font-medium capitalize text-neutral-900 dark:text-neutral-100">
                     {t(`branding.dividerOptions.${divider}`, divider)}
                   </span>
                 </div>

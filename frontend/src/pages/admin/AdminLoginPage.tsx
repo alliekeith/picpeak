@@ -288,7 +288,7 @@ export const AdminLoginPage: React.FC = () => {
             {/* Form Error */}
             {errors.form && (
               <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
-                <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
                 <p className="text-sm text-red-800">{errors.form}</p>
               </div>
             )}
@@ -349,7 +349,7 @@ export const AdminLoginPage: React.FC = () => {
                   type="checkbox"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className="w-4 h-4 text-accent border-neutral-300 rounded focus:ring-primary-500"
+                  className="w-4 h-4 text-accent border-neutral-300 rounded-sm focus:ring-primary-500"
                 />
                 <span className="ml-2 text-sm text-neutral-700">{t('adminLogin.rememberMe')}</span>
               </label>
@@ -417,7 +417,7 @@ export const AdminLoginPage: React.FC = () => {
 
             {mfaError && (
               <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
-                <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
                 <p className="text-sm text-red-800">{mfaError}</p>
               </div>
             )}

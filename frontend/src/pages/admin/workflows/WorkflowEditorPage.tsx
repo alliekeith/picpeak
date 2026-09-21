@@ -82,7 +82,7 @@ function WfNode({ data }: { data: any }) {
   const label = describeNode(data.nodeType, data.config, data.triggerType);
   const pos = (i: number, n: number) => `${(100 / (n + 1)) * (i + 1)}%`;
   return (
-    <div style={{ borderColor: color }} className="relative rounded-md border-2 bg-white dark:bg-neutral-900 px-3 pt-2 pb-4 min-w-[152px] text-center shadow-sm">
+    <div style={{ borderColor: color }} className="relative rounded-md border-2 bg-white dark:bg-neutral-900 px-3 pt-2 pb-4 min-w-[152px] text-center shadow-xs">
       {data.nodeType !== 'trigger' && <Handle type="target" position={Position.Top} />}
       <div className="text-[10px] uppercase tracking-wide" style={{ color }}>{data.nodeType}</div>
       <div className="text-sm text-neutral-900 dark:text-neutral-100">{label}</div>
@@ -272,13 +272,13 @@ export const WorkflowEditorPage: React.FC = () => {
         </Button>
         <input
           value={name} onChange={(e) => setName(e.target.value)}
-          className="px-2 py-1 rounded border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100"
+          className="px-2 py-1 rounded-sm border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100"
           placeholder={t('workflows.editor.namePlaceholder', 'Workflow name') as string}
         />
         <label className="text-sm text-neutral-600 dark:text-neutral-400">{t('workflows.editor.when', 'When')}</label>
         <select
           value={triggerType} onChange={(e) => setTriggerType(e.target.value)}
-          className="px-2 py-1 rounded border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 text-sm"
+          className="px-2 py-1 rounded-sm border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 text-sm"
         >
           {TRIGGERS.map((tr) => <option key={tr} value={tr}>{tr}</option>)}
         </select>
@@ -289,7 +289,7 @@ export const WorkflowEditorPage: React.FC = () => {
               type="number" min={0} max={365}
               value={triggerConfig.daysBefore ?? 2}
               onChange={(e) => setTriggerConfig((c) => ({ ...c, daysBefore: Number(e.target.value) }))}
-              className="w-16 px-2 py-1 rounded border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 text-sm"
+              className="w-16 px-2 py-1 rounded-sm border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 text-sm"
             />
           </label>
         )}
@@ -312,14 +312,14 @@ export const WorkflowEditorPage: React.FC = () => {
         {PALETTE.map((type) => (
           <button
             key={type} type="button" onClick={() => addNode(type)}
-            className="text-xs px-2 py-1 rounded border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800"
+            className="text-xs px-2 py-1 rounded-sm border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800"
           >
             + {type}
           </button>
         ))}
         <button
           type="button" onClick={cleanUp}
-          className="ml-auto inline-flex items-center gap-1 text-xs px-2 py-1 rounded border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800"
+          className="ml-auto inline-flex items-center gap-1 text-xs px-2 py-1 rounded-sm border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800"
         >
           <Wand2 className="w-3.5 h-3.5" /> {t('workflows.editor.cleanUp', 'Clean up layout')}
         </button>
@@ -333,7 +333,7 @@ export const WorkflowEditorPage: React.FC = () => {
           </p>
           <textarea
             value={text} onChange={(e) => setText(e.target.value)} spellCheck={false}
-            className="w-full font-mono text-xs p-2 rounded border border-neutral-300 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100"
+            className="w-full font-mono text-xs p-2 rounded-sm border border-neutral-300 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100"
             style={{ height: '62vh' }}
           />
           {textErr && <p className="text-xs text-red-600 dark:text-red-400">{textErr}</p>}

@@ -100,7 +100,7 @@ export const FeedbackModerationPanel: React.FC<FeedbackModerationPanelProps> = (
             {pendingComments.slice(0, showAllModal.isOpen ? undefined : maxItems).map((item) => (
               <div key={item.id} className="border border-neutral-200 dark:border-neutral-700 rounded-lg p-4 hover:bg-neutral-50 dark:hover:bg-neutral-800">
                 <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0">
+                  <div className="shrink-0">
                     <div className="w-10 h-10 bg-neutral-100 dark:bg-neutral-800 rounded-full flex items-center justify-center">
                       <User className="w-5 h-5 text-neutral-600 dark:text-neutral-300" />
                     </div>
@@ -121,11 +121,11 @@ export const FeedbackModerationPanel: React.FC<FeedbackModerationPanelProps> = (
                         <p className="mt-1 text-sm text-neutral-700">{item.comment_text || item.comment}</p>
                         {item.photo_id && (
                           <div className="mt-2 flex items-center gap-2">
-                            <div className="w-16 h-16 overflow-hidden rounded">
+                            <div className="w-16 h-16 overflow-hidden rounded-sm">
                               <AdminAuthenticatedImage 
                                 src={`/admin/photos/${eventId}/thumbnail/${item.photo_id}`}
                                 alt={item.filename || 'Photo'}
-                                className="w-16 h-16 object-cover rounded"
+                                className="w-16 h-16 object-cover rounded-sm"
                               />
                             </div>
                             <p className="text-xs text-neutral-500">

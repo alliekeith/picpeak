@@ -302,7 +302,7 @@ export const CustomerDetailPage: React.FC = () => {
         <div className="flex items-center gap-3 min-w-0">
           <Link
             to="/admin/clients/accounts"
-            className="p-2 -ml-2 rounded hover:bg-neutral-100 dark:hover:bg-neutral-700"
+            className="p-2 -ml-2 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-700"
             aria-label={t('common.back', 'Back')}
           >
             <ArrowLeft className="w-4 h-4 text-neutral-500 dark:text-neutral-400" />
@@ -328,7 +328,7 @@ export const CustomerDetailPage: React.FC = () => {
           )}
           {customer.isPassive ? (
             <span
-              className="inline-flex items-center gap-1 text-[11px] px-1.5 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300"
+              className="inline-flex items-center gap-1 text-[11px] px-1.5 py-0.5 rounded-sm bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300"
               title={t(
                 'customers.passive.detailHint',
                 'This customer has no portal access (admin-only record). Click "Send portal invitation" below to email them a sign-up link.',
@@ -684,11 +684,11 @@ export const CustomerDetailPage: React.FC = () => {
                       Colors match Settings → Features StatusBadge so
                       the two surfaces feel consistent. */}
                   {badge === 'soon' ? (
-                    <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">
+                    <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-sm font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">
                       {t('customer.nav.soon', 'Soon')}
                     </span>
                   ) : (
-                    <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded font-semibold bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300">
+                    <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-sm font-semibold bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300">
                       {t('customer.nav.new', 'New')}
                     </span>
                   )}
@@ -698,7 +698,7 @@ export const CustomerDetailPage: React.FC = () => {
                   role="switch"
                   aria-checked={enabled}
                   onClick={() => toggleFeature(key)}
-                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${enabled ? '' : 'bg-neutral-300 dark:bg-neutral-600'}`}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 ${enabled ? '' : 'bg-neutral-300 dark:bg-neutral-600'}`}
                   style={enabled ? { backgroundColor: 'var(--color-accent)' } : undefined}
                 >
                   <span
@@ -831,7 +831,7 @@ export const CustomerDetailPage: React.FC = () => {
             type="checkbox"
             checked={!!form.skontoDisabled}
             onChange={(e) => setForm((prev) => ({ ...prev, skontoDisabled: e.target.checked } as any))}
-            className="mt-0.5 rounded border-neutral-300 dark:border-neutral-600"
+            className="mt-0.5 rounded-sm border-neutral-300 dark:border-neutral-600"
           />
           <span>
             {t('customers.billing.skontoDisabled', 'No Skonto for this customer')}

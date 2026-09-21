@@ -29,7 +29,7 @@ import type { BoundTo, LineUnit } from '../../../../utils/lineItemTotals';
 const UNITS: LineUnit[] = ['hour', 'day', 'piece', 'km', 'flat'];
 const CURRENCIES = ['CHF', 'EUR', 'USD', 'GBP'];
 const LANGUAGES = ['de', 'en', 'fr', 'nl', 'pt', 'ru'];
-const inputCls = 'w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900';
+const inputCls = 'w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900';
 // Native selects ignore vertical padding in Safari; a fixed height keeps them level with the inputs.
 const selectCls = `${inputCls} h-10`;
 const labelCls = 'block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1';
@@ -292,10 +292,10 @@ export const QuoteTemplateEditorPage: React.FC = () => {
                       onChange={(e) => updateSection(idx, { ...section, isOptional: e.target.checked })} />
                     {t('crm.lineItems.optional', 'Offer as add-on')}
                   </label>
-                  <button type="button" onClick={() => moveSection(idx, -1)} aria-label="Move up" className="p-1 rounded hover:bg-neutral-100 dark:hover:bg-neutral-700"><ArrowUp className="w-4 h-4" /></button>
-                  <button type="button" onClick={() => moveSection(idx, 1)} aria-label="Move down" className="p-1 rounded hover:bg-neutral-100 dark:hover:bg-neutral-700"><ArrowDown className="w-4 h-4" /></button>
+                  <button type="button" onClick={() => moveSection(idx, -1)} aria-label="Move up" className="p-1 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-700"><ArrowUp className="w-4 h-4" /></button>
+                  <button type="button" onClick={() => moveSection(idx, 1)} aria-label="Move down" className="p-1 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-700"><ArrowDown className="w-4 h-4" /></button>
                   <button type="button" onClick={() => setSections(draft.sections.filter((_, i) => i !== idx))} aria-label="Remove"
-                    className="p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/30 text-red-600"><X className="w-4 h-4" /></button>
+                    className="p-1 rounded-sm hover:bg-red-50 dark:hover:bg-red-900/30 text-red-600"><X className="w-4 h-4" /></button>
                 </div>
               </div>
 
@@ -304,7 +304,7 @@ export const QuoteTemplateEditorPage: React.FC = () => {
                 const rateBased = preset?.priceMode === 'hour' || preset?.priceMode === 'day';
                 return (
                   <div className="flex flex-wrap gap-2">
-                    <select aria-label={t('quotes.templates.section.item', 'Catalogue item') as string} className={`${selectCls} flex-1 min-w-[12rem]`}
+                    <select aria-label={t('quotes.templates.section.item', 'Catalogue item') as string} className={`${selectCls} flex-1 min-w-48`}
                       value={section.presetId}
                       onChange={(e) => updateSection(idx, { ...section, presetId: Number(e.target.value), boundTo: null })}>
                       {!preset && <option value={section.presetId}>#{section.presetId}</option>}
@@ -345,7 +345,7 @@ export const QuoteTemplateEditorPage: React.FC = () => {
                       </div>
                       <button type="button" aria-label="Remove"
                         onClick={() => updateSection(idx, { ...section, children: section.children.filter((_, i) => i !== cIdx) })}
-                        className="p-1 mt-1 rounded hover:bg-red-50 dark:hover:bg-red-900/30 text-red-600"><X className="w-4 h-4" /></button>
+                        className="p-1 mt-1 rounded-sm hover:bg-red-50 dark:hover:bg-red-900/30 text-red-600"><X className="w-4 h-4" /></button>
                     </div>
                   ))}
                   <Button variant="outline" size="sm"

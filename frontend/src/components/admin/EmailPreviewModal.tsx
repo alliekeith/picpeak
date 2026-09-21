@@ -71,7 +71,7 @@ export const EmailPreviewModal: React.FC<EmailPreviewModalProps> = ({
         {/* Content */}
         <div className="flex-1 overflow-auto p-6">
           {viewMode === 'html' ? (
-            <div className="bg-white border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-sm">
+            <div className="bg-white border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-xs">
               <iframe
                 srcDoc={htmlContent}
                 className="w-full h-[600px] border-0"

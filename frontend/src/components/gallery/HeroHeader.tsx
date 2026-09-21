@@ -236,7 +236,7 @@ export const HeroHeader: React.FC<HeroHeaderProps> = ({
         {/* Scroll Indicator */}
         <button
           onClick={handleScrollToContent}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce cursor-pointer hover:scale-110 transition-transform focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 rounded-full p-2"
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce cursor-pointer hover:scale-110 transition-transform focus:outline-hidden focus:ring-2 focus:ring-white focus:ring-opacity-50 rounded-full p-2"
           aria-label="Scroll to gallery"
         >
           <ChevronDown className="w-8 h-8 text-white drop-shadow-lg" />

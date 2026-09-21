@@ -37,7 +37,7 @@ const STATUS_STYLE: Record<AdminCustomerDocument['status'], string> = {
   rejected: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300',
 };
 
-const selectClass = 'focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900 h-9 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-2 text-sm text-neutral-900 dark:text-neutral-100';
+const selectClass = 'focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900 h-9 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-2 text-sm text-neutral-900 dark:text-neutral-100';
 
 interface Props {
   customerId: number;
@@ -212,10 +212,10 @@ export const CustomerDocumentsCard: React.FC<Props> = ({ customerId, events }) =
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100 break-all">{doc.name}</span>
-                      <span className={`text-[11px] px-1.5 py-0.5 rounded font-semibold ${STATUS_STYLE[doc.status]}`}>
+                      <span className={`text-[11px] px-1.5 py-0.5 rounded-sm font-semibold ${STATUS_STYLE[doc.status]}`}>
                         {statusLabel(doc.status)}
                       </span>
-                      <span className="text-[11px] px-1.5 py-0.5 rounded font-semibold bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300">
+                      <span className="text-[11px] px-1.5 py-0.5 rounded-sm font-semibold bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300">
                         {doc.shared
                           ? t('customers.documents.shared', 'Shared')
                           : t('customers.documents.notShared', 'Not shared')}

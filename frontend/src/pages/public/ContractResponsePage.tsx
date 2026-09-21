@@ -70,7 +70,7 @@ const SECTION_LABELS: Record<ContractBlockSection, { en: string; de: string }> =
   closing: { en: 'Closing', de: 'Schlussbestimmungen' },
 };
 
-const CARD = 'bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-200 dark:border-neutral-700 p-6 md:p-8';
+const CARD = 'bg-white dark:bg-neutral-800 rounded-xl shadow-xs border border-neutral-200 dark:border-neutral-700 p-6 md:p-8';
 const PRIMARY_BUTTON = 'px-4 py-2 rounded-md bg-accent-dark text-white text-sm hover:opacity-90 disabled:opacity-50';
 const SECONDARY_BUTTON = 'px-3 py-1.5 rounded-md border border-neutral-300 dark:border-neutral-600 text-sm inline-flex items-center gap-1 disabled:opacity-50 text-neutral-700 dark:text-neutral-300';
 const INPUT = 'w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 text-sm text-neutral-900 dark:text-neutral-100';
@@ -207,7 +207,7 @@ const ContractBody: React.FC<{ contract: PublicContractView }> = ({ contract: c 
         <h1 className="text-2xl font-bold">
           {c.title || t('publicContract.fallbackTitle', 'Contract')}
         </h1>
-        <span className="text-xs font-mono px-2 py-1 rounded bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300">
+        <span className="text-xs font-mono px-2 py-1 rounded-sm bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300">
           {c.contractNumber}
         </span>
       </div>
@@ -604,7 +604,7 @@ const SignerProgress: React.FC<{ contract: SigningSessionContract }> = ({ contra
                 </span>
               )}
             </span>
-            <span className={`px-2 py-0.5 rounded text-xs font-medium ${PROGRESS_CHIP[s.status] || PROGRESS_CHIP.pending}`}>
+            <span className={`px-2 py-0.5 rounded-sm text-xs font-medium ${PROGRESS_CHIP[s.status] || PROGRESS_CHIP.pending}`}>
               {s.status === 'signed'
                 ? t('contractSigning.signers.status.signed', 'Signed')
                 : s.status === 'declined'
@@ -794,7 +794,7 @@ const SignForm: React.FC<SignFormProps> = ({
           </div>
         ) : (
           <div>
-            <div className="h-20 flex items-center px-4 rounded border border-neutral-300 dark:border-neutral-600 bg-white text-neutral-900 font-serif italic text-2xl overflow-hidden">
+            <div className="h-20 flex items-center px-4 rounded-sm border border-neutral-300 dark:border-neutral-600 bg-white text-neutral-900 font-serif italic text-2xl overflow-hidden">
               {name.trim()}
             </div>
             <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1">
@@ -1262,12 +1262,12 @@ export const ContractResponseView: React.FC<{ adapter: ContractDocumentAdapter }
         </div>
 
         {/* Main card */}
-        <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-200 dark:border-neutral-700 p-6 md:p-8">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-xs border border-neutral-200 dark:border-neutral-700 p-6 md:p-8">
           <div className="flex items-baseline justify-between mb-4 gap-3 flex-wrap">
             <h1 className="text-2xl font-bold">
               {c.title || t('publicContract.fallbackTitle', 'Contract')}
             </h1>
-            <span className="text-xs font-mono px-2 py-1 rounded bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300">
+            <span className="text-xs font-mono px-2 py-1 rounded-sm bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300">
               {c.contractNumber}
             </span>
           </div>
@@ -1310,7 +1310,7 @@ export const ContractResponseView: React.FC<{ adapter: ContractDocumentAdapter }
         </div>
 
         {/* Signing card */}
-        <div className="mt-6 bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-200 dark:border-neutral-700 p-6 md:p-8">
+        <div className="mt-6 bg-white dark:bg-neutral-800 rounded-xl shadow-xs border border-neutral-200 dark:border-neutral-700 p-6 md:p-8">
           {alreadySigned ? (
             <div className="py-2">
               <div className="text-center mb-5">
@@ -1436,7 +1436,7 @@ export const ContractResponseView: React.FC<{ adapter: ContractDocumentAdapter }
                   </label>
                   <canvas
                     ref={canvasRef}
-                    className="w-full h-32 bg-white rounded border border-neutral-300 dark:border-neutral-600 touch-none"
+                    className="w-full h-32 bg-white rounded-sm border border-neutral-300 dark:border-neutral-600 touch-none"
                   />
                   <div className="mt-1 flex justify-end">
                     <button

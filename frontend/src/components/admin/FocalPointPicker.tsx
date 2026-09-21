@@ -81,12 +81,12 @@ export const FocalPointPicker: React.FC<FocalPointPickerProps> = ({
           <div className="absolute inset-0 m-px w-6 h-6 rounded-full border-2 border-white" />
           {/* Center dot */}
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-1.5 h-1.5 rounded-full bg-white shadow-sm" />
+            <div className="w-1.5 h-1.5 rounded-full bg-white shadow-xs" />
           </div>
         </div>
 
         {/* Coordinate label */}
-        <span className="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 text-[10px] font-mono leading-none text-white bg-black/60 rounded">
+        <span className="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 text-[10px] font-mono leading-none text-white bg-black/60 rounded-sm">
           {x}% {y}%
         </span>
       </div>

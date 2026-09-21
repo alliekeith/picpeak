@@ -205,7 +205,7 @@ export const PhotoExportMenu: React.FC<PhotoExportMenuProps> = ({
                 <select
                   value={markSource}
                   onChange={(e) => setMarkSource(e.target.value === 'mine' ? 'mine' : 'client')}
-                  className="px-2 py-1 rounded border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100"
+                  className="px-2 py-1 rounded-sm border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <option value="client">{t('export.markSourceClient', 'Client selections')}</option>

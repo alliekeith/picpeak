@@ -65,7 +65,7 @@ export default function ProductUsageNotice() {
       aria-label={t('productUsage.title')}
     >
       <div className="flex items-start gap-3">
-        <Sparkles className="w-5 h-5 flex-shrink-0 mt-0.5 text-primary-600 dark:text-primary-300" />
+        <Sparkles className="w-5 h-5 shrink-0 mt-0.5 text-primary-600 dark:text-primary-300" />
         <div className="min-w-0 text-sm text-primary-900 dark:text-primary-100">
           <p className="font-medium">{t('productUsage.noticeTitle')}</p>
           <p className="mt-0.5 text-primary-800 dark:text-primary-200">

@@ -25,7 +25,7 @@ import { Button, Card, Loading, LocalizedDateInput } from '../../../components/c
 // doesn't export a Select component, and the form pieces here are
 // small enough that a plain styled <select> is the right call.
 const selectClassName =
-  'w-full rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 focus:outline-none focus:ring-2 focus:ring-primary-500';
+  'w-full rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-primary-500';
 import { taxReportService, type TaxReportParams } from '../../../services/taxReport.service';
 import { ledgerService, type ExportFormat } from '../../../services/ledger.service';
 import { useFeatureFlags } from '../../../contexts/FeatureFlagsContext';
@@ -212,7 +212,7 @@ export const TaxReportPage: React.FC = () => {
         {/* Filter card (left) */}
         <Card padding="md">
           <div className="flex items-start gap-3 mb-4">
-            <div className="w-10 h-10 rounded-lg bg-accent-soft text-on-accent-soft flex items-center justify-center flex-shrink-0">
+            <div className="w-10 h-10 rounded-lg bg-accent-soft text-on-accent-soft flex items-center justify-center shrink-0">
               <Calculator className="w-5 h-5" />
             </div>
             <div className="min-w-0">
@@ -456,7 +456,7 @@ export const TaxReportPage: React.FC = () => {
                   </div>
                   {report.summary.vatRegistrationConfigured === false && (
                     <p className="flex items-start gap-1.5 text-xs text-amber-600 dark:text-amber-400 pt-1">
-                      <AlertCircle className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" />
+                      <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
                       <span>{t('taxReport.summary.vatUnconfigured', 'VAT registration isn’t configured, so VAT payable can’t be computed. Set it under Settings → Accounting.')}</span>
                     </p>
                   )}
@@ -502,10 +502,10 @@ export const TaxReportPage: React.FC = () => {
       {report?.costsError && (
         <Card padding="md">
           <div className="flex items-start gap-3 text-amber-700 dark:text-amber-400">
-            <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+            <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
             <div>
               <p className="font-medium">{t('taxReport.costsErrorTitle', 'Costs could not be loaded')}</p>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1 break-words">{report.costsError}</p>
+              <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1 wrap-break-word">{report.costsError}</p>
             </div>
           </div>
         </Card>
@@ -517,7 +517,7 @@ export const TaxReportPage: React.FC = () => {
       ) : isError ? (
         <Card padding="lg">
           <div className="flex items-start gap-3 text-amber-700 dark:text-amber-400">
-            <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+            <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
             <div>
               <p className="font-medium">{t('taxReport.errorTitle', 'Could not load tax report')}</p>
               <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
@@ -614,7 +614,7 @@ export const TaxReportPage: React.FC = () => {
                       <td className="px-2 py-1.5 whitespace-nowrap">
                         <span className="font-medium">{row.reference}</span>
                         {row.isCancelled && (
-                          <span className="ml-2 inline-block px-1.5 py-0.5 text-[10px] uppercase tracking-wider rounded bg-neutral-200 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 font-semibold not-italic">
+                          <span className="ml-2 inline-block px-1.5 py-0.5 text-[10px] uppercase tracking-wider rounded-sm bg-neutral-200 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 font-semibold not-italic">
                             {t('taxReport.statusCancelled', 'Cancelled')}
                           </span>
                         )}
@@ -623,12 +623,12 @@ export const TaxReportPage: React.FC = () => {
                             colour scheme distinguishes the row kinds at
                             a glance across both surfaces. */}
                         {row.kind === 'storno' && (
-                          <span className="ml-2 inline-block px-1.5 py-0.5 text-[10px] uppercase tracking-wider rounded bg-purple-100 dark:bg-purple-900/40 text-purple-800 dark:text-purple-300 font-semibold not-italic">
+                          <span className="ml-2 inline-block px-1.5 py-0.5 text-[10px] uppercase tracking-wider rounded-sm bg-purple-100 dark:bg-purple-900/40 text-purple-800 dark:text-purple-300 font-semibold not-italic">
                             {t('bills.kind.storno', 'Storno')}
                           </span>
                         )}
                         {row.isReissue && (
-                          <span className="ml-2 inline-block px-1.5 py-0.5 text-[10px] uppercase tracking-wider rounded bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300 font-semibold not-italic">
+                          <span className="ml-2 inline-block px-1.5 py-0.5 text-[10px] uppercase tracking-wider rounded-sm bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300 font-semibold not-italic">
                             {t('bills.kind.reissue', 'Reissue')}
                           </span>
                         )}
@@ -678,7 +678,7 @@ export const TaxReportPage: React.FC = () => {
               any cost row. */}
           {ledgerHasCosts && (
             <p className="flex items-start gap-2 text-xs text-neutral-500 dark:text-neutral-400">
-              <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+              <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
               <span>
                 {t(
                   'taxReport.costsDisclaimer',

@@ -164,7 +164,7 @@ export const CustomerManagementPage: React.FC = () => {
                 surface are placeholders, so flag the whole feature as
                 still evolving. Keeps expectations honest. */}
             <span
-              className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
+              className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-sm font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
               title="Beta — feature is functional but still evolving"
             >
               {t('navigation.betaTag', 'Beta')}
@@ -255,7 +255,7 @@ export const CustomerManagementPage: React.FC = () => {
                             const invite = pendingInviteByEmail.get(c.email.trim().toLowerCase());
                             return invite ? (
                               <span
-                                className="inline-flex items-center gap-1 text-[11px] px-1.5 py-0.5 rounded bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300"
+                                className="inline-flex items-center gap-1 text-[11px] px-1.5 py-0.5 rounded-sm bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300"
                                 // Deliberately describes the invitation ROW, not a
                                 // delivery. createInvitation inserts the row and then
                                 // queues the email without a transaction, so an open
@@ -268,7 +268,7 @@ export const CustomerManagementPage: React.FC = () => {
                                 {t('customers.invitePending.badge', 'Invitation pending')}
                               </span>
                             ) : (
-                              <span className="inline-flex items-center gap-1 text-[11px] px-1.5 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300">
+                              <span className="inline-flex items-center gap-1 text-[11px] px-1.5 py-0.5 rounded-sm bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300">
                                 {t('customers.passive.badge', 'Passive — admin only')}
                               </span>
                             );

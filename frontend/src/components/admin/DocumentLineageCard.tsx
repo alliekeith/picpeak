@@ -284,7 +284,7 @@ const Row: React.FC<{
       <div className="flex items-center gap-2 min-w-0">
         <span className={`font-mono text-sm ${isCurrent ? 'text-neutral-500 dark:text-neutral-400' : ''}`}>{number}</span>
         {badge && (
-          <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded font-semibold bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300">
+          <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-sm font-semibold bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300">
             {badge}
           </span>
         )}
@@ -303,7 +303,7 @@ const Row: React.FC<{
   }
   return (
     <li>
-      <Link to={href} className="block hover:bg-neutral-50 dark:hover:bg-neutral-800/40 -mx-2 px-2 rounded">
+      <Link to={href} className="block hover:bg-neutral-50 dark:hover:bg-neutral-800/40 -mx-2 px-2 rounded-sm">
         {inner}
       </Link>
     </li>

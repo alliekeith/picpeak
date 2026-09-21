@@ -117,7 +117,7 @@ export const SignaturePadField = forwardRef<SignaturePadHandle, SignaturePadFiel
           ref={canvasRef}
           role="img"
           aria-label={label}
-          className={`w-full ${heightClassName} bg-white rounded border border-neutral-300 dark:border-neutral-600 touch-none`}
+          className={`w-full ${heightClassName} bg-white rounded-sm border border-neutral-300 dark:border-neutral-600 touch-none`}
         />
         <div className="mt-1 flex justify-end">
           <button

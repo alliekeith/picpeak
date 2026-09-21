@@ -359,7 +359,7 @@ export const SetupPage: React.FC = () => {
         <Card padding="lg">
           {errors.form && (
             <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+              <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
               <p className="text-sm text-red-800">{errors.form}</p>
             </div>
           )}
@@ -386,13 +386,13 @@ export const SetupPage: React.FC = () => {
                 <div className="mt-4 rounded-lg border border-neutral-200 bg-neutral-50 p-3">
                   <p className="text-xs font-medium text-neutral-600">{t('setup.tokenCommandLabel')}</p>
                   <div className="mt-2 flex items-center gap-2">
-                    <code className="flex-1 overflow-x-auto whitespace-nowrap rounded bg-neutral-900 px-3 py-2 font-mono text-xs text-neutral-100">
+                    <code className="flex-1 overflow-x-auto whitespace-nowrap rounded-sm bg-neutral-900 px-3 py-2 font-mono text-xs text-neutral-100">
                       {recoveryCommand}
                     </code>
                     <button
                       type="button"
                       onClick={copyRecoveryCommand}
-                      className="flex-shrink-0 rounded-md border border-neutral-200 bg-white p-2 text-neutral-500 hover:text-neutral-700 transition-colors"
+                      className="shrink-0 rounded-md border border-neutral-200 bg-white p-2 text-neutral-500 hover:text-neutral-700 transition-colors"
                       aria-label={t('setup.copyCommand')}
                       title={t('setup.copyCommand')}
                     >
@@ -525,7 +525,7 @@ export const SetupPage: React.FC = () => {
                       >
                         <input
                           type="checkbox"
-                          className="mt-0.5 h-4 w-4 rounded border-neutral-300"
+                          className="mt-0.5 h-4 w-4 rounded-sm border-neutral-300"
                           checked={selectedFeatures.has(key)}
                           onChange={() => toggleFeature(key)}
                         />
@@ -634,7 +634,7 @@ export const SetupPage: React.FC = () => {
                     rel="noopener noreferrer"
                     className="flex items-start gap-3 rounded-lg border border-neutral-200 p-3 hover:bg-neutral-50 transition-colors"
                   >
-                    <Icon className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: 'var(--color-primary, #5C8762)' }} />
+                    <Icon className="w-5 h-5 shrink-0 mt-0.5" style={{ color: 'var(--color-primary, #5C8762)' }} />
                     <span className="min-w-0">
                       <span className="block text-sm font-medium text-neutral-800">
                         {t(`setup.community.${key}Title`)}
@@ -643,7 +643,7 @@ export const SetupPage: React.FC = () => {
                         {t(`setup.community.${key}Desc`)}
                       </span>
                     </span>
-                    <ExternalLink className="w-4 h-4 flex-shrink-0 text-neutral-400 self-center" aria-hidden="true" />
+                    <ExternalLink className="w-4 h-4 shrink-0 text-neutral-400 self-center" aria-hidden="true" />
                   </a>
                 ))}
               </div>

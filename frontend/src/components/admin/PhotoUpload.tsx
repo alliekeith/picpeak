@@ -612,7 +612,7 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({ eventId, onUploadCompl
           id="replace-by-name"
           checked={replaceByName}
           onChange={(e) => setReplaceByName(e.target.checked)}
-          className="rounded border-neutral-300 text-accent focus:ring-primary-500"
+          className="rounded-sm border-neutral-300 text-accent focus:ring-primary-500"
         />
         <label htmlFor="replace-by-name" className="text-sm text-neutral-700 dark:text-neutral-300">
           {t('upload.replaceByName', 'Replace existing photos with same name')}
@@ -700,7 +700,7 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({ eventId, onUploadCompl
                     e.stopPropagation();
                     removeFile(index);
                   }}
-                  className="p-1 hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded"
+                  className="p-1 hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded-sm"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -734,7 +734,7 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({ eventId, onUploadCompl
         >
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-2 text-amber-800 dark:text-amber-300">
-              <AlertTriangle className="w-5 h-5 flex-shrink-0" />
+              <AlertTriangle className="w-5 h-5 shrink-0" />
               <p className="text-sm font-medium">
                 {t('upload.failures.title', '{{count}} file(s) could not be uploaded', {
                   count: failures.length,
@@ -745,7 +745,7 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({ eventId, onUploadCompl
               type="button"
               onClick={() => setFailuresDismissed(true)}
               aria-label={t('common.dismiss', 'Dismiss')}
-              className="p-1 -m-1 text-amber-700 dark:text-amber-300 hover:bg-amber-100 dark:hover:bg-amber-800/40 rounded"
+              className="p-1 -m-1 text-amber-700 dark:text-amber-300 hover:bg-amber-100 dark:hover:bg-amber-800/40 rounded-sm"
             >
               <X className="w-4 h-4" />
             </button>
@@ -755,7 +755,7 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({ eventId, onUploadCompl
               <li key={`${f.kind}-${f.filename}-${i}`} className="flex items-start gap-2 text-xs">
                 <span
                   className={clsx(
-                    'flex-shrink-0 mt-0.5 px-1.5 py-0.5 rounded font-medium whitespace-nowrap',
+                    'shrink-0 mt-0.5 px-1.5 py-0.5 rounded-sm font-medium whitespace-nowrap',
                     f.kind === 'rejected' && 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
                     f.kind === 'transfer' && 'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300',
                     f.kind === 'processing' && 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300'

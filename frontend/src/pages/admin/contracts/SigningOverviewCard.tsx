@@ -148,7 +148,7 @@ export const SigningOverviewCard: React.FC<SigningOverviewCardProps> = ({ contra
                     ].filter(Boolean).join(' · ')}
                   </p>
                 </div>
-                <span className={`px-2 py-0.5 rounded text-xs font-medium ${STATUS_CHIP[s.status] || STATUS_CHIP.pending}`}>
+                <span className={`px-2 py-0.5 rounded-sm text-xs font-medium ${STATUS_CHIP[s.status] || STATUS_CHIP.pending}`}>
                   {statusLabel(s)}
                 </span>
                 {canResend && (
@@ -294,7 +294,7 @@ const EvidencePanel: React.FC<{ contractId: number }> = ({ contractId }) => {
             <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('contracts.signers.evidence.empty', 'Nothing recorded yet.')}</p>
           )}
           {data.evidence.map((ev) => (
-            <div key={ev.signerId} className="p-3 rounded border border-neutral-200 dark:border-neutral-700">
+            <div key={ev.signerId} className="p-3 rounded-sm border border-neutral-200 dark:border-neutral-700">
               <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100 mb-1">{ev.name || '—'}</p>
               <dl className="grid grid-cols-1 sm:grid-cols-[12rem_1fr] gap-x-3 gap-y-1 text-xs">
                 {row(t('contracts.signers.evidence.ip', 'IP address'), ev.ip, true)}

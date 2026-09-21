@@ -155,7 +155,7 @@ function FilterSortBar<S extends string>({
         <select
           value={statusFilter}
           onChange={(e) => onStatusChange(e.target.value as S)}
-          className="text-sm px-2 py-1 rounded border"
+          className="text-sm px-2 py-1 rounded-sm border"
           style={{
             backgroundColor: 'var(--color-surface)',
             borderColor: 'var(--color-surface-border)',
@@ -172,7 +172,7 @@ function FilterSortBar<S extends string>({
         <select
           value={sort}
           onChange={(e) => onSortChange(e.target.value as SortKey)}
-          className="text-sm px-2 py-1 rounded border"
+          className="text-sm px-2 py-1 rounded-sm border"
           style={{
             backgroundColor: 'var(--color-surface)',
             borderColor: 'var(--color-surface-border)',
@@ -231,7 +231,7 @@ const QuoteRow: React.FC<{ q: CustomerQuote }> = ({ q }) => {
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2 flex-wrap">
           <span className="font-mono text-sm">{q.quoteNumber}</span>
-          <span className={`px-2 py-0.5 rounded text-xs font-medium ${statusClass}`}>
+          <span className={`px-2 py-0.5 rounded-sm text-xs font-medium ${statusClass}`}>
             {t(`quotes.status.${q.status}`, q.status)}
           </span>
         </div>

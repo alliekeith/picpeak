@@ -182,7 +182,7 @@ export const SetupEventTypesStep: React.FC<Props> = ({ onDone }) => {
       <div className="space-y-2">
         {rows.map((row, index) => (
           <div key={row.id ?? `new-${index}`} className="flex items-center gap-2">
-            <span className="w-8 text-center text-xl flex-shrink-0" aria-hidden="true">{row.emoji}</span>
+            <span className="w-8 text-center text-xl shrink-0" aria-hidden="true">{row.emoji}</span>
             <div className="flex-1 min-w-0">
               <Input
                 value={row.name}
@@ -191,7 +191,7 @@ export const SetupEventTypesStep: React.FC<Props> = ({ onDone }) => {
                 aria-label={t('setup.eventTypes.nameLabel')}
               />
             </div>
-            <div className="w-32 flex-shrink-0">
+            <div className="w-32 shrink-0">
               <Input
                 value={row.slug_prefix}
                 onChange={(e) => setRow(index, { slug_prefix: normalizeSlug(e.target.value) })}
@@ -202,7 +202,7 @@ export const SetupEventTypesStep: React.FC<Props> = ({ onDone }) => {
             <button
               type="button"
               onClick={() => removeRow(index)}
-              className="flex-shrink-0 p-2 rounded-lg text-neutral-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+              className="shrink-0 p-2 rounded-lg text-neutral-400 hover:text-red-600 hover:bg-red-50 transition-colors"
               aria-label={t('common.delete', 'Delete')}
               title={t('common.delete', 'Delete')}
             >

@@ -122,7 +122,7 @@ export const ChartOfAccountsManager: React.FC = () => {
   return (
     <div className="space-y-6">
       <p className="flex items-start gap-2 text-xs text-neutral-500 dark:text-neutral-400">
-        <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+        <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
         <span>{t('ledger.intro', 'Used only to produce the Treuhänder export — picpeak does not keep double-entry books. The seeded chart + VAT codes follow the Swiss/LI KMU-Kontenrahmen; adjust them to match your Treuhänder’s setup.')}</span>
       </p>
 

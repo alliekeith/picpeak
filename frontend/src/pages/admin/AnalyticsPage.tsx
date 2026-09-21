@@ -541,7 +541,7 @@ export const AnalyticsPage: React.FC = () => {
       {umamiConfig.enabled === false && (
         <Card padding="md" className="mt-6 bg-amber-50 dark:bg-amber-900/30 border-amber-200 dark:border-amber-800">
           <div className="flex items-start gap-3">
-            <Activity className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0" />
+            <Activity className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0" />
             <div>
               <p className="text-sm font-medium text-amber-900 dark:text-amber-200">{t('analytics.notConfigured')}</p>
               <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">

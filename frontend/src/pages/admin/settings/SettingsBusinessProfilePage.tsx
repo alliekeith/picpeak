@@ -148,7 +148,7 @@ export const SettingsBusinessProfilePage: React.FC = () => {
             <select
               value={normalizeCurrency(profile.defaultCurrency)}
               onChange={(e) => setProfile({ ...profile, defaultCurrency: e.target.value })}
-              className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary-500"
             >
               {currencyOptions(profile.defaultCurrency).map((c) => (
                 <option key={c} value={c}>{c}</option>
@@ -167,7 +167,7 @@ export const SettingsBusinessProfilePage: React.FC = () => {
             <select
               value={profile.timezone || ''}
               onChange={(e) => setProfile({ ...profile, timezone: e.target.value || null })}
-              className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary-500"
             >
               <option value="">
                 {t('businessProfile.field.timezoneSystemDefault', 'System default')} ({Intl.DateTimeFormat().resolvedOptions().timeZone})
@@ -403,7 +403,7 @@ const PdfToggleRow: React.FC<PdfToggleRowProps> = ({ label, description, enabled
       role="switch"
       aria-checked={enabled}
       onClick={() => onChange(!enabled)}
-      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 shrink-0 ${enabled ? '' : 'bg-neutral-300 dark:bg-neutral-600'}`}
+      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 shrink-0 ${enabled ? '' : 'bg-neutral-300 dark:bg-neutral-600'}`}
       style={enabled ? { backgroundColor: 'var(--color-accent)' } : undefined}
     >
       <span

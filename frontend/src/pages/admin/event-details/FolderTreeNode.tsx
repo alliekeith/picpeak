@@ -29,7 +29,7 @@ export const FolderTreeNode: React.FC<{
   const indentStyle = { paddingLeft: depth * 16 + 4 };
   const childIndentStyle = { paddingLeft: (depth + 1) * 16 + 4 };
   const rowClass =
-    'flex items-center gap-1 py-1 pr-1 rounded ' +
+    'flex items-center gap-1 py-1 pr-1 rounded-sm ' +
     (isSelected
       ? 'bg-accent-dark/15'
       : 'hover:bg-neutral-50 dark:hover:bg-neutral-700');
@@ -56,9 +56,9 @@ export const FolderTreeNode: React.FC<{
           }
         >
           {isExpanded ? (
-            <FolderOpen className="w-4 h-4 flex-shrink-0 text-accent" />
+            <FolderOpen className="w-4 h-4 shrink-0 text-accent" />
           ) : (
-            <Folder className="w-4 h-4 flex-shrink-0 text-neutral-500" />
+            <Folder className="w-4 h-4 shrink-0 text-neutral-500" />
           )}
           <span className="truncate">{name}</span>
         </button>

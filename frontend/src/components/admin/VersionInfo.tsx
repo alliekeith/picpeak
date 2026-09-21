@@ -64,7 +64,7 @@ export const VersionInfo: React.FC = () => {
   });
 
   const channelBadge = versionInfo?.channel === 'beta' ? (
-    <span className="ml-1 px-1.5 py-0.5 text-xs bg-amber-100 text-amber-700 rounded">
+    <span className="ml-1 px-1.5 py-0.5 text-xs bg-amber-100 text-amber-700 rounded-sm">
       {t('admin.updates.beta', 'BETA')}
     </span>
   ) : null;

@@ -225,7 +225,7 @@ export const AdminGuestsList: React.FC<AdminGuestsListProps> = ({ eventId, event
                 <Button variant="outline" size="sm" leftIcon={<Download className="w-4 h-4" />}>
                   {t('admin.guests.exportAll', 'Export all')}
                 </Button>
-                <div className="absolute right-0 top-full mt-1 hidden group-hover:block bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded shadow-lg z-10 min-w-[120px]">
+                <div className="absolute right-0 top-full mt-1 hidden group-hover:block bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-sm shadow-lg z-10 min-w-[120px]">
                   {(['csv', 'txt', 'json'] as const).map((fmt) => (
                     <button
                       key={fmt}
@@ -334,7 +334,7 @@ export const AdminGuestsList: React.FC<AdminGuestsListProps> = ({ eventId, event
                           aria-label={t('admin.guests.mergeInclude', 'Include {{name}} in the merge', { name: guest.name })}
                           checked={mergeSelection.includes(guest.id)}
                           onChange={() => toggleMergeSelection(guest.id)}
-                          className="w-4 h-4 text-accent rounded focus:ring-primary-500"
+                          className="w-4 h-4 text-accent rounded-sm focus:ring-primary-500"
                         />
                       </td>
                     )}
@@ -363,7 +363,7 @@ export const AdminGuestsList: React.FC<AdminGuestsListProps> = ({ eventId, event
                       {guest.email || '—'}
                       {guest.duplicate_group && (
                         <span
-                          className="ml-2 inline-block rounded px-1.5 py-0.5 text-xs bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-200"
+                          className="ml-2 inline-block rounded-sm px-1.5 py-0.5 text-xs bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-200"
                           title={t('admin.guests.duplicateHint', 'Another entry on this gallery uses the same email — likely the same person registered twice.')}
                         >
                           {t('admin.guests.duplicateBadge', 'duplicate?')}
@@ -409,7 +409,7 @@ export const AdminGuestsList: React.FC<AdminGuestsListProps> = ({ eventId, event
                           >
                             <Download className="w-4 h-4" />
                           </button>
-                          <div className="absolute right-0 top-full mt-1 hidden group-hover:block bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded shadow-lg z-10 min-w-[100px]">
+                          <div className="absolute right-0 top-full mt-1 hidden group-hover:block bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-sm shadow-lg z-10 min-w-[100px]">
                             {(['csv', 'txt', 'json'] as const).map((fmt) => (
                               <button
                                 key={fmt}

@@ -208,7 +208,7 @@ export const ShortUrlsCard: React.FC<Props> = ({ eventId }) => {
                   → {row.target_path}
                 </div>
               </div>
-              <div className="flex items-center gap-1 flex-shrink-0">
+              <div className="flex items-center gap-1 shrink-0">
                 <button
                   type="button"
                   onClick={() => handleCopy(row)}

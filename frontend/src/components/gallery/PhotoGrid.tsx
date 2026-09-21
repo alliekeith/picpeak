@@ -282,13 +282,13 @@ const PhotoThumbnail: React.FC<PhotoThumbnailProps> = ({
           {feedbackEnabled && (photo.has_feedback || (photo.average_rating ?? 0) > 0 || (photo.comment_count ?? 0) > 0) && (
             <div className="absolute top-2 left-2 flex gap-1 z-10">
               {(photo.comment_count ?? 0) > 0 && (
-                <div className="bg-white/90 backdrop-blur-sm rounded-full px-2 py-1 flex items-center gap-1" title={`${photo.comment_count ?? 0} comments`}>
+                <div className="bg-white/90 backdrop-blur-xs rounded-full px-2 py-1 flex items-center gap-1" title={`${photo.comment_count ?? 0} comments`}>
                   <MessageSquare className="w-3.5 h-3.5 text-accent" fill="currentColor" />
                   <span className="text-xs font-medium text-muted-theme">{photo.comment_count ?? 0}</span>
                 </div>
               )}
               {(photo.average_rating ?? 0) > 0 && (
-                <div className="bg-white/90 backdrop-blur-sm rounded-full px-2 py-1 flex items-center gap-1" title={`Rating: ${Number(photo.average_rating ?? 0).toFixed(1)}`}>
+                <div className="bg-white/90 backdrop-blur-xs rounded-full px-2 py-1 flex items-center gap-1" title={`Rating: ${Number(photo.average_rating ?? 0).toFixed(1)}`}>
                   <Star className="w-3.5 h-3.5 text-yellow-500" fill="currentColor" />
                   <span className="text-xs font-medium text-muted-theme">{Number(photo.average_rating ?? 0).toFixed(1)}</span>
                 </div>
@@ -343,12 +343,12 @@ const PhotoThumbnail: React.FC<PhotoThumbnailProps> = ({
           {/* Media type badges */}
           <div className="absolute bottom-2 left-2 flex gap-2">
             {photo.type === 'collage' && (
-              <span className="px-2 py-1 bg-black/60 text-white text-xs rounded">
+              <span className="px-2 py-1 bg-black/60 text-white text-xs rounded-sm">
                 Collage
               </span>
             )}
             {photo.media_type === 'video' && (
-              <span className="px-2 py-1 bg-black/60 text-white text-xs rounded flex items-center gap-1">
+              <span className="px-2 py-1 bg-black/60 text-white text-xs rounded-sm flex items-center gap-1">
                 <Play className="w-3 h-3" fill="white" />
                 Video
                 {photo.duration && (

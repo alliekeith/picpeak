@@ -132,7 +132,7 @@ export const PublishGalleryDialog: React.FC<PublishGalleryDialogProps> = ({
                 setNotifyCustomer(e.target.checked);
                 if (error) setError(undefined);
               }}
-              className="mt-1 h-4 w-4 rounded border-neutral-300 dark:border-neutral-600"
+              className="mt-1 h-4 w-4 rounded-sm border-neutral-300 dark:border-neutral-600"
             />
             <span className="text-sm">
               <span className="font-medium text-neutral-900 dark:text-neutral-100">

@@ -22,15 +22,15 @@ export const Switch: React.FC<SwitchProps> = ({ checked, onChange, disabled = fa
     disabled={disabled}
     onClick={() => !disabled && onChange(!checked)}
     className={clsx(
-      'relative inline-flex flex-shrink-0 h-6 w-11 items-center rounded-full transition-colors',
-      'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500',
+      'relative inline-flex shrink-0 h-6 w-11 items-center rounded-full transition-colors',
+      'focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-primary-500',
       checked ? 'bg-primary-600 dark:bg-primary-500' : 'bg-neutral-300 dark:bg-neutral-600',
       disabled && 'opacity-50 cursor-not-allowed',
     )}
   >
     <span
       className={clsx(
-        'inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform',
+        'inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform',
         checked ? 'translate-x-6' : 'translate-x-1',
       )}
     />

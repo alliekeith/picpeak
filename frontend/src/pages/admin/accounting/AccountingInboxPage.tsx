@@ -410,7 +410,7 @@ export const AccountingInboxPage: React.FC = () => {
           <div className="space-y-2">
             {pendingItems.map((p) => (
               <div key={p.customerAccountId} className="flex flex-wrap items-center gap-3 rounded-lg border border-neutral-200 dark:border-neutral-700 px-4 py-2">
-                <div className="flex-1 min-w-[12rem]">
+                <div className="flex-1 min-w-48">
                   <div className="text-sm font-medium text-neutral-900 dark:text-neutral-100">{customerLabel(p)}</div>
                   <div className="text-xs text-neutral-500 dark:text-neutral-400">
                     {t('accounting.incoming.pendingCount', '{{count}} item(s)', { count: p.itemCount })}
@@ -442,14 +442,14 @@ export const AccountingInboxPage: React.FC = () => {
                   else if (doc.status === 'categorized' && !doc.supplierPaid) setPayDoc(doc);
                   else setViewDoc(doc);
                 }}
-                className="flex-1 min-w-[12rem] text-left"
+                className="flex-1 min-w-48 text-left"
               >
                 <div className="flex items-center gap-2">
                   {/* #1: once paid, the front status reads "Paid" — not the
                       stale "categorized". */}
                   {doc.supplierPaid
-                    ? <span className="inline-block rounded px-2 py-0.5 text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300">{t('accounting.incoming.paid', 'Paid')}</span>
-                    : <span className={`inline-block rounded px-2 py-0.5 text-xs font-medium ${statusClasses[doc.status] || ''}`}>{t(`accounting.inbox.status.${doc.status}`, doc.status)}</span>}
+                    ? <span className="inline-block rounded-sm px-2 py-0.5 text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300">{t('accounting.incoming.paid', 'Paid')}</span>
+                    : <span className={`inline-block rounded-sm px-2 py-0.5 text-xs font-medium ${statusClasses[doc.status] || ''}`}>{t(`accounting.inbox.status.${doc.status}`, doc.status)}</span>}
                   <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100 truncate hover:underline">{doc.supplierName || doc.originalFilename || t('accounting.inbox.untitled', 'Untitled document')}</span>
                   {doc.source === 'camera' && <Camera className="w-3.5 h-3.5 text-neutral-400" />}
                 </div>

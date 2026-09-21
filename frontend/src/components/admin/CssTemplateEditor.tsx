@@ -146,7 +146,7 @@ export const CssTemplateEditor: React.FC = () => {
                   type="checkbox"
                   checked={activeTemplate.is_enabled}
                   onChange={(e) => updateLocalTemplate({ is_enabled: e.target.checked })}
-                  className="rounded border-neutral-300 text-accent focus:ring-primary-500"
+                  className="rounded-sm border-neutral-300 text-accent focus:ring-primary-500"
                 />
                 <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
                   {t('cssTemplates.enableTemplate', 'Enable this template')}
@@ -181,7 +181,7 @@ export const CssTemplateEditor: React.FC = () => {
 
             {/* Security Notice */}
             <div className="flex items-start gap-2 p-3 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 rounded-lg">
-              <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" />
+              <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 mt-0.5 shrink-0" />
               <div className="text-xs text-amber-800 dark:text-amber-200">
                 <strong>{t('cssTemplates.securityNotice', 'Security Notice')}:</strong>{' '}
                 {t('cssTemplates.securityText', 'CSS is sanitized to prevent malicious code. External URLs, @import, and JavaScript expressions are blocked.')}

@@ -153,7 +153,7 @@ const JustifiedPhoto: React.FC<JustifiedPhotoProps> = ({
         >
           {(likeCount > 0 || liked) && (
             <span
-              className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm"
+              className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/90 backdrop-blur-xs"
               title="Liked"
             >
               <Heart className="w-3.5 h-3.5 text-red-500" fill="currentColor" />
@@ -161,7 +161,7 @@ const JustifiedPhoto: React.FC<JustifiedPhotoProps> = ({
           )}
           {averageRating > 0 && (
             <span
-              className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm"
+              className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/90 backdrop-blur-xs"
               title="Rated"
             >
               <Star className="w-3.5 h-3.5 text-yellow-500" fill="currentColor" />
@@ -169,7 +169,7 @@ const JustifiedPhoto: React.FC<JustifiedPhotoProps> = ({
           )}
           {commentCount > 0 && (
             <span
-              className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm"
+              className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/90 backdrop-blur-xs"
               title="Commented"
             >
               <MessageSquare className="w-3.5 h-3.5 text-accent" fill="currentColor" />
@@ -181,7 +181,7 @@ const JustifiedPhoto: React.FC<JustifiedPhotoProps> = ({
       {/* Video Badge */}
       {isVideo && (
         <div className="absolute bottom-2 right-2">
-          <span className="px-2 py-1 bg-black/60 text-white text-xs rounded flex items-center gap-1">
+          <span className="px-2 py-1 bg-black/60 text-white text-xs rounded-sm flex items-center gap-1">
             <Video className="w-3 h-3" />
             Video
           </span>
@@ -191,7 +191,7 @@ const JustifiedPhoto: React.FC<JustifiedPhotoProps> = ({
       {/* Collage Badge */}
       {photo.type === 'collage' && (
         <div className="absolute bottom-2 right-2">
-          <span className="px-2 py-1 bg-black/60 text-white text-xs rounded">Collage</span>
+          <span className="px-2 py-1 bg-black/60 text-white text-xs rounded-sm">Collage</span>
         </div>
       )}
     </PhotoCard>
@@ -482,7 +482,7 @@ export const JustifiedGalleryLayout: React.FC<JustifiedGalleryLayoutProps> = ({
                   window.scrollBy({ top: window.innerHeight * 0.7, behavior: 'smooth' });
                 }
               }}
-              className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce cursor-pointer hover:scale-110 transition-transform focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 rounded-full p-2"
+              className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce cursor-pointer hover:scale-110 transition-transform focus:outline-hidden focus:ring-2 focus:ring-white focus:ring-opacity-50 rounded-full p-2"
               aria-label="Scroll to gallery"
             >
               <ChevronDown className="w-8 h-8 text-white drop-shadow-lg" />

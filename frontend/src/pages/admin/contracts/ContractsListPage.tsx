@@ -70,7 +70,7 @@ export const ContractsListPage: React.FC = () => {
             <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{t('contracts.title', 'Contracts')}</h1>
             {/* Beta badge — matches Customers + Quotes + Invoices. */}
             <span
-              className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
+              className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-sm font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
               title="Beta — feature is functional but still evolving"
             >
               {t('navigation.betaTag', 'Beta')}

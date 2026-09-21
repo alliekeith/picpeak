@@ -49,11 +49,11 @@ const PreviewPhoto: React.FC<{
   className = '',
   aspectRatio = 'aspect-square'
 }) => (
-  <div className={`relative overflow-hidden rounded-lg bg-gradient-to-br from-neutral-200 to-neutral-300 ${aspectRatio} ${className}`}>
+  <div className={`relative overflow-hidden rounded-lg bg-linear-to-br from-neutral-200 to-neutral-300 ${aspectRatio} ${className}`}>
     <div className="absolute inset-0 flex items-center justify-center">
       <Camera className="w-8 h-8 text-neutral-400" />
     </div>
-    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2">
+    <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/60 to-transparent p-2">
       <p className="text-white text-xs truncate">{photo.filename}</p>
       {photo.category_name && (
         <p className="text-white/70 text-[10px]">{photo.category_name}</p>
@@ -61,7 +61,7 @@ const PreviewPhoto: React.FC<{
     </div>
     {photo.type === 'collage' && (
       <div className="absolute top-1 right-1">
-        <span className="px-1.5 py-0.5 bg-black/60 text-white text-[10px] rounded">
+        <span className="px-1.5 py-0.5 bg-black/60 text-white text-[10px] rounded-sm">
           Collage
         </span>
       </div>
@@ -158,7 +158,7 @@ export const GalleryPreview: React.FC<GalleryPreviewProps> = ({
               <div key={photo.id} className={`break-inside-avoid mb-${spacing === 'tight' ? '1' : spacing === 'relaxed' ? '4' : '2'}`}>
                 <PreviewPhoto 
                   photo={photo} 
-                  aspectRatio={idx % 3 === 0 ? 'aspect-[4/5]' : idx % 3 === 1 ? 'aspect-[4/3]' : 'aspect-square'}
+                  aspectRatio={idx % 3 === 0 ? 'aspect-4/5' : idx % 3 === 1 ? 'aspect-4/3' : 'aspect-square'}
                 />
               </div>
             ))}
@@ -169,7 +169,7 @@ export const GalleryPreview: React.FC<GalleryPreviewProps> = ({
         return (
           <div className="relative">
             <div className="flex items-center gap-2 overflow-hidden">
-              <PreviewPhoto photo={mockPhotos[0]} className="w-full max-w-md mx-auto" aspectRatio="aspect-[4/3]" />
+              <PreviewPhoto photo={mockPhotos[0]} className="w-full max-w-md mx-auto" aspectRatio="aspect-4/3" />
             </div>
             <div className="flex justify-center gap-1 mt-3">
               {[0, 1, 2, 3].map((idx) => (
@@ -214,7 +214,7 @@ export const GalleryPreview: React.FC<GalleryPreviewProps> = ({
   
   return (
     <div
-      className={`bg-white rounded-lg shadow-sm overflow-hidden ${className}`}
+      className={`bg-white rounded-lg shadow-xs overflow-hidden ${className}`}
       style={{
         backgroundColor: theme.backgroundColor || '#ffffff',
         color: theme.textColor || '#171717',

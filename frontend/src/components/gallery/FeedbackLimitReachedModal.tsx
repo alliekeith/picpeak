@@ -71,7 +71,7 @@ export const FeedbackLimitReachedModal: React.FC<FeedbackLimitReachedModalProps>
       role="dialog"
       aria-modal="true"
       aria-labelledby="feedback-limit-title"
-      className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center p-3 sm:p-4 bg-black/60"
+      className="fixed inset-0 z-60 flex items-end sm:items-center justify-center p-3 sm:p-4 bg-black/60"
       onClick={(e) => {
         // Backdrop click only — don't dismiss when clicking inside the card.
         if (e.target === e.currentTarget) onClose();
@@ -93,7 +93,7 @@ export const FeedbackLimitReachedModal: React.FC<FeedbackLimitReachedModalProps>
         <div className="flex items-start gap-3 p-5 sm:p-6">
           <div
             className={`
-              flex-shrink-0 w-11 h-11 sm:w-12 sm:h-12 rounded-full
+              shrink-0 w-11 h-11 sm:w-12 sm:h-12 rounded-full
               flex items-center justify-center
               ${isFavorite ? 'bg-amber-100 dark:bg-amber-900/40' : 'bg-rose-100 dark:bg-rose-900/40'}
             `}
@@ -123,7 +123,7 @@ export const FeedbackLimitReachedModal: React.FC<FeedbackLimitReachedModalProps>
           <button
             type="button"
             onClick={onClose}
-            className="flex-shrink-0 p-1 text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 rounded transition-colors"
+            className="shrink-0 p-1 text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 rounded-sm transition-colors"
             aria-label={t('common.close', 'Close')}
           >
             <X className="w-5 h-5" />
@@ -139,7 +139,7 @@ export const FeedbackLimitReachedModal: React.FC<FeedbackLimitReachedModalProps>
             className="
               w-full sm:w-auto px-5 py-2.5 rounded-lg text-sm font-medium
               bg-accent-dark text-white hover:opacity-90
-              focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-dark focus-visible:ring-offset-2
+              focus:outline-hidden focus-visible:ring-2 focus-visible:ring-accent-dark focus-visible:ring-offset-2
               transition-opacity
             "
           >

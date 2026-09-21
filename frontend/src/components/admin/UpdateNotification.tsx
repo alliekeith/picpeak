@@ -67,7 +67,7 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({ onDismis
     <div className="bg-blue-50 dark:bg-blue-900/30 border-l-4 border-blue-500 p-4 mb-4 rounded-r-lg">
       <div className="flex items-start justify-between">
         <div className="flex items-start">
-          <ArrowUpCircle className="w-5 h-5 text-blue-500 mt-0.5 mr-3 flex-shrink-0" />
+          <ArrowUpCircle className="w-5 h-5 text-blue-500 mt-0.5 mr-3 shrink-0" />
           <div>
             <h4 className="text-sm font-semibold text-blue-800 dark:text-blue-200">
               {t('admin.updates.available', 'Update Available')}

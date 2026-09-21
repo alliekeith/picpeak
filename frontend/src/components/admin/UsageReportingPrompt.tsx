@@ -71,7 +71,7 @@ export default function UsageReportingPrompt() {
           event.preventDefault();
           if (!isEnabling) void dismiss();
         }}
-        className="w-[calc(100%-2rem)] max-w-md max-h-[90vh] flex flex-col overflow-hidden rounded-xl p-0 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 shadow-xl backdrop:bg-black/50 focus:outline-none"
+        className="w-[calc(100%-2rem)] max-w-md max-h-[90vh] flex flex-col overflow-hidden rounded-xl p-0 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 shadow-xl backdrop:bg-black/50 focus:outline-hidden"
       >
         <header className="px-6 pt-6 pb-4">
           <h2 id={titleId} className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-1">

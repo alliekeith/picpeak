@@ -265,7 +265,7 @@ export const ContractDetailPage: React.FC = () => {
             </span>
           )}
         </h1>
-        <span className={`inline-block px-2 py-1 rounded text-xs font-medium ${statusBadgeClass(c.status)}`}>
+        <span className={`inline-block px-2 py-1 rounded-sm text-xs font-medium ${statusBadgeClass(c.status)}`}>
           {t(`contracts.status.${c.status}`, c.status)}
         </span>
       </div>
@@ -442,7 +442,7 @@ export const ContractDetailPage: React.FC = () => {
               'The signature evidence is recorded, but the stamped PDF was not generated on the last attempt. Click "Re-send signed PDF" above to re-stamp from the original document and resend.')}
           </p>
           {c.signedPdfRenderError && (
-            <p className="mt-2 text-xs font-mono text-red-800 dark:text-red-300 break-words">
+            <p className="mt-2 text-xs font-mono text-red-800 dark:text-red-300 wrap-break-word">
               {c.signedPdfRenderError}
             </p>
           )}
@@ -532,7 +532,7 @@ export const ContractDetailPage: React.FC = () => {
         <Card padding="lg" className="mb-4">
           <h2 className="font-semibold mb-2">{t('contracts.detail.signatures', 'Signatures')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-            <div className="p-3 rounded border border-neutral-200 dark:border-neutral-700">
+            <div className="p-3 rounded-sm border border-neutral-200 dark:border-neutral-700">
               <p className="text-xs uppercase text-neutral-500 dark:text-neutral-400 tracking-wide">
                 {t('contracts.detail.signedByCustomer', 'Signed by customer')}
               </p>
@@ -551,7 +551,7 @@ export const ContractDetailPage: React.FC = () => {
                 <p className="text-xs text-neutral-600 dark:text-neutral-300">—</p>
               )}
             </div>
-            <div className="p-3 rounded border border-neutral-200 dark:border-neutral-700">
+            <div className="p-3 rounded-sm border border-neutral-200 dark:border-neutral-700">
               <p className="text-xs uppercase text-neutral-500 dark:text-neutral-400 tracking-wide">
                 {t('contracts.detail.signedByAdmin', 'Counter-signed')}
               </p>
@@ -738,7 +738,7 @@ const IntegrityCheckCard: React.FC<{ contractId: number }> = ({ contractId }) =>
       );
     }
     return (
-      <div className="border border-neutral-200 dark:border-neutral-700 rounded p-3 space-y-1">
+      <div className="border border-neutral-200 dark:border-neutral-700 rounded-sm p-3 space-y-1">
         <div className="flex items-center justify-between gap-2">
           <span className="text-sm font-medium">{t(titleKey, titleFallback)}</span>
           {badge}
@@ -1132,7 +1132,7 @@ const RestampSignaturesCard: React.FC<RestampCardProps> = ({ contract, onSuccess
             </label>
             <canvas
               ref={customerCanvasRef}
-              className="w-full h-24 bg-white rounded border border-neutral-300 dark:border-neutral-600 touch-none"
+              className="w-full h-24 bg-white rounded-sm border border-neutral-300 dark:border-neutral-600 touch-none"
             />
             <button
               type="button"
@@ -1152,7 +1152,7 @@ const RestampSignaturesCard: React.FC<RestampCardProps> = ({ contract, onSuccess
             </label>
             <canvas
               ref={adminCanvasRef}
-              className="w-full h-24 bg-white rounded border border-neutral-300 dark:border-neutral-600 touch-none"
+              className="w-full h-24 bg-white rounded-sm border border-neutral-300 dark:border-neutral-600 touch-none"
             />
             <button
               type="button"

@@ -166,7 +166,7 @@ export const WebhookDeliveriesPage: React.FC = () => {
           <p className="text-sm font-mono text-neutral-500 dark:text-neutral-400 mt-1 break-all">{webhook.url}</p>
           <div className="mt-2 flex items-center gap-2 flex-wrap">
             {webhook.events.map((e) => (
-              <span key={e} className="text-xs px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 font-mono">
+              <span key={e} className="text-xs px-2 py-0.5 rounded-sm bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 font-mono">
                 {e}
               </span>
             ))}
@@ -247,7 +247,7 @@ export const WebhookDeliveriesPage: React.FC = () => {
                     </td>
                     <td className="py-2.5 pr-3 font-mono text-xs">{d.event_type}</td>
                     <td className="py-2.5 pr-3">
-                      <span className={`text-xs px-2 py-0.5 rounded ${statusBadge(d.status)}`}>
+                      <span className={`text-xs px-2 py-0.5 rounded-sm ${statusBadge(d.status)}`}>
                         {d.status === 'success' && <CheckCircle2 className="w-3 h-3 inline mr-1" />}
                         {d.status === 'pending' && <Clock className="w-3 h-3 inline mr-1" />}
                         {d.status === 'failed' && <AlertCircle className="w-3 h-3 inline mr-1" />}
@@ -311,7 +311,7 @@ export const WebhookDeliveriesPage: React.FC = () => {
                   <span className="block text-xs text-neutral-500">
                     {t('settings.webhooks.deliveries.colStatus', 'Status')}
                   </span>
-                  <span className={`text-xs px-2 py-0.5 rounded ${statusBadge(detailQuery.data.status)}`}>
+                  <span className={`text-xs px-2 py-0.5 rounded-sm ${statusBadge(detailQuery.data.status)}`}>
                     {t(`settings.webhooks.deliveries.status.${detailQuery.data.status}`, detailQuery.data.status)}
                   </span>
                 </div>
@@ -320,7 +320,7 @@ export const WebhookDeliveriesPage: React.FC = () => {
                     <span className="block text-xs text-neutral-500">
                       {t('settings.webhooks.deliveries.lastError', 'Last error')}
                     </span>
-                    <pre className="text-xs whitespace-pre-wrap break-words bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 rounded p-2">
+                    <pre className="text-xs whitespace-pre-wrap wrap-break-word bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 rounded-sm p-2">
                       {detailQuery.data.last_error}
                     </pre>
                   </div>
@@ -338,7 +338,7 @@ export const WebhookDeliveriesPage: React.FC = () => {
                     <span className="block text-xs text-neutral-500">
                       {t('settings.webhooks.deliveries.responseBody', 'Response body (truncated to 1KB)')}
                     </span>
-                    <pre className="text-xs whitespace-pre-wrap break-words bg-neutral-50 dark:bg-neutral-800 rounded p-2 max-h-40 overflow-y-auto">
+                    <pre className="text-xs whitespace-pre-wrap wrap-break-word bg-neutral-50 dark:bg-neutral-800 rounded-sm p-2 max-h-40 overflow-y-auto">
                       {detailQuery.data.response_body}
                     </pre>
                   </div>
@@ -347,7 +347,7 @@ export const WebhookDeliveriesPage: React.FC = () => {
                   <span className="block text-xs text-neutral-500">
                     {t('settings.webhooks.deliveries.payload', 'Payload (signed body)')}
                   </span>
-                  <pre className="text-xs whitespace-pre-wrap break-words bg-neutral-50 dark:bg-neutral-800 rounded p-2 max-h-80 overflow-y-auto">
+                  <pre className="text-xs whitespace-pre-wrap wrap-break-word bg-neutral-50 dark:bg-neutral-800 rounded-sm p-2 max-h-80 overflow-y-auto">
                     {JSON.stringify(detailQuery.data.payload, null, 2)}
                   </pre>
                 </div>
@@ -376,7 +376,7 @@ export const WebhookDeliveriesPage: React.FC = () => {
             <select
               value={testEventType}
               onChange={(e) => setTestEventType(e.target.value)}
-              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 dark:bg-neutral-800 rounded text-sm mb-4"
+              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 dark:bg-neutral-800 rounded-sm text-sm mb-4"
             >
               {WEBHOOK_EVENT_TYPES.map((e) => <option key={e} value={e}>{e}</option>)}
             </select>

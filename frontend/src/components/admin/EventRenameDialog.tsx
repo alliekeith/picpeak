@@ -144,7 +144,7 @@ export const EventRenameDialog: React.FC<EventRenameDialogProps> = ({
           // Success state
           <div className="space-y-4">
             <div className="flex items-center gap-3 p-4 bg-green-50 rounded-lg">
-              <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0" />
+              <CheckCircle className="w-6 h-6 text-green-600 shrink-0" />
               <div>
                 <p className="font-medium text-green-900">
                   {t('events.rename.success', 'Event renamed successfully!')}
@@ -176,7 +176,7 @@ export const EventRenameDialog: React.FC<EventRenameDialogProps> = ({
           // Error state
           <div className="space-y-4">
             <div className="flex items-center gap-3 p-4 bg-red-50 rounded-lg">
-              <AlertCircle className="w-6 h-6 text-red-600 flex-shrink-0" />
+              <AlertCircle className="w-6 h-6 text-red-600 shrink-0" />
               <div>
                 <p className="font-medium text-red-900">
                   {t('events.rename.failed', 'Rename failed')}
@@ -245,7 +245,7 @@ export const EventRenameDialog: React.FC<EventRenameDialogProps> = ({
 
             {validationResult && !validationResult.valid && (
               <div className="flex items-center gap-2 p-3 bg-red-50 rounded-lg">
-                <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0" />
+                <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
                 <p className="text-sm text-red-700">{validationResult.error}</p>
               </div>
             )}
@@ -258,7 +258,7 @@ export const EventRenameDialog: React.FC<EventRenameDialogProps> = ({
                     type="checkbox"
                     checked={resendEmail}
                     onChange={(e) => setResendEmail(e.target.checked)}
-                    className="mt-1 w-4 h-4 text-accent border-neutral-300 rounded focus:ring-primary-500"
+                    className="mt-1 w-4 h-4 text-accent border-neutral-300 rounded-sm focus:ring-primary-500"
                   />
                   <div>
                     <span className="text-sm font-medium text-neutral-700 flex items-center gap-1">
@@ -276,7 +276,7 @@ export const EventRenameDialog: React.FC<EventRenameDialogProps> = ({
             {/* Warning */}
             <div className="p-3 bg-amber-50 rounded-lg border border-amber-200">
               <div className="flex gap-2">
-                <AlertCircle className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
+                <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                 <div className="text-sm text-amber-800">
                   <p className="font-medium">{t('events.rename.warningTitle', 'Please note:')}</p>
                   <ul className="mt-1 list-disc list-inside space-y-1">

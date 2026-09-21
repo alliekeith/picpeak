@@ -390,13 +390,13 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({
           value={sourceContent}
           onChange={(e) => handleSourceChange(e.target.value)}
           rows={15}
-          className="w-full px-3 py-2 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 font-mono text-sm focus:outline-none resize-y"
+          className="w-full px-3 py-2 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 font-mono text-sm focus:outline-hidden resize-y"
           spellCheck={false}
         />
       ) : (
         <EditorContent
           editor={editor}
-          className="min-h-[300px] p-4 prose prose-neutral dark:prose-invert max-w-none bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 focus:outline-none [&_.ProseMirror]:min-h-[300px] [&_.ProseMirror]:outline-none [&_.ProseMirror]:text-neutral-900 [&_.ProseMirror]:dark:text-neutral-100 [&_.ProseMirror_p.is-editor-empty:first-child::before]:content-[attr(data-placeholder)] [&_.ProseMirror_p.is-editor-empty:first-child::before]:text-neutral-400 [&_.ProseMirror_p.is-editor-empty:first-child::before]:pointer-events-none [&_.ProseMirror_p.is-editor-empty:first-child::before]:float-left [&_.ProseMirror_p.is-editor-empty:first-child::before]:h-0"
+          className="min-h-[300px] p-4 prose prose-neutral dark:prose-invert max-w-none bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 focus:outline-hidden [&_.ProseMirror]:min-h-[300px] [&_.ProseMirror]:outline-hidden [&_.ProseMirror]:text-neutral-900 dark:[&_.ProseMirror]:text-neutral-100 [&_.ProseMirror_p.is-editor-empty:first-child::before]:content-[attr(data-placeholder)] [&_.ProseMirror_p.is-editor-empty:first-child::before]:text-neutral-400 [&_.ProseMirror_p.is-editor-empty:first-child::before]:pointer-events-none [&_.ProseMirror_p.is-editor-empty:first-child::before]:float-left [&_.ProseMirror_p.is-editor-empty:first-child::before]:h-0"
         />
       )}
     </div>

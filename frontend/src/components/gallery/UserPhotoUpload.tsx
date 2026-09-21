@@ -258,9 +258,9 @@ export const UserPhotoUpload: React.FC<UserPhotoUploadProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end sm:items-center justify-center z-50 p-0 sm:p-4">
-      <div className="w-full sm:max-w-2xl bg-surface flex flex-col max-h-[100vh] sm:max-h-[90vh] rounded-2xl shadow-xl overflow-hidden">
+      <div className="w-full sm:max-w-2xl bg-surface flex flex-col max-h-screen sm:max-h-[90vh] rounded-2xl shadow-xl overflow-hidden">
         {/* Fixed Header */}
-        <div className="flex items-center justify-between p-4 sm:p-6 border-b border-surface flex-shrink-0">
+        <div className="flex items-center justify-between p-4 sm:p-6 border-b border-surface shrink-0">
           <h2 className="text-lg sm:text-xl font-semibold text-theme">{t('upload.uploadPhotos')}</h2>
           <button
             onClick={onClose}
@@ -349,7 +349,7 @@ export const UserPhotoUpload: React.FC<UserPhotoUploadProps> = ({
                     ) : (
                       <button
                         onClick={() => removeFile(index)}
-                        className="p-1 hover:bg-black/10 rounded transition-colors"
+                        className="p-1 hover:bg-black/10 rounded-sm transition-colors"
                         disabled={uploading}
                       >
                         <X className="w-4 h-4 text-muted-theme" />
@@ -362,7 +362,7 @@ export const UserPhotoUpload: React.FC<UserPhotoUploadProps> = ({
         </div>
 
         {/* Fixed Footer */}
-        <div className="flex items-center justify-end gap-2 sm:gap-3 p-4 sm:p-6 border-t border-surface bg-surface flex-shrink-0">
+        <div className="flex items-center justify-end gap-2 sm:gap-3 p-4 sm:p-6 border-t border-surface bg-surface shrink-0">
           <Button
             variant="outline"
             onClick={onClose}

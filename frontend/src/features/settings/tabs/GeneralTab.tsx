@@ -258,7 +258,7 @@ export const GeneralTab: React.FC<GeneralTabProps> = ({
               type="checkbox"
               checked={generalSettings.enable_analytics}
               onChange={(e) => setGeneralSettings(prev => ({ ...prev, enable_analytics: e.target.checked }))}
-              className="w-4 h-4 text-primary-600 rounded focus:ring-primary-500"
+              className="w-4 h-4 text-primary-600 rounded-sm focus:ring-primary-500"
             />
             <span className="ml-2 text-sm text-neutral-700 dark:text-neutral-300">{t('settings.general.enableAnalytics')}</span>
           </label>
@@ -268,7 +268,7 @@ export const GeneralTab: React.FC<GeneralTabProps> = ({
               type="checkbox"
               checked={generalSettings.enable_registration}
               onChange={(e) => setGeneralSettings(prev => ({ ...prev, enable_registration: e.target.checked }))}
-              className="w-4 h-4 text-primary-600 rounded focus:ring-primary-500"
+              className="w-4 h-4 text-primary-600 rounded-sm focus:ring-primary-500"
             />
             <span className="ml-2 text-sm text-neutral-700 dark:text-neutral-300">{t('settings.general.enableRegistration')}</span>
           </label>
@@ -278,7 +278,7 @@ export const GeneralTab: React.FC<GeneralTabProps> = ({
               type="checkbox"
               checked={generalSettings.maintenance_mode}
               onChange={(e) => setGeneralSettings(prev => ({ ...prev, maintenance_mode: e.target.checked }))}
-              className="w-4 h-4 text-primary-600 rounded focus:ring-primary-500"
+              className="w-4 h-4 text-primary-600 rounded-sm focus:ring-primary-500"
             />
             <span className="ml-2 text-sm text-neutral-700 dark:text-neutral-300">{t('settings.general.maintenanceMode')}</span>
           </label>
@@ -289,7 +289,7 @@ export const GeneralTab: React.FC<GeneralTabProps> = ({
                 type="checkbox"
                 checked={generalSettings.short_gallery_urls}
                 onChange={(e) => setGeneralSettings(prev => ({ ...prev, short_gallery_urls: e.target.checked }))}
-                className="w-4 h-4 text-primary-600 rounded focus:ring-primary-500"
+                className="w-4 h-4 text-primary-600 rounded-sm focus:ring-primary-500"
               />
               <span className="ml-2 text-sm text-neutral-700 dark:text-neutral-300">{t('settings.general.enableShortGalleryUrls')}</span>
             </label>
@@ -304,7 +304,7 @@ export const GeneralTab: React.FC<GeneralTabProps> = ({
                 type="checkbox"
                 checked={generalSettings.use_original_filenames_for_downloads}
                 onChange={(e) => setGeneralSettings(prev => ({ ...prev, use_original_filenames_for_downloads: e.target.checked }))}
-                className="w-4 h-4 text-primary-600 rounded focus:ring-primary-500"
+                className="w-4 h-4 text-primary-600 rounded-sm focus:ring-primary-500"
               />
               <span className="ml-2 text-sm text-neutral-700 dark:text-neutral-300">{t('settings.general.useOriginalFilenames')}</span>
             </label>
@@ -326,7 +326,7 @@ export const GeneralTab: React.FC<GeneralTabProps> = ({
             <select
               value={generalSettings.default_language}
               onChange={(e) => setGeneralSettings(prev => ({ ...prev, default_language: e.target.value }))}
-              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             >
               {SUPPORTED_LANGUAGES.map(lang => (
                 <option key={lang.code} value={lang.code}>{lang.name}</option>
@@ -357,7 +357,7 @@ export const GeneralTab: React.FC<GeneralTabProps> = ({
                   date_format: { format, locale }
                 }));
               }}
-              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             >
               <option value="dd/MM/yyyy">DD/MM/YYYY (European)</option>
               <option value="MM/dd/yyyy">MM/DD/YYYY (US)</option>
@@ -379,7 +379,7 @@ export const GeneralTab: React.FC<GeneralTabProps> = ({
                 const time_format = e.target.value === '12h' ? '12h' : '24h';
                 setGeneralSettings(prev => ({ ...prev, time_format }));
               }}
-              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             >
               <option value="24h">{t('settings.general.timeFormat24h', '24-hour (14:30)')}</option>
               <option value="12h">{t('settings.general.timeFormat12h', '12-hour (2:30 PM)')}</option>

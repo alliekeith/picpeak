@@ -81,7 +81,7 @@ export const WorkflowApprovalsPage: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => navigate(href)}
-                      className="min-w-0 flex-1 text-left rounded -mx-1 px-1 py-0.5 hover:bg-neutral-50 dark:hover:bg-neutral-800/60 transition-colors cursor-pointer"
+                      className="min-w-0 flex-1 text-left rounded-sm -mx-1 px-1 py-0.5 hover:bg-neutral-50 dark:hover:bg-neutral-800/60 transition-colors cursor-pointer"
                       title={t('workflows.approvals.openEntity', 'Open {{type}} #{{id}}', { type: a.entity_type, id: a.entity_id }) as string}
                     >
                       {meta}

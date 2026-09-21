@@ -112,7 +112,7 @@ export const ThemeDisplay: React.FC<ThemeDisplayProps> = ({
               ].filter((s) => !!s.value).map((s, i) => (
                 <div
                   key={i}
-                  className="w-6 h-6 rounded border border-neutral-300 dark:border-neutral-600"
+                  className="w-6 h-6 rounded-sm border border-neutral-300 dark:border-neutral-600"
                   style={{ backgroundColor: s.value }}
                   title={s.title}
                 />

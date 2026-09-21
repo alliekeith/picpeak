@@ -245,7 +245,7 @@ export const RoleEditorModal: React.FC<RoleEditorModalProps> = ({
                             checked={checked}
                             onChange={() => togglePerm(p.name)}
                             disabled={readOnly}
-                            className="mt-0.5 rounded border-neutral-300 dark:border-neutral-600 text-accent focus:ring-accent"
+                            className="mt-0.5 rounded-sm border-neutral-300 dark:border-neutral-600 text-accent focus:ring-accent"
                           />
                           <span className="min-w-0">
                             <span className="block text-sm text-neutral-800 dark:text-neutral-200">{p.display_name}</span>

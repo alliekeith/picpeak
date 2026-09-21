@@ -114,7 +114,7 @@ export const TransferPhotoPicker: React.FC<TransferPhotoPickerProps> = ({
             >
               {t('transfers.picker.lightbox', 'Lightbox')}
             </Button>
-            <button onClick={onClose} className="rounded p-1 text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800">
+            <button onClick={onClose} className="rounded-sm p-1 text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800">
               <X className="h-5 w-5" />
             </button>
           </div>
@@ -224,17 +224,17 @@ export const TransferPhotoPicker: React.FC<TransferPhotoPickerProps> = ({
       {/* Simple lightbox preview */}
       {previewPhoto && (
         <div
-          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 p-6"
+          className="fixed inset-0 z-60 flex items-center justify-center bg-black/80 p-6"
           onClick={() => setPreviewPhoto(null)}
         >
-          <button className="absolute right-4 top-4 rounded p-2 text-white hover:bg-white/10">
+          <button className="absolute right-4 top-4 rounded-sm p-2 text-white hover:bg-white/10">
             <X className="h-6 w-6" />
           </button>
           <div className="max-h-full max-w-full" onClick={(e) => e.stopPropagation()}>
             <AdminAuthenticatedImage
               src={`/admin/photos/${selectedEventId}/photo/${previewPhoto.id}`}
               alt={previewPhoto.filename}
-              className="max-h-[80vh] max-w-full rounded object-contain"
+              className="max-h-[80vh] max-w-full rounded-sm object-contain"
             />
             <div className="mt-3 flex items-center justify-center gap-3">
               <span className="text-sm text-white/80">{previewPhoto.original_filename || previewPhoto.filename}</span>

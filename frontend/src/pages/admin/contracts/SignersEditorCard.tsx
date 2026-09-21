@@ -28,7 +28,7 @@ interface SignerRow {
   email: string;
 }
 
-const INPUT = 'focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900 w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm text-neutral-900 dark:text-neutral-100';
+const INPUT = 'focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900 w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm text-neutral-900 dark:text-neutral-100';
 
 function rowsFrom(overview: ContractSignersOverview): SignerRow[] {
   return overview.signers
@@ -144,7 +144,7 @@ export const SignersEditorCard: React.FC<SignersEditorCardProps> = ({ contractId
     : t('contracts.signers.emptyNoName', 'No signers added yet — the contract\'s customer signs by default.');
 
   const issuerRow = (position: number) => (
-    <li className="flex flex-wrap items-center gap-2 p-2 rounded border border-dashed border-neutral-300 dark:border-neutral-600 text-sm">
+    <li className="flex flex-wrap items-center gap-2 p-2 rounded-sm border border-dashed border-neutral-300 dark:border-neutral-600 text-sm">
       <span className="w-5 text-neutral-500 dark:text-neutral-400">{position}.</span>
       <span className="font-medium text-neutral-900 dark:text-neutral-100">{issuerName}</span>
       <span className="text-xs text-neutral-500 dark:text-neutral-400">

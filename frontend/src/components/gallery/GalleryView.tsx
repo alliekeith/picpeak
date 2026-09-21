@@ -1007,7 +1007,7 @@ export const GalleryView: React.FC<GalleryViewProps> = ({ slug, event, requiresP
           // container itself must not take hits, or it would block the nav's own
           // search/favourites/logout underneath. Only the real controls opt back
           // in via pointer-events-auto.
-          <div className="relative z-[60] pointer-events-none max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center gap-3 flex-wrap">
+          <div className="relative z-60 pointer-events-none max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center gap-3 flex-wrap">
             <div className="pointer-events-auto flex items-center gap-3 flex-wrap">
               {buildFolderNav(true)}
             </div>

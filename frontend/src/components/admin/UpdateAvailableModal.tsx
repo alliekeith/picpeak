@@ -137,7 +137,7 @@ export const UpdateAvailableModal: React.FC<UpdateAvailableModalProps> = ({
         {/* Header */}
         <div className="flex items-start justify-between p-5 border-b border-neutral-200 dark:border-neutral-700">
           <div className="flex items-start gap-3">
-            <ArrowUpCircle className="w-6 h-6 text-blue-600 mt-0.5 flex-shrink-0" />
+            <ArrowUpCircle className="w-6 h-6 text-blue-600 mt-0.5 shrink-0" />
             <div>
               <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
                 {t('admin.updates.modalTitle', 'Update available')}
@@ -187,12 +187,12 @@ export const UpdateAvailableModal: React.FC<UpdateAvailableModalProps> = ({
                       </p>
                       {step.command && (
                         <div className="relative">
-                          <pre className="text-xs bg-neutral-900 text-neutral-100 rounded p-3 overflow-x-auto">
+                          <pre className="text-xs bg-neutral-900 text-neutral-100 rounded-sm p-3 overflow-x-auto">
                             <code>{step.command}</code>
                           </pre>
                           <button
                             onClick={() => copy(step.command!, key)}
-                            className="absolute top-2 right-2 p-1.5 rounded hover:bg-neutral-700/50 text-neutral-300"
+                            className="absolute top-2 right-2 p-1.5 rounded-sm hover:bg-neutral-700/50 text-neutral-300"
                             aria-label={t('admin.updates.copyCommand', 'Copy command')}
                           >
                             {copiedKey === key
@@ -240,7 +240,7 @@ export const UpdateAvailableModal: React.FC<UpdateAvailableModalProps> = ({
                   return (
                     <div
                       key={release.version}
-                      className="border border-neutral-200 dark:border-neutral-700 rounded"
+                      className="border border-neutral-200 dark:border-neutral-700 rounded-sm"
                     >
                       <button
                         onClick={() => toggle(release.version)}

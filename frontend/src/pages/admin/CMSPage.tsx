@@ -429,7 +429,7 @@ export const CMSPage: React.FC = () => {
                     {t('settings.publicSite.htmlLabel')}
                   </label>
                   <textarea
-                    className="w-full h-64 font-mono text-sm rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-accent-dark disabled:bg-neutral-100 dark:disabled:bg-neutral-700 disabled:text-neutral-500 dark:disabled:text-neutral-400"
+                    className="w-full h-64 font-mono text-sm rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:border-accent-dark disabled:bg-neutral-100 dark:disabled:bg-neutral-700 disabled:text-neutral-500 dark:disabled:text-neutral-400"
                     value={publicSiteHtml}
                     onChange={(event) => setPublicSiteHtml(event.target.value)}
                     disabled={!publicSiteEnabled}
@@ -446,7 +446,7 @@ export const CMSPage: React.FC = () => {
                     {t('settings.publicSite.cssLabel')}
                   </label>
                   <textarea
-                    className="w-full h-48 font-mono text-sm rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-accent-dark disabled:bg-neutral-100 dark:disabled:bg-neutral-700 disabled:text-neutral-500 dark:disabled:text-neutral-400"
+                    className="w-full h-48 font-mono text-sm rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:border-accent-dark disabled:bg-neutral-100 dark:disabled:bg-neutral-700 disabled:text-neutral-500 dark:disabled:text-neutral-400"
                     value={publicSiteCss}
                     onChange={(event) => setPublicSiteCss(event.target.value)}
                     disabled={!publicSiteEnabled}
@@ -490,7 +490,7 @@ export const CMSPage: React.FC = () => {
                   <span className="text-xs text-neutral-500 dark:text-neutral-400">{t('settings.publicSite.previewSandboxed')}</span>
                 </div>
                 {publicSiteEnabled ? (
-                  <div className="rounded-xl border border-neutral-200 dark:border-neutral-700 overflow-hidden shadow-sm bg-white dark:bg-neutral-800">
+                  <div className="rounded-xl border border-neutral-200 dark:border-neutral-700 overflow-hidden shadow-xs bg-white dark:bg-neutral-800">
                     <iframe
                       title="public-site-preview"
                       sandbox="allow-same-origin"
@@ -532,7 +532,7 @@ export const CMSPage: React.FC = () => {
                       : 'bg-white dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 text-neutral-900 dark:text-neutral-100'
                   }`}
                 >
-                  <FileText className="w-5 h-5 flex-shrink-0" />
+                  <FileText className="w-5 h-5 shrink-0" />
                   <div className="flex-1 min-w-0">
                     {/* Fall back to the page's own English title for slugs
                         that don't have a fixed translation key (e.g. the new
@@ -543,7 +543,7 @@ export const CMSPage: React.FC = () => {
                     <p className="text-sm text-neutral-500 dark:text-neutral-400">/{page.slug}</p>
                   </div>
                   {selectedPage === page.slug && hasUnsavedChanges && (
-                    <div className="w-2 h-2 bg-yellow-500 rounded-full flex-shrink-0" />
+                    <div className="w-2 h-2 bg-yellow-500 rounded-full shrink-0" />
                   )}
                 </button>
               ))}
@@ -640,7 +640,7 @@ export const CMSPage: React.FC = () => {
                 <label className="flex items-start gap-3 cursor-pointer">
                   <input
                     type="checkbox"
-                    className="mt-1 h-4 w-4 rounded border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
+                    className="mt-1 h-4 w-4 rounded-sm border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
                     checked={!!editForm.use_external_url}
                     onChange={(e) => handleUseExternalUrlChange(e.target.checked)}
                   />
@@ -677,7 +677,7 @@ export const CMSPage: React.FC = () => {
                 <label className="flex items-start gap-3 cursor-pointer">
                   <input
                     type="checkbox"
-                    className="mt-1 h-4 w-4 rounded border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
+                    className="mt-1 h-4 w-4 rounded-sm border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
                     checked={editForm.show_in_footer !== false}
                     onChange={(e) => setEditForm(prev => ({ ...prev, show_in_footer: e.target.checked }))}
                   />
@@ -730,10 +730,10 @@ export const CMSPage: React.FC = () => {
                     <img
                       src={buildResourceUrl(editForm.logo_url)}
                       alt="Page logo"
-                      className="h-16 w-auto object-contain bg-neutral-50 dark:bg-neutral-700 rounded border border-neutral-200 dark:border-neutral-600 px-3 py-1"
+                      className="h-16 w-auto object-contain bg-neutral-50 dark:bg-neutral-700 rounded-sm border border-neutral-200 dark:border-neutral-600 px-3 py-1"
                     />
                   ) : (
-                    <div className="h-16 w-32 flex items-center justify-center bg-neutral-50 dark:bg-neutral-700 rounded border border-dashed border-neutral-300 dark:border-neutral-600 text-xs text-neutral-500 dark:text-neutral-400">
+                    <div className="h-16 w-32 flex items-center justify-center bg-neutral-50 dark:bg-neutral-700 rounded-sm border border-dashed border-neutral-300 dark:border-neutral-600 text-xs text-neutral-500 dark:text-neutral-400">
                       {t('cms.noLogo', 'no override')}
                     </div>
                   )}

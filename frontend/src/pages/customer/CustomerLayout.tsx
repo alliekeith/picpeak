@@ -148,19 +148,19 @@ export const CustomerLayout: React.FC = () => {
         <div className="flex flex-col h-screen lg:h-full">
           {/* Brand */}
           <div
-            className="flex items-center justify-between h-16 px-4 border-b flex-shrink-0"
+            className="flex items-center justify-between h-16 px-4 border-b shrink-0"
             style={{ borderColor: 'var(--color-surface-border, #e5e5e5)' }}
           >
             <Link
               to="/customer/dashboard"
-              className="flex items-center gap-2 min-w-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded"
+              className="flex items-center gap-2 min-w-0 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 rounded-sm"
               onClick={() => setSidebarOpen(false)}
             >
               {showLogo && (
                 <img
                   src={resolvedLogoUrl}
                   alt={companyName}
-                  className="h-8 w-auto object-contain flex-shrink-0"
+                  className="h-8 w-auto object-contain shrink-0"
                 />
               )}
               {showCompanyName && (
@@ -206,7 +206,7 @@ export const CustomerLayout: React.FC = () => {
                       // variables, not the `.dark` class, so the
                       // light-mode value was always winning and the
                       // hover read as near-white.
-                      : 'hover:bg-[var(--color-elevated)]'
+                      : 'hover:bg-(--color-elevated)'
                   }`}
                   // Non-active items take their colour from the theme
                   // variable the admin chose in the colour pickers
@@ -243,7 +243,7 @@ export const CustomerLayout: React.FC = () => {
             <button
               type="button"
               onClick={() => { void logout(); }}
-              className="p-2 rounded hover:bg-neutral-100 dark:hover:bg-neutral-800 text-muted-theme hover:text-theme focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+              className="p-2 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 text-muted-theme hover:text-theme focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2"
               aria-label={t('common.logout', 'Logout')}
               title={t('common.logout', 'Logout')}
             >
@@ -256,7 +256,7 @@ export const CustomerLayout: React.FC = () => {
       {/* Main column */}
       <div className="flex-1 flex flex-col min-w-0 h-screen">
         <header
-          className="lg:hidden h-14 px-4 flex items-center justify-between border-b flex-shrink-0"
+          className="lg:hidden h-14 px-4 flex items-center justify-between border-b shrink-0"
           style={{
             backgroundColor: 'var(--color-surface, #ffffff)',
             borderColor: 'var(--color-surface-border, #e5e5e5)',
@@ -265,7 +265,7 @@ export const CustomerLayout: React.FC = () => {
           <button
             type="button"
             onClick={() => setSidebarOpen(true)}
-            className="p-2 -ml-2 rounded hover:bg-neutral-100 dark:hover:bg-neutral-800 text-theme"
+            className="p-2 -ml-2 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 text-theme"
             aria-label={t('common.menu', 'Menu')}
           >
             <Menu className="w-6 h-6" />

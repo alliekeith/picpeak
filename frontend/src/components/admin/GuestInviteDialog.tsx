@@ -74,7 +74,7 @@ export const GuestInviteDialog: React.FC<GuestInviteDialogProps> = ({ eventId, o
 
         <div className="overflow-y-auto p-4 space-y-4">
           {/* Create form */}
-          <div className="p-4 bg-neutral-50 dark:bg-neutral-800 rounded">
+          <div className="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-sm">
             <h3 className="text-sm font-medium text-neutral-900 dark:text-neutral-100 mb-3">
               {t('admin.guests.createInvite', 'Create invite')}
             </h3>
@@ -122,7 +122,7 @@ export const GuestInviteDialog: React.FC<GuestInviteDialogProps> = ({ eventId, o
                 {invites.map((invite) => (
                   <div
                     key={invite.id}
-                    className="p-3 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded"
+                    className="p-3 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-sm"
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex-1 min-w-0">

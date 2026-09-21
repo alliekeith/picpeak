@@ -66,7 +66,7 @@ export const BulkDeleteModal: React.FC<BulkDeleteModalProps> = ({
           ) : (
             <>
               <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg flex items-start gap-3">
-                <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
+                <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
                 <p className="text-sm text-red-800 dark:text-red-200">
                   {t('events.bulkDelete.warning', 'This will permanently delete the selected events, all their photos, archives, and audit logs. This action cannot be undone.')}
                 </p>

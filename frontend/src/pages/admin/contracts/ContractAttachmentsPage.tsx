@@ -101,7 +101,7 @@ export const ContractAttachmentsPage: React.FC = () => {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3">
-        <Link to="/admin/clients/contracts" className="p-1 rounded hover:bg-neutral-100 dark:hover:bg-neutral-800"
+        <Link to="/admin/clients/contracts" className="p-1 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-800"
           aria-label={t('contracts.templates.back', 'Back to contracts') as string}>
           <ArrowLeft className="w-5 h-5" />
         </Link>
@@ -165,7 +165,7 @@ export const ContractAttachmentsPage: React.FC = () => {
                     <p className="font-medium text-neutral-900 dark:text-neutral-100">
                       {a.name}
                       {!a.isActive && (
-                        <span className="ml-2 text-[10px] uppercase tracking-wide px-1.5 py-0.5 rounded bg-neutral-200 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-200">
+                        <span className="ml-2 text-[10px] uppercase tracking-wide px-1.5 py-0.5 rounded-sm bg-neutral-200 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-200">
                           {t('contracts.attachments.archived', 'Archived')}
                         </span>
                       )}

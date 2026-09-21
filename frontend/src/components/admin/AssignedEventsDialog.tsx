@@ -187,7 +187,7 @@ export const AssignedEventsDialog: React.FC<Props> = ({ customerId, isOpen, init
             type="button"
             onClick={onClose}
             disabled={saveMutation.isPending}
-            className="p-1 rounded hover:bg-neutral-100 dark:hover:bg-neutral-800 flex-shrink-0"
+            className="p-1 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 shrink-0"
             aria-label={t('common.close', 'Close')}
           >
             <X className="w-5 h-5 text-neutral-500" />
@@ -244,7 +244,7 @@ export const AssignedEventsDialog: React.FC<Props> = ({ customerId, isOpen, init
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder={t('customers.assignedEvents.searchPlaceholder', 'Search by event name')}
                 disabled={saveMutation.isPending}
-                className="w-full pl-9 pr-9 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full pl-9 pr-9 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-primary-500"
               />
               {/* Inline clear button — visible only while the query has
                   content. We keep the query through add() now so the
@@ -258,7 +258,7 @@ export const AssignedEventsDialog: React.FC<Props> = ({ customerId, isOpen, init
                   onClick={clearQuery}
                   disabled={saveMutation.isPending}
                   aria-label={t('customers.assignedEvents.clearSearchAria', 'Clear search')}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded hover:bg-neutral-100 dark:hover:bg-neutral-700 disabled:opacity-50"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-700 disabled:opacity-50"
                 >
                   <X className="w-3.5 h-3.5 text-neutral-500" />
                 </button>
@@ -291,13 +291,13 @@ export const AssignedEventsDialog: React.FC<Props> = ({ customerId, isOpen, init
                         className="w-full text-left px-3 py-2 flex items-center justify-between gap-3 hover:bg-neutral-50 dark:hover:bg-neutral-700"
                       >
                         <span className="flex items-center gap-2 min-w-0">
-                          <CalendarIcon className="w-4 h-4 flex-shrink-0 text-neutral-400" />
+                          <CalendarIcon className="w-4 h-4 shrink-0 text-neutral-400" />
                           <span className="truncate text-sm font-medium text-neutral-900 dark:text-neutral-100">
                             {ev.event_name}
                           </span>
                         </span>
                         {ev.event_date && (
-                          <span className="text-xs text-neutral-500 dark:text-neutral-400 flex-shrink-0">
+                          <span className="text-xs text-neutral-500 dark:text-neutral-400 shrink-0">
                             {ev.event_date}
                           </span>
                         )}

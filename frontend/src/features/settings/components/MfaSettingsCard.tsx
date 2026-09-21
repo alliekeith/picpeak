@@ -48,7 +48,7 @@ const RecoveryCodesPanel: React.FC<RecoveryCodesPanelProps> = ({ codes, onConfir
   return (
     <div className="space-y-4">
       <div className="p-4 rounded-lg bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 flex items-start gap-3">
-        <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+        <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
         <p className="text-sm text-amber-800 dark:text-amber-200">{t('settings.mfa.recoveryCodesWarning')}</p>
       </div>
 
@@ -72,7 +72,7 @@ const RecoveryCodesPanel: React.FC<RecoveryCodesPanelProps> = ({ codes, onConfir
           type="checkbox"
           checked={acknowledged}
           onChange={(e) => setAcknowledged(e.target.checked)}
-          className="mt-1 w-4 h-4 text-primary-600 rounded focus:ring-primary-500"
+          className="mt-1 w-4 h-4 text-primary-600 rounded-sm focus:ring-primary-500"
         />
         <span className="text-sm text-neutral-700 dark:text-neutral-300">{t('settings.mfa.recoveryCodesAck')}</span>
       </label>
@@ -190,7 +190,7 @@ export const MfaSettingsCard: React.FC = () => {
         /* ---------------- Enrolled ---------------- */
         <div className="space-y-4">
           <div className="p-3 rounded-lg bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0" />
+            <ShieldCheck className="w-5 h-5 text-green-600 dark:text-green-400 shrink-0" />
             <span className="text-sm text-green-800 dark:text-green-200">{t('settings.mfa.enabledBadge')}</span>
           </div>
 
@@ -258,7 +258,7 @@ export const MfaSettingsCard: React.FC = () => {
             />
             <div className="space-y-2">
               <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('settings.mfa.manualEntry')}</p>
-              <code className="block px-3 py-2 rounded bg-neutral-100 dark:bg-neutral-800 text-sm font-mono text-neutral-900 dark:text-neutral-100 break-all select-all">
+              <code className="block px-3 py-2 rounded-sm bg-neutral-100 dark:bg-neutral-800 text-sm font-mono text-neutral-900 dark:text-neutral-100 break-all select-all">
                 {setupData.secret}
               </code>
             </div>

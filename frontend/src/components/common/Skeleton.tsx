@@ -23,7 +23,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
   };
 
   const variantClasses = {
-    text: 'rounded',
+    text: 'rounded-sm',
     circular: 'rounded-full',
     rectangular: 'rounded-lg'
   };
@@ -88,7 +88,7 @@ const SURFACE_STYLE: React.CSSProperties = {
 
 // Common skeleton patterns
 export const SkeletonCard: React.FC<{ className?: string }> = ({ className }) => (
-  <div className={cn('rounded-lg shadow-sm p-6', className)} style={SURFACE_STYLE}>
+  <div className={cn('rounded-lg shadow-xs p-6', className)} style={SURFACE_STYLE}>
     <Skeleton height={24} width="60%" className="mb-4" />
     <SkeletonGroup count={3} />
     <div className="flex gap-3 mt-6">
@@ -102,7 +102,7 @@ export const SkeletonTable: React.FC<{ rows?: number; className?: string }> = ({
   rows = 5,
   className
 }) => (
-  <div className={cn('rounded-lg shadow-sm overflow-hidden', className)} style={SURFACE_STYLE}>
+  <div className={cn('rounded-lg shadow-xs overflow-hidden', className)} style={SURFACE_STYLE}>
     <div className="border-b border-neutral-200 dark:border-neutral-700 p-4">
       <div className="flex gap-4">
         <Skeleton width="30%" height={20} />

@@ -326,7 +326,7 @@ export const QuoteResponseView: React.FC<{ adapter: QuoteDocumentAdapter }> = ({
           </div>
         )}
 
-        <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-200 dark:border-neutral-700 p-6 md:p-8">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-xs border border-neutral-200 dark:border-neutral-700 p-6 md:p-8">
           <div className="flex items-baseline justify-between mb-4 gap-3 flex-wrap">
             <h1 className="text-2xl font-bold">{t('quoteResponse.title', 'Quote')} {quote.quoteNumber}</h1>
             <span className={`text-xs font-medium px-2 py-1 rounded ${
@@ -426,7 +426,7 @@ export const QuoteResponseView: React.FC<{ adapter: QuoteDocumentAdapter }> = ({
                       <td className={`py-2 whitespace-pre-line ${isSub ? 'pl-6' : ''} ${dim}`}>
                         {isSub ? '• ' : ''}{li.description}
                         {hasStatus && canChoose && (
-                          <span className="ml-2 inline-block rounded px-1.5 py-0.5 text-xs bg-neutral-100 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-200">
+                          <span className="ml-2 inline-block rounded-sm px-1.5 py-0.5 text-xs bg-neutral-100 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-200">
                             {t('quoteResponse.addons.optional', 'Optional')}
                           </span>
                         )}
@@ -472,7 +472,7 @@ export const QuoteResponseView: React.FC<{ adapter: QuoteDocumentAdapter }> = ({
                               />
                             </div>
                           ) : (
-                            <span className={`inline-block rounded px-1.5 py-0.5 text-xs bg-neutral-100 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-200 ${dim}`}>
+                            <span className={`inline-block rounded-sm px-1.5 py-0.5 text-xs bg-neutral-100 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-200 ${dim}`}>
                               {addOnChosen
                                 ? t('quoteResponse.addons.included', 'Booked')
                                 : t('quoteResponse.addons.notChosen', 'Not booked')}
@@ -522,7 +522,7 @@ export const QuoteResponseView: React.FC<{ adapter: QuoteDocumentAdapter }> = ({
                 <p className="text-xs font-medium text-neutral-600 dark:text-neutral-400 mb-1">
                   {t('quoteResponse.message.yours', 'Your message')}
                 </p>
-                <p className="text-sm whitespace-pre-wrap break-words text-neutral-800 dark:text-neutral-200">{quote.customerMessage}</p>
+                <p className="text-sm whitespace-pre-wrap wrap-break-word text-neutral-800 dark:text-neutral-200">{quote.customerMessage}</p>
               </div>
             )}
             {locked ? (
@@ -606,7 +606,7 @@ export const QuoteResponseView: React.FC<{ adapter: QuoteDocumentAdapter }> = ({
                     disabled={busy}
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder={t('quoteResponse.message.placeholder', 'Anything we should know? It is sent with your acceptance.')}
-                    className="w-full rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-600"
+                    className="w-full rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-hidden focus:ring-2 focus:ring-primary-600"
                   />
                 </div>
 

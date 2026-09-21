@@ -78,7 +78,7 @@ export function ProductUsageConsentDialog({
       // does not follow dark mode, so it stayed white while the dark: text
       // variants below turned near-white. neutral-800 is what `.card`
       // resolves to in dark, which is what the rest of the admin UI uses.
-      className="w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden rounded-xl p-0 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 shadow-xl backdrop:bg-black/50 focus:outline-none"
+      className="w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden rounded-xl p-0 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 shadow-xl backdrop:bg-black/50 focus:outline-hidden"
     >
       <header className="flex items-start gap-3 px-6 pt-6 pb-4">
         <span className="mt-0.5 flex h-9 w-9 flex-none items-center justify-center rounded-full bg-primary-50 dark:bg-primary-900/30">
@@ -105,7 +105,7 @@ export function ProductUsageConsentDialog({
         tabIndex={0}
         role="group"
         aria-label={t('productUsage.consentTitle') as string}
-        className="min-h-0 flex-auto overflow-y-auto border-y border-neutral-200 dark:border-neutral-700 px-6 py-4 space-y-4 focus:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-primary-400"
+        className="min-h-0 flex-auto overflow-y-auto border-y border-neutral-200 dark:border-neutral-700 px-6 py-4 space-y-4 focus:outline-hidden focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-primary-400"
       >
         {DISCLOSURE.map(({ key, heading, Icon }) => (
           <section key={key}>

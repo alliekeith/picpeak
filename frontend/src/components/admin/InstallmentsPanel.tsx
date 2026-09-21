@@ -280,7 +280,7 @@ export const InstallmentsPanel: React.FC<InstallmentsPanelProps> = ({
                     type="button"
                     onClick={() => remove(idx)}
                     disabled={disabled}
-                    className="p-2 rounded hover:bg-neutral-200 dark:hover:bg-neutral-700 text-red-600"
+                    className="p-2 rounded-sm hover:bg-neutral-200 dark:hover:bg-neutral-700 text-red-600"
                     aria-label={t('installments.removeRow', 'Remove row') as string}
                   >
                     <Trash2 className="w-4 h-4" />

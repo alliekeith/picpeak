@@ -346,7 +346,7 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
               <div className="mt-2 bg-neutral-800 rounded-lg p-2">
                 <button
                   onClick={() => handleCategoryChange(null)}
-                  className="w-full text-left px-3 py-2 text-sm text-white hover:bg-neutral-700 rounded"
+                  className="w-full text-left px-3 py-2 text-sm text-white hover:bg-neutral-700 rounded-sm"
                 >
                   Uncategorized
                 </button>
@@ -354,7 +354,7 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
                   <button
                     key={cat.id}
                     onClick={() => handleCategoryChange(cat.id)}
-                    className="w-full text-left px-3 py-2 text-sm text-white hover:bg-neutral-700 rounded"
+                    className="w-full text-left px-3 py-2 text-sm text-white hover:bg-neutral-700 rounded-sm"
                   >
                     {cat.name}
                   </button>
@@ -550,19 +550,19 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
                               {/* Comment Status Badge */}
                               <div className="flex items-center gap-1">
                                 {!comment.is_approved && !comment.is_hidden && (
-                                  <span className="text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded flex items-center gap-1">
+                                  <span className="text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded-sm flex items-center gap-1">
                                     <AlertCircle className="w-3 h-3" />
                                     Pending
                                   </span>
                                 )}
                                 {comment.is_approved && !comment.is_hidden && (
-                                  <span className="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded flex items-center gap-1">
+                                  <span className="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded-sm flex items-center gap-1">
                                     <CheckCircle className="w-3 h-3" />
                                     Approved
                                   </span>
                                 )}
                                 {comment.is_hidden && (
-                                  <span className="text-xs bg-red-500/20 text-red-400 px-2 py-1 rounded flex items-center gap-1">
+                                  <span className="text-xs bg-red-500/20 text-red-400 px-2 py-1 rounded-sm flex items-center gap-1">
                                     <XCircle className="w-3 h-3" />
                                     Hidden
                                   </span>
@@ -583,7 +583,7 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
                                     action: 'approve' 
                                   })}
                                   disabled={moderateFeedbackMutation.isPending}
-                                  className="text-xs px-2 py-1 bg-green-600 hover:bg-green-700 text-white rounded"
+                                  className="text-xs px-2 py-1 bg-green-600 hover:bg-green-700 text-white rounded-sm"
                                 >
                                   Approve
                                 </button>
@@ -596,7 +596,7 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
                                     action: 'hide' 
                                   })}
                                   disabled={moderateFeedbackMutation.isPending}
-                                  className="text-xs px-2 py-1 bg-yellow-600 hover:bg-yellow-700 text-white rounded"
+                                  className="text-xs px-2 py-1 bg-yellow-600 hover:bg-yellow-700 text-white rounded-sm"
                                 >
                                   Hide
                                 </button>
@@ -609,7 +609,7 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
                                     action: 'approve' 
                                   })}
                                   disabled={moderateFeedbackMutation.isPending}
-                                  className="text-xs px-2 py-1 bg-green-600 hover:bg-green-700 text-white rounded"
+                                  className="text-xs px-2 py-1 bg-green-600 hover:bg-green-700 text-white rounded-sm"
                                 >
                                   Unhide
                                 </button>
@@ -622,7 +622,7 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
                                   }
                                 }}
                                 disabled={deleteFeedbackMutation.isPending}
-                                className="text-xs px-2 py-1 bg-red-600 hover:bg-red-700 text-white rounded"
+                                className="text-xs px-2 py-1 bg-red-600 hover:bg-red-700 text-white rounded-sm"
                               >
                                 Delete
                               </button>

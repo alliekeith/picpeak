@@ -142,7 +142,7 @@ export const PhotosTab: React.FC<PhotosTabProps> = ({
         // photos are gone" rather than "we couldn't load them" (QA follow-up).
         <Card padding="lg">
           <div className="flex items-start gap-3 text-amber-700 dark:text-amber-400">
-            <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+            <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
             <div>
               <p className="font-medium">{t('gallery.failedToLoad')}</p>
               <Button variant="outline" size="sm" onClick={() => refetchPhotos()} className="mt-3">

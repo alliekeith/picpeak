@@ -218,7 +218,7 @@ export const EventDetailsHeader: React.FC<EventDetailsHeaderProps> = ({
       {!!event.is_draft && !event.is_archived && (
         <Card className="p-4 mb-6 border-2 border-yellow-500 bg-yellow-50 dark:bg-yellow-900/20">
           <div className="flex items-start gap-3">
-            <AlertTriangle className="w-5 h-5 flex-shrink-0 text-yellow-600 dark:text-yellow-400" />
+            <AlertTriangle className="w-5 h-5 shrink-0 text-yellow-600 dark:text-yellow-400" />
             <div className="flex-1">
               <p className="font-medium text-yellow-900 dark:text-yellow-200">
                 {t('events.draft')}
@@ -246,7 +246,7 @@ export const EventDetailsHeader: React.FC<EventDetailsHeaderProps> = ({
       {!event.is_archived && (isExpired || isExpiring) && (
         <Card className={`p-4 mb-6 border-2 ${isExpired ? 'border-red-500 bg-red-50' : 'border-orange-500 bg-orange-50'}`}>
           <div className="flex items-start gap-3">
-            <AlertTriangle className={`w-5 h-5 flex-shrink-0 ${isExpired ? 'text-red-600' : 'text-orange-600'}`} />
+            <AlertTriangle className={`w-5 h-5 shrink-0 ${isExpired ? 'text-red-600' : 'text-orange-600'}`} />
             <div className="flex-1">
               <p className={`font-medium ${isExpired ? 'text-red-900' : 'text-orange-900'}`}>
                 {isExpired

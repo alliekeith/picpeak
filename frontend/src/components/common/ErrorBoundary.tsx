@@ -125,7 +125,7 @@ export class PageErrorBoundary extends Component<Props, State> {
                 <summary className="text-sm text-neutral-500 cursor-pointer hover:text-neutral-700">
                   {i18n.t('errors.errorDetails')}
                 </summary>
-                <pre className="mt-2 text-xs bg-neutral-100 p-3 rounded overflow-auto">
+                <pre className="mt-2 text-xs bg-neutral-100 p-3 rounded-sm overflow-auto">
                   {this.state.error.stack}
                 </pre>
               </details>

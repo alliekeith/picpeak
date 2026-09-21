@@ -316,7 +316,7 @@ export const CrmDevelopmentPage: React.FC = () => {
                     <div className="flex items-center gap-2">
                       <span className="font-mono text-xs text-neutral-500">{tpl.key}</span>
                       {!tpl.present && (
-                        <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">
+                        <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-sm font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">
                           {t('crmDev.templates.notSeeded', 'Not seeded')}
                         </span>
                       )}

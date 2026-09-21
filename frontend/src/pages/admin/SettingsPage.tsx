@@ -430,7 +430,7 @@ export const SettingsPage: React.FC = () => {
             id="settings-section"
             value={activeTab}
             onChange={(e) => setActiveTab(e.target.value as TabType)}
-            className="w-full rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-3 py-2 text-sm font-medium text-neutral-900 dark:text-neutral-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="w-full rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-3 py-2 text-sm font-medium text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-primary-500"
           >
             {visibleGroups.map((group) => (
               <optgroup key={group.label} label={group.label}>
@@ -476,7 +476,7 @@ export const SettingsPage: React.FC = () => {
                               and avoids the accent-on-accent low-contrast
                               that the prior `text-accent` produced). */}
                           <Icon
-                            className={`w-4 h-4 flex-shrink-0 ${
+                            className={`w-4 h-4 shrink-0 ${
                               isActive
                                 ? 'text-white'
                                 : 'text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-700 dark:group-hover:text-neutral-200'

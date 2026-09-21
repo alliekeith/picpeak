@@ -229,7 +229,7 @@ export const QuoteDetailPage: React.FC = () => {
             <ArrowLeft className="w-4 h-4" /> {t('common.back', 'Back')}
           </button>
           <h2 className="text-xl font-bold">
-            {q.quoteNumber} <span className="ml-2 text-xs font-medium px-2 py-0.5 rounded bg-neutral-100 text-neutral-700">{t(`quotes.status.${q.status}`, q.status)}</span>
+            {q.quoteNumber} <span className="ml-2 text-xs font-medium px-2 py-0.5 rounded-sm bg-neutral-100 text-neutral-700">{t(`quotes.status.${q.status}`, q.status)}</span>
           </h2>
           <p className="text-sm text-neutral-600 dark:text-neutral-400">
             {q.customer.companyName || q.customer.displayName || q.customer.email}
@@ -332,7 +332,7 @@ export const QuoteDetailPage: React.FC = () => {
           <h3 className="font-semibold mb-2 text-neutral-900 dark:text-neutral-100">
             {t('quotes.section.customerMessage', 'Message from the customer')}
           </h3>
-          <p className="text-sm whitespace-pre-wrap break-words text-neutral-700 dark:text-neutral-300">{q.customerMessage}</p>
+          <p className="text-sm whitespace-pre-wrap wrap-break-word text-neutral-700 dark:text-neutral-300">{q.customerMessage}</p>
         </Card>
       )}
 

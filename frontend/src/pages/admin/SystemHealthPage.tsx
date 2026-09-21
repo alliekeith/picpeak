@@ -95,7 +95,7 @@ export const SystemHealthPage: React.FC = () => {
                 <td className="px-3 py-2 font-mono text-xs">{m.emailType}</td>
                 <td className="px-3 py-2 max-w-xs">
                   {showError ? (
-                    <span className="text-xs text-red-700 dark:text-red-400 break-words">
+                    <span className="text-xs text-red-700 dark:text-red-400 wrap-break-word">
                       {m.errorMessage || t('systemHealth.stuckEmails.noError', 'retries exhausted')}
                     </span>
                   ) : (

@@ -179,7 +179,7 @@ export const CustomerAccountPicker: React.FC<Props> = ({ value, onChange, disabl
                 <button
                   type="button"
                   onClick={() => remove(c.id)}
-                  className="ml-1 -mr-1 rounded hover:bg-neutral-200 dark:hover:bg-neutral-700 p-0.5"
+                  className="ml-1 -mr-1 rounded-sm hover:bg-neutral-200 dark:hover:bg-neutral-700 p-0.5"
                   aria-label={t('events.customerPicker.removeAria', 'Remove {{name}}', { name: c.email })}
                 >
                   <X className="w-3 h-3" />
@@ -253,7 +253,7 @@ export const CustomerAccountPicker: React.FC<Props> = ({ value, onChange, disabl
                     onClick={() => select(r)}
                     className="w-full text-left px-3 py-2 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-700 flex items-center gap-2"
                   >
-                    <UserPlus className="w-4 h-4 text-neutral-500 dark:text-neutral-400 flex-shrink-0" />
+                    <UserPlus className="w-4 h-4 text-neutral-500 dark:text-neutral-400 shrink-0" />
                     <span className="flex-1 truncate">{labelFor(r)}</span>
                   </button>
                 </li>

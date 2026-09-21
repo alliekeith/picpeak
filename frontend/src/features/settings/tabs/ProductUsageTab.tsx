@@ -16,7 +16,7 @@ import { ProductUsageConsentDialog } from '../components/ProductUsageConsentDial
 // the card at 390px and then, once allowed to wrap, out of the fixed height.
 // h-auto lets the second line have somewhere to go; min-h keeps a one-line
 // button the same size as every other button beside it.
-const WRAPPING_BUTTON = 'max-w-full whitespace-normal text-left h-auto min-h-[2.5rem]';
+const WRAPPING_BUTTON = 'max-w-full whitespace-normal text-left h-auto min-h-10';
 
 export default function ProductUsageTab() {
   const { t } = useTranslation();
@@ -130,7 +130,7 @@ export default function ProductUsageTab() {
         <p>{t(`productUsage.stateDetails.${data.status}`)}</p>
         {data.status !== 'disabled' && <p>{t('productUsage.currentSchema', { schema: data.schema_version })}</p>}
         {data.consent_update_available && (
-          <div className="rounded border border-theme p-3 space-y-2">
+          <div className="rounded-sm border border-theme p-3 space-y-2">
             <p>{t('productUsage.upgradeExplanation')}</p>
             <Button disabled={busy || Boolean(data.pending_action) || !data.collector_url} onClick={() => setConsent(true)}>
               {t('productUsage.reviewUpgrade')}
@@ -142,7 +142,7 @@ export default function ProductUsageTab() {
           <label className="block">
             {t('productUsage.hash')}
             <input
-              className="mt-1 w-full rounded border border-theme bg-theme-surface p-2 font-mono text-sm"
+              className="mt-1 w-full rounded-sm border border-theme bg-theme-surface p-2 font-mono text-sm"
               readOnly
               value={data.installation_id}
             />
@@ -187,7 +187,7 @@ export default function ProductUsageTab() {
         {data.can_abandon && (
           // The one dead end the operator cannot retry out of. Offered only
           // here, and worded so nobody mistakes it for a confirmed deletion.
-          <div className="rounded border border-amber-300 dark:border-amber-700 p-3 space-y-2">
+          <div className="rounded-sm border border-amber-300 dark:border-amber-700 p-3 space-y-2">
             <p>
               {t(
                 data.abandon_never_registered
@@ -406,7 +406,7 @@ export default function ProductUsageTab() {
             </div>
             {preview !== null && (
               <pre
-                className="max-h-96 overflow-auto rounded border border-theme p-3 text-xs"
+                className="max-h-96 overflow-auto rounded-sm border border-theme p-3 text-xs"
                 aria-label={t('productUsage.preview')}
               >
                 {JSON.stringify(preview, null, 2)}
@@ -457,7 +457,7 @@ export default function ProductUsageTab() {
               {t('productUsage.kind')}
               <select
                 aria-label={t('productUsage.kind')}
-                className="block mt-1 rounded border border-theme bg-theme-surface p-2"
+                className="block mt-1 rounded-sm border border-theme bg-theme-surface p-2"
                 value={form.kind}
                 onChange={(e) =>
                   setForm({
@@ -480,7 +480,7 @@ export default function ProductUsageTab() {
               <input
                 required
                 maxLength={120}
-                className="block mt-1 w-full rounded border border-theme bg-theme-surface p-2"
+                className="block mt-1 w-full rounded-sm border border-theme bg-theme-surface p-2"
                 value={form.title}
                 onChange={(e) => setForm({ ...form, title: e.target.value })}
               />
@@ -491,7 +491,7 @@ export default function ProductUsageTab() {
                 required
                 maxLength={4000}
                 rows={5}
-                className="block mt-1 w-full rounded border border-theme bg-theme-surface p-2"
+                className="block mt-1 w-full rounded-sm border border-theme bg-theme-surface p-2"
                 value={form.body}
                 onChange={(e) => setForm({ ...form, body: e.target.value })}
               />
@@ -515,7 +515,7 @@ export default function ProductUsageTab() {
                   <input
                     required
                     maxLength={80}
-                    className="block mt-1 rounded border border-theme bg-theme-surface p-2"
+                    className="block mt-1 rounded-sm border border-theme bg-theme-surface p-2"
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                   />

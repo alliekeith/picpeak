@@ -146,7 +146,7 @@ export const EventTypesPage: React.FC = () => {
               type="checkbox"
               checked={showInactive}
               onChange={(e) => setShowInactive(e.target.checked)}
-              className="rounded border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
+              className="rounded-sm border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
             />
             <span className="text-sm text-neutral-700 dark:text-neutral-300">
               {t('eventTypes.showInactive', 'Show inactive')}
@@ -210,7 +210,7 @@ export const EventTypesPage: React.FC = () => {
                       </div>
                     </td>
                     <td className="px-4 py-4">
-                      <code className="px-2 py-1 bg-neutral-100 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 rounded text-sm">
+                      <code className="px-2 py-1 bg-neutral-100 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 rounded-sm text-sm">
                         {type.slug_prefix}
                       </code>
                     </td>
@@ -405,7 +405,7 @@ const EventTypeModal: React.FC<EventTypeModalProps> = ({
                 {form.slug_prefix && (
                   <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
                     {t('eventTypes.form.slugPreview', 'Example URL:')}{' '}
-                    <code className="bg-neutral-100 dark:bg-neutral-700 px-1 rounded">
+                    <code className="bg-neutral-100 dark:bg-neutral-700 px-1 rounded-sm">
                       {form.slug_prefix}-event-name-2025-01-22
                     </code>
                   </p>
@@ -460,7 +460,7 @@ const EventTypeModal: React.FC<EventTypeModalProps> = ({
                     type="checkbox"
                     checked={eventType?.is_active}
                     onChange={(e) => onSubmit({ is_active: e.target.checked })}
-                    className="rounded border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
+                    className="rounded-sm border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
                   />
                   <span className="text-sm text-neutral-700 dark:text-neutral-300">
                     {t('eventTypes.form.isActive', 'Active (visible in event creation)')}

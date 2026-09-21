@@ -142,13 +142,13 @@ export const SsoTab: React.FC = () => {
               {t('settings.sso.redirectUri', 'Redirect URI (register this on your IdP client)')}
             </p>
             <div className="mt-2 flex items-center gap-2">
-              <code className="flex-1 overflow-x-auto whitespace-nowrap rounded bg-neutral-900 px-3 py-2 font-mono text-xs text-neutral-100">
+              <code className="flex-1 overflow-x-auto whitespace-nowrap rounded-sm bg-neutral-900 px-3 py-2 font-mono text-xs text-neutral-100">
                 {form.redirect_uri}
               </code>
               <button
                 type="button"
                 onClick={copyRedirectUri}
-                className="flex-shrink-0 rounded-md border border-neutral-200 dark:border-neutral-600 bg-white dark:bg-neutral-700 p-2 text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 transition-colors"
+                className="shrink-0 rounded-md border border-neutral-200 dark:border-neutral-600 bg-white dark:bg-neutral-700 p-2 text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 transition-colors"
                 aria-label={t('common.copy', 'Copy')}
                 title={t('common.copy', 'Copy')}
               >
@@ -199,7 +199,7 @@ export const SsoTab: React.FC = () => {
           <label className="flex items-start gap-3 pt-1 cursor-pointer">
             <input
               type="checkbox"
-              className="mt-0.5 rounded border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
+              className="mt-0.5 rounded-sm border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
               checked={form.oidc_autoprovision}
               onChange={(e) => set('oidc_autoprovision', e.target.checked)}
             />
@@ -241,7 +241,7 @@ export const SsoTab: React.FC = () => {
           <label className="flex items-start gap-3 pt-1 cursor-pointer">
             <input
               type="checkbox"
-              className="mt-0.5 rounded border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
+              className="mt-0.5 rounded-sm border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
               checked={form.oidc_enabled}
               onChange={(e) => set('oidc_enabled', e.target.checked)}
             />
@@ -295,7 +295,7 @@ export const SsoTab: React.FC = () => {
           <label className="flex items-start gap-3 pt-1 cursor-pointer">
             <input
               type="checkbox"
-              className="mt-0.5 rounded border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
+              className="mt-0.5 rounded-sm border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
               checked={form.oidc_role_mapping_enabled}
               onChange={(e) => set('oidc_role_mapping_enabled', e.target.checked)}
             />
@@ -353,7 +353,7 @@ export const SsoTab: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setMappingRows((prev) => (prev ? prev.filter((_, i) => i !== index) : prev))}
-                      className="flex-shrink-0 rounded-md p-2 text-neutral-400 hover:text-red-600 transition-colors"
+                      className="shrink-0 rounded-md p-2 text-neutral-400 hover:text-red-600 transition-colors"
                       aria-label={t('common.delete', 'Delete')}
                       title={t('common.delete', 'Delete')}
                     >
@@ -374,7 +374,7 @@ export const SsoTab: React.FC = () => {
               <label className="flex items-start gap-3 pt-1 cursor-pointer">
                 <input
                   type="checkbox"
-                  className="mt-0.5 rounded border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
+                  className="mt-0.5 rounded-sm border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
                   checked={form.oidc_require_mapped_role}
                   onChange={(e) => set('oidc_require_mapped_role', e.target.checked)}
                 />
@@ -405,7 +405,7 @@ export const SsoTab: React.FC = () => {
           <label className="flex items-start gap-3 pt-1 cursor-pointer">
             <input
               type="checkbox"
-              className="mt-0.5 rounded border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
+              className="mt-0.5 rounded-sm border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
               checked={form.oidc_disable_local_login}
               onChange={(e) => set('oidc_disable_local_login', e.target.checked)}
             />
@@ -429,7 +429,7 @@ export const SsoTab: React.FC = () => {
           <label className="flex items-start gap-3 pt-1 cursor-pointer">
             <input
               type="checkbox"
-              className="mt-0.5 rounded border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
+              className="mt-0.5 rounded-sm border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
               checked={form.oidc_logout_from_idp}
               onChange={(e) => set('oidc_logout_from_idp', e.target.checked)}
             />

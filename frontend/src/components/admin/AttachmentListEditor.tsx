@@ -23,9 +23,9 @@ export interface AttachmentRow {
   isActive: boolean;
 }
 
-const fieldClass = 'focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900 px-2 py-1 rounded-md border border-neutral-300 dark:border-neutral-600 '
+const fieldClass = 'focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900 px-2 py-1 rounded-md border border-neutral-300 dark:border-neutral-600 '
   + 'bg-white dark:bg-neutral-800 text-sm text-neutral-900 dark:text-neutral-100';
-const iconButton = 'focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900 p-1 rounded border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-200 '
+const iconButton = 'focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900 p-1 rounded-sm border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-200 '
   + 'disabled:opacity-40 hover:bg-neutral-50 dark:hover:bg-neutral-700';
 
 export const AttachmentListEditor: React.FC<{
@@ -70,7 +70,7 @@ export const AttachmentListEditor: React.FC<{
       ) : (
         <ol className="space-y-2">
           {value.map((row, index) => (
-            <li key={row.attachmentId} className="rounded border border-neutral-200 dark:border-neutral-700 p-2 flex flex-wrap items-center gap-2">
+            <li key={row.attachmentId} className="rounded-sm border border-neutral-200 dark:border-neutral-700 p-2 flex flex-wrap items-center gap-2">
               <span className="text-xs tabular-nums text-neutral-500 dark:text-neutral-400 w-6">{index + 1}.</span>
               <span className="flex-1 min-w-[160px] text-sm">
                 <span className="font-medium text-neutral-900 dark:text-neutral-100">{row.name}</span>

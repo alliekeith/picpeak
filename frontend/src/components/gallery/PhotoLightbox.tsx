@@ -899,7 +899,7 @@ export const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
                 names from pushing the action row to another line. */}
             {showOriginalFilename && (currentPhoto.original_filename || currentPhoto.filename) && (
               <p
-                className="text-xs opacity-60 truncate max-w-[14rem] sm:max-w-md mt-0.5"
+                className="text-xs opacity-60 truncate max-w-56 sm:max-w-md mt-0.5"
                 title={currentPhoto.original_filename || currentPhoto.filename}
               >
                 {currentPhoto.original_filename || currentPhoto.filename}
@@ -972,7 +972,7 @@ export const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
                     this gate, a guest could see how many other guests
                     liked a photo even with show_feedback_to_guests off. */}
                 {feedbackSettings?.show_feedback_to_guests && (
-                  <span className="text-white text-xs min-w-[1.5rem] text-center select-none">{likeCount}</span>
+                  <span className="text-white text-xs min-w-6 text-center select-none">{likeCount}</span>
                 )}
               </div>
             )}
@@ -1222,12 +1222,12 @@ export const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
 
       {/* Feedback Panel */}
       {showFeedback && (
-        <div className="absolute right-0 top-0 bottom-0 w-full sm:w-[26rem] bg-surface shadow-xl z-20 overflow-y-auto flex flex-col border-l border-surface">
+        <div className="absolute right-0 top-0 bottom-0 w-full sm:w-104 bg-surface shadow-xl z-20 overflow-y-auto flex flex-col border-l border-surface">
           <div className="sticky top-0 bg-surface border-b border-surface px-4 py-3 flex items-center justify-between">
             <h3 className="font-semibold" style={{ color: 'var(--color-text)' }}>Photo Feedback</h3>
             <button
               onClick={() => setShowFeedback(false)}
-              className="p-1 hover:bg-black/10 rounded transition-colors"
+              className="p-1 hover:bg-black/10 rounded-sm transition-colors"
               aria-label="Close feedback"
             >
               <X className="w-5 h-5" />

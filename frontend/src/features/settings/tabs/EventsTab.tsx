@@ -57,7 +57,7 @@ export const EventsTab: React.FC<EventsTabProps> = ({
                 type="checkbox"
                 checked={eventSettings.event_require_customer_name}
                 onChange={(e) => setEventSettings(prev => ({ ...prev, event_require_customer_name: e.target.checked }))}
-                className="mt-1 w-4 h-4 text-primary-600 rounded focus:ring-primary-500"
+                className="mt-1 w-4 h-4 text-primary-600 rounded-sm focus:ring-primary-500"
               />
               <div>
                 <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
@@ -76,7 +76,7 @@ export const EventsTab: React.FC<EventsTabProps> = ({
                 type="checkbox"
                 checked={eventSettings.event_require_customer_email}
                 onChange={(e) => setEventSettings(prev => ({ ...prev, event_require_customer_email: e.target.checked }))}
-                className="mt-1 w-4 h-4 text-primary-600 rounded focus:ring-primary-500"
+                className="mt-1 w-4 h-4 text-primary-600 rounded-sm focus:ring-primary-500"
               />
               <div>
                 <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
@@ -101,7 +101,7 @@ export const EventsTab: React.FC<EventsTabProps> = ({
                 type="checkbox"
                 checked={eventSettings.event_require_admin_email}
                 onChange={(e) => setEventSettings(prev => ({ ...prev, event_require_admin_email: e.target.checked }))}
-                className="mt-1 w-4 h-4 text-primary-600 rounded focus:ring-primary-500"
+                className="mt-1 w-4 h-4 text-primary-600 rounded-sm focus:ring-primary-500"
               />
               <div>
                 <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
@@ -126,7 +126,7 @@ export const EventsTab: React.FC<EventsTabProps> = ({
                 type="checkbox"
                 checked={eventSettings.event_require_event_date}
                 onChange={(e) => setEventSettings(prev => ({ ...prev, event_require_event_date: e.target.checked }))}
-                className="mt-1 w-4 h-4 text-primary-600 rounded focus:ring-primary-500"
+                className="mt-1 w-4 h-4 text-primary-600 rounded-sm focus:ring-primary-500"
               />
               <div>
                 <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
@@ -151,7 +151,7 @@ export const EventsTab: React.FC<EventsTabProps> = ({
                 type="checkbox"
                 checked={eventSettings.event_require_expiration}
                 onChange={(e) => setEventSettings(prev => ({ ...prev, event_require_expiration: e.target.checked }))}
-                className="mt-1 w-4 h-4 text-primary-600 rounded focus:ring-primary-500"
+                className="mt-1 w-4 h-4 text-primary-600 rounded-sm focus:ring-primary-500"
               />
               <div>
                 <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
@@ -176,7 +176,7 @@ export const EventsTab: React.FC<EventsTabProps> = ({
                 type="checkbox"
                 checked={eventSettings.event_default_require_password}
                 onChange={(e) => setEventSettings(prev => ({ ...prev, event_default_require_password: e.target.checked }))}
-                className="mt-1 w-4 h-4 text-primary-600 rounded focus:ring-primary-500"
+                className="mt-1 w-4 h-4 text-primary-600 rounded-sm focus:ring-primary-500"
               />
               <div>
                 <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
@@ -195,7 +195,7 @@ export const EventsTab: React.FC<EventsTabProps> = ({
                 type="checkbox"
                 checked={eventSettings.event_default_feedback_enabled}
                 onChange={(e) => setEventSettings(prev => ({ ...prev, event_default_feedback_enabled: e.target.checked }))}
-                className="mt-1 w-4 h-4 text-primary-600 rounded focus:ring-primary-500"
+                className="mt-1 w-4 h-4 text-primary-600 rounded-sm focus:ring-primary-500"
               />
               <div>
                 <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
@@ -232,7 +232,7 @@ export const EventsTab: React.FC<EventsTabProps> = ({
                   disabled={!eventSettings.event_default_feedback_enabled}
                   checked={eventSettings[key]}
                   onChange={(e) => setEventSettings(prev => ({ ...prev, [key]: e.target.checked }))}
-                  className="mt-1 w-4 h-4 text-primary-600 rounded focus:ring-primary-500"
+                  className="mt-1 w-4 h-4 text-primary-600 rounded-sm focus:ring-primary-500"
                 />
                 <span className="text-sm text-neutral-700 dark:text-neutral-300 flex items-center gap-2">
                   {t(label, fallback)}
@@ -287,7 +287,7 @@ export const EventsTab: React.FC<EventsTabProps> = ({
                 type="checkbox"
                 checked={eventSettings.gallery_show_filter_bar}
                 onChange={(e) => setEventSettings(prev => ({ ...prev, gallery_show_filter_bar: e.target.checked }))}
-                className="mt-1 w-4 h-4 text-primary-600 rounded focus:ring-primary-500"
+                className="mt-1 w-4 h-4 text-primary-600 rounded-sm focus:ring-primary-500"
               />
               <div>
                 <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
@@ -306,7 +306,7 @@ export const EventsTab: React.FC<EventsTabProps> = ({
                 type="checkbox"
                 checked={eventSettings.event_phone_field_enabled}
                 onChange={(e) => setEventSettings(prev => ({ ...prev, event_phone_field_enabled: e.target.checked }))}
-                className="mt-1 w-4 h-4 text-primary-600 rounded focus:ring-primary-500"
+                className="mt-1 w-4 h-4 text-primary-600 rounded-sm focus:ring-primary-500"
               />
               <div>
                 <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
@@ -334,7 +334,7 @@ export const EventsTab: React.FC<EventsTabProps> = ({
 
       <Card padding="md">
         <div className="flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+          <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0" />
           <div className="text-sm text-blue-800 dark:text-blue-200">
             <p className="font-medium mb-1">{t('settings.events.noteTitle', 'Note')}</p>
             <p>

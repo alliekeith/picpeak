@@ -125,9 +125,9 @@ export const UpdateNotificationSettings: React.FC = () => {
     return (
       <Card padding="md">
         <div className="animate-pulse space-y-4">
-          <div className="h-6 bg-neutral-200 dark:bg-neutral-700 rounded w-1/3"></div>
-          <div className="h-10 bg-neutral-200 dark:bg-neutral-700 rounded"></div>
-          <div className="h-10 bg-neutral-200 dark:bg-neutral-700 rounded"></div>
+          <div className="h-6 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-1/3"></div>
+          <div className="h-10 bg-neutral-200 dark:bg-neutral-700 rounded-sm"></div>
+          <div className="h-10 bg-neutral-200 dark:bg-neutral-700 rounded-sm"></div>
         </div>
       </Card>
     );
@@ -151,7 +151,7 @@ export const UpdateNotificationSettings: React.FC = () => {
             type="checkbox"
             checked={localEnabled}
             onChange={(e) => handleToggleEnabled(e.target.checked)}
-            className="w-4 h-4 text-primary-600 bg-neutral-100 border-neutral-300 rounded focus:ring-primary-500"
+            className="w-4 h-4 text-primary-600 bg-neutral-100 border-neutral-300 rounded-sm focus:ring-primary-500"
           />
           <div>
             <p className="font-medium text-neutral-900 dark:text-neutral-100">

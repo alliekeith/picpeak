@@ -167,7 +167,7 @@ export const ImageSecurityTab: React.FC = () => {
                 type="checkbox"
                 checked={settings.enable_devtools_protection}
                 onChange={(e) => handleChange('enable_devtools_protection', e.target.checked)}
-                className="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500"
+                className="w-4 h-4 text-primary-600 border-neutral-300 rounded-sm focus:ring-primary-500"
               />
               <Monitor className="w-4 h-4 ml-2 mr-1 text-neutral-500" />
               <span className="text-sm text-neutral-700 dark:text-neutral-300">
@@ -180,7 +180,7 @@ export const ImageSecurityTab: React.FC = () => {
                 type="checkbox"
                 checked={settings.enable_canvas_rendering}
                 onChange={(e) => handleChange('enable_canvas_rendering', e.target.checked)}
-                className="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500"
+                className="w-4 h-4 text-primary-600 border-neutral-300 rounded-sm focus:ring-primary-500"
               />
               <Image className="w-4 h-4 ml-2 mr-1 text-neutral-500" />
               <span className="text-sm text-neutral-700 dark:text-neutral-300">
@@ -290,7 +290,7 @@ export const ImageSecurityTab: React.FC = () => {
                 type="checkbox"
                 checked={settings.security_monitoring_enabled}
                 onChange={(e) => handleChange('security_monitoring_enabled', e.target.checked)}
-                className="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500"
+                className="w-4 h-4 text-primary-600 border-neutral-300 rounded-sm focus:ring-primary-500"
               />
               <span className="ml-2 text-sm text-neutral-700 dark:text-neutral-300 dark:text-neutral-300">
                 {t('settings.imageSecurity.enableMonitoring', 'Enable security monitoring')}
@@ -302,7 +302,7 @@ export const ImageSecurityTab: React.FC = () => {
                 type="checkbox"
                 checked={settings.block_suspicious_ips}
                 onChange={(e) => handleChange('block_suspicious_ips', e.target.checked)}
-                className="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500"
+                className="w-4 h-4 text-primary-600 border-neutral-300 rounded-sm focus:ring-primary-500"
               />
               <span className="ml-2 text-sm text-neutral-700 dark:text-neutral-300 dark:text-neutral-300">
                 {t('settings.imageSecurity.blockSuspiciousIps', 'Automatically block suspicious IPs')}
@@ -314,7 +314,7 @@ export const ImageSecurityTab: React.FC = () => {
                 type="checkbox"
                 checked={settings.log_security_events_to_db}
                 onChange={(e) => handleChange('log_security_events_to_db', e.target.checked)}
-                className="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500"
+                className="w-4 h-4 text-primary-600 border-neutral-300 rounded-sm focus:ring-primary-500"
               />
               <span className="ml-2 text-sm text-neutral-700 dark:text-neutral-300 dark:text-neutral-300">
                 {t('settings.imageSecurity.logEvents', 'Log security events to database')}
@@ -327,7 +327,7 @@ export const ImageSecurityTab: React.FC = () => {
       {/* Info Box */}
       <Card padding="md" className="bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800">
         <div className="flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+          <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
           <div className="text-sm text-blue-800 dark:text-blue-200">
             <p className="font-medium mb-1">{t('settings.imageSecurity.infoTitle', 'About Image Protection')}</p>
             <p>

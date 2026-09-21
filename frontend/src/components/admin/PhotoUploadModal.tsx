@@ -46,7 +46,7 @@ export const PhotoUploadModal: React.FC<PhotoUploadModalProps> = ({
             variant="ghost"
             size="sm"
             onClick={onClose}
-            className="!p-1"
+            className="p-1!"
           >
             <X className="w-5 h-5" />
           </Button>

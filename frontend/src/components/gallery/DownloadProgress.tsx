@@ -34,7 +34,7 @@ export const DownloadProgress: React.FC<DownloadProgressProps> = ({
         {onCancel && (
           <button
             onClick={onCancel}
-            className="p-1 hover:bg-black/10 rounded transition-colors"
+            className="p-1 hover:bg-black/10 rounded-sm transition-colors"
           >
             <X className="w-4 h-4 text-muted-theme" />
           </button>

@@ -72,7 +72,7 @@ export const TemplatePickerModal: React.FC<Props> = ({ open, onClose }) => {
         <div className="flex items-center justify-between border-b border-neutral-200 dark:border-neutral-700 px-5 py-3">
           <h2 id="template-picker-title" className="text-lg font-semibold">{t('quotes.new', 'New quote')}</h2>
           <button type="button" onClick={onClose} aria-label={t('common.close', 'Close') as string}
-            className="p-1 rounded hover:bg-neutral-100 dark:hover:bg-neutral-800">
+            className="p-1 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-800">
             <X className="w-5 h-5" />
           </button>
         </div>

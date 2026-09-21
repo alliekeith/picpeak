@@ -267,7 +267,7 @@ export const MessagesPage: React.FC = () => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder={t('messages.searchPlaceholder', 'Search this folder…')}
-            className="w-full h-9 pl-9 pr-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-sm text-neutral-900 dark:text-neutral-100 focus:outline-none focus:ring-2 focus:ring-accent"
+            className="w-full h-9 pl-9 pr-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-sm text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-accent"
           />
         </div>
         <div className="flex items-center gap-2 flex-none">
@@ -297,7 +297,7 @@ export const MessagesPage: React.FC = () => {
               <div className="flex items-center gap-2 px-2 py-1.5 text-sm font-semibold text-neutral-800 dark:text-neutral-200">
                 <span className="w-2 h-2 rounded-full flex-none" style={{ background: a.color }} />
                 <span>{a.name}</span>
-                {a.addr && <span title={a.addr} className="ml-auto text-[11px] font-medium font-mono text-neutral-400 dark:text-neutral-500 truncate max-w-[7rem]">{localPart(a.addr)}</span>}
+                {a.addr && <span title={a.addr} className="ml-auto text-[11px] font-medium font-mono text-neutral-400 dark:text-neutral-500 truncate max-w-28">{localPart(a.addr)}</span>}
               </div>
               <div className="flex flex-col gap-0.5">
                 {a.folders.map((f) => {
@@ -807,7 +807,7 @@ const PdfModal: React.FC<{ docId: number; onClose: () => void; t: TFunction }> =
           {err ? (
             <div className="text-sm text-neutral-500 dark:text-neutral-400">{t('messages.previewUnavailable', 'Preview unavailable')}</div>
           ) : url ? (
-            <img src={url} alt="" className="max-w-full shadow-lg rounded" />
+            <img src={url} alt="" className="max-w-full shadow-lg rounded-sm" />
           ) : (
             <Loading />
           )}

@@ -208,13 +208,13 @@ export const CustomerAcceptInvitePage: React.FC = () => {
             <div className="flex justify-center py-8"><Loading size="lg" /></div>
           ) : lookupError || !invitation ? (
             <div className="flex items-start gap-2 text-sm">
-              <AlertCircle className="w-5 h-5 mt-0.5 flex-shrink-0 text-red-600" />
+              <AlertCircle className="w-5 h-5 mt-0.5 shrink-0 text-red-600" />
               <p className="text-theme">{lookupError}</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="flex items-start gap-2 p-3 rounded-lg" style={{ backgroundColor: 'var(--color-elevated, #f5f5f5)' }}>
-                <CheckCircle className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: 'var(--color-accent)' }} />
+                <CheckCircle className="w-5 h-5 mt-0.5 shrink-0" style={{ color: 'var(--color-accent)' }} />
                 <div className="text-sm text-theme">
                   {t('customer.acceptInvite.emailWillBe', 'Your account email will be ')}
                   <span className="font-medium">{invitation.email}</span>
@@ -230,7 +230,7 @@ export const CustomerAcceptInvitePage: React.FC = () => {
 
               {errors.form && (
                 <div role="alert" className="flex items-start gap-2 p-3 rounded-lg border" style={{ borderColor: 'var(--color-surface-border)' }}>
-                  <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0 text-red-600" />
+                  <AlertCircle className="w-4 h-4 mt-0.5 shrink-0 text-red-600" />
                   <span className="text-sm text-theme">{errors.form}</span>
                 </div>
               )}
@@ -249,7 +249,7 @@ export const CustomerAcceptInvitePage: React.FC = () => {
                     <select
                       value={form.salutation}
                       onChange={(e) => update('salutation', e.target.value)}
-                      className="w-full rounded-lg border px-3 h-10 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+                      className="w-full rounded-lg border px-3 h-10 text-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2"
                       style={{
                         backgroundColor: 'var(--color-surface)',
                         borderColor: 'var(--color-surface-border)',

@@ -405,11 +405,11 @@ export const ProjectCockpitPage: React.FC = () => {
                   onClick={onRowClick}
                   className={`flex items-start gap-3 rounded-lg border border-neutral-100 dark:border-neutral-800 px-3 py-2 ${onRowClick ? 'cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-800/60' : ''}`}
                 >
-                  <Icon className="w-4 h-4 mt-0.5 text-neutral-500 flex-shrink-0" />
+                  <Icon className="w-4 h-4 mt-0.5 text-neutral-500 shrink-0" />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2">
                       <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100 truncate">{item.title}</span>
-                      <span className="text-xs text-neutral-500 flex-shrink-0">
+                      <span className="text-xs text-neutral-500 shrink-0">
                         {item.date ? `${format(item.date)} ${item.kind === 'email' ? formatTime(item.date) : ''}` : '—'}
                       </span>
                     </div>
@@ -492,7 +492,7 @@ export const ProjectCockpitPage: React.FC = () => {
                     srcDoc={preparePreviewHtml(preview.html)}
                     sandbox=""
                     style={{ colorScheme: 'normal' }}
-                    className="w-full h-[60vh] border border-neutral-200 dark:border-neutral-700 rounded"
+                    className="w-full h-[60vh] border border-neutral-200 dark:border-neutral-700 rounded-sm"
                   />
                 </>
               ) : (

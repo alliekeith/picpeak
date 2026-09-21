@@ -342,10 +342,10 @@ export const BlockLibraryPage: React.FC = () => {
                               >
                                 {b.name}
                               </p>
-                              <div className="flex items-center gap-1.5 flex-shrink-0">
+                              <div className="flex items-center gap-1.5 shrink-0">
                                 {b.isSystem && (
                                   <span
-                                    className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded font-semibold bg-neutral-200 dark:bg-neutral-600 text-neutral-700 dark:text-neutral-300"
+                                    className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-sm font-semibold bg-neutral-200 dark:bg-neutral-600 text-neutral-700 dark:text-neutral-300"
                                     title={t('contracts.blocks.systemBadge', 'System') as string}
                                   >
                                     {t('contracts.blocks.systemBadge', 'System')}
@@ -445,7 +445,7 @@ export const BlockLibraryPage: React.FC = () => {
                         onClick={() => setEditingLang(lang.code)}
                         className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors flex items-center gap-1.5 ${
                           editingLang === lang.code
-                            ? 'bg-white dark:bg-neutral-800 text-accent-dark shadow-sm'
+                            ? 'bg-white dark:bg-neutral-800 text-accent-dark shadow-xs'
                             : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200'
                         }`}
                       >
@@ -540,7 +540,7 @@ export const BlockLibraryPage: React.FC = () => {
                         {t('contracts.blocks.quoteLineItems.previewExample',
                           'Example rendered output:')}
                       </p>
-                      <pre className="mt-1 text-[11px] font-mono bg-white/50 dark:bg-neutral-900/40 rounded p-2 overflow-x-auto">
+                      <pre className="mt-1 text-[11px] font-mono bg-white/50 dark:bg-neutral-900/40 rounded-sm p-2 overflow-x-auto">
 {`#   Description                      Qty    Unit       Total
 1   Photography session              1      CHF 800    CHF 800
 2   Photo prints                     2      CHF 15     CHF 30

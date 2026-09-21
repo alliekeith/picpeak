@@ -131,7 +131,7 @@ export const CustomerPicker: React.FC<CustomerPickerProps> = ({
         <div className="flex items-center gap-2 flex-wrap">
           <span className="text-sm">{label || `#${value}`}</span>
           {isPassive && (
-            <span className="inline-flex items-center gap-1 text-[11px] px-1.5 py-0.5 rounded bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300">
+            <span className="inline-flex items-center gap-1 text-[11px] px-1.5 py-0.5 rounded-sm bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300">
               {t('customers.passive.badge', 'Passive — admin only')}
             </span>
           )}
@@ -187,12 +187,12 @@ export const CustomerPicker: React.FC<CustomerPickerProps> = ({
                   </span>
                   <span className="text-neutral-500 ml-2">{c.email}</span>
                   {c.isPassive && (
-                    <span className="ml-2 inline-flex items-center gap-1 text-[11px] px-1.5 py-0.5 rounded bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300">
+                    <span className="ml-2 inline-flex items-center gap-1 text-[11px] px-1.5 py-0.5 rounded-sm bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300">
                       {t('customers.passive.badge', 'Passive — admin only')}
                     </span>
                   )}
                   {hourLoggingOff && (
-                    <span className="ml-2 inline-flex items-center gap-1 text-[11px] px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300">
+                    <span className="ml-2 inline-flex items-center gap-1 text-[11px] px-1.5 py-0.5 rounded-sm bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300">
                       {t('customers.hoursLoggingDisabled.badge', 'Hour logging disabled')}
                     </span>
                   )}

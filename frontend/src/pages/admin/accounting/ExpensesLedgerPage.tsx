@@ -281,18 +281,18 @@ export const ExpensesLedgerPage: React.FC = () => {
             const cat = ex.categoryId ? catById.get(ex.categoryId) : null;
             return (
               <div key={ex.id} className="flex flex-wrap items-center gap-3 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-4 py-3">
-                <span className="inline-flex items-center gap-1 rounded bg-neutral-100 dark:bg-neutral-800 px-2 py-0.5 text-xs font-medium text-neutral-700 dark:text-neutral-300">{kindIcon[ex.kind]} {t(`accounting.expenseKind.${ex.kind}`, ex.kind)}</span>
-                <div className="flex-1 min-w-[10rem]">
+                <span className="inline-flex items-center gap-1 rounded-sm bg-neutral-100 dark:bg-neutral-800 px-2 py-0.5 text-xs font-medium text-neutral-700 dark:text-neutral-300">{kindIcon[ex.kind]} {t(`accounting.expenseKind.${ex.kind}`, ex.kind)}</span>
+                <div className="flex-1 min-w-40">
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100 truncate">{ex.description || ex.supplierName || t('accounting.ledger.untitled', 'Expense')}</span>
                     {/* invoiced = on a real client invoice → locked (#2/#3). */}
                     {ex.invoiced && (
                       ex.billedInvoiceId ? (
-                        <Link to={`/admin/bills/${ex.billedInvoiceId}`} className="inline-flex items-center gap-1 rounded bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider hover:underline">
+                        <Link to={`/admin/bills/${ex.billedInvoiceId}`} className="inline-flex items-center gap-1 rounded-sm bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider hover:underline">
                           <FileText className="w-3 h-3" /> {t('accounting.ledger.invoiced', 'Invoiced')}
                         </Link>
                       ) : (
-                        <span className="inline-flex items-center gap-1 rounded bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider"><FileText className="w-3 h-3" /> {t('accounting.ledger.invoiced', 'Invoiced')}</span>
+                        <span className="inline-flex items-center gap-1 rounded-sm bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider"><FileText className="w-3 h-3" /> {t('accounting.ledger.invoiced', 'Invoiced')}</span>
                       )
                     )}
                   </div>

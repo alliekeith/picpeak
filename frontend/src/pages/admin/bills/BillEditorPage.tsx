@@ -567,7 +567,7 @@ export const BillEditorPage: React.FC = () => {
                 type="checkbox"
                 checked={dueDateOverridden}
                 onChange={(e) => setDueDateOverridden(e.target.checked)}
-                className="rounded border-neutral-300 dark:border-neutral-600"
+                className="rounded-sm border-neutral-300 dark:border-neutral-600"
               />
               {dueDateOverridden
                 ? t('bills.field.dueDateOverrideOn', 'Manual due date — untick to auto-set from send date + payment term')
@@ -777,7 +777,7 @@ export const BillEditorPage: React.FC = () => {
                   const email = e.target.value;
                   if (email) setCcPdfEmail(email);
                 }}
-                className="text-xs px-2 py-1 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded focus:ring-2 focus:ring-primary-500 focus:border-accent-dark"
+                className="text-xs px-2 py-1 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-sm focus:ring-2 focus:ring-primary-500 focus:border-accent-dark"
               >
                 <option value="">{t('bills.field.ccPdfCustom', 'Custom email')}</option>
                 {activeAdmins.map((a: any) => (

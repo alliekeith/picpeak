@@ -9,7 +9,7 @@ export function UsageCatalog() {
   const entries = Object.entries(catalog.features).filter(([key]) =>
     `${key} ${t(`productUsage.catalog.${key}.name`)}`.toLowerCase().includes(search.toLowerCase()));
   return (
-    <details className="rounded border border-theme p-3">
+    <details className="rounded-sm border border-theme p-3">
       <summary className="cursor-pointer font-semibold">{t('productUsage.catalogTitle')}</summary>
       <p className="my-3 text-sm">{t('productUsage.catalogExplanation')}</p>
       <section className="my-3 space-y-2 text-sm">
@@ -22,7 +22,7 @@ export function UsageCatalog() {
       <label className="block text-sm">
         {t('productUsage.catalogSearch')}
         <input type="search" value={search} onChange={(e) => setSearch(e.target.value)}
-          className="my-2 w-full rounded border border-theme bg-theme-surface p-2" />
+          className="my-2 w-full rounded-sm border border-theme bg-theme-surface p-2" />
       </label>
       <div className="max-h-96 space-y-3 overflow-y-auto" tabIndex={0}>
         {entries.map(([key, definition]) => (

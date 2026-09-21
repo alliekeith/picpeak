@@ -541,7 +541,7 @@ export const LineItemsTable: React.FC<Props> = ({
                           rows={2}
                           maxLength={2000}
                           aria-label={t('crm.lineItems.detailsFilled', 'Details') as string}
-                          className="mt-2 w-full rounded border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-2 py-1 text-xs italic"
+                          className="mt-2 w-full rounded-sm border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-2 py-1 text-xs italic"
                           value={li.detailsText || ''}
                           onChange={(e) => setItem(idx, { detailsText: e.target.value })}
                           placeholder={t('crm.lineItems.detailsPlaceholder', 'Optional notes — fine print, package inclusions, conditions…') as string}
@@ -572,7 +572,7 @@ export const LineItemsTable: React.FC<Props> = ({
                     <td className="px-2 py-2 align-top">
                       <div className="flex items-center gap-1 justify-end">
                         <button type="button" onClick={() => removeRow(idx)} aria-label={t('crm.lineItems.remove', 'Remove') as string}
-                          className="p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/30 text-red-600">
+                          className="p-1 rounded-sm hover:bg-red-50 dark:hover:bg-red-900/30 text-red-600">
                           <X className="w-4 h-4" />
                         </button>
                       </div>
@@ -594,7 +594,7 @@ export const LineItemsTable: React.FC<Props> = ({
                     </td>
                     <td className={`px-2 py-2 align-top ${dim}`}>
                       <DecimalInput
-                        className={`w-20 rounded border border-neutral-300 dark:border-neutral-600 px-2 py-1 text-sm ${qtyDisabled ? disabledInputClass : enabledInputClass}`}
+                        className={`w-20 rounded-sm border border-neutral-300 dark:border-neutral-600 px-2 py-1 text-sm ${qtyDisabled ? disabledInputClass : enabledInputClass}`}
                         value={effectiveQuantity(li)}
                         onChange={(n) => setItem(idx, { quantity: Number.isFinite(n) ? n : 0 })}
                         disabled={qtyDisabled}
@@ -614,7 +614,7 @@ export const LineItemsTable: React.FC<Props> = ({
                     <td className={`px-2 py-2 align-top ${sub ? 'pl-6' : ''}`}>
                       <textarea
                         rows={2}
-                        className={`w-full rounded border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-2 py-1 text-sm ${dim}`}
+                        className={`w-full rounded-sm border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-2 py-1 text-sm ${dim}`}
                         value={li.description}
                         onChange={(e) => setItem(idx, { description: e.target.value })}
                         placeholder={t('crm.lineItems.descriptionPlaceholder', 'Description (multi-line OK)') as string}
@@ -636,7 +636,7 @@ export const LineItemsTable: React.FC<Props> = ({
                                 ...(rateUnit && isRatePriced(li) ? { priceMode: unit as PriceMode } : {}),
                               });
                             }}
-                            className="rounded border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-1 py-0.5"
+                            className="rounded-sm border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-1 py-0.5"
                           >
                             <option value="">{t('crm.lineItems.unitNone', '—')}</option>
                             {UNITS.map((u) => (
@@ -671,7 +671,7 @@ export const LineItemsTable: React.FC<Props> = ({
                           </label>
                         )}
                         {isQuote && isRatePriced(li) && rateBadge(li) && (
-                          <span className={`rounded bg-neutral-100 dark:bg-neutral-700 px-1.5 py-0.5 text-[11px] ${dim}`}>{rateBadge(li)}</span>
+                          <span className={`rounded-sm bg-neutral-100 dark:bg-neutral-700 px-1.5 py-0.5 text-[11px] ${dim}`}>{rateBadge(li)}</span>
                         )}
                         {isQuote && !sub && (
                           <label className={`inline-flex items-center gap-1 ${dim}`}>
@@ -702,7 +702,7 @@ export const LineItemsTable: React.FC<Props> = ({
                         <textarea
                           rows={2}
                           maxLength={2000}
-                          className={`mt-2 w-full rounded border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-2 py-1 text-xs italic ${dim}`}
+                          className={`mt-2 w-full rounded-sm border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-2 py-1 text-xs italic ${dim}`}
                           value={li.detailsText || ''}
                           onChange={(e) => setItem(idx, { detailsText: e.target.value })}
                           placeholder={t('crm.lineItems.detailsPlaceholder', 'Optional notes — fine print, package inclusions, conditions…') as string}
@@ -726,7 +726,7 @@ export const LineItemsTable: React.FC<Props> = ({
                     </td>
                     <td className={`px-2 py-2 align-top ${dim}`}>
                       <DecimalInput
-                        className={`w-24 rounded border border-neutral-300 dark:border-neutral-600 px-2 py-1 text-sm text-right ${priceDisabled ? disabledInputClass : enabledInputClass}`}
+                        className={`w-24 rounded-sm border border-neutral-300 dark:border-neutral-600 px-2 py-1 text-sm text-right ${priceDisabled ? disabledInputClass : enabledInputClass}`}
                         value={li.unitPrice}
                         fractionDigits={2}
                         onChange={(n) => setItem(idx, { unitPrice: Number.isFinite(n) ? n : 0 })}
@@ -739,7 +739,7 @@ export const LineItemsTable: React.FC<Props> = ({
                     {showDiscount && (
                       <td className={`px-2 py-2 align-top ${dim}`}>
                         <DecimalInput
-                          className={`w-20 rounded border border-neutral-300 dark:border-neutral-600 px-2 py-1 text-sm text-right ${parentAutoTotaled ? disabledInputClass : enabledInputClass}`}
+                          className={`w-20 rounded-sm border border-neutral-300 dark:border-neutral-600 px-2 py-1 text-sm text-right ${parentAutoTotaled ? disabledInputClass : enabledInputClass}`}
                           value={li.discountPercent}
                           onChange={(n) => {
                             // Clamp to 0..100 — match the original input's min/max.
@@ -770,29 +770,29 @@ export const LineItemsTable: React.FC<Props> = ({
                     <td className={`px-2 py-2 align-top ${dim}`}>
                       <div className="flex items-center gap-1 justify-end flex-wrap">
                         <button type="button" onClick={() => move(idx, -1)} aria-label="Move up"
-                          className="p-1 rounded hover:bg-neutral-100 dark:hover:bg-neutral-700 disabled:opacity-30">
+                          className="p-1 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-700 disabled:opacity-30">
                           <ArrowUp className="w-4 h-4" />
                         </button>
                         <button type="button" onClick={() => move(idx, 1)} aria-label="Move down"
-                          className="p-1 rounded hover:bg-neutral-100 dark:hover:bg-neutral-700 disabled:opacity-30">
+                          className="p-1 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-700 disabled:opacity-30">
                           <ArrowDown className="w-4 h-4" />
                         </button>
                         {!sub && (
                           <button type="button" onClick={() => addSubItem(idx)} aria-label="Add sub-item"
-                            className="p-1 rounded hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                            className="p-1 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-700"
                             title={t('crm.lineItems.addSubItem', 'Add sub-item') as string}>
                             <CornerDownRight className="w-4 h-4" />
                           </button>
                         )}
                         {onSaveAsPreset && !sub && (
                           <button type="button" onClick={() => onSaveAsPreset(li)} aria-label="Save as preset"
-                            className="p-1 rounded hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                            className="p-1 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-700"
                             title={t('crm.lineItems.saveAsPreset', 'Save as preset') as string}>
                             <SaveIcon className="w-4 h-4" />
                           </button>
                         )}
                         <button type="button" onClick={() => removeRow(idx)} aria-label="Remove"
-                          className="p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/30 text-red-600">
+                          className="p-1 rounded-sm hover:bg-red-50 dark:hover:bg-red-900/30 text-red-600">
                           <X className="w-4 h-4" />
                         </button>
                       </div>

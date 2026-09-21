@@ -202,9 +202,9 @@ export function DocumentVerificationStep<Result = DocumentAccessGrant>({
           {issuer?.companyName && <h2 className="text-xl font-bold">{issuer.companyName}</h2>}
         </div>
 
-        <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-200 dark:border-neutral-700 p-6">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-xs border border-neutral-200 dark:border-neutral-700 p-6">
           {documentLabel && (
-            <p className="text-xs font-mono inline-block mb-3 px-2 py-1 rounded bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300">
+            <p className="text-xs font-mono inline-block mb-3 px-2 py-1 rounded-sm bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300">
               {documentLabel}
             </p>
           )}

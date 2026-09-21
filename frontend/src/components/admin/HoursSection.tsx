@@ -433,7 +433,7 @@ export const HoursSection: React.FC<HoursSectionProps> = ({
           visible in compact mode so the customer-detail page can
           still trigger the on-demand billing action. */}
       {!isMonthly && unbilledCount > 0 && canBill && (
-        <div className="mb-4 flex items-center justify-between bg-blue-50 dark:bg-blue-900/20 rounded p-3">
+        <div className="mb-4 flex items-center justify-between bg-blue-50 dark:bg-blue-900/20 rounded-sm p-3">
           <span className="text-sm">
             {t('customers.hours.unbilledCount',
               '{{count}} unbilled entries totaling {{total}}',

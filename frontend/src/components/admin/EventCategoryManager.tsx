@@ -274,7 +274,7 @@ export const EventCategoryManager: React.FC<EventCategoryManagerProps> = ({ even
                   {/* Hero photo thumbnail */}
                   <button
                     onClick={() => setHeroPickerCategoryId(category.id)}
-                    className="flex-shrink-0 w-10 h-10 rounded border border-neutral-200 dark:border-neutral-700 overflow-hidden bg-neutral-100 dark:bg-neutral-700 hover:border-accent-dark transition-colors flex items-center justify-center"
+                    className="shrink-0 w-10 h-10 rounded-sm border border-neutral-200 dark:border-neutral-700 overflow-hidden bg-neutral-100 dark:bg-neutral-700 hover:border-accent-dark transition-colors flex items-center justify-center"
                     title={t('categories.setCoverPhoto')}
                   >
                     {heroPhoto ? (
@@ -291,7 +291,7 @@ export const EventCategoryManager: React.FC<EventCategoryManagerProps> = ({ even
                   </button>
                   <span className="text-sm text-neutral-700 dark:text-neutral-300 truncate">{category.name}</span>
                   {category.is_global && (
-                    <span className="flex-shrink-0 text-[10px] uppercase tracking-wide px-1.5 py-0.5 rounded bg-neutral-200 dark:bg-neutral-700 text-neutral-500 dark:text-neutral-400">
+                    <span className="shrink-0 text-[10px] uppercase tracking-wide px-1.5 py-0.5 rounded-sm bg-neutral-200 dark:bg-neutral-700 text-neutral-500 dark:text-neutral-400">
                       {t('categories.sharedBadge', 'Shared')}
                     </span>
                   )}
@@ -425,7 +425,7 @@ export const EventCategoryManager: React.FC<EventCategoryManagerProps> = ({ even
                             <Check className="w-4 h-4" />
                           </div>
                         )}
-                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2">
+                        <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/60 to-transparent p-2">
                           <p className="text-white text-xs truncate">{photo.filename}</p>
                         </div>
                       </div>

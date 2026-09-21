@@ -384,7 +384,7 @@ export const ArchivesPage: React.FC = () => {
       {/* Storage Warning */}
       <div className="mt-6 p-4 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 rounded-lg">
         <div className="flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0" />
+          <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0" />
           <div>
             <p className="text-sm font-medium text-amber-900 dark:text-amber-200">{t('archives.storageManagement')}</p>
             <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">

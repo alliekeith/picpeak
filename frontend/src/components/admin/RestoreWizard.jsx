@@ -513,7 +513,7 @@ export const RestoreWizard = ({ onVerifyIntegrity } = {}) => {
               ...prev,
               skipPreBackup: e.target.checked
             }))}
-            className="mt-1 h-4 w-4 text-primary focus:ring-primary border-neutral-300 dark:border-neutral-600 rounded bg-white dark:bg-neutral-700"
+            className="mt-1 h-4 w-4 text-primary focus:ring-primary border-neutral-300 dark:border-neutral-600 rounded-sm bg-white dark:bg-neutral-700"
           />
           <div>
             <p className="text-sm font-medium text-neutral-700 dark:text-neutral-300">{t('backup.restore.options.additionalOptions.skipPreBackup')}</p>
@@ -531,7 +531,7 @@ export const RestoreWizard = ({ onVerifyIntegrity } = {}) => {
               ...prev,
               force: e.target.checked
             }))}
-            className="mt-1 h-4 w-4 text-primary focus:ring-primary border-neutral-300 dark:border-neutral-600 rounded bg-white dark:bg-neutral-700"
+            className="mt-1 h-4 w-4 text-primary focus:ring-primary border-neutral-300 dark:border-neutral-600 rounded-sm bg-white dark:bg-neutral-700"
           />
           <div>
             <p className="text-sm font-medium text-neutral-700 dark:text-neutral-300">{t('backup.restore.options.additionalOptions.force')}</p>
@@ -702,7 +702,7 @@ export const RestoreWizard = ({ onVerifyIntegrity } = {}) => {
         {lastRunFailed && (
           <div className="bg-red-50 dark:bg-red-900/30 border border-red-300 dark:border-red-700 rounded-lg p-4">
             <div className="flex items-start gap-3">
-              <XCircle className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5" />
+              <XCircle className="h-5 w-5 text-red-500 shrink-0 mt-0.5" />
               <div className="flex-1">
                 <h4 className="text-sm font-semibold text-red-800 dark:text-red-200 mb-1">
                   {t('backup.restore.progress.errorTitle', 'Restore did not complete')}

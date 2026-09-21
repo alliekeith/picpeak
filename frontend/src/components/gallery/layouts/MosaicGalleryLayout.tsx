@@ -104,7 +104,7 @@ const MosaicPhoto: React.FC<MosaicPhotoProps> = ({
         checkboxTestId
         afterOverlay={((photo.like_count ?? 0) > 0 || likedLocal) ? (
           <div className={`absolute ${photo.type === 'collage' ? 'bottom-8' : 'bottom-2'} left-2 z-10`}>
-            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm" title="Liked">
+            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/90 backdrop-blur-xs" title="Liked">
               <Heart className="w-3.5 h-3.5 text-red-500" fill="currentColor" />
             </span>
           </div>
@@ -112,7 +112,7 @@ const MosaicPhoto: React.FC<MosaicPhotoProps> = ({
       >
         {photo.type === 'collage' && (
           <div className="absolute bottom-2 left-2">
-            <span className="px-2 py-1 bg-black/60 text-white text-xs rounded">
+            <span className="px-2 py-1 bg-black/60 text-white text-xs rounded-sm">
               Collage
             </span>
           </div>

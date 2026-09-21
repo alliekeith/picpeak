@@ -118,13 +118,13 @@ export const SentEmailsPanel: React.FC = () => {
                       <td className="px-3 py-2 break-all">{m.recipientEmail}</td>
                       <td className="px-3 py-2 font-mono text-xs">{m.emailType}</td>
                       <td className="px-3 py-2">
-                        <span className={`px-2 py-0.5 rounded text-xs font-medium ${statusClass(m.status)}`}>
+                        <span className={`px-2 py-0.5 rounded-sm text-xs font-medium ${statusClass(m.status)}`}>
                           {t(`email.sentEmails.status.${m.status}`, m.status)}
                         </span>
                         {m.status === 'failed' && m.errorMessage && (
                           <div className="mt-1 flex items-start gap-1 text-xs text-red-700 dark:text-red-400 max-w-xs">
-                            <AlertCircle className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" />
-                            <span className="break-words">{m.errorMessage}</span>
+                            <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+                            <span className="wrap-break-word">{m.errorMessage}</span>
                           </div>
                         )}
                         {m.status === 'pending' && m.retryCount > 0 && (

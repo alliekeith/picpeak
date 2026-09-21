@@ -50,7 +50,7 @@ export const ReceivedEmailsPanel: React.FC = () => {
         <tbody className="divide-y divide-neutral-100 dark:divide-neutral-800">
           {items.map((r) => (
             <tr key={r.id}>
-              <td className="px-4 py-2 text-neutral-700 dark:text-neutral-300 truncate max-w-[14rem]">{r.from_address || '—'}</td>
+              <td className="px-4 py-2 text-neutral-700 dark:text-neutral-300 truncate max-w-56">{r.from_address || '—'}</td>
               <td className="px-4 py-2 text-neutral-900 dark:text-neutral-100">
                 <span className="truncate inline-block max-w-[18rem] align-middle">{r.subject || '—'}</span>
                 {r.attachment_count > 0 && (
@@ -61,7 +61,7 @@ export const ReceivedEmailsPanel: React.FC = () => {
                 )}
               </td>
               <td className="px-4 py-2 text-neutral-500 dark:text-neutral-400 whitespace-nowrap">{r.received_at ? fmtDateTime(r.received_at) : '—'}</td>
-              <td className="px-4 py-2"><span className={`inline-block rounded px-2 py-0.5 text-xs font-medium ${statusClass(r.status)}`}>{t(`email.received.statusValue.${r.status}`, r.status)}</span></td>
+              <td className="px-4 py-2"><span className={`inline-block rounded-sm px-2 py-0.5 text-xs font-medium ${statusClass(r.status)}`}>{t(`email.received.statusValue.${r.status}`, r.status)}</span></td>
             </tr>
           ))}
         </tbody>

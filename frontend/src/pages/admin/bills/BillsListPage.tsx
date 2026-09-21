@@ -67,7 +67,7 @@ export const BillsListPage: React.FC = () => {
             <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{t('bills.title', 'Invoices')}</h1>
             {/* Beta badge — matches the Customers + Quotes pages. */}
             <span
-              className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
+              className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-sm font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
               title="Beta — feature is functional but still evolving"
             >
               {t('navigation.betaTag', 'Beta')}
@@ -157,7 +157,7 @@ export const BillsListPage: React.FC = () => {
                               cancellation documents instantly
                               recognisable. */}
                           {inv.kind === 'storno' && (
-                            <span className="ml-2 text-[10px] font-semibold px-1.5 py-0.5 rounded bg-purple-100 text-purple-800 uppercase tracking-wide">
+                            <span className="ml-2 text-[10px] font-semibold px-1.5 py-0.5 rounded-sm bg-purple-100 text-purple-800 uppercase tracking-wide">
                               {t('bills.kind.storno', 'Storno')}
                             </span>
                           )}
@@ -167,7 +167,7 @@ export const BillsListPage: React.FC = () => {
                               from Storno (blue vs purple) so the two
                               kinds are visually unambiguous. */}
                           {inv.kind !== 'storno' && inv.replacesInvoiceId && (
-                            <span className="ml-2 text-[10px] font-semibold px-1.5 py-0.5 rounded bg-blue-100 text-blue-800 uppercase tracking-wide">
+                            <span className="ml-2 text-[10px] font-semibold px-1.5 py-0.5 rounded-sm bg-blue-100 text-blue-800 uppercase tracking-wide">
                               {t('bills.kind.reissue', 'Reissue')}
                             </span>
                           )}
@@ -193,7 +193,7 @@ export const BillsListPage: React.FC = () => {
                             // Held invoice: 'scheduled' with no send date (incl. the
                             // monthly/manual accumulator) never auto-ships, so badge it
                             // honestly as "Draft" rather than "Scheduled".
-                            <span className="px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-200">
+                            <span className="px-2 py-0.5 rounded-sm text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-200">
                               {t('bills.status.draft', 'Draft')}
                             </span>
                           ) : (
@@ -294,7 +294,7 @@ const ImportHistoricalInvoiceModal: React.FC<ImportModalProps> = ({ onClose }) =
           <h2 className="text-lg font-semibold">
             {t('bills.importTitle', 'Import historical invoice')}
           </h2>
-          <button type="button" onClick={onClose} className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded">
+          <button type="button" onClick={onClose} className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-sm">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -311,7 +311,7 @@ const ImportHistoricalInvoiceModal: React.FC<ImportModalProps> = ({ onClose }) =
             </label>
             {customerId ? (
               <div className="flex items-center gap-2 text-sm">
-                <span className="px-2 py-1 rounded bg-neutral-100 dark:bg-neutral-800">{customerLabel}</span>
+                <span className="px-2 py-1 rounded-sm bg-neutral-100 dark:bg-neutral-800">{customerLabel}</span>
                 <button type="button" onClick={() => { setCustomerId(null); setCustomerLabel(''); }}
                   className="text-xs text-neutral-500 hover:underline">
                   {t('common.change', 'Change')}
@@ -323,7 +323,7 @@ const ImportHistoricalInvoiceModal: React.FC<ImportModalProps> = ({ onClose }) =
                   value={customerSearch}
                   onChange={(e) => setCustomerSearch(e.target.value)} />
                 {customerSearch.length >= 2 && customerOptions && (
-                  <ul className="mt-1 max-h-40 overflow-y-auto border border-neutral-200 dark:border-neutral-700 rounded">
+                  <ul className="mt-1 max-h-40 overflow-y-auto border border-neutral-200 dark:border-neutral-700 rounded-sm">
                     {(customerOptions as any[]).map((c) => (
                       <li key={c.id}>
                         <button type="button"

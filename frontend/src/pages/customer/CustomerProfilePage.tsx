@@ -243,7 +243,7 @@ export const CustomerProfilePage: React.FC = () => {
                 id="profile-salutation"
                 value={form.salutation || ''}
                 onChange={(e) => updateField('salutation', e.target.value)}
-                className="w-full rounded-lg border px-3 h-10 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+                className="w-full rounded-lg border px-3 h-10 text-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2"
                 style={{
                   backgroundColor: 'var(--color-surface)',
                   borderColor: 'var(--color-surface-border)',

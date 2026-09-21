@@ -50,10 +50,10 @@ const nextKey = () => {
   return `clause-${keyCounter}`;
 };
 
-const fieldClass = 'focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900 w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 '
+const fieldClass = 'focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900 w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 '
   + 'bg-white dark:bg-neutral-800 text-sm text-neutral-900 dark:text-neutral-100';
 const labelClass = 'block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1';
-const iconButton = 'focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900 p-1 rounded border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-200 '
+const iconButton = 'focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900 p-1 rounded-sm border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-200 '
   + 'disabled:opacity-40 hover:bg-neutral-50 dark:hover:bg-neutral-700';
 
 function libraryBodies(block: ContractBlock): LocaleText {
@@ -313,7 +313,7 @@ export const ContractTemplateEditorPage: React.FC = () => {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3 flex-wrap">
-        <Link to="/admin/clients/contracts/templates" className="p-1 rounded hover:bg-neutral-100 dark:hover:bg-neutral-800"
+        <Link to="/admin/clients/contracts/templates" className="p-1 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-800"
           aria-label={t('contracts.templates.backToTemplates', 'Back to templates') as string}>
           <ArrowLeft className="w-5 h-5" />
         </Link>
@@ -393,10 +393,10 @@ export const ContractTemplateEditorPage: React.FC = () => {
         )}
         <ol className="space-y-2">
           {items.map((item, index) => (
-            <li key={item.key} className="rounded border border-neutral-200 dark:border-neutral-700 p-2">
+            <li key={item.key} className="rounded-sm border border-neutral-200 dark:border-neutral-700 p-2">
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-xs tabular-nums text-neutral-500 dark:text-neutral-400 w-6">{index + 1}.</span>
-                <span className="text-[10px] uppercase tracking-wide px-1.5 py-0.5 rounded bg-neutral-200 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-200">
+                <span className="text-[10px] uppercase tracking-wide px-1.5 py-0.5 rounded-sm bg-neutral-200 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-200">
                   {item.kind === 'block' ? t('contracts.templates.clause', 'Clause') : t('contracts.templates.freeText', 'Free text')}
                 </span>
                 <span className="text-xs text-neutral-500 dark:text-neutral-400">{t(`contracts.sections.${item.section}`, item.section)}</span>

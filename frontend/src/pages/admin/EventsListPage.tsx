@@ -480,7 +480,7 @@ export const EventsListPage: React.FC = () => {
                     type="checkbox"
                     checked={selectedEvents.length === events.length && events.length > 0}
                     onChange={handleSelectAll}
-                    className="w-4 h-4 text-accent border-neutral-300 dark:border-neutral-600 rounded focus:ring-primary-500 dark:bg-neutral-700"
+                    className="w-4 h-4 text-accent border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-primary-500 dark:bg-neutral-700"
                   />
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
@@ -528,7 +528,7 @@ export const EventsListPage: React.FC = () => {
                           type="checkbox"
                           checked={selectedEvents.includes(event.id)}
                           onChange={() => handleSelectEvent(event.id)}
-                          className="w-4 h-4 text-accent border-neutral-300 dark:border-neutral-600 rounded focus:ring-primary-500 dark:bg-neutral-700"
+                          className="w-4 h-4 text-accent border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-primary-500 dark:bg-neutral-700"
                         />
                       </td>
                       <td className="px-6 py-4">

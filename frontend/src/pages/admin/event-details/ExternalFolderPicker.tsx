@@ -37,14 +37,14 @@ export const ExternalFolderPicker: React.FC<{ value: string; onChange: (p: strin
         {value && (
           <button
             type="button"
-            className="text-xs underline text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 flex-shrink-0"
+            className="text-xs underline text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 shrink-0"
             onClick={() => onChange('')}
           >
             {t('events.clearSelection', 'Clear')}
           </button>
         )}
       </div>
-      <div className="max-h-80 overflow-auto [color-scheme:light] dark:[color-scheme:dark]">
+      <div className="max-h-80 overflow-auto scheme-light dark:scheme-dark">
         <FolderTreeNode
           path=""
           name="/external-media"

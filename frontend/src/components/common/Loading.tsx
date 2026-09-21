@@ -32,7 +32,7 @@ export const Loading: React.FC<LoadingProps> = ({
 
   if (fullScreen) {
     return (
-      <div className="fixed inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="fixed inset-0 bg-white/80 backdrop-blur-xs flex items-center justify-center z-50">
         {content}
       </div>
     );
@@ -55,7 +55,7 @@ export const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({
   const baseStyles = 'skeleton';
   
   const typeStyles = {
-    text: 'h-4 w-full rounded',
+    text: 'h-4 w-full rounded-sm',
     card: 'h-32 w-full rounded-xl',
     image: 'aspect-square w-full rounded-lg',
   };

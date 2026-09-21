@@ -748,7 +748,7 @@ const LegendSwatch: React.FC<{ color: string; label: string; dashed?: boolean }>
   <div className="flex items-center gap-2">
     <span
       aria-hidden
-      className="inline-block w-4 h-3 rounded-sm"
+      className="inline-block w-4 h-3 rounded-xs"
       style={{
         backgroundColor: dashed ? 'transparent' : color,
         border: dashed ? `1.5px dashed ${color}` : `1px solid ${color}`,

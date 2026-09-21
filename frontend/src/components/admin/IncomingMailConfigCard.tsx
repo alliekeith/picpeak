@@ -216,7 +216,7 @@ export const IncomingMailConfigCard: React.FC = () => {
           >
             {t('email.incoming.poll', 'Check now')}
           </Button>
-          <Button variant="primary" onClick={() => save.mutate()} isLoading={save.isPending} leftIcon={<Save className="w-5 h-5" />} className="flex-1 min-w-[12rem]">
+          <Button variant="primary" onClick={() => save.mutate()} isLoading={save.isPending} leftIcon={<Save className="w-5 h-5" />} className="flex-1 min-w-48">
             {t('email.incoming.save', 'Save Incoming Mail Settings')}
           </Button>
         </div>

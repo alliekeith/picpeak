@@ -33,7 +33,7 @@ export const ColorPickerRow: React.FC<{
         type="color"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="h-10 w-20 rounded border border-neutral-300 dark:border-neutral-600 cursor-pointer"
+        className="h-10 w-20 rounded-sm border border-neutral-300 dark:border-neutral-600 cursor-pointer"
       />
       <Input
         value={value}

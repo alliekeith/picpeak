@@ -177,7 +177,7 @@ export const EventFeedbackPage: React.FC = () => {
               id="feedback-export-shape"
               value={exportShape}
               onChange={(e) => setExportShape(e.target.value as 'long' | 'pivot')}
-              className="text-sm px-2 py-1.5 rounded border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800"
+              className="text-sm px-2 py-1.5 rounded-sm border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800"
             >
               <option value="long">{t('feedback.exportShapeLong', 'Per-action (long)')}</option>
               <option value="pivot">{t('feedback.exportShapePivot', 'Per-guest (pivot)')}</option>
@@ -280,11 +280,11 @@ export const EventFeedbackPage: React.FC = () => {
                 <Card key={item.id} className="overflow-hidden">
                   <div className="p-4 flex items-start gap-4">
                     {item.photo_id && (
-                      <div className="w-16 h-16 overflow-hidden rounded">
+                      <div className="w-16 h-16 overflow-hidden rounded-sm">
                         <AdminAuthenticatedImage
                           src={`/admin/photos/${id}/thumbnail/${item.photo_id}`}
                           alt={item.filename || 'Photo'}
-                          className="w-16 h-16 object-cover rounded"
+                          className="w-16 h-16 object-cover rounded-sm"
                         />
                       </div>
                     )}

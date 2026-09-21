@@ -599,7 +599,7 @@ export const ContractEditorPage: React.FC = () => {
           ref={summaryRef}
           role="alert"
           tabIndex={-1}
-          className="mb-4 p-3 rounded-md border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950/30 text-sm text-red-900 dark:text-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+          className="mb-4 p-3 rounded-md border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950/30 text-sm text-red-900 dark:text-red-200 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-red-500"
         >
           <p className="font-medium">{savedStateSentence(saveError)}</p>
           {saveErrorDetail(saveError)}
@@ -865,7 +865,7 @@ export const ContractEditorPage: React.FC = () => {
               {blocksBySection[section].map((b) => (
                 <li
                   key={b.blockId}
-                  className="flex items-start gap-3 p-2 rounded border border-neutral-200 dark:border-neutral-700"
+                  className="flex items-start gap-3 p-2 rounded-sm border border-neutral-200 dark:border-neutral-700"
                 >
                   <input
                     type="checkbox"
@@ -877,7 +877,7 @@ export const ContractEditorPage: React.FC = () => {
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="font-medium text-sm">{b.name}</span>
                       {b.isSystem && (
-                        <span className="text-[10px] uppercase tracking-wide px-1.5 py-0.5 rounded bg-neutral-200 dark:bg-neutral-700">
+                        <span className="text-[10px] uppercase tracking-wide px-1.5 py-0.5 rounded-sm bg-neutral-200 dark:bg-neutral-700">
                           {t('contracts.editor.systemBadge', 'System')}
                         </span>
                       )}
@@ -889,12 +889,12 @@ export const ContractEditorPage: React.FC = () => {
                   <div className="flex flex-col gap-1">
                     <button
                       type="button"
-                      className="px-2 py-0.5 text-xs rounded border border-neutral-300 dark:border-neutral-600"
+                      className="px-2 py-0.5 text-xs rounded-sm border border-neutral-300 dark:border-neutral-600"
                       onClick={() => moveBlock(b.blockId, -1)}
                     >↑</button>
                     <button
                       type="button"
-                      className="px-2 py-0.5 text-xs rounded border border-neutral-300 dark:border-neutral-600"
+                      className="px-2 py-0.5 text-xs rounded-sm border border-neutral-300 dark:border-neutral-600"
                       onClick={() => moveBlock(b.blockId, 1)}
                     >↓</button>
                   </div>
@@ -924,7 +924,7 @@ export const ContractEditorPage: React.FC = () => {
           </p>
           <ul className="space-y-2">
             {(existing?.contract.textSections || []).map((s) => (
-              <li key={s.id} className="p-2 rounded border border-neutral-200 dark:border-neutral-700">
+              <li key={s.id} className="p-2 rounded-sm border border-neutral-200 dark:border-neutral-700">
                 <p className="text-sm font-medium">{s.heading || t(`contracts.sections.${s.section}`, s.section)}</p>
                 <p className="text-xs text-neutral-600 dark:text-neutral-400 whitespace-pre-line line-clamp-3">
                   {s.body[language as keyof typeof s.body] || s.body.en || s.body.de || ''}

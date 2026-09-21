@@ -137,7 +137,7 @@ export const WebhooksTab: React.FC = () => {
            admins know what flows to a webhook receiver before they wire
            one up to a third-party automation tool. */}
         <div className="rounded-lg border border-amber-300 bg-amber-50 dark:border-amber-700/50 dark:bg-amber-900/20 p-3 mb-4 flex items-start gap-2.5">
-          <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+          <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
           <p className="text-xs text-amber-900 dark:text-amber-200 leading-relaxed">
             {t(
               'settings.webhooks.piiNotice',
@@ -149,13 +149,13 @@ export const WebhooksTab: React.FC = () => {
         {justCreatedSecret && (
           <div className="rounded-lg border border-amber-300 bg-amber-50 dark:bg-amber-900/20 p-4 mb-4">
             <div className="flex items-start gap-3">
-              <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+              <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-amber-900 dark:text-amber-200 mb-1">
                   {t('settings.webhooks.copyNow', 'Copy this signing secret now — it will not be shown again.')}
                 </p>
                 <div className="flex items-center gap-2">
-                  <code className="block flex-1 min-w-0 px-3 py-2 bg-white dark:bg-neutral-900 border border-amber-300 dark:border-amber-700 rounded text-xs font-mono break-all">
+                  <code className="block flex-1 min-w-0 px-3 py-2 bg-white dark:bg-neutral-900 border border-amber-300 dark:border-amber-700 rounded-sm text-xs font-mono break-all">
                     {justCreatedSecret}
                   </code>
                   <Button
@@ -209,7 +209,7 @@ export const WebhooksTab: React.FC = () => {
                     type="checkbox"
                     checked={events.includes(e)}
                     onChange={() => toggleEvent(e)}
-                    className="w-4 h-4 text-primary-600 rounded focus:ring-primary-500"
+                    className="w-4 h-4 text-primary-600 rounded-sm focus:ring-primary-500"
                   />
                   <code className="text-xs">{e}</code>
                 </label>
@@ -236,7 +236,7 @@ export const WebhooksTab: React.FC = () => {
                   onChange={(e) => { setFilterText(e.target.value); setFilterError(null); }}
                   placeholder='{"data.event.event_type": "wedding"}'
                   rows={3}
-                  className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 dark:bg-neutral-800 rounded text-sm font-mono"
+                  className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 dark:bg-neutral-800 rounded-sm text-sm font-mono"
                 />
                 <p className="text-xs text-neutral-500 mt-1">
                   {t('settings.webhooks.filterHelp', 'Dot-path → expected value. All keys must match (AND). Use an array for "any of".')} <code>{'{"type": ["event.published", "event.archived"]}'}</code>
@@ -253,7 +253,7 @@ export const WebhooksTab: React.FC = () => {
                   onChange={(e) => setTemplate(e.target.value)}
                   placeholder={t('settings.webhooks.templatePlaceholder', 'New gallery: ${data.event.event_name} → ${data.event.share_url}')}
                   rows={3}
-                  className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 dark:bg-neutral-800 rounded text-sm font-mono"
+                  className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 dark:bg-neutral-800 rounded-sm text-sm font-mono"
                 />
                 <p className="text-xs text-neutral-500 mt-1">
                   {t('settings.webhooks.templateHelp', 'Replaces the default JSON envelope as the request body. ${dot.path} substitution from the payload only — no logic, no expressions.')}

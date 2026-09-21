@@ -247,7 +247,7 @@ export const ReminderTemplatesPage: React.FC = () => {
   return (
     <div>
       <div className="mb-4 flex items-center gap-3">
-        <Link to="/admin/settings/crm" className="p-2 -ml-2 rounded hover:bg-neutral-100 dark:hover:bg-neutral-700">
+        <Link to="/admin/settings/crm" className="p-2 -ml-2 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-700">
           <ArrowLeft className="w-4 h-4" />
         </Link>
         {/* Explicit neutral colours (not `text-theme` / `text-muted-theme`):
@@ -345,10 +345,10 @@ export const ReminderTemplatesPage: React.FC = () => {
                             {row.label}
                           </p>
                         </div>
-                        <div className="flex items-center gap-1.5 flex-shrink-0">
+                        <div className="flex items-center gap-1.5 shrink-0">
                           {!row.hasTemplate && !row.isDefault && (
                             <span
-                              className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
+                              className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-sm font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
                               title={t('reminderTemplates.usesDefaultTooltip',
                                 'No dedicated template yet — this event type falls back to the default. Edit + save here to create one.') as string}
                             >
@@ -405,7 +405,7 @@ export const ReminderTemplatesPage: React.FC = () => {
                         onClick={() => setEditingLang(lang.code)}
                         className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors flex items-center gap-1.5 ${
                           editingLang === lang.code
-                            ? 'bg-white dark:bg-neutral-800 text-accent-dark shadow-sm'
+                            ? 'bg-white dark:bg-neutral-800 text-accent-dark shadow-xs'
                             : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200'
                         }`}
                       >

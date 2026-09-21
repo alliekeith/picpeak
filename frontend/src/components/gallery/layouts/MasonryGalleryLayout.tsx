@@ -21,19 +21,19 @@ const FeedbackCountIndicators: React.FC<{ photo: Photo; withTitles?: boolean }> 
   return (
     <div className="absolute top-2 left-2 flex gap-1 z-10">
       {(photo.comment_count ?? 0) > 0 && (
-        <div className="bg-white/90 backdrop-blur-sm rounded-full px-2 py-1 flex items-center gap-1" title={withTitles ? `${photo.comment_count ?? 0} comments` : undefined}>
+        <div className="bg-white/90 backdrop-blur-xs rounded-full px-2 py-1 flex items-center gap-1" title={withTitles ? `${photo.comment_count ?? 0} comments` : undefined}>
           <MessageSquare className="w-3.5 h-3.5 text-accent" fill="currentColor" />
           <span className="text-xs font-medium text-neutral-700">{photo.comment_count ?? 0}</span>
         </div>
       )}
       {(photo.average_rating ?? 0) > 0 && (
-        <div className="bg-white/90 backdrop-blur-sm rounded-full px-2 py-1 flex items-center gap-1" title={withTitles ? `Rating: ${Number(photo.average_rating ?? 0).toFixed(1)}` : undefined}>
+        <div className="bg-white/90 backdrop-blur-xs rounded-full px-2 py-1 flex items-center gap-1" title={withTitles ? `Rating: ${Number(photo.average_rating ?? 0).toFixed(1)}` : undefined}>
           <Star className="w-3.5 h-3.5 text-yellow-500" fill="currentColor" />
           <span className="text-xs font-medium text-neutral-700">{Number(photo.average_rating ?? 0).toFixed(1)}</span>
         </div>
       )}
       {(photo.like_count ?? 0) > 0 && (
-        <div className="bg-white/90 backdrop-blur-sm rounded-full px-2 py-1 flex items-center gap-1" title={withTitles ? `${photo.like_count ?? 0} likes` : undefined}>
+        <div className="bg-white/90 backdrop-blur-xs rounded-full px-2 py-1 flex items-center gap-1" title={withTitles ? `${photo.like_count ?? 0} likes` : undefined}>
           <Heart className="w-3.5 h-3.5 text-red-500" fill="currentColor" />
           <span className="text-xs font-medium text-neutral-700">{photo.like_count ?? 0}</span>
         </div>
@@ -136,7 +136,7 @@ const MasonryPhoto: React.FC<MasonryPhotoProps> = ({
     >
       {photo.type === 'collage' && (
         <div className="absolute bottom-2 left-2">
-          <span className="px-2 py-1 bg-black/60 text-white text-xs rounded">
+          <span className="px-2 py-1 bg-black/60 text-white text-xs rounded-sm">
             Collage
           </span>
         </div>
@@ -440,7 +440,7 @@ export const MasonryGalleryLayout: React.FC<BaseGalleryLayoutProps> = ({
             >
               {photo.type === 'collage' && (
                 <div className="absolute bottom-2 left-2">
-                  <span className="px-2 py-1 bg-black/60 text-white text-xs rounded">Collage</span>
+                  <span className="px-2 py-1 bg-black/60 text-white text-xs rounded-sm">Collage</span>
                 </div>
               )}
             </PhotoCard>
@@ -506,7 +506,7 @@ export const MasonryGalleryLayout: React.FC<BaseGalleryLayoutProps> = ({
             >
               {photo.type === 'collage' && (
                 <div className="absolute bottom-2 left-2">
-                  <span className="px-2 py-1 bg-black/60 text-white text-xs rounded">Collage</span>
+                  <span className="px-2 py-1 bg-black/60 text-white text-xs rounded-sm">Collage</span>
                 </div>
               )}
             </PhotoCard>

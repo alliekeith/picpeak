@@ -122,13 +122,13 @@ export const CustomerResetPasswordPage: React.FC = () => {
             <div className="flex justify-center py-8"><Loading size="lg" /></div>
           ) : lookupError || !reset ? (
             <div className="flex items-start gap-2 text-sm">
-              <AlertCircle className="w-5 h-5 mt-0.5 flex-shrink-0 text-red-600" />
+              <AlertCircle className="w-5 h-5 mt-0.5 shrink-0 text-red-600" />
               <p className="text-theme">{lookupError}</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="flex items-start gap-2 p-3 rounded-lg" style={{ backgroundColor: 'var(--color-elevated, #f5f5f5)' }}>
-                <CheckCircle className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: 'var(--color-accent)' }} />
+                <CheckCircle className="w-5 h-5 mt-0.5 shrink-0" style={{ color: 'var(--color-accent)' }} />
                 <div className="text-sm text-theme">
                   {t('customer.resetPassword.forEmail', 'Setting a new password for ')}
                   <span className="font-medium">{reset.email}</span>
@@ -138,7 +138,7 @@ export const CustomerResetPasswordPage: React.FC = () => {
 
               {errors.form && (
                 <div role="alert" className="flex items-start gap-2 p-3 rounded-lg border" style={{ borderColor: 'var(--color-surface-border)' }}>
-                  <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0 text-red-600" />
+                  <AlertCircle className="w-4 h-4 mt-0.5 shrink-0 text-red-600" />
                   <span className="text-sm text-theme">{errors.form}</span>
                 </div>
               )}

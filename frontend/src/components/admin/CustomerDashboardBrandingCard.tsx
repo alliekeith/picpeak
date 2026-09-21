@@ -51,7 +51,7 @@ interface ToggleProps {
 const Toggle: React.FC<ToggleProps> = ({ enabled, onChange, label, hint, icon: Icon }) => (
   <label className="flex items-start justify-between gap-4 py-3 cursor-pointer">
     <div className="flex items-start gap-3 min-w-0">
-      <Icon className="w-5 h-5 mt-0.5 text-neutral-500 dark:text-neutral-400 flex-shrink-0" />
+      <Icon className="w-5 h-5 mt-0.5 text-neutral-500 dark:text-neutral-400 shrink-0" />
       <div className="min-w-0">
         <div className="text-sm font-medium text-neutral-900 dark:text-neutral-100">{label}</div>
         {hint && <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">{hint}</p>}
@@ -62,7 +62,7 @@ const Toggle: React.FC<ToggleProps> = ({ enabled, onChange, label, hint, icon: I
       role="switch"
       aria-checked={enabled}
       onClick={onChange}
-      className={`relative inline-flex h-6 w-11 flex-shrink-0 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${enabled ? '' : 'bg-neutral-300 dark:bg-neutral-600'}`}
+      className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 ${enabled ? '' : 'bg-neutral-300 dark:bg-neutral-600'}`}
       style={enabled ? { backgroundColor: 'var(--color-accent, #5C8762)' } : undefined}
     >
       <span
@@ -116,7 +116,7 @@ export const CustomerDashboardBrandingCard: React.FC = () => {
   return (
     <Card padding="md">
       <div className="flex items-start gap-3 mb-4">
-        <div className="w-10 h-10 rounded-lg bg-accent-soft text-on-accent-soft flex items-center justify-center flex-shrink-0">
+        <div className="w-10 h-10 rounded-lg bg-accent-soft text-on-accent-soft flex items-center justify-center shrink-0">
           <UserCog className="w-5 h-5" />
         </div>
         <div>

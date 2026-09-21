@@ -37,7 +37,7 @@ const PLACEHOLDERS = [
   'business_name', 'hours', 'days', 'hourly_rate', 'day_rate',
 ];
 
-const inputCls = 'w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900';
+const inputCls = 'w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900';
 // Native selects ignore vertical padding in Safari; a fixed height keeps them level with the inputs.
 const selectCls = `${inputCls} h-10`;
 const labelCls = 'block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1';
@@ -56,7 +56,7 @@ const errorText = (err: any): string => {
 const ArchivedBadge: React.FC = () => {
   const { t } = useTranslation();
   return (
-    <span className="ml-2 rounded bg-neutral-200 dark:bg-neutral-700 px-1.5 py-0.5 text-[11px] text-neutral-600 dark:text-neutral-300">
+    <span className="ml-2 rounded-sm bg-neutral-200 dark:bg-neutral-700 px-1.5 py-0.5 text-[11px] text-neutral-600 dark:text-neutral-300">
       {t('quotes.catalog.archived', 'Archived')}
     </span>
   );
@@ -412,7 +412,7 @@ const PackagesTab: React.FC = () => {
               const rateBased = preset?.priceMode === 'hour' || preset?.priceMode === 'day';
               return (
                 <div key={idx} className="flex flex-wrap items-center gap-2">
-                  <select aria-label={t('quotes.catalog.packageItem', 'Item') as string} className={`${selectCls} flex-1 min-w-[12rem]`} value={it.presetId}
+                  <select aria-label={t('quotes.catalog.packageItem', 'Item') as string} className={`${selectCls} flex-1 min-w-48`} value={it.presetId}
                     onChange={(e) => setItems(form.items.map((x, i) => (i === idx ? { ...x, presetId: Number(e.target.value), boundTo: '' } : x)))}>
                     {!preset && <option value={it.presetId}>#{it.presetId}</option>}
                     {presets.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
@@ -428,10 +428,10 @@ const PackagesTab: React.FC = () => {
                       <option value="days">{t('crm.lineItems.followsDays', 'Follows the quote days')}</option>
                     </select>
                   )}
-                  <button type="button" onClick={() => moveItem(idx, -1)} aria-label="Move up" className="p-1 rounded hover:bg-neutral-100 dark:hover:bg-neutral-700"><ArrowUp className="w-4 h-4" /></button>
-                  <button type="button" onClick={() => moveItem(idx, 1)} aria-label="Move down" className="p-1 rounded hover:bg-neutral-100 dark:hover:bg-neutral-700"><ArrowDown className="w-4 h-4" /></button>
+                  <button type="button" onClick={() => moveItem(idx, -1)} aria-label="Move up" className="p-1 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-700"><ArrowUp className="w-4 h-4" /></button>
+                  <button type="button" onClick={() => moveItem(idx, 1)} aria-label="Move down" className="p-1 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-700"><ArrowDown className="w-4 h-4" /></button>
                   <button type="button" onClick={() => setItems(form.items.filter((_, i) => i !== idx))} aria-label="Remove"
-                    className="p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/30 text-red-600"><X className="w-4 h-4" /></button>
+                    className="p-1 rounded-sm hover:bg-red-50 dark:hover:bg-red-900/30 text-red-600"><X className="w-4 h-4" /></button>
                 </div>
               );
             })}

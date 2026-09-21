@@ -147,7 +147,7 @@ const FallbackWarning: React.FC = () => {
   const { t } = useTranslation();
   return (
     <div className="mb-4 p-3 rounded-lg bg-amber-50 dark:bg-amber-900/30 text-sm text-amber-800 dark:text-amber-200 flex items-start gap-2">
-      <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+      <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
       <span>
         {t(
           'backup.coverage.fallbackInUse',
@@ -397,7 +397,7 @@ const CoverageBadge: React.FC<{ coverage: BackupPathCoverage }> = ({ coverage })
   };
   const { tone, label } = map[coverage];
   return (
-    <span className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${TONE_BG[tone]}`}>
+    <span className={`inline-block px-2 py-0.5 rounded-sm text-xs font-medium ${TONE_BG[tone]}`}>
       {label}
     </span>
   );

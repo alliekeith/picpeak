@@ -246,14 +246,14 @@ export const CategoryManager: React.FC = () => {
                   <div className="flex gap-1">
                     <button
                       onClick={() => startEdit(category)}
-                      className="p-1.5 text-neutral-600 dark:text-neutral-400 hover:text-accent dark:hover:text-accent hover:bg-accent-dark/15 rounded transition-colors"
+                      className="p-1.5 text-neutral-600 dark:text-neutral-400 hover:text-accent dark:hover:text-accent hover:bg-accent-dark/15 rounded-sm transition-colors"
                       title={t('common.edit')}
                     >
                       <Edit2 className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => handleDelete(category)}
-                      className="p-1.5 text-neutral-600 dark:text-neutral-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded transition-colors"
+                      className="p-1.5 text-neutral-600 dark:text-neutral-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-sm transition-colors"
                       title={t('common.delete')}
                       disabled={deleteMutation.isPending}
                     >

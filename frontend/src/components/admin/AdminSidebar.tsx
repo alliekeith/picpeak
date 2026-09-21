@@ -201,7 +201,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose, col
       // leave a visible step in the horizontal divider where the
       // sidebar meets the main column. Shadow uses the same neutral
       // border colors so it looks identical to the previous border.
-      className={`fixed inset-y-0 left-0 z-50 ${widthClasses} bg-white dark:bg-neutral-900 shadow-[1px_0_0_0_theme(colors.neutral.200)] dark:shadow-[1px_0_0_0_theme(colors.neutral.700)] transform transition-all duration-200 ease-in-out lg:relative lg:translate-x-0 lg:h-screen ${
+      className={`fixed inset-y-0 left-0 z-50 ${widthClasses} bg-white dark:bg-neutral-900 shadow-[1px_0_0_0_var(--color-neutral-200)] dark:shadow-[1px_0_0_0_var(--color-neutral-700)] transform transition-all duration-200 ease-in-out lg:relative lg:translate-x-0 lg:h-screen ${
         isOpen ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
@@ -212,7 +212,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose, col
             it sits in admins' muscle-memory zone for chrome controls.
             When collapsed on desktop the title hides and the row
             becomes an empty spacer (no rail-width fight). */}
-        <div className={`flex items-center h-16 border-b border-neutral-200 dark:border-neutral-700 flex-shrink-0 ${
+        <div className={`flex items-center h-16 border-b border-neutral-200 dark:border-neutral-700 shrink-0 ${
           collapsed ? 'lg:justify-center lg:px-2 px-6 justify-between' : 'justify-between px-6'
         }`}>
           <div className="flex items-center gap-2 min-w-0">
@@ -290,7 +290,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose, col
                     .tile-selected pattern used in the customizer. The accent
                     -dark token defaults to the legacy primary green so users
                     who haven't set CI colours yet see no migration regression. */}
-                <item.icon className={`w-5 h-5 flex-shrink-0 ${
+                <item.icon className={`w-5 h-5 shrink-0 ${
                   collapsed ? 'mr-3 lg:mr-0' : 'mr-3'
                 } ${
                   isActive ? 'text-white' : 'text-neutral-400'
@@ -308,7 +308,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose, col
             rail can always be re-expanded. Hidden on mobile (the X
             in the brand row already closes the sheet there). */}
         {onToggleCollapse && (
-          <div className={`hidden lg:flex flex-shrink-0 border-t border-neutral-200 dark:border-neutral-700 py-2 ${
+          <div className={`hidden lg:flex shrink-0 border-t border-neutral-200 dark:border-neutral-700 py-2 ${
             collapsed ? 'justify-center px-2' : 'justify-end px-4'
           }`}>
             <button
@@ -339,7 +339,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose, col
             have their own loading states so admins see "—" / a spinner
             instead of nothing during the actual data fetch. */}
         {(permissionsLoading || hasPermission('settings.view')) && (
-          <div className={`flex-shrink-0 ${collapsed ? 'lg:hidden' : ''}`}>
+          <div className={`shrink-0 ${collapsed ? 'lg:hidden' : ''}`}>
             {/* Version Info */}
             <VersionInfo />
 

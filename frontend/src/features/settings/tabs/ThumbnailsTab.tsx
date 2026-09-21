@@ -178,7 +178,7 @@ export const ThumbnailsTab: React.FC = () => {
       {!canEdit && (
         <Card padding="md" className="bg-amber-50 dark:bg-amber-900/30 border-amber-200 dark:border-amber-800">
           <div className="flex items-start gap-3 text-sm text-amber-800 dark:text-amber-200">
-            <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+            <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
             <p>{t('settings.thumbnails.readOnly', 'Only admins who can edit settings can change these values or regenerate the whole library.')}</p>
           </div>
         </Card>
@@ -324,7 +324,7 @@ export const ThumbnailsTab: React.FC = () => {
         <label className="flex items-start gap-3 cursor-pointer mb-4">
           <input
             type="checkbox"
-            className="mt-0.5 rounded border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
+            className="mt-0.5 rounded-sm border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
             checked={settings.lightbox_preview_enabled}
             onChange={(e) => handleChange('lightbox_preview_enabled', e.target.checked)}
           />
@@ -355,7 +355,7 @@ export const ThumbnailsTab: React.FC = () => {
       {/* Info Box */}
       <Card padding="md" className="bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800">
         <div className="flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+          <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
           <div className="text-sm text-blue-800 dark:text-blue-200">
             <p className="font-medium mb-1">{t('settings.thumbnails.infoTitle', 'About Thumbnails')}</p>
             <p>

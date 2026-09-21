@@ -86,7 +86,7 @@ export const GuestRecoveryModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-60 flex items-center justify-center p-4">
       <div className="fixed inset-0 bg-black bg-opacity-50" onClick={handleClose} />
       <div className="relative bg-surface rounded-lg shadow-xl max-w-md w-full p-6">
         <button
@@ -122,12 +122,12 @@ export const GuestRecoveryModal: React.FC = () => {
         </p>
 
         {info && step === 'code' && (
-          <div className="text-sm text-green-700 bg-green-50 dark:bg-green-900/20 rounded px-3 py-2 mb-3">
+          <div className="text-sm text-green-700 bg-green-50 dark:bg-green-900/20 rounded-sm px-3 py-2 mb-3">
             {info}
           </div>
         )}
         {error && (
-          <div className="text-sm text-red-600 bg-red-50 dark:bg-red-900/20 rounded px-3 py-2 mb-3">
+          <div className="text-sm text-red-600 bg-red-50 dark:bg-red-900/20 rounded-sm px-3 py-2 mb-3">
             {error}
           </div>
         )}

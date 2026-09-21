@@ -18,7 +18,7 @@ interface Props {
   webhooks?: WebhookOption[];
 }
 
-const field = 'w-full px-2 py-1.5 rounded border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 text-sm';
+const field = 'w-full px-2 py-1.5 rounded-sm border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 text-sm';
 const lbl = 'block text-xs text-neutral-500 dark:text-neutral-400 mb-1';
 
 const ACTIONS = [

@@ -224,7 +224,7 @@ export const PhotoComments: React.FC<PhotoCommentsProps> = ({
         <div className="space-y-3">
           {visibleComments.map((comment) => (
             <div key={comment.id} className="flex gap-3">
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 <div className="w-8 h-8 bg-black/10 rounded-full flex items-center justify-center">
                   <User className="w-4 h-4 text-muted-theme" />
                 </div>
@@ -243,7 +243,7 @@ export const PhotoComments: React.FC<PhotoCommentsProps> = ({
                     </span>
                   )}
                 </div>
-                <p className="text-sm text-muted-theme break-words">
+                <p className="text-sm text-muted-theme wrap-break-word">
                   {comment.comment_text}
                 </p>
               </div>
