@@ -72,7 +72,7 @@ const RecoveryCodesPanel: React.FC<RecoveryCodesPanelProps> = ({ codes, onConfir
           type="checkbox"
           checked={acknowledged}
           onChange={(e) => setAcknowledged(e.target.checked)}
-          className="mt-1 w-4 h-4 text-primary-600 rounded-sm focus:ring-primary-500"
+          className="mt-1 w-4 h-4 text-brand-600 rounded-sm focus:ring-brand-500"
         />
         <span className="text-sm text-neutral-700 dark:text-neutral-300">{t('settings.mfa.recoveryCodesAck')}</span>
       </label>

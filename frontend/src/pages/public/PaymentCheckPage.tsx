@@ -126,14 +126,14 @@ export const PaymentCheckPage: React.FC = () => {
     <div
       className="min-h-screen py-10 px-4"
       style={{
-        backgroundColor: 'var(--color-background, #fafafa)',
-        color: 'var(--color-text, #171717)',
+        backgroundColor: 'var(--background, #fafafa)',
+        color: 'var(--foreground, #171717)',
       }}
     >
       <div className="max-w-2xl mx-auto">
         <BrandingHeader issuer={issuer} />
         <h1 className="text-2xl font-bold mb-1">{t('paymentCheck.title', 'Confirm payment')}</h1>
-        <p className="text-sm mb-6" style={{ color: 'var(--color-muted-text, #737373)' }}>
+        <p className="text-sm mb-6" style={{ color: 'var(--muted-foreground, #737373)' }}>
           {t('paymentCheck.subtitle',
             'Select what was received for this invoice. The choice is logged and the appropriate reminder is queued automatically.')}
         </p>
@@ -191,13 +191,13 @@ export const PaymentCheckPage: React.FC = () => {
             label={t('paymentCheck.action.partial', 'Partially paid')}
             description={t('paymentCheck.action.partialHelp',
               'Log the amount received, then queue the customer reminder for the remainder.')}
-            icon={<Wallet className="w-5 h-5" style={{ color: 'var(--color-accent, #2563eb)' }} />}
+            icon={<Wallet className="w-5 h-5" style={{ color: 'var(--brand, #2563eb)' }} />}
             selected={action === 'partial'}
             onSelect={() => setAction('partial')}
           >
             {action === 'partial' && (
               <div className="mt-3">
-                <label className="block text-xs uppercase tracking-wider mb-1" style={{ color: 'var(--color-muted-text)' }}>
+                <label className="block text-xs uppercase tracking-wider mb-1" style={{ color: 'var(--muted-foreground)' }}>
                   {t('paymentCheck.action.partialAmount', 'Amount received')}
                 </label>
                 <div className="flex items-center gap-2">
@@ -211,13 +211,13 @@ export const PaymentCheckPage: React.FC = () => {
                     onChange={(e) => setPartialAmount(e.target.value)}
                     className="flex-1 px-3 py-2 rounded-md border text-sm"
                     style={{
-                      backgroundColor: 'var(--color-elevated, #ffffff)',
-                      borderColor: 'var(--color-surface-border, #e5e5e5)',
-                      color: 'var(--color-text)',
+                      backgroundColor: 'var(--muted, #ffffff)',
+                      borderColor: 'var(--border, #e5e5e5)',
+                      color: 'var(--foreground)',
                     }}
                   />
                 </div>
-                <p className="text-xs mt-1" style={{ color: 'var(--color-muted-text)' }}>
+                <p className="text-xs mt-1" style={{ color: 'var(--muted-foreground)' }}>
                   {t('paymentCheck.action.partialMax', 'Max: {{max}}', {
                     max: formatMoney(inv.outstandingMinor, inv.currency),
                   })}
@@ -247,8 +247,8 @@ export const PaymentCheckPage: React.FC = () => {
             disabled={!action || submitting}
             className="px-6 py-3 rounded-md font-medium disabled:opacity-50 transition-colors"
             style={{
-              backgroundColor: 'var(--color-accent-dark, #2563eb)',
-              color: 'var(--color-accent-fg, #ffffff)',
+              backgroundColor: 'var(--primary, #2563eb)',
+              color: 'var(--brand-foreground, #ffffff)',
             }}
           >
             {submitting ? t('paymentCheck.submitting', 'Recording…') : t('paymentCheck.submit', 'Confirm')}
@@ -278,7 +278,7 @@ const BrandingHeader: React.FC<{ issuer: PaymentCheckIssuer | null }> = ({ issue
         <h2 className="text-xl font-bold">{issuer.companyName}</h2>
       )}
       {issuer.website && (
-        <p className="text-sm" style={{ color: 'var(--color-muted-text, #737373)' }}>{issuer.website}</p>
+        <p className="text-sm" style={{ color: 'var(--muted-foreground, #737373)' }}>{issuer.website}</p>
       )}
     </header>
   );
@@ -288,8 +288,8 @@ const ThemedSurface: React.FC<{ className?: string; children: React.ReactNode }>
   <div
     className={`rounded-lg border ${className || ''}`}
     style={{
-      backgroundColor: 'var(--color-surface, #ffffff)',
-      borderColor: 'var(--color-surface-border, #e5e5e5)',
+      backgroundColor: 'var(--card, #ffffff)',
+      borderColor: 'var(--border, #e5e5e5)',
     }}
   >
     {children}
@@ -298,7 +298,7 @@ const ThemedSurface: React.FC<{ className?: string; children: React.ReactNode }>
 
 const Field: React.FC<{ label: string; value: React.ReactNode }> = ({ label, value }) => (
   <div>
-    <div className="text-xs uppercase" style={{ color: 'var(--color-muted-text, #737373)' }}>{label}</div>
+    <div className="text-xs uppercase" style={{ color: 'var(--muted-foreground, #737373)' }}>{label}</div>
     <div>{value}</div>
   </div>
 );
@@ -317,17 +317,17 @@ const ActionCard: React.FC<ActionCardProps> = ({ label, description, icon, selec
     onClick={onSelect}
     className="w-full text-left rounded-lg border p-4 transition-colors"
     style={{
-      borderColor: selected ? 'var(--color-accent, #2563eb)' : 'var(--color-surface-border, #e5e5e5)',
+      borderColor: selected ? 'var(--brand, #2563eb)' : 'var(--border, #e5e5e5)',
       backgroundColor: selected
-        ? 'color-mix(in srgb, var(--color-accent) 8%, var(--color-surface))'
-        : 'var(--color-surface, #ffffff)',
+        ? 'color-mix(in srgb, var(--brand) 8%, var(--card))'
+        : 'var(--card, #ffffff)',
     }}
   >
     <div className="flex items-start gap-3">
       <div className="shrink-0 mt-0.5">{icon}</div>
       <div className="flex-1">
         <div className="font-medium">{label}</div>
-        <div className="text-sm mt-1" style={{ color: 'var(--color-muted-text, #737373)' }}>{description}</div>
+        <div className="text-sm mt-1" style={{ color: 'var(--muted-foreground, #737373)' }}>{description}</div>
         {children}
       </div>
     </div>
@@ -338,15 +338,15 @@ const ErrorBox: React.FC<{ message: string }> = ({ message }) => (
   <div
     className="min-h-screen flex items-center justify-center p-6"
     style={{
-      backgroundColor: 'var(--color-background, #fafafa)',
-      color: 'var(--color-text)',
+      backgroundColor: 'var(--background, #fafafa)',
+      color: 'var(--foreground)',
     }}
   >
     <div
       className="max-w-md w-full rounded-lg border p-6"
       style={{
         borderColor: '#fecaca',
-        backgroundColor: 'color-mix(in srgb, #fee2e2 50%, var(--color-surface))',
+        backgroundColor: 'color-mix(in srgb, #fee2e2 50%, var(--card))',
       }}
     >
       <h1 className="text-lg font-bold mb-2" style={{ color: '#991b1b' }}>{message}</h1>
@@ -364,8 +364,8 @@ const ResultBox: React.FC<{
     <div
       className="min-h-screen flex items-center justify-center p-6"
       style={{
-        backgroundColor: 'var(--color-background, #fafafa)',
-        color: 'var(--color-text)',
+        backgroundColor: 'var(--background, #fafafa)',
+        color: 'var(--foreground)',
       }}
     >
       <div className="max-w-md w-full">
@@ -376,15 +376,15 @@ const ResultBox: React.FC<{
             // Theme-adaptive success card — a light-green tint on light surfaces,
             // a dark-green tint on dark ones (was a hardcoded light-green mix +
             // dark-green title that went unreadable in dark mode, #759).
-            borderColor: 'color-mix(in srgb, #16a34a 35%, var(--color-surface))',
-            backgroundColor: 'color-mix(in srgb, #16a34a 12%, var(--color-surface))',
+            borderColor: 'color-mix(in srgb, #16a34a 35%, var(--card))',
+            backgroundColor: 'color-mix(in srgb, #16a34a 12%, var(--card))',
           }}
         >
           <CheckCircle2 className="w-10 h-10 mb-3" style={{ color: '#16a34a' }} />
-          <h1 className="text-lg font-bold mb-1" style={{ color: 'var(--color-text)' }}>
+          <h1 className="text-lg font-bold mb-1" style={{ color: 'var(--foreground)' }}>
             {t('paymentCheck.result.title', 'Action recorded')}
           </h1>
-          <p className="text-sm" style={{ color: 'var(--color-text)' }}>
+          <p className="text-sm" style={{ color: 'var(--foreground)' }}>
             {result.applied === 'paid_full' && t('paymentCheck.result.paid',
               'Invoice {{n}} marked as paid in full.', { n: inv.invoiceNumber })}
             {result.applied === 'paid_with_skonto' && t('paymentCheck.result.paidSkonto',
@@ -400,7 +400,7 @@ const ResultBox: React.FC<{
                 'Recorded as unpaid. Customer reminder queued (level {{lvl}}).',
                 { lvl: result.reminderLevel || 1 })}
           </p>
-          <p className="text-xs mt-4" style={{ color: 'var(--color-muted-text, #737373)' }}>
+          <p className="text-xs mt-4" style={{ color: 'var(--muted-foreground, #737373)' }}>
             {t('paymentCheck.result.close', 'You can close this tab.')}
           </p>
         </div>

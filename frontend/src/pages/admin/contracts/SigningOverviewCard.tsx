@@ -214,7 +214,7 @@ export const SigningOverviewCard: React.FC<SigningOverviewCardProps> = ({ contra
               const actor = e.actorLabel || t(`contracts.signers.log.actor.${e.actorType}`, e.actorType);
               const signer = nameOf(e.signerId);
               return (
-                <li key={e.seq} className="flex items-start gap-3 text-sm border-l-2 border-accent-dark pl-3">
+                <li key={e.seq} className="flex items-start gap-3 text-sm border-l-2 border-primary pl-3">
                   <span className="font-mono text-xs text-neutral-500 dark:text-neutral-400 w-8 shrink-0">#{e.seq}</span>
                   <div className="flex-1 min-w-0">
                     <div className="font-medium text-neutral-900 dark:text-neutral-100">

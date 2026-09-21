@@ -136,7 +136,7 @@ export const CustomerLoginPage: React.FC = () => {
       // backgrounds (admin uses the dark: trigger; customer uses theme
       // tokens).
       className="customer-surface min-h-screen flex items-center justify-center p-4"
-      style={{ backgroundColor: 'var(--color-background, #fafafa)' }}
+      style={{ backgroundColor: 'var(--background, #fafafa)' }}
     >
       <div className="w-full max-w-md">
         {/* Logo / header — matches AdminLoginPage. The frame and size
@@ -167,10 +167,10 @@ export const CustomerLoginPage: React.FC = () => {
               />
             );
           })()}
-          <h1 className="text-3xl font-bold" style={{ color: 'var(--color-text, #171717)' }}>
+          <h1 className="text-3xl font-bold" style={{ color: 'var(--foreground, #171717)' }}>
             {t('customer.login.title', 'Customer login')}
           </h1>
-          <p className="mt-2" style={{ color: 'var(--color-text, #171717)', opacity: 0.7 }}>
+          <p className="mt-2" style={{ color: 'var(--foreground, #171717)', opacity: 0.7 }}>
             {t('customer.login.subtitle', 'Access all of your photo galleries in one place.')}
           </p>
         </div>
@@ -182,9 +182,9 @@ export const CustomerLoginPage: React.FC = () => {
                 role="alert"
                 className="flex items-start gap-2 p-3 rounded-lg border"
                 style={{
-                  borderColor: 'var(--color-surface-border, #e5e5e5)',
-                  color: 'var(--color-text)',
-                  backgroundColor: 'var(--color-elevated, rgba(220, 38, 38, 0.05))',
+                  borderColor: 'var(--border, #e5e5e5)',
+                  color: 'var(--foreground)',
+                  backgroundColor: 'var(--muted, rgba(220, 38, 38, 0.05))',
                 }}
               >
                 <AlertCircle className="w-4 h-4 mt-0.5 shrink-0 text-red-600" />
@@ -193,7 +193,7 @@ export const CustomerLoginPage: React.FC = () => {
             )}
 
             <div>
-              <label htmlFor="customer-email" className="block text-sm font-medium text-theme mb-1">
+              <label htmlFor="customer-email" className="block text-sm font-medium text-foreground mb-1">
                 {t('customer.login.email', 'Email')}
               </label>
               <Input
@@ -211,7 +211,7 @@ export const CustomerLoginPage: React.FC = () => {
             </div>
 
             <div>
-              <label htmlFor="customer-password" className="block text-sm font-medium text-theme mb-1">
+              <label htmlFor="customer-password" className="block text-sm font-medium text-foreground mb-1">
                 {t('customer.login.password', 'Password')}
               </label>
               <div className="relative">
@@ -266,17 +266,17 @@ export const CustomerLoginPage: React.FC = () => {
             who land here on purpose can navigate to /admin/login on
             their own. */}
         <div className="text-center mt-8">
-          <p className="text-sm" style={{ color: 'var(--color-text, #171717)', opacity: 0.7 }}>
+          <p className="text-sm" style={{ color: 'var(--foreground, #171717)', opacity: 0.7 }}>
             {t('customer.login.needHelp', 'Need help?')}{' '}
             <a
               href={`mailto:${settingsData?.branding_support_email || 'support@example.com'}`}
               className="hover:underline"
-              style={{ color: 'var(--color-primary, #5C8762)' }}
+              style={{ color: 'var(--primary, #5C8762)' }}
             >
               {settingsData?.branding_support_email || 'support@example.com'}
             </a>
           </p>
-          <PoweredBy className="text-xs mt-2" style={{ color: 'var(--color-text, #171717)', opacity: 0.5 }} />
+          <PoweredBy className="text-xs mt-2" style={{ color: 'var(--foreground, #171717)', opacity: 0.5 }} />
         </div>
       </div>
     </div>

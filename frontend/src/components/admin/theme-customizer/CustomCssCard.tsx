@@ -30,7 +30,7 @@ export const CustomCssCard: React.FC<CustomCssCardProps> = ({
         <button
           type="button"
           onClick={() => setShowCssInstructions(!showCssInstructions)}
-          className="flex items-center gap-2 text-sm text-accent hover:opacity-80 font-medium"
+          className="flex items-center gap-2 text-sm text-brand hover:opacity-80 font-medium"
         >
           <Info className="w-4 h-4" />
           {t('branding.cssInstructions.title', 'How to use Custom CSS')}
@@ -48,14 +48,14 @@ export const CustomCssCard: React.FC<CustomCssCardProps> = ({
                 {t('branding.cssInstructions.variablesDesc', 'Use these CSS variables to match your theme presets:')}
               </p>
               <code className="block bg-neutral-800 text-green-400 p-3 rounded-sm text-xs overflow-x-auto">
-{`--color-background: ${localTheme.backgroundColor || '#fafafa'};
---color-surface: ${localTheme.surfaceColor || '#ffffff'};
---color-elevated: ${localTheme.elevatedColor || '#f5f5f5'};
---color-surface-border: ${localTheme.surfaceBorderColor || '#e5e5e5'};
---color-text: ${localTheme.textColor || '#171717'};
---color-muted-text: ${localTheme.mutedTextColor || '#737373'};
---color-accent: ${localTheme.accentColor || '#22c55e'};
---color-accent-dark: ${localTheme.accentDarkColor || localTheme.primaryColor || '#5C8762'};
+{`--background: ${localTheme.backgroundColor || '#fafafa'};
+--card: ${localTheme.surfaceColor || '#ffffff'};
+--muted: ${localTheme.elevatedColor || '#f5f5f5'};
+--border: ${localTheme.surfaceBorderColor || '#e5e5e5'};
+--foreground: ${localTheme.textColor || '#171717'};
+--muted-foreground: ${localTheme.mutedTextColor || '#737373'};
+--brand: ${localTheme.accentColor || '#22c55e'};
+--primary: ${localTheme.accentDarkColor || localTheme.primaryColor || '#5C8762'};
 --font-family: ${localTheme.fontFamily || 'Inter, sans-serif'};
 --heading-font: ${localTheme.headingFontFamily || localTheme.fontFamily || 'Inter, sans-serif'};`}
               </code>

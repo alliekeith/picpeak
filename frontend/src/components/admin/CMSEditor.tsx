@@ -65,7 +65,7 @@ const MenuButton: React.FC<{
     disabled={disabled}
     className={`p-2 rounded hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors ${
       active
-        ? 'bg-accent-dark/15 text-accent-dark'
+        ? 'bg-primary/15 text-primary'
         : 'text-neutral-700 dark:text-neutral-200'
     } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
     title={title}
@@ -218,7 +218,7 @@ export const CMSEditor: React.FC<CMSEditorProps> = ({ content, onChange, onSave,
   const viewModeChipClass = (mode: typeof viewMode) =>
     `px-3 py-1.5 text-sm font-medium rounded transition-colors ${
       viewMode === mode
-        ? 'bg-accent-dark/15 text-accent-dark'
+        ? 'bg-primary/15 text-primary'
         : 'text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700'
     }`;
 
@@ -479,14 +479,14 @@ export const CMSEditor: React.FC<CMSEditorProps> = ({ content, onChange, onSave,
               rendered below it, the URL field ended up at the toolbar's
               original document position, under the pinned toolbar. */}
           {showLinkDialog && (
-            <div className="p-3 bg-accent-dark/15 border-b border-accent-dark/30 flex items-center gap-2">
+            <div className="p-3 bg-primary/15 border-b border-primary/30 flex items-center gap-2">
               <input
                 type="url"
                 value={linkUrl}
                 onChange={(e) => setLinkUrl(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && addLink()}
                 placeholder={t('cms.editor.linkUrlPlaceholder', 'Enter URL...')}
-                className="flex-1 px-3 py-1 border border-accent-dark/30 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 rounded-md focus:ring-2 focus:ring-primary-500"
+                className="flex-1 px-3 py-1 border border-primary/30 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 rounded-md focus:ring-2 focus:ring-brand-500"
                 autoFocus
               />
               <Button size="sm" onClick={addLink}>{t('cms.editor.addLink', 'Add Link')}</Button>

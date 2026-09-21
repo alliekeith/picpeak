@@ -108,7 +108,7 @@ export const CategoryManager: React.FC = () => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center py-8">
-        <Loader2 className="w-6 h-6 animate-spin text-accent" />
+        <Loader2 className="w-6 h-6 animate-spin text-brand" />
       </div>
     );
   }
@@ -139,7 +139,7 @@ export const CategoryManager: React.FC = () => {
             onKeyPress={(e) => e.key === 'Enter' && handleCreate()}
             placeholder={t('categories.categoryName')}
             maxLength={100}
-            className="flex-1 px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-md bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-primary-500"
+            className="flex-1 px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-md bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-brand-500"
             autoFocus
           />
           <Button
@@ -190,7 +190,7 @@ export const CategoryManager: React.FC = () => {
                       if (e.key === 'Escape') cancelEdit();
                     }}
                     maxLength={100}
-                    className="flex-1 px-3 py-1 border border-neutral-300 dark:border-neutral-600 rounded-md bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-primary-500"
+                    className="flex-1 px-3 py-1 border border-neutral-300 dark:border-neutral-600 rounded-md bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-brand-500"
                     autoFocus
                   />
                   <Button
@@ -222,7 +222,7 @@ export const CategoryManager: React.FC = () => {
                       <button
                         onClick={() => handleMove(index, -1)}
                         disabled={index === 0 || reorderMutation.isPending}
-                        className="p-0.5 text-neutral-400 dark:text-neutral-500 hover:text-accent-dark disabled:opacity-30 disabled:hover:text-neutral-400 transition-colors"
+                        className="p-0.5 text-neutral-400 dark:text-neutral-500 hover:text-primary disabled:opacity-30 disabled:hover:text-neutral-400 transition-colors"
                         title={t('categories.moveUp', 'Move up')}
                         aria-label={t('categories.moveUp', 'Move up')}
                       >
@@ -231,7 +231,7 @@ export const CategoryManager: React.FC = () => {
                       <button
                         onClick={() => handleMove(index, 1)}
                         disabled={index === ordered.length - 1 || reorderMutation.isPending}
-                        className="p-0.5 text-neutral-400 dark:text-neutral-500 hover:text-accent-dark disabled:opacity-30 disabled:hover:text-neutral-400 transition-colors"
+                        className="p-0.5 text-neutral-400 dark:text-neutral-500 hover:text-primary disabled:opacity-30 disabled:hover:text-neutral-400 transition-colors"
                         title={t('categories.moveDown', 'Move down')}
                         aria-label={t('categories.moveDown', 'Move down')}
                       >
@@ -246,7 +246,7 @@ export const CategoryManager: React.FC = () => {
                   <div className="flex gap-1">
                     <button
                       onClick={() => startEdit(category)}
-                      className="p-1.5 text-neutral-600 dark:text-neutral-400 hover:text-accent dark:hover:text-accent hover:bg-accent-dark/15 rounded-sm transition-colors"
+                      className="p-1.5 text-neutral-600 dark:text-neutral-400 hover:text-brand dark:hover:text-brand hover:bg-primary/15 rounded-sm transition-colors"
                       title={t('common.edit')}
                     >
                       <Edit2 className="w-4 h-4" />

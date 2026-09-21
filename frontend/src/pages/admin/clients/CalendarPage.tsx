@@ -621,8 +621,8 @@ export const CalendarPage: React.FC = () => {
             .btn-outline / .btn-primary tokens. FC ships its own
             .fc-button-primary class; we override the relevant rules
             and bind to the CSS variables the rest of the admin theme
-            uses (--color-accent-dark, --color-surface-border,
-            --color-muted-text). The "today" / disabled-edge buttons
+            uses (--primary, --border,
+            --muted-foreground). The "today" / disabled-edge buttons
             and the active state (selected view) all read from these
             vars so the calendar respects custom branding palettes. */}
       <style>{`
@@ -661,14 +661,14 @@ export const CalendarPage: React.FC = () => {
         }
         .fc .fc-button-primary:focus,
         .fc .fc-button-primary:focus-visible {
-          box-shadow: 0 0 0 2px var(--color-accent-dark);
+          box-shadow: 0 0 0 2px var(--primary);
           outline: none;
         }
         /* "today" / active view button — picpeak's primary fill. */
         .fc .fc-button-primary:not(:disabled).fc-button-active,
         .fc .fc-button-primary:not(:disabled):active {
-          background-color: var(--color-accent-dark);
-          border-color: var(--color-accent-dark);
+          background-color: var(--primary);
+          border-color: var(--primary);
           color: white;
         }
         .fc .fc-button-primary:disabled {

@@ -21,7 +21,7 @@ export interface ComposerInit {
   replyToReceivedId?: number;
 }
 
-const inputCls = 'flex-1 px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-950 text-sm text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-accent';
+const inputCls = 'flex-1 px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-950 text-sm text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-brand';
 
 export const MessageComposer: React.FC<{
   init: ComposerInit;
@@ -98,7 +98,7 @@ export const MessageComposer: React.FC<{
               suppressContentEditableWarning
               role="textbox"
               aria-multiline="true"
-              className="min-h-[240px] flex-1 overflow-y-auto rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-950 p-3 text-sm text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-accent"
+              className="min-h-[240px] flex-1 overflow-y-auto rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-950 p-3 text-sm text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-brand"
             />
           </div>
         </div>

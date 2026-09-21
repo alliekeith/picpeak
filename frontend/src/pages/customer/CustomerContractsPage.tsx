@@ -68,7 +68,7 @@ export const CustomerContractsPage: React.FC = () => {
       return (
         <div className="container py-8">
           <h1 className="text-2xl font-bold mb-2">{t('customer.contracts.title', 'Contracts')}</h1>
-          <p className="text-muted-theme">
+          <p className="text-muted-foreground">
             {t('customer.contracts.disabled',
               'This feature is currently disabled for your account.')}
           </p>
@@ -86,11 +86,11 @@ export const CustomerContractsPage: React.FC = () => {
   return (
     <div className="container py-6">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-theme flex items-center gap-2">
+        <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
           <ScrollText className="w-6 h-6" />
           {t('customer.contracts.title', 'Contracts')}
         </h1>
-        <p className="text-sm text-muted-theme mt-1">
+        <p className="text-sm text-muted-foreground mt-1">
           {t('customer.contracts.subtitle',
             'Every contract your photographer has sent you. Open the signing link on awaiting-signature contracts, or download the signed PDF once both parties have signed.')}
         </p>
@@ -98,7 +98,7 @@ export const CustomerContractsPage: React.FC = () => {
 
       {all.length === 0 ? (
         <Card padding="lg">
-          <p className="text-center text-muted-theme py-8">
+          <p className="text-center text-muted-foreground py-8">
             {t('customer.contracts.empty', 'No contracts yet.')}
           </p>
         </Card>
@@ -106,7 +106,7 @@ export const CustomerContractsPage: React.FC = () => {
         <>
           <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
             <div className="flex flex-wrap items-center gap-2">
-              <label className="text-xs text-muted-theme uppercase tracking-wider">
+              <label className="text-xs text-muted-foreground uppercase tracking-wider">
                 {t('customer.filter.label', 'Filter')}
               </label>
               <select
@@ -114,16 +114,16 @@ export const CustomerContractsPage: React.FC = () => {
                 onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
                 className="text-sm px-2 py-1 rounded-sm border"
                 style={{
-                  backgroundColor: 'var(--color-surface)',
-                  borderColor: 'var(--color-surface-border)',
-                  color: 'var(--color-text)',
+                  backgroundColor: 'var(--card)',
+                  borderColor: 'var(--border)',
+                  color: 'var(--foreground)',
                 }}
               >
                 {STATUS_OPTIONS.map((o) => (
                   <option key={o.value} value={o.value}>{t(o.key, o.fallback)}</option>
                 ))}
               </select>
-              <label className="text-xs text-muted-theme uppercase tracking-wider ml-2">
+              <label className="text-xs text-muted-foreground uppercase tracking-wider ml-2">
                 {t('customer.sort.label', 'Sort')}
               </label>
               <select
@@ -131,23 +131,23 @@ export const CustomerContractsPage: React.FC = () => {
                 onChange={(e) => setSort(e.target.value as SortKey)}
                 className="text-sm px-2 py-1 rounded-sm border"
                 style={{
-                  backgroundColor: 'var(--color-surface)',
-                  borderColor: 'var(--color-surface-border)',
-                  color: 'var(--color-text)',
+                  backgroundColor: 'var(--card)',
+                  borderColor: 'var(--border)',
+                  color: 'var(--foreground)',
                 }}
               >
                 <option value="newest">{t('customer.sort.newest', 'Newest first')}</option>
                 <option value="oldest">{t('customer.sort.oldest', 'Oldest first')}</option>
               </select>
             </div>
-            <div className="text-xs text-muted-theme">
+            <div className="text-xs text-muted-foreground">
               {visible.length === all.length
                 ? t('customer.filter.countAll', '{{count}} total', { count: all.length })
                 : t('customer.filter.countFiltered', '{{visible}} of {{total}}', { visible: visible.length, total: all.length })}
             </div>
           </div>
           <Card padding="none">
-            <ul className="divide-y" style={{ borderColor: 'var(--color-surface-border)' }}>
+            <ul className="divide-y" style={{ borderColor: 'var(--border)' }}>
               {visible.map((c) => <ContractRow key={c.id} c={c} />)}
             </ul>
           </Card>
@@ -223,9 +223,9 @@ const ContractRow: React.FC<{ c: CustomerContract }> = ({ c }) => {
           </span>
         </div>
         {c.title && (
-          <p className="text-sm text-theme mt-1">{c.title}</p>
+          <p className="text-sm text-foreground mt-1">{c.title}</p>
         )}
-        <p className="text-xs text-muted-theme mt-0.5">
+        <p className="text-xs text-muted-foreground mt-0.5">
           {t('customer.contracts.issued', 'Issued')}: {formatShortDate(c.issueDate)}
           {c.signedByCustomerAt && (
             <>
@@ -241,7 +241,7 @@ const ContractRow: React.FC<{ c: CustomerContract }> = ({ c }) => {
           )}
         </p>
         {c.status === 'declined' && (
-          <p className="text-xs text-muted-theme mt-0.5">
+          <p className="text-xs text-muted-foreground mt-0.5">
             {t('customer.contracts.declinedHint', 'This contract was declined and can no longer be signed.')}
           </p>
         )}
@@ -252,7 +252,7 @@ const ContractRow: React.FC<{ c: CustomerContract }> = ({ c }) => {
             type="button"
             onClick={handleSign}
             disabled={opening}
-            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-sm text-sm bg-accent-dark text-white hover:opacity-90 disabled:opacity-50"
+            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-sm text-sm bg-primary text-white hover:opacity-90 disabled:opacity-50"
           >
             <PenLine className="w-4 h-4" />
             {opening
@@ -266,9 +266,9 @@ const ContractRow: React.FC<{ c: CustomerContract }> = ({ c }) => {
             onClick={handleDownload}
             className="inline-flex items-center gap-1 px-3 py-1.5 rounded-sm text-sm border"
             style={{
-              backgroundColor: 'var(--color-surface)',
-              borderColor: 'var(--color-surface-border)',
-              color: 'var(--color-text)',
+              backgroundColor: 'var(--card)',
+              borderColor: 'var(--border)',
+              color: 'var(--foreground)',
             }}
           >
             <Download className="w-4 h-4" />

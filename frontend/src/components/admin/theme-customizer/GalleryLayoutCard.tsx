@@ -61,7 +61,7 @@ export const GalleryLayoutCard: React.FC<GalleryLayoutCardProps> = ({
               </span>
             </div>
             {localTheme.galleryLayout === layout && (
-              <Check className="absolute top-2 right-2 w-4 h-4 text-accent-dark" />
+              <Check className="absolute top-2 right-2 w-4 h-4 text-primary" />
             )}
           </button>
         ))}

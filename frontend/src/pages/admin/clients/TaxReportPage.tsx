@@ -25,7 +25,7 @@ import { Button, Card, Loading, LocalizedDateInput } from '../../../components/c
 // doesn't export a Select component, and the form pieces here are
 // small enough that a plain styled <select> is the right call.
 const selectClassName =
-  'w-full rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-primary-500';
+  'w-full rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-brand-500';
 import { taxReportService, type TaxReportParams } from '../../../services/taxReport.service';
 import { ledgerService, type ExportFormat } from '../../../services/ledger.service';
 import { useFeatureFlags } from '../../../contexts/FeatureFlagsContext';
@@ -212,7 +212,7 @@ export const TaxReportPage: React.FC = () => {
         {/* Filter card (left) */}
         <Card padding="md">
           <div className="flex items-start gap-3 mb-4">
-            <div className="w-10 h-10 rounded-lg bg-accent-soft text-on-accent-soft flex items-center justify-center shrink-0">
+            <div className="w-10 h-10 rounded-lg bg-brand-soft text-on-brand-soft flex items-center justify-center shrink-0">
               <Calculator className="w-5 h-5" />
             </div>
             <div className="min-w-0">
@@ -555,35 +555,35 @@ export const TaxReportPage: React.FC = () => {
                   <tr>
                     <th className="px-2 py-2 text-right font-medium w-10">#</th>
                     <th className="px-2 py-2 text-left font-medium whitespace-nowrap">
-                      <button type="button" onClick={() => toggleSort('type')} className="font-medium hover:text-primary-600 dark:hover:text-primary-400">
+                      <button type="button" onClick={() => toggleSort('type')} className="font-medium hover:text-brand-600 dark:hover:text-brand-400">
                         {t('taxReport.col.type', 'Type')}{sortIndicator('type')}
                       </button>
                     </th>
                     <th className="px-2 py-2 text-left font-medium whitespace-nowrap">
-                      <button type="button" onClick={() => toggleSort('date')} className="font-medium hover:text-primary-600 dark:hover:text-primary-400">
+                      <button type="button" onClick={() => toggleSort('date')} className="font-medium hover:text-brand-600 dark:hover:text-brand-400">
                         {t('taxReport.col.date', 'Date')}{sortIndicator('date')}
                       </button>
                     </th>
                     <th className="px-2 py-2 text-left font-medium whitespace-nowrap">{t('taxReport.col.reference', 'Reference')}</th>
                     <th className="px-2 py-2 text-left font-medium">
-                      <button type="button" onClick={() => toggleSort('party')} className="font-medium hover:text-primary-600 dark:hover:text-primary-400">
+                      <button type="button" onClick={() => toggleSort('party')} className="font-medium hover:text-brand-600 dark:hover:text-brand-400">
                         {t('taxReport.col.party', 'Customer / supplier')}{sortIndicator('party')}
                       </button>
                     </th>
                     <th className="px-2 py-2 text-left font-medium">{t('taxReport.col.event', 'Event')}</th>
                     <th className="px-2 py-2 text-left font-medium whitespace-nowrap">{t('taxReport.col.tax', 'Tax')}</th>
                     <th className="px-2 py-2 text-right font-medium whitespace-nowrap">
-                      <button type="button" onClick={() => toggleSort('net')} className="font-medium hover:text-primary-600 dark:hover:text-primary-400">
+                      <button type="button" onClick={() => toggleSort('net')} className="font-medium hover:text-brand-600 dark:hover:text-brand-400">
                         {t('taxReport.col.net', 'Net')}{sortIndicator('net')}
                       </button>
                     </th>
                     <th className="px-2 py-2 text-right font-medium whitespace-nowrap">
-                      <button type="button" onClick={() => toggleSort('vat')} className="font-medium hover:text-primary-600 dark:hover:text-primary-400">
+                      <button type="button" onClick={() => toggleSort('vat')} className="font-medium hover:text-brand-600 dark:hover:text-brand-400">
                         {t('taxReport.col.vat', 'VAT')}{sortIndicator('vat')}
                       </button>
                     </th>
                     <th className="px-2 py-2 text-right font-medium whitespace-nowrap">
-                      <button type="button" onClick={() => toggleSort('gross')} className="font-medium hover:text-primary-600 dark:hover:text-primary-400">
+                      <button type="button" onClick={() => toggleSort('gross')} className="font-medium hover:text-brand-600 dark:hover:text-brand-400">
                         {t('taxReport.col.total', 'Gross')}{sortIndicator('gross')}
                       </button>
                     </th>

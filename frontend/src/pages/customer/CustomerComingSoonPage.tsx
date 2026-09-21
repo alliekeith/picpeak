@@ -28,29 +28,29 @@ export const CustomerComingSoonPage: React.FC<CustomerComingSoonPageProps> = ({
       <div
         className="max-w-xl mx-auto rounded-xl border p-8 sm:p-12 text-center"
         style={{
-          backgroundColor: 'var(--color-surface)',
-          borderColor: 'var(--color-surface-border)',
+          backgroundColor: 'var(--card)',
+          borderColor: 'var(--border)',
         }}
       >
         <div
           className="mx-auto mb-4 w-14 h-14 rounded-full flex items-center justify-center"
-          style={{ backgroundColor: 'color-mix(in srgb, var(--color-accent) 14%, transparent)' }}
+          style={{ backgroundColor: 'color-mix(in srgb, var(--brand) 14%, transparent)' }}
         >
-          <Icon className="w-7 h-7" style={{ color: 'var(--color-accent)' }} />
+          <Icon className="w-7 h-7" style={{ color: 'var(--brand)' }} />
         </div>
         <span
           className="inline-block text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-sm font-semibold mb-3"
           style={{
-            backgroundColor: 'color-mix(in srgb, var(--color-accent) 14%, transparent)',
-            color: 'var(--color-accent)',
+            backgroundColor: 'color-mix(in srgb, var(--brand) 14%, transparent)',
+            color: 'var(--brand)',
           }}
         >
           {t('customer.comingSoon.tag', 'Coming soon')}
         </span>
-        <h1 className="text-2xl font-bold text-theme mb-2">
+        <h1 className="text-2xl font-bold text-foreground mb-2">
           {t(titleKey, titleFallback)}
         </h1>
-        <p className="text-sm text-muted-theme leading-relaxed">
+        <p className="text-sm text-muted-foreground leading-relaxed">
           {t(bodyKey, bodyFallback)}
         </p>
       </div>

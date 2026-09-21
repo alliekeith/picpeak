@@ -256,7 +256,7 @@ export const CarouselGalleryLayout: React.FC<BaseGalleryLayoutProps> = ({
                 onClick={() => setCurrentIndex(index)}
                 className={`relative shrink-0 w-20 h-20 rounded overflow-hidden transition-all ${
                   index === currentIndex 
-                    ? 'ring-2 ring-primary-600 scale-110' 
+                    ? 'ring-2 ring-brand-600 scale-110' 
                     : 'opacity-70 hover:opacity-100'
                 }`}
               >

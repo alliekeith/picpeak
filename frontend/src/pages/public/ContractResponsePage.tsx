@@ -71,7 +71,7 @@ const SECTION_LABELS: Record<ContractBlockSection, { en: string; de: string }> =
 };
 
 const CARD = 'bg-white dark:bg-neutral-800 rounded-xl shadow-xs border border-neutral-200 dark:border-neutral-700 p-6 md:p-8';
-const PRIMARY_BUTTON = 'px-4 py-2 rounded-md bg-accent-dark text-white text-sm hover:opacity-90 disabled:opacity-50';
+const PRIMARY_BUTTON = 'px-4 py-2 rounded-md bg-primary text-white text-sm hover:opacity-90 disabled:opacity-50';
 const SECONDARY_BUTTON = 'px-3 py-1.5 rounded-md border border-neutral-300 dark:border-neutral-600 text-sm inline-flex items-center gap-1 disabled:opacity-50 text-neutral-700 dark:text-neutral-300';
 const INPUT = 'w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 text-sm text-neutral-900 dark:text-neutral-100';
 
@@ -748,7 +748,7 @@ const SignForm: React.FC<SignFormProps> = ({
       aria-checked={mode === value}
       onClick={() => { setMode(value); setError(null); }}
       className={`px-3 py-1.5 text-sm rounded-md border ${mode === value
-        ? 'border-accent-dark bg-neutral-100 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 font-medium'
+        ? 'border-primary bg-neutral-100 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 font-medium'
         : 'border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300'}`}
     >
       {label}
@@ -1337,7 +1337,7 @@ export const ContractResponseView: React.FC<{ adapter: ContractDocumentAdapter }
                 <button
                   type="button"
                   onClick={handleDownload}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-accent-dark text-white text-sm hover:opacity-90"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-primary text-white text-sm hover:opacity-90"
                 >
                   <Download className="w-4 h-4" />
                   {c.hasSignedPdf
@@ -1471,7 +1471,7 @@ export const ContractResponseView: React.FC<{ adapter: ContractDocumentAdapter }
                   <button
                     type="submit"
                     disabled={signMutation.isPending}
-                    className="px-4 py-2 rounded-md bg-accent-dark text-white text-sm hover:opacity-90 disabled:opacity-50"
+                    className="px-4 py-2 rounded-md bg-primary text-white text-sm hover:opacity-90 disabled:opacity-50"
                   >
                     {t('publicContract.submit', 'Sign contract')}
                   </button>

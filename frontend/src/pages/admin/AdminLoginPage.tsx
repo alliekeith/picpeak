@@ -230,7 +230,7 @@ export const AdminLoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: 'var(--color-background, #fafafa)' }}>
+    <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: 'var(--background, #fafafa)' }}>
       <div className="w-full max-w-md">
         {/* Logo/Header — frame visibility and size are admin-controllable
             via Branding → "Login pages logo" settings. Both knobs apply
@@ -258,8 +258,8 @@ export const AdminLoginPage: React.FC = () => {
               />
             );
           })()}
-          <h1 className="text-3xl font-bold" style={{ color: 'var(--color-text, #171717)' }}>{t('adminLogin.title')}</h1>
-          <p className="mt-2" style={{ color: 'var(--color-text, #171717)', opacity: 0.7 }}>{t('adminLogin.subtitle')}</p>
+          <h1 className="text-3xl font-bold" style={{ color: 'var(--foreground, #171717)' }}>{t('adminLogin.title')}</h1>
+          <p className="mt-2" style={{ color: 'var(--foreground, #171717)', opacity: 0.7 }}>{t('adminLogin.subtitle')}</p>
         </div>
 
         {/* Login Form */}
@@ -349,7 +349,7 @@ export const AdminLoginPage: React.FC = () => {
                   type="checkbox"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className="w-4 h-4 text-accent border-neutral-300 rounded-sm focus:ring-primary-500"
+                  className="w-4 h-4 text-brand border-neutral-300 rounded-sm focus:ring-brand-500"
                 />
                 <span className="ml-2 text-sm text-neutral-700">{t('adminLogin.rememberMe')}</span>
               </label>
@@ -404,13 +404,13 @@ export const AdminLoginPage: React.FC = () => {
           ) : (
           <form onSubmit={handleMfaSubmit} className="space-y-6">
             <div className="text-center">
-              <div className="mx-auto mb-3 w-12 h-12 rounded-full flex items-center justify-center bg-primary-50 dark:bg-primary-900/30">
-                <ShieldCheck className="w-6 h-6" style={{ color: 'var(--color-primary, #5C8762)' }} />
+              <div className="mx-auto mb-3 w-12 h-12 rounded-full flex items-center justify-center bg-brand-50 dark:bg-brand-900/30">
+                <ShieldCheck className="w-6 h-6" style={{ color: 'var(--primary, #5C8762)' }} />
               </div>
-              <h2 className="text-lg font-semibold" style={{ color: 'var(--color-text, #171717)' }}>
+              <h2 className="text-lg font-semibold" style={{ color: 'var(--foreground, #171717)' }}>
                 {t('adminLogin.mfa.title')}
               </h2>
-              <p className="mt-1 text-sm" style={{ color: 'var(--color-text, #171717)', opacity: 0.7 }}>
+              <p className="mt-1 text-sm" style={{ color: 'var(--foreground, #171717)', opacity: 0.7 }}>
                 {useRecoveryCode ? t('adminLogin.mfa.recoverySubtitle') : t('adminLogin.mfa.subtitle')}
               </p>
             </div>
@@ -469,7 +469,7 @@ export const AdminLoginPage: React.FC = () => {
                   setMfaError(null);
                 }}
                 className="hover:underline"
-                style={{ color: 'var(--color-primary, #5C8762)' }}
+                style={{ color: 'var(--primary, #5C8762)' }}
               >
                 {useRecoveryCode ? t('adminLogin.mfa.useAuthenticator') : t('adminLogin.mfa.useRecoveryCode')}
               </button>
@@ -480,17 +480,17 @@ export const AdminLoginPage: React.FC = () => {
 
         {/* Footer */}
         <div className="text-center mt-8">
-          <p className="text-sm" style={{ color: 'var(--color-text, #171717)', opacity: 0.7 }}>
+          <p className="text-sm" style={{ color: 'var(--foreground, #171717)', opacity: 0.7 }}>
             {t('adminLogin.needHelp')}{' '}
             <a 
               href={`mailto:${settingsData?.branding_support_email || 'support@example.com'}`} 
               className="hover:underline"
-              style={{ color: 'var(--color-primary, #5C8762)' }}
+              style={{ color: 'var(--primary, #5C8762)' }}
             >
               {settingsData?.branding_support_email || 'support@example.com'}
             </a>
           </p>
-          <PoweredBy className="text-xs mt-2" style={{ color: 'var(--color-text, #171717)', opacity: 0.5 }} />
+          <PoweredBy className="text-xs mt-2" style={{ color: 'var(--foreground, #171717)', opacity: 0.5 }} />
         </div>
 
         {/* Development Hint */}

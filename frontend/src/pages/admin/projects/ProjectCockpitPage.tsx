@@ -421,7 +421,7 @@ export const ProjectCockpitPage: React.FC = () => {
                       {item.amount && <span className="text-xs font-medium text-neutral-700 dark:text-neutral-300">{item.amount}</span>}
                       {item.kind === 'email' && item.emailId != null && canActOnEmail(item) && (
                         <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
-                          <button onClick={() => openPreview(item.emailId as number)} className="inline-flex items-center gap-1 text-xs text-primary-600 hover:underline">
+                          <button onClick={() => openPreview(item.emailId as number)} className="inline-flex items-center gap-1 text-xs text-brand-600 hover:underline">
                             <Eye className="w-3 h-3" />{t('projects.email.preview', 'Preview')}
                           </button>
                           {item.reRendered && (

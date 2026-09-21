@@ -250,8 +250,8 @@ export const ReminderTemplatesPage: React.FC = () => {
         <Link to="/admin/settings/crm" className="p-2 -ml-2 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-700">
           <ArrowLeft className="w-4 h-4" />
         </Link>
-        {/* Explicit neutral colours (not `text-theme` / `text-muted-theme`):
-            those resolve to the gallery branding theme's --color-text, which
+        {/* Explicit neutral colours (not `text-foreground` / `text-muted-foreground`):
+            those resolve to the gallery branding theme's --foreground, which
             is applied globally on <html> and renders near-white inside the
             light admin chrome (QA S13). */}
         <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
@@ -405,7 +405,7 @@ export const ReminderTemplatesPage: React.FC = () => {
                         onClick={() => setEditingLang(lang.code)}
                         className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors flex items-center gap-1.5 ${
                           editingLang === lang.code
-                            ? 'bg-white dark:bg-neutral-800 text-accent-dark shadow-xs'
+                            ? 'bg-white dark:bg-neutral-800 text-primary shadow-xs'
                             : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200'
                         }`}
                       >

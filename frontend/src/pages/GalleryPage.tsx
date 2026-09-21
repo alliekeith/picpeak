@@ -358,7 +358,7 @@ export const GalleryPage: React.FC = () => {
   // Show expired state
   if (galleryInfo?.is_expired) {
     return (
-      <div className="min-h-screen" style={{ backgroundColor: 'var(--color-background, #fafafa)' }}>
+      <div className="min-h-screen" style={{ backgroundColor: 'var(--background, #fafafa)' }}>
         <div className="min-h-screen flex flex-col">
           {/* Logo at top */}
           {settingsData?.branding_logo_url && (
@@ -464,10 +464,10 @@ export const GalleryPage: React.FC = () => {
     // gallery cannot spin.
     return (
       <div className="min-h-screen flex items-center justify-center p-4"
-        style={{ backgroundColor: 'var(--color-background, #fafafa)' }}>
+        style={{ backgroundColor: 'var(--background, #fafafa)' }}>
         <Card className="w-full max-w-md">
           <CardContent className="p-6 text-center">
-            <AlertCircle className="w-10 h-10 mx-auto mb-3 text-muted-theme" />
+            <AlertCircle className="w-10 h-10 mx-auto mb-3 text-muted-foreground" />
             <p className="text-base mb-4">
               {loginError || t('gallery.failedToLoad', 'Failed to load gallery')}
             </p>
@@ -487,7 +487,7 @@ export const GalleryPage: React.FC = () => {
 
   // Show login form
   return (
-    <div className="min-h-screen" style={{ backgroundColor: 'var(--color-background, #fafafa)' }}>
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--background, #fafafa)' }}>
       <div className="min-h-screen flex items-center justify-center p-4">
         <div className="w-full max-w-lg">
           {/* Logo/Header. The logo can be hidden per gallery (#894). */}
@@ -502,7 +502,7 @@ export const GalleryPage: React.FC = () => {
                 className="h-12 sm:h-16 lg:h-20 w-auto object-contain mx-auto mb-3 sm:mb-4"
               />
             )}
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 px-2" style={{ color: 'var(--color-primary, #5C8762)' }}>
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 px-2" style={{ color: 'var(--primary, #5C8762)' }}>
               {galleryInfo?.event_name}
             </h1>
           </div>

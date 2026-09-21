@@ -219,7 +219,7 @@ export const CustomerAccountPicker: React.FC<Props> = ({ value, onChange, disabl
         <button
           type="button"
           onClick={() => { setIsOpen(false); setIsCreating(true); }}
-          className="mt-2 inline-flex items-center gap-1 text-sm text-primary-600 dark:text-primary-400 hover:underline"
+          className="mt-2 inline-flex items-center gap-1 text-sm text-brand-600 dark:text-brand-400 hover:underline"
         >
           {t('customers.create.openLink', '+ Create new customer')}
         </button>

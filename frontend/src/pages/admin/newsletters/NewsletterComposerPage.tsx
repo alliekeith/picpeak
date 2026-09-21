@@ -300,7 +300,7 @@ export const NewsletterComposerPage: React.FC = () => {
                 type="button"
                 onClick={() => setShowCss((v) => !v)}
                 className="text-sm hover:underline"
-                style={{ color: 'var(--color-accent)' }}
+                style={{ color: 'var(--brand)' }}
               >
                 {showCss
                   ? t('newsletters.hideCss', 'Hide custom CSS')

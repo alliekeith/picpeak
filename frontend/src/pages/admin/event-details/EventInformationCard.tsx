@@ -119,7 +119,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
             <textarea
               value={editForm.welcome_message}
               onChange={(e) => setEditForm(prev => ({ ...prev, welcome_message: e.target.value }))}
-              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-accent-dark"
+              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
               rows={3}
               placeholder={t('events.welcomeMessage')}
             />
@@ -200,7 +200,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
             <label className={`flex items-start gap-2 cursor-pointer ${editForm.hero_photo_id ? '' : 'opacity-60 cursor-not-allowed'}`}>
               <input
                 type="checkbox"
-                className="mt-0.5 rounded-sm border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
+                className="mt-0.5 rounded-sm border-neutral-300 dark:border-neutral-600 text-brand focus:ring-brand-500"
                 checked={editForm.og_image_share_enabled === true}
                 disabled={!editForm.hero_photo_id}
                 onChange={(e) => setEditForm(prev => ({ ...prev, og_image_share_enabled: e.target.checked }))}
@@ -245,7 +245,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
             <label className="flex items-start gap-2">
               <input
                 type="checkbox"
-                className="mt-1 w-4 h-4 text-accent border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-primary-500"
+                className="mt-1 w-4 h-4 text-brand border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-brand-500"
                 checked={editForm.require_password}
                 onChange={(e) => {
                   const checked = e.target.checked;
@@ -340,7 +340,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                     : ''
                 }));
               }}
-              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-accent-dark"
+              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
             >
               <option value="managed">{t('events.sourceModeManaged', 'Managed (upload to PicPeak)')}</option>
               <option value="reference">{t('events.sourceModeReference', 'Reference external folder')}</option>
@@ -365,7 +365,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
               <label className={`flex items-start gap-2 mt-3 ${canEnableWatch || editForm.external_watch ? 'cursor-pointer' : 'opacity-60 cursor-not-allowed'}`}>
                 <input
                   type="checkbox"
-                  className="mt-0.5 rounded-sm border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
+                  className="mt-0.5 rounded-sm border-neutral-300 dark:border-neutral-600 text-brand focus:ring-brand-500"
                   checked={editForm.external_watch === true}
                   disabled={!canEnableWatch && !editForm.external_watch}
                   onChange={(e) => setEditForm(prev => ({ ...prev, external_watch: e.target.checked }))}
@@ -403,7 +403,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                 // aria-valuemax="0", and an out-of-range value only fails at
                 // INSERT.
                 max={2147483647}
-                className="w-24 px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-accent-dark"
+                className="w-24 px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
               />
               <span className="text-xs text-neutral-500 dark:text-neutral-400">
                 {t('events.photoCapHelp', 'Maximum number of photos allowed. 0 = unlimited')}
@@ -419,7 +419,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
             <select
               value={editForm.default_photo_sort}
               onChange={(e) => setEditForm(prev => ({ ...prev, default_photo_sort: e.target.value }))}
-              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-accent-dark"
+              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
             >
               <option value="upload_date_desc">{t('photoSort.uploadDateNewest', 'Upload Date (Newest First)')}</option>
               <option value="upload_date_asc">{t('photoSort.uploadDateOldest', 'Upload Date (Oldest First)')}</option>
@@ -436,7 +436,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                 type="checkbox"
                 checked={editForm.allow_user_uploads}
                 onChange={(e) => setEditForm(prev => ({ ...prev, allow_user_uploads: e.target.checked }))}
-                className="w-4 h-4 text-accent border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-primary-500"
+                className="w-4 h-4 text-brand border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-brand-500"
               />
               <span className="ml-2 text-sm text-neutral-700 dark:text-neutral-300">{t('events.allowUserUploads')}</span>
             </label>
@@ -456,7 +456,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                   ...prev,
                   upload_category_id: e.target.value ? parseInt(e.target.value) : null
                 }))}
-                className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-accent-dark"
+                className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
               >
                 <option value="">{t('events.selectCategory')}</option>
                 {categories?.map(category => (
@@ -479,7 +479,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                   type="checkbox"
                   checked={editForm.reveal_mode}
                   onChange={(e) => setEditForm(prev => ({ ...prev, reveal_mode: e.target.checked }))}
-                  className="w-4 h-4 text-accent border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-primary-500"
+                  className="w-4 h-4 text-brand border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-brand-500"
                 />
                 <span className="ml-2 text-sm text-neutral-700 dark:text-neutral-300">
                   {t('events.revealMode', 'Reveal mode (hide gallery until reveal)')}
@@ -497,7 +497,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                     type="datetime-local"
                     value={editForm.reveal_at}
                     onChange={(e) => setEditForm(prev => ({ ...prev, reveal_at: e.target.value }))}
-                    className="px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-primary-500"
+                    className="px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-brand-500"
                   />
                   <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
                     {t('events.revealAtHelp', 'Leave empty to reveal manually with the "Reveal now" button.')}
@@ -533,7 +533,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                     value={mode}
                     checked={editForm.promo_mode === mode}
                     onChange={() => setEditForm(prev => ({ ...prev, promo_mode: mode }))}
-                    className="w-4 h-4 text-accent border-neutral-300 dark:border-neutral-600 focus:ring-primary-500"
+                    className="w-4 h-4 text-brand border-neutral-300 dark:border-neutral-600 focus:ring-brand-500"
                   />
                   <span className="ml-2 text-sm text-neutral-700 dark:text-neutral-300">
                     {t(`events.promoBanner.mode_${mode}`, mode === 'inherit' ? 'Inherit global default' : mode === 'custom' ? 'Custom override for this event' : 'Off (hide for this event)')}
@@ -548,14 +548,14 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                   onChange={(e) => setEditForm(prev => ({ ...prev, promo_markdown: e.target.value }))}
                   rows={5}
                   placeholder={t('events.promoBanner.placeholder', 'Markdown content (e.g. **Special offer:** [book your next session](https://example.com))')}
-                  className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-accent-dark font-mono text-sm"
+                  className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary font-mono text-sm"
                 />
                 {editForm.promo_markdown.trim() && (
                   <div className="border border-neutral-200 dark:border-neutral-700 rounded-lg p-3 bg-neutral-50 dark:bg-neutral-900">
                     <p className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-2">
                       {t('events.promoBanner.preview', 'Preview')}
                     </p>
-                    <MarkdownContent source={editForm.promo_markdown} className="prose prose-sm dark:prose-invert max-w-none text-sm text-neutral-800 dark:text-neutral-200 prose-a:text-primary-600 dark:prose-a:text-primary-400" />
+                    <MarkdownContent source={editForm.promo_markdown} className="prose prose-sm dark:prose-invert max-w-none text-sm text-neutral-800 dark:text-neutral-200 prose-a:text-brand-600 dark:prose-a:text-brand-400" />
                   </div>
                 )}
               </div>
@@ -581,7 +581,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                     value={mode}
                     checked={editForm.info_mode === mode}
                     onChange={() => setEditForm(prev => ({ ...prev, info_mode: mode }))}
-                    className="w-4 h-4 text-accent border-neutral-300 dark:border-neutral-600 focus:ring-primary-500"
+                    className="w-4 h-4 text-brand border-neutral-300 dark:border-neutral-600 focus:ring-brand-500"
                   />
                   <span className="ml-2 text-sm text-neutral-700 dark:text-neutral-300">
                     {t(`events.infoBanner.mode_${mode}`, mode === 'inherit' ? 'Inherit global default' : mode === 'custom' ? 'Custom override for this event' : 'Off (hide for this event)')}
@@ -596,14 +596,14 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                   onChange={(e) => setEditForm(prev => ({ ...prev, info_markdown: e.target.value }))}
                   rows={3}
                   placeholder={t('events.infoBanner.placeholder', 'Use the menu button in the top-left corner to filter the photos.')}
-                  className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-accent-dark font-mono text-sm"
+                  className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary font-mono text-sm"
                 />
                 {editForm.info_markdown.trim() && (
                   <div className="border border-neutral-200 dark:border-neutral-700 rounded-lg p-3 bg-neutral-50 dark:bg-neutral-900">
                     <p className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-2">
                       {t('events.infoBanner.preview', 'Preview')}
                     </p>
-                    <MarkdownContent source={editForm.info_markdown} className="prose prose-sm dark:prose-invert max-w-none text-sm text-neutral-800 dark:text-neutral-200 prose-a:text-primary-600 dark:prose-a:text-primary-400" />
+                    <MarkdownContent source={editForm.info_markdown} className="prose prose-sm dark:prose-invert max-w-none text-sm text-neutral-800 dark:text-neutral-200 prose-a:text-brand-600 dark:prose-a:text-brand-400" />
                   </div>
                 )}
               </div>
@@ -613,7 +613,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
           {/* Download Protection Settings */}
           <div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
             <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 mb-3 flex items-center gap-2">
-              <Shield className="w-4 h-4 text-accent" />
+              <Shield className="w-4 h-4 text-brand" />
               {t('events.downloadProtection', 'Download Protection')}
             </h3>
 
@@ -623,7 +623,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                   type="checkbox"
                   checked={editForm.allow_downloads}
                   onChange={(e) => setEditForm(prev => ({ ...prev, allow_downloads: e.target.checked }))}
-                  className="w-4 h-4 text-accent border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-primary-500"
+                  className="w-4 h-4 text-brand border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-brand-500"
                 />
                 <Download className="w-4 h-4 ml-2 mr-1 text-neutral-500 dark:text-neutral-400" />
                 <span className="text-sm text-neutral-700 dark:text-neutral-300">{t('events.allowDownloads', 'Allow photo downloads')}</span>
@@ -634,7 +634,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                   type="checkbox"
                   checked={editForm.disable_right_click}
                   onChange={(e) => setEditForm(prev => ({ ...prev, disable_right_click: e.target.checked }))}
-                  className="w-4 h-4 text-accent border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-primary-500"
+                  className="w-4 h-4 text-brand border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-brand-500"
                 />
                 <MousePointer className="w-4 h-4 ml-2 mr-1 text-neutral-500 dark:text-neutral-400" />
                 <span className="text-sm text-neutral-700 dark:text-neutral-300">{t('events.disableRightClick', 'Block right-click menu')}</span>
@@ -648,7 +648,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                     ...prev,
                     watermark_downloads: e.target.checked,
                   }))}
-                  className="w-4 h-4 text-accent border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-primary-500"
+                  className="w-4 h-4 text-brand border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-brand-500"
                 />
                 <Droplets className="w-4 h-4 ml-2 mr-1 text-neutral-500 dark:text-neutral-400" />
                 <span className="text-sm text-neutral-700 dark:text-neutral-300">{t('events.watermarkDownloads', 'Add watermark to downloads')}</span>
@@ -661,7 +661,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                   type="checkbox"
                   checked={editForm.enable_devtools_protection}
                   onChange={(e) => setEditForm(prev => ({ ...prev, enable_devtools_protection: e.target.checked }))}
-                  className="w-4 h-4 text-accent border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-primary-500"
+                  className="w-4 h-4 text-brand border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-brand-500"
                 />
                 <Monitor className="w-4 h-4 ml-2 mr-1 text-neutral-500 dark:text-neutral-400" />
                 <span className="text-sm text-neutral-700 dark:text-neutral-300">{t('events.enableDevtoolsProtection', 'Detect developer tools')}</span>
@@ -672,7 +672,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                   type="checkbox"
                   checked={editForm.use_canvas_rendering}
                   onChange={(e) => setEditForm(prev => ({ ...prev, use_canvas_rendering: e.target.checked }))}
-                  className="w-4 h-4 text-accent border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-primary-500"
+                  className="w-4 h-4 text-brand border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-brand-500"
                 />
                 <Image className="w-4 h-4 ml-2 mr-1 text-neutral-500 dark:text-neutral-400" />
                 <span className="text-sm text-neutral-700 dark:text-neutral-300">{t('events.useCanvasRendering', 'Canvas rendering in the lightbox (advanced protection)')}</span>
@@ -687,7 +687,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
           {/* Hero Logo Settings */}
           <div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
             <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 mb-3 flex items-center gap-2">
-              <Layout className="w-4 h-4 text-accent" />
+              <Layout className="w-4 h-4 text-brand" />
               {t('events.heroLogoSettings', 'Hero Logo Settings')}
             </h3>
 
@@ -708,7 +708,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                     ...prev,
                     hero_logo_visible: e.target.value === 'inherit' ? null : e.target.value === 'show'
                   }))}
-                  className="w-full sm:w-64 px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-md shadow-xs focus:ring-primary-500 focus:border-accent-dark text-sm"
+                  className="w-full sm:w-64 px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-md shadow-xs focus:ring-brand-500 focus:border-primary text-sm"
                 >
                   <option value="inherit">{t('events.heroLogoInherit', 'Use branding default')}</option>
                   <option value="show">{t('events.heroLogoShow', 'Always show')}</option>
@@ -726,7 +726,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                       // '' = inherit the global branding logo size (#756).
                       value={editForm.hero_logo_size ?? ''}
                       onChange={(e) => setEditForm(prev => ({ ...prev, hero_logo_size: e.target.value === '' ? null : e.target.value as 'small' | 'medium' | 'large' | 'xlarge' }))}
-                      className="w-full sm:w-48 px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-md shadow-xs focus:ring-primary-500 focus:border-accent-dark text-sm"
+                      className="w-full sm:w-48 px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-md shadow-xs focus:ring-brand-500 focus:border-primary text-sm"
                     >
                       <option value="">{t('events.heroLogoInherit', 'Use branding default')}</option>
                       <option value="small">{t('events.heroLogoSizeSmall', 'Small')}</option>
@@ -743,7 +743,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                     <select
                       value={editForm.hero_logo_position}
                       onChange={(e) => setEditForm(prev => ({ ...prev, hero_logo_position: e.target.value as 'top' | 'center' | 'bottom' }))}
-                      className="w-full sm:w-48 px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-md shadow-xs focus:ring-primary-500 focus:border-accent-dark text-sm"
+                      className="w-full sm:w-48 px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-md shadow-xs focus:ring-brand-500 focus:border-primary text-sm"
                     >
                       <option value="top">{t('events.heroLogoPositionTop', 'Top (above title)')}</option>
                       <option value="center">{t('events.heroLogoPositionCenter', 'Center (between title and dates)')}</option>
@@ -770,7 +770,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                           />
                         </div>
                         <div className="flex flex-col gap-1">
-                          <label className="cursor-pointer inline-flex items-center gap-1 text-xs text-accent hover:opacity-80">
+                          <label className="cursor-pointer inline-flex items-center gap-1 text-xs text-brand hover:opacity-80">
                             <Upload className="w-3 h-3" />
                             {t('events.replaceLogo', 'Replace')}
                             <input
@@ -834,7 +834,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                     ...prev,
                     login_logo_visible: e.target.value === 'hide' ? false : null
                   }))}
-                  className="w-full sm:w-64 px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-md shadow-xs focus:ring-primary-500 focus:border-accent-dark text-sm"
+                  className="w-full sm:w-64 px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-md shadow-xs focus:ring-brand-500 focus:border-primary text-sm"
                 >
                   <option value="show">{t('events.loginLogoShow', 'Show (default)')}</option>
                   <option value="hide">{t('events.loginLogoHide', 'Hide')}</option>
@@ -933,7 +933,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
             <dt className="text-sm font-medium text-neutral-500 dark:text-neutral-400">{t('events.heroPhoto')}</dt>
             <dd className="mt-1 text-sm text-neutral-900 dark:text-neutral-100">
               {event.hero_photo_id ? (
-                <span className="text-accent">{t('events.heroPhotoSelected')}</span>
+                <span className="text-brand">{t('events.heroPhotoSelected')}</span>
               ) : (
                 <span className="text-neutral-400">{t('events.noHeroPhotoSelected')}</span>
               )}
@@ -984,7 +984,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                       <button
                         type="button"
                         onClick={onRevealNow}
-                        className="block px-3 py-1.5 text-xs font-medium text-white bg-accent hover:bg-accent-dark rounded-sm transition-colors"
+                        className="block px-3 py-1.5 text-xs font-medium text-white bg-brand hover:bg-primary rounded-sm transition-colors"
                       >
                         {t('events.revealNow', 'Reveal now')}
                       </button>

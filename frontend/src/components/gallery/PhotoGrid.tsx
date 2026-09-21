@@ -118,7 +118,7 @@ export const PhotoGrid: React.FC<PhotoGridProps> = ({
   if (photos.length === 0) {
     return (
       <div className="text-center py-12">
-        <p className="text-muted-theme">{t('gallery.noPhotosFound')}</p>
+        <p className="text-muted-foreground">{t('gallery.noPhotosFound')}</p>
       </div>
     );
   }
@@ -155,7 +155,7 @@ export const PhotoGrid: React.FC<PhotoGridProps> = ({
           
           {isSelectionMode && (
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
-              <span className="text-xs sm:text-sm text-muted-theme">
+              <span className="text-xs sm:text-sm text-muted-foreground">
                 {t('gallery.photosSelected', { count: selectedPhotos.size })}
               </span>
               <div className="flex items-center gap-2 flex-wrap">
@@ -283,14 +283,14 @@ const PhotoThumbnail: React.FC<PhotoThumbnailProps> = ({
             <div className="absolute top-2 left-2 flex gap-1 z-10">
               {(photo.comment_count ?? 0) > 0 && (
                 <div className="bg-white/90 backdrop-blur-xs rounded-full px-2 py-1 flex items-center gap-1" title={`${photo.comment_count ?? 0} comments`}>
-                  <MessageSquare className="w-3.5 h-3.5 text-accent" fill="currentColor" />
-                  <span className="text-xs font-medium text-muted-theme">{photo.comment_count ?? 0}</span>
+                  <MessageSquare className="w-3.5 h-3.5 text-brand" fill="currentColor" />
+                  <span className="text-xs font-medium text-muted-foreground">{photo.comment_count ?? 0}</span>
                 </div>
               )}
               {(photo.average_rating ?? 0) > 0 && (
                 <div className="bg-white/90 backdrop-blur-xs rounded-full px-2 py-1 flex items-center gap-1" title={`Rating: ${Number(photo.average_rating ?? 0).toFixed(1)}`}>
                   <Star className="w-3.5 h-3.5 text-yellow-500" fill="currentColor" />
-                  <span className="text-xs font-medium text-muted-theme">{Number(photo.average_rating ?? 0).toFixed(1)}</span>
+                  <span className="text-xs font-medium text-muted-foreground">{Number(photo.average_rating ?? 0).toFixed(1)}</span>
                 </div>
               )}
             </div>
@@ -311,7 +311,7 @@ const PhotoThumbnail: React.FC<PhotoThumbnailProps> = ({
                   }}
                   aria-label="View full size"
                 >
-                  <Maximize2 className="w-5 h-5 text-theme" />
+                  <Maximize2 className="w-5 h-5 text-foreground" />
                 </button>
                 {allowDownloads && (
                   <button
@@ -324,7 +324,7 @@ const PhotoThumbnail: React.FC<PhotoThumbnailProps> = ({
                     }}
                     aria-label="Download photo"
                   >
-                    <Download className="w-5 h-5 text-theme" />
+                    <Download className="w-5 h-5 text-foreground" />
                   </button>
                 )}
               </>
@@ -334,7 +334,7 @@ const PhotoThumbnail: React.FC<PhotoThumbnailProps> = ({
           {/* Selection checkbox - Larger on mobile for easier tapping */}
           {isSelectionMode && (
             <div className={`absolute top-2 right-2 ${isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100 sm:opacity-0 sm:group-hover:opacity-100'} transition-opacity`}>
-              <div className={`w-7 h-7 sm:w-6 sm:h-6 rounded-full border-2 ${isSelected ? 'bg-accent-dark border-accent-dark' : 'bg-white/80 border-white'} flex items-center justify-center transition-colors`}>
+              <div className={`w-7 h-7 sm:w-6 sm:h-6 rounded-full border-2 ${isSelected ? 'bg-primary border-primary' : 'bg-white/80 border-white'} flex items-center justify-center transition-colors`}>
                 {isSelected && <Check className="w-4 h-4 text-white" />}
               </div>
             </div>

@@ -138,8 +138,8 @@ export const FeedbackLimitReachedModal: React.FC<FeedbackLimitReachedModalProps>
             onClick={onClose}
             className="
               w-full sm:w-auto px-5 py-2.5 rounded-lg text-sm font-medium
-              bg-accent-dark text-white hover:opacity-90
-              focus:outline-hidden focus-visible:ring-2 focus-visible:ring-accent-dark focus-visible:ring-offset-2
+              bg-primary text-white hover:opacity-90
+              focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2
               transition-opacity
             "
           >

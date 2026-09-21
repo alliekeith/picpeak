@@ -239,7 +239,7 @@ export const PhotoGridWithLayouts: React.FC<PhotoGridWithLayoutsProps> = ({
     if (!suppressEmptyState) {
       return (
         <div className="text-center py-12">
-          <p className="text-muted-theme">{t('gallery.noPhotosFound')}</p>
+          <p className="text-muted-foreground">{t('gallery.noPhotosFound')}</p>
         </div>
       );
     }
@@ -353,7 +353,7 @@ export const PhotoGridWithLayouts: React.FC<PhotoGridWithLayoutsProps> = ({
       {/* Welcome Message - shown for non-fullpage layouts when set */}
       {!isFullPageLayout && welcomeMessage && (
         <div className="mb-6 px-4 py-3 rounded-lg bg-card-theme/50 border border-border-theme text-center">
-          <p className="text-sm text-muted-theme whitespace-pre-line">{welcomeMessage}</p>
+          <p className="text-sm text-muted-foreground whitespace-pre-line">{welcomeMessage}</p>
         </div>
       )}
 
@@ -387,7 +387,7 @@ export const PhotoGridWithLayouts: React.FC<PhotoGridWithLayoutsProps> = ({
           
           {isSelectionMode && (
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
-              <span className="text-xs sm:text-sm text-muted-theme">
+              <span className="text-xs sm:text-sm text-muted-foreground">
                 {t('gallery.photosSelected', { count: selectedPhotos.size })}
               </span>
               <div className="flex items-center gap-2 flex-wrap">

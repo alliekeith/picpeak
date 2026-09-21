@@ -547,7 +547,7 @@ export const ContractEditorPage: React.FC = () => {
           {t('contracts.editor.locked', 'Sent contracts cannot be edited. Cancel and create a fresh one for amendments.')}
         </p>
         <div className="mt-3">
-          <Link to={`/admin/clients/contracts/${numericId}`} className="text-accent-dark hover:underline">
+          <Link to={`/admin/clients/contracts/${numericId}`} className="text-primary hover:underline">
             ← {t('contracts.editor.backToDetail', 'Back to contract')}
           </Link>
         </div>
@@ -564,7 +564,7 @@ export const ContractEditorPage: React.FC = () => {
       <div className="mb-4 flex items-center gap-3">
         <Link
           to="/admin/clients/contracts"
-          className="inline-flex items-center gap-1 text-sm text-neutral-600 dark:text-neutral-400 hover:text-accent-dark"
+          className="inline-flex items-center gap-1 text-sm text-neutral-600 dark:text-neutral-400 hover:text-primary"
         >
           <ArrowLeft className="w-4 h-4" />
           {t('contracts.editor.back', 'Back to list')}

@@ -103,7 +103,7 @@ export const CustomerResetPasswordPage: React.FC = () => {
   return (
     <div
       className="customer-surface min-h-screen flex items-center justify-center px-4 py-8"
-      style={{ backgroundColor: 'var(--color-background, #fafafa)' }}
+      style={{ backgroundColor: 'var(--background, #fafafa)' }}
     >
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
@@ -112,7 +112,7 @@ export const CustomerResetPasswordPage: React.FC = () => {
             alt={companyName}
             className="h-16 w-auto object-contain mx-auto mb-4"
           />
-          <h1 className="text-2xl font-bold text-theme">
+          <h1 className="text-2xl font-bold text-foreground">
             {t('customer.resetPassword.title', 'Reset your password')}
           </h1>
         </div>
@@ -123,13 +123,13 @@ export const CustomerResetPasswordPage: React.FC = () => {
           ) : lookupError || !reset ? (
             <div className="flex items-start gap-2 text-sm">
               <AlertCircle className="w-5 h-5 mt-0.5 shrink-0 text-red-600" />
-              <p className="text-theme">{lookupError}</p>
+              <p className="text-foreground">{lookupError}</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="flex items-start gap-2 p-3 rounded-lg" style={{ backgroundColor: 'var(--color-elevated, #f5f5f5)' }}>
-                <CheckCircle className="w-5 h-5 mt-0.5 shrink-0" style={{ color: 'var(--color-accent)' }} />
-                <div className="text-sm text-theme">
+              <div className="flex items-start gap-2 p-3 rounded-lg" style={{ backgroundColor: 'var(--muted, #f5f5f5)' }}>
+                <CheckCircle className="w-5 h-5 mt-0.5 shrink-0" style={{ color: 'var(--brand)' }} />
+                <div className="text-sm text-foreground">
                   {t('customer.resetPassword.forEmail', 'Setting a new password for ')}
                   <span className="font-medium">{reset.email}</span>
                   {'.'}
@@ -137,14 +137,14 @@ export const CustomerResetPasswordPage: React.FC = () => {
               </div>
 
               {errors.form && (
-                <div role="alert" className="flex items-start gap-2 p-3 rounded-lg border" style={{ borderColor: 'var(--color-surface-border)' }}>
+                <div role="alert" className="flex items-start gap-2 p-3 rounded-lg border" style={{ borderColor: 'var(--border)' }}>
                   <AlertCircle className="w-4 h-4 mt-0.5 shrink-0 text-red-600" />
-                  <span className="text-sm text-theme">{errors.form}</span>
+                  <span className="text-sm text-foreground">{errors.form}</span>
                 </div>
               )}
 
               <div>
-                <label className="block text-sm font-medium text-theme mb-1">
+                <label className="block text-sm font-medium text-foreground mb-1">
                   {t('customer.resetPassword.password', 'New password')}
                 </label>
                 <Input
@@ -156,13 +156,13 @@ export const CustomerResetPasswordPage: React.FC = () => {
                   autoComplete="new-password"
                   autoFocus
                 />
-                <p className="mt-1 text-xs text-muted-theme">
+                <p className="mt-1 text-xs text-muted-foreground">
                   {t('customer.resetPassword.hint', 'At least 8 characters with one uppercase letter and one number.')}
                 </p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-theme mb-1">
+                <label className="block text-sm font-medium text-foreground mb-1">
                   {t('customer.resetPassword.confirm', 'Confirm new password')}
                 </label>
                 <Input

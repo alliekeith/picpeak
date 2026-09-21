@@ -203,7 +203,7 @@ export const EventDetailsHeader: React.FC<EventDetailsHeaderProps> = ({
                 href={`${buildShareLinkUrl(event.share_link)}${buildShareLinkUrl(event.share_link).includes('?') ? '&' : '?'}admin_preview=1`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-accent hover:opacity-80 border border-accent-dark rounded-lg hover:bg-accent-dark/15 transition-colors"
+                className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-brand hover:opacity-80 border border-primary rounded-lg hover:bg-primary/15 transition-colors"
               >
                 <ExternalLink className="w-4 h-4" />
                 {t('events.viewGallery')}

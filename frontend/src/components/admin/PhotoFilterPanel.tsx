@@ -115,7 +115,7 @@ export const PhotoFilterPanel: React.FC<PhotoFilterPanelProps> = ({
           <select
             value={filters.minRating ?? ''}
             onChange={(e) => handleRatingChange(e.target.value === '' ? null : parseFloat(e.target.value))}
-            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-primary-500 focus:border-accent-dark"
+            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-brand-500 focus:border-primary"
             disabled={isLoading}
           >
             {RATING_OPTIONS.map(option => (
@@ -133,7 +133,7 @@ export const PhotoFilterPanel: React.FC<PhotoFilterPanelProps> = ({
               type="checkbox"
               checked={filters.hasLikes || false}
               onChange={() => handleCheckboxChange('hasLikes')}
-              className="rounded-sm border-neutral-300 text-accent focus:ring-primary-500"
+              className="rounded-sm border-neutral-300 text-brand focus:ring-brand-500"
               disabled={isLoading}
             />
             <Heart className="w-4 h-4 text-red-500" />
@@ -150,7 +150,7 @@ export const PhotoFilterPanel: React.FC<PhotoFilterPanelProps> = ({
               type="checkbox"
               checked={filters.hasFavorites || false}
               onChange={() => handleCheckboxChange('hasFavorites')}
-              className="rounded-sm border-neutral-300 text-accent focus:ring-primary-500"
+              className="rounded-sm border-neutral-300 text-brand focus:ring-brand-500"
               disabled={isLoading}
             />
             <Bookmark className="w-4 h-4 text-yellow-500" />
@@ -167,7 +167,7 @@ export const PhotoFilterPanel: React.FC<PhotoFilterPanelProps> = ({
               type="checkbox"
               checked={filters.hasComments || false}
               onChange={() => handleCheckboxChange('hasComments')}
-              className="rounded-sm border-neutral-300 text-accent focus:ring-primary-500"
+              className="rounded-sm border-neutral-300 text-brand focus:ring-brand-500"
               disabled={isLoading}
             />
             <MessageCircle className="w-4 h-4 text-blue-500" />
@@ -204,7 +204,7 @@ export const PhotoFilterPanel: React.FC<PhotoFilterPanelProps> = ({
                     aria-label={t('filter.showOnlyColor', 'Show only {{color}}', { color: name })}
                     className={`flex items-center gap-2 px-2.5 py-1 rounded-full border text-sm transition-colors ${
                       isActive
-                        ? 'border-accent-dark bg-accent-dark/10 text-neutral-900 dark:text-neutral-100'
+                        ? 'border-primary bg-primary/10 text-neutral-900 dark:text-neutral-100'
                         : 'border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-700'
                     }`}
                   >
@@ -246,7 +246,7 @@ export const PhotoFilterPanel: React.FC<PhotoFilterPanelProps> = ({
                     aria-label={t('filter.showOnlyMyColor', 'Show only my {{color}} marks', { color: name })}
                     className={`flex items-center gap-2 px-2.5 py-1 rounded-full border text-sm transition-colors ${
                       isActive
-                        ? 'border-accent-dark bg-accent-dark/10 text-neutral-900 dark:text-neutral-100'
+                        ? 'border-primary bg-primary/10 text-neutral-900 dark:text-neutral-100'
                         : 'border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-700'
                     }`}
                   >
@@ -274,7 +274,7 @@ export const PhotoFilterPanel: React.FC<PhotoFilterPanelProps> = ({
                 onClick={() => handleLogicChange('AND')}
                 className={`px-3 py-1 text-sm font-medium transition-colors ${
                   filters.logic === 'AND' || !filters.logic
-                    ? 'bg-accent-dark text-white'
+                    ? 'bg-primary text-white'
                     : 'bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-700'
                 }`}
                 disabled={isLoading}
@@ -286,7 +286,7 @@ export const PhotoFilterPanel: React.FC<PhotoFilterPanelProps> = ({
                 onClick={() => handleLogicChange('OR')}
                 className={`px-3 py-1 text-sm font-medium transition-colors ${
                   filters.logic === 'OR'
-                    ? 'bg-accent-dark text-white'
+                    ? 'bg-primary text-white'
                     : 'bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-700'
                 }`}
                 disabled={isLoading}

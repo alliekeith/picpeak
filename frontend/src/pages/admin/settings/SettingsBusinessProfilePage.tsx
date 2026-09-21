@@ -148,7 +148,7 @@ export const SettingsBusinessProfilePage: React.FC = () => {
             <select
               value={normalizeCurrency(profile.defaultCurrency)}
               onChange={(e) => setProfile({ ...profile, defaultCurrency: e.target.value })}
-              className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm focus:outline-hidden focus:ring-2 focus:ring-brand-500"
             >
               {currencyOptions(profile.defaultCurrency).map((c) => (
                 <option key={c} value={c}>{c}</option>
@@ -167,7 +167,7 @@ export const SettingsBusinessProfilePage: React.FC = () => {
             <select
               value={profile.timezone || ''}
               onChange={(e) => setProfile({ ...profile, timezone: e.target.value || null })}
-              className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm focus:outline-hidden focus:ring-2 focus:ring-brand-500"
             >
               <option value="">
                 {t('businessProfile.field.timezoneSystemDefault', 'System default')} ({Intl.DateTimeFormat().resolvedOptions().timeZone})
@@ -404,7 +404,7 @@ const PdfToggleRow: React.FC<PdfToggleRowProps> = ({ label, description, enabled
       aria-checked={enabled}
       onClick={() => onChange(!enabled)}
       className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 shrink-0 ${enabled ? '' : 'bg-neutral-300 dark:bg-neutral-600'}`}
-      style={enabled ? { backgroundColor: 'var(--color-accent)' } : undefined}
+      style={enabled ? { backgroundColor: 'var(--brand)' } : undefined}
     >
       <span
         className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${enabled ? 'translate-x-6' : 'translate-x-1'}`}
@@ -546,7 +546,7 @@ const BusinessHoursEditor: React.FC<{
                   <button
                     type="button"
                     onClick={() => addBlock(iso)}
-                    className="inline-flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700"
+                    className="inline-flex items-center gap-1 text-sm text-brand-600 hover:text-brand-700"
                   >
                     <Plus className="w-4 h-4" />
                     {t('businessProfile.businessHours.addHours', 'Add hours')}
@@ -582,7 +582,7 @@ const BusinessHoursEditor: React.FC<{
                       type="button"
                       onClick={() => addBlock(iso)}
                       aria-label={t('businessProfile.businessHours.addBlock', 'Add another block') as string}
-                      className="p-1.5 text-primary-600 hover:text-primary-700"
+                      className="p-1.5 text-brand-600 hover:text-brand-700"
                     >
                       <Plus className="w-4 h-4" />
                     </button>
@@ -667,7 +667,7 @@ const PdfLogoUploader: React.FC<PdfLogoUploaderProps> = ({ profile, setProfile }
           accept="image/png,image/jpeg,image/svg+xml"
           onChange={onPick}
           disabled={uploading}
-          className="text-sm file:mr-3 file:rounded-md file:border-0 file:bg-primary-600 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-white hover:file:bg-primary-700 disabled:opacity-60"
+          className="text-sm file:mr-3 file:rounded-md file:border-0 file:bg-brand-600 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-white hover:file:bg-brand-700 disabled:opacity-60"
         />
         {profile.logoPath && (
           <>

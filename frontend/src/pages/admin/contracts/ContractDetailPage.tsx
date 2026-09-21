@@ -250,7 +250,7 @@ export const ContractDetailPage: React.FC = () => {
       <div className="mb-4 flex items-center gap-3 flex-wrap">
         <Link
           to="/admin/clients/contracts"
-          className="inline-flex items-center gap-1 text-sm text-neutral-600 dark:text-neutral-400 hover:text-accent-dark"
+          className="inline-flex items-center gap-1 text-sm text-neutral-600 dark:text-neutral-400 hover:text-primary"
         >
           <ArrowLeft className="w-4 h-4" />
           {t('contracts.detail.back', 'Back to list')}
@@ -497,7 +497,7 @@ export const ContractDetailPage: React.FC = () => {
                 <span className="text-neutral-600 dark:text-neutral-300">{t('contracts.detail.fromQuote', 'From quote')}: </span>
                 <Link
                   to={`/admin/clients/quotes/${sourceQuoteId}`}
-                  className="text-accent-dark hover:underline font-mono"
+                  className="text-primary hover:underline font-mono"
                 >
                   {sourceQuoteData?.quote?.quoteNumber || `#${sourceQuoteId}`}
                 </Link>
@@ -508,7 +508,7 @@ export const ContractDetailPage: React.FC = () => {
                 <span className="text-neutral-600 dark:text-neutral-300">{t('contracts.detail.linkedInvoice', 'Invoice')}: </span>
                 <Link
                   to={`/admin/clients/bills/${linkedInvoices[0].id}`}
-                  className="text-accent-dark hover:underline font-mono"
+                  className="text-primary hover:underline font-mono"
                 >
                   {linkedInvoices[0].invoiceNumber}
                 </Link>
@@ -620,7 +620,7 @@ export const ContractDetailPage: React.FC = () => {
             <span className="text-neutral-500 dark:text-neutral-400 mr-2">
               {t('contracts.detail.convertedToEvent', 'Converted to event')}:
             </span>
-            <Link to={`/admin/events/${c.convertedEventId}`} className="font-medium text-primary-600 dark:text-primary-400 hover:underline">
+            <Link to={`/admin/events/${c.convertedEventId}`} className="font-medium text-brand-600 dark:text-brand-400 hover:underline">
               #{c.convertedEventId}
             </Link>
           </p>
@@ -913,7 +913,7 @@ const AuditTrailCard: React.FC<{ contractId: number }> = ({ contractId }) => {
               return `${k}: ${typeof v === 'string' ? v.slice(0, 24) : v}`;
             });
           return (
-            <li key={e.id} className="flex items-start gap-3 text-sm border-l-2 border-accent-dark pl-3">
+            <li key={e.id} className="flex items-start gap-3 text-sm border-l-2 border-primary pl-3">
               <div className="flex-1 min-w-0">
                 <div className="font-medium">{label}</div>
                 <div className="text-xs text-neutral-500">

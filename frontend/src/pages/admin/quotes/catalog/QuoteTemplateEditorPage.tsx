@@ -29,7 +29,7 @@ import type { BoundTo, LineUnit } from '../../../../utils/lineItemTotals';
 const UNITS: LineUnit[] = ['hour', 'day', 'piece', 'km', 'flat'];
 const CURRENCIES = ['CHF', 'EUR', 'USD', 'GBP'];
 const LANGUAGES = ['de', 'en', 'fr', 'nl', 'pt', 'ru'];
-const inputCls = 'w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900';
+const inputCls = 'w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900';
 // Native selects ignore vertical padding in Safari; a fixed height keeps them level with the inputs.
 const selectCls = `${inputCls} h-10`;
 const labelCls = 'block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1';

@@ -76,7 +76,7 @@ export const CustomerQuotesPage: React.FC = () => {
       return (
         <div className="container py-8">
           <h1 className="text-2xl font-bold mb-2">{t('customer.quotes.title', 'Quotes')}</h1>
-          <p className="text-muted-theme">
+          <p className="text-muted-foreground">
             {t('customer.quotes.disabled',
               'This feature is currently disabled for your account. Please contact your photographer if you expected to see quotes here.')}
           </p>
@@ -94,11 +94,11 @@ export const CustomerQuotesPage: React.FC = () => {
   return (
     <div className="container py-6">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-theme flex items-center gap-2">
+        <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
           <FileText className="w-6 h-6" />
           {t('customer.quotes.title', 'Quotes')}
         </h1>
-        <p className="text-sm text-muted-theme mt-1">
+        <p className="text-sm text-muted-foreground mt-1">
           {t('customer.quotes.subtitle',
             'Every quote your photographer has sent you. Click an open quote to accept or decline.')}
         </p>
@@ -106,7 +106,7 @@ export const CustomerQuotesPage: React.FC = () => {
 
       {allQuotes.length === 0 ? (
         <Card padding="lg">
-          <p className="text-center text-muted-theme py-8">
+          <p className="text-center text-muted-foreground py-8">
             {t('customer.quotes.empty', 'No quotes yet.')}
           </p>
         </Card>
@@ -120,7 +120,7 @@ export const CustomerQuotesPage: React.FC = () => {
             visibleRowCount={visible.length}
           />
           <Card padding="none">
-            <ul className="divide-y" style={{ borderColor: 'var(--color-surface-border)' }}>
+            <ul className="divide-y" style={{ borderColor: 'var(--border)' }}>
               {visible.map((q: CustomerQuote) => (
                 <QuoteRow key={q.id} q={q} />
               ))}
@@ -149,7 +149,7 @@ function FilterSortBar<S extends string>({
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
       <div className="flex flex-wrap items-center gap-2">
-        <label className="text-xs text-muted-theme uppercase tracking-wider">
+        <label className="text-xs text-muted-foreground uppercase tracking-wider">
           {t('customer.filter.label', 'Filter')}
         </label>
         <select
@@ -157,16 +157,16 @@ function FilterSortBar<S extends string>({
           onChange={(e) => onStatusChange(e.target.value as S)}
           className="text-sm px-2 py-1 rounded-sm border"
           style={{
-            backgroundColor: 'var(--color-surface)',
-            borderColor: 'var(--color-surface-border)',
-            color: 'var(--color-text)',
+            backgroundColor: 'var(--card)',
+            borderColor: 'var(--border)',
+            color: 'var(--foreground)',
           }}
         >
           {statusOptions.map((o) => (
             <option key={o.value} value={o.value}>{t(o.key, o.fallback)}</option>
           ))}
         </select>
-        <label className="text-xs text-muted-theme uppercase tracking-wider ml-2">
+        <label className="text-xs text-muted-foreground uppercase tracking-wider ml-2">
           {t('customer.sort.label', 'Sort')}
         </label>
         <select
@@ -174,9 +174,9 @@ function FilterSortBar<S extends string>({
           onChange={(e) => onSortChange(e.target.value as SortKey)}
           className="text-sm px-2 py-1 rounded-sm border"
           style={{
-            backgroundColor: 'var(--color-surface)',
-            borderColor: 'var(--color-surface-border)',
-            color: 'var(--color-text)',
+            backgroundColor: 'var(--card)',
+            borderColor: 'var(--border)',
+            color: 'var(--foreground)',
           }}
         >
           {SORT_OPTIONS.map((o) => (
@@ -184,7 +184,7 @@ function FilterSortBar<S extends string>({
           ))}
         </select>
       </div>
-      <div className="text-xs text-muted-theme">
+      <div className="text-xs text-muted-foreground">
         {visibleRowCount === totalRowCount
           ? t('customer.filter.countAll', '{{count}} total', { count: totalRowCount })
           : t('customer.filter.countFiltered', '{{visible}} of {{total}}', { visible: visibleRowCount, total: totalRowCount })}
@@ -235,7 +235,7 @@ const QuoteRow: React.FC<{ q: CustomerQuote }> = ({ q }) => {
             {t(`quotes.status.${q.status}`, q.status)}
           </span>
         </div>
-        <div className="text-sm text-muted-theme mt-1 truncate">
+        <div className="text-sm text-muted-foreground mt-1 truncate">
           {q.eventName || t('customer.quotes.noEventName', '—')}
           {q.eventDate ? ` · ${formatShortDate(q.eventDate)}` : ''}
           {q.validUntil && canRespond ? ` · ${t('quoteResponse.validUntil', 'valid until')} ${formatShortDate(q.validUntil)}` : ''}
@@ -247,12 +247,12 @@ const QuoteRow: React.FC<{ q: CustomerQuote }> = ({ q }) => {
         </div>
         <div className="mt-1 flex items-center justify-end gap-3 text-xs">
           <button type="button" onClick={handleDownloadPdf}
-            className="text-primary-600 dark:text-primary-400 inline-flex items-center gap-1 hover:underline">
+            className="text-brand-600 dark:text-brand-400 inline-flex items-center gap-1 hover:underline">
             <Download className="w-3 h-3" />
             {t('customer.quotes.viewPdf', 'View PDF')}
           </button>
           {canRespond && linkHref && (
-            <span className="text-primary-600 dark:text-primary-400 inline-flex items-center gap-1">
+            <span className="text-brand-600 dark:text-brand-400 inline-flex items-center gap-1">
               {t('customer.quotes.openToRespond', 'Open to respond')}
               <ExternalLink className="w-3 h-3" />
             </span>

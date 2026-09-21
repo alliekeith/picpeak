@@ -556,7 +556,7 @@ const TransferDetailModal: React.FC<DetailProps> = ({ transferId, onClose, onCop
                       </span>
                       <span className="flex shrink-0 items-center gap-3 text-neutral-500">
                         <span>{formatBytes(f.size_bytes)}</span>
-                        <a href={transfersService.adminExtraFileDownloadUrl(transferId, f.id)} className="text-primary-600 hover:underline">
+                        <a href={transfersService.adminExtraFileDownloadUrl(transferId, f.id)} className="text-brand-600 hover:underline">
                           <Download className="h-4 w-4" />
                         </a>
                         <button
@@ -621,7 +621,7 @@ const TransferDetailModal: React.FC<DetailProps> = ({ transferId, onClose, onCop
                           <span className="truncate">{u.original_filename}</span>
                           <span className="flex items-center gap-3 text-neutral-500">
                             <span>{formatBytes(u.size_bytes)}</span>
-                            <a href={transfersService.adminUploadDownloadUrl(transferId, u.id)} className="text-primary-600 hover:underline">
+                            <a href={transfersService.adminUploadDownloadUrl(transferId, u.id)} className="text-brand-600 hover:underline">
                               <Download className="h-4 w-4" />
                             </a>
                           </span>

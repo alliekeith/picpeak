@@ -37,7 +37,7 @@ const PLACEHOLDERS = [
   'business_name', 'hours', 'days', 'hourly_rate', 'day_rate',
 ];
 
-const inputCls = 'w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900';
+const inputCls = 'w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900';
 // Native selects ignore vertical padding in Safari; a fixed height keeps them level with the inputs.
 const selectCls = `${inputCls} h-10`;
 const labelCls = 'block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1';
@@ -907,7 +907,7 @@ export const QuoteCatalogPage: React.FC = () => {
             aria-selected={tab === key}
             onClick={() => setSearchParams({ tab: key })}
             className={`px-3 py-2 text-sm -mb-px border-b-2 ${tab === key
-              ? 'border-primary-600 dark:border-primary-400 text-neutral-900 dark:text-neutral-100 font-medium'
+              ? 'border-brand-600 dark:border-brand-400 text-neutral-900 dark:text-neutral-100 font-medium'
               : 'border-transparent text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100'}`}
           >
             {tabLabel(key)}

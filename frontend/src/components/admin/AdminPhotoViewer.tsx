@@ -333,7 +333,7 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
               </span>
               <button
                 onClick={categoryMenuModal.toggle}
-                className="text-xs text-accent hover:text-accent-dark"
+                className="text-xs text-brand hover:text-primary"
               >
                 Change
               </button>
@@ -528,7 +528,7 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
                 <div className="space-y-2">
                   <button
                     onClick={commentsModal.toggle}
-                    className="text-xs text-accent hover:text-accent-dark mb-2"
+                    className="text-xs text-brand hover:text-primary mb-2"
                   >
                     {commentsModal.isOpen ? 'Hide' : 'Show'} Comments ({comments.length})
                   </button>

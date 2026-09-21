@@ -64,7 +64,7 @@ export const MaintenanceMode: React.FC = () => {
               {t('maintenance.urgentMatters')}{' '}
               <a 
                 href={`mailto:${settings.branding_support_email}`}
-                className="text-primary-600 hover:text-primary-700"
+                className="text-brand-600 hover:text-brand-700"
               >
                 {settings.branding_support_email}
               </a>

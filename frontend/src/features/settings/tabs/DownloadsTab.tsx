@@ -135,7 +135,7 @@ export const DownloadsTab: React.FC = () => {
         <label className="flex items-start gap-3 mb-3 cursor-pointer">
           <input
             type="checkbox"
-            className="mt-1 accent-primary-600"
+            className="mt-1 accent-brand-600"
             checked={form.picker_enabled}
             onChange={(e) => setForm({ ...form, picker_enabled: e.target.checked })}
           />
@@ -153,7 +153,7 @@ export const DownloadsTab: React.FC = () => {
         <label className="flex items-start gap-3 mb-5 cursor-pointer">
           <input
             type="checkbox"
-            className="mt-1 accent-primary-600"
+            className="mt-1 accent-brand-600"
             checked={form.allow_original}
             disabled={!form.picker_enabled}
             onChange={(e) => setForm({ ...form, allow_original: e.target.checked })}

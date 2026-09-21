@@ -63,7 +63,7 @@ const Toggle: React.FC<ToggleProps> = ({ enabled, onChange, label, hint, icon: I
       aria-checked={enabled}
       onClick={onChange}
       className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 ${enabled ? '' : 'bg-neutral-300 dark:bg-neutral-600'}`}
-      style={enabled ? { backgroundColor: 'var(--color-accent, #5C8762)' } : undefined}
+      style={enabled ? { backgroundColor: 'var(--brand, #5C8762)' } : undefined}
     >
       <span
         className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${enabled ? 'translate-x-6' : 'translate-x-1'}`}
@@ -116,7 +116,7 @@ export const CustomerDashboardBrandingCard: React.FC = () => {
   return (
     <Card padding="md">
       <div className="flex items-start gap-3 mb-4">
-        <div className="w-10 h-10 rounded-lg bg-accent-soft text-on-accent-soft flex items-center justify-center shrink-0">
+        <div className="w-10 h-10 rounded-lg bg-brand-soft text-on-brand-soft flex items-center justify-center shrink-0">
           <UserCog className="w-5 h-5" />
         </div>
         <div>

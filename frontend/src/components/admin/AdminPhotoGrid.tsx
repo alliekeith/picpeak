@@ -326,7 +326,7 @@ export const AdminPhotoGrid: React.FC<AdminPhotoGridProps> = ({
               title={t('admin.photos.gridView', 'Grid view')}
               className={`p-1.5 transition-colors ${
                 viewMode === 'grid'
-                  ? 'bg-primary-500 text-white'
+                  ? 'bg-brand-500 text-white'
                   : 'bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700'
               }`}
             >
@@ -340,7 +340,7 @@ export const AdminPhotoGrid: React.FC<AdminPhotoGridProps> = ({
               title={t('admin.photos.listView', 'List view')}
               className={`p-1.5 transition-colors border-l border-neutral-300 dark:border-neutral-600 ${
                 viewMode === 'list'
-                  ? 'bg-primary-500 text-white'
+                  ? 'bg-brand-500 text-white'
                   : 'bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700'
               }`}
             >
@@ -367,7 +367,7 @@ export const AdminPhotoGrid: React.FC<AdminPhotoGridProps> = ({
               key={photo.id}
               data-testid={`admin-photo-tile-${photo.id}`}
               className={`relative group cursor-pointer rounded-lg overflow-hidden bg-neutral-100 dark:bg-neutral-800 transition-opacity ${
-                isSelectionMode ? 'ring-2 ring-offset-2 ' + (selectedPhotos.has(photo.id) ? 'ring-primary-500' : 'ring-transparent') : ''
+                isSelectionMode ? 'ring-2 ring-offset-2 ' + (selectedPhotos.has(photo.id) ? 'ring-brand-500' : 'ring-transparent') : ''
               } ${isDeleting ? 'opacity-50' : ''}`}
               onClick={() => !isDeleting && onPhotoClick(photo, index)}
           >
@@ -385,7 +385,7 @@ export const AdminPhotoGrid: React.FC<AdminPhotoGridProps> = ({
             >
               <div className={`w-6 h-6 rounded border-2 flex items-center justify-center ${
                 selectedPhotos.has(photo.id)
-                  ? 'bg-accent-dark border-accent-dark'
+                  ? 'bg-primary border-primary'
                   : 'bg-white/90 border-white'
               }`}>
                 {selectedPhotos.has(photo.id) && <Check className="w-4 h-4 text-white" />}
@@ -583,7 +583,7 @@ export const AdminPhotoGrid: React.FC<AdminPhotoGridProps> = ({
                 )}
                 {commentCount > 0 && (
                   <div className="bg-white/90 backdrop-blur-xs rounded-full px-2 py-1 flex items-center gap-1" title={`${commentCount} comments`}>
-                    <MessageSquare className="w-3.5 h-3.5 text-accent" fill="currentColor" />
+                    <MessageSquare className="w-3.5 h-3.5 text-brand" fill="currentColor" />
                     <span className="text-xs font-medium text-neutral-700">{commentCount}</span>
                   </div>
                 )}
@@ -644,7 +644,7 @@ export const AdminPhotoGrid: React.FC<AdminPhotoGridProps> = ({
                   key={photo.id}
                   data-testid={`admin-photo-row-${photo.id}`}
                   className={`group cursor-pointer transition-colors ${
-                    isSelected ? 'bg-primary-50 dark:bg-primary-900/20' : 'hover:bg-neutral-50 dark:hover:bg-neutral-700/50'
+                    isSelected ? 'bg-brand-50 dark:bg-brand-900/20' : 'hover:bg-neutral-50 dark:hover:bg-neutral-700/50'
                   } ${isRowDeleting ? 'opacity-50' : ''}`}
                   onClick={() => !isRowDeleting && onPhotoClick(photo, index)}
                 >
@@ -660,7 +660,7 @@ export const AdminPhotoGrid: React.FC<AdminPhotoGridProps> = ({
                     >
                       <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
                         isSelected
-                          ? 'bg-accent-dark border-accent-dark'
+                          ? 'bg-primary border-primary'
                           : 'border-neutral-300 dark:border-neutral-500 group-hover:border-neutral-400'
                       }`}>
                         {isSelected && <Check className="w-3.5 h-3.5 text-white" />}
@@ -768,7 +768,7 @@ export const AdminPhotoGrid: React.FC<AdminPhotoGridProps> = ({
                         )}
                         {commentCount > 0 && (
                           <span className="inline-flex items-center gap-0.5" title={`${commentCount} comments`}>
-                            <MessageSquare className="w-3.5 h-3.5 text-accent" fill="currentColor" />
+                            <MessageSquare className="w-3.5 h-3.5 text-brand" fill="currentColor" />
                             {commentCount}
                           </span>
                         )}

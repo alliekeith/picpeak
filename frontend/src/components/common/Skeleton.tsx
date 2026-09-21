@@ -31,11 +31,11 @@ export const Skeleton: React.FC<SkeletonProps> = ({
   // Theme-aware placeholder colour. Without this the skeleton tiles
   // rendered as bright bg-neutral-200 light grey on dark gallery
   // themes — the "most annoying" frame in #358's screenshots. Using
-  // var(--color-surface-border) tracks whatever shade ThemeContext
+  // var(--border) tracks whatever shade ThemeContext
   // resolves for the current colour mode (light: #e5e5e5, dark:
   // #2e2e2e by default; per-event themes can override).
   const style: React.CSSProperties = {
-    backgroundColor: 'var(--color-surface-border, #e5e5e5)',
+    backgroundColor: 'var(--border, #e5e5e5)',
   };
   if (width) style.width = typeof width === 'number' ? `${width}px` : width;
   if (height) style.height = typeof height === 'number' ? `${height}px` : height;
@@ -80,10 +80,10 @@ export const SkeletonGroup: React.FC<SkeletonGroupProps> = ({
 };
 
 // Theme-aware container surface — same reasoning as the Skeleton
-// itself. Reads var(--color-surface) so the card sits on the right
+// itself. Reads var(--card) so the card sits on the right
 // background regardless of the active theme's colour mode.
 const SURFACE_STYLE: React.CSSProperties = {
-  backgroundColor: 'var(--color-surface, #ffffff)',
+  backgroundColor: 'var(--card, #ffffff)',
 };
 
 // Common skeleton patterns

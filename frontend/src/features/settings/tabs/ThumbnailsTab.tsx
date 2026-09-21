@@ -187,7 +187,7 @@ export const ThumbnailsTab: React.FC = () => {
       {/* Dimensions & Quality */}
       <Card padding="md">
         <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4 flex items-center gap-2">
-          <Image className="w-5 h-5 text-primary-600" />
+          <Image className="w-5 h-5 text-brand-600" />
           {t('settings.thumbnails.dimensionsTitle', 'Thumbnail Dimensions & Quality')}
         </h2>
         <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
@@ -205,7 +205,7 @@ export const ThumbnailsTab: React.FC = () => {
               max="1000"
               value={settings.width}
               onChange={(e) => handleChange('width', parseInt(e.target.value) || 300)}
-              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
             />
             <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
               {t('settings.thumbnails.widthHelp', '50-1000 pixels')}
@@ -222,7 +222,7 @@ export const ThumbnailsTab: React.FC = () => {
               max="1000"
               value={settings.height}
               onChange={(e) => handleChange('height', parseInt(e.target.value) || 300)}
-              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
             />
             <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
               {t('settings.thumbnails.heightHelp', '50-1000 pixels')}
@@ -239,7 +239,7 @@ export const ThumbnailsTab: React.FC = () => {
               max="100"
               value={settings.quality}
               onChange={(e) => handleChange('quality', parseInt(e.target.value) || 85)}
-              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
             />
             <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
               {t('settings.thumbnails.qualityHelp', '1-100, higher = better quality but larger files')}
@@ -253,7 +253,7 @@ export const ThumbnailsTab: React.FC = () => {
             <select
               value={settings.format}
               onChange={(e) => handleChange('format', e.target.value)}
-              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
             >
               {formatOptions.map((fmt) => (
                 <option key={fmt} value={fmt}>{fmt.toUpperCase()}</option>
@@ -269,7 +269,7 @@ export const ThumbnailsTab: React.FC = () => {
           <select
             value={settings.fit}
             onChange={(e) => handleChange('fit', e.target.value)}
-            className="w-full sm:w-64 px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            className="w-full sm:w-64 px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
           >
             {fitOptions.map((opt) => (
               <option key={opt} value={opt}>
@@ -289,7 +289,7 @@ export const ThumbnailsTab: React.FC = () => {
       {/* Regenerate */}
       <Card padding="md">
         <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4 flex items-center gap-2">
-          <RefreshCw className="w-5 h-5 text-primary-600" />
+          <RefreshCw className="w-5 h-5 text-brand-600" />
           {t('settings.thumbnails.regenerateTitle', 'Regenerate Thumbnails')}
         </h2>
         <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
@@ -314,7 +314,7 @@ export const ThumbnailsTab: React.FC = () => {
           preview_url emitted. */}
       <Card padding="md">
         <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-1 flex items-center gap-2">
-          <Image className="w-5 h-5 text-primary-600" />
+          <Image className="w-5 h-5 text-brand-600" />
           {t('settings.thumbnails.lightboxTitle', 'Lightbox Preview Tier')}
         </h2>
         <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
@@ -324,7 +324,7 @@ export const ThumbnailsTab: React.FC = () => {
         <label className="flex items-start gap-3 cursor-pointer mb-4">
           <input
             type="checkbox"
-            className="mt-0.5 rounded-sm border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
+            className="mt-0.5 rounded-sm border-neutral-300 dark:border-neutral-600 text-brand focus:ring-brand-500"
             checked={settings.lightbox_preview_enabled}
             onChange={(e) => handleChange('lightbox_preview_enabled', e.target.checked)}
           />

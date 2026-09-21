@@ -74,7 +74,7 @@ export const ColorCustomizationCard: React.FC<ColorCustomizationCardProps> = ({
               onClick={() => handleColorModeSelect(mode)}
               className={`px-4 py-2 text-sm font-medium rounded-lg border transition-colors ${
                 (localTheme.colorMode || 'light') === mode
-                  ? 'border-accent-dark bg-accent-dark text-white'
+                  ? 'border-primary bg-primary text-white'
                   : 'border-neutral-300 dark:border-neutral-600 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800'
               }`}
             >
@@ -122,7 +122,7 @@ export const ColorCustomizationCard: React.FC<ColorCustomizationCardProps> = ({
                     onClick={() => onForceColorModeChange(value)}
                     className={`px-4 py-2 text-sm font-medium rounded-lg border transition-colors ${
                       active
-                        ? 'border-accent-dark bg-accent-dark text-white'
+                        ? 'border-primary bg-primary text-white'
                         : 'border-neutral-300 dark:border-neutral-600 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800'
                     }`}
                   >

@@ -582,7 +582,7 @@ export const QuoteResponseView: React.FC<{ adapter: QuoteDocumentAdapter }> = ({
                           <>
                             {' '}
                             <a href={quote.tos.url} target="_blank" rel="noopener noreferrer"
-                              className="underline text-primary-600 dark:text-primary-400">
+                              className="underline text-brand-600 dark:text-brand-400">
                               {t('quoteResponse.tosLink', 'Read the full Terms')}
                             </a>
                           </>
@@ -606,7 +606,7 @@ export const QuoteResponseView: React.FC<{ adapter: QuoteDocumentAdapter }> = ({
                     disabled={busy}
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder={t('quoteResponse.message.placeholder', 'Anything we should know? It is sent with your acceptance.')}
-                    className="w-full rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-hidden focus:ring-2 focus:ring-primary-600"
+                    className="w-full rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-hidden focus:ring-2 focus:ring-brand-600"
                   />
                 </div>
 

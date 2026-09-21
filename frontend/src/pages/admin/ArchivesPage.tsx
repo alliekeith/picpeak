@@ -140,7 +140,7 @@ export const ArchivesPage: React.FC = () => {
               <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('archives.totalArchives')}</p>
               <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{totals.archives}</p>
             </div>
-            <Archive className="w-8 h-8 text-accent" />
+            <Archive className="w-8 h-8 text-brand" />
           </div>
         </Card>
 
@@ -199,7 +199,7 @@ export const ArchivesPage: React.FC = () => {
             <select
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}
-              className="px-4 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-accent-dark"
+              className="px-4 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
             >
               <option value="all">{t('archives.allTypes')}</option>
               <option value="wedding">{t('archives.wedding')}</option>
@@ -212,7 +212,7 @@ export const ArchivesPage: React.FC = () => {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
-              className="px-4 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-accent-dark"
+              className="px-4 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
             >
               <option value="date">{t('archives.sortByDate')}</option>
               <option value="name">{t('archives.sortByName')}</option>

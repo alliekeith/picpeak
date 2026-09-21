@@ -121,7 +121,7 @@ export default function ProductUsageTab() {
     });
   };
   return (
-    <div className="space-y-6 text-theme">
+    <div className="space-y-6 text-foreground">
       <p>{t('productUsage.purpose')}</p>
       <Card padding="md" className="space-y-4">
         <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
@@ -301,7 +301,7 @@ export default function ProductUsageTab() {
                       href={portalUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-sm text-primary-600 dark:text-primary-400 hover:underline self-center"
+                      className="text-sm text-brand-600 dark:text-brand-400 hover:underline self-center"
                     >
                       {t('productUsage.portalReady')}
                     </a>
@@ -319,7 +319,7 @@ export default function ProductUsageTab() {
                 </a>
               )}
               <a
-                className="text-sm text-primary-600 dark:text-primary-400 hover:underline self-center"
+                className="text-sm text-brand-600 dark:text-brand-400 hover:underline self-center"
                 href={`${data.collector_url}/transparency`}
                 target="_blank"
                 rel="noreferrer"

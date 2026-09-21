@@ -316,7 +316,7 @@ export const CustomerDetailPage: React.FC = () => {
         </div>
         <div className="flex flex-col items-end gap-1">
           {customer.isActive ? (
-            <span className="inline-flex items-center gap-1 text-xs" style={{ color: 'var(--color-accent)' }}>
+            <span className="inline-flex items-center gap-1 text-xs" style={{ color: 'var(--brand)' }}>
               <CheckCircle2 className="w-3.5 h-3.5" />
               {t('customers.status.active', 'Active')}
             </span>
@@ -699,7 +699,7 @@ export const CustomerDetailPage: React.FC = () => {
                   aria-checked={enabled}
                   onClick={() => toggleFeature(key)}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 ${enabled ? '' : 'bg-neutral-300 dark:bg-neutral-600'}`}
-                  style={enabled ? { backgroundColor: 'var(--color-accent)' } : undefined}
+                  style={enabled ? { backgroundColor: 'var(--brand)' } : undefined}
                 >
                   <span
                     className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${enabled ? 'translate-x-6' : 'translate-x-1'}`}

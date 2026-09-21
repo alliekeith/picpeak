@@ -101,7 +101,7 @@ export const QuotesListPage: React.FC = () => {
               <button key={s} type="button" onClick={() => toggleStatus(s)}
                 className={`px-2.5 py-1 rounded-full text-xs font-medium border transition-colors ${
                   active
-                    ? 'bg-accent-dark text-white border-accent-dark'
+                    ? 'bg-primary text-white border-primary'
                     : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-neutral-300 dark:border-neutral-600'
                 }`}
               >{t(`quotes.status.${s}`, s)}</button>

@@ -907,7 +907,7 @@ export const CreateEventPage: React.FC = () => {
                         setFormData(prev => ({ ...prev, admin_email: email }));
                       }
                     }}
-                    className="text-xs px-2 py-1 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-sm focus:ring-2 focus:ring-primary-500 focus:border-accent-dark"
+                    className="text-xs px-2 py-1 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-sm focus:ring-2 focus:ring-brand-500 focus:border-primary"
                   >
                     <option value="">{t('events.adminEmailCustom', 'Custom email')}</option>
                     {activeAdmins.map(a => (
@@ -924,7 +924,7 @@ export const CreateEventPage: React.FC = () => {
               <label className="flex items-start gap-2">
                 <input
                   type="checkbox"
-                  className="mt-1 w-4 h-4 text-accent border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-primary-500"
+                  className="mt-1 w-4 h-4 text-brand border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-brand-500"
                   checked={formData.require_password}
                   onChange={(e) => {
                     const checked = e.target.checked;
@@ -1082,7 +1082,7 @@ export const CreateEventPage: React.FC = () => {
               <select
                 value={formData.default_photo_sort}
                 onChange={(e) => setFormData({ ...formData, default_photo_sort: e.target.value })}
-                className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-accent-dark"
+                className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
               >
                 <option value="upload_date_desc">{t('photoSort.uploadDateNewest', 'Upload Date (Newest First)')}</option>
                 <option value="upload_date_asc">{t('photoSort.uploadDateOldest', 'Upload Date (Oldest First)')}</option>
@@ -1098,7 +1098,7 @@ export const CreateEventPage: React.FC = () => {
               <label className="flex items-start gap-2">
                 <input
                   type="checkbox"
-                  className="mt-1 w-4 h-4 text-accent border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-primary-500"
+                  className="mt-1 w-4 h-4 text-brand border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-brand-500"
                   checked={formData.client_access_enabled}
                   onChange={(e) => setFormData(prev => ({
                     ...prev,
@@ -1138,7 +1138,7 @@ export const CreateEventPage: React.FC = () => {
                   type="checkbox"
                   checked={formData.allow_user_uploads}
                   onChange={(e) => setFormData({ ...formData, allow_user_uploads: e.target.checked })}
-                  className="rounded-sm border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
+                  className="rounded-sm border-neutral-300 dark:border-neutral-600 text-brand focus:ring-brand-500"
                 />
                 <div>
                   <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
@@ -1161,7 +1161,7 @@ export const CreateEventPage: React.FC = () => {
                       ...formData,
                       upload_category_id: e.target.value ? Number(e.target.value) : null
                     })}
-                    className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg focus:ring-2 focus:ring-brand-500 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100"
                   >
                     <option value="">{t('events.selectCategory')}</option>
                     {categories.map(category => (

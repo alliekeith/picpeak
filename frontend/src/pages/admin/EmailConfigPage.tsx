@@ -509,7 +509,7 @@ export const EmailConfigPage: React.FC = () => {
             onClick={() => setActiveTab('smtp')}
             className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
               activeTab === 'smtp'
-                ? 'border-accent text-accent'
+                ? 'border-brand text-brand'
                 : 'border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300'
             }`}
           >
@@ -519,7 +519,7 @@ export const EmailConfigPage: React.FC = () => {
             onClick={() => setActiveTab('templates')}
             className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
               activeTab === 'templates'
-                ? 'border-accent text-accent'
+                ? 'border-brand text-brand'
                 : 'border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300'
             }`}
           >
@@ -529,7 +529,7 @@ export const EmailConfigPage: React.FC = () => {
             onClick={() => setActiveTab('sent')}
             className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
               activeTab === 'sent'
-                ? 'border-accent text-accent'
+                ? 'border-brand text-brand'
                 : 'border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300'
             }`}
           >
@@ -540,7 +540,7 @@ export const EmailConfigPage: React.FC = () => {
               onClick={() => setActiveTab('received')}
               className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
                 activeTab === 'received'
-                  ? 'border-accent text-accent'
+                  ? 'border-brand text-brand'
                   : 'border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300'
               }`}
             >
@@ -571,7 +571,7 @@ export const EmailConfigPage: React.FC = () => {
                 ? t('email.signatureOn', 'Footer signature is on — your business address is appended to automatic emails. Replies you write in Messages are sent as typed.')
                 : t('email.signatureOff', 'Footer signature is off — emails show the logo and company name only.')}
               {' '}
-              <Link to="/admin/settings?tab=businessProfile" className="underline hover:no-underline" style={{ color: 'var(--color-accent)' }}>
+              <Link to="/admin/settings?tab=businessProfile" className="underline hover:no-underline" style={{ color: 'var(--brand)' }}>
                 {t('email.signatureEdit', 'Edit in Business profile')}
               </Link>
             </span>
@@ -614,7 +614,7 @@ export const EmailConfigPage: React.FC = () => {
                   <select
                     value={smtpConfig.smtp_secure ? 'ssl' : 'tls'}
                     onChange={(e) => setSmtpConfig(prev => ({ ...prev, smtp_secure: e.target.value === 'ssl' }))}
-                    className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-accent-dark"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
                   >
                     <option value="tls">TLS</option>
                     <option value="ssl">SSL</option>
@@ -629,7 +629,7 @@ export const EmailConfigPage: React.FC = () => {
                     type="checkbox"
                     checked={!smtpConfig.tls_reject_unauthorized}
                     onChange={(e) => setSmtpConfig(prev => ({ ...prev, tls_reject_unauthorized: !e.target.checked }))}
-                    className="w-4 h-4 text-accent border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-primary-500"
+                    className="w-4 h-4 text-brand border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-brand-500"
                   />
                   <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
                     {t('email.ignoreSslErrors')}
@@ -1037,7 +1037,7 @@ export const EmailConfigPage: React.FC = () => {
                       onClick={() => setEditingLang(lang.code)}
                       className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors flex items-center gap-1.5 ${
                         editingLang === lang.code
-                          ? 'bg-white dark:bg-neutral-800 text-accent-dark shadow-xs'
+                          ? 'bg-white dark:bg-neutral-800 text-primary shadow-xs'
                           : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200'
                       }`}
                     >

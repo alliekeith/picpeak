@@ -163,7 +163,7 @@ export const PasswordResetModal: React.FC<PasswordResetModalProps> = ({
                   type="checkbox"
                   checked={sendEmail}
                   onChange={(e) => setSendEmail(e.target.checked)}
-                  className="w-4 h-4 text-accent bg-neutral-100 dark:bg-neutral-700 border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-primary-500 focus:ring-2"
+                  className="w-4 h-4 text-brand bg-neutral-100 dark:bg-neutral-700 border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-brand-500 focus:ring-2"
                 />
                 <div className="flex-1">
                   <div className="flex items-center gap-2">

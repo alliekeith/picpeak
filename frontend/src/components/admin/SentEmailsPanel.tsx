@@ -85,7 +85,7 @@ export const SentEmailsPanel: React.FC = () => {
               onClick={() => { setStatusFilter(active ? null : s); resetTo1(); }}
               className={`px-2.5 py-1 rounded-full text-xs font-medium border transition-colors ${
                 active
-                  ? 'bg-accent-dark text-white border-accent-dark'
+                  ? 'bg-primary text-white border-primary'
                   : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-neutral-300 dark:border-neutral-600'
               }`}
             >{t(`email.sentEmails.status.${s}`, s)}</button>
@@ -137,7 +137,7 @@ export const SentEmailsPanel: React.FC = () => {
                       <td className="px-3 py-2 whitespace-nowrap">{m.sentAt ? fmtDateTime(m.sentAt) : '—'}</td>
                       <td className="px-3 py-2">
                         {m.eventId ? (
-                          <Link to={`/admin/events/${m.eventId}`} className="text-accent hover:underline" onClick={(e) => e.stopPropagation()}>
+                          <Link to={`/admin/events/${m.eventId}`} className="text-brand hover:underline" onClick={(e) => e.stopPropagation()}>
                             {m.eventName || `#${m.eventId}`}
                           </Link>
                         ) : '—'}

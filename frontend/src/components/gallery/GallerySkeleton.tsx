@@ -15,8 +15,8 @@ export const GallerySkeleton: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: 'var(--color-background, #fafafa)' }}>
-      <header className="bg-surface border-b border-surface sticky top-0 z-40">
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--background, #fafafa)' }}>
+      <header className="bg-card border-b border-border sticky top-0 z-40">
         <div className="container py-4">
           <div className="flex items-center justify-between">
             <div>

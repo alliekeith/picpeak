@@ -157,7 +157,7 @@ export const GuestInviteDialog: React.FC<GuestInviteDialogProps> = ({ eventId, o
                             <button
                               type="button"
                               onClick={() => copy(invite)}
-                              className="p-1.5 text-neutral-500 hover:text-accent"
+                              className="p-1.5 text-neutral-500 hover:text-brand"
                               title={t('admin.guests.copyLink', 'Copy link')}
                             >
                               {copiedId === invite.id ? (

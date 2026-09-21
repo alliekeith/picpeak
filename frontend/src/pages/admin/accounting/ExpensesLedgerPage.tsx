@@ -302,7 +302,7 @@ export const ExpensesLedgerPage: React.FC = () => {
                     {' · '}{format(ex.createdAt)}
                   </div>
                 </div>
-                {ex.hasProof && <button onClick={() => openProof(ex.id)} className="inline-flex items-center gap-1 text-xs text-primary-600 hover:underline"><Paperclip className="w-3.5 h-3.5" /> {t('accounting.expense.viewProof', 'Proof')}</button>}
+                {ex.hasProof && <button onClick={() => openProof(ex.id)} className="inline-flex items-center gap-1 text-xs text-brand-600 hover:underline"><Paperclip className="w-3.5 h-3.5" /> {t('accounting.expense.viewProof', 'Proof')}</button>}
 
                 {/* Paid toggle (#2): manual, independent of invoiced. */}
                 {ex.paid

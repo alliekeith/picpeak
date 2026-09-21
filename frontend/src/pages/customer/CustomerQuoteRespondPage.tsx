@@ -38,7 +38,7 @@ export const CustomerQuoteRespondPage: React.FC = () => {
       <div className="container pt-4">
         <Link
           to="/customer/quotes"
-          className="inline-flex items-center gap-1 text-sm text-muted-theme hover:underline"
+          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:underline"
         >
           <ArrowLeft className="w-4 h-4" />
           {t('customer.quotes.backToList', 'Back to quotes')}

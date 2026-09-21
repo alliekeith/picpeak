@@ -184,7 +184,7 @@ export const ThemeEditorModal: React.FC<ThemeEditorModalProps> = ({
                           </span>
                         </div>
                         {(previewLayout || theme.galleryLayout || 'grid') === layout && (
-                          <Check className="absolute top-1 right-1 w-3 h-3 text-accent" />
+                          <Check className="absolute top-1 right-1 w-3 h-3 text-brand" />
                         )}
                       </button>
                     ))}

@@ -159,7 +159,7 @@ export const CrmOverviewSection: React.FC = () => {
               <FileText className="w-5 h-5" />
               {t('crmOverview.quotes.title', 'Quotes')}
             </h3>
-            <Link to="/admin/clients/quotes" className="text-sm text-primary-600 dark:text-primary-400 hover:underline">
+            <Link to="/admin/clients/quotes" className="text-sm text-brand-600 dark:text-brand-400 hover:underline">
               {t('crmOverview.viewAll', 'View all')} →
             </Link>
           </div>
@@ -212,7 +212,7 @@ export const CrmOverviewSection: React.FC = () => {
               <Receipt className="w-5 h-5" />
               {t('crmOverview.invoices.title', 'Invoices')}
             </h3>
-            <Link to="/admin/clients/bills" className="text-sm text-primary-600 dark:text-primary-400 hover:underline">
+            <Link to="/admin/clients/bills" className="text-sm text-brand-600 dark:text-brand-400 hover:underline">
               {t('crmOverview.viewAll', 'View all')} →
             </Link>
           </div>

@@ -805,9 +805,9 @@ export const GalleryView: React.FC<GalleryViewProps> = ({ slug, event, requiresP
     }
 
     return (
-      <div className="min-h-screen bg-surface flex items-center justify-center">
+      <div className="min-h-screen bg-card flex items-center justify-center">
         <div className="text-center">
-          <p className="text-lg text-muted-theme">{t('gallery.failedToLoad')}</p>
+          <p className="text-lg text-muted-foreground">{t('gallery.failedToLoad')}</p>
           <Button onClick={() => refetch()} className="mt-4">
             {t('gallery.tryAgain')}
           </Button>
@@ -853,17 +853,17 @@ export const GalleryView: React.FC<GalleryViewProps> = ({ slug, event, requiresP
         brandingSettings={brandingSettings}
       >
         <div className="max-w-xl mx-auto text-center py-16 px-4">
-          <div className="mx-auto mb-5 w-16 h-16 rounded-full bg-surface flex items-center justify-center">
-            <EyeOff className="w-8 h-8 text-muted-theme" />
+          <div className="mx-auto mb-5 w-16 h-16 rounded-full bg-card flex items-center justify-center">
+            <EyeOff className="w-8 h-8 text-muted-foreground" />
           </div>
-          <h2 className="text-2xl font-semibold mb-3" style={{ color: 'var(--color-text, #171717)' }}>
+          <h2 className="text-2xl font-semibold mb-3" style={{ color: 'var(--foreground, #171717)' }}>
             {t('gallery.revealPendingTitle', 'The photos are still a surprise')}
           </h2>
-          <p className="text-muted-theme mb-2">
+          <p className="text-muted-foreground mb-2">
             {t('gallery.revealPendingMessage', 'The host will reveal the gallery later — check back soon!')}
           </p>
           {data.reveal_at && (
-            <p className="text-sm text-muted-theme mb-6">
+            <p className="text-sm text-muted-foreground mb-6">
               {t('gallery.revealScheduledFor', 'Reveal scheduled for {{date}}', {
                 date: new Date(data.reveal_at).toLocaleString(),
               })}
@@ -871,7 +871,7 @@ export const GalleryView: React.FC<GalleryViewProps> = ({ slug, event, requiresP
           )}
           {uploadsOn && (
             <div className="mt-6">
-              <p className="text-sm text-muted-theme mb-3">
+              <p className="text-sm text-muted-foreground mb-3">
                 {t('gallery.revealUploadHint', 'You can already add your own photos to the collection:')}
               </p>
               <Button
@@ -940,13 +940,13 @@ export const GalleryView: React.FC<GalleryViewProps> = ({ slug, event, requiresP
         type="button"
         onClick={() => openFolderBySlug(null)}
         className="inline-flex items-center gap-1 underline hover:no-underline"
-        style={{ color: 'var(--color-muted-text)' }}
+        style={{ color: 'var(--muted-foreground)' }}
       >
         <ChevronLeft className="w-4 h-4" />
         {t('gallery.backToGallery', 'All photos')}
       </button>
-      <span style={{ color: 'var(--color-muted-text)' }}>/</span>
-      <span className="font-medium" style={{ color: 'var(--color-text)' }}>
+      <span style={{ color: 'var(--muted-foreground)' }}>/</span>
+      <span className="font-medium" style={{ color: 'var(--foreground)' }}>
         {openFolder.name}
       </span>
       {allowDownloads && folderDownloadableIds.length > 0 && (

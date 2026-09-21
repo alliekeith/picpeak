@@ -31,7 +31,7 @@ export const FolderTreeNode: React.FC<{
   const rowClass =
     'flex items-center gap-1 py-1 pr-1 rounded-sm ' +
     (isSelected
-      ? 'bg-accent-dark/15'
+      ? 'bg-primary/15'
       : 'hover:bg-neutral-50 dark:hover:bg-neutral-700');
 
   return (
@@ -51,12 +51,12 @@ export const FolderTreeNode: React.FC<{
           className={
             'flex items-center gap-1.5 flex-1 min-w-0 text-left text-sm ' +
             (isSelected
-              ? 'text-accent-dark font-medium'
+              ? 'text-primary font-medium'
               : 'text-neutral-900 dark:text-neutral-100')
           }
         >
           {isExpanded ? (
-            <FolderOpen className="w-4 h-4 shrink-0 text-accent" />
+            <FolderOpen className="w-4 h-4 shrink-0 text-brand" />
           ) : (
             <Folder className="w-4 h-4 shrink-0 text-neutral-500" />
           )}

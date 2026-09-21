@@ -54,7 +54,7 @@ export const ThemePresetsCard: React.FC<ThemePresetsCardProps> = ({
                 )}
               </div>
               {selectedPreset === key && (
-                <Check className="w-4 h-4 text-accent-dark shrink-0" />
+                <Check className="w-4 h-4 text-primary shrink-0" />
               )}
             </div>
             <div className="flex items-center gap-2 mt-3">

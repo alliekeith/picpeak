@@ -40,7 +40,7 @@ export const CustomerContractSignPage: React.FC = () => {
       <div className="container pt-4">
         <Link
           to="/customer/contracts"
-          className="inline-flex items-center gap-1 text-sm text-muted-theme hover:underline"
+          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:underline"
         >
           <ArrowLeft className="w-4 h-4" />
           {t('customer.contracts.backToList', 'Back to contracts')}

@@ -47,8 +47,8 @@ const SORT_OPTIONS: Array<{ value: SortKey; labelKey: string; fallback: string }
 const DEFAULT_SORT: SortKey = 'newest';
 
 const surfaceStyle = {
-  backgroundColor: 'var(--color-surface)',
-  borderColor: 'var(--color-surface-border)',
+  backgroundColor: 'var(--card)',
+  borderColor: 'var(--border)',
 };
 
 const NeedsAction: React.FC<{ items: CustomerDashboard['needsAction'] }> = ({ items }) => {
@@ -59,50 +59,50 @@ const NeedsAction: React.FC<{ items: CustomerDashboard['needsAction'] }> = ({ it
 
   return (
     <section aria-labelledby="needs-action-title" className="rounded-xl border mb-6 overflow-hidden" style={surfaceStyle}>
-      <h2 id="needs-action-title" className="px-4 pt-4 pb-2 text-base font-semibold text-theme flex items-center gap-2">
+      <h2 id="needs-action-title" className="px-4 pt-4 pb-2 text-base font-semibold text-foreground flex items-center gap-2">
         <Info className="w-5 h-5" />
         {t('customer.dashboard.needsAction', 'Needs your attention')}
       </h2>
-      <ul className="divide-y" style={{ borderColor: 'var(--color-surface-border)' }}>
+      <ul className="divide-y" style={{ borderColor: 'var(--border)' }}>
         {items.quotes.map((q) => (
           <li key={`q-${q.id}`} className="px-4 py-3 flex items-center justify-between gap-3 flex-wrap">
-            <span className="text-sm text-theme">
+            <span className="text-sm text-foreground">
               {t('customer.dashboard.quoteAwaiting', 'Quote {{number}} is waiting for your answer', { number: q.quoteNumber })}
               {q.validUntil && (
-                <span className="block text-xs text-muted-theme">
+                <span className="block text-xs text-muted-foreground">
                   {t('customer.dashboard.validUntil', 'Valid until {{date}}', { date: fmtDate(q.validUntil) })}
                 </span>
               )}
             </span>
-            <Link to="/customer/quotes" className="text-sm underline text-theme">
+            <Link to="/customer/quotes" className="text-sm underline text-foreground">
               {t('customer.dashboard.viewQuote', 'View quote')}
             </Link>
           </li>
         ))}
         {items.contracts.map((c) => (
           <li key={`c-${c.id}`} className="px-4 py-3 flex items-center justify-between gap-3 flex-wrap">
-            <span className="text-sm text-theme">
+            <span className="text-sm text-foreground">
               {t('customer.dashboard.contractAwaiting', 'Contract {{number}} is waiting for your signature', { number: c.contractNumber })}
-              {c.title && <span className="block text-xs text-muted-theme">{c.title}</span>}
+              {c.title && <span className="block text-xs text-muted-foreground">{c.title}</span>}
             </span>
-            <Link to="/customer/contracts" className="text-sm underline text-theme">
+            <Link to="/customer/contracts" className="text-sm underline text-foreground">
               {t('customer.dashboard.viewContract', 'View contract')}
             </Link>
           </li>
         ))}
         {items.invoices.map((i) => (
           <li key={`i-${i.id}`} className="px-4 py-3 flex items-center justify-between gap-3 flex-wrap">
-            <span className="text-sm text-theme">
+            <span className="text-sm text-foreground">
               {i.overdue
                 ? t('customer.dashboard.invoiceOverdue', 'Invoice {{number}} is overdue', { number: i.invoiceNumber })
                 : t('customer.dashboard.invoiceDue', 'Invoice {{number}} is due {{date}}', {
                   number: i.invoiceNumber, date: i.dueDate ? fmtDate(i.dueDate) : '',
                 })}
-              <span className={`block text-xs ${i.overdue ? 'text-red-600' : 'text-muted-theme'}`}>
+              <span className={`block text-xs ${i.overdue ? 'text-red-600' : 'text-muted-foreground'}`}>
                 {t('customer.dashboard.openAmount', 'Open: {{amount}}', { amount: formatMoneyMinor(i.openAmountMinor, i.currency) })}
               </span>
             </span>
-            <Link to="/customer/bills" className="text-sm underline text-theme">
+            <Link to="/customer/bills" className="text-sm underline text-foreground">
               {t('customer.dashboard.viewInvoice', 'View invoice')}
             </Link>
           </li>
@@ -200,7 +200,7 @@ export const CustomerDashboardPage: React.FC = () => {
   const detailsLink = (ev: CustomerEvent) => (
     <Link
       to={`/customer/events/${encodeURIComponent(ev.slug)}`}
-      className="text-sm underline text-theme whitespace-nowrap"
+      className="text-sm underline text-foreground whitespace-nowrap"
       aria-label={t('customer.dashboard.detailsAria', 'Details for {{name}}', { name: ev.eventName })}
     >
       {t('customer.dashboard.details', 'Details')}
@@ -214,7 +214,7 @@ export const CustomerDashboardPage: React.FC = () => {
       ) : error || !data ? (
         <div role="alert" className="rounded-xl border p-6 flex items-start gap-3" style={surfaceStyle}>
           <AlertCircle className="w-5 h-5 mt-0.5 shrink-0 text-red-500" />
-          <p className="text-theme">
+          <p className="text-foreground">
             {t('customer.dashboard.loadError', 'Could not load your galleries. Please try again.')}
           </p>
         </div>
@@ -224,10 +224,10 @@ export const CustomerDashboardPage: React.FC = () => {
 
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-6">
             <div>
-              <h1 className="text-2xl font-bold text-theme">
+              <h1 className="text-2xl font-bold text-foreground">
                 {t('customer.dashboard.title', 'Your galleries')}
               </h1>
-              <p className="mt-1 text-sm text-muted-theme">
+              <p className="mt-1 text-sm text-muted-foreground">
                 {t('customer.dashboard.subtitle', 'Click a gallery to open it. The Download button bundles every photo as a zip.')}
               </p>
             </div>
@@ -235,7 +235,7 @@ export const CustomerDashboardPage: React.FC = () => {
             {/* Sort dropdown — only render when there's something to sort. */}
             {sortedEvents.length > 1 && (
               <div className="flex items-center gap-2">
-                <label htmlFor="customer-events-sort" className="text-sm text-muted-theme whitespace-nowrap">
+                <label htmlFor="customer-events-sort" className="text-sm text-muted-foreground whitespace-nowrap">
                   {t('customer.dashboard.sortLabel', 'Sort by')}
                 </label>
                 <select
@@ -243,7 +243,7 @@ export const CustomerDashboardPage: React.FC = () => {
                   value={sort}
                   onChange={(e) => setSort(e.target.value as SortKey)}
                   className="rounded-lg border px-3 h-9 text-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2"
-                  style={{ ...surfaceStyle, color: 'var(--color-text)' }}
+                  style={{ ...surfaceStyle, color: 'var(--foreground)' }}
                 >
                   {SORT_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>
@@ -258,11 +258,11 @@ export const CustomerDashboardPage: React.FC = () => {
           {sortedEvents.length === 0 ? (
             <div className="rounded-xl border p-6" style={surfaceStyle}>
               <div className="text-center py-12">
-                <ImageIcon className="w-12 h-12 mx-auto mb-3 text-muted-theme" aria-hidden="true" />
-                <h2 className="text-lg font-semibold text-theme mb-2">
+                <ImageIcon className="w-12 h-12 mx-auto mb-3 text-muted-foreground" aria-hidden="true" />
+                <h2 className="text-lg font-semibold text-foreground mb-2">
                   {t('customer.dashboard.emptyTitle', 'No galleries yet')}
                 </h2>
-                <p className="text-sm text-muted-theme">
+                <p className="text-sm text-muted-foreground">
                   {t('customer.dashboard.emptyBody', 'Once your photographer assigns you to a gallery, it will appear here.')}
                 </p>
               </div>
@@ -271,7 +271,7 @@ export const CustomerDashboardPage: React.FC = () => {
             // Inline list — one row per gallery. Open and Download are
             // separate buttons so click bubbling doesn't cross-trigger.
             <div className="rounded-xl border overflow-hidden" style={surfaceStyle}>
-              <ul className="divide-y" style={{ borderColor: 'var(--color-surface-border)' }}>
+              <ul className="divide-y" style={{ borderColor: 'var(--border)' }}>
                 {sortedEvents.map((ev) => {
                   const date = formatDate(ev.eventDate);
                   const expires = formatDate(ev.expiresAt);
@@ -283,13 +283,13 @@ export const CustomerDashboardPage: React.FC = () => {
                     <li
                       key={ev.id}
                       className="px-4 py-3 sm:px-5 sm:py-4 flex items-center gap-3 sm:gap-4"
-                      style={{ borderColor: 'var(--color-surface-border)' }}
+                      style={{ borderColor: 'var(--border)' }}
                     >
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-sm sm:text-base font-semibold text-theme truncate">
+                        <h3 className="text-sm sm:text-base font-semibold text-foreground truncate">
                           {ev.eventName}
                         </h3>
-                        <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs sm:text-sm text-muted-theme">
+                        <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs sm:text-sm text-muted-foreground">
                           {date && (
                             <span className="inline-flex items-center gap-1.5">
                               <Calendar className="w-3.5 h-3.5 shrink-0" />
@@ -306,7 +306,7 @@ export const CustomerDashboardPage: React.FC = () => {
                             <span>{t('customer.dashboard.notAvailable', 'Not available yet')}</span>
                           )}
                           {isOpening && (
-                            <span className="text-xs" style={{ color: 'var(--color-accent)' }}>
+                            <span className="text-xs" style={{ color: 'var(--brand)' }}>
                               {t('customer.dashboard.opening', 'Opening…')}
                             </span>
                           )}
@@ -355,19 +355,19 @@ export const CustomerDashboardPage: React.FC = () => {
 
           {expiredEvents.length > 0 && (
             <section aria-labelledby="expired-galleries-title" className="mt-8">
-              <h2 id="expired-galleries-title" className="text-lg font-semibold text-theme">
+              <h2 id="expired-galleries-title" className="text-lg font-semibold text-foreground">
                 {t('customer.dashboard.expiredTitle', 'Expired galleries')}
               </h2>
-              <p className="mt-1 mb-3 text-sm text-muted-theme">
+              <p className="mt-1 mb-3 text-sm text-muted-foreground">
                 {t('customer.dashboard.expiredHint', 'These galleries have expired and can no longer be opened. Contact your photographer if you still need the photos.')}
               </p>
               <div className="rounded-xl border overflow-hidden" style={surfaceStyle}>
-                <ul className="divide-y" style={{ borderColor: 'var(--color-surface-border)' }}>
+                <ul className="divide-y" style={{ borderColor: 'var(--border)' }}>
                   {expiredEvents.map((ev) => (
                     <li key={ev.id} className="px-4 py-3 sm:px-5 flex items-center gap-3">
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-sm font-medium text-theme truncate">{ev.eventName}</h3>
-                        <p className="mt-0.5 text-xs text-muted-theme">
+                        <h3 className="text-sm font-medium text-foreground truncate">{ev.eventName}</h3>
+                        <p className="mt-0.5 text-xs text-muted-foreground">
                           {ev.eventDate && <>{formatDate(ev.eventDate)}{' · '}</>}
                           {t('customer.dashboard.expiredOn', 'Expired {{date}}', { date: formatDate(ev.expiresAt) || '' })}
                         </p>

@@ -150,9 +150,9 @@ export const PhotoRating: React.FC<PhotoRatingProps> = ({
 
         {/* Average Rating Display */}
         {totalRatings > 0 && (
-          <div className="text-sm text-muted-theme">
+          <div className="text-sm text-muted-foreground">
             <span className="font-medium">{safeAverageRating.toFixed(1)}</span>
-            <span className="text-muted-theme ml-1">
+            <span className="text-muted-foreground ml-1">
               ({t('feedback.ratingsCount', '{{count}} ratings', { count: totalRatings })})
             </span>
           </div>

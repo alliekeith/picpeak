@@ -164,7 +164,7 @@ export const InstallmentsPanel: React.FC<InstallmentsPanelProps> = ({
         {enabled && (
           <button
             type="button"
-            className="text-xs text-primary-600 dark:text-primary-400 hover:underline"
+            className="text-xs text-brand-600 dark:text-brand-400 hover:underline"
             onClick={() => setAdvanced((v) => !v)}
             disabled={disabled}
           >

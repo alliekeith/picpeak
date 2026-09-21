@@ -281,7 +281,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose, col
                   collapsed ? 'px-3 lg:px-0 lg:justify-center' : 'px-3'
                 } ${
                   isActive
-                    ? 'bg-accent-dark text-white'
+                    ? 'bg-primary text-white'
                     : 'text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100'
                 }`}
               >
@@ -384,7 +384,7 @@ const StorageInfo: React.FC = () => {
     ? Math.round((storageInfo.total_used / limitInUse) * 100)
     : 0;
   const isOverSoftLimit = limitInUse && storageInfo.total_used >= limitInUse;
-  const progressBarClass = isOverSoftLimit ? 'bg-red-600' : 'bg-accent-dark';
+  const progressBarClass = isOverSoftLimit ? 'bg-red-600' : 'bg-primary';
   const containerClass = isOverSoftLimit
     ? 'bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800'
     : 'bg-neutral-100 dark:bg-neutral-800';

@@ -135,7 +135,7 @@ export const CustomerManagementPage: React.FC = () => {
         type="button"
         onClick={() => setActiveTab('customers')}
         className={`pb-3 -mb-px border-b-2 text-sm font-medium ${
-          activeTab === 'customers' ? 'border-accent text-accent' : 'border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100'
+          activeTab === 'customers' ? 'border-brand text-brand' : 'border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100'
         }`}
       >
         {t('customers.tabs.customers', 'Customers')}
@@ -145,7 +145,7 @@ export const CustomerManagementPage: React.FC = () => {
         type="button"
         onClick={() => setActiveTab('invitations')}
         className={`pb-3 -mb-px border-b-2 text-sm font-medium ${
-          activeTab === 'invitations' ? 'border-accent text-accent' : 'border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100'
+          activeTab === 'invitations' ? 'border-brand text-brand' : 'border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100'
         }`}
       >
         {t('customers.tabs.invitations', 'Invitations')}
@@ -237,7 +237,7 @@ export const CustomerManagementPage: React.FC = () => {
                       <td className="px-3 py-3">
                         <div className="flex flex-col gap-1">
                           {c.isActive ? (
-                            <span className="inline-flex items-center gap-1 text-xs" style={{ color: 'var(--color-accent)' }}>
+                            <span className="inline-flex items-center gap-1 text-xs" style={{ color: 'var(--brand)' }}>
                               <CheckCircle2 className="w-3.5 h-3.5" />
                               {t('customers.status.active', 'Active')}
                             </span>

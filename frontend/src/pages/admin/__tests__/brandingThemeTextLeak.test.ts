@@ -1,6 +1,6 @@
 /**
- * ThemeContext.applyTheme() writes the branding theme's `--color-text` as an
- * inline style on <html>, so `body { color: var(--color-text) }` applies
+ * ThemeContext.applyTheme() writes the branding theme's `--foreground` as an
+ * inline style on <html>, so `body { color: var(--foreground) }` applies
  * everywhere — including the light admin chrome and the light-chromed public
  * legal pages. Any heading that ships without an explicit text-color class
  * therefore renders near-white on white as soon as the install picks a
@@ -17,7 +17,7 @@ const SRC = path.resolve(__dirname, '../../..');
 
 const read = (rel: string) => fs.readFileSync(path.join(SRC, rel), 'utf8');
 
-// Headings must set a colour explicitly. `text-theme` / `text-muted-theme` are
+// Headings must set a colour explicitly. `text-foreground` / `text-muted-foreground` are
 // deliberately NOT accepted — they resolve to the same leaking variables.
 const EXPLICIT_COLOR = /\btext-(neutral|white|amber|blue|red|green|primary|accent)\b|\btext-(neutral|amber|blue|red|green|primary)-\d/;
 
@@ -29,7 +29,7 @@ const HEADING_FILES = [
   'pages/admin/settings/ReminderTemplatesPage.tsx',
   'pages/public/LegalPage.tsx',
   // Follow-up (QA B14): these three were the known remaining offenders —
-  // they set `text-theme` explicitly, which beats the AdminLayout default.
+  // they set `text-foreground` explicitly, which beats the AdminLayout default.
   'pages/admin/SystemHealthPage.tsx',
   'components/admin/CrmOverviewSection.tsx',
   'components/admin/HoursSection.tsx',
@@ -69,10 +69,10 @@ describe('branding-theme text colour leak (QA S3 / S4 / S13)', () => {
   });
 
   it('keeps the CMS 404 card surface on the same theme tokens as its text', () => {
-    // CMSContentBlock intentionally renders themed text (var(--color-text));
+    // CMSContentBlock intentionally renders themed text (var(--foreground));
     // the card surface has to follow, because `.card` hardcodes bg-white.
     const source = read('components/common/CMSContentBlock.tsx');
-    expect(source).toContain("backgroundColor: 'var(--color-surface)'");
-    expect(source).toContain("color: 'var(--color-text)'");
+    expect(source).toContain("backgroundColor: 'var(--card)'");
+    expect(source).toContain("color: 'var(--foreground)'");
   });
 });

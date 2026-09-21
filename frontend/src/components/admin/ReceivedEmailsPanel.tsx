@@ -56,7 +56,7 @@ export const ReceivedEmailsPanel: React.FC = () => {
                 {r.attachment_count > 0 && (
                   <span className="ml-2 inline-flex items-center gap-0.5 text-xs text-neutral-500">
                     <Paperclip className="w-3 h-3" />{r.attachment_count}
-                    {r.inbound_document_id && <Link to="/admin/accounting/inbox" className="ml-1 text-primary-600 hover:underline">{t('email.received.inbox', 'inbox')}</Link>}
+                    {r.inbound_document_id && <Link to="/admin/accounting/inbox" className="ml-1 text-brand-600 hover:underline">{t('email.received.inbox', 'inbox')}</Link>}
                   </span>
                 )}
               </td>

@@ -185,7 +185,7 @@ export const BackupManagement: React.FC = () => {
                 className={`
                   py-2 px-1 border-b-2 font-medium text-sm flex items-center space-x-2
                   ${activeTab === tab.id
-                    ? 'border-accent text-accent'
+                    ? 'border-brand text-brand'
                     : 'border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-600'
                   }
                 `}

@@ -134,11 +134,11 @@ export const PhotoComments: React.FC<PhotoCommentsProps> = ({
     <div className="space-y-4">
       {/* Comments Header */}
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-theme flex items-center gap-2">
+        <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
           <MessageSquare className="w-4 h-4" />
           {t('feedback.comments', 'Comments')} 
           {visibleComments.length > 0 && (
-            <span className="text-muted-theme">({visibleComments.length})</span>
+            <span className="text-muted-foreground">({visibleComments.length})</span>
           )}
         </h3>
         {!showCommentForm && (
@@ -154,7 +154,7 @@ export const PhotoComments: React.FC<PhotoCommentsProps> = ({
 
       {/* Comment Form */}
       {showCommentForm && (
-        <form onSubmit={handleSubmitComment} className="space-y-3 p-4 bg-surface rounded-lg border border-surface">
+        <form onSubmit={handleSubmitComment} className="space-y-3 p-4 bg-card rounded-lg border border-border">
           {requireNameEmail && !isGuestMode && (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <Input
@@ -179,8 +179,8 @@ export const PhotoComments: React.FC<PhotoCommentsProps> = ({
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
               placeholder={t('feedback.writeComment', 'Write a comment...')}
-              className={`w-full px-3 py-2 text-sm border rounded-lg resize-vertical min-h-[100px] focus:ring-2 focus:ring-primary-500 focus:border-accent-dark ${
-                errors.comment_text ? 'border-red-500' : 'border-surface'
+              className={`w-full px-3 py-2 text-sm border rounded-lg resize-vertical min-h-[100px] focus:ring-2 focus:ring-brand-500 focus:border-primary ${
+                errors.comment_text ? 'border-red-500' : 'border-border'
               }`}
               rows={4}
               maxLength={500}
@@ -188,7 +188,7 @@ export const PhotoComments: React.FC<PhotoCommentsProps> = ({
             {errors.comment_text && (
               <p className="text-xs text-red-600 mt-1">{errors.comment_text}</p>
             )}
-            <p className="text-xs text-muted-theme mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               {commentText.length}/500
             </p>
           </div>
@@ -226,15 +226,15 @@ export const PhotoComments: React.FC<PhotoCommentsProps> = ({
             <div key={comment.id} className="flex gap-3">
               <div className="shrink-0">
                 <div className="w-8 h-8 bg-black/10 rounded-full flex items-center justify-center">
-                  <User className="w-4 h-4 text-muted-theme" />
+                  <User className="w-4 h-4 text-muted-foreground" />
                 </div>
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-baseline gap-2 mb-1">
-                  <span className="text-sm font-medium text-theme">
+                  <span className="text-sm font-medium text-foreground">
                     {comment.guest_name || t('feedback.anonymous', 'Anonymous')}
                   </span>
-                  <span className="text-xs text-muted-theme">
+                  <span className="text-xs text-muted-foreground">
                     {format(new Date(comment.created_at), 'PP')}
                   </span>
                   {comment.is_mine && !comment.is_approved && (
@@ -243,7 +243,7 @@ export const PhotoComments: React.FC<PhotoCommentsProps> = ({
                     </span>
                   )}
                 </div>
-                <p className="text-sm text-muted-theme wrap-break-word">
+                <p className="text-sm text-muted-foreground wrap-break-word">
                   {comment.comment_text}
                 </p>
               </div>
@@ -254,7 +254,7 @@ export const PhotoComments: React.FC<PhotoCommentsProps> = ({
 
       {/* Empty State */}
       {visibleComments.length === 0 && !showCommentForm && (
-        <p className="text-sm text-muted-theme text-center py-4">
+        <p className="text-sm text-muted-foreground text-center py-4">
           {t('feedback.noComments', 'No comments yet. Be the first to comment!')}
         </p>
       )}

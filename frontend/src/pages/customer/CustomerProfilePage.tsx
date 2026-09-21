@@ -43,8 +43,8 @@ const ProfileTile: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div
     className="rounded-xl border p-6 sm:p-8"
     style={{
-      backgroundColor: 'var(--color-surface)',
-      borderColor: 'var(--color-surface-border)',
+      backgroundColor: 'var(--card)',
+      borderColor: 'var(--border)',
     }}
   >
     {children}
@@ -199,10 +199,10 @@ export const CustomerProfilePage: React.FC = () => {
   return (
     <div className="container py-6 sm:py-8 space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-theme">
+        <h1 className="text-2xl font-bold text-foreground">
           {t('customer.profile.title', 'Customer profile')}
         </h1>
-        <p className="mt-1 text-sm text-muted-theme">
+        <p className="mt-1 text-sm text-muted-foreground">
           {t('customer.profile.subtitle', 'Keep your contact and billing details up to date — they\'re shown on quotes and invoices once those features go live.')}
         </p>
       </div>
@@ -213,15 +213,15 @@ export const CustomerProfilePage: React.FC = () => {
       <form onSubmit={handleProfileSave} className="space-y-6">
         <ProfileTile>
           <div className="flex items-center gap-2 mb-4">
-            <UserIcon className="w-5 h-5 text-muted-theme" />
-            <h2 className="text-lg font-semibold text-theme">
+            <UserIcon className="w-5 h-5 text-muted-foreground" />
+            <h2 className="text-lg font-semibold text-foreground">
               {t('customer.profile.section.personal', 'Personal information')}
             </h2>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-theme mb-1">
+              <label className="block text-sm font-medium text-foreground mb-1">
                 {t('customer.profile.field.email', 'Email (login)')}
               </label>
               <Input
@@ -230,13 +230,13 @@ export const CustomerProfilePage: React.FC = () => {
                 disabled
                 leftIcon={<Mail className="w-5 h-5 text-neutral-400" />}
               />
-              <p className="mt-1 text-xs text-muted-theme">
+              <p className="mt-1 text-xs text-muted-foreground">
                 {t('customer.profile.field.emailHint', 'Contact your photographer if you need to change your login email.')}
               </p>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-theme mb-1" htmlFor="profile-salutation">
+              <label className="block text-sm font-medium text-foreground mb-1" htmlFor="profile-salutation">
                 {t('customer.profile.field.salutation', 'Salutation')}
               </label>
               <select
@@ -245,9 +245,9 @@ export const CustomerProfilePage: React.FC = () => {
                 onChange={(e) => updateField('salutation', e.target.value)}
                 className="w-full rounded-lg border px-3 h-10 text-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2"
                 style={{
-                  backgroundColor: 'var(--color-surface)',
-                  borderColor: 'var(--color-surface-border)',
-                  color: 'var(--color-text)',
+                  backgroundColor: 'var(--card)',
+                  borderColor: 'var(--border)',
+                  color: 'var(--foreground)',
                 }}
               >
                 {SALUTATION_OPTIONS.map((o) => (
@@ -257,7 +257,7 @@ export const CustomerProfilePage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-theme mb-1" htmlFor="profile-first-name">
+              <label className="block text-sm font-medium text-foreground mb-1" htmlFor="profile-first-name">
                 {t('customer.profile.field.firstName', 'First name')}
               </label>
               <Input
@@ -270,7 +270,7 @@ export const CustomerProfilePage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-theme mb-1" htmlFor="profile-last-name">
+              <label className="block text-sm font-medium text-foreground mb-1" htmlFor="profile-last-name">
                 {t('customer.profile.field.lastName', 'Last name')}
               </label>
               <Input
@@ -283,7 +283,7 @@ export const CustomerProfilePage: React.FC = () => {
             </div>
 
             <div className="sm:col-span-2">
-              <label className="block text-sm font-medium text-theme mb-1" htmlFor="profile-display-name">
+              <label className="block text-sm font-medium text-foreground mb-1" htmlFor="profile-display-name">
                 {t('customer.profile.field.displayName', 'Display name')}
               </label>
               <Input
@@ -293,7 +293,7 @@ export const CustomerProfilePage: React.FC = () => {
                 value={form.displayName || ''}
                 onChange={(e) => updateField('displayName', e.target.value)}
               />
-              <p className="mt-1 text-xs text-muted-theme">
+              <p className="mt-1 text-xs text-muted-foreground">
                 {t('customer.profile.field.displayNameHint', 'How we greet you in the dashboard.')}
               </p>
             </div>
@@ -302,15 +302,15 @@ export const CustomerProfilePage: React.FC = () => {
 
         <ProfileTile>
           <div className="flex items-center gap-2 mb-4">
-            <Phone className="w-5 h-5 text-muted-theme" />
-            <h2 className="text-lg font-semibold text-theme">
+            <Phone className="w-5 h-5 text-muted-foreground" />
+            <h2 className="text-lg font-semibold text-foreground">
               {t('customer.profile.section.contact', 'Contact & business')}
             </h2>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-theme mb-1" htmlFor="profile-phone">
+              <label className="block text-sm font-medium text-foreground mb-1" htmlFor="profile-phone">
                 {t('customer.profile.field.phone', 'Phone')}
               </label>
               <Input
@@ -324,7 +324,7 @@ export const CustomerProfilePage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-theme mb-1" htmlFor="profile-company">
+              <label className="block text-sm font-medium text-foreground mb-1" htmlFor="profile-company">
                 {t('customer.profile.field.companyName', 'Company name')}
               </label>
               <Input
@@ -337,7 +337,7 @@ export const CustomerProfilePage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-theme mb-1" htmlFor="profile-vat">
+              <label className="block text-sm font-medium text-foreground mb-1" htmlFor="profile-vat">
                 {t('customer.profile.field.vatId', 'VAT ID')}
               </label>
               {/* No standard autocomplete token for VAT — leave it off so
@@ -354,8 +354,8 @@ export const CustomerProfilePage: React.FC = () => {
 
         <ProfileTile>
           <div className="flex items-center gap-2 mb-4">
-            <MapPin className="w-5 h-5 text-muted-theme" />
-            <h2 className="text-lg font-semibold text-theme">
+            <MapPin className="w-5 h-5 text-muted-foreground" />
+            <h2 className="text-lg font-semibold text-foreground">
               {t('customer.profile.section.address', 'Billing address')}
             </h2>
           </div>
@@ -376,7 +376,7 @@ export const CustomerProfilePage: React.FC = () => {
           */}
           <div className="grid grid-cols-1 sm:grid-cols-6 gap-4">
             <div className="sm:col-span-6">
-              <label className="block text-sm font-medium text-theme mb-1" htmlFor="profile-address-line1">
+              <label className="block text-sm font-medium text-foreground mb-1" htmlFor="profile-address-line1">
                 {t('customer.profile.field.addressLine1', 'Address line 1')}
               </label>
               <Input
@@ -389,7 +389,7 @@ export const CustomerProfilePage: React.FC = () => {
             </div>
 
             <div className="sm:col-span-6">
-              <label className="block text-sm font-medium text-theme mb-1" htmlFor="profile-address-line2">
+              <label className="block text-sm font-medium text-foreground mb-1" htmlFor="profile-address-line2">
                 {t('customer.profile.field.addressLine2', 'Address line 2')}
               </label>
               <Input
@@ -402,7 +402,7 @@ export const CustomerProfilePage: React.FC = () => {
             </div>
 
             <div className="sm:col-span-2">
-              <label className="block text-sm font-medium text-theme mb-1" htmlFor="profile-postal-code">
+              <label className="block text-sm font-medium text-foreground mb-1" htmlFor="profile-postal-code">
                 {t('customer.profile.field.postalCode', 'Postal code')}
               </label>
               <Input
@@ -416,7 +416,7 @@ export const CustomerProfilePage: React.FC = () => {
             </div>
 
             <div className="sm:col-span-4">
-              <label className="block text-sm font-medium text-theme mb-1" htmlFor="profile-city">
+              <label className="block text-sm font-medium text-foreground mb-1" htmlFor="profile-city">
                 {t('customer.profile.field.city', 'City')}
               </label>
               <Input
@@ -429,7 +429,7 @@ export const CustomerProfilePage: React.FC = () => {
             </div>
 
             <div className="sm:col-span-3">
-              <label className="block text-sm font-medium text-theme mb-1" htmlFor="profile-state">
+              <label className="block text-sm font-medium text-foreground mb-1" htmlFor="profile-state">
                 {t('customer.profile.field.state', 'State / region')}
               </label>
               <Input
@@ -470,15 +470,15 @@ export const CustomerProfilePage: React.FC = () => {
           unrelated fields. */}
       <ProfileTile>
         <div className="flex items-center gap-2 mb-4">
-          <Lock className="w-5 h-5 text-muted-theme" />
-          <h2 className="text-lg font-semibold text-theme">
+          <Lock className="w-5 h-5 text-muted-foreground" />
+          <h2 className="text-lg font-semibold text-foreground">
             {t('customer.profile.section.password', 'Change password')}
           </h2>
         </div>
 
         <form onSubmit={handlePasswordSave} className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium text-theme mb-1">
+            <label className="block text-sm font-medium text-foreground mb-1">
               {t('customer.profile.password.current', 'Current password')}
             </label>
             <Input
@@ -490,7 +490,7 @@ export const CustomerProfilePage: React.FC = () => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-theme mb-1">
+            <label className="block text-sm font-medium text-foreground mb-1">
               {t('customer.profile.password.next', 'New password')}
             </label>
             <Input
@@ -502,7 +502,7 @@ export const CustomerProfilePage: React.FC = () => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-theme mb-1">
+            <label className="block text-sm font-medium text-foreground mb-1">
               {t('customer.profile.password.confirm', 'Confirm new password')}
             </label>
             <Input
@@ -514,7 +514,7 @@ export const CustomerProfilePage: React.FC = () => {
             />
           </div>
           <div className="sm:col-span-3">
-            <p className="mt-1 text-xs text-muted-theme">
+            <p className="mt-1 text-xs text-muted-foreground">
               {t('customer.profile.password.hint', 'At least 8 characters with one uppercase letter and one number.')}
             </p>
           </div>

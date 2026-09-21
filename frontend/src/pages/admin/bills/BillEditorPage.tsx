@@ -689,7 +689,7 @@ export const BillEditorPage: React.FC = () => {
       <Card>
         <h3 className="font-semibold mb-2">{t('bills.section.payment', 'Payment conditions')}</h3>
         <Link to="/admin/settings?tab=crm"
-          className="text-xs text-accent hover:underline mb-2 inline-block">
+          className="text-xs text-brand hover:underline mb-2 inline-block">
           {t('common.configureInSettings', 'Configure defaults in Settings ↗')}
         </Link>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -777,7 +777,7 @@ export const BillEditorPage: React.FC = () => {
                   const email = e.target.value;
                   if (email) setCcPdfEmail(email);
                 }}
-                className="text-xs px-2 py-1 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-sm focus:ring-2 focus:ring-primary-500 focus:border-accent-dark"
+                className="text-xs px-2 py-1 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-sm focus:ring-2 focus:ring-brand-500 focus:border-primary"
               >
                 <option value="">{t('bills.field.ccPdfCustom', 'Custom email')}</option>
                 {activeAdmins.map((a: any) => (

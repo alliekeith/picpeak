@@ -19,9 +19,9 @@ export const PasswordChangeRequiredNotice: React.FC<{ reason?: 'password' | 'ses
   const { t } = useTranslation();
 
   return (
-    <div className="min-h-screen bg-surface flex items-center justify-center px-4">
+    <div className="min-h-screen bg-card flex items-center justify-center px-4">
       <div className="text-center max-w-md">
-        <p className="text-lg text-muted-theme">
+        <p className="text-lg text-muted-foreground">
           {reason === 'session'
             ? t('gallery.adminSessionExpired', 'Your admin session has expired. Sign in again to preview this gallery.')
             : t('gallery.passwordChangeRequired', 'Change your password in the admin area before previewing this gallery.')}

@@ -12,7 +12,7 @@
  * new customer". The three copies had drifted: passive badge text
  * positioning differed, the contract variant used a bare `<input>`
  * instead of the shared `<Input>` component, and the contract change
- * link used `text-accent-dark hover:underline` instead of the
+ * link used `text-primary hover:underline` instead of the
  * Button-variant "outline" style the other two used.
  *
  * Behavior unified here matches the Quote and Bill variants (which
@@ -205,7 +205,7 @@ export const CustomerPicker: React.FC<CustomerPickerProps> = ({
       <button
         type="button"
         onClick={() => setCreating(true)}
-        className="mt-3 inline-flex items-center gap-1 text-sm text-primary-600 dark:text-primary-400 hover:underline"
+        className="mt-3 inline-flex items-center gap-1 text-sm text-brand-600 dark:text-brand-400 hover:underline"
       >
         {t('customers.create.openLink', '+ Create new customer')}
       </button>

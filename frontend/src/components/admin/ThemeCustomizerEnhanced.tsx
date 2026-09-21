@@ -118,7 +118,7 @@ export const ThemeCustomizerEnhanced: React.FC<ThemeCustomizerEnhancedProps> = (
   const handleChange = (key: keyof ThemeConfig, newValue: any) => {
     const updated: ThemeConfig = { ...localTheme, [key]: newValue };
     // Legacy alias: keep primaryColor in lockstep with accentDarkColor so
-    // any consumer that still reads --color-primary or themeConfig.primaryColor
+    // any consumer that still reads --primary or themeConfig.primaryColor
     // doesn't drift after the 8-token migration.
     if (key === 'accentDarkColor') {
       updated.primaryColor = newValue;

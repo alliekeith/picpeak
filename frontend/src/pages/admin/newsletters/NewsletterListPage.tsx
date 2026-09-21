@@ -155,7 +155,7 @@ export const NewsletterListPage: React.FC = () => {
                           ? `/admin/clients/newsletters/${c.id}/edit`
                           : `/admin/clients/newsletters/${c.id}`}
                         className="font-medium hover:underline"
-                        style={{ color: 'var(--color-accent)' }}
+                        style={{ color: 'var(--brand)' }}
                       >
                         {c.name}
                       </Link>

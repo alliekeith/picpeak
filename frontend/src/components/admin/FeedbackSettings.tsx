@@ -55,7 +55,7 @@ export const FeedbackSettings: React.FC<FeedbackSettingsProps> = ({
               type="checkbox"
               checked={settings.feedback_enabled}
               onChange={() => handleToggle('feedback_enabled')}
-              className="w-4 h-4 text-accent bg-neutral-100 border-neutral-300 rounded-sm focus:ring-primary-500"
+              className="w-4 h-4 text-brand bg-neutral-100 border-neutral-300 rounded-sm focus:ring-brand-500"
             />
             <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
               {t('feedback.settings.enableFeedback', 'Enable feedback')}
@@ -74,7 +74,7 @@ export const FeedbackSettings: React.FC<FeedbackSettingsProps> = ({
                 <label
                   className={`flex items-start gap-3 p-3 rounded-lg cursor-pointer border transition ${
                     (settings.identity_mode || 'simple') === 'simple'
-                      ? 'border-accent-dark bg-accent-dark/15'
+                      ? 'border-primary bg-primary/15'
                       : 'border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800'
                   }`}
                 >
@@ -84,7 +84,7 @@ export const FeedbackSettings: React.FC<FeedbackSettingsProps> = ({
                     value="simple"
                     checked={(settings.identity_mode || 'simple') === 'simple'}
                     onChange={() => onChange({ ...settings, identity_mode: 'simple' })}
-                    className="mt-0.5 w-4 h-4 text-accent focus:ring-primary-500"
+                    className="mt-0.5 w-4 h-4 text-brand focus:ring-brand-500"
                   />
                   <User className="w-5 h-5 mt-0.5 text-neutral-600 dark:text-neutral-400" />
                   <div className="flex-1">
@@ -103,7 +103,7 @@ export const FeedbackSettings: React.FC<FeedbackSettingsProps> = ({
                 <label
                   className={`flex items-start gap-3 p-3 rounded-lg cursor-pointer border transition ${
                     settings.identity_mode === 'guest'
-                      ? 'border-accent-dark bg-accent-dark/15'
+                      ? 'border-primary bg-primary/15'
                       : 'border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800'
                   }`}
                 >
@@ -113,7 +113,7 @@ export const FeedbackSettings: React.FC<FeedbackSettingsProps> = ({
                     value="guest"
                     checked={settings.identity_mode === 'guest'}
                     onChange={() => onChange({ ...settings, identity_mode: 'guest' })}
-                    className="mt-0.5 w-4 h-4 text-accent focus:ring-primary-500"
+                    className="mt-0.5 w-4 h-4 text-brand focus:ring-brand-500"
                   />
                   <Users className="w-5 h-5 mt-0.5 text-neutral-600 dark:text-neutral-400" />
                   <div className="flex-1">
@@ -137,7 +137,7 @@ export const FeedbackSettings: React.FC<FeedbackSettingsProps> = ({
                 <label
                   className={`flex items-start gap-3 p-3 rounded-lg cursor-pointer border transition ${
                     settings.identity_mode === 'shared'
-                      ? 'border-accent-dark bg-accent-dark/15'
+                      ? 'border-primary bg-primary/15'
                       : 'border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800'
                   }`}
                 >
@@ -147,7 +147,7 @@ export const FeedbackSettings: React.FC<FeedbackSettingsProps> = ({
                     value="shared"
                     checked={settings.identity_mode === 'shared'}
                     onChange={() => onChange({ ...settings, identity_mode: 'shared' })}
-                    className="mt-0.5 w-4 h-4 text-accent focus:ring-primary-500"
+                    className="mt-0.5 w-4 h-4 text-brand focus:ring-brand-500"
                   />
                   <Tag className="w-5 h-5 mt-0.5 text-neutral-600 dark:text-neutral-400" />
                   <div className="flex-1">
@@ -187,7 +187,7 @@ export const FeedbackSettings: React.FC<FeedbackSettingsProps> = ({
                     type="checkbox"
                     checked={settings.allow_ratings}
                     onChange={() => handleToggle('allow_ratings')}
-                    className="w-4 h-4 text-accent bg-neutral-100 border-neutral-300 rounded-sm focus:ring-primary-500"
+                    className="w-4 h-4 text-brand bg-neutral-100 border-neutral-300 rounded-sm focus:ring-brand-500"
                   />
                   <Star className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
                   <div className="flex-1">
@@ -205,7 +205,7 @@ export const FeedbackSettings: React.FC<FeedbackSettingsProps> = ({
                     type="checkbox"
                     checked={settings.allow_likes}
                     onChange={() => handleToggle('allow_likes')}
-                    className="w-4 h-4 text-accent bg-neutral-100 border-neutral-300 rounded-sm focus:ring-primary-500"
+                    className="w-4 h-4 text-brand bg-neutral-100 border-neutral-300 rounded-sm focus:ring-brand-500"
                   />
                   <Heart className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
                   <div className="flex-1">
@@ -223,7 +223,7 @@ export const FeedbackSettings: React.FC<FeedbackSettingsProps> = ({
                     type="checkbox"
                     checked={settings.allow_comments}
                     onChange={() => handleToggle('allow_comments')}
-                    className="w-4 h-4 text-accent bg-neutral-100 border-neutral-300 rounded-sm focus:ring-primary-500"
+                    className="w-4 h-4 text-brand bg-neutral-100 border-neutral-300 rounded-sm focus:ring-brand-500"
                   />
                   <MessageSquare className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
                   <div className="flex-1">
@@ -241,7 +241,7 @@ export const FeedbackSettings: React.FC<FeedbackSettingsProps> = ({
                     type="checkbox"
                     checked={settings.allow_favorites}
                     onChange={() => handleToggle('allow_favorites')}
-                    className="w-4 h-4 text-accent bg-neutral-100 border-neutral-300 rounded-sm focus:ring-primary-500"
+                    className="w-4 h-4 text-brand bg-neutral-100 border-neutral-300 rounded-sm focus:ring-brand-500"
                   />
                   <Bookmark className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
                   <div className="flex-1">
@@ -259,7 +259,7 @@ export const FeedbackSettings: React.FC<FeedbackSettingsProps> = ({
                     type="checkbox"
                     checked={settings.allow_reactions}
                     onChange={() => handleToggle('allow_reactions')}
-                    className="w-4 h-4 text-accent bg-neutral-100 border-neutral-300 rounded-sm focus:ring-primary-500"
+                    className="w-4 h-4 text-brand bg-neutral-100 border-neutral-300 rounded-sm focus:ring-brand-500"
                   />
                   <Smile className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
                   <div className="flex-1">
@@ -278,7 +278,7 @@ export const FeedbackSettings: React.FC<FeedbackSettingsProps> = ({
                     type="checkbox"
                     checked={settings.allow_color_labels}
                     onChange={() => handleToggle('allow_color_labels')}
-                    className="w-4 h-4 text-accent bg-neutral-100 border-neutral-300 rounded-sm focus:ring-primary-500"
+                    className="w-4 h-4 text-brand bg-neutral-100 border-neutral-300 rounded-sm focus:ring-brand-500"
                   />
                   <Palette className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
                   <div className="flex-1">
@@ -319,7 +319,7 @@ export const FeedbackSettings: React.FC<FeedbackSettingsProps> = ({
                       key={mode}
                       className={`flex gap-3 p-3 rounded-lg cursor-pointer border ${
                         (settings.keybind_mode || 'colors') === mode
-                          ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
+                          ? 'border-brand-500 bg-brand-50 dark:bg-brand-900/20'
                           : 'border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700'
                       }`}
                     >
@@ -328,7 +328,7 @@ export const FeedbackSettings: React.FC<FeedbackSettingsProps> = ({
                         name="keybind_mode"
                         checked={(settings.keybind_mode || 'colors') === mode}
                         onChange={() => onChange({ ...settings, keybind_mode: mode })}
-                        className="mt-1 w-4 h-4 text-accent border-neutral-300 focus:ring-primary-500"
+                        className="mt-1 w-4 h-4 text-brand border-neutral-300 focus:ring-brand-500"
                       />
                       <div className="flex-1">
                         <div className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
@@ -446,7 +446,7 @@ export const FeedbackSettings: React.FC<FeedbackSettingsProps> = ({
                     type="checkbox"
                     checked={settings.require_name_email}
                     onChange={() => handleToggle('require_name_email')}
-                    className="w-4 h-4 text-accent bg-neutral-100 border-neutral-300 rounded-sm focus:ring-primary-500"
+                    className="w-4 h-4 text-brand bg-neutral-100 border-neutral-300 rounded-sm focus:ring-brand-500"
                   />
                   <div className="flex-1">
                     <div className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
@@ -464,7 +464,7 @@ export const FeedbackSettings: React.FC<FeedbackSettingsProps> = ({
                     checked={settings.moderate_comments}
                     onChange={() => handleToggle('moderate_comments')}
                     disabled={!settings.allow_comments}
-                    className="w-4 h-4 text-accent bg-neutral-100 border-neutral-300 rounded-sm focus:ring-primary-500 disabled:opacity-50"
+                    className="w-4 h-4 text-brand bg-neutral-100 border-neutral-300 rounded-sm focus:ring-brand-500 disabled:opacity-50"
                   />
                   <Shield className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
                   <div className="flex-1">
@@ -482,7 +482,7 @@ export const FeedbackSettings: React.FC<FeedbackSettingsProps> = ({
                     type="checkbox"
                     checked={settings.show_feedback_to_guests}
                     onChange={() => handleToggle('show_feedback_to_guests')}
-                    className="w-4 h-4 text-accent bg-neutral-100 border-neutral-300 rounded-sm focus:ring-primary-500"
+                    className="w-4 h-4 text-brand bg-neutral-100 border-neutral-300 rounded-sm focus:ring-brand-500"
                   />
                   <Eye className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
                   <div className="flex-1">

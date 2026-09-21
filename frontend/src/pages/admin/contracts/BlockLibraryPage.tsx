@@ -239,7 +239,7 @@ export const BlockLibraryPage: React.FC = () => {
       <div className="mb-4 flex items-center gap-3 flex-wrap">
         <Link
           to="/admin/clients/contracts"
-          className="inline-flex items-center gap-1 text-sm text-neutral-600 dark:text-neutral-400 hover:text-accent-dark"
+          className="inline-flex items-center gap-1 text-sm text-neutral-600 dark:text-neutral-400 hover:text-primary"
         >
           <ArrowLeft className="w-4 h-4" />
           {t('contracts.blocks.back', 'Back to contracts')}
@@ -445,7 +445,7 @@ export const BlockLibraryPage: React.FC = () => {
                         onClick={() => setEditingLang(lang.code)}
                         className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors flex items-center gap-1.5 ${
                           editingLang === lang.code
-                            ? 'bg-white dark:bg-neutral-800 text-accent-dark shadow-xs'
+                            ? 'bg-white dark:bg-neutral-800 text-primary shadow-xs'
                             : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200'
                         }`}
                       >

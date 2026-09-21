@@ -101,7 +101,7 @@ export const AccountingLayout: React.FC = () => {
             id="accounting-section"
             value={location.pathname}
             onChange={(e) => navigate(e.target.value)}
-            className="w-full rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-3 py-2 text-sm font-medium text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-primary-500"
+            className="w-full rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-3 py-2 text-sm font-medium text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-brand-500"
           >
             {enabledItems.map((item) => (
               <option key={item.key} value={item.to}>{item.label}</option>
@@ -124,7 +124,7 @@ export const AccountingLayout: React.FC = () => {
                   className={({ isActive }) =>
                     `group w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                       isActive
-                        ? 'bg-accent-dark text-white'
+                        ? 'bg-primary text-white'
                         : 'text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800'
                     }`
                   }

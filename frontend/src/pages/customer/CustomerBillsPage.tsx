@@ -80,7 +80,7 @@ export const CustomerBillsPage: React.FC = () => {
       return (
         <div className="container py-8">
           <h1 className="text-2xl font-bold mb-2">{t('customer.bills.title', 'Invoices')}</h1>
-          <p className="text-muted-theme">
+          <p className="text-muted-foreground">
             {t('customer.bills.disabled',
               'This feature is currently disabled for your account. Please contact your photographer if you expected to see invoices here.')}
           </p>
@@ -115,11 +115,11 @@ export const CustomerBillsPage: React.FC = () => {
   return (
     <div className="container py-6">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-theme flex items-center gap-2">
+        <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
           <Receipt className="w-6 h-6" />
           {t('customer.bills.title', 'Invoices')}
         </h1>
-        <p className="text-sm text-muted-theme mt-1">
+        <p className="text-sm text-muted-foreground mt-1">
           {t('customer.bills.subtitle',
             'Every invoice your photographer has sent you. Click "View PDF" to download.')}
         </p>
@@ -127,7 +127,7 @@ export const CustomerBillsPage: React.FC = () => {
 
       {invoices.length === 0 ? (
         <Card padding="lg">
-          <p className="text-center text-muted-theme py-8">
+          <p className="text-center text-muted-foreground py-8">
             {t('customer.bills.empty', 'No invoices yet.')}
           </p>
         </Card>
@@ -141,7 +141,7 @@ export const CustomerBillsPage: React.FC = () => {
             visibleRowCount={visible.length}
           />
           <Card padding="none">
-            <ul className="divide-y" style={{ borderColor: 'var(--color-surface-border)' }}>
+            <ul className="divide-y" style={{ borderColor: 'var(--border)' }}>
               {visible.map((inv) => (
                 <InvoiceRow key={inv.id} inv={inv} onViewPdf={() => handleViewPdf(inv)} />
               ))}
@@ -170,7 +170,7 @@ function FilterSortBar<S extends string>({
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
       <div className="flex flex-wrap items-center gap-2">
-        <label className="text-xs text-muted-theme uppercase tracking-wider">
+        <label className="text-xs text-muted-foreground uppercase tracking-wider">
           {t('customer.filter.label', 'Filter')}
         </label>
         <select
@@ -178,16 +178,16 @@ function FilterSortBar<S extends string>({
           onChange={(e) => onStatusChange(e.target.value as S)}
           className="text-sm px-2 py-1 rounded-sm border"
           style={{
-            backgroundColor: 'var(--color-surface)',
-            borderColor: 'var(--color-surface-border)',
-            color: 'var(--color-text)',
+            backgroundColor: 'var(--card)',
+            borderColor: 'var(--border)',
+            color: 'var(--foreground)',
           }}
         >
           {statusOptions.map((o) => (
             <option key={o.value} value={o.value}>{t(o.key, o.fallback)}</option>
           ))}
         </select>
-        <label className="text-xs text-muted-theme uppercase tracking-wider ml-2">
+        <label className="text-xs text-muted-foreground uppercase tracking-wider ml-2">
           {t('customer.sort.label', 'Sort')}
         </label>
         <select
@@ -195,9 +195,9 @@ function FilterSortBar<S extends string>({
           onChange={(e) => onSortChange(e.target.value as SortKey)}
           className="text-sm px-2 py-1 rounded-sm border"
           style={{
-            backgroundColor: 'var(--color-surface)',
-            borderColor: 'var(--color-surface-border)',
-            color: 'var(--color-text)',
+            backgroundColor: 'var(--card)',
+            borderColor: 'var(--border)',
+            color: 'var(--foreground)',
           }}
         >
           {SORT_OPTIONS.map((o) => (
@@ -205,7 +205,7 @@ function FilterSortBar<S extends string>({
           ))}
         </select>
       </div>
-      <div className="text-xs text-muted-theme">
+      <div className="text-xs text-muted-foreground">
         {visibleRowCount === totalRowCount
           ? t('customer.filter.countAll', '{{count}} total', { count: totalRowCount })
           : t('customer.filter.countFiltered', '{{visible}} of {{total}}', { visible: visibleRowCount, total: totalRowCount })}
@@ -262,7 +262,7 @@ const InvoiceRow: React.FC<{ inv: CustomerInvoice; onViewPdf: () => void }> = ({
                 : t(`bills.status.${inv.status}`, inv.status)}
             </span>
             {inv.installmentTotal > 1 && !isStorno && (
-              <span className="text-xs text-muted-theme">
+              <span className="text-xs text-muted-foreground">
                 {inv.installmentIndex + 1}/{inv.installmentTotal}
                 {inv.installmentLabel ? ` · ${inv.installmentLabel}` : ''}
               </span>
@@ -273,12 +273,12 @@ const InvoiceRow: React.FC<{ inv: CustomerInvoice; onViewPdf: () => void }> = ({
               grouped at a glance. Omit when no event is set rather than
               rendering a stray em-dash. */}
           {inv.eventName && (
-            <div className="text-sm text-muted-theme mt-1 truncate">
+            <div className="text-sm text-muted-foreground mt-1 truncate">
               {inv.eventName}
               {inv.eventDate ? ` · ${formatShortDate(inv.eventDate)}` : ''}
             </div>
           )}
-          <div className="text-sm text-muted-theme mt-1">
+          <div className="text-sm text-muted-foreground mt-1">
             {t('customer.bills.field.issueDate', 'Issued')}: {formatShortDate(inv.issueDate)}
             {!isStorno && inv.dueDate && (
               <> {' · '} {t('customer.bills.field.dueDate', 'Due')}: {formatShortDate(inv.dueDate)}</>
@@ -320,7 +320,7 @@ const InvoiceRow: React.FC<{ inv: CustomerInvoice; onViewPdf: () => void }> = ({
             </div>
           )}
           <button type="button" onClick={onViewPdf}
-            className="text-xs text-primary-600 dark:text-primary-400 mt-1 inline-flex items-center gap-1 hover:underline">
+            className="text-xs text-brand-600 dark:text-brand-400 mt-1 inline-flex items-center gap-1 hover:underline">
             <Download className="w-3 h-3" />
             {t('customer.bills.viewPdf', 'View PDF')}
           </button>

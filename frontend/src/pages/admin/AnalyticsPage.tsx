@@ -290,7 +290,7 @@ export const AnalyticsPage: React.FC = () => {
           <select
             value={dateRange}
             onChange={(e) => setDateRange(e.target.value as any)}
-            className="px-4 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-primary-500"
+            className="px-4 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-brand-500"
           >
             <option value="7d">{t('analytics.last7Days')}</option>
             <option value="30d">{t('analytics.last30Days')}</option>
@@ -477,7 +477,7 @@ export const AnalyticsPage: React.FC = () => {
               ? 'bg-red-600'
               : (usagePercent != null && usagePercent >= 90)
                 ? 'bg-amber-500'
-                : 'bg-accent-dark';
+                : 'bg-primary';
             const limitDescriptor = storageInfo
               ? storageInfo.soft_limit_configured
                 ? t('admin.storageSoftLimitConfigured', { limit: limitDisplay })

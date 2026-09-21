@@ -90,17 +90,17 @@ export const CustomerDocumentList: React.FC<{ documents: CustomerDocument[]; sho
   };
 
   return (
-    <ul className="divide-y" style={{ borderColor: 'var(--color-surface-border)' }}>
+    <ul className="divide-y" style={{ borderColor: 'var(--border)' }}>
       {documents.map((doc) => (
         <li key={doc.id} className="p-4 flex items-start justify-between gap-3 flex-wrap">
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-sm font-medium text-theme break-all">{doc.name}</span>
+              <span className="text-sm font-medium text-foreground break-all">{doc.name}</span>
               <span className={`px-2 py-0.5 rounded-sm text-xs font-medium ${STATUS_STYLE[doc.status]}`}>
                 {statusLabel(t, doc.status)}
               </span>
             </div>
-            <p className="text-xs text-muted-theme mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               {doc.uploadedBy === 'you'
                 ? t('customer.documents.fromYou', 'Uploaded by you')
                 : t('customer.documents.fromStudio', 'Shared by your photographer')}
@@ -109,7 +109,7 @@ export const CustomerDocumentList: React.FC<{ documents: CustomerDocument[]; sho
               {showEvent && doc.eventName && <>{' · '}{doc.eventName}</>}
             </p>
             {doc.status === 'pending' && (
-              <p className="text-xs text-muted-theme mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 {t('customer.documents.pendingHint', 'Your photographer checks every upload before it becomes available.')}
               </p>
             )}
@@ -164,8 +164,8 @@ export const CustomerDocumentsPage: React.FC = () => {
     const status = (error as any)?.response?.status;
     return (
       <div className="container py-8">
-        <h1 className="text-2xl font-bold text-theme mb-2">{t('customer.documents.title', 'Documents')}</h1>
-        <p className={status === 403 ? 'text-muted-theme' : 'text-red-600'}>
+        <h1 className="text-2xl font-bold text-foreground mb-2">{t('customer.documents.title', 'Documents')}</h1>
+        <p className={status === 403 ? 'text-muted-foreground' : 'text-red-600'}>
           {status === 403
             ? t('customer.documents.disabled', 'Documents are not available for your account.')
             : t('customer.documents.loadError', 'Could not load your documents.')}
@@ -229,18 +229,18 @@ export const CustomerDocumentsPage: React.FC = () => {
   return (
     <div className="container py-6">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-theme flex items-center gap-2">
+        <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
           <FolderOpen className="w-6 h-6" />
           {t('customer.documents.title', 'Documents')}
         </h1>
-        <p className="text-sm text-muted-theme mt-1">
+        <p className="text-sm text-muted-foreground mt-1">
           {t('customer.documents.subtitle', 'Files your photographer shared with you, and PDFs you sent them.')}
         </p>
       </div>
 
       <Card padding="lg" className="mb-4">
-        <h2 className="text-base font-semibold text-theme mb-1">{t('customer.documents.uploadTitle', 'Send a document')}</h2>
-        <p className="text-xs text-muted-theme mb-3">
+        <h2 className="text-base font-semibold text-foreground mb-1">{t('customer.documents.uploadTitle', 'Send a document')}</h2>
+        <p className="text-xs text-muted-foreground mb-3">
           {limits
             ? t('customer.documents.uploadHint', 'PDF only, up to {{size}} per file. {{used}} of {{quota}} used.', {
               size: formatFileSize(limits.maxUploadBytes),
@@ -250,7 +250,7 @@ export const CustomerDocumentsPage: React.FC = () => {
             : t('customer.documents.uploadHintShort', 'PDF only.')}
         </p>
         <div className="flex flex-col sm:flex-row sm:items-end gap-3">
-          <label className="flex-1 min-w-0 text-sm text-theme">
+          <label className="flex-1 min-w-0 text-sm text-foreground">
             <span className="block mb-1">{t('customer.documents.fileLabel', 'PDF file')}</span>
             <input
               ref={inputRef}
@@ -262,7 +262,7 @@ export const CustomerDocumentsPage: React.FC = () => {
             />
           </label>
           {(events?.length ?? 0) > 0 && (
-            <label className="text-sm text-theme">
+            <label className="text-sm text-foreground">
               <span className="block mb-1">{t('customer.documents.eventLabel', 'Event (optional)')}</span>
               <select
                 value={eventId}
@@ -270,9 +270,9 @@ export const CustomerDocumentsPage: React.FC = () => {
                 onChange={(e) => setEventId(e.target.value)}
                 className="h-10 w-full sm:w-56 rounded-lg border px-2 text-sm"
                 style={{
-                  backgroundColor: 'var(--color-surface)',
-                  borderColor: 'var(--color-surface-border)',
-                  color: 'var(--color-text)',
+                  backgroundColor: 'var(--card)',
+                  borderColor: 'var(--border)',
+                  color: 'var(--foreground)',
                 }}
               >
                 <option value="">{t('customer.documents.noEvent', 'No event')}</option>
@@ -322,7 +322,7 @@ export const CustomerDocumentsPage: React.FC = () => {
 
       {documents.length === 0 ? (
         <Card padding="lg">
-          <p className="text-center text-muted-theme py-8">
+          <p className="text-center text-muted-foreground py-8">
             {t('customer.documents.empty', 'No documents yet.')}
           </p>
         </Card>

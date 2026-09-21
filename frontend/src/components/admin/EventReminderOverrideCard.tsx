@@ -101,7 +101,7 @@ export const EventReminderOverrideCard: React.FC<EventReminderOverrideCardProps>
       <div className="flex items-start justify-between gap-3 mb-2 flex-wrap">
         <div className="flex items-center gap-2">
           {disabled
-            ? <BellOff className="w-5 h-5 text-muted-theme" aria-hidden />
+            ? <BellOff className="w-5 h-5 text-muted-foreground" aria-hidden />
             : <Bell className="w-5 h-5" aria-hidden />}
           <h2 className="text-lg font-semibold">
             {t('eventReminderOverride.title', 'Pre-event reminder')}
@@ -119,7 +119,7 @@ export const EventReminderOverrideCard: React.FC<EventReminderOverrideCardProps>
         </Button>
       </div>
 
-      <p className="text-xs text-muted-theme mb-3">
+      <p className="text-xs text-muted-foreground mb-3">
         {t('eventReminderOverride.help',
           'Per-event override for the customer reminder. Global on-off + default offset live under Settings → Reminder emails. Anything left blank here inherits the global setting / resolved template.')}
       </p>

@@ -341,7 +341,7 @@ export const AdminDashboard: React.FC = () => {
             {expiringTotal > 5 && (
               <button
                 onClick={() => navigate('/admin/events?filter=expiring')}
-                className="w-full mt-4 text-sm text-accent hover:opacity-80 font-medium"
+                className="w-full mt-4 text-sm text-brand hover:opacity-80 font-medium"
               >
                 {t('admin.viewAllExpiringEvents', { count: expiringTotal })} →
               </button>
@@ -401,7 +401,7 @@ export const AdminDashboard: React.FC = () => {
               {pendingApprovals.length > 5 && (
                 <button
                   onClick={() => navigate('/admin/workflows/approvals')}
-                  className="w-full mt-4 text-sm text-accent hover:opacity-80 font-medium"
+                  className="w-full mt-4 text-sm text-brand hover:opacity-80 font-medium"
                 >
                   {t('workflows.approvals.viewAll', 'View all approvals')} →
                 </button>

@@ -186,7 +186,7 @@ export const CustomerAcceptInvitePage: React.FC = () => {
   return (
     <div
       className="customer-surface min-h-screen flex items-center justify-center px-4 py-8"
-      style={{ backgroundColor: 'var(--color-background, #fafafa)' }}
+      style={{ backgroundColor: 'var(--background, #fafafa)' }}
     >
       <div className="w-full max-w-2xl">
         <div className="text-center mb-8">
@@ -195,10 +195,10 @@ export const CustomerAcceptInvitePage: React.FC = () => {
             alt={companyName}
             className="h-16 w-auto object-contain mx-auto mb-4"
           />
-          <h1 className="text-2xl font-bold text-theme">
+          <h1 className="text-2xl font-bold text-foreground">
             {t('customer.acceptInvite.title', 'Set up your account')}
           </h1>
-          <p className="mt-2 text-sm text-muted-theme">
+          <p className="mt-2 text-sm text-muted-foreground">
             {t('customer.acceptInvite.subtitle', 'Confirm or fill in your details. You can edit anything from the profile page later.')}
           </p>
         </div>
@@ -209,13 +209,13 @@ export const CustomerAcceptInvitePage: React.FC = () => {
           ) : lookupError || !invitation ? (
             <div className="flex items-start gap-2 text-sm">
               <AlertCircle className="w-5 h-5 mt-0.5 shrink-0 text-red-600" />
-              <p className="text-theme">{lookupError}</p>
+              <p className="text-foreground">{lookupError}</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="flex items-start gap-2 p-3 rounded-lg" style={{ backgroundColor: 'var(--color-elevated, #f5f5f5)' }}>
-                <CheckCircle className="w-5 h-5 mt-0.5 shrink-0" style={{ color: 'var(--color-accent)' }} />
-                <div className="text-sm text-theme">
+              <div className="flex items-start gap-2 p-3 rounded-lg" style={{ backgroundColor: 'var(--muted, #f5f5f5)' }}>
+                <CheckCircle className="w-5 h-5 mt-0.5 shrink-0" style={{ color: 'var(--brand)' }} />
+                <div className="text-sm text-foreground">
                   {t('customer.acceptInvite.emailWillBe', 'Your account email will be ')}
                   <span className="font-medium">{invitation.email}</span>
                   {invitation.invitedBy ? (
@@ -229,21 +229,21 @@ export const CustomerAcceptInvitePage: React.FC = () => {
               </div>
 
               {errors.form && (
-                <div role="alert" className="flex items-start gap-2 p-3 rounded-lg border" style={{ borderColor: 'var(--color-surface-border)' }}>
+                <div role="alert" className="flex items-start gap-2 p-3 rounded-lg border" style={{ borderColor: 'var(--border)' }}>
                   <AlertCircle className="w-4 h-4 mt-0.5 shrink-0 text-red-600" />
-                  <span className="text-sm text-theme">{errors.form}</span>
+                  <span className="text-sm text-foreground">{errors.form}</span>
                 </div>
               )}
 
               {/* Personal — required: display name + password */}
               <section className="space-y-3">
-                <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-theme flex items-center gap-2">
+                <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
                   <UserIcon className="w-4 h-4" />
                   {t('customer.acceptInvite.section.personal', 'Personal')}
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-sm font-medium text-theme mb-1">
+                    <label className="block text-sm font-medium text-foreground mb-1">
                       {t('customer.profile.field.salutation', 'Salutation')}
                     </label>
                     <select
@@ -251,9 +251,9 @@ export const CustomerAcceptInvitePage: React.FC = () => {
                       onChange={(e) => update('salutation', e.target.value)}
                       className="w-full rounded-lg border px-3 h-10 text-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2"
                       style={{
-                        backgroundColor: 'var(--color-surface)',
-                        borderColor: 'var(--color-surface-border)',
-                        color: 'var(--color-text)',
+                        backgroundColor: 'var(--card)',
+                        borderColor: 'var(--border)',
+                        color: 'var(--foreground)',
                       }}
                     >
                       {SALUTATION_OPTIONS.map((o) => (
@@ -262,7 +262,7 @@ export const CustomerAcceptInvitePage: React.FC = () => {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-theme mb-1">
+                    <label className="block text-sm font-medium text-foreground mb-1">
                       {t('customer.acceptInvite.displayName', 'Display name')} <span className="text-red-500">*</span>
                     </label>
                     <Input
@@ -273,7 +273,7 @@ export const CustomerAcceptInvitePage: React.FC = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-theme mb-1" htmlFor="invite-first-name">
+                    <label className="block text-sm font-medium text-foreground mb-1" htmlFor="invite-first-name">
                       {t('customer.profile.field.firstName', 'First name')}
                     </label>
                     <Input
@@ -285,7 +285,7 @@ export const CustomerAcceptInvitePage: React.FC = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-theme mb-1" htmlFor="invite-last-name">
+                    <label className="block text-sm font-medium text-foreground mb-1" htmlFor="invite-last-name">
                       {t('customer.profile.field.lastName', 'Last name')}
                     </label>
                     <Input
@@ -303,13 +303,13 @@ export const CustomerAcceptInvitePage: React.FC = () => {
                   appreciate having the phone for last-minute schedule
                   changes but no customer should be blocked on it. */}
               <section className="space-y-3">
-                <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-theme flex items-center gap-2">
+                <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
                   <Phone className="w-4 h-4" />
                   {t('customer.acceptInvite.section.contact', 'Contact & business (optional)')}
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-sm font-medium text-theme mb-1" htmlFor="invite-phone">
+                    <label className="block text-sm font-medium text-foreground mb-1" htmlFor="invite-phone">
                       {t('customer.profile.field.phone', 'Phone')}
                     </label>
                     <Input
@@ -322,7 +322,7 @@ export const CustomerAcceptInvitePage: React.FC = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-theme mb-1" htmlFor="invite-company">
+                    <label className="block text-sm font-medium text-foreground mb-1" htmlFor="invite-company">
                       {t('customer.profile.field.companyName', 'Company name')}
                     </label>
                     <Input
@@ -334,7 +334,7 @@ export const CustomerAcceptInvitePage: React.FC = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-theme mb-1" htmlFor="invite-vat">
+                    <label className="block text-sm font-medium text-foreground mb-1" htmlFor="invite-vat">
                       {t('customer.profile.field.vatId', 'VAT ID')}
                     </label>
                     <Input
@@ -349,7 +349,7 @@ export const CustomerAcceptInvitePage: React.FC = () => {
 
               {/* Address */}
               <section className="space-y-3">
-                <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-theme flex items-center gap-2">
+                <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
                   <MapPin className="w-4 h-4" />
                   {t('customer.acceptInvite.section.address', 'Billing address (optional)')}
                 </h2>
@@ -357,7 +357,7 @@ export const CustomerAcceptInvitePage: React.FC = () => {
                     uses — see CustomerProfilePage for the rationale. */}
                 <div className="grid grid-cols-1 sm:grid-cols-6 gap-3">
                   <div className="sm:col-span-6">
-                    <label className="block text-sm font-medium text-theme mb-1" htmlFor="invite-address-line1">
+                    <label className="block text-sm font-medium text-foreground mb-1" htmlFor="invite-address-line1">
                       {t('customer.profile.field.addressLine1', 'Address line 1')}
                     </label>
                     <Input
@@ -369,7 +369,7 @@ export const CustomerAcceptInvitePage: React.FC = () => {
                     />
                   </div>
                   <div className="sm:col-span-6">
-                    <label className="block text-sm font-medium text-theme mb-1" htmlFor="invite-address-line2">
+                    <label className="block text-sm font-medium text-foreground mb-1" htmlFor="invite-address-line2">
                       {t('customer.profile.field.addressLine2', 'Address line 2')}
                     </label>
                     <Input
@@ -381,7 +381,7 @@ export const CustomerAcceptInvitePage: React.FC = () => {
                     />
                   </div>
                   <div className="sm:col-span-2">
-                    <label className="block text-sm font-medium text-theme mb-1" htmlFor="invite-postal-code">
+                    <label className="block text-sm font-medium text-foreground mb-1" htmlFor="invite-postal-code">
                       {t('customer.profile.field.postalCode', 'Postal code')}
                     </label>
                     <Input
@@ -394,7 +394,7 @@ export const CustomerAcceptInvitePage: React.FC = () => {
                     />
                   </div>
                   <div className="sm:col-span-4">
-                    <label className="block text-sm font-medium text-theme mb-1" htmlFor="invite-city">
+                    <label className="block text-sm font-medium text-foreground mb-1" htmlFor="invite-city">
                       {t('customer.profile.field.city', 'City')}
                     </label>
                     <Input
@@ -406,7 +406,7 @@ export const CustomerAcceptInvitePage: React.FC = () => {
                     />
                   </div>
                   <div className="sm:col-span-3">
-                    <label className="block text-sm font-medium text-theme mb-1" htmlFor="invite-state">
+                    <label className="block text-sm font-medium text-foreground mb-1" htmlFor="invite-state">
                       {t('customer.profile.field.state', 'State / region')}
                     </label>
                     <Input
@@ -432,13 +432,13 @@ export const CustomerAcceptInvitePage: React.FC = () => {
 
               {/* Password — required */}
               <section className="space-y-3">
-                <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-theme flex items-center gap-2">
+                <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
                   <Lock className="w-4 h-4" />
                   {t('customer.acceptInvite.section.password', 'Choose a password')}
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-sm font-medium text-theme mb-1">
+                    <label className="block text-sm font-medium text-foreground mb-1">
                       {t('customer.acceptInvite.password', 'Password')} <span className="text-red-500">*</span>
                     </label>
                     <Input
@@ -450,7 +450,7 @@ export const CustomerAcceptInvitePage: React.FC = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-theme mb-1">
+                    <label className="block text-sm font-medium text-foreground mb-1">
                       {t('customer.acceptInvite.confirm', 'Confirm password')} <span className="text-red-500">*</span>
                     </label>
                     <Input
@@ -462,7 +462,7 @@ export const CustomerAcceptInvitePage: React.FC = () => {
                     />
                   </div>
                 </div>
-                <p className="text-xs text-muted-theme">
+                <p className="text-xs text-muted-foreground">
                   {t('customer.acceptInvite.passwordHint', 'At least 8 characters, with one uppercase letter and one number.')}
                 </p>
               </section>

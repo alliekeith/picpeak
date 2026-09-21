@@ -158,7 +158,7 @@ const GridPhoto: React.FC<GridPhotoProps> = ({
           )}
           {commentCount > 0 && (
             <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/90 backdrop-blur-xs" title="Commented">
-              <MessageSquare className="w-3.5 h-3.5 text-accent" fill="currentColor" />
+              <MessageSquare className="w-3.5 h-3.5 text-brand" fill="currentColor" />
             </span>
           )}
         </div>

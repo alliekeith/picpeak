@@ -42,16 +42,16 @@ export const TransferUploadPage: React.FC = () => {
     retry: false,
   });
 
-  const muted = { color: 'var(--color-muted-text)' } as const;
+  const muted = { color: 'var(--muted-foreground)' } as const;
 
   const wrap = (children: React.ReactNode) => (
     <div
       className="flex min-h-screen items-center justify-center p-4"
-      style={{ backgroundColor: 'var(--color-background)', color: 'var(--color-text)' }}
+      style={{ backgroundColor: 'var(--background)', color: 'var(--foreground)' }}
     >
       <div
         className="w-full max-w-lg rounded-lg border shadow-xs"
-        style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-surface-border)' }}
+        style={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)' }}
       >
         {children}
       </div>
@@ -116,7 +116,7 @@ export const TransferUploadPage: React.FC = () => {
   return wrap(
     <div className="p-6">
       <div className="mb-5 text-center">
-        <UploadCloud className="mx-auto mb-2 h-10 w-10" style={{ color: 'var(--color-accent)' }} />
+        <UploadCloud className="mx-auto mb-2 h-10 w-10" style={{ color: 'var(--brand)' }} />
         <h1 className="text-2xl font-bold">{data.title}</h1>
         {data.message && <p className="mt-2 whitespace-pre-line" style={muted}>{data.message}</p>}
         <p className="mt-2 text-sm" style={muted}>
@@ -128,7 +128,7 @@ export const TransferUploadPage: React.FC = () => {
         type="button"
         onClick={() => inputRef.current?.click()}
         className="flex w-full flex-col items-center justify-center rounded-lg border-2 border-dashed py-10 transition hover:opacity-80"
-        style={{ borderColor: 'var(--color-surface-border)', color: 'var(--color-muted-text)' }}
+        style={{ borderColor: 'var(--border)', color: 'var(--muted-foreground)' }}
         onDragOver={(e) => e.preventDefault()}
         onDrop={(e) => { e.preventDefault(); addFiles(e.dataTransfer.files); }}
       >
@@ -144,12 +144,12 @@ export const TransferUploadPage: React.FC = () => {
       />
 
       {files.length > 0 && (
-        <ul className="mt-4 border-t" style={{ borderColor: 'var(--color-surface-border)' }}>
+        <ul className="mt-4 border-t" style={{ borderColor: 'var(--border)' }}>
           {files.map((f, idx) => (
             <li
               key={`${f.name}-${idx}`}
               className="flex items-center justify-between border-b py-2 text-sm"
-              style={{ borderColor: 'var(--color-surface-border)' }}
+              style={{ borderColor: 'var(--border)' }}
             >
               <span className="flex min-w-0 items-center gap-2">
                 <FileIcon className="h-4 w-4 shrink-0" style={muted} />
@@ -169,8 +169,8 @@ export const TransferUploadPage: React.FC = () => {
       )}
 
       {uploading && (
-        <div className="mt-4 h-2 w-full overflow-hidden rounded-full" style={{ backgroundColor: 'var(--color-surface-border)' }}>
-          <div className="h-full transition-all" style={{ width: `${progress}%`, backgroundColor: 'var(--color-accent-dark)' }} />
+        <div className="mt-4 h-2 w-full overflow-hidden rounded-full" style={{ backgroundColor: 'var(--border)' }}>
+          <div className="h-full transition-all" style={{ width: `${progress}%`, backgroundColor: 'var(--primary)' }} />
         </div>
       )}
 

@@ -310,12 +310,12 @@ export const QuoteDetailPage: React.FC = () => {
           {q.declinedAt && <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.field.declinedAt', 'Declined at')}</div><div>{fmtDateTime(q.declinedAt)}</div></div>}
           {q.replacesQuoteId && q.replacesQuoteNumber && (
             <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.replacesQuote', 'Replaces')}</div>
-              <button type="button" className="text-primary-600 dark:text-primary-400 hover:underline"
+              <button type="button" className="text-brand-600 dark:text-brand-400 hover:underline"
                 onClick={() => navigate(`/admin/clients/quotes/${q.replacesQuoteId}`)}>{q.replacesQuoteNumber}</button></div>
           )}
           {q.replacedByQuoteId && q.replacedByQuoteNumber && (
             <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.replacedByQuote', 'Replaced by')}</div>
-              <button type="button" className="text-primary-600 dark:text-primary-400 hover:underline"
+              <button type="button" className="text-brand-600 dark:text-brand-400 hover:underline"
                 onClick={() => navigate(`/admin/clients/quotes/${q.replacedByQuoteId}`)}>{q.replacedByQuoteNumber}</button></div>
           )}
           {q.declineReason && <div className="col-span-2 md:col-span-4"><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.field.declineReason', 'Decline reason')}</div><div className="whitespace-pre-line">{q.declineReason}</div></div>}

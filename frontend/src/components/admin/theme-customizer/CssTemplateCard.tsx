@@ -40,7 +40,7 @@ export const CssTemplateCard: React.FC<CssTemplateCardProps> = ({
           <div className="flex items-center justify-between">
             <span className="font-medium text-sm text-neutral-900 dark:text-neutral-100">{t('branding.noTemplate', 'No Template')}</span>
             {!cssTemplateId && (
-              <Check className="w-4 h-4 text-accent-dark shrink-0" />
+              <Check className="w-4 h-4 text-primary shrink-0" />
             )}
           </div>
           <span className="text-xs text-neutral-600 dark:text-neutral-400 mt-1 block">
@@ -62,7 +62,7 @@ export const CssTemplateCard: React.FC<CssTemplateCardProps> = ({
             <div className="flex items-center justify-between">
               <span className="font-medium text-sm text-neutral-900 dark:text-neutral-100">{template.name}</span>
               {cssTemplateId === template.id && (
-                <Check className="w-4 h-4 text-accent-dark shrink-0" />
+                <Check className="w-4 h-4 text-primary shrink-0" />
               )}
             </div>
             <span className="text-xs text-neutral-600 dark:text-neutral-400 mt-1 block">

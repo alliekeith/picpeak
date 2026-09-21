@@ -133,7 +133,7 @@ export const RoleEditorModal: React.FC<RoleEditorModalProps> = ({
         <div className="p-6 flex-1 overflow-y-auto">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <Shield className="w-5 h-5 text-accent" />
+              <Shield className="w-5 h-5 text-brand" />
               <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
                 {mode === 'create'
                   ? t('roleEditor.createTitle', 'Create role')
@@ -226,7 +226,7 @@ export const RoleEditorModal: React.FC<RoleEditorModalProps> = ({
                       type="button"
                       onClick={() => toggleCategory(perms, allSelected)}
                       disabled={readOnly}
-                      className="text-xs font-medium text-accent hover:underline disabled:opacity-40 disabled:no-underline"
+                      className="text-xs font-medium text-brand hover:underline disabled:opacity-40 disabled:no-underline"
                     >
                       {allSelected ? t('roleEditor.clearAll', 'Clear all') : t('roleEditor.selectAll', 'Select all')}
                     </button>
@@ -245,7 +245,7 @@ export const RoleEditorModal: React.FC<RoleEditorModalProps> = ({
                             checked={checked}
                             onChange={() => togglePerm(p.name)}
                             disabled={readOnly}
-                            className="mt-0.5 rounded-sm border-neutral-300 dark:border-neutral-600 text-accent focus:ring-accent"
+                            className="mt-0.5 rounded-sm border-neutral-300 dark:border-neutral-600 text-brand focus:ring-brand"
                           />
                           <span className="min-w-0">
                             <span className="block text-sm text-neutral-800 dark:text-neutral-200">{p.display_name}</span>

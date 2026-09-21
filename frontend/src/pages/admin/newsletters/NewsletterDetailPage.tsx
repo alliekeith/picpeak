@@ -146,7 +146,7 @@ export const NewsletterDetailPage: React.FC = () => {
               <div
                 data-testid="newsletter-progress"
                 className="h-full rounded-full transition-all"
-                style={{ width: `${progress}%`, backgroundColor: 'var(--color-accent)' }}
+                style={{ width: `${progress}%`, backgroundColor: 'var(--brand)' }}
               />
             </div>
             <p className="mt-2 text-xs text-neutral-500 dark:text-neutral-400">

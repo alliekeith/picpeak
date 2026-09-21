@@ -43,7 +43,7 @@ export const ControlsStyleCard: React.FC<ControlsStyleCardProps> = ({ localTheme
             </span>
           </div>
           {(localTheme.controlsStyle || 'classic') === 'classic' && (
-            <Check className="absolute top-2 right-2 w-4 h-4 text-accent-dark" />
+            <Check className="absolute top-2 right-2 w-4 h-4 text-primary" />
           )}
         </button>
         <button
@@ -67,7 +67,7 @@ export const ControlsStyleCard: React.FC<ControlsStyleCardProps> = ({ localTheme
             </span>
           </div>
           {localTheme.controlsStyle === 'sidebar' && (
-            <Check className="absolute top-2 right-2 w-4 h-4 text-accent-dark" />
+            <Check className="absolute top-2 right-2 w-4 h-4 text-primary" />
           )}
         </button>
       </div>

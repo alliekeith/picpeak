@@ -74,21 +74,21 @@ export const GuestNamePromptModal: React.FC<GuestNamePromptModalProps> = ({
   return (
     <div className="fixed inset-0 z-60 flex items-center justify-center p-4">
       <div className="fixed inset-0 bg-black bg-opacity-50" onClick={allowCancel ? handleClose : undefined} />
-      <div className="relative bg-surface rounded-lg shadow-xl max-w-md w-full p-6">
+      <div className="relative bg-card rounded-lg shadow-xl max-w-md w-full p-6">
         {allowCancel && (
           <button
             type="button"
             onClick={handleClose}
             className="absolute top-4 right-4 p-1 hover:bg-black/10 rounded-lg transition-colors"
           >
-            <X className="w-5 h-5 text-muted-theme" />
+            <X className="w-5 h-5 text-muted-foreground" />
           </button>
         )}
 
-        <h2 className="text-lg font-semibold text-theme mb-2">
+        <h2 className="text-lg font-semibold text-foreground mb-2">
           {t('gallery.guestPrompt.title', "Welcome — what's your name?")}
         </h2>
-        <p className="text-sm text-muted-theme mb-4">
+        <p className="text-sm text-muted-foreground mb-4">
           {t(
             'gallery.guestPrompt.description',
             'Your picks will be saved under this name so the photographer knows which photos you love.'
@@ -155,13 +155,13 @@ export const GuestNamePromptModal: React.FC<GuestNamePromptModalProps> = ({
               A dark gallery preset is delivered through CSS variables and does
               NOT add Tailwind's .dark class, so the dark: half never fires and
               this block would render dark grey on a dark surface. The rest of
-              the modal uses text-theme / text-muted-theme for exactly this
+              the modal uses text-foreground / text-muted-foreground for exactly this
               reason. */}
           <div
             className="pt-3 mt-1 border-t text-center"
-            style={{ borderColor: 'var(--color-surface-border, #e5e5e5)' }}
+            style={{ borderColor: 'var(--border, #e5e5e5)' }}
           >
-            <p className="text-sm text-muted-theme">
+            <p className="text-sm text-muted-foreground">
               {t(
                 'gallery.guestPrompt.returningHint',
                 'Been here before? Your earlier picks are still saved.'
@@ -173,7 +173,7 @@ export const GuestNamePromptModal: React.FC<GuestNamePromptModalProps> = ({
                 closePrompt();
                 openRecovery();
               }}
-              className="mt-1 text-sm font-medium text-accent hover:underline"
+              className="mt-1 text-sm font-medium text-brand hover:underline"
             >
               {t('gallery.guestPrompt.recoverPicks', 'Get them back')}
             </button>

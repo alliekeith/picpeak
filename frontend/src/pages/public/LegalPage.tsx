@@ -100,7 +100,7 @@ export const LegalPage: React.FC = () => {
             </p>
             <Link
               to="/"
-              className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700"
+              className="inline-flex items-center gap-2 text-brand-600 hover:text-brand-700"
             >
               <Home className="w-4 h-4" />
               Go to Homepage
@@ -134,7 +134,7 @@ export const LegalPage: React.FC = () => {
             
             {/* This page's chrome is hardcoded light (bg-neutral-50 wrapper,
                 white card). Without an explicit text color the CMS body
-                inherits `body { color: var(--color-text) }`, which a
+                inherits `body { color: var(--foreground) }`, which a
                 dark-toned branding theme sets to near-white — leaving the
                 Impressum / Datenschutz text invisible (QA S3). */}
             <div

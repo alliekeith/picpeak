@@ -151,7 +151,7 @@ export const UpdateNotificationSettings: React.FC = () => {
             type="checkbox"
             checked={localEnabled}
             onChange={(e) => handleToggleEnabled(e.target.checked)}
-            className="w-4 h-4 text-primary-600 bg-neutral-100 border-neutral-300 rounded-sm focus:ring-primary-500"
+            className="w-4 h-4 text-brand-600 bg-neutral-100 border-neutral-300 rounded-sm focus:ring-brand-500"
           />
           <div>
             <p className="font-medium text-neutral-900 dark:text-neutral-100">

@@ -233,7 +233,7 @@ export function DocumentVerificationStep<Result = DocumentAccessGrant>({
               type="button"
               onClick={handleSend}
               disabled={busy || waitSeconds > 0}
-              className="w-full inline-flex justify-center items-center gap-2 px-4 py-2 rounded-md bg-accent-dark text-white text-sm hover:opacity-90 disabled:opacity-50"
+              className="w-full inline-flex justify-center items-center gap-2 px-4 py-2 rounded-md bg-primary text-white text-sm hover:opacity-90 disabled:opacity-50"
             >
               <Mail className="w-4 h-4" />
               {busy
@@ -267,7 +267,7 @@ export function DocumentVerificationStep<Result = DocumentAccessGrant>({
               <button
                 type="submit"
                 disabled={busy || code.length !== 6}
-                className="w-full px-4 py-2 rounded-md bg-accent-dark text-white text-sm hover:opacity-90 disabled:opacity-50"
+                className="w-full px-4 py-2 rounded-md bg-primary text-white text-sm hover:opacity-90 disabled:opacity-50"
               >
                 {busy ? t('documentVerification.confirming', 'Checking…') : t('documentVerification.confirm', 'Confirm')}
               </button>

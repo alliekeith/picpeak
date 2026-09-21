@@ -143,7 +143,7 @@ const CreateInvitationModal: React.FC<CreateInvitationModalProps> = ({
                     setRoleId(e.target.value ? Number(e.target.value) : '');
                     setErrors((prev) => ({ ...prev, role: undefined }));
                   }}
-                  className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:border-accent-dark"
+                  className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:border-primary"
                   disabled={isLoading}
                 >
                   <option value="">{t('userManagement.selectRole')}</option>
@@ -256,7 +256,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
               <select
                 value={roleId}
                 onChange={(e) => setRoleId(e.target.value ? Number(e.target.value) : '')}
-                className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:border-accent-dark"
+                className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:border-primary"
                 disabled={isLoading}
               >
                 <option value="">{t('userManagement.selectRole')}</option>
@@ -652,7 +652,7 @@ export const UserManagementPage: React.FC = () => {
                 {users?.length || 0}
               </p>
             </div>
-            <Users className="w-8 h-8 text-accent" />
+            <Users className="w-8 h-8 text-brand" />
           </div>
         </Card>
 
@@ -708,7 +708,7 @@ export const UserManagementPage: React.FC = () => {
               onClick={() => setActiveTab(tab.key)}
               className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors flex items-center gap-2 ${
                 activeTab === tab.key
-                  ? 'border-accent text-accent'
+                  ? 'border-brand text-brand'
                   : 'border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300'
               }`}
             >
@@ -716,7 +716,7 @@ export const UserManagementPage: React.FC = () => {
               <span
                 className={`px-2 py-0.5 text-xs rounded-full ${
                   activeTab === tab.key
-                    ? 'bg-accent-dark/15 text-accent-dark'
+                    ? 'bg-primary/15 text-primary'
                     : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400'
                 }`}
               >
@@ -786,8 +786,8 @@ export const UserManagementPage: React.FC = () => {
                     <tr key={user.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-700/50">
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-accent-dark/15 flex items-center justify-center">
-                            <span className="text-accent-dark font-medium text-sm">
+                          <div className="w-10 h-10 rounded-full bg-primary/15 flex items-center justify-center">
+                            <span className="text-primary font-medium text-sm">
                               {user.username.charAt(0).toUpperCase()}
                             </span>
                           </div>
@@ -840,7 +840,7 @@ export const UserManagementPage: React.FC = () => {
                         <div className="flex items-center justify-end gap-2">
                           <button
                             onClick={() => handleEditUser(user)}
-                            className="p-1.5 text-neutral-400 hover:text-accent hover:bg-accent-dark/15 rounded-lg transition-colors"
+                            className="p-1.5 text-neutral-400 hover:text-brand hover:bg-primary/15 rounded-lg transition-colors"
                             title={t('userManagement.editUser')}
                           >
                             <Edit className="w-4 h-4" />

@@ -60,7 +60,7 @@ export const ProjectSelect: React.FC<ProjectSelectProps> = ({
         value={value ?? ''}
         disabled={disabled || isLoading}
         onChange={(e) => onChange(e.target.value ? Number(e.target.value) : null)}
-        className="w-full rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-primary-500 disabled:opacity-60"
+        className="w-full rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-brand-500 disabled:opacity-60"
       >
         <option value="">{t('projects.picker.none', 'No project')}</option>
         {options.map((p) => (

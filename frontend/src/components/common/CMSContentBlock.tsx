@@ -53,7 +53,7 @@ export const CMSContentBlock: React.FC<CMSContentBlockProps> = ({ slug, fallback
     return (
       <div
         className="min-h-screen flex items-center justify-center"
-        style={{ backgroundColor: 'var(--color-background, #fafafa)' }}
+        style={{ backgroundColor: 'var(--background, #fafafa)' }}
       >
         <Loading size="lg" />
       </div>
@@ -72,7 +72,7 @@ export const CMSContentBlock: React.FC<CMSContentBlockProps> = ({ slug, fallback
   const companyName = settings?.branding_company_name || 'PicPeak';
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundColor: 'var(--color-background, #fafafa)' }}>
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: 'var(--background, #fafafa)' }}>
       <div className="p-8 text-center">
         <img
           src={logoSrc}
@@ -91,8 +91,8 @@ export const CMSContentBlock: React.FC<CMSContentBlockProps> = ({ slug, fallback
           <Card
             padding="lg"
             style={{
-              backgroundColor: 'var(--color-surface)',
-              borderColor: 'var(--color-surface-border)',
+              backgroundColor: 'var(--card)',
+              borderColor: 'var(--border)',
             }}
           >
             {/*
@@ -102,13 +102,13 @@ export const CMSContentBlock: React.FC<CMSContentBlockProps> = ({ slug, fallback
              */}
             <h1
               className="text-2xl sm:text-3xl font-bold mb-6"
-              style={{ color: 'var(--color-text)' }}
+              style={{ color: 'var(--foreground)' }}
             >
               {page.title}
             </h1>
             <div
-              className="prose prose-neutral dark:prose-invert max-w-none text-theme"
-              style={{ color: 'var(--color-text)' }}
+              className="prose prose-neutral dark:prose-invert max-w-none text-foreground"
+              style={{ color: 'var(--foreground)' }}
               dangerouslySetInnerHTML={{
                 __html: DOMPurify.sanitize(page.content, {
                   ALLOWED_TAGS,
@@ -122,7 +122,7 @@ export const CMSContentBlock: React.FC<CMSContentBlockProps> = ({ slug, fallback
               <Link
                 to="/"
                 className="text-sm font-medium hover:underline"
-                style={{ color: 'var(--color-accent)' }}
+                style={{ color: 'var(--brand)' }}
               >
                 {lang === 'de' ? '← Zur Startseite' : '← Back to home'}
               </Link>
@@ -133,13 +133,13 @@ export const CMSContentBlock: React.FC<CMSContentBlockProps> = ({ slug, fallback
 
       <footer
         className="py-8 text-center text-xs"
-        style={{ color: 'var(--color-muted-text)' }}
+        style={{ color: 'var(--muted-foreground)' }}
       >
         <div className="flex justify-center gap-4">
           <Link to="/impressum" className="hover:underline">
             {lang === 'de' ? 'Impressum' : 'Legal Notice'}
           </Link>
-          <span style={{ color: 'var(--color-surface-border)' }}>•</span>
+          <span style={{ color: 'var(--border)' }}>•</span>
           <Link to="/datenschutz" className="hover:underline">
             {lang === 'de' ? 'Datenschutz' : 'Privacy Policy'}
           </Link>

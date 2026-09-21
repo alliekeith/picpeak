@@ -220,7 +220,7 @@ export const StatusTab: React.FC<StatusTabProps> = ({
           ? 'bg-red-600'
           : usagePercentage >= 90
             ? 'bg-amber-500'
-            : 'bg-primary-600';
+            : 'bg-brand-600';
         const limitCardClass = overSoftLimit ? 'bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800' : 'bg-neutral-50 dark:bg-neutral-800';
         const limitValueClass = overSoftLimit ? 'text-amber-700 dark:text-amber-300' : 'text-neutral-900 dark:text-neutral-100';
         const limitDescriptorClass = overSoftLimit ? 'text-amber-700 dark:text-amber-300 font-semibold' : 'text-neutral-600 dark:text-neutral-400';
@@ -796,7 +796,7 @@ export const StatusTab: React.FC<StatusTabProps> = ({
       {orientationStatus && canManageSystem && (
         <Card padding="md">
           <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4 flex items-center gap-2">
-            <RotateCw className="w-5 h-5 text-primary-600" />
+            <RotateCw className="w-5 h-5 text-brand-600" />
             {t('settings.orientationBackfill.title', 'Photo Orientation')}
           </h2>
 

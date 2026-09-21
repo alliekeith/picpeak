@@ -209,7 +209,7 @@ export const WebhooksTab: React.FC = () => {
                     type="checkbox"
                     checked={events.includes(e)}
                     onChange={() => toggleEvent(e)}
-                    className="w-4 h-4 text-primary-600 rounded-sm focus:ring-primary-500"
+                    className="w-4 h-4 text-brand-600 rounded-sm focus:ring-brand-500"
                   />
                   <code className="text-xs">{e}</code>
                 </label>
@@ -220,7 +220,7 @@ export const WebhooksTab: React.FC = () => {
           <button
             type="button"
             onClick={() => setShowAdvanced((prev) => !prev)}
-            className="text-sm text-primary-600 dark:text-primary-400 hover:underline self-start"
+            className="text-sm text-brand-600 dark:text-brand-400 hover:underline self-start"
           >
             {showAdvanced ? t('settings.webhooks.hideAdvanced', '− Hide advanced (filter, template)') : t('settings.webhooks.showAdvanced', '+ Advanced (filter, template)')}
           </button>

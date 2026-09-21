@@ -59,7 +59,7 @@ export const HeaderStyleCard: React.FC<HeaderStyleCardProps> = ({ localTheme, ha
               </span>
             </div>
             {(localTheme.headerStyle || 'standard') === style && (
-              <Check className="absolute top-2 right-2 w-4 h-4 text-accent-dark" />
+              <Check className="absolute top-2 right-2 w-4 h-4 text-primary" />
             )}
           </button>
         ))}
@@ -96,7 +96,7 @@ export const HeaderStyleCard: React.FC<HeaderStyleCardProps> = ({ localTheme, ha
                   </span>
                 </div>
                 {(localTheme.heroDividerStyle || 'wave') === divider && (
-                  <Check className="absolute top-1 right-1 w-3 h-3 text-accent-dark" />
+                  <Check className="absolute top-1 right-1 w-3 h-3 text-primary" />
                 )}
               </button>
             ))}

@@ -50,10 +50,10 @@ const nextKey = () => {
   return `clause-${keyCounter}`;
 };
 
-const fieldClass = 'focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900 w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 '
+const fieldClass = 'focus:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900 w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 '
   + 'bg-white dark:bg-neutral-800 text-sm text-neutral-900 dark:text-neutral-100';
 const labelClass = 'block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1';
-const iconButton = 'focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900 p-1 rounded-sm border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-200 '
+const iconButton = 'focus:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900 p-1 rounded-sm border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-200 '
   + 'disabled:opacity-40 hover:bg-neutral-50 dark:hover:bg-neutral-700';
 
 function libraryBodies(block: ContractBlock): LocaleText {
@@ -108,7 +108,7 @@ const LocaleTextField: React.FC<{
               aria-pressed={locale === l}
               onClick={() => setLocale(l)}
               className={`px-2 py-0.5 rounded text-xs border ${locale === l
-                ? 'bg-primary-600 text-white border-primary-600'
+                ? 'bg-brand-600 text-white border-brand-600'
                 : 'border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300'}`}
             >
               {l.toUpperCase()}{value[l] ? ' •' : ''}

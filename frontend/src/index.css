@@ -7,11 +7,221 @@
  * frontend/src/contexts/ThemeContext.tsx based on the active theme.
  */
 @import 'tailwindcss';
+@import 'tw-animate-css';
 
 /* Import image protection styles */
 @import './styles/image-protection.css' layer(base);
 
-@config '../tailwind.config.js';
+@plugin '@tailwindcss/typography';
+
+/*
+ * Thumbnail-scale offsets build grid-cols-* class names at runtime, so the
+ * source scanner cannot see them. v4's replacement for v3's `safelist`.
+ */
+@source inline("{,sm:,lg:,xl:}grid-cols-{1..12}");
+
+/* ===================================================================
+ * Design tokens
+ * ===================================================================
+ *
+ * Structure and token names follow shadcn/ui exactly, so the unmodified
+ * components in src/components/ui resolve without any adaptation:
+ * `:root` / `.dark` hold raw colour values, and `@theme inline` exposes
+ * them to Tailwind as --color-* utilities.
+ *
+ * Two PicPeak-specific notes:
+ *
+ * 1. PicPeak previously kept its runtime theme values in --color-* names
+ *    (--background, --brand, --primary, ...). In
+ *    Tailwind 4 --color-* is Tailwind's own reserved theme namespace and
+ *    shadcn claims those exact names, so the runtime values were moved
+ *    out of it and onto shadcn's names (--background, --primary, ...).
+ *    ThemeContext.applyTheme() writes these at runtime for per-gallery
+ *    photographer branding; the values below are the pre-mount defaults.
+ *
+ * 2. shadcn uses `accent` for a subtle hover surface, whereas PicPeak used
+ *    it for the saturated brand colour. The brand colour therefore lives
+ *    on --brand (and drives --ring), and the brand CTA fill maps onto
+ *    shadcn's --primary. `accent` now means what shadcn means by it.
+ *
+ * Colour format: the static defaults use oklch, matching shadcn. Runtime
+ * branding writes hex, which is equally valid here — Tailwind 4 resolves
+ * opacity modifiers such as bg-primary/90 through color-mix(), so both
+ * formats support them.
+ */
+:root {
+  --radius: 0.5rem;
+
+  /*
+   * BASE tokens. ThemeContext.applyTheme() overwrites exactly these at
+   * runtime from the photographer's branding settings.
+   */
+  --background: oklch(0.985 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --border: oklch(0.922 0 0);
+
+  /* Brand CTA fill (#5C8762 — scrappbook.de green). */
+  --primary: oklch(0.5758 0.0605 145.28);
+  --primary-foreground: oklch(1 0 0);
+
+  /*
+   * DERIVED tokens. These reference the base tokens rather than repeating
+   * values, so a theme only has to set the base set and every shadcn
+   * component still follows the branding. Without this, applyTheme() would
+   * brand `bg-card` but leave `bg-popover` at its static default, and
+   * dropdowns would stay white inside a dark gallery theme.
+   */
+  --card-foreground: var(--foreground);
+  --popover: var(--card);
+  --popover-foreground: var(--foreground);
+  --secondary: var(--muted);
+  --secondary-foreground: var(--foreground);
+  --accent: var(--muted);
+  --accent-foreground: var(--foreground);
+  --input: var(--border);
+  --ring: var(--brand);
+
+  /* Destructive is deliberately NOT brandable: a delete action should read
+   * as dangerous no matter what colours a photographer picks. */
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(1 0 0);
+
+  /*
+   * PicPeak brand tokens. Not part of shadcn's set: these carry the
+   * photographer's colour for links, focus rings and tinted chips.
+   */
+  --brand: oklch(0.723 0.1854 145.3);
+  --brand-foreground: oklch(1 0 0);
+  --brand-light: oklch(0.6756 0.0713 145.6);
+  --brand-dark: oklch(0.4989 0.0545 145.4);
+
+  /* Non-colour theme values written by ThemeContext.applyTheme(). */
+  --font-family: 'Inter', 'Noto Sans', system-ui, -apple-system, sans-serif;
+  --heading-font-family: 'Inter', 'Noto Sans', system-ui, -apple-system, sans-serif;
+  --font-size-base: 16px;
+  --shadow-default: 0 4px 6px rgb(0 0 0 / 0.1);
+}
+
+.dark {
+  /*
+   * Only the base tokens are redeclared; the derived ones in :root follow
+   * automatically because they are var() references.
+   */
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --border: oklch(0.269 0 0);
+
+  --primary: oklch(0.5758 0.0605 145.28);
+  --primary-foreground: oklch(1 0 0);
+
+  --destructive: oklch(0.637 0.237 25.331);
+  --destructive-foreground: oklch(1 0 0);
+
+  --brand: oklch(0.723 0.1854 145.3);
+  --brand-foreground: oklch(1 0 0);
+  --brand-light: oklch(0.6756 0.0713 145.6);
+  --brand-dark: oklch(0.4989 0.0545 145.4);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-brand-light: var(--brand-light);
+  --color-brand-dark: var(--brand-dark);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@theme {
+  --font-sans: 'Inter', 'Noto Sans', system-ui, -apple-system, sans-serif;
+
+  /*
+   * Brand green scale. Previously named primary-50..900; renamed because
+   * Tailwind 4 + shadcn need `primary` for the single CTA colour above.
+   * Values are unchanged, so every migrated call site renders identically.
+   */
+  --color-brand-50: #f0fdf4;
+  --color-brand-100: #dcfce7;
+  --color-brand-200: #bbf7d0;
+  --color-brand-300: #86efac;
+  --color-brand-400: #4ade80;
+  --color-brand-500: #22c55e;
+  --color-brand-600: #5c8762;
+  --color-brand-700: #4a6f4f;
+  --color-brand-800: #3f5d42;
+  --color-brand-900: #365238;
+
+  --color-sand-50: #fdfcfb;
+  --color-sand-100: #f7f5f2;
+  --color-sand-200: #f0ebe5;
+  --color-sand-300: #e6ddd4;
+  --color-sand-400: #d4c2b0;
+  --color-sand-500: #c2a68c;
+  --color-sand-600: #b18b68;
+
+  --spacing-18: 4.5rem;
+  --spacing-88: 22rem;
+
+  --shadow-soft: 0 2px 8px rgb(0 0 0 / 0.04);
+  --shadow-medium: 0 4px 16px rgb(0 0 0 / 0.08);
+  --shadow-large: 0 8px 32px rgb(0 0 0 / 0.12);
+
+  --animate-fade-in: fadeIn 0.5s ease-in-out;
+  --animate-slide-up: slideUp 0.3s ease-out;
+  --animate-scale-in: scaleIn 0.2s ease-out;
+  --animate-shimmer: shimmer 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  @keyframes slideUp {
+    0% { transform: translateY(10px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+  @keyframes scaleIn {
+    0% { transform: scale(0.95); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+}
+
+/* PicPeak's neutral scale was identical to Tailwind's built-in `neutral`,
+ * so it is no longer redefined here. */
+
+@custom-variant dark (&:where(.dark, .dark *));
 
 /*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,
@@ -35,47 +245,47 @@
   /*
    * Button styles.
    *
-   * Migration note: .btn-primary now binds to --color-accent-dark instead
-   * of --color-primary. The two tokens are kept in lockstep by the
+   * Migration note: .btn-primary now binds to --primary instead
+   * of --primary. The two tokens are kept in lockstep by the
    * customizer (handleChange syncs primaryColor → accentDarkColor) and by
    * the migration helper (legacy themes get accentDarkColor = primaryColor),
    * so existing instances render identically after upgrade — but new themes
    * that set only accentDarkColor (the 8-token CI flow) now drive primary
    * buttons correctly. White text + accent-dark fill matches the rest of
    * the selected-state visual language (sidebar, tile-selected, segmented
-   * buttons). Hover stays on --color-primary-dark for the auto-darkened
+   * buttons). Hover stays on --brand-dark for the auto-darkened
    * legacy behaviour.
    */
   @apply inline-flex items-center justify-center font-medium whitespace-nowrap transition-all duration-200 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
-  border-radius: var(--border-radius);
-  --tw-ring-color: var(--color-accent);
-  --tw-ring-offset-color: var(--color-background);
+  border-radius: var(--radius);
+  --tw-ring-color: var(--brand);
+  --tw-ring-offset-color: var(--background);
 }
 
 @utility btn-primary {
-  background-color: var(--color-accent-dark);
+  background-color: var(--primary);
   color: white;
   @apply hover:opacity-90;
 
   &:hover {
-    background-color: var(--color-primary-dark);
+    background-color: var(--brand-dark);
   }
 }
 
 @utility btn-alt {
   background-color: transparent;
-  color: var(--color-text);
-  border: 2px solid var(--color-text);
+  color: var(--foreground);
+  border: 2px solid var(--foreground);
 
   &:hover {
-    background-color: var(--color-text);
-    color: var(--color-background);
+    background-color: var(--foreground);
+    color: var(--background);
   }
 }
 
 @utility btn-secondary {
-  background-color: var(--color-surface-border);
-  color: var(--color-text);
+  background-color: var(--border);
+  color: var(--foreground);
   @apply hover:opacity-80;
 
   /* Secondary and outline buttons for admin dark mode — restore explicit
@@ -86,9 +296,9 @@
 }
 
 @utility btn-outline {
-  border-color: var(--color-surface-border);
+  border-color: var(--border);
   background-color: transparent;
-  color: var(--color-muted-text);
+  color: var(--muted-foreground);
   @apply border hover:opacity-80;
 
   .dark & {
@@ -120,7 +330,7 @@
    * .dark .input override below. Gallery inputs use .input-themed which
    * binds to the 8-token palette via CSS variables.
    */
-  @apply flex h-10 w-full rounded-lg border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+  @apply flex h-10 w-full rounded-lg border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
   @apply bg-white border-neutral-300 text-neutral-900;
 
   &::placeholder {
@@ -136,44 +346,44 @@
   }
 
   .customer-surface & {
-    background-color: var(--color-surface);
-    border-color: var(--color-surface-border);
-    color: var(--color-text);
+    background-color: var(--card);
+    border-color: var(--border);
+    color: var(--foreground);
   }
 
   .customer-surface &select {
-    background-color: var(--color-surface);
-    border-color: var(--color-surface-border);
-    color: var(--color-text);
+    background-color: var(--card);
+    border-color: var(--border);
+    color: var(--foreground);
   }
 
   .customer-surface &input {
-    background-color: var(--color-surface);
-    border-color: var(--color-surface-border);
-    color: var(--color-text);
+    background-color: var(--card);
+    border-color: var(--border);
+    color: var(--foreground);
   }
 
   .customer-surface &::placeholder {
-    color: var(--color-muted-text);
+    color: var(--muted-foreground);
     opacity: 0.7;
   }
 
   .customer-surface &:disabled {
-    background-color: var(--color-elevated, var(--color-surface));
-    color: var(--color-muted-text);
+    background-color: var(--muted, var(--card));
+    color: var(--muted-foreground);
     opacity: 0.7;
   }
 }
 
 @utility input-themed {
   /* Gallery-specific input that uses theme variables */
-  @apply flex h-10 w-full rounded-lg border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
-  background-color: var(--color-surface);
-  border-color: var(--color-surface-border);
-  color: var(--color-text);
+  @apply flex h-10 w-full rounded-lg border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+  background-color: var(--card);
+  border-color: var(--border);
+  color: var(--foreground);
 
   &::placeholder {
-    color: var(--color-muted-text);
+    color: var(--muted-foreground);
   }
 
   .dark & {
@@ -203,7 +413,7 @@
    * hard-code bg-white, and the customer surface uses theme variables
    * rather than the admin's `.dark` class trigger. Overriding here so
    * every <Input> and <Card> rendered inside the customer surface picks
-   * up var(--color-surface) / var(--color-text) automatically — no
+   * up var(--card) / var(--foreground) automatically — no
    * per-page wrapper needed. Same treatment for native <select>
    * elements which share the .input mental model on the profile and
    * accept-invite forms.
@@ -214,8 +424,8 @@
    * gallery) keep their original styling.
    */
   .customer-surface & {
-    background-color: var(--color-surface);
-    border-color: var(--color-surface-border);
+    background-color: var(--card);
+    border-color: var(--border);
   }
 }
 
@@ -223,16 +433,16 @@
   @apply card transition-all duration-200 hover:translate-y-[-2px];
 
   .customer-surface & {
-    background-color: var(--color-surface);
-    border-color: var(--color-surface-border);
+    background-color: var(--card);
+    border-color: var(--border);
   }
 }
 
 @utility card-themed {
   /* Gallery-specific card that uses theme variables */
   @apply rounded-xl border;
-  background-color: var(--color-surface);
-  border-color: var(--color-surface-border);
+  background-color: var(--card);
+  border-color: var(--border);
   box-shadow: var(--shadow-default);
 
   .dark & {
@@ -245,162 +455,135 @@
   @apply mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl w-full;
 }
 
-@utility bg-background {
-  /*
-   * Theme-token utility classes — exposed so any component (admin or gallery)
-   * can opt into the 8-token palette without an inline style. The Tailwind
-   * config also exposes these as full color aliases (bg-surface, text-theme,
-   * etc.) but these single-purpose classes are kept for back-compat with
-   * existing call sites.
-   */
-  background-color: var(--color-background);
-}
+/*
+ * The single-purpose theme utilities that used to live here (bg-background,
+ * bg-card, bg-muted, bg-brand, bg-primary, border-border, text-foreground,
+ * text-muted-foreground, text-brand, text-primary) have been removed:
+ * Tailwind now generates all of them from the @theme block at the top of
+ * this file. The generated versions also support variants and opacity
+ * modifiers (bg-primary/90), which these hand-written ones did not.
+ */
 
-@utility bg-surface {
-  background-color: var(--color-surface);
-}
-
-@utility bg-elevated {
-  background-color: var(--color-elevated);
-}
-
-@utility bg-accent {
-  background-color: var(--color-accent);
-}
-
-@utility bg-accent-dark {
-  background-color: var(--color-accent-dark);
-}
-
-@utility border-surface {
-  border-color: var(--color-surface-border);
-}
-
-@utility text-theme {
-  color: var(--color-text);
-}
-
-@utility text-muted-theme {
-  color: var(--color-muted-text);
-}
-
-@utility text-accent {
-  color: var(--color-accent);
-}
-
-@utility text-accent-dark {
-  color: var(--color-accent-dark);
-}
-
-@utility bg-accent-soft {
+@utility bg-brand-soft {
   /*
    * Low-opacity accent fills used as "icon tile" / "tinted chip"
    * backgrounds (Features tab feature icons, Sidebar Preview pills,
    * Customer dashboard branding card header). Picks up the admin's CI
    * accent automatically — previously these places used Tailwind's
-   * hardcoded `primary-50` palette which stayed green regardless of
+   * hardcoded `brand-50` palette which stayed green regardless of
    * branding settings.
    *
    * Mix weights bumped from 12% / 28% to 18% / 55% so the tint reads
    * as "tinted" rather than "barely there" on dark backgrounds. The
    * pill foreground intentionally falls back to a high-contrast theme
-   * colour rather than the accent itself (.text-accent-dark on an
+   * colour rather than the accent itself (.text-primary on an
    * accent-soft bg disappears because both come from the same
    * source).
    *
    * color-mix is supported on every browser we ship (Chromium 111+,
    * Safari 16.2+, Firefox 113+ — see baseline). Older browsers fall
-   * back to the var(--color-accent-dark) below.
+   * back to the var(--primary) below.
    */
-  background-color: var(--color-accent-dark);
+  background-color: var(--primary);
   background-color: color-mix(
     in srgb,
-    var(--color-accent-dark) 18%,
+    var(--primary) 18%,
     transparent
   );
   .dark & {
-    background-color: var(--color-accent-dark);
+    background-color: var(--primary);
     background-color: color-mix(
       in srgb,
-      var(--color-accent-dark) 55%,
+      var(--primary) 55%,
       transparent
     );
   }
 }
 
-@utility dark {
-  & .bg-accent-soft {
-    background-color: var(--color-accent-dark);
+/*
+ * Dark-mode overrides for the legacy component classes below.
+ *
+ * The Tailwind 4 codemod converted these from `.dark .x { }` rules into
+ * `@utility dark { & .x { } }`. That happened to keep working only because
+ * the literal string 'dark' appears in some .tsx files, so the scanner
+ * emitted the utility — if that ever stopped being true, all of these
+ * overrides would silently vanish. `.dark` is a mode selector set by
+ * AdminDarkModeContext on <html>, not a utility, so it is written as an
+ * ordinary rule in a layer instead.
+ */
+@layer components {
+  .dark .bg-brand-soft {
+    background-color: var(--primary);
     background-color: color-mix(
       in srgb,
-      var(--color-accent-dark) 55%,
+      var(--primary) 55%,
       transparent
     );
   }
-  & .border-accent-soft {
-    border-color: color-mix(in srgb, var(--color-accent-dark) 70%, transparent);
+  .dark .border-brand-soft {
+    border-color: color-mix(in srgb, var(--primary) 70%, transparent);
   }
-  & .text-on-accent-soft {
+  .dark .text-on-brand-soft {
     color: #ffffff;
   }
 
-  & .info-tooltip::after {
+  .dark .info-tooltip::after {
     background-color: #fafafa;
     color: #171717;
   }
 
   /* Admin dark mode overrides (via Tailwind dark: class on html) */
-  & .card {
+  .dark .card {
     @apply bg-neutral-800 border-neutral-700;
   }
 
-  & .card-themed {
+  .dark .card-themed {
     @apply bg-neutral-800 border-neutral-700;
   }
 
-  & .input {
+  .dark .input {
     @apply bg-neutral-800 border-neutral-700 text-neutral-100;
   }
 
-  & .input::placeholder {
+  .dark .input::placeholder {
     @apply text-neutral-500;
   }
 
-  & .input-themed {
+  .dark .input-themed {
     @apply bg-neutral-800 border-neutral-700 text-neutral-100;
   }
 
-  & .input-themed::placeholder {
+  .dark .input-themed::placeholder {
     @apply text-neutral-500;
   }
 
-  & .skeleton {
+  .dark .skeleton {
     @apply bg-neutral-700;
   }
 
-  & .badge-success {
+  .dark .badge-success {
     @apply bg-green-900/40 text-green-300;
   }
 
-  & .badge-warning {
+  .dark .badge-warning {
     @apply bg-amber-900/40 text-amber-300;
   }
 
-  & .badge-danger {
+  .dark .badge-danger {
     @apply bg-red-900/40 text-red-300;
   }
 
   /* Secondary and outline buttons for admin dark mode — restore explicit
    * neutral overrides so existing admin pages render exactly as before. */
-  & .btn-secondary {
+  .dark .btn-secondary {
     @apply bg-neutral-700 border-neutral-600 text-neutral-100;
   }
 
-  & .btn-outline {
+  .dark .btn-outline {
     @apply border-neutral-600 text-neutral-300;
   }
 
-  & .btn-outline:hover {
+  .dark .btn-outline:hover {
     @apply bg-neutral-800;
   }
 
@@ -435,51 +618,51 @@
   }
 
   /* Tag/chip styles for admin dark mode */
-  & .tag {
+  .dark .tag {
     @apply bg-neutral-700 text-neutral-200 border-neutral-600;
   }
   & [class*='tag-'] {
     @apply bg-neutral-700 text-neutral-200 border-neutral-600;
   }
-  & .chip {
+  .dark .chip {
     @apply bg-neutral-700 text-neutral-200 border-neutral-600;
   }
 
   /* Alert/info boxes for admin dark mode */
-  & .alert-info {
+  .dark .alert-info {
     @apply bg-blue-900/30 border-blue-800 text-blue-200;
   }
 
-  & .alert-warning {
+  .dark .alert-warning {
     @apply bg-amber-900/30 border-amber-800 text-amber-200;
   }
 
-  & .alert-success {
+  .dark .alert-success {
     @apply bg-green-900/30 border-green-800 text-green-200;
   }
 
-  & .alert-danger {
+  .dark .alert-danger {
     @apply bg-red-900/30 border-red-800 text-red-200;
   }
 }
 
-@utility border-accent-soft {
-  border-color: var(--color-accent-dark);
-  border-color: color-mix(in srgb, var(--color-accent-dark) 45%, transparent);
+@utility border-brand-soft {
+  border-color: var(--primary);
+  border-color: color-mix(in srgb, var(--primary) 45%, transparent);
   .dark & {
-    border-color: color-mix(in srgb, var(--color-accent-dark) 70%, transparent);
+    border-color: color-mix(in srgb, var(--primary) 70%, transparent);
   }
 }
 
-@utility text-on-accent-soft {
+@utility text-on-brand-soft {
   /*
-   * Foreground for content sitting on .bg-accent-soft. Uses the
+   * Foreground for content sitting on .bg-brand-soft. Uses the
    * theme's text token (already high-contrast against both light
    * backgrounds and dark surfaces) instead of the accent itself —
    * accent-on-accent-soft was the reason the Sidebar Preview pills
    * read as "barely visible".
    */
-  color: var(--color-accent-dark);
+  color: var(--primary);
   .dark & {
     color: #ffffff;
   }
@@ -494,8 +677,8 @@
    * with white descendants gives a strong, accessible selection cue and
    * follows the user's CI palette.
    */
-  background-color: var(--color-accent-dark) !important;
-  border-color: var(--color-accent-dark) !important;
+  background-color: var(--primary) !important;
+  border-color: var(--primary) !important;
   color: #ffffff !important;
 
   & * {
@@ -612,7 +795,7 @@
    * hard-code bg-white, and the customer surface uses theme variables
    * rather than the admin's `.dark` class trigger. Overriding here so
    * every <Input> and <Card> rendered inside the customer surface picks
-   * up var(--color-surface) / var(--color-text) automatically — no
+   * up var(--card) / var(--foreground) automatically — no
    * per-page wrapper needed. Same treatment for native <select>
    * elements which share the .input mental model on the profile and
    * accept-invite forms.
@@ -623,40 +806,40 @@
    * gallery) keep their original styling.
    */
   & .card {
-    background-color: var(--color-surface);
-    border-color: var(--color-surface-border);
+    background-color: var(--card);
+    border-color: var(--border);
   }
   & .card-hover {
-    background-color: var(--color-surface);
-    border-color: var(--color-surface-border);
+    background-color: var(--card);
+    border-color: var(--border);
   }
 
   & .input {
-    background-color: var(--color-surface);
-    border-color: var(--color-surface-border);
-    color: var(--color-text);
+    background-color: var(--card);
+    border-color: var(--border);
+    color: var(--foreground);
   }
 
   & select.input {
-    background-color: var(--color-surface);
-    border-color: var(--color-surface-border);
-    color: var(--color-text);
+    background-color: var(--card);
+    border-color: var(--border);
+    color: var(--foreground);
   }
 
   & input.input {
-    background-color: var(--color-surface);
-    border-color: var(--color-surface-border);
-    color: var(--color-text);
+    background-color: var(--card);
+    border-color: var(--border);
+    color: var(--foreground);
   }
 
   & .input::placeholder {
-    color: var(--color-muted-text);
+    color: var(--muted-foreground);
     opacity: 0.7;
   }
 
   & .input:disabled {
-    background-color: var(--color-elevated, var(--color-surface));
-    color: var(--color-muted-text);
+    background-color: var(--muted, var(--card));
+    color: var(--muted-foreground);
     opacity: 0.7;
   }
 }
@@ -712,7 +895,7 @@
 
 @utility text-gradient {
   /* Text gradient */
-  @apply bg-clip-text text-transparent bg-linear-to-r from-primary-600 to-primary-800;
+  @apply bg-clip-text text-transparent bg-linear-to-r from-brand-600 to-brand-800;
 }
 
 @utility smooth-scroll {
@@ -749,7 +932,7 @@
     appearance: none;
     width: 20px;
     height: 20px;
-    background: var(--color-primary);
+    background: var(--primary);
     border-radius: 50%;
     cursor: pointer;
     margin-top: -6px; /* Center the thumb vertically */
@@ -757,7 +940,7 @@
   }
 
   &input[type='range']::-webkit-slider-thumb:hover {
-    background: var(--color-primary-dark);
+    background: var(--brand-dark);
     transform: scale(1.1);
   }
 
@@ -774,14 +957,14 @@
     border: none;
     width: 20px;
     height: 20px;
-    background: var(--color-primary);
+    background: var(--primary);
     border-radius: 50%;
     cursor: pointer;
     transition: all 0.2s ease;
   }
 
   &input[type='range']::-moz-range-thumb:hover {
-    background: var(--color-primary-dark);
+    background: var(--brand-dark);
     transform: scale(1.1);
   }
 
@@ -807,7 +990,7 @@
   &input[type='range']::-ms-thumb {
     width: 20px;
     height: 20px;
-    background: var(--color-primary);
+    background: var(--primary);
     border-radius: 50%;
     cursor: pointer;
     margin-top: 0;
@@ -839,92 +1022,18 @@
 }
 
 @layer base {
-  :root {
-    /*
-     * Theme CSS Variables — 8-token CI palette.
-     * Token names are kept aligned with frontend/src/types/theme.types.ts
-     * (ThemeConfig). ThemeContext.applyTheme() writes these from the active
-     * theme/branding settings; values here are the "Classic Grid" defaults.
-     */
-    --color-background: #fafafa;        /* page base */
-    --color-surface: #ffffff;           /* cards, nav, alternating sections */
-    --color-elevated: #f5f5f5;          /* raised panels */
-    --color-surface-border: #e5e5e5;    /* dividers, borders (a.k.a. border token) */
-    --color-text: #171717;              /* primary text */
-    --color-muted-text: #737373;        /* secondary text */
-    --color-accent: #22c55e;            /* links, focus rings, hover */
-    --color-accent-dark: #5C8762;       /* primary CTA fill */
-
-    /* Legacy aliases — kept for any consumer that still reads --color-primary.
-     * Both resolve to the accent-dark token (the previous "primary" CTA color). */
-    --color-primary: #5C8762;
-    --color-primary-light: #7aa583;
-    --color-primary-dark: #4a6f4f;
-
-    --font-family: 'Inter', 'Noto Sans', system-ui, -apple-system, sans-serif;
-    --heading-font-family: 'Inter', 'Noto Sans', system-ui, -apple-system, sans-serif;
-    --border-radius: 0.5rem;
-    --font-size-base: 16px;
-    --shadow-default: 0 4px 6px rgba(0,0,0,0.1);
-
-    /* Tailwind RGB values for primary color (legacy, used by primary-* utilities) */
-    --tw-color-primary: 92 135 98;
-
-    /*
-     * shadcn/ui bridge variables.
-     *
-     * The *-fg pair are the readable foreground colours placed on top of the
-     * accent fills. ThemeContext.applyTheme() overwrites them per theme via
-     * getReadableForeground(); the values here are the static defaults used
-     * before React mounts and on pages that never call applyTheme().
-     */
-    --color-accent-fg: #ffffff;
-    --color-accent-dark-fg: #ffffff;
-
-    /* Destructive (delete / danger) actions. Not part of the 8-token CI
-     * palette — intentionally NOT photographer-brandable, so a destructive
-     * action always reads as destructive regardless of branding. */
-    --color-destructive: #dc2626;
-    --color-destructive-fg: #ffffff;
-
-    /* shadcn reads --radius; keep it following the customizer's setting so
-     * shadcn primitives pick up the theme's border-radius automatically. */
-    --radius: var(--border-radius);
-  }
-
   /*
-   * Admin dark mode unification.
-   * AdminDarkModeContext toggles `.dark` on <html> without going through
-   * applyTheme(). Previously this only flipped the components that had
-   * explicit `.dark .x` overrides; everything else (cards/inputs/buttons
-   * that now read CSS variables) stayed light. We re-declare the 8-token
-   * defaults under `.dark` so the same variables resolve to a dark palette
-   * whenever the class is present. Gallery applyTheme() still wins because
-   * it writes inline `--color-*` styles on the html element, which beat the
-   * .dark stylesheet rule in the cascade.
+   * The design tokens themselves live in the :root / .dark / @theme blocks
+   * at the top of this file, using shadcn's names. What remains here are the
+   * element-level base styles.
    */
-  .dark {
-    --color-background: #0a0a0a;
-    --color-surface: #171717;
-    --color-elevated: #1f1f1f;
-    --color-surface-border: #262626;
-    --color-text: #f5f5f5;
-    --color-muted-text: #a3a3a3;
-    --color-accent: #22c55e;
-    --color-accent-dark: #5C8762;
-    --color-accent-fg: #ffffff;
-    --color-accent-dark-fg: #ffffff;
-    --color-destructive: #ef4444;
-    --color-destructive-fg: #ffffff;
-  }
-
   * {
     font-family: var(--font-family);
   }
 
   body {
-    background-color: var(--color-background);
-    color: var(--color-text);
+    background-color: var(--background);
+    color: var(--foreground);
     font-size: var(--font-size-base);
     @apply antialiased;
     overflow-x: hidden;

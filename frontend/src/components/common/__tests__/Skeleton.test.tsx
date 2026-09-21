@@ -11,11 +11,11 @@ import { Skeleton, SkeletonGalleryGrid, SkeletonCard } from '../Skeleton';
  * track whatever the theme defines for both light and dark modes.
  */
 describe('Skeleton — theme-aware colour', () => {
-  it('uses var(--color-surface-border) for the placeholder background', () => {
+  it('uses var(--border) for the placeholder background', () => {
     const { container } = render(<Skeleton />);
     const div = container.querySelector('div');
     expect(div).not.toBeNull();
-    expect(div!.style.backgroundColor).toBe('var(--color-surface-border, #e5e5e5)');
+    expect(div!.style.backgroundColor).toBe('var(--border, #e5e5e5)');
   });
 
   it('does NOT add the legacy hard-coded bg-neutral-200 class', () => {
@@ -33,16 +33,16 @@ describe('Skeleton — theme-aware colour', () => {
     expect(tiles.length).toBe(3);
     tiles.forEach((tile) => {
       expect((tile as HTMLElement).style.backgroundColor).toBe(
-        'var(--color-surface-border, #e5e5e5)'
+        'var(--border, #e5e5e5)'
       );
     });
   });
 
-  it('SkeletonCard surface uses var(--color-surface)', () => {
+  it('SkeletonCard surface uses var(--card)', () => {
     const { container } = render(<SkeletonCard />);
     const card = container.firstElementChild as HTMLElement;
     expect(card).not.toBeNull();
-    expect(card.style.backgroundColor).toBe('var(--color-surface, #ffffff)');
+    expect(card.style.backgroundColor).toBe('var(--card, #ffffff)');
     // Sanity: should not retain the old bg-white class either
     expect(card.className).not.toMatch(/bg-white/);
   });

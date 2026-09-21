@@ -481,7 +481,7 @@ export const PhotoCard: React.FC<PhotoCardProps> = ({
             className={`absolute top-2 right-2 z-20 transition-opacity ${checkboxVisibilityClass}`}
             onClick={(e) => { e.stopPropagation(); onToggleSelect(); }}
           >
-            <div className={`w-6 h-6 rounded-full border-2 ${isSelected ? 'bg-accent-dark border-accent-dark' : 'bg-white/90 border-white'} flex items-center justify-center transition-colors`}>
+            <div className={`w-6 h-6 rounded-full border-2 ${isSelected ? 'bg-primary border-primary' : 'bg-white/90 border-white'} flex items-center justify-center transition-colors`}>
               {isSelected && <Check className="w-4 h-4 text-white" />}
             </div>
           </button>

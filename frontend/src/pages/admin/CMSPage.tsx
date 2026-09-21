@@ -384,7 +384,7 @@ export const CMSPage: React.FC = () => {
         <Card className="space-y-6">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <div className="flex items-center gap-2 text-accent mb-1">
+              <div className="flex items-center gap-2 text-brand mb-1">
                 <Globe className="w-5 h-5" />
                 <span className="text-sm font-semibold uppercase tracking-wide">{t('settings.publicSite.badge')}</span>
               </div>
@@ -401,7 +401,7 @@ export const CMSPage: React.FC = () => {
               <span
                 aria-hidden="true"
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                  publicSiteEnabled ? 'bg-accent-dark' : 'bg-neutral-300'
+                  publicSiteEnabled ? 'bg-primary' : 'bg-neutral-300'
                 }`}
               >
                 <span
@@ -425,11 +425,11 @@ export const CMSPage: React.FC = () => {
               <div className="space-y-4">
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-neutral-800 dark:text-neutral-200 mb-2">
-                    <Sparkles className="w-4 h-4 text-accent" />
+                    <Sparkles className="w-4 h-4 text-brand" />
                     {t('settings.publicSite.htmlLabel')}
                   </label>
                   <textarea
-                    className="w-full h-64 font-mono text-sm rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:border-accent-dark disabled:bg-neutral-100 dark:disabled:bg-neutral-700 disabled:text-neutral-500 dark:disabled:text-neutral-400"
+                    className="w-full h-64 font-mono text-sm rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:border-primary disabled:bg-neutral-100 dark:disabled:bg-neutral-700 disabled:text-neutral-500 dark:disabled:text-neutral-400"
                     value={publicSiteHtml}
                     onChange={(event) => setPublicSiteHtml(event.target.value)}
                     disabled={!publicSiteEnabled}
@@ -442,11 +442,11 @@ export const CMSPage: React.FC = () => {
 
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-neutral-800 dark:text-neutral-200 mb-2">
-                    <ShieldCheck className="w-4 h-4 text-accent" />
+                    <ShieldCheck className="w-4 h-4 text-brand" />
                     {t('settings.publicSite.cssLabel')}
                   </label>
                   <textarea
-                    className="w-full h-48 font-mono text-sm rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:border-accent-dark disabled:bg-neutral-100 dark:disabled:bg-neutral-700 disabled:text-neutral-500 dark:disabled:text-neutral-400"
+                    className="w-full h-48 font-mono text-sm rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:border-primary disabled:bg-neutral-100 dark:disabled:bg-neutral-700 disabled:text-neutral-500 dark:disabled:text-neutral-400"
                     value={publicSiteCss}
                     onChange={(event) => setPublicSiteCss(event.target.value)}
                     disabled={!publicSiteEnabled}
@@ -557,7 +557,7 @@ export const CMSPage: React.FC = () => {
                 href={`${window.location.origin}/${selectedPage}?lang=en`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-accent hover:opacity-80"
+                className="flex items-center gap-2 text-brand hover:opacity-80"
               >
                 <Globe className="w-4 h-4" />
                 {t('cms.englishVersion')}
@@ -566,7 +566,7 @@ export const CMSPage: React.FC = () => {
                 href={`${window.location.origin}/${selectedPage}?lang=de`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-accent hover:opacity-80"
+                className="flex items-center gap-2 text-brand hover:opacity-80"
               >
                 <Globe className="w-4 h-4" />
                 {t('cms.germanVersion')}
@@ -615,7 +615,7 @@ export const CMSPage: React.FC = () => {
                   onClick={() => setEditingLang('en')}
                   className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
                     editingLang === 'en'
-                      ? 'bg-accent-dark/15 text-accent-dark'
+                      ? 'bg-primary/15 text-primary'
                       : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-600'
                   }`}
                 >
@@ -625,7 +625,7 @@ export const CMSPage: React.FC = () => {
                   onClick={() => setEditingLang('de')}
                   className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
                     editingLang === 'de'
-                      ? 'bg-accent-dark/15 text-accent-dark'
+                      ? 'bg-primary/15 text-primary'
                       : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-600'
                   }`}
                 >
@@ -640,7 +640,7 @@ export const CMSPage: React.FC = () => {
                 <label className="flex items-start gap-3 cursor-pointer">
                   <input
                     type="checkbox"
-                    className="mt-1 h-4 w-4 rounded-sm border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
+                    className="mt-1 h-4 w-4 rounded-sm border-neutral-300 dark:border-neutral-600 text-brand focus:ring-brand-500"
                     checked={!!editForm.use_external_url}
                     onChange={(e) => handleUseExternalUrlChange(e.target.checked)}
                   />
@@ -677,7 +677,7 @@ export const CMSPage: React.FC = () => {
                 <label className="flex items-start gap-3 cursor-pointer">
                   <input
                     type="checkbox"
-                    className="mt-1 h-4 w-4 rounded-sm border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
+                    className="mt-1 h-4 w-4 rounded-sm border-neutral-300 dark:border-neutral-600 text-brand focus:ring-brand-500"
                     checked={editForm.show_in_footer !== false}
                     onChange={(e) => setEditForm(prev => ({ ...prev, show_in_footer: e.target.checked }))}
                   />

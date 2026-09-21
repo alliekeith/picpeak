@@ -258,15 +258,15 @@ export const UserPhotoUpload: React.FC<UserPhotoUploadProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end sm:items-center justify-center z-50 p-0 sm:p-4">
-      <div className="w-full sm:max-w-2xl bg-surface flex flex-col max-h-screen sm:max-h-[90vh] rounded-2xl shadow-xl overflow-hidden">
+      <div className="w-full sm:max-w-2xl bg-card flex flex-col max-h-screen sm:max-h-[90vh] rounded-2xl shadow-xl overflow-hidden">
         {/* Fixed Header */}
-        <div className="flex items-center justify-between p-4 sm:p-6 border-b border-surface shrink-0">
-          <h2 className="text-lg sm:text-xl font-semibold text-theme">{t('upload.uploadPhotos')}</h2>
+        <div className="flex items-center justify-between p-4 sm:p-6 border-b border-border shrink-0">
+          <h2 className="text-lg sm:text-xl font-semibold text-foreground">{t('upload.uploadPhotos')}</h2>
           <button
             onClick={onClose}
             className="p-1.5 sm:p-2 hover:bg-black/10 rounded-lg transition-colors"
           >
-            <X className="w-5 h-5 text-muted-theme" />
+            <X className="w-5 h-5 text-muted-foreground" />
           </button>
         </div>
 
@@ -276,8 +276,8 @@ export const UserPhotoUpload: React.FC<UserPhotoUploadProps> = ({
             <div className="mb-4 sm:mb-6">
               <label className="block">
                 <div
-                  className={`border-2 border-dashed rounded-lg p-6 sm:p-8 text-center hover:border-accent-dark transition-colors cursor-pointer ${
-                    isDragOver ? 'border-accent-dark bg-accent-dark/10' : 'border-surface'
+                  className={`border-2 border-dashed rounded-lg p-6 sm:p-8 text-center hover:border-primary transition-colors cursor-pointer ${
+                    isDragOver ? 'border-primary bg-primary/10' : 'border-border'
                   }`}
                   onDragOver={handleDragOver}
                   onDragEnter={handleDragOver}
@@ -285,10 +285,10 @@ export const UserPhotoUpload: React.FC<UserPhotoUploadProps> = ({
                   onDrop={handleDrop}
                 >
                   <Upload className="w-10 h-10 sm:w-12 sm:h-12 text-neutral-400 mx-auto mb-3" />
-                  <p className="text-sm font-medium text-muted-theme mb-1">
+                  <p className="text-sm font-medium text-muted-foreground mb-1">
                     {t('upload.clickToUpload')}
                   </p>
-                  <p className="text-xs text-muted-theme">
+                  <p className="text-xs text-muted-foreground">
                     {/* #613 — pass { limit } so `{{limit}}` interpolates
                         with the real number from settings instead of
                         rendering literally. */}
@@ -309,19 +309,19 @@ export const UserPhotoUpload: React.FC<UserPhotoUploadProps> = ({
             {/* Selected Files */}
             {files.length > 0 && (
               <div className="space-y-2">
-                <h3 className="text-sm font-medium text-muted-theme mb-2">
+                <h3 className="text-sm font-medium text-muted-foreground mb-2">
                   {t('upload.selectedFiles')} ({files.length})
                 </h3>
                 {files.map((file, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-between p-3 bg-surface rounded-lg"
+                    className="flex items-center justify-between p-3 bg-card rounded-lg"
                   >
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-theme truncate">
+                      <p className="text-sm font-medium text-foreground truncate">
                         {file.name}
                       </p>
-                      <p className="text-xs text-muted-theme">
+                      <p className="text-xs text-muted-foreground">
                         {formatBytes(file.size)}
                       </p>
                     </div>
@@ -339,7 +339,7 @@ export const UserPhotoUpload: React.FC<UserPhotoUploadProps> = ({
                           <div className="w-20">
                             <div className="bg-neutral-200 rounded-full h-2">
                               <div
-                                className="bg-accent-dark h-2 rounded-full transition-all"
+                                className="bg-primary h-2 rounded-full transition-all"
                                 style={{ width: `${uploadProgress[file.name]}%` }}
                               />
                             </div>
@@ -352,7 +352,7 @@ export const UserPhotoUpload: React.FC<UserPhotoUploadProps> = ({
                         className="p-1 hover:bg-black/10 rounded-sm transition-colors"
                         disabled={uploading}
                       >
-                        <X className="w-4 h-4 text-muted-theme" />
+                        <X className="w-4 h-4 text-muted-foreground" />
                       </button>
                     )}
                   </div>
@@ -362,7 +362,7 @@ export const UserPhotoUpload: React.FC<UserPhotoUploadProps> = ({
         </div>
 
         {/* Fixed Footer */}
-        <div className="flex items-center justify-end gap-2 sm:gap-3 p-4 sm:p-6 border-t border-surface bg-surface shrink-0">
+        <div className="flex items-center justify-end gap-2 sm:gap-3 p-4 sm:p-6 border-t border-border bg-card shrink-0">
           <Button
             variant="outline"
             onClick={onClose}

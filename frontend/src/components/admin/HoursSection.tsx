@@ -248,8 +248,8 @@ export const HoursSection: React.FC<HoursSectionProps> = ({
 
   return (
     <Card padding="lg">
-      {/* Explicit neutral colours (not `text-theme` / `text-muted-theme`):
-          those resolve to the gallery branding theme's --color-text, which
+      {/* Explicit neutral colours (not `text-foreground` / `text-muted-foreground`):
+          those resolve to the gallery branding theme's --foreground, which
           is applied globally on <html> and renders near-white inside the
           light admin chrome (QA S13). */}
       <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-1 flex items-center gap-2">
@@ -307,11 +307,11 @@ export const HoursSection: React.FC<HoursSectionProps> = ({
                   </p>
                   <div className="mt-2 flex flex-wrap gap-3">
                     <Link to={`/admin/clients/accounts/${customerId}`}
-                      className="text-accent-dark hover:underline font-medium">
+                      className="text-primary hover:underline font-medium">
                       {t('customers.hours.noRate.setForCustomer', 'Set a rate for this customer')}
                     </Link>
                     <Link to="/admin/settings?tab=businessProfile" target="_blank" rel="noopener noreferrer"
-                      className="text-accent-dark hover:underline font-medium">
+                      className="text-primary hover:underline font-medium">
                       {t('customers.hours.noRate.setInstallDefault', 'Set an install-wide default')}
                     </Link>
                   </div>

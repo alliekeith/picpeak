@@ -46,7 +46,7 @@ export const GalleryFilter: React.FC<GalleryFilterProps> = ({
     return (
       <div className={`${className}`}>
         <div className="flex items-center gap-2">
-          <span className="text-sm text-muted-theme whitespace-nowrap">
+          <span className="text-sm text-muted-foreground whitespace-nowrap">
             {t('gallery.feedbackFilter', 'Feedback Filter')}
           </span>
           <div className="flex items-center gap-1">
@@ -106,7 +106,7 @@ export const GalleryFilter: React.FC<GalleryFilterProps> = ({
       {/* Mobile-optimized vertical layout */}
       {isMobile ? (
         <div className="space-y-2">
-          <div className="text-xs text-muted-theme font-medium">
+          <div className="text-xs text-muted-foreground font-medium">
             {t('gallery.feedbackFilter', 'Feedback Filter')}
           </div>
           <div className="flex flex-wrap gap-2">
@@ -153,7 +153,7 @@ export const GalleryFilter: React.FC<GalleryFilterProps> = ({
       ) : (
         /* Desktop layout - inline with categories */
         <div className="flex items-center gap-3">
-          <span className="text-sm text-muted-theme font-medium whitespace-nowrap">
+          <span className="text-sm text-muted-foreground font-medium whitespace-nowrap">
             {t('gallery.feedbackFilter', 'Feedback Filter')}:
           </span>
           <div className="flex gap-2">
@@ -175,7 +175,7 @@ export const GalleryFilter: React.FC<GalleryFilterProps> = ({
               <Heart className="w-3 h-3 sm:w-4 sm:h-4" />
               <span className="hidden sm:inline">{t('gallery.liked', 'Liked')}</span>
               {likeCount > 0 && (
-                <span className="bg-accent-dark/15 text-accent-dark px-1.5 rounded-sm">
+                <span className="bg-primary/15 text-primary px-1.5 rounded-sm">
                   {likeCount}
                 </span>
               )}
@@ -190,7 +190,7 @@ export const GalleryFilter: React.FC<GalleryFilterProps> = ({
               <Bookmark className="w-3 h-3 sm:w-4 sm:h-4" />
               <span className="hidden sm:inline">{t('gallery.favorited', 'Saved')}</span>
               {favoriteCount > 0 && (
-                <span className="bg-accent-dark/15 text-accent-dark px-1.5 rounded-sm">
+                <span className="bg-primary/15 text-primary px-1.5 rounded-sm">
                   {favoriteCount}
                 </span>
               )}
@@ -205,7 +205,7 @@ export const GalleryFilter: React.FC<GalleryFilterProps> = ({
               <Star className="w-3 h-3 sm:w-4 sm:h-4" />
               <span className="hidden sm:inline">{t('gallery.rated', 'Rated')}</span>
               {ratedCount > 0 && (
-                <span className="bg-accent-dark/15 text-accent-dark px-1.5 rounded-sm">
+                <span className="bg-primary/15 text-primary px-1.5 rounded-sm">
                   {ratedCount}
                 </span>
               )}

@@ -156,7 +156,7 @@ export const EventCategoryManager: React.FC<EventCategoryManagerProps> = ({ even
   if (isLoading) {
     return (
       <div className="flex justify-center items-center py-4">
-        <Loader2 className="w-5 h-5 animate-spin text-accent" />
+        <Loader2 className="w-5 h-5 animate-spin text-brand" />
       </div>
     );
   }
@@ -207,7 +207,7 @@ export const EventCategoryManager: React.FC<EventCategoryManagerProps> = ({ even
             onKeyPress={(e) => e.key === 'Enter' && handleCreate()}
             placeholder={t('categories.categoryName')}
             maxLength={100}
-            className="flex-1 px-3 py-1.5 text-sm border border-neutral-300 dark:border-neutral-600 rounded-md bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-primary-500"
+            className="flex-1 px-3 py-1.5 text-sm border border-neutral-300 dark:border-neutral-600 rounded-md bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-brand-500"
             autoFocus
           />
           <Button
@@ -255,7 +255,7 @@ export const EventCategoryManager: React.FC<EventCategoryManagerProps> = ({ even
                     <button
                       onClick={() => handleMove(index, -1)}
                       disabled={index === 0 || busy}
-                      className="p-0.5 text-neutral-400 dark:text-neutral-500 hover:text-accent-dark disabled:opacity-30 disabled:hover:text-neutral-400 transition-colors"
+                      className="p-0.5 text-neutral-400 dark:text-neutral-500 hover:text-primary disabled:opacity-30 disabled:hover:text-neutral-400 transition-colors"
                       title={t('categories.moveUp', 'Move up')}
                       aria-label={t('categories.moveUp', 'Move up')}
                     >
@@ -264,7 +264,7 @@ export const EventCategoryManager: React.FC<EventCategoryManagerProps> = ({ even
                     <button
                       onClick={() => handleMove(index, 1)}
                       disabled={index === ordered.length - 1 || busy}
-                      className="p-0.5 text-neutral-400 dark:text-neutral-500 hover:text-accent-dark disabled:opacity-30 disabled:hover:text-neutral-400 transition-colors"
+                      className="p-0.5 text-neutral-400 dark:text-neutral-500 hover:text-primary disabled:opacity-30 disabled:hover:text-neutral-400 transition-colors"
                       title={t('categories.moveDown', 'Move down')}
                       aria-label={t('categories.moveDown', 'Move down')}
                     >
@@ -274,7 +274,7 @@ export const EventCategoryManager: React.FC<EventCategoryManagerProps> = ({ even
                   {/* Hero photo thumbnail */}
                   <button
                     onClick={() => setHeroPickerCategoryId(category.id)}
-                    className="shrink-0 w-10 h-10 rounded-sm border border-neutral-200 dark:border-neutral-700 overflow-hidden bg-neutral-100 dark:bg-neutral-700 hover:border-accent-dark transition-colors flex items-center justify-center"
+                    className="shrink-0 w-10 h-10 rounded-sm border border-neutral-200 dark:border-neutral-700 overflow-hidden bg-neutral-100 dark:bg-neutral-700 hover:border-primary transition-colors flex items-center justify-center"
                     title={t('categories.setCoverPhoto')}
                   >
                     {heroPhoto ? (
@@ -284,7 +284,7 @@ export const EventCategoryManager: React.FC<EventCategoryManagerProps> = ({ even
                         className="w-full h-full object-cover"
                       />
                     ) : category.hero_photo_id ? (
-                      <ImageIcon className="w-4 h-4 text-accent" />
+                      <ImageIcon className="w-4 h-4 text-brand" />
                     ) : (
                       <ImageIcon className="w-4 h-4 text-neutral-300" />
                     )}
@@ -308,8 +308,8 @@ export const EventCategoryManager: React.FC<EventCategoryManagerProps> = ({ even
                         })}
                         className={`p-1 transition-colors ${
                           category.is_folder
-                            ? 'text-primary-600 dark:text-primary-400 hover:text-neutral-400'
-                            : 'text-neutral-400 dark:text-neutral-500 hover:text-primary-600 dark:hover:text-primary-400'
+                            ? 'text-brand-600 dark:text-brand-400 hover:text-neutral-400'
+                            : 'text-neutral-400 dark:text-neutral-500 hover:text-brand-600 dark:hover:text-brand-400'
                         }`}
                         title={
                           category.is_folder
@@ -409,7 +409,7 @@ export const EventCategoryManager: React.FC<EventCategoryManagerProps> = ({ even
                         onClick={() => handleSelectHeroPhoto(heroPickerCategoryId, photo.id)}
                         className={`relative cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${
                           isSelected
-                            ? 'border-accent-dark ring-2 ring-primary-500 ring-offset-2'
+                            ? 'border-primary ring-2 ring-brand-500 ring-offset-2'
                             : 'border-transparent hover:border-neutral-300'
                         }`}
                       >
@@ -421,7 +421,7 @@ export const EventCategoryManager: React.FC<EventCategoryManagerProps> = ({ even
                           />
                         </div>
                         {isSelected && (
-                          <div className="absolute top-2 right-2 bg-accent-dark text-white rounded-full p-1">
+                          <div className="absolute top-2 right-2 bg-primary text-white rounded-full p-1">
                             <Check className="w-4 h-4" />
                           </div>
                         )}

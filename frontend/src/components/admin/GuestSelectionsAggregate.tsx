@@ -54,7 +54,7 @@ export const GuestSelectionsAggregate: React.FC<GuestSelectionsAggregateProps> =
               alt={p.filename}
               className="w-full aspect-square object-cover rounded-sm"
             />
-            <div className="absolute top-2 right-2 bg-accent-dark text-white text-xs font-semibold px-2 py-1 rounded-full flex items-center gap-1 shadow-sm">
+            <div className="absolute top-2 right-2 bg-primary text-white text-xs font-semibold px-2 py-1 rounded-full flex items-center gap-1 shadow-sm">
               <Users className="w-3 h-3" />
               {p.picker_count}
             </div>

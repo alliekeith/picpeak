@@ -141,7 +141,7 @@ export const WebhookDeliveriesPage: React.FC = () => {
         <p className="text-sm text-neutral-600 dark:text-neutral-400">
           {t('settings.webhooks.deliveries.notFound', 'Webhook not found.')}
         </p>
-        <Link to="/admin/settings" className="text-accent hover:underline">
+        <Link to="/admin/settings" className="text-brand hover:underline">
           ← {t('settings.webhooks.deliveries.back', 'Back to Settings')}
         </Link>
       </div>
@@ -200,7 +200,7 @@ export const WebhookDeliveriesPage: React.FC = () => {
               onClick={() => setFilter(s)}
               className={`text-xs px-3 py-1 rounded-full ${
                 filter === s
-                  ? 'bg-accent-dark text-white'
+                  ? 'bg-primary text-white'
                   : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200'
               }`}
             >

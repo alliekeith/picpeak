@@ -9,7 +9,7 @@ interface HeroDividerProps {
 
 export const HeroDivider: React.FC<HeroDividerProps> = ({
   style,
-  fillColor = 'var(--color-background, #fafafa)',
+  fillColor = 'var(--background, #fafafa)',
   className = ''
 }) => {
   if (style === 'none' || style === 'straight') {

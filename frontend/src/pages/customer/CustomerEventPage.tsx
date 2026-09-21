@@ -38,7 +38,7 @@ async function openPdf(load: () => Promise<string>, blockedMessage: string, fail
 
 const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
   <Card padding="none" className="mb-4">
-    <h2 className="px-4 pt-4 pb-2 text-base font-semibold text-theme">{title}</h2>
+    <h2 className="px-4 pt-4 pb-2 text-base font-semibold text-foreground">{title}</h2>
     {children}
   </Card>
 );
@@ -61,10 +61,10 @@ export const CustomerEventPage: React.FC = () => {
   if (isError || !data) {
     return (
       <div className="container py-8">
-        <p className="text-theme mb-4">
+        <p className="text-foreground mb-4">
           {t('customer.event.notFound', 'This event was not found, or you no longer have access to it.')}
         </p>
-        <Link to="/customer/dashboard" className="text-sm underline text-theme">
+        <Link to="/customer/dashboard" className="text-sm underline text-foreground">
           {t('customer.event.back', 'Back to your galleries')}
         </Link>
       </div>
@@ -97,13 +97,13 @@ export const CustomerEventPage: React.FC = () => {
 
   return (
     <div className="container py-6">
-      <Link to="/customer/dashboard" className="inline-flex items-center gap-1 text-sm text-muted-theme hover:text-theme mb-4">
+      <Link to="/customer/dashboard" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4">
         <ArrowLeft className="w-4 h-4" />
         {t('customer.event.back', 'Back to your galleries')}
       </Link>
 
-      <h1 className="text-2xl font-bold text-theme">{event.eventName}</h1>
-      <div className="mt-1 mb-6 flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-theme">
+      <h1 className="text-2xl font-bold text-foreground">{event.eventName}</h1>
+      <div className="mt-1 mb-6 flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground">
         {event.eventDate && (
           <span className="inline-flex items-center gap-1.5"><Calendar className="w-4 h-4" />{fmtDate(event.eventDate)}</span>
         )}
@@ -118,7 +118,7 @@ export const CustomerEventPage: React.FC = () => {
       </div>
 
       <Card padding="lg" className="mb-4">
-        <h2 className="text-base font-semibold text-theme mb-2">{t('customer.event.gallery', 'Gallery')}</h2>
+        <h2 className="text-base font-semibold text-foreground mb-2">{t('customer.event.gallery', 'Gallery')}</h2>
         {event.availability === 'active' ? (
           <Button
             type="button"
@@ -131,13 +131,13 @@ export const CustomerEventPage: React.FC = () => {
             {opening ? t('customer.dashboard.opening', 'Opening…') : t('customer.event.openGallery', 'Open gallery')}
           </Button>
         ) : event.availability === 'expired' ? (
-          <p className="text-sm text-muted-theme">
+          <p className="text-sm text-muted-foreground">
             {t('customer.event.galleryExpired', 'This gallery expired on {{date}} and can no longer be opened. Contact your photographer if you still need the photos.', {
               date: event.expiresAt ? fmtDate(event.expiresAt) : '',
             })}
           </p>
         ) : (
-          <p className="text-sm text-muted-theme">
+          <p className="text-sm text-muted-foreground">
             {t('customer.event.galleryUnavailable', 'This gallery is not available yet.')}
           </p>
         )}
@@ -145,13 +145,13 @@ export const CustomerEventPage: React.FC = () => {
 
       {sections.quotes && data.quotes.length > 0 && (
         <Section title={t('customer.nav.quotes', 'Quotes')}>
-          <ul className="divide-y" style={{ borderColor: 'var(--color-surface-border)' }}>
+          <ul className="divide-y" style={{ borderColor: 'var(--border)' }}>
             {data.quotes.map((q) => (
               <li key={q.id} className="p-4 flex items-center justify-between gap-3 flex-wrap">
                 <div className="min-w-0">
-                  <span className="font-mono text-sm text-theme">{q.quoteNumber}</span>
-                  <span className="ml-2 text-xs text-muted-theme">{t(`quotes.status.${q.status}`, q.status)}</span>
-                  <p className="text-xs text-muted-theme mt-0.5">
+                  <span className="font-mono text-sm text-foreground">{q.quoteNumber}</span>
+                  <span className="ml-2 text-xs text-muted-foreground">{t(`quotes.status.${q.status}`, q.status)}</span>
+                  <p className="text-xs text-muted-foreground mt-0.5">
                     {q.issueDate && fmtDate(q.issueDate)}{' · '}{formatMoneyMinor(q.totalAmountMinor, q.currency)}
                   </p>
                 </div>
@@ -167,13 +167,13 @@ export const CustomerEventPage: React.FC = () => {
 
       {sections.contracts && data.contracts.length > 0 && (
         <Section title={t('customer.nav.contracts', 'Contracts')}>
-          <ul className="divide-y" style={{ borderColor: 'var(--color-surface-border)' }}>
+          <ul className="divide-y" style={{ borderColor: 'var(--border)' }}>
             {data.contracts.map((c) => (
               <li key={c.id} className="p-4 flex items-center justify-between gap-3 flex-wrap">
                 <div className="min-w-0">
-                  <span className="font-mono text-sm text-theme">{c.contractNumber}</span>
-                  <span className="ml-2 text-xs text-muted-theme">{t(`contracts.status.${c.status}`, c.status)}</span>
-                  {c.title && <p className="text-xs text-muted-theme mt-0.5">{c.title}</p>}
+                  <span className="font-mono text-sm text-foreground">{c.contractNumber}</span>
+                  <span className="ml-2 text-xs text-muted-foreground">{t(`contracts.status.${c.status}`, c.status)}</span>
+                  {c.title && <p className="text-xs text-muted-foreground mt-0.5">{c.title}</p>}
                 </div>
                 {(c.hasPdf || c.hasSignedPdf) && (
                   <Button type="button" variant="outline" size="sm" leftIcon={<Download className="w-4 h-4" />}
@@ -189,13 +189,13 @@ export const CustomerEventPage: React.FC = () => {
 
       {sections.invoices && data.invoices.length > 0 && (
         <Section title={t('customer.nav.bills', 'Invoices')}>
-          <ul className="divide-y" style={{ borderColor: 'var(--color-surface-border)' }}>
+          <ul className="divide-y" style={{ borderColor: 'var(--border)' }}>
             {data.invoices.map((i) => (
               <li key={i.id} className="p-4 flex items-center justify-between gap-3 flex-wrap">
                 <div className="min-w-0">
-                  <span className="font-mono text-sm text-theme">{i.invoiceNumber}</span>
-                  <span className="ml-2 text-xs text-muted-theme">{t(`bills.status.${i.status}`, i.status)}</span>
-                  <p className="text-xs text-muted-theme mt-0.5">
+                  <span className="font-mono text-sm text-foreground">{i.invoiceNumber}</span>
+                  <span className="ml-2 text-xs text-muted-foreground">{t(`bills.status.${i.status}`, i.status)}</span>
+                  <p className="text-xs text-muted-foreground mt-0.5">
                     {i.dueDate && t('customer.event.dueOn', 'Due {{date}}', { date: fmtDate(i.dueDate) })}
                     {' · '}{formatMoneyMinor(i.totalAmountMinor, i.currency)}
                   </p>
@@ -217,7 +217,7 @@ export const CustomerEventPage: React.FC = () => {
       )}
 
       {nothingElse && (
-        <p className="text-sm text-muted-theme">
+        <p className="text-sm text-muted-foreground">
           {t('customer.event.nothingElse', 'There are no documents for this event yet.')}
         </p>
       )}

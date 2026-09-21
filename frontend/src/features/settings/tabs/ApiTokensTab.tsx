@@ -149,7 +149,7 @@ export const ApiTokensTab: React.FC = () => {
                     type="checkbox"
                     checked={scopes.includes(s)}
                     onChange={() => toggleScope(s)}
-                    className="w-4 h-4 text-primary-600 rounded-sm focus:ring-primary-500"
+                    className="w-4 h-4 text-brand-600 rounded-sm focus:ring-brand-500"
                   />
                   {s}
                 </label>

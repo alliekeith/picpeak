@@ -523,7 +523,7 @@ export const BillDetailPage: React.FC = () => {
                 {t('bills.send.proofsLabel', 'Supplier proofs')}
               </span>
               <div className="flex gap-3 text-xs">
-                <button type="button" className="text-primary-600 hover:underline"
+                <button type="button" className="text-brand-600 hover:underline"
                   onClick={() => setSelectedProofIds(new Set(sendProofs.filter((p) => p.hasProof).map((p) => p.id)))}>
                   {t('bills.send.selectAll', 'Select all')}
                 </button>
@@ -634,7 +634,7 @@ export const BillDetailPage: React.FC = () => {
                   id="pay-method"
                   value={payMethod}
                   onChange={(e) => setPayMethod(e.target.value)}
-                  className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:border-accent-dark"
+                  className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:border-primary"
                 >
                   <option value="">{t('bills.payment.methodPlaceholder', 'Select method…')}</option>
                   <option value="bank_transfer">{t('bills.payment.methods.bankTransfer', 'Bank transfer')}</option>

@@ -98,9 +98,9 @@ export const CustomerLayout: React.FC = () => {
     return (
       <div
         className="min-h-screen flex items-center justify-center"
-        style={{ backgroundColor: 'var(--color-background, #fafafa)' }}
+        style={{ backgroundColor: 'var(--background, #fafafa)' }}
       >
-        <div className="w-12 h-12 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: 'var(--color-accent)', borderTopColor: 'transparent' }} />
+        <div className="w-12 h-12 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: 'var(--brand)', borderTopColor: 'transparent' }} />
       </div>
     );
   }
@@ -124,7 +124,7 @@ export const CustomerLayout: React.FC = () => {
       // `dark:` modifier (toggled on <html>), but the customer surface
       // uses theme tokens so we scope the override here.
       className="customer-surface h-screen flex overflow-hidden"
-      style={{ backgroundColor: 'var(--color-background, #fafafa)' }}
+      style={{ backgroundColor: 'var(--background, #fafafa)' }}
     >
       {/* Mobile backdrop */}
       {sidebarOpen && (
@@ -141,15 +141,15 @@ export const CustomerLayout: React.FC = () => {
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
         style={{
-          backgroundColor: 'var(--color-surface, #ffffff)',
-          borderColor: 'var(--color-surface-border, #e5e5e5)',
+          backgroundColor: 'var(--card, #ffffff)',
+          borderColor: 'var(--border, #e5e5e5)',
         }}
       >
         <div className="flex flex-col h-screen lg:h-full">
           {/* Brand */}
           <div
             className="flex items-center justify-between h-16 px-4 border-b shrink-0"
-            style={{ borderColor: 'var(--color-surface-border, #e5e5e5)' }}
+            style={{ borderColor: 'var(--border, #e5e5e5)' }}
           >
             <Link
               to="/customer/dashboard"
@@ -164,7 +164,7 @@ export const CustomerLayout: React.FC = () => {
                 />
               )}
               {showCompanyName && (
-                <span className="text-sm font-semibold text-theme truncate">
+                <span className="text-sm font-semibold text-foreground truncate">
                   {companyName}
                 </span>
               )}
@@ -172,7 +172,7 @@ export const CustomerLayout: React.FC = () => {
             <button
               type="button"
               onClick={() => setSidebarOpen(false)}
-              className="lg:hidden text-muted-theme hover:text-theme"
+              className="lg:hidden text-muted-foreground hover:text-foreground"
               aria-label={t('common.close', 'Close')}
             >
               <X className="w-6 h-6" />
@@ -196,8 +196,8 @@ export const CustomerLayout: React.FC = () => {
                   onClick={() => setSidebarOpen(false)}
                   className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                     isActive
-                      ? 'bg-accent-dark text-white'
-                      // Hover uses the theme `--color-elevated` token
+                      ? 'bg-primary text-white'
+                      // Hover uses the theme `--muted` token
                       // (light mode = #f5f5f5, dark mode = #1f1f1f) —
                       // mirrors the admin sidebar's subtle grey hover.
                       // Tailwind's bare `hover:bg-neutral-100 dark:
@@ -206,16 +206,16 @@ export const CustomerLayout: React.FC = () => {
                       // variables, not the `.dark` class, so the
                       // light-mode value was always winning and the
                       // hover read as near-white.
-                      : 'hover:bg-(--color-elevated)'
+                      : 'hover:bg-(--muted)'
                   }`}
                   // Non-active items take their colour from the theme
                   // variable the admin chose in the colour pickers
-                  // (`--color-text`). The Tailwind dark:text-white
+                  // (`--foreground`). The Tailwind dark:text-white
                   // approach didn't apply because the customer
                   // portal toggles the palette via CSS variables, not
                   // the `.dark` class — so the previous styling
                   // resolved to the body's inherited muted colour.
-                  style={isActive ? undefined : { color: 'var(--color-text)' }}
+                  style={isActive ? undefined : { color: 'var(--foreground)' }}
                 >
                   {/* Mirrors AdminSidebar's active state exactly: solid
                       accent-dark pill, white icon and label, no extra
@@ -223,7 +223,7 @@ export const CustomerLayout: React.FC = () => {
                       what the admin chrome renders. */}
                   <Icon
                     className="w-5 h-5 mr-3"
-                    style={isActive ? undefined : { color: 'var(--color-text)' }}
+                    style={isActive ? undefined : { color: 'var(--foreground)' }}
                   />
                   {t(item.labelKey, item.fallback)}
                 </NavLink>
@@ -234,16 +234,16 @@ export const CustomerLayout: React.FC = () => {
           {/* Footer (logout + greeting on a single line, mirrors admin) */}
           <div
             className="border-t px-4 py-3 flex items-center justify-between gap-2"
-            style={{ borderColor: 'var(--color-surface-border, #e5e5e5)' }}
+            style={{ borderColor: 'var(--border, #e5e5e5)' }}
           >
             <div className="min-w-0">
-              <div className="text-sm font-medium text-theme truncate">{greetingName}</div>
-              <div className="text-xs text-muted-theme truncate">{customer?.email}</div>
+              <div className="text-sm font-medium text-foreground truncate">{greetingName}</div>
+              <div className="text-xs text-muted-foreground truncate">{customer?.email}</div>
             </div>
             <button
               type="button"
               onClick={() => { void logout(); }}
-              className="p-2 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 text-muted-theme hover:text-theme focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2"
+              className="p-2 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 text-muted-foreground hover:text-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2"
               aria-label={t('common.logout', 'Logout')}
               title={t('common.logout', 'Logout')}
             >
@@ -258,19 +258,19 @@ export const CustomerLayout: React.FC = () => {
         <header
           className="lg:hidden h-14 px-4 flex items-center justify-between border-b shrink-0"
           style={{
-            backgroundColor: 'var(--color-surface, #ffffff)',
-            borderColor: 'var(--color-surface-border, #e5e5e5)',
+            backgroundColor: 'var(--card, #ffffff)',
+            borderColor: 'var(--border, #e5e5e5)',
           }}
         >
           <button
             type="button"
             onClick={() => setSidebarOpen(true)}
-            className="p-2 -ml-2 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 text-theme"
+            className="p-2 -ml-2 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 text-foreground"
             aria-label={t('common.menu', 'Menu')}
           >
             <Menu className="w-6 h-6" />
           </button>
-          <span className="text-sm font-semibold text-theme truncate">{companyName}</span>
+          <span className="text-sm font-semibold text-foreground truncate">{companyName}</span>
           <span className="w-9" aria-hidden="true" />
         </header>
 
@@ -280,7 +280,7 @@ export const CustomerLayout: React.FC = () => {
 
         <footer
           className="py-4 px-4 text-center text-xs"
-          style={{ color: 'var(--color-muted-text, #737373)' }}
+          style={{ color: 'var(--muted-foreground, #737373)' }}
         >
           <p>
             {settingsData?.branding_footer_text

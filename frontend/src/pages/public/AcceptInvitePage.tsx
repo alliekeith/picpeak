@@ -257,7 +257,7 @@ export const AcceptInvitePage: React.FC = () => {
   // Loading state
   if (isValidating) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: 'var(--color-background, #fafafa)' }}>
+      <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: 'var(--background, #fafafa)' }}>
         <div className="w-full max-w-md text-center">
           <Loading size="lg" text={t('acceptInvitation.validating')} />
         </div>
@@ -270,7 +270,7 @@ export const AcceptInvitePage: React.FC = () => {
     const errorMessage = (validationError as any)?.response?.data?.error || t('acceptInvitation.invalidTokenMessage');
 
     return (
-      <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: 'var(--color-background, #fafafa)' }}>
+      <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: 'var(--background, #fafafa)' }}>
         <div className="w-full max-w-md">
           <Card padding="lg">
             <div className="text-center">
@@ -302,7 +302,7 @@ export const AcceptInvitePage: React.FC = () => {
   // Success state - account created
   if (acceptMutation.isSuccess) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: 'var(--color-background, #fafafa)' }}>
+      <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: 'var(--background, #fafafa)' }}>
         <div className="w-full max-w-md">
           <Card padding="lg">
             <div className="text-center">
@@ -333,7 +333,7 @@ export const AcceptInvitePage: React.FC = () => {
 
   // Form state - valid invitation
   return (
-    <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: 'var(--color-background, #fafafa)' }}>
+    <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: 'var(--background, #fafafa)' }}>
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
@@ -347,10 +347,10 @@ export const AcceptInvitePage: React.FC = () => {
               className="w-[180px] h-[130px] object-contain"
             />
           </div>
-          <h1 className="text-3xl font-bold" style={{ color: 'var(--color-text, #171717)' }}>
+          <h1 className="text-3xl font-bold" style={{ color: 'var(--foreground, #171717)' }}>
             {t('acceptInvitation.title')}
           </h1>
-          <p className="mt-2" style={{ color: 'var(--color-text, #171717)', opacity: 0.7 }}>
+          <p className="mt-2" style={{ color: 'var(--foreground, #171717)', opacity: 0.7 }}>
             {t('acceptInvitation.subtitle')}
           </p>
         </div>
@@ -358,8 +358,8 @@ export const AcceptInvitePage: React.FC = () => {
         {/* Invitation Info Card */}
         <Card padding="md" className="mb-6">
           <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center shrink-0">
-              <Mail className="w-5 h-5 text-primary-600" />
+            <div className="w-10 h-10 rounded-full bg-brand-100 flex items-center justify-center shrink-0">
+              <Mail className="w-5 h-5 text-brand-600" />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm text-neutral-500">{t('acceptInvitation.invitedAs')}</p>
@@ -527,17 +527,17 @@ export const AcceptInvitePage: React.FC = () => {
 
         {/* Footer */}
         <div className="text-center mt-8">
-          <p className="text-sm" style={{ color: 'var(--color-text, #171717)', opacity: 0.7 }}>
+          <p className="text-sm" style={{ color: 'var(--foreground, #171717)', opacity: 0.7 }}>
             {t('acceptInvitation.alreadyHaveAccount')}{' '}
             <a
               href="/admin/login"
               className="hover:underline"
-              style={{ color: 'var(--color-primary, #5C8762)' }}
+              style={{ color: 'var(--primary, #5C8762)' }}
             >
               {t('acceptInvitation.signIn')}
             </a>
           </p>
-          <PoweredBy className="text-xs mt-2" style={{ color: 'var(--color-text, #171717)', opacity: 0.5 }} />
+          <PoweredBy className="text-xs mt-2" style={{ color: 'var(--foreground, #171717)', opacity: 0.5 }} />
         </div>
       </div>
     </div>

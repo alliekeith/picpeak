@@ -267,7 +267,7 @@ export const MessagesPage: React.FC = () => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder={t('messages.searchPlaceholder', 'Search this folder…')}
-            className="w-full h-9 pl-9 pr-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-sm text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-accent"
+            className="w-full h-9 pl-9 pr-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-sm text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-brand"
           />
         </div>
         <div className="flex items-center gap-2 flex-none">
@@ -281,7 +281,7 @@ export const MessagesPage: React.FC = () => {
           </button>
           <button
             onClick={openNewMessage}
-            className="inline-flex items-center gap-2 h-9 px-3.5 rounded-lg bg-accent-dark text-white text-sm font-medium hover:opacity-90"
+            className="inline-flex items-center gap-2 h-9 px-3.5 rounded-lg bg-primary text-white text-sm font-medium hover:opacity-90"
           >
             <PenSquare className="w-4 h-4" />
             {t('messages.newMessage', 'New message')}
@@ -309,14 +309,14 @@ export const MessagesPage: React.FC = () => {
                       onClick={() => { setActiveFolder(f.id); setSelection(null); }}
                       className={`flex items-center gap-2 pl-7 pr-2 py-1.5 rounded-lg text-[13.5px] text-left transition-colors ${
                         active
-                          ? 'bg-accent-soft text-on-accent-soft font-semibold'
+                          ? 'bg-brand-soft text-on-brand-soft font-semibold'
                           : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800/60'
                       }`}
                     >
                       <f.icon className="w-4 h-4 opacity-80" />
                       <span>{f.name}</span>
                       {typeof c === 'number' && c > 0 && (
-                        <span className={`ml-auto tabular-nums text-xs ${active ? 'text-on-accent-soft' : 'text-neutral-400'}`}>{c}</span>
+                        <span className={`ml-auto tabular-nums text-xs ${active ? 'text-on-brand-soft' : 'text-neutral-400'}`}>{c}</span>
                       )}
                     </button>
                   );
@@ -334,7 +334,7 @@ export const MessagesPage: React.FC = () => {
                   onClick={() => { setActiveFolder(f.id); setSelection(null); }}
                   className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-[13.5px] text-left transition-colors ${
                     active
-                      ? 'bg-accent-soft text-on-accent-soft font-semibold'
+                      ? 'bg-brand-soft text-on-brand-soft font-semibold'
                       : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800/60'
                   }`}
                 >
@@ -478,7 +478,7 @@ const MessageList: React.FC<{
             onClick={r.onClick}
             className={`w-full text-left px-4 py-3 border-b border-neutral-100 dark:border-neutral-800/70 border-l-[3px] transition-colors ${
               r.active
-                ? 'border-l-accent-dark bg-accent-soft'
+                ? 'border-l-accent-dark bg-brand-soft'
                 : 'border-l-transparent hover:bg-neutral-50 dark:hover:bg-neutral-800/40'
             }`}
           >
@@ -677,7 +677,7 @@ const ReceivedDetail: React.FC<{
         <div className="mt-5 flex flex-wrap gap-2">
           <button
             onClick={() => onViewDoc(item.inbound_document_id as number)}
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-accent-dark hover:opacity-90 text-white text-sm font-medium"
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-primary hover:opacity-90 text-white text-sm font-medium"
           >
             <FileText className="w-4 h-4" />{t('messages.viewDocument', 'View document')}
           </button>
@@ -715,7 +715,7 @@ const Toolbar: React.FC<{
         title={enabled ? undefined : t('messages.soon', 'Available in a later phase')}
         className={`inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg text-[13px] font-medium ${
           enabled ? 'hover:bg-neutral-100 dark:hover:bg-neutral-800 ' : 'cursor-not-allowed opacity-50 '
-        }${accent ? 'text-accent-dark font-semibold' : 'text-neutral-600 dark:text-neutral-300'}`}
+        }${accent ? 'text-primary font-semibold' : 'text-neutral-600 dark:text-neutral-300'}`}
       >
         <Icon className="w-[15px] h-[15px]" />{label}
       </button>

@@ -115,7 +115,7 @@ export const BillsListPage: React.FC = () => {
             return (
               <button key={s} type="button" onClick={() => toggleStatus(s)}
                 className={`px-2.5 py-1 rounded-full text-xs font-medium border transition-colors ${
-                  active ? 'bg-accent-dark text-white border-accent-dark' : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-neutral-300 dark:border-neutral-600'
+                  active ? 'bg-primary text-white border-primary' : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-neutral-300 dark:border-neutral-600'
                 }`}
               >{t(`bills.status.${s}`, s)}</button>
             );
@@ -409,7 +409,7 @@ const ImportHistoricalInvoiceModal: React.FC<ImportModalProps> = ({ onClose }) =
               type="file"
               accept="application/pdf"
               onChange={(e) => setFile(e.target.files?.[0] || null)}
-              className="text-sm file:mr-3 file:rounded-md file:border-0 file:bg-primary-600 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-white hover:file:bg-primary-700"
+              className="text-sm file:mr-3 file:rounded-md file:border-0 file:bg-brand-600 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-white hover:file:bg-brand-700"
             />
             {file && (
               <p className="text-xs text-neutral-500 mt-1">{file.name} · {(file.size / 1024).toFixed(1)} KB</p>

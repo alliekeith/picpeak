@@ -211,7 +211,7 @@ export const BackupConfiguration: React.FC<BackupConfigurationProps> = ({
               onChange={(e) => handleChange('backup_enabled', e.target.checked)}
               className="sr-only peer"
             />
-            <div className="w-11 h-6 bg-neutral-200 dark:bg-neutral-600 peer-focus:outline-hidden peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-neutral-300 dark:after:border-neutral-500 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+            <div className="w-11 h-6 bg-neutral-200 dark:bg-neutral-600 peer-focus:outline-hidden peer-focus:ring-4 peer-focus:ring-brand-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-neutral-300 dark:after:border-neutral-500 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
           </label>
         </div>
       </Card>
@@ -237,7 +237,7 @@ export const BackupConfiguration: React.FC<BackupConfigurationProps> = ({
                 onClick={() => handleChange('backup_destination_type', type.id)}
                 className={`p-4 rounded-lg border-2 transition-all ${
                   formData.backup_destination_type === type.id
-                    ? 'border-primary bg-accent-dark/15'
+                    ? 'border-primary bg-primary/15'
                     : 'border-neutral-200 dark:border-neutral-600 hover:border-neutral-300 dark:hover:border-neutral-500'
                 }`}
               >

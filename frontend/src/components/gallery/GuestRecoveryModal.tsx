@@ -88,28 +88,28 @@ export const GuestRecoveryModal: React.FC = () => {
   return (
     <div className="fixed inset-0 z-60 flex items-center justify-center p-4">
       <div className="fixed inset-0 bg-black bg-opacity-50" onClick={handleClose} />
-      <div className="relative bg-surface rounded-lg shadow-xl max-w-md w-full p-6">
+      <div className="relative bg-card rounded-lg shadow-xl max-w-md w-full p-6">
         <button
           type="button"
           onClick={handleClose}
           className="absolute top-4 right-4 p-1 hover:bg-black/10 rounded-lg transition-colors"
         >
-          <X className="w-5 h-5 text-muted-theme" />
+          <X className="w-5 h-5 text-muted-foreground" />
         </button>
 
         <button
           type="button"
           onClick={backToPrompt}
-          className="flex items-center gap-1 text-sm text-muted-theme hover:text-theme mb-3"
+          className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-3"
         >
           <ArrowLeft className="w-4 h-4" />
           {t('gallery.guestRecovery.back', 'Back')}
         </button>
 
-        <h2 className="text-lg font-semibold text-theme mb-2">
+        <h2 className="text-lg font-semibold text-foreground mb-2">
           {t('gallery.guestRecovery.title', 'Recover your picks')}
         </h2>
-        <p className="text-sm text-muted-theme mb-4">
+        <p className="text-sm text-muted-foreground mb-4">
           {step === 'email'
             ? t(
                 'gallery.guestRecovery.emailStepDescription',

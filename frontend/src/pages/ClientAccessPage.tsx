@@ -23,7 +23,7 @@ export const ClientAccessPage: React.FC = () => {
 
   const { data: settingsData } = usePublicSettings();
   // Theme-aware logo: the page background follows the themed
-  // --color-background (dark when branding_force_color_mode / OS is dark),
+  // --background (dark when branding_force_color_mode / OS is dark),
   // so pick the dark logo variant accordingly.
   const { isDark } = usePublicDarkMode();
   const lightLogo = settingsData?.branding_logo_url?.trim();
@@ -71,7 +71,7 @@ export const ClientAccessPage: React.FC = () => {
 
   if (isLoadingInfo || authLoading) {
     return (
-      <div className="min-h-screen" style={{ backgroundColor: 'var(--color-background, #fafafa)' }}>
+      <div className="min-h-screen" style={{ backgroundColor: 'var(--background, #fafafa)' }}>
         <div className="min-h-screen flex items-center justify-center">
           <Loading size="lg" text={t('gallery.loading')} />
         </div>
@@ -81,7 +81,7 @@ export const ClientAccessPage: React.FC = () => {
 
   if (infoError || !galleryInfo) {
     return (
-      <div className="min-h-screen" style={{ backgroundColor: 'var(--color-background, #fafafa)' }}>
+      <div className="min-h-screen" style={{ backgroundColor: 'var(--background, #fafafa)' }}>
         <div className="min-h-screen flex flex-col">
           {brandLogo && (
             <div className="p-8 text-center">
@@ -107,7 +107,7 @@ export const ClientAccessPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: 'var(--color-background, #fafafa)' }}>
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--background, #fafafa)' }}>
       <div className="min-h-screen flex flex-col">
         {/* Logo — hidden when the admin turned it off for this gallery (#894) */}
         {brandLogo && galleryInfo.login_logo_visible !== false && (
@@ -169,7 +169,7 @@ export const ClientAccessPage: React.FC = () => {
                   {t('clientAccess.guestHint')}{' '}
                   <Link
                     to={`/gallery/${slug}`}
-                    className="text-primary-600 dark:text-primary-400 hover:underline"
+                    className="text-brand-600 dark:text-brand-400 hover:underline"
                   >
                     {t('clientAccess.guestLink')}
                   </Link>

@@ -42,18 +42,18 @@ describe('tailwind typography plugin (#1288)', () => {
 
     // The plugin ships a fixed near-black palette and sets `color` on the
     // heading ELEMENT, which beats the container's inherited colour. A dark
-    // gallery preset writes a near-white --color-text on :root and does NOT
+    // gallery preset writes a near-white --foreground on :root and does NOT
     // add a `.dark` class, so `dark:prose-invert` never engages — without
     // this mapping the promo block, info banner and public CMS pages render
     // near-black headings on a dark background.
     it('remaps the prose palette wherever the theme owns the text colour', () => {
-      expect(overrides).toMatch(/\.prose\.text-theme\s*\{/);
-      expect(overrides).toMatch(/--tw-prose-headings:\s*var\(--color-text\)/);
-      expect(overrides).toMatch(/--tw-prose-body:\s*var\(--color-text\)/);
-      expect(overrides).toMatch(/--tw-prose-bold:\s*var\(--color-text\)/);
+      expect(overrides).toMatch(/\.prose\.text-foreground\s*\{/);
+      expect(overrides).toMatch(/--tw-prose-headings:\s*var\(--foreground\)/);
+      expect(overrides).toMatch(/--tw-prose-body:\s*var\(--foreground\)/);
+      expect(overrides).toMatch(/--tw-prose-bold:\s*var\(--foreground\)/);
     });
 
-    it('keeps the gallery prose surfaces carrying the text-theme marker', () => {
+    it('keeps the gallery prose surfaces carrying the text-foreground marker', () => {
       // The mapping is keyed on that class; a consumer that drops it silently
       // falls back to the near-black palette.
       for (const file of [
@@ -64,7 +64,7 @@ describe('tailwind typography plugin (#1288)', () => {
         const proseLines = src.split('\n').filter((l) => /className|class=/.test(l) && /\bprose\b/.test(l));
         expect(proseLines.length).toBeGreaterThan(0);
         for (const line of proseLines) {
-          expect(line).toMatch(/text-theme/);
+          expect(line).toMatch(/text-foreground/);
         }
       }
     });

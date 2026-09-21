@@ -166,7 +166,7 @@ export const AdminGuestDetail: React.FC<AdminGuestDetailProps> = ({ eventId, gue
                   onClick={() => setTab(k)}
                   className={`px-3 py-2 text-sm font-medium border-b-2 transition ${
                     tab === k
-                      ? 'border-accent text-accent'
+                      ? 'border-brand text-brand'
                       : 'border-transparent text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100'
                   }`}
                 >

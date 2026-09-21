@@ -102,7 +102,7 @@ export const FocalPointPicker: React.FC<FocalPointPickerProps> = ({
             onClick={() => onChange(p.value)}
             className={
               keywordToPercent(currentValue) === p.value
-                ? 'bg-accent-dark/15 border-accent-dark/30 text-accent-dark'
+                ? 'bg-primary/15 border-primary/30 text-primary'
                 : ''
             }
           >
