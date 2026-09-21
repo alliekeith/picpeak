@@ -5,7 +5,7 @@
  *
  * **Why this lives outside the individual services**
  *
- * The seeders themselves (`crmEmailTemplates.js`,
+ * The seeder itself (
  * `contractEmailTemplates.js`, `eventReminderTemplates.js`) are
  * idempotent and module-cached, but they were never called at boot.
  * contractEmailTemplates is called lazily by every contractService
@@ -29,12 +29,10 @@
  * circuits after its first successful pass via a module-level flag.
  */
 
-const { ensureCrmEmailTemplatesSeeded } = require('./crmEmailTemplates');
-const { ensureContractEmailTemplatesSeeded } = require('./contractEmailTemplates');
 const { ensureEventReminderTemplatesSeeded } = require('./eventReminderTemplates');
 
 /**
- * Run all three template seeders, then recover any email_queue rows
+ * Run the template seeder, then recover any email_queue rows
  * that exhausted their retries because the template they needed didn't
  * exist yet.
  *
@@ -51,8 +49,6 @@ async function seedEmailTemplatesAndRecoverQueue(db, logger) {
   const seeded = [];
 
   for (const seedFn of [
-    ensureCrmEmailTemplatesSeeded,
-    ensureContractEmailTemplatesSeeded,
     ensureEventReminderTemplatesSeeded,
   ]) {
     try {

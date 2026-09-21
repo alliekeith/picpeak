@@ -1,11 +1,11 @@
 /**
- * Test harness for CRM integration tests.
+ * Test harness for integration tests.
  *
  * Boots a temp-SQLite database, runs every `migrations/core/*.up()`
  * directly (bypassing knex's Migrator — its exclusive write lock
  * deadlocks 001_init's nested `initializeDatabase()` call), and
  * exposes a small helper for seeding the minimal row set that the
- * quote/contract/invoice services need to operate.
+ * services need to operate.
  *
  * Usage:
  *
@@ -78,9 +78,10 @@ async function bootCrmDb() {
 }
 
 /**
- * Seed the minimal row set that quote/contract/invoice services
- * dereference on creation: an admin user, an active customer, a
- * business_profile row, and the app_settings keys the services read.
+ * Seed the minimal row set the services dereference: today just an
+ * admin user. The CRM seeds (business_profile, customer_accounts) went
+ * with the CRM feature area — `customerId` is still returned, as null,
+ * so the many callers that destructure it keep working.
  *
  * Returns the ids the caller will pass into service calls.
  */
@@ -94,32 +95,11 @@ async function seedMinimal(db) {
   }).returning('id');
   const adminId = adminInsert[0]?.id ?? adminInsert[0];
 
-  // business_profile is a singleton; the row is seeded by migration 107
-  // for fresh installs. Defensive: insert if missing.
-  const profile = await db('business_profile').first();
-  if (!profile) {
-    await db('business_profile').insert({
-      legal_name: 'Test Studio',
-      default_currency: 'CHF',
-      default_locale: 'de',
-    });
-  }
-
-  const customerInsert = await db('customer_accounts').insert({
-    email: 'customer@example.com',
-    display_name: 'Test Customer',
-    password_hash: passwordHash,
-    preferred_language: 'de',
-    is_active: 1,
-    created_at: new Date(),
-  }).returning('id');
-  const customerId = customerInsert[0]?.id ?? customerInsert[0];
-
-  return { adminId, customerId };
+  return { adminId, customerId: null };
 }
 
 // ---------------------------------------------------------------------
-// Route-test helpers (#570) — building blocks for the CRM HTTP layer
+// Route-test helpers (#570) — building blocks for the HTTP layer
 // tests. Kept here so every supertest suite shares the same minting +
 // app-wiring shape and a refactor lands in one place.
 // ---------------------------------------------------------------------

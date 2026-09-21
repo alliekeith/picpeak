@@ -68,14 +68,7 @@ async function expandSnapshot(db, { features, flags, used, now, version = 'usage
   result.s3_photo_storage.configured = process.env.STORAGE_BACKEND === 's3' &&
     Boolean(process.env.STORAGE_S3_BUCKET && process.env.STORAGE_S3_ACCESS_KEY && process.env.STORAGE_S3_SECRET_KEY);
   result.s3_backups.configured = settings.backup_destination_type === 's3' && Boolean(settings.backup_s3_bucket);
-  result.crm_installments.configured = Boolean(effective.quotes || effective.bills);
-  result.document_templates.configured = Boolean(effective.quotes || effective.contracts);
-  const imapColumns = ['imap_host', 'imap_user', 'imap_pass'];
-  const imapPresent = (query) => { for (const column of imapColumns) query.whereNotNull(column).whereNot(column, ''); };
-  result.incoming_mail.configured = Boolean(effective.incomingMail) && (
-    await exists('email_configs', imapColumns, imapPresent) ||
-    await exists('mail_accounts', [...imapColumns, 'enabled'], (query) => { imapPresent(query); query.where('enabled', formatBoolean(true)); })
-  );
+  result.incoming_mail.configured = false;
   result.api_integration.configured = await exists('api_tokens', ['revoked_at', 'expires_at'], (query) => {
     query.whereNull('revoked_at').where((q) => q.whereNull('expires_at').orWhere('expires_at', '>', new Date(now).toISOString()));
   });
@@ -132,8 +125,6 @@ async function expandSnapshot(db, { features, flags, used, now, version = 'usage
               expiry.whereNull('expires_at').orWhere('expires_at', '>', new Date(now).toISOString())))));
     result.workflow_automation_enabled.configured = Boolean(effective.workflows) && await enabled('workflows', 'enabled');
     result.s3_auto_import.configured = result.s3_photo_storage.configured && process.env.STORAGE_AUTO_IMPORT === 'true';
-    result.crm_combined_billing.configured = Boolean(effective.bills && effective.incomingInvoices);
-    result.crm_document_conversion.configured = Boolean(effective.quotes || effective.contracts);
     result.gallery_capture_date_sort.configured = await exists('events', ['default_photo_sort'], (query) =>
       query.whereIn('default_photo_sort', ['capture_date_asc', 'capture_date_desc']));
     const originalNames = await db('app_settings').where({ setting_key: 'general_use_original_filenames_for_downloads' }).first('setting_value');

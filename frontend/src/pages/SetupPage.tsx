@@ -46,9 +46,7 @@ const COMMUNITY_LINKS: {
 // Server-side applyDependencyRules resolves dependencies (e.g. Invoices pulls in
 // Accounting) when we PUT the selection, so we only send the raw ticks.
 const USAGE_GROUPS: { id: string; titleKey: string; features: FeatureKey[] }[] = [
-  { id: 'crm', titleKey: 'setup.usageGroupCrm', features: ['quotes', 'contracts', 'bills', 'hoursLogging', 'customerPortal', 'calendar'] },
-  { id: 'accounting', titleKey: 'setup.usageGroupAccounting', features: ['taxReport', 'incomingInvoices', 'expenses'] },
-  { id: 'automation', titleKey: 'setup.usageGroupAutomation', features: ['reminderEmails', 'slideshow', 'workflows', 'whatsapp', 'incomingMail'] },
+  { id: 'automation', titleKey: 'setup.usageGroupAutomation', features: ['reminderEmails', 'slideshow', 'whatsapp'] },
 ];
 const ALL_USAGE_FEATURES: FeatureKey[] = USAGE_GROUPS.flatMap((g) => g.features);
 
@@ -542,10 +540,6 @@ export const SetupPage: React.FC = () => {
                   </div>
                 </div>
               ))}
-
-              {selectedFeatures.has('bills') && !selectedFeatures.has('taxReport') && (
-                <p className="text-xs text-neutral-500">{t('setup.usageDepsNote')}</p>
-              )}
 
               <Button
                 type="button"

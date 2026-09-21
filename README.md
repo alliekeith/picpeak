@@ -115,20 +115,6 @@ Unlike expensive SaaS solutions, PicPeak gives you:
 
 **Technical** — Docker-ready, automatic thumbnail generation, external media reference mode, smart archiving of expired galleries, S3-compatible [storage backends](https://docs.picpeak.app/features/storage-backends), [webhooks](https://docs.picpeak.app/features/webhooks), and security-first defaults (JWT, rate limiting, CORS).
 
-<details>
-<summary><strong>🧾 For studios — CRM &amp; Accounting (Beta, off by default)</strong></summary>
-
-- 📝 **Quotes → Contracts → Invoices** — one deal lineage; cancel-and-reissue (Storno) keeps issued invoices immutable
-- ⏱️ **Hours Logging & Calendar** — per-customer time tracking; admin calendar of events, logged hours, and pending quotes/contracts
-- 🧾 **Inbound Supplier Invoices & Expenses** — capture received invoices (upload/camera, rasterised server-side), categorise, and re-bill costs to clients
-- 📊 **Tax Report & Accountant Export** — period-scoped income/cost report with VAT breakdown; PDF/CSV plus a Treuhänder/Banana (Swiss/LI) journal export
-- 🌍 **VAT & Multi-currency** — single VAT-code registry snapshotted onto each document
-
-</details>
-
-> [!WARNING]
-> **CRM & Accounting — examples only, verify locally.** Feature-flagged off by default. Seeded contract blocks are written by the maintainer, **not a lawyer**; QR-bills/SEPA payloads and every tax, VAT and Treuhänder/Banana figure are computed from your input and defaults and are **jurisdiction-specific guidance only**. Have your lawyer review contracts, scan a test QR with your bank's app, and verify all numbers with your accountant / Treuhänder / tax authority before customer-facing use. Read **[the CRM disclaimers](https://docs.picpeak.app/features/crm/disclaimers)** first.
-
 ## 📖 Documentation
 
 Full documentation lives at **[docs.picpeak.app](https://docs.picpeak.app)** — deployment, admin settings, API, branding, and more.
@@ -145,7 +131,6 @@ Full documentation lives at **[docs.picpeak.app](https://docs.picpeak.app)** —
 | 🪝 Webhooks | [docs.picpeak.app/features/webhooks](https://docs.picpeak.app/features/webhooks) |
 | 💾 Storage backends (local / S3) | [docs.picpeak.app/features/storage-backends](https://docs.picpeak.app/features/storage-backends) |
 | 💻 System requirements & tuning | [docs.picpeak.app/deployment/system-requirements](https://docs.picpeak.app/deployment/system-requirements) |
-| 🧾 CRM & Accounting | [docs.picpeak.app/features/crm](https://docs.picpeak.app/features/crm) · [disclaimers](https://docs.picpeak.app/features/crm/disclaimers) |
 | 🗺️ Roadmap | [GitHub Issues](https://github.com/PicPeak/picpeak/issues) |
 
 **Project meta:** [Support](SUPPORT.md) · [Contributing](CONTRIBUTING.md) · [License](LICENSE) · [Security](SECURITY.md) · [Code of Conduct](CODE_OF_CONDUCT.md)
@@ -161,9 +146,6 @@ Full documentation lives at **[docs.picpeak.app](https://docs.picpeak.app)** —
 | Client Uploads | ✅ | ✅ | ✅ | Limited |
 | API Access | ✅ | Paid | ❌ | ❌ |
 | Open Source | ✅ | ❌ | ❌ | ❌ |
-| Customer Accounts | ✅ | ❌ | ❌ | ✅ |
-| Quotes / Contracts / Invoices | 🧪 Beta | ❌ | ❌ | ✅ |
-| Incoming Invoices & Accounting | 🧪 Beta | ❌ | ❌ | ❌ |
 
 <sub>*You bring your own server and, optionally, a domain. **Limited only by your server storage. ***Pixieset's "unlimited" is photos only; video is capped by plan. 🧪 Beta = built but feature-flagged off by default.</sub>
 

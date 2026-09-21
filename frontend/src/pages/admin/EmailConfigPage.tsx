@@ -20,8 +20,6 @@ import { EmailPreviewModal } from '../../components/admin/EmailPreviewModal';
 import { EmailTemplateEditor } from '../../components/admin/EmailTemplateEditor';
 import { SentEmailsPanel } from '../../components/admin/SentEmailsPanel';
 import { ReceivedEmailsPanel } from '../../components/admin/ReceivedEmailsPanel';
-import { IncomingMailConfigCard } from '../../components/admin/IncomingMailConfigCard';
-import { CustomerMailboxCard } from '../../components/admin/CustomerMailboxCard';
 import { Palette, RefreshCw, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useQuery, useMutation } from '@tanstack/react-query';
@@ -535,18 +533,6 @@ export const EmailConfigPage: React.FC = () => {
           >
             {t('email.sentEmails.tab', 'Sent emails')}
           </button>
-          {featureFlags.incomingMail && (
-            <button
-              onClick={() => setActiveTab('received')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
-                activeTab === 'received'
-                  ? 'border-accent text-accent'
-                  : 'border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300'
-              }`}
-            >
-              {t('email.received.tab', 'Received emails')}
-            </button>
-          )}
         </nav>
       </div>
 
@@ -872,9 +858,6 @@ export const EmailConfigPage: React.FC = () => {
       )}
 
       {/* Email Templates Tab */}
-      {/* Incoming mail (IMAP) — a second block under SMTP, flag-gated. */}
-      {activeTab === 'smtp' && featureFlags.incomingMail && <IncomingMailConfigCard />}
-      {activeTab === 'smtp' && featureFlags.messaging && <CustomerMailboxCard />}
 
       {activeTab === 'templates' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

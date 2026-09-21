@@ -38,13 +38,12 @@ const PRESETS = [
   {
     name: 'team_photographer',
     display_name: 'Team Photographer',
-    description: 'Contributing photographer (second/festival shooter) — view events, upload and manage photos, and see read-only client context. Not the customer contact: no settings, user management, billing edits or event configuration. A preset starting point.',
+    description: 'Contributing photographer (second/festival shooter) — view events, upload and manage photos. Not the customer contact: no settings, user management or event configuration. A preset starting point.',
     is_system: true,
     priority: 40,
     permissions: [
       'events.view',
       'photos.view', 'photos.upload', 'photos.edit', 'photos.download',
-      'customers.view', 'quotes.view', 'bills.view',
     ],
   },
 ];

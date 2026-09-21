@@ -79,7 +79,6 @@ const { startExpirationChecker } = require('./src/services/expirationChecker');
 const { startTransferCleanup } = require('./src/services/transferCleanupService');
 const { startDownloadJobCleanup } = require('./src/services/downloadJobCleanupService');
 const { startRevealScheduler } = require('./src/services/revealScheduler');
-const { startInvoiceScheduler } = require('./src/services/invoiceSchedulerService');
 const { initializeTransporter, startEmailQueueProcessor } = require('./src/services/emailProcessor');
 const emailWebhookTransport = require('./src/services/emailWebhookTransport');
 const { startBackupService } = require('./src/services/backupService');
@@ -868,14 +867,11 @@ app.use('/api/admin/roles', require('./src/routes/adminRoles'));
 // in browser or intermediate caches and outlive its cause. See the
 // PR #458 → #470 history in the middleware file for context.
 const { noStoreCache } = require('./src/middleware/noStoreCache');
-app.use('/api/admin/customers', noStoreCache, require('./src/routes/adminCustomers'));
 // Customer-side surface (#354). Strictly separate from /api/admin/* —
 // distinct token type, distinct cookie, distinct middleware. The
 // noStoreCache wrapper (upstream) prevents stale customer-portal
 // data from being served after logout. The CRM-area route-flag
 // gate was reverted upstream and lives in the UI now.
-app.use('/api/customer/auth', noStoreCache, require('./src/routes/customerAuth'));
-app.use('/api/customer', noStoreCache, require('./src/routes/customer'));
 
 // --- CRM (#TBD) -------------------------------------------------------
 // Quotes / Invoices / Contracts / Calendar / Tax report / Deals lineage.
@@ -883,47 +879,23 @@ app.use('/api/customer', noStoreCache, require('./src/routes/customer'));
 // /api/admin/business-profile, gated by the existing settings.manage
 // permission rather than a CRM-specific one. The public endpoints
 // host the customer-side accept/decline / sign / payment-check pages.
-app.use('/api/admin/business-profile', require('./src/routes/adminBusinessProfile'));
 // PDF theme for quotes, invoices and contracts (#1445) — same settings
 // permissions as the business profile's PDF settings.
-app.use('/api/admin/pdf-themes', require('./src/routes/adminPdfThemes'));
-app.use('/api/admin/quotes',     require('./src/routes/adminQuotes'));
 // Quote catalogue + templates (#1451). Own prefix so its collection paths
 // never collide with /api/admin/quotes/:id.
-app.use('/api/admin/quote-catalog', require('./src/routes/adminQuoteCatalog'));
-app.use('/api/admin/invoices',   require('./src/routes/adminInvoices'));
-app.use('/api/admin/contracts',  require('./src/routes/adminContracts'));
 // Contract templates (#1445) — own prefix, behind the contracts flag.
-app.use('/api/admin/contract-templates', require('./src/routes/adminContractTemplates'));
 // The attachment library for contract templates and contracts (#1445).
-app.use('/api/admin/document-attachments', require('./src/routes/adminDocumentAttachments'));
-app.use('/api/admin/projects',   require('./src/routes/adminProjects'));
-app.use('/api/admin/calendar',   require('./src/routes/adminCalendar'));
-app.use('/api/admin/deals',      require('./src/routes/adminDeals'));
-app.use('/api/admin/workflows',  require('./src/routes/adminWorkflows'));
-app.use('/api/admin/tax-report', require('./src/routes/adminTaxReport'));
-app.use('/api/admin/expenses',   require('./src/routes/adminExpenses'));
-app.use('/api/admin/ledger',     require('./src/routes/adminLedger'));
 // Read-only VAT-code registry for the invoice/quote editors — un-gated by the
 // accounting flag (management stays under /ledger).
-app.use('/api/admin/vat-codes',  require('./src/routes/adminVatCodes'));
 app.use('/api/admin/system-health', require('./src/routes/adminSystemHealth'));
-app.use('/api/admin/dev',        require('./src/routes/adminDev'));
 app.use('/api/admin/transfers',  require('./src/routes/adminTransfers'));
 // Newsletter campaigns (#1264). Flag-gated inside the router.
-app.use('/api/admin/newsletters', require('./src/routes/adminNewsletters'));
-app.use('/api/public/quotes',  require('./src/routes/publicQuotes'));
-app.use('/api/public/contracts', require('./src/routes/publicContracts'));
 // Signing with a link per signer and an emailed code (#1446).
-app.use('/api/public/contract-signing', require('./src/routes/publicContractSigning'));
 // PicTransfer (#997): recipient download + client upload, token-authenticated.
 app.use('/api/public/transfer', require('./src/routes/publicTransfer'));
 app.use('/api/public/transfer-upload', require('./src/routes/publicTransferUpload'));
-app.use('/api/public/payment-check', require('./src/routes/publicPaymentCheck'));
 // Newsletter unsubscribe (#1264). Deliberately NOT flag-gated: turning the
 // feature off must not break the links in mail that already went out.
-app.use('/api/public/newsletter', require('./src/routes/publicNewsletter'));
-app.use('/api/public/workflow-approvals', require('./src/routes/publicWorkflowApprovals'));
 app.use('/api/admin/event-types', require('./src/routes/adminEventTypes'));
 app.use('/api/admin/api-tokens', require('./src/routes/adminApiTokens'));
 app.use('/api/admin/webhooks', require('./src/routes/adminWebhooks'));
@@ -1154,9 +1126,6 @@ async function startServer() {
     // PicTransfer retention sweep (#997): expire links, notify admins, and
     // hard-delete client uploads once the grace window elapses.
     startTransferCleanup();
-    // Customer documents retention (#1444): delete long-rejected files and
-    // remove the bytes of deleted ones once the retention window elapses.
-    require('./src/services/customerDocumentRetentionService').startCustomerDocumentRetention();
     // Custom-resolution download archives (#858) are disposable renditions —
     // sweep them once their TTL passes so .download-cache doesn't grow forever.
     // Best-effort, as before the scheduler refactor: a transient DB error on
@@ -1166,10 +1135,6 @@ async function startServer() {
     startDownloadJobCleanup();
     // Reveal-mode scheduler (#838): minutely stamp for scheduled reveals.
     startRevealScheduler();
-    // CRM invoice scheduler: hourly tick to flush scheduled-send invoices
-    // + run the overdue reminder ladder. No-op when the `bills` feature
-    // flag is OFF (the service short-circuits on empty result sets).
-    startInvoiceScheduler();
     
     // Initialize email transporter and start queue processor.
     // Skipped under the webhook transport (#1225): an install that switched to
@@ -1198,15 +1163,6 @@ async function startServer() {
       startWhatsAppQueueProcessor();
     } catch (err) {
       logger.warn('WhatsApp queue processor start failed:', err.message);
-    }
-
-    // Start incoming-mail (IMAP) poller — no-ops each minute unless the
-    // `incomingMail` flag is on and a mailbox is configured (migration 128).
-    try {
-      const { startIncomingMailPoller } = require('./src/services/emailIntakeService');
-      startIncomingMailPoller();
-    } catch (err) {
-      logger.warn('Incoming-mail poller failed to start:', err.message);
     }
 
     // Start webhook delivery worker (#327)

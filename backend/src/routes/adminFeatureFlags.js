@@ -5,8 +5,6 @@
  * PUT  /api/admin/feature-flags  → body { [key]: boolean }, replaces in tx
  *
  * Server-side dependency rules mirror the frontend:
- *   - quotes=false  forces bills=false
- *   - calendar=false forces calendarBooking=false
  *   - galleries is hard-coded true regardless of input
  *
  * Audit log: every successful PUT writes one activity_logs row with the
@@ -26,60 +24,8 @@ const logger = require('../utils/logger');
 const KNOWN_FLAGS = [
   'galleries',
   'reminderEmails',
-  // Incoming mail (migration 128) — IMAP polling of a dedicated mailbox into
-  // the incoming-invoices inbox. Standalone toggle.
-  'incomingMail',
-  'calendar',
-  'calendarBooking',
-  'quotes',
-  'bills',
-  'messaging',
   'analytics',
   'userManagement',
-  // Top-level "Clients" section (#354 follow-up). Parent flag that
-  // gates the /admin/clients/* sidebar entry. customerPortal,
-  // calendar, quotes, bills and messaging are conceptually its
-  // children — when `clients` is off none of them surface in the
-  // admin UI even if their individual flags are on.
-  'clients',
-  // Customer-side portal surface (#354). Gates /customer/* routes
-  // and the Accounts sub-page under Clients. See migration 095.
-  'customerPortal',
-  // CRM developer tools sub-tab — internal helpers (test the
-  // payment-check email flow without waiting 30 days, etc.).
-  // Strictly opt-in.
-  'crmDevelopment',
-  // Tax / Steuer report — an Accounting sub-feature (moved out of CRM).
-  // Independent of `bills`; forced off when the `accounting` master is off
-  // (see applyDependencyRules below).
-  'taxReport',
-  // Hours logging (migration 129). Master switch for the per-customer
-  // Hours card + the auto-append into monthly draft / "Bill these
-  // hours" flow. Independent of `bills` because hours are an INPUT to
-  // bills — admin who's still in the dogfood phase may want to log
-  // hours without enabling the full billing surface yet.
-  'hoursLogging',
-  // Contracts (migration 130). Independent of quotes/bills — contracts
-  // are a standalone legal document type with their own composition
-  // (blocks) and signing flow (in-browser canvas + wet-signed PDF
-  // upload). Seeded block bodies are EXAMPLES ONLY; admins must have a
-  // lawyer review before sending. See https://docs.picpeak.app/features/crm/disclaimers.
-  'contracts',
-  // Accounting (migration 122). Top-level Accounting area — inbound
-  // supplier invoices, expenses + re-bill, and the tax report (which
-  // relocates here from CRM when this is on). Strictly opt-in.
-  'accounting',
-  // Incoming invoices (migration 124) — external supplier-invoice capture +
-  // re-bill. Accounting sub-feature; forced off when the `accounting` master
-  // is off.
-  'incomingInvoices',
-  // Expenses (migration 127) — internal expenses (mileage / per-diem / cash).
-  // Separate Accounting sub-feature; forced off when `accounting` is off.
-  'expenses',
-  // Projects (migration 120). Admin-only grouping layer above events +
-  // the Project Overview cockpit ("book to project" hours control, 360°
-  // rollup feed). Lights up the Clients section. Customers never see it.
-  'projects',
   // WhatsApp Business API delivery channel (migration 136, #640D). Strictly
   // opt-in — operators must register a Meta-approved template before turning
   // it on. Independent of email; both can fire on the same event.
@@ -93,53 +39,22 @@ const KNOWN_FLAGS = [
   // opt-in; gates the sidebar entry, the /admin/transfers area AND every
   // transfer route (admin + public token routes).
   'transfers',
-  // Workflow / automation engine — admin-configurable visual flows (triggers,
-  // conditions, branches, loops, approval gates). Strictly opt-in; master
-  // kill-switch for the Workflows admin area AND the engine's runtime side
-  // effects (no run is created/resumed while off).
-  'workflows',
-  // Newsletter campaigns (migration 199, #1264). Child of `clients` — mass
-  // marketing mail to customer accounts, with per-customer opt-out and an
-  // unsubscribe link on every send. Strictly opt-in: an install that never
-  // turns this on never gains a route, a nav entry or a way to mass-mail.
-  'newsletters',
-  // Customer documents (migration 225, #1444) — PDF exchange in the customer
-  // portal plus the Documents card on the customer record. Strictly opt-in:
-  // while off, every documents route (portal and admin) answers 403.
-  'documents',
 ];
 
 // Spec defaults for any flag missing from the DB (e.g. a row added by a
 // new release that hasn't run its migration yet on this instance).
 const DEFAULT_FLAGS = {
   galleries: true,
-  incomingMail: false,
   // F.3 — reminderEmails is a placeholder card in the Features tab
   // (lockedReason: NOT_YET_AVAILABLE). Default FALSE so it matches
   // the locked-but-off visual state of messaging / calendarBooking
   // instead of being a confusing "on but locked".
   reminderEmails: false,
-  calendar: false,
-  calendarBooking: false,
-  quotes: false,
-  bills: false,
-  messaging: false,
   analytics: true,
   userManagement: true,
-  clients: false,
-  taxReport: false,
-  hoursLogging: false,
-  contracts: false,
-  accounting: false,
-  incomingInvoices: false,
-  expenses: false,
-  projects: false,
   whatsapp: false,
   slideshow: false,
   transfers: false,
-  workflows: false,
-  newsletters: false,
-  documents: false,
 };
 
 async function readAllFlags() {
@@ -157,48 +72,6 @@ function applyDependencyRules(flags) {
   const out = { ...flags };
   // Galleries is the foundation — never off.
   out.galleries = true;
-  // Sub-features can't outlive their parents.
-  if (out.quotes === false) out.bills = false;
-  if (out.calendar === false) out.calendarBooking = false;
-  // Invoices (Bills) force-enable the Accounting master: invoice VAT config
-  // (codes + label) and the hourly rate live under Settings → Accounting, so
-  // an install with invoices must have Accounting available. Runs BEFORE the
-  // accounting→children rule so the sub-features keep their own stored state.
-  if (out.bills === true) out.accounting = true;
-  // Accounting is a top-level MASTER; its sub-features can't outlive it.
-  // Tax export is now independent of Bills — it relocated permanently
-  // into the Accounting section (its own master gate).
-  if (out.accounting === false) {
-    out.taxReport = false;
-    out.incomingInvoices = false;
-    out.expenses = false;
-  }
-  // Clients parent flag is DERIVED from its children. Admins don't
-  // toggle it directly in the Features tab — they enable a specific
-  // sub-feature (Accounts today; Calendar/Quotes/Bills/Messaging
-  // later) and the Clients sidebar section lights up automatically.
-  // Computing the value here (rather than only on writes) means GET
-  // /admin/feature-flags also returns a consistent state if the DB
-  // ever drifts (e.g. partial migration run).
-  out.clients = Boolean(
-    out.customerPortal
-    || out.crmDevelopment
-    || out.quotes
-    || out.bills
-    || out.hoursLogging
-    || out.contracts
-    // NOTE: taxReport intentionally removed — Tax export moved to the
-    // Accounting section (its own master), no longer a CRM sub-feature.
-    // Migration 120 — admin-only Project Overview cockpit lives under Clients.
-    || out.projects
-    // Migration 137 — admin calendar lights up the Clients section.
-    // (calendarBooking is gated behind `calendar` so adding the parent
-    // is sufficient.)
-    || out.calendar
-    // Migration 199 (#1264) — newsletter campaigns live under Clients.
-    || out.newsletters
-    // future siblings (out.messaging) go here
-  );
   return out;
 }
 

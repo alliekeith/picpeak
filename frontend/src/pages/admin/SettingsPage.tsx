@@ -43,7 +43,6 @@ import {
   DownloadsTab,
   ApiTokensTab,
   WebhooksTab,
-  AccountingTab,
   WhatsAppTab,
   SsoTab,
 } from '../../features/settings';
@@ -54,13 +53,10 @@ import { SlideshowSettingsPage } from './SlideshowSettingsPage';
 import { BackupManagement } from './BackupManagement';
 import { CMSPage } from './CMSPage';
 // CRM (#TBD)
-import { SettingsBusinessProfilePage } from './settings/SettingsBusinessProfilePage';
-import { CrmSettingsPage } from './settings/CrmSettingsPage';
 import { ReminderTemplatesPage } from './settings/ReminderTemplatesPage';
-import { BlockLibraryPage } from './contracts/BlockLibraryPage';
 import { useFeatureFlags } from '../../contexts/FeatureFlagsContext';
 import { usePermissions } from '../../contexts/PermissionsContext';
-import { Briefcase, Receipt, ScrollText, Landmark, Smartphone, MonitorPlay } from 'lucide-react';
+import { Smartphone, MonitorPlay } from 'lucide-react';
 
 // Tab keys driving the inner-nav. Must include every key used in
 // `navGroups` below and in the switch at the bottom of the component.
@@ -89,11 +85,7 @@ type TabType =
   | 'backup'
   // CRM (#TBD): issuer block for quote/invoice PDFs and per-area
   // CRM behaviour toggles.
-  | 'businessProfile'
-  | 'crm'
-  | 'contracts'
   | 'reminderTemplates'
-  | 'accounting'
   | 'whatsapp'
   | 'slideshow';
 
@@ -116,7 +108,7 @@ const ALL_TAB_KEYS: TabType[] = [
   'security', 'sso', 'imageSecurity', 'seo',
   'apiTokens', 'webhooks',
   'status', 'analytics', 'backup',
-  'businessProfile', 'crm', 'contracts', 'reminderTemplates', 'accounting', 'whatsapp',
+  'reminderTemplates', 'whatsapp',
   'slideshow',
 ];
 
@@ -154,11 +146,7 @@ const TAB_PERMISSIONS: Record<TabType, string[]> = {
   status:            ['settings.view', 'system.view', 'system.manage'],
   analytics:         ['settings.view', 'analytics.view'],
   backup:            ['settings.view', 'backup.view'],
-  businessProfile:   ['settings.view', 'settings.banking'],
-  crm:               ['settings.view'],
-  contracts:         ['settings.view', 'contracts.view', 'contracts.manage'],
   reminderTemplates: ['settings.view', 'email.view', 'email.edit'],
-  accounting:        ['settings.view', 'settings.banking', 'accounting.view', 'accounting.manage'],
   whatsapp:          ['settings.view', 'whatsapp.view', 'whatsapp.manage'],
   slideshow:         ['settings.view'],
 };
@@ -259,10 +247,7 @@ export const SettingsPage: React.FC = () => {
     // has actually enabled.
     if (flagsLoading) return;
     const gatedOff: Record<string, boolean> = {
-      crm: !(flags.quotes || flags.bills || flags.contracts),
-      contracts: !flags.contracts,
       reminderTemplates: !flags.reminderEmails,
-      accounting: !flags.accounting,
       whatsapp: !flags.whatsapp,
       slideshow: !flags.slideshow,
     };
@@ -270,7 +255,7 @@ export const SettingsPage: React.FC = () => {
       setActiveTab('features');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [flagsLoading, flags.quotes, flags.bills, flags.contracts, flags.reminderEmails, flags.accounting, flags.whatsapp, flags.slideshow, activeTab]);
+  }, [flagsLoading, flags.reminderEmails, flags.whatsapp, flags.slideshow, activeTab]);
 
   // Permission snap-back: if the active tab isn't permitted for this role (e.g.
   // a deep-linked ?tab=security a photographer can't access), move to the first
@@ -280,10 +265,7 @@ export const SettingsPage: React.FC = () => {
     if (flagsLoading) return;
     if (hasAnyPermission(TAB_PERMISSIONS[activeTab] ?? ['settings.view'])) return;
     const flagOff: Partial<Record<TabType, boolean>> = {
-      crm: !(flags.quotes || flags.bills || flags.contracts),
-      contracts: !flags.contracts,
       reminderTemplates: !flags.reminderEmails,
-      accounting: !flags.accounting,
       whatsapp: !flags.whatsapp,
       slideshow: !flags.slideshow,
     };
@@ -292,7 +274,7 @@ export const SettingsPage: React.FC = () => {
     );
     if (firstVisible && firstVisible !== activeTab) setActiveTab(firstVisible);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [flagsLoading, activeTab, flags.quotes, flags.bills, flags.contracts, flags.reminderEmails, flags.accounting, flags.whatsapp, flags.slideshow]);
+  }, [flagsLoading, activeTab, flags.reminderEmails, flags.whatsapp, flags.slideshow]);
 
   // Wait for the permissions context too: on a fresh/hard mount it starts out
   // empty, which filters every nav group down to nothing and left `activeItem`
@@ -358,25 +340,13 @@ export const SettingsPage: React.FC = () => {
       ],
     },
     {
-      // CRM group. businessProfile is always relevant (the issuer block
-      // feeds every PDF, gallery hero, footer, etc — even with zero
-      // CRM features). The remaining items hide when their matching
-      // master flag is off so admins don't navigate to a tab that
-      // configures a feature they can't actually use.
-      label: t('settings.groups.crm', 'CRM-Settings'),
+      // Communication group — reminder emails and the WhatsApp channel.
+      // Each item hides when its master flag is off so admins don't
+      // navigate to a tab configuring a feature they can't use.
+      label: t('settings.groups.communication', 'Communication'),
       items: [
-        { key: 'businessProfile',    label: t('settings.businessProfile.title', 'Business profile'), icon: Briefcase },
-        ...(flags.quotes || flags.bills || flags.contracts
-          ? [{ key: 'crm' as const,                label: t('settings.crm.title',             'CRM behaviour'),    icon: Receipt }]
-          : []),
-        ...(flags.contracts
-          ? [{ key: 'contracts' as const,          label: t('settings.contracts.title',       'Contracts'),        icon: ScrollText }]
-          : []),
         ...(flags.reminderEmails
           ? [{ key: 'reminderTemplates' as const,  label: t('settings.reminderTemplates.title', 'Reminder emails'), icon: Mail }]
-          : []),
-        ...(flags.accounting
-          ? [{ key: 'accounting' as const,         label: t('settings.accounting.title',      'Accounting'),       icon: Landmark }]
           : []),
         ...(flags.whatsapp
           ? [{ key: 'whatsapp' as const,           label: t('settings.whatsapp.title',        'WhatsApp'),         icon: Smartphone }]
@@ -410,7 +380,7 @@ export const SettingsPage: React.FC = () => {
   // header (FeaturesTab has its own icon+title+description block), skip
   // the Settings shell's section heading so the layout doesn't double
   // up.
-  const TABS_WITH_OWN_HEADER: TabType[] = ['features', 'email', 'branding', 'eventTypes', 'backup', 'cms', 'contracts', 'reminderTemplates'];
+  const TABS_WITH_OWN_HEADER: TabType[] = ['features', 'email', 'branding', 'eventTypes', 'backup', 'cms', 'reminderTemplates'];
   const showSectionHeading = !TABS_WITH_OWN_HEADER.includes(activeTab);
 
   return (
@@ -539,11 +509,7 @@ export const SettingsPage: React.FC = () => {
           {activeTab === 'cms' && <CMSPage />}
           {activeTab === 'email' && <EmailConfigPage />}
           {activeTab === 'backup' && <BackupManagement />}
-          {activeTab === 'businessProfile' && <SettingsBusinessProfilePage />}
-          {activeTab === 'crm' && <CrmSettingsPage />}
-          {activeTab === 'contracts' && <BlockLibraryPage />}
           {activeTab === 'reminderTemplates' && <ReminderTemplatesPage />}
-          {activeTab === 'accounting' && <AccountingTab />}
           {activeTab === 'whatsapp' && <WhatsAppTab />}
           {activeTab === 'usage' && hasAnyPermission(['settings.edit']) && <Suspense fallback={<Loading />}><ProductUsageTab /></Suspense>}
 
