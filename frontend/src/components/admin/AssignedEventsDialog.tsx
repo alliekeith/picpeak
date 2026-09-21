@@ -28,6 +28,14 @@ import { customerAdminService } from '../../services/customerAdmin.service';
 import { eventsService } from '../../services/events.service';
 import type { Event as AdminEvent } from '../../types';
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface SelectedEvent {
   id: number;
@@ -155,47 +163,30 @@ export const AssignedEventsDialog: React.FC<Props> = ({ customerId, isOpen, init
     },
   });
 
-  if (!isOpen) return null;
-
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{ backgroundColor: 'rgba(0,0,0,0.6)' }}
-      role="dialog"
-      aria-modal="true"
-      onClick={(e) => {
-        // Click-outside to close — only when the click was actually on
-        // the backdrop, not on a child element that bubbled up.
-        if (e.target === e.currentTarget && !saveMutation.isPending) onClose();
+    <Dialog
+      open={isOpen}
+      onOpenChange={(next) => {
+        // A save in flight must not be interrupted by Escape or a click
+        // outside, which is what the old backdrop handler guarded against.
+        if (!next && !saveMutation.isPending) onClose();
       }}
     >
-      <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden">
-        {/* Header */}
-        <div className="px-6 py-4 border-b border-neutral-200 dark:border-neutral-700 flex items-center justify-between gap-4">
-          <div>
-            <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-              {t('customers.assignedEvents.title', 'Manage assigned galleries')}
-            </h2>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
-              {t(
-                'customers.assignedEvents.subtitle',
-                'Pick every gallery this customer should be able to access from their dashboard. Removing a gallery here revokes access immediately on the customer\'s next request.',
-              )}
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            disabled={saveMutation.isPending}
-            className="p-1 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 shrink-0"
-            aria-label={t('common.close', 'Close')}
-          >
-            <X className="w-5 h-5 text-neutral-500" />
-          </button>
-        </div>
+      <DialogContent className="sm:max-w-2xl max-h-[85vh] flex flex-col overflow-hidden">
+        <DialogHeader>
+          <DialogTitle>
+            {t('customers.assignedEvents.title', 'Manage assigned galleries')}
+          </DialogTitle>
+          <DialogDescription className="text-xs">
+            {t(
+              'customers.assignedEvents.subtitle',
+              'Pick every gallery this customer should be able to access from their dashboard. Removing a gallery here revokes access immediately on the customer\'s next request.',
+            )}
+          </DialogDescription>
+        </DialogHeader>
 
         {/* Body */}
-        <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
+        <div className="flex-1 overflow-y-auto space-y-4">
           {/* Selected chips */}
           <div>
             <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2">
@@ -310,8 +301,7 @@ export const AssignedEventsDialog: React.FC<Props> = ({ customerId, isOpen, init
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="px-6 py-4 border-t border-neutral-200 dark:border-neutral-700 flex items-center justify-end gap-2">
+        <DialogFooter>
           <Button
             variant="outline"
             onClick={onClose}
@@ -323,8 +313,8 @@ export const AssignedEventsDialog: React.FC<Props> = ({ customerId, isOpen, init
                               onClick={() => saveMutation.mutate()} disabled={!isDirty || saveMutation.isPending || saveMutation.isPending}
                             >
                               {saveMutation.isPending && <Loader2 className="animate-spin" />}{t('customers.assignedEvents.save', 'Save assignments')}</Button>
-        </div>
-      </div>
-    </div>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };

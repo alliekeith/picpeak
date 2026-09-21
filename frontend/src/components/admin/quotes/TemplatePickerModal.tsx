@@ -7,7 +7,6 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { X } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { LocalizedDateInput } from '../../common';
 import { DecimalInput } from '../../common/DecimalInput';
@@ -16,6 +15,13 @@ import { PermissionGate } from '../PermissionGate';
 import { quoteCatalogService } from '../../../services/quoteCatalog.service';
 import { quoteErrorText } from '../../../utils/quoteErrors';
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -69,17 +75,12 @@ export const TemplatePickerModal: React.FC<Props> = ({ open, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" role="dialog" aria-modal="true"
-      aria-labelledby="template-picker-title">
-      <div className="w-full max-w-lg rounded-lg bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 shadow-xl">
-        <div className="flex items-center justify-between border-b border-neutral-200 dark:border-neutral-700 px-5 py-3">
-          <h2 id="template-picker-title" className="text-lg font-semibold">{t('quotes.new', 'New quote')}</h2>
-          <button type="button" onClick={onClose} aria-label={t('common.close', 'Close') as string}
-            className="p-1 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-800">
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-        <div className="space-y-4 px-5 py-4">
+    <Dialog open onOpenChange={(next) => { if (!next) onClose(); }}>
+      <DialogContent className="sm:max-w-lg">
+        <DialogHeader>
+          <DialogTitle>{t('quotes.new', 'New quote')}</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-4">
           <div>
             <label htmlFor="template-picker-template" className="block text-sm font-medium mb-1">
               {t('quotes.templates.pickLabel', 'Start from')}
@@ -132,7 +133,7 @@ export const TemplatePickerModal: React.FC<Props> = ({ open, onClose }) => {
             </>
           )}
         </div>
-        <div className="flex justify-end gap-2 border-t border-neutral-200 dark:border-neutral-700 px-5 py-3">
+        <DialogFooter>
           <Button variant="outline" onClick={onClose}>{t('common.cancel', 'Cancel')}</Button>
           {selected ? (
             <PermissionGate permission="quotes.manage">
@@ -145,8 +146,8 @@ export const TemplatePickerModal: React.FC<Props> = ({ open, onClose }) => {
               {t('quotes.templates.startBlank', 'Start blank')}
             </Button>
           )}
-        </div>
-      </div>
-    </div>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };

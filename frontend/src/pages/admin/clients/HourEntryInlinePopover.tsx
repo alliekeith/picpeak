@@ -22,7 +22,7 @@
  * modal. Reusing the pattern keeps the visual language consistent.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Lock, Trash2 } from 'lucide-react';
@@ -31,7 +31,10 @@ import { TimeField } from '../../../components/common';
 import { customerAdminService } from '../../../services/customerAdmin.service';
 import type { CalendarHoursItem } from '../../../services/calendar.service';
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 
 export interface HourEntryInlinePopoverProps {
@@ -120,28 +123,15 @@ export const HourEntryInlinePopover: React.FC<HourEntryInlinePopoverProps> = ({
     updateMutation.mutate();
   };
 
-  // I.6 — document-level Escape listener (same reasoning as the
-  // drag-create modal: focus is usually on FC's canvas when this
-  // popover opens, so the onKeyDown handler on the outer div never
-  // sees the keydown).
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && !busy) onClose();
-    };
-    document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
-  }, [busy, onClose]);
+  // The document-level Escape listener this used to need is gone: it existed
+  // because focus sits on FullCalendar's canvas when the popover opens, so a
+  // handler on the outer div never saw the keydown. The stock Dialog moves
+  // focus into itself on open, so Escape reaches it normally.
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 dark:bg-black/60 p-4"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
-    >
-      <Card className="py-8 w-full max-w-md"><CardContent className="px-8"><div className="flex items-start justify-between mb-2">
+    <Dialog open onOpenChange={(next) => { if (!next && !busy) onClose(); }}>
+      <DialogContent className="sm:max-w-md">
+        <div className="flex items-start justify-between mb-2">
                     <div>
                       <h2 className="font-semibold text-lg">
                         {item.customerName || t('calendar.hourEntry.untitledCustomer', 'Hours')}
@@ -224,7 +214,8 @@ export const HourEntryInlinePopover: React.FC<HourEntryInlinePopoverProps> = ({
                         </Button>
                       )}
                     </div>
-                  </div></CardContent></Card>
-    </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 };

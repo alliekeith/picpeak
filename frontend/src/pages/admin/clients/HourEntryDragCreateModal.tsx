@@ -24,7 +24,7 @@
  * from the backend and the toast surfaces the error.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
@@ -37,7 +37,12 @@ import {
   type CustomerAccountDetail,
 } from '../../../services/customerAdmin.service';
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 
 export interface HourEntryDragCreateModalProps {
@@ -206,39 +211,20 @@ export const HourEntryDragCreateModal: React.FC<HourEntryDragCreateModalProps> =
     createMutation.mutate();
   };
 
-  // I.6 — close on Escape via a document-level listener. A React
-  // onKeyDown on the modal's outer div ONLY fires when focus is
-  // already inside the modal subtree — but after the modal opens
-  // (from FullCalendar's `select` callback), focus stays on FC's
-  // canvas / body, so the bubbled-up handler never sees the keydown.
-  // Listening on document catches Escape regardless of where focus
-  // sits. Guarded against the mutation being in-flight so the admin
-  // can't cancel mid-save and end up with a saved-but-modal-closed
-  // race.
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && !createMutation.isPending) {
-        onClose();
-      }
-    };
-    document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
-  }, [createMutation.isPending, onClose]);
+  // The document-level Escape listener this used to need is gone. It existed
+  // because the modal opens from FullCalendar's `select` callback with focus
+  // still on FC's canvas, so a handler on the modal's own div never saw the
+  // keydown. The stock Dialog moves focus into itself on open, so Escape
+  // reaches it normally. The in-flight guard is kept, in onOpenChange, so a
+  // save cannot be cancelled half-way.
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 dark:bg-black/60 p-4"
-      onClick={(e) => {
-        // Click on the backdrop closes; clicks inside the card stop
-        // here. (Esc handled via document-level listener above.)
-        if (e.target === e.currentTarget) onClose();
-      }}
-    >
-      <Card className="py-8 w-full max-w-md"><CardContent className="px-8"><h2 className="font-semibold text-lg mb-1">
-                    {t('calendar.hourEntry.createTitle', 'Log hours')}
-                  </h2><p className="text-xs text-neutral-500 dark:text-neutral-400 mb-4">
+    <Dialog open onOpenChange={(next) => { if (!next && !createMutation.isPending) onClose(); }}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>{t('calendar.hourEntry.createTitle', 'Log hours')}</DialogTitle>
+        </DialogHeader>
+        <p className="text-xs text-muted-foreground mb-4">
                     {/* The pre-filled range is part of the page state, not editable
                         from this modal. Admin can edit start/end after creating
                         via the inline-edit popover (also in this commit). */}
@@ -337,7 +323,8 @@ export const HourEntryDragCreateModal: React.FC<HourEntryDragCreateModalProps> =
                         : t('calendar.hourEntry.submit', 'Save hours')}
                     </Button>
                   </div>
-                  </form></CardContent></Card>
-    </div>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 };
