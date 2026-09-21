@@ -21,21 +21,21 @@ const FeedbackCountIndicators: React.FC<{ photo: Photo; withTitles?: boolean }> 
   return (
     <div className="absolute top-2 left-2 flex gap-1 z-10">
       {(photo.comment_count ?? 0) > 0 && (
-        <div className="bg-white/90 backdrop-blur-sm rounded-full px-2 py-1 flex items-center gap-1" title={withTitles ? `${photo.comment_count ?? 0} comments` : undefined}>
-          <MessageSquare className="w-3.5 h-3.5 text-accent" fill="currentColor" />
-          <span className="text-xs font-medium text-neutral-700">{photo.comment_count ?? 0}</span>
+        <div className="bg-white/90 backdrop-blur-xs rounded-full px-2 py-1 flex items-center gap-1" title={withTitles ? `${photo.comment_count ?? 0} comments` : undefined}>
+          <MessageSquare className="w-3.5 h-3.5 text-brand" fill="currentColor" />
+          <span className="text-xs font-medium text-foreground">{photo.comment_count ?? 0}</span>
         </div>
       )}
       {(photo.average_rating ?? 0) > 0 && (
-        <div className="bg-white/90 backdrop-blur-sm rounded-full px-2 py-1 flex items-center gap-1" title={withTitles ? `Rating: ${Number(photo.average_rating ?? 0).toFixed(1)}` : undefined}>
+        <div className="bg-white/90 backdrop-blur-xs rounded-full px-2 py-1 flex items-center gap-1" title={withTitles ? `Rating: ${Number(photo.average_rating ?? 0).toFixed(1)}` : undefined}>
           <Star className="w-3.5 h-3.5 text-yellow-500" fill="currentColor" />
-          <span className="text-xs font-medium text-neutral-700">{Number(photo.average_rating ?? 0).toFixed(1)}</span>
+          <span className="text-xs font-medium text-foreground">{Number(photo.average_rating ?? 0).toFixed(1)}</span>
         </div>
       )}
       {(photo.like_count ?? 0) > 0 && (
-        <div className="bg-white/90 backdrop-blur-sm rounded-full px-2 py-1 flex items-center gap-1" title={withTitles ? `${photo.like_count ?? 0} likes` : undefined}>
+        <div className="bg-white/90 backdrop-blur-xs rounded-full px-2 py-1 flex items-center gap-1" title={withTitles ? `${photo.like_count ?? 0} likes` : undefined}>
           <Heart className="w-3.5 h-3.5 text-red-500" fill="currentColor" />
-          <span className="text-xs font-medium text-neutral-700">{photo.like_count ?? 0}</span>
+          <span className="text-xs font-medium text-foreground">{photo.like_count ?? 0}</span>
         </div>
       )}
     </div>
@@ -136,7 +136,7 @@ const MasonryPhoto: React.FC<MasonryPhotoProps> = ({
     >
       {photo.type === 'collage' && (
         <div className="absolute bottom-2 left-2">
-          <span className="px-2 py-1 bg-black/60 text-white text-xs rounded">
+          <span className="px-2 py-1 bg-black/60 text-white text-xs rounded-sm">
             Collage
           </span>
         </div>
@@ -346,7 +346,7 @@ export const MasonryGalleryLayout: React.FC<BaseGalleryLayoutProps> = ({
           // Render a simple grid while calculating to get container width
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {photos.slice(0, 8).map((photo) => (
-              <div key={photo.id} className="aspect-square bg-neutral-200 rounded-lg animate-pulse" />
+              <div key={photo.id} className="aspect-square bg-muted rounded-lg animate-pulse" />
             ))}
           </div>
         ) : photos.map((photo, index) => {
@@ -403,7 +403,7 @@ export const MasonryGalleryLayout: React.FC<BaseGalleryLayoutProps> = ({
         {isCalculating ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {photos.slice(0, 8).map((photo) => (
-              <div key={photo.id} className="aspect-square bg-neutral-200 rounded-lg animate-pulse" />
+              <div key={photo.id} className="aspect-square bg-muted rounded-lg animate-pulse" />
             ))}
           </div>
         ) : photos.map((photo, index) => {
@@ -440,7 +440,7 @@ export const MasonryGalleryLayout: React.FC<BaseGalleryLayoutProps> = ({
             >
               {photo.type === 'collage' && (
                 <div className="absolute bottom-2 left-2">
-                  <span className="px-2 py-1 bg-black/60 text-white text-xs rounded">Collage</span>
+                  <span className="px-2 py-1 bg-black/60 text-white text-xs rounded-sm">Collage</span>
                 </div>
               )}
             </PhotoCard>
@@ -491,7 +491,7 @@ export const MasonryGalleryLayout: React.FC<BaseGalleryLayoutProps> = ({
               onClick={() => onPhotoClick(index)}
               onDownload={(e) => onDownload(photo, e)}
               onToggleSelect={() => onPhotoSelect && onPhotoSelect(photo.id)}
-              className={`photo-card group cursor-pointer relative overflow-hidden rounded-lg bg-neutral-100 ${spanClasses}`}
+              className={`photo-card group cursor-pointer relative overflow-hidden rounded-lg bg-muted ${spanClasses}`}
               imageProps={{
                 src: photo.thumbnail_url || photo.url,
                 alt: photo.filename,
@@ -506,7 +506,7 @@ export const MasonryGalleryLayout: React.FC<BaseGalleryLayoutProps> = ({
             >
               {photo.type === 'collage' && (
                 <div className="absolute bottom-2 left-2">
-                  <span className="px-2 py-1 bg-black/60 text-white text-xs rounded">Collage</span>
+                  <span className="px-2 py-1 bg-black/60 text-white text-xs rounded-sm">Collage</span>
                 </div>
               )}
             </PhotoCard>
@@ -534,7 +534,7 @@ export const MasonryGalleryLayout: React.FC<BaseGalleryLayoutProps> = ({
         // 62 photos downloading twice, plus 17 left on the larger file.
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {photos.slice(0, 8).map((photo) => (
-            <div key={photo.id} className="aspect-square bg-neutral-200 rounded-lg animate-pulse" />
+            <div key={photo.id} className="aspect-square bg-muted rounded-lg animate-pulse" />
           ))}
         </div>
       ) : photoColumns.map((column, columnIndex) => (

@@ -36,7 +36,7 @@ export const ColorLabelFilterChips: React.FC<ColorLabelFilterChipsProps> = ({
   return (
     <div className={`flex items-center gap-2 ${className}`}>
       {showLabel && (
-        <span className="text-sm text-muted-theme whitespace-nowrap">
+        <span className="text-sm text-muted-foreground whitespace-nowrap">
           {t('gallery.colorFilter', 'Color')}
         </span>
       )}
@@ -59,8 +59,8 @@ export const ColorLabelFilterChips: React.FC<ColorLabelFilterChipsProps> = ({
               title={`${name}${count > 0 ? ` (${count})` : ''}`}
               className={`flex items-center gap-1.5 pl-1.5 pr-2 h-8 rounded-full border text-xs transition-all ${
                 isActive
-                  ? 'border-current ring-2 ring-offset-1 ring-current text-theme'
-                  : 'border-black/15 text-muted-theme hover:border-current'
+                  ? 'border-current ring-2 ring-offset-1 ring-current text-foreground'
+                  : 'border-black/15 text-muted-foreground hover:border-current'
               }`}
               style={isActive ? { color: swatch.ring } : undefined}
             >

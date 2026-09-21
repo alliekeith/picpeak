@@ -10,9 +10,7 @@ import {
   Ruler,
   CalendarClock,
   RotateCw,
-  AlertTriangle,
-} from 'lucide-react';
-import { Button, Card, Input } from '../../../components/common';
+  AlertTriangle, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../../config/api';
@@ -21,6 +19,10 @@ import { useStatusTab } from '../hooks/useStatusTab';
 import { UpdateNotificationSettings } from '../components/UpdateNotificationSettings';
 import { useLocalizedDate } from '../../../hooks/useLocalizedDate';
 import { usePermission } from '../../../hooks/usePermission';
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 const BYTES_PER_GB = 1024 * 1024 * 1024;
 
@@ -220,10 +222,10 @@ export const StatusTab: React.FC<StatusTabProps> = ({
           ? 'bg-red-600'
           : usagePercentage >= 90
             ? 'bg-amber-500'
-            : 'bg-primary-600';
-        const limitCardClass = overSoftLimit ? 'bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800' : 'bg-neutral-50 dark:bg-neutral-800';
-        const limitValueClass = overSoftLimit ? 'text-amber-700 dark:text-amber-300' : 'text-neutral-900 dark:text-neutral-100';
-        const limitDescriptorClass = overSoftLimit ? 'text-amber-700 dark:text-amber-300 font-semibold' : 'text-neutral-600 dark:text-neutral-400';
+            : 'bg-brand-600';
+        const limitCardClass = overSoftLimit ? 'bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800' : 'bg-muted';
+        const limitValueClass = overSoftLimit ? 'text-amber-700 dark:text-amber-300' : 'text-foreground';
+        const limitDescriptorClass = overSoftLimit ? 'text-amber-700 dark:text-amber-300 font-semibold' : 'text-muted-foreground';
         const recommendedDescriptorValue = (recommendedDisplay ?? limitDisplay);
         const diskMetricsReliable = storageInfo.disk_metrics_reliable;
         const overrideSource = storageInfo.disk_override_source;
@@ -256,396 +258,354 @@ export const StatusTab: React.FC<StatusTabProps> = ({
         }
 
         return (
-          <Card padding="md">
-            <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4 flex items-center gap-2">
-              <HardDrive className="w-5 h-5" />
-              {t('settings.systemStatus.storageOverview')}
-            </h2>
+          <Card><CardContent><h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                          <HardDrive className="w-5 h-5" />
+                          {t('settings.systemStatus.storageOverview')}
+                        </h2><div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                          <div className="bg-muted rounded-lg p-4">
+                            <p className="text-sm text-muted-foreground">{t('settings.storage.totalUsed')}</p>
+                            <p className="text-2xl font-bold text-foreground">
+                              {/* `+` marks a floor: part of the storage root was
+                                  unreadable, so the real figure — and the limit
+                                  percentage derived from it — is higher (#1164). */}
+                              {settingsService.formatBytes(storageInfo.total_used)}{storageInfo.storage_partial ? '+' : ''}
+                            </p>
+                            {storageInfo.storage_measurement === 'catalog' && (
+                              <p className="text-xs text-muted-foreground mt-1">
+                                {t('settings.storage.catalogMeasurement', 'Catalogued size — objects live in the configured S3 bucket, not on this disk')}
+                              </p>
+                            )}
+                          </div>
+                          <div className="bg-muted rounded-lg p-4">
+                            <p className="text-sm text-muted-foreground">{t('settings.storage.archiveStorage')}</p>
+                            <p className="text-2xl font-bold text-foreground">
+                              {settingsService.formatBytes(storageInfo.archive_storage)}
+                            </p>
+                          </div>
+                          <div className={`rounded-lg p-4 ${limitCardClass}`}>
+                            <p className="text-sm text-muted-foreground">{t('settings.storage.storageLimit')}</p>
+                            <p className={`text-2xl font-bold ${limitValueClass}`}>
+                              {limitDisplay}
+                            </p>
+                            <p className={`text-xs mt-1 ${limitDescriptorClass}`}>
+                              {storageInfo.soft_limit_configured
+                                ? t('admin.storageSoftLimitConfigured', { limit: limitDisplay })
+                                : t('admin.storageSoftLimitRecommended', { limit: recommendedDescriptorValue })}
+                            </p>
+                          </div>
+                        </div><div className="mb-4">
+                          <div className="flex justify-between text-sm mb-1">
+                            <span className="text-muted-foreground">{t('settings.storage.storageUsage')}</span>
+                            <span className={`font-medium ${overSoftLimit ? 'text-red-600 dark:text-red-400' : 'text-foreground'}`}>
+                              {usagePercentage}%
+                            </span>
+                          </div>
+                          <div className="w-full bg-muted rounded-full h-3">
+                            <div
+                              className={`${progressColor} h-3 rounded-full transition-all`}
+                              style={{ width: `${usageWidth}%` }}
+                            />
+                          </div>
+                        </div><div className="border-t border-border pt-4 mt-6 space-y-4">
+                          <p className="text-sm text-muted-foreground">
+                            {t('settings.storage.storageLimitHelper')}
+                          </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-4">
-                <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('settings.storage.totalUsed')}</p>
-                <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
-                  {/* `+` marks a floor: part of the storage root was
-                      unreadable, so the real figure — and the limit
-                      percentage derived from it — is higher (#1164). */}
-                  {settingsService.formatBytes(storageInfo.total_used)}{storageInfo.storage_partial ? '+' : ''}
-                </p>
-                {storageInfo.storage_measurement === 'catalog' && (
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-                    {t('settings.storage.catalogMeasurement', 'Catalogued size — objects live in the configured S3 bucket, not on this disk')}
-                  </p>
-                )}
-              </div>
-              <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-4">
-                <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('settings.storage.archiveStorage')}</p>
-                <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
-                  {settingsService.formatBytes(storageInfo.archive_storage)}
-                </p>
-              </div>
-              <div className={`rounded-lg p-4 ${limitCardClass}`}>
-                <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('settings.storage.storageLimit')}</p>
-                <p className={`text-2xl font-bold ${limitValueClass}`}>
-                  {limitDisplay}
-                </p>
-                <p className={`text-xs mt-1 ${limitDescriptorClass}`}>
-                  {storageInfo.soft_limit_configured
-                    ? t('admin.storageSoftLimitConfigured', { limit: limitDisplay })
-                    : t('admin.storageSoftLimitRecommended', { limit: recommendedDescriptorValue })}
-                </p>
-              </div>
-            </div>
+                          {diskSummaryCards.length > 0 && (diskMetricsReliable || overrideSource) && (
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                              {diskSummaryCards.map((card) => (
+                                <div key={card.label} className="bg-muted rounded-lg p-4">
+                                  <p className="text-xs text-muted-foreground uppercase tracking-wide">{card.label}</p>
+                                  <p className="text-lg font-semibold text-foreground mt-1">{card.value}</p>
+                                </div>
+                              ))}
+                            </div>
+                          )}
 
-            <div className="mb-4">
-              <div className="flex justify-between text-sm mb-1">
-                <span className="text-neutral-600 dark:text-neutral-400">{t('settings.storage.storageUsage')}</span>
-                <span className={`font-medium ${overSoftLimit ? 'text-red-600 dark:text-red-400' : 'text-neutral-900 dark:text-neutral-100'}`}>
-                  {usagePercentage}%
-                </span>
-              </div>
-              <div className="w-full bg-neutral-200 dark:bg-neutral-700 rounded-full h-3">
-                <div
-                  className={`${progressColor} h-3 rounded-full transition-all`}
-                  style={{ width: `${usageWidth}%` }}
-                />
-              </div>
-            </div>
+                          {!diskMetricsReliable && !overrideSource && (
+                            <p className="text-xs text-muted-foreground">
+                              {t('settings.storage.diskMetricsUnavailable')}
+                            </p>
+                          )}
 
-            <div className="border-t border-neutral-200 dark:border-neutral-700 pt-4 mt-6 space-y-4">
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                {t('settings.storage.storageLimitHelper')}
-              </p>
+                          <div className="grid grid-cols-1 gap-3 md:grid-cols-[minmax(0,1fr)]">
+                            <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('settings.storage.softLimitInputLabel')}</span><div className="relative"><Input
+                                                      type="number"
+                                                      inputMode="decimal"
+                                                      min={0}
+                                                      step="0.1"
+                                                      value={softLimitGb === '' ? '' : softLimitGb}
+                                                      onChange={(e) => {
+                                                        const value = e.target.value;
+                                                        setSoftLimitDirty(true);
+                                                        if (value === '') {
+                                                          setSoftLimitGb('');
+                                                          return;
+                                                        }
+                                                        const numeric = Number(value);
+                                                        if (Number.isNaN(numeric)) {
+                                                          return;
+                                                        }
+                                                        setSoftLimitGb(numeric);
+                                                      }} className="pr-10"
+                                                    /><div className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground">{<span className="text-xs font-semibold text-muted-foreground uppercase">GB</span>}</div></div>{(t('settings.storage.softLimitHelper')) && <p className="mt-1.5 text-sm text-muted-foreground">{t('settings.storage.softLimitHelper')}</p>}</Label></div>
+                            <p className="text-xs text-muted-foreground">
+                              {t('settings.storage.limitNotEnforced')}
+                            </p>
+                          </div>
 
-              {diskSummaryCards.length > 0 && (diskMetricsReliable || overrideSource) && (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {diskSummaryCards.map((card) => (
-                    <div key={card.label} className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-4">
-                      <p className="text-xs text-neutral-500 dark:text-neutral-400 uppercase tracking-wide">{card.label}</p>
-                      <p className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mt-1">{card.value}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
+                          <div className="flex flex-wrap gap-2">
+                            <Button
+                              type="button"
+                              variant="secondary"
+                              size="sm"
+                              onClick={() => {
+                                if (storageInfo.recommended_soft_limit != null) {
+                                  const value = Number((storageInfo.recommended_soft_limit / BYTES_PER_GB).toFixed(2));
+                                  setSoftLimitGb(value);
+                                  setSoftLimitDirty(true);
+                                }
+                              }}
+                              disabled={storageInfo.recommended_soft_limit == null}
+                            >
+                              {t('settings.storage.applyRecommended')}
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="secondary"
+                              size="sm"
+                              onClick={() => {
+                                if (storageInfo.disk_available != null) {
+                                  const value = Number((storageInfo.disk_available / BYTES_PER_GB).toFixed(2));
+                                  setSoftLimitGb(value);
+                                  setSoftLimitDirty(true);
+                                }
+                              }}
+                              disabled={storageInfo.disk_available == null}
+                            >
+                              {t('settings.storage.applyAvailable')}
+                            </Button>
+                          </div>
 
-              {!diskMetricsReliable && !overrideSource && (
-                <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                  {t('settings.storage.diskMetricsUnavailable')}
-                </p>
-              )}
+                          <div className="flex justify-end">
+                            <Button
+                                                      size="sm"
+                                                      onClick={handleSaveSoftLimit} disabled={saveSoftLimitMutation.isPending}
+                                                    >
+                                                      {saveSoftLimitMutation.isPending && <Loader2 className="animate-spin" />}<Save className="w-4 h-4" />{t('settings.storage.saveSoftLimit')}</Button>
+                          </div>
 
-              <div className="grid grid-cols-1 gap-3 md:grid-cols-[minmax(0,1fr)]">
-                <Input
-                  type="number"
-                  inputMode="decimal"
-                  min={0}
-                  step="0.1"
-                  value={softLimitGb === '' ? '' : softLimitGb}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    setSoftLimitDirty(true);
-                    if (value === '') {
-                      setSoftLimitGb('');
-                      return;
-                    }
-                    const numeric = Number(value);
-                    if (Number.isNaN(numeric)) {
-                      return;
-                    }
-                    setSoftLimitGb(numeric);
-                  }}
-                  label={t('settings.storage.softLimitInputLabel')}
-                  helperText={t('settings.storage.softLimitHelper')}
-                  rightIcon={<span className="text-xs font-semibold text-neutral-500 uppercase">GB</span>}
-                />
-                <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                  {t('settings.storage.limitNotEnforced')}
-                </p>
-              </div>
+                          <div className="border-t border-border pt-4 mt-6 space-y-4">
+                            <div>
+                              <p className="text-sm font-medium text-foreground">{t('settings.storage.overrideTitle')}</p>
+                              {overrideControlled ? (
+                                <p className="text-xs text-muted-foreground mt-1">{t('settings.storage.diskOverrideEnvNote')}</p>
+                              ) : (
+                                <p className="text-xs text-muted-foreground mt-1">{t('settings.storage.diskOverrideSettingsHelp')}</p>
+                              )}
+                            </div>
 
-              <div className="flex flex-wrap gap-2">
-                <Button
-                  type="button"
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => {
-                    if (storageInfo.recommended_soft_limit != null) {
-                      const value = Number((storageInfo.recommended_soft_limit / BYTES_PER_GB).toFixed(2));
-                      setSoftLimitGb(value);
-                      setSoftLimitDirty(true);
-                    }
-                  }}
-                  disabled={storageInfo.recommended_soft_limit == null}
-                >
-                  {t('settings.storage.applyRecommended')}
-                </Button>
-                <Button
-                  type="button"
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => {
-                    if (storageInfo.disk_available != null) {
-                      const value = Number((storageInfo.disk_available / BYTES_PER_GB).toFixed(2));
-                      setSoftLimitGb(value);
-                      setSoftLimitDirty(true);
-                    }
-                  }}
-                  disabled={storageInfo.disk_available == null}
-                >
-                  {t('settings.storage.applyAvailable')}
-                </Button>
-              </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('settings.storage.overrideCapacityLabel')}</span><div className="relative"><Input
+                                                            type="number"
+                                                            inputMode="decimal"
+                                                            min={0}
+                                                            step="0.1"
+                                                            value={capacityOverrideGb === '' ? '' : capacityOverrideGb}
+                                                            onChange={(e) => {
+                                                              const value = e.target.value;
+                                                              setOverrideDirty(true);
+                                                              if (value === '') {
+                                                                setCapacityOverrideGb('');
+                                                                return;
+                                                              }
+                                                              const numeric = Number(value);
+                                                              if (Number.isNaN(numeric)) {
+                                                                return;
+                                                              }
+                                                              setCapacityOverrideGb(numeric);
+                                                            }}
+                                                            disabled={overrideControlled} className="pr-10"
+                                                          /><div className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground">{<span className="text-xs font-semibold text-muted-foreground uppercase">GB</span>}</div></div>{(t('settings.storage.overrideCapacityHelper')) && <p className="mt-1.5 text-sm text-muted-foreground">{t('settings.storage.overrideCapacityHelper')}</p>}</Label></div>
+                              <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('settings.storage.overrideAvailableLabel')}</span><div className="relative"><Input
+                                                            type="number"
+                                                            inputMode="decimal"
+                                                            min={0}
+                                                            step="0.1"
+                                                            value={availableOverrideGb === '' ? '' : availableOverrideGb}
+                                                            onChange={(e) => {
+                                                              const value = e.target.value;
+                                                              setOverrideDirty(true);
+                                                              if (value === '') {
+                                                                setAvailableOverrideGb('');
+                                                                return;
+                                                              }
+                                                              const numeric = Number(value);
+                                                              if (Number.isNaN(numeric)) {
+                                                                return;
+                                                              }
+                                                              setAvailableOverrideGb(numeric);
+                                                            }}
+                                                            disabled={overrideControlled} className="pr-10"
+                                                          /><div className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground">{<span className="text-xs font-semibold text-muted-foreground uppercase">GB</span>}</div></div>{(t('settings.storage.overrideAvailableHelper')) && <p className="mt-1.5 text-sm text-muted-foreground">{t('settings.storage.overrideAvailableHelper')}</p>}</Label></div>
+                            </div>
 
-              <div className="flex justify-end">
-                <Button
-                  variant="primary"
-                  size="sm"
-                  onClick={handleSaveSoftLimit}
-                  isLoading={saveSoftLimitMutation.isPending}
-                  leftIcon={<Save className="w-4 h-4" />}
-                >
-                  {t('settings.storage.saveSoftLimit')}
-                </Button>
-              </div>
-
-              <div className="border-t border-neutral-200 dark:border-neutral-700 pt-4 mt-6 space-y-4">
-                <div>
-                  <p className="text-sm font-medium text-neutral-700 dark:text-neutral-300">{t('settings.storage.overrideTitle')}</p>
-                  {overrideControlled ? (
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">{t('settings.storage.diskOverrideEnvNote')}</p>
-                  ) : (
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">{t('settings.storage.diskOverrideSettingsHelp')}</p>
-                  )}
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Input
-                    type="number"
-                    inputMode="decimal"
-                    min={0}
-                    step="0.1"
-                    value={capacityOverrideGb === '' ? '' : capacityOverrideGb}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      setOverrideDirty(true);
-                      if (value === '') {
-                        setCapacityOverrideGb('');
-                        return;
-                      }
-                      const numeric = Number(value);
-                      if (Number.isNaN(numeric)) {
-                        return;
-                      }
-                      setCapacityOverrideGb(numeric);
-                    }}
-                    label={t('settings.storage.overrideCapacityLabel')}
-                    helperText={t('settings.storage.overrideCapacityHelper')}
-                    rightIcon={<span className="text-xs font-semibold text-neutral-500 uppercase">GB</span>}
-                    disabled={overrideControlled}
-                  />
-                  <Input
-                    type="number"
-                    inputMode="decimal"
-                    min={0}
-                    step="0.1"
-                    value={availableOverrideGb === '' ? '' : availableOverrideGb}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      setOverrideDirty(true);
-                      if (value === '') {
-                        setAvailableOverrideGb('');
-                        return;
-                      }
-                      const numeric = Number(value);
-                      if (Number.isNaN(numeric)) {
-                        return;
-                      }
-                      setAvailableOverrideGb(numeric);
-                    }}
-                    label={t('settings.storage.overrideAvailableLabel')}
-                    helperText={t('settings.storage.overrideAvailableHelper')}
-                    rightIcon={<span className="text-xs font-semibold text-neutral-500 uppercase">GB</span>}
-                    disabled={overrideControlled}
-                  />
-                </div>
-
-                <div className="flex justify-end">
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    onClick={handleSaveCapacityOverride}
-                    isLoading={saveCapacityOverrideMutation.isPending}
-                    disabled={overrideControlled}
-                    leftIcon={<Save className="w-4 h-4" />}
-                  >
-                    {t('settings.storage.saveOverride')}
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </Card>
+                            <div className="flex justify-end">
+                              <Button
+                                                            size="sm"
+                                                            onClick={handleSaveCapacityOverride} disabled={overrideControlled || saveCapacityOverrideMutation.isPending}
+                                                          >
+                                                            {saveCapacityOverrideMutation.isPending && <Loader2 className="animate-spin" />}<Save className="w-4 h-4" />{t('settings.storage.saveOverride')}</Button>
+                            </div>
+                          </div>
+                        </div></CardContent></Card>
         );
       })()}
 
       {/* System Information */}
       {systemStatus && (
         <>
-          <Card padding="md">
-            <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4 flex items-center gap-2">
-              <Server className="w-5 h-5" />
-              {t('settings.systemStatus.systemInfo')}
-            </h2>
+          <Card><CardContent><h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                                <Server className="w-5 h-5" />
+                                {t('settings.systemStatus.systemInfo')}
+                              </h2><div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <div className="bg-muted rounded-lg p-4">
+                                  <p className="text-sm text-muted-foreground">{t('settings.systemStatus.platform')}</p>
+                                  <p className="font-semibold text-foreground">{systemStatus.system.platform}</p>
+                                </div>
+                                <div className="bg-muted rounded-lg p-4">
+                                  <p className="text-sm text-muted-foreground">{t('settings.systemStatus.nodeVersion')}</p>
+                                  <p className="font-semibold text-foreground">{systemStatus.system.nodeVersion}</p>
+                                </div>
+                                <div className="bg-muted rounded-lg p-4">
+                                  <p className="text-sm text-muted-foreground">{t('settings.systemStatus.uptime')}</p>
+                                  <p className="font-semibold text-foreground">{Math.floor(systemStatus.system.uptime / 3600)}h {Math.floor((systemStatus.system.uptime % 3600) / 60)}m</p>
+                                </div>
+                                <div className="bg-muted rounded-lg p-4">
+                                  <p className="text-sm text-muted-foreground">{t('settings.systemStatus.cpuCores')}</p>
+                                  <p className="font-semibold text-foreground">{systemStatus.system.cpu.cores}</p>
+                                </div>
+                              </div><div className="mt-4">
+                                <h3 className="text-sm font-semibold text-foreground mb-2">{t('settings.systemStatus.memoryUsage')}</h3>
+                                <div className="mb-2">
+                                  <div className="flex justify-between text-sm mb-1">
+                                    <span className="text-muted-foreground">{t('settings.systemStatus.memoryUsed')}</span>
+                                    <span className="font-medium text-foreground">
+                                      {settingsService.formatBytes(systemStatus.system.memory.used)} / {settingsService.formatBytes(systemStatus.system.memory.total)}
+                                    </span>
+                                  </div>
+                                  <div className="w-full bg-muted rounded-full h-2">
+                                    <div
+                                      className="bg-blue-600 h-2 rounded-full transition-all"
+                                      style={{
+                                        width: `${Math.round((systemStatus.system.memory.used / systemStatus.system.memory.total) * 100)}%`
+                                      }}
+                                    />
+                                  </div>
+                                </div>
+                              </div></CardContent></Card>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-4">
-                <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('settings.systemStatus.platform')}</p>
-                <p className="font-semibold text-neutral-900 dark:text-neutral-100">{systemStatus.system.platform}</p>
-              </div>
-              <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-4">
-                <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('settings.systemStatus.nodeVersion')}</p>
-                <p className="font-semibold text-neutral-900 dark:text-neutral-100">{systemStatus.system.nodeVersion}</p>
-              </div>
-              <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-4">
-                <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('settings.systemStatus.uptime')}</p>
-                <p className="font-semibold text-neutral-900 dark:text-neutral-100">{Math.floor(systemStatus.system.uptime / 3600)}h {Math.floor((systemStatus.system.uptime % 3600) / 60)}m</p>
-              </div>
-              <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-4">
-                <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('settings.systemStatus.cpuCores')}</p>
-                <p className="font-semibold text-neutral-900 dark:text-neutral-100">{systemStatus.system.cpu.cores}</p>
-              </div>
-            </div>
+          <Card><CardContent><h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                                <Database className="w-5 h-5" />
+                                {t('settings.systemStatus.databaseInfo')}
+                              </h2><div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                                <div className="bg-muted rounded-lg p-3 text-center">
+                                  <p className="text-2xl font-bold text-foreground">{systemStatus.database.tables.events}</p>
+                                  <p className="text-xs text-muted-foreground">{t('navigation.events')}</p>
+                                </div>
+                                <div className="bg-muted rounded-lg p-3 text-center">
+                                  <p className="text-2xl font-bold text-foreground">{systemStatus.database.tables.photos}</p>
+                                  <p className="text-xs text-muted-foreground">{t('settings.systemStatus.photos')}</p>
+                                </div>
+                                <div className="bg-muted rounded-lg p-3 text-center">
+                                  <p className="text-2xl font-bold text-foreground">{systemStatus.database.tables.admins}</p>
+                                  <p className="text-xs text-muted-foreground">{t('settings.systemStatus.admins')}</p>
+                                </div>
+                                <div className="bg-muted rounded-lg p-3 text-center">
+                                  <p className="text-2xl font-bold text-foreground">{systemStatus.database.tables.categories}</p>
+                                  <p className="text-xs text-muted-foreground">{t('settings.categories.title')}</p>
+                                </div>
+                                <div className="bg-muted rounded-lg p-3 text-center">
+                                  <p className="text-2xl font-bold text-foreground">{settingsService.formatBytes(systemStatus.database.size)}</p>
+                                  <p className="text-xs text-muted-foreground">{t('settings.systemStatus.dbSize')}</p>
+                                </div>
+                              </div></CardContent></Card>
 
-            <div className="mt-4">
-              <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 mb-2">{t('settings.systemStatus.memoryUsage')}</h3>
-              <div className="mb-2">
-                <div className="flex justify-between text-sm mb-1">
-                  <span className="text-neutral-600 dark:text-neutral-400">{t('settings.systemStatus.memoryUsed')}</span>
-                  <span className="font-medium text-neutral-900 dark:text-neutral-100">
-                    {settingsService.formatBytes(systemStatus.system.memory.used)} / {settingsService.formatBytes(systemStatus.system.memory.total)}
-                  </span>
-                </div>
-                <div className="w-full bg-neutral-200 dark:bg-neutral-700 rounded-full h-2">
-                  <div
-                    className="bg-blue-600 h-2 rounded-full transition-all"
-                    style={{
-                      width: `${Math.round((systemStatus.system.memory.used / systemStatus.system.memory.total) * 100)}%`
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-          </Card>
-
-          <Card padding="md">
-            <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4 flex items-center gap-2">
-              <Database className="w-5 h-5" />
-              {t('settings.systemStatus.databaseInfo')}
-            </h2>
-
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-              <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-3 text-center">
-                <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{systemStatus.database.tables.events}</p>
-                <p className="text-xs text-neutral-600 dark:text-neutral-400">{t('navigation.events')}</p>
-              </div>
-              <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-3 text-center">
-                <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{systemStatus.database.tables.photos}</p>
-                <p className="text-xs text-neutral-600 dark:text-neutral-400">{t('settings.systemStatus.photos')}</p>
-              </div>
-              <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-3 text-center">
-                <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{systemStatus.database.tables.admins}</p>
-                <p className="text-xs text-neutral-600 dark:text-neutral-400">{t('settings.systemStatus.admins')}</p>
-              </div>
-              <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-3 text-center">
-                <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{systemStatus.database.tables.categories}</p>
-                <p className="text-xs text-neutral-600 dark:text-neutral-400">{t('settings.categories.title')}</p>
-              </div>
-              <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-3 text-center">
-                <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{settingsService.formatBytes(systemStatus.database.size)}</p>
-                <p className="text-xs text-neutral-600 dark:text-neutral-400">{t('settings.systemStatus.dbSize')}</p>
-              </div>
-            </div>
-          </Card>
-
-          <Card padding="md">
-            <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4 flex items-center gap-2">
-              <Activity className="w-5 h-5" />
-              {t('settings.systemStatus.services')}
-            </h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <p className="text-sm font-medium text-neutral-700 dark:text-neutral-300">{t('settings.systemStatus.fileWatcher')}</p>
-                  <CheckCircle className="w-5 h-5 text-green-600" />
-                </div>
-                <p className="text-xs text-neutral-600 dark:text-neutral-400">{t('settings.systemStatus.fileWatcherDesc')}</p>
-              </div>
-              <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <p className="text-sm font-medium text-neutral-700 dark:text-neutral-300">{t('settings.systemStatus.expirationChecker')}</p>
-                  <CheckCircle className="w-5 h-5 text-green-600" />
-                </div>
-                <p className="text-xs text-neutral-600 dark:text-neutral-400">{t('settings.systemStatus.expirationCheckerDesc')}</p>
-              </div>
-              {/* #1262 — this card used to render a green check unconditionally,
-                  against an API field that was itself the literal 'active'. Both
-                  ends now tell the truth: a stopped or bailing processor is the
-                  reason queued mail never arrives, and this is one of the two
-                  places an admin looks to find that out. */}
-              <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <p className="text-sm font-medium text-neutral-700 dark:text-neutral-300">{t('settings.systemStatus.emailProcessor')}</p>
-                  {systemStatus?.services?.emailProcessor?.status === 'active' ? (
-                    <CheckCircle className="w-5 h-5 text-green-600" />
-                  ) : (
-                    <AlertTriangle className="w-5 h-5 text-red-600" />
-                  )}
-                </div>
-                <p className="text-xs text-neutral-600 dark:text-neutral-400">
-                  {systemStatus?.services?.emailProcessor?.status === 'stopped'
-                    ? t('settings.systemStatus.emailProcessorStopped',
-                      'Not running — queued emails are written but nothing sends them.')
-                    : systemStatus?.services?.emailProcessor?.status === 'degraded'
-                      ? t('settings.systemStatus.emailProcessorDegraded',
-                        'Running, but the last pass could not send: {{error}}',
-                        { error: systemStatus?.services?.emailProcessor?.lastError })
-                      : t('settings.systemStatus.emailProcessorDesc')}
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
-              <h3 className="text-sm font-semibold text-blue-900 dark:text-blue-200 mb-2">{t('settings.systemStatus.emailQueue')}</h3>
-              <div className="grid grid-cols-3 gap-4 text-sm">
-                <div>
-                  <span className="text-blue-700 dark:text-blue-300">{t('settings.systemStatus.pending')}:</span>
-                  <span className="ml-2 font-semibold text-blue-900 dark:text-blue-200">
-                    {systemStatus.emailQueue.pending}
-                    {systemStatus.emailQueue.stuck > 0 && (
-                      <span className="text-orange-600 text-xs ml-1">
-                        ({systemStatus.emailQueue.stuck} stuck)
-                      </span>
-                    )}
-                  </span>
-                </div>
-                <div>
-                  <span className="text-green-700 dark:text-green-400">{t('settings.systemStatus.sent')}:</span>
-                  <span className="ml-2 font-semibold text-green-900 dark:text-green-300">{systemStatus.emailQueue.sent}</span>
-                </div>
-                <div>
-                  <span className="text-red-700 dark:text-red-400">{t('settings.systemStatus.failed')}:</span>
-                  <span className="ml-2 font-semibold text-red-900 dark:text-red-300">{systemStatus.emailQueue.failed}</span>
-                </div>
-              </div>
-              {systemStatus.emailQueue.stuck > 0 && (
-                <div className="mt-3 p-3 bg-orange-50 dark:bg-orange-900/30 rounded-md">
-                  <p className="text-xs text-orange-800 dark:text-orange-200">
-                    <span className="font-semibold">Warning: {systemStatus.emailQueue.stuck} email(s) stuck:</span> These emails have exceeded retry limits and won&apos;t be processed automatically.
-                    Only {systemStatus.emailQueue.processable} of {systemStatus.emailQueue.pending} pending emails will be processed.
-                  </p>
-                </div>
-              )}
-            </div>
-          </Card>
+          <Card><CardContent><h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                                <Activity className="w-5 h-5" />
+                                {t('settings.systemStatus.services')}
+                              </h2><div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div className="bg-muted rounded-lg p-4">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <p className="text-sm font-medium text-foreground">{t('settings.systemStatus.fileWatcher')}</p>
+                                    <CheckCircle className="w-5 h-5 text-green-600" />
+                                  </div>
+                                  <p className="text-xs text-muted-foreground">{t('settings.systemStatus.fileWatcherDesc')}</p>
+                                </div>
+                                <div className="bg-muted rounded-lg p-4">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <p className="text-sm font-medium text-foreground">{t('settings.systemStatus.expirationChecker')}</p>
+                                    <CheckCircle className="w-5 h-5 text-green-600" />
+                                  </div>
+                                  <p className="text-xs text-muted-foreground">{t('settings.systemStatus.expirationCheckerDesc')}</p>
+                                </div>
+                                {/* #1262 — this card used to render a green check unconditionally,
+                                    against an API field that was itself the literal 'active'. Both
+                                    ends now tell the truth: a stopped or bailing processor is the
+                                    reason queued mail never arrives, and this is one of the two
+                                    places an admin looks to find that out. */}
+                                <div className="bg-muted rounded-lg p-4">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <p className="text-sm font-medium text-foreground">{t('settings.systemStatus.emailProcessor')}</p>
+                                    {systemStatus?.services?.emailProcessor?.status === 'active' ? (
+                                      <CheckCircle className="w-5 h-5 text-green-600" />
+                                    ) : (
+                                      <AlertTriangle className="w-5 h-5 text-red-600" />
+                                    )}
+                                  </div>
+                                  <p className="text-xs text-muted-foreground">
+                                    {systemStatus?.services?.emailProcessor?.status === 'stopped'
+                                      ? t('settings.systemStatus.emailProcessorStopped',
+                                        'Not running — queued emails are written but nothing sends them.')
+                                      : systemStatus?.services?.emailProcessor?.status === 'degraded'
+                                        ? t('settings.systemStatus.emailProcessorDegraded',
+                                          'Running, but the last pass could not send: {{error}}',
+                                          { error: systemStatus?.services?.emailProcessor?.lastError })
+                                        : t('settings.systemStatus.emailProcessorDesc')}
+                                  </p>
+                                </div>
+                              </div><div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
+                                <h3 className="text-sm font-semibold text-blue-900 dark:text-blue-200 mb-2">{t('settings.systemStatus.emailQueue')}</h3>
+                                <div className="grid grid-cols-3 gap-4 text-sm">
+                                  <div>
+                                    <span className="text-blue-700 dark:text-blue-300">{t('settings.systemStatus.pending')}:</span>
+                                    <span className="ml-2 font-semibold text-blue-900 dark:text-blue-200">
+                                      {systemStatus.emailQueue.pending}
+                                      {systemStatus.emailQueue.stuck > 0 && (
+                                        <span className="text-orange-600 text-xs ml-1">
+                                          ({systemStatus.emailQueue.stuck} stuck)
+                                        </span>
+                                      )}
+                                    </span>
+                                  </div>
+                                  <div>
+                                    <span className="text-green-700 dark:text-green-400">{t('settings.systemStatus.sent')}:</span>
+                                    <span className="ml-2 font-semibold text-green-900 dark:text-green-300">{systemStatus.emailQueue.sent}</span>
+                                  </div>
+                                  <div>
+                                    <span className="text-red-700 dark:text-red-400">{t('settings.systemStatus.failed')}:</span>
+                                    <span className="ml-2 font-semibold text-red-900 dark:text-red-300">{systemStatus.emailQueue.failed}</span>
+                                  </div>
+                                </div>
+                                {systemStatus.emailQueue.stuck > 0 && (
+                                  <div className="mt-3 p-3 bg-orange-50 dark:bg-orange-900/30 rounded-md">
+                                    <p className="text-xs text-orange-800 dark:text-orange-200">
+                                      <span className="font-semibold">Warning: {systemStatus.emailQueue.stuck} email(s) stuck:</span> These emails have exceeded retry limits and won&apos;t be processed automatically.
+                                      Only {systemStatus.emailQueue.processable} of {systemStatus.emailQueue.pending} pending emails will be processed.
+                                    </p>
+                                  </div>
+                                )}
+                              </div></CardContent></Card>
         </>
       )}
 
@@ -655,57 +615,43 @@ export const StatusTab: React.FC<StatusTabProps> = ({
           admin logging in behind a system.manage user inside the cache lifetime
           would still be shown the card and a button whose POST 403s. */}
       {dimensionStatus && canRepairDimensions && (
-        <Card padding="md">
-          <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4 flex items-center gap-2">
-            <Ruler className="w-5 h-5" />
-            {t('settings.photoDimensions.title')}
-          </h2>
-
-          <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
-            {t('settings.photoDimensions.description')}
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-            <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-3 text-center">
-              <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{dimensionStatus.total}</p>
-              <p className="text-xs text-neutral-600 dark:text-neutral-400">{t('settings.photoDimensions.totalPhotos')}</p>
-            </div>
-            <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-3 text-center">
-              <p className="text-2xl font-bold text-green-600 dark:text-green-400">{dimensionStatus.withDimensions}</p>
-              <p className="text-xs text-neutral-600 dark:text-neutral-400">{t('settings.photoDimensions.withDimensions')}</p>
-            </div>
-            <div className={`rounded-lg p-3 text-center ${Number(dimensionStatus.withoutDimensions) > 0 ? 'bg-amber-50 dark:bg-amber-900/30' : 'bg-neutral-50 dark:bg-neutral-800'}`}>
-              <p className={`text-2xl font-bold ${Number(dimensionStatus.withoutDimensions) > 0 ? 'text-amber-600 dark:text-amber-400' : 'text-neutral-900 dark:text-neutral-100'}`}>{dimensionStatus.withoutDimensions}</p>
-              <p className="text-xs text-neutral-600 dark:text-neutral-400">{t('settings.photoDimensions.missingDimensions')}</p>
-            </div>
-          </div>
-
-          {dimensionStatus.lastResult && (
-            <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
-              {t('settings.photoDimensions.resultSuccess', {
-                success: dimensionStatus.lastResult.success,
-                failed: dimensionStatus.lastResult.failed,
-              })}
-            </p>
-          )}
-
-          <div className="flex justify-end">
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => repairMutation.mutate()}
-              isLoading={repairMutation.isPending || dimensionStatus.isRunning}
-              disabled={Number(dimensionStatus.withoutDimensions) === 0 || dimensionStatus.isRunning}
-              leftIcon={<Ruler className="w-4 h-4" />}
-            >
-              {dimensionStatus.isRunning
-                ? t('settings.photoDimensions.repairing')
-                : Number(dimensionStatus.withoutDimensions) === 0
-                  ? t('settings.photoDimensions.noneToRepair')
-                  : t('settings.photoDimensions.repairButton')}
-            </Button>
-          </div>
-        </Card>
+        <Card><CardContent><h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                          <Ruler className="w-5 h-5" />
+                          {t('settings.photoDimensions.title')}
+                        </h2><p className="text-sm text-muted-foreground mb-4">
+                          {t('settings.photoDimensions.description')}
+                        </p><div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                          <div className="bg-muted rounded-lg p-3 text-center">
+                            <p className="text-2xl font-bold text-foreground">{dimensionStatus.total}</p>
+                            <p className="text-xs text-muted-foreground">{t('settings.photoDimensions.totalPhotos')}</p>
+                          </div>
+                          <div className="bg-muted rounded-lg p-3 text-center">
+                            <p className="text-2xl font-bold text-green-600 dark:text-green-400">{dimensionStatus.withDimensions}</p>
+                            <p className="text-xs text-muted-foreground">{t('settings.photoDimensions.withDimensions')}</p>
+                          </div>
+                          <div className={`rounded-lg p-3 text-center ${Number(dimensionStatus.withoutDimensions) > 0 ? 'bg-amber-50 dark:bg-amber-900/30' : 'bg-muted'}`}>
+                            <p className={`text-2xl font-bold ${Number(dimensionStatus.withoutDimensions) > 0 ? 'text-amber-600 dark:text-amber-400' : 'text-foreground'}`}>{dimensionStatus.withoutDimensions}</p>
+                            <p className="text-xs text-muted-foreground">{t('settings.photoDimensions.missingDimensions')}</p>
+                          </div>
+                        </div>{dimensionStatus.lastResult && (
+                          <p className="text-sm text-muted-foreground mb-4">
+                            {t('settings.photoDimensions.resultSuccess', {
+                              success: dimensionStatus.lastResult.success,
+                              failed: dimensionStatus.lastResult.failed,
+                            })}
+                          </p>
+                        )}<div className="flex justify-end">
+                          <Button
+                                                  variant="secondary"
+                                                  size="sm"
+                                                  onClick={() => repairMutation.mutate()} disabled={Number(dimensionStatus.withoutDimensions) === 0 || dimensionStatus.isRunning || repairMutation.isPending || dimensionStatus.isRunning}
+                                                >
+                                                  {repairMutation.isPending || dimensionStatus.isRunning && <Loader2 className="animate-spin" />}<Ruler className="w-4 h-4" />{dimensionStatus.isRunning
+                                                    ? t('settings.photoDimensions.repairing')
+                                                    : Number(dimensionStatus.withoutDimensions) === 0
+                                                      ? t('settings.photoDimensions.noneToRepair')
+                                                      : t('settings.photoDimensions.repairButton')}</Button>
+                        </div></CardContent></Card>
       )}
 
       {/* Capture Dates (#1172) */}
@@ -714,131 +660,105 @@ export const StatusTab: React.FC<StatusTabProps> = ({
           admin logging in behind a system.manage user inside the cache lifetime
           would still be shown the card and a button whose POST 403s. */}
       {captureDateStatus && canManageSystem && (
-        <Card padding="md">
-          <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4 flex items-center gap-2">
-            <CalendarClock className="w-5 h-5" />
-            {t('settings.captureDates.title', 'Capture Dates')}
-          </h2>
-
-          <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
-            {t('settings.captureDates.description', 'Backfill "Date Taken" from EXIF for photos imported before capture dates were read. External/reference imports never recorded one, so their galleries sort by import order instead of when the photos were taken.')}
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-            <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-3 text-center">
-              <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{captureDateStatus.total}</p>
-              <p className="text-xs text-neutral-600 dark:text-neutral-400">{t('settings.captureDates.totalPhotos', 'Total Photos')}</p>
-            </div>
-            <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-3 text-center">
-              <p className="text-2xl font-bold text-green-600 dark:text-green-400">{captureDateStatus.withCaptureDate}</p>
-              <p className="text-xs text-neutral-600 dark:text-neutral-400">{t('settings.captureDates.withDates', 'With Capture Date')}</p>
-            </div>
-            <div className={`rounded-lg p-3 text-center ${Number(captureDateStatus.withoutCaptureDate) > 0 ? 'bg-amber-50 dark:bg-amber-900/30' : 'bg-neutral-50 dark:bg-neutral-800'}`}>
-              <p className={`text-2xl font-bold ${Number(captureDateStatus.withoutCaptureDate) > 0 ? 'text-amber-600 dark:text-amber-400' : 'text-neutral-900 dark:text-neutral-100'}`}>{captureDateStatus.withoutCaptureDate}</p>
-              <p className="text-xs text-neutral-600 dark:text-neutral-400">{t('settings.captureDates.missingDates', 'Missing Capture Date')}</p>
-            </div>
-          </div>
-
-          {captureDateStatus.lastResult && (
-            <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
-              {/* Two buckets on purpose: "the mount is gone" and "these files
-                  carry no date" need different reactions. The middle number is
-                  worded as "no date found" rather than "without EXIF" because
-                  it also absorbs files whose metadata could not be parsed —
-                  extractCaptureDate returns null for those too. The last number
-                  is the one that means the storage could not be reached. */}
-              {t('settings.captureDates.resultSuccess', {
-                success: captureDateStatus.lastResult.success,
-                noExif: captureDateStatus.lastResult.noExif,
-                failed: captureDateStatus.lastResult.failed,
-                defaultValue: 'Last run: {{success}} updated, {{noExif}} with no date found, {{failed}} unreachable',
-              })}
-              {/* Only when it happened, like the orientation job's staleTiers
-                  below. Without it the three numbers above silently stop
-                  adding up to the count the run started with: a photo that
-                  was replaced, renamed or dated by someone else mid-run is
-                  read but not written.
-                  Deliberately says "not updated" and not "will be retried":
-                  one of the two ways to land here is another writer having
-                  filled captured_at, and that photo is finished, not backlog.
-                  The Missing Capture Date figure above is what says whether
-                  anything is actually left to do. */}
-              {Number(captureDateStatus.lastResult.skipped) > 0 && (
-                <span className="block text-amber-600 dark:text-amber-400 mt-1">
-                  {t('settings.captureDates.skipped', {
-                    count: captureDateStatus.lastResult.skipped,
-                    defaultValue: '{{count}} photo(s) were changed by something else while the run was reading them and were not updated.',
-                  })}
-                </span>
-              )}
-            </p>
-          )}
-
-          <div className="flex justify-end">
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => captureDateMutation.mutate()}
-              isLoading={captureDateMutation.isPending || captureDateStatus.isRunning}
-              disabled={Number(captureDateStatus.withoutCaptureDate) === 0 || captureDateStatus.isRunning}
-              leftIcon={<CalendarClock className="w-4 h-4" />}
-            >
-              {captureDateStatus.isRunning
-                ? t('settings.captureDates.running', 'Backfilling...')
-                : Number(captureDateStatus.withoutCaptureDate) === 0
-                  ? t('settings.captureDates.noneToFill', 'All photos already have a capture date')
-                  : t('settings.captureDates.button', 'Backfill Capture Dates')}
-            </Button>
-          </div>
-        </Card>
+        <Card><CardContent><h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                          <CalendarClock className="w-5 h-5" />
+                          {t('settings.captureDates.title', 'Capture Dates')}
+                        </h2><p className="text-sm text-muted-foreground mb-4">
+                          {t('settings.captureDates.description', 'Backfill "Date Taken" from EXIF for photos imported before capture dates were read. External/reference imports never recorded one, so their galleries sort by import order instead of when the photos were taken.')}
+                        </p><div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                          <div className="bg-muted rounded-lg p-3 text-center">
+                            <p className="text-2xl font-bold text-foreground">{captureDateStatus.total}</p>
+                            <p className="text-xs text-muted-foreground">{t('settings.captureDates.totalPhotos', 'Total Photos')}</p>
+                          </div>
+                          <div className="bg-muted rounded-lg p-3 text-center">
+                            <p className="text-2xl font-bold text-green-600 dark:text-green-400">{captureDateStatus.withCaptureDate}</p>
+                            <p className="text-xs text-muted-foreground">{t('settings.captureDates.withDates', 'With Capture Date')}</p>
+                          </div>
+                          <div className={`rounded-lg p-3 text-center ${Number(captureDateStatus.withoutCaptureDate) > 0 ? 'bg-amber-50 dark:bg-amber-900/30' : 'bg-muted'}`}>
+                            <p className={`text-2xl font-bold ${Number(captureDateStatus.withoutCaptureDate) > 0 ? 'text-amber-600 dark:text-amber-400' : 'text-foreground'}`}>{captureDateStatus.withoutCaptureDate}</p>
+                            <p className="text-xs text-muted-foreground">{t('settings.captureDates.missingDates', 'Missing Capture Date')}</p>
+                          </div>
+                        </div>{captureDateStatus.lastResult && (
+                          <p className="text-sm text-muted-foreground mb-4">
+                            {/* Two buckets on purpose: "the mount is gone" and "these files
+                                carry no date" need different reactions. The middle number is
+                                worded as "no date found" rather than "without EXIF" because
+                                it also absorbs files whose metadata could not be parsed —
+                                extractCaptureDate returns null for those too. The last number
+                                is the one that means the storage could not be reached. */}
+                            {t('settings.captureDates.resultSuccess', {
+                              success: captureDateStatus.lastResult.success,
+                              noExif: captureDateStatus.lastResult.noExif,
+                              failed: captureDateStatus.lastResult.failed,
+                              defaultValue: 'Last run: {{success}} updated, {{noExif}} with no date found, {{failed}} unreachable',
+                            })}
+                            {/* Only when it happened, like the orientation job's staleTiers
+                                below. Without it the three numbers above silently stop
+                                adding up to the count the run started with: a photo that
+                                was replaced, renamed or dated by someone else mid-run is
+                                read but not written.
+                                Deliberately says "not updated" and not "will be retried":
+                                one of the two ways to land here is another writer having
+                                filled captured_at, and that photo is finished, not backlog.
+                                The Missing Capture Date figure above is what says whether
+                                anything is actually left to do. */}
+                            {Number(captureDateStatus.lastResult.skipped) > 0 && (
+                              <span className="block text-amber-600 dark:text-amber-400 mt-1">
+                                {t('settings.captureDates.skipped', {
+                                  count: captureDateStatus.lastResult.skipped,
+                                  defaultValue: '{{count}} photo(s) were changed by something else while the run was reading them and were not updated.',
+                                })}
+                              </span>
+                            )}
+                          </p>
+                        )}<div className="flex justify-end">
+                          <Button
+                                                  variant="secondary"
+                                                  size="sm"
+                                                  onClick={() => captureDateMutation.mutate()} disabled={Number(captureDateStatus.withoutCaptureDate) === 0 || captureDateStatus.isRunning || captureDateMutation.isPending || captureDateStatus.isRunning}
+                                                >
+                                                  {captureDateMutation.isPending || captureDateStatus.isRunning && <Loader2 className="animate-spin" />}<CalendarClock className="w-4 h-4" />{captureDateStatus.isRunning
+                                                    ? t('settings.captureDates.running', 'Backfilling...')
+                                                    : Number(captureDateStatus.withoutCaptureDate) === 0
+                                                      ? t('settings.captureDates.noneToFill', 'All photos already have a capture date')
+                                                      : t('settings.captureDates.button', 'Backfill Capture Dates')}</Button>
+                        </div></CardContent></Card>
       )}
 
       {orientationStatus && canManageSystem && (
-        <Card padding="md">
-          <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4 flex items-center gap-2">
-            <RotateCw className="w-5 h-5 text-primary-600" />
-            {t('settings.orientationBackfill.title', 'Photo Orientation')}
-          </h2>
-
-          <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
-            {t('settings.orientationBackfill.description', 'Re-read EXIF orientation for photos imported before rotation was applied, correct their stored dimensions, and clear the thumbnails, previews and hero images generated from the unrotated originals. Only photos whose orientation actually changed are touched.')}
-          </p>
-
-          {orientationStatus.lastResult && (
-            <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
-              {t('settings.orientationBackfill.resultSuccess', {
-                checked: orientationStatus.lastResult.checked,
-                corrected: orientationStatus.lastResult.corrected,
-                requeued: orientationStatus.lastResult.requeuedFaces,
-                failed: orientationStatus.lastResult.failed,
-                defaultValue: 'Last run: {{checked}} checked, {{corrected}} corrected, {{requeued}} requeued for face scanning, {{failed}} unreachable',
-              })}
-              {Number(orientationStatus.lastResult.staleTiers) > 0 && (
-                <span className="block text-amber-600 dark:text-amber-400 mt-1">
-                  {t('settings.orientationBackfill.staleTiers', {
-                    count: orientationStatus.lastResult.staleTiers,
-                    defaultValue: '{{count}} cached size(s) could not be deleted and will keep serving the old orientation — re-run once storage is writable.',
-                  })}
-                </span>
-              )}
-            </p>
-          )}
-
-          <div className="flex justify-end">
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => orientationMutation.mutate()}
-              isLoading={orientationMutation.isPending || orientationStatus.isRunning}
-              disabled={orientationStatus.isRunning}
-              leftIcon={<RotateCw className="w-4 h-4" />}
-            >
-              {orientationStatus.isRunning
-                ? t('settings.orientationBackfill.running', 'Checking orientation...')
-                : t('settings.orientationBackfill.button', 'Fix Photo Orientation')}
-            </Button>
-          </div>
-        </Card>
+        <Card><CardContent><h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                          <RotateCw className="w-5 h-5 text-brand-600" />
+                          {t('settings.orientationBackfill.title', 'Photo Orientation')}
+                        </h2><p className="text-sm text-muted-foreground mb-4">
+                          {t('settings.orientationBackfill.description', 'Re-read EXIF orientation for photos imported before rotation was applied, correct their stored dimensions, and clear the thumbnails, previews and hero images generated from the unrotated originals. Only photos whose orientation actually changed are touched.')}
+                        </p>{orientationStatus.lastResult && (
+                          <p className="text-sm text-muted-foreground mb-4">
+                            {t('settings.orientationBackfill.resultSuccess', {
+                              checked: orientationStatus.lastResult.checked,
+                              corrected: orientationStatus.lastResult.corrected,
+                              requeued: orientationStatus.lastResult.requeuedFaces,
+                              failed: orientationStatus.lastResult.failed,
+                              defaultValue: 'Last run: {{checked}} checked, {{corrected}} corrected, {{requeued}} requeued for face scanning, {{failed}} unreachable',
+                            })}
+                            {Number(orientationStatus.lastResult.staleTiers) > 0 && (
+                              <span className="block text-amber-600 dark:text-amber-400 mt-1">
+                                {t('settings.orientationBackfill.staleTiers', {
+                                  count: orientationStatus.lastResult.staleTiers,
+                                  defaultValue: '{{count}} cached size(s) could not be deleted and will keep serving the old orientation — re-run once storage is writable.',
+                                })}
+                              </span>
+                            )}
+                          </p>
+                        )}<div className="flex justify-end">
+                          <Button
+                                                  variant="secondary"
+                                                  size="sm"
+                                                  onClick={() => orientationMutation.mutate()} disabled={orientationStatus.isRunning || orientationMutation.isPending || orientationStatus.isRunning}
+                                                >
+                                                  {orientationMutation.isPending || orientationStatus.isRunning && <Loader2 className="animate-spin" />}<RotateCw className="w-4 h-4" />{orientationStatus.isRunning
+                                                    ? t('settings.orientationBackfill.running', 'Checking orientation...')
+                                                    : t('settings.orientationBackfill.button', 'Fix Photo Orientation')}</Button>
+                        </div></CardContent></Card>
       )}
 
       {/* Update Notification Settings */}
@@ -846,7 +766,7 @@ export const StatusTab: React.FC<StatusTabProps> = ({
 
       {/* Last update time */}
       {systemStatus && (
-        <div className="text-xs text-neutral-500 dark:text-neutral-400 text-right flex items-center justify-end gap-1">
+        <div className="text-xs text-muted-foreground text-right flex items-center justify-end gap-1">
           <Clock className="w-3 h-3" />
           {t('settings.systemStatus.lastUpdate')}: {fmtDateTime(systemStatus.timestamp)}
         </div>

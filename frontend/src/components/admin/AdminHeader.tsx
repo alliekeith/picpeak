@@ -116,7 +116,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick }) => {
     if (brandingLoading) {
       return (
         <div className="flex items-center gap-2 min-w-0">
-          <div className="h-8 w-8 sm:w-32 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse" />
+          <div className="h-8 w-8 sm:w-32 bg-muted rounded-sm animate-pulse" />
         </div>
       );
     }
@@ -129,7 +129,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick }) => {
           <img
             src={logoImgSrc}
             alt={companyName}
-            className="h-8 w-auto object-contain flex-shrink-0"
+            className="h-8 w-auto object-contain shrink-0"
             onError={() => {
               // First failure: configured URL → try the bundled fallback.
               // Second failure: bundled fallback → hide entirely, let
@@ -209,7 +209,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick }) => {
     // — same model as the sidebar's brand row (also h-16 border-b
     // border-box). Both bottom borders meet at the exact same
     // y-coordinate.
-    <header className="sticky top-0 z-30 bg-white dark:bg-neutral-900 h-16 border-b border-neutral-200 dark:border-neutral-700">
+    <header className="sticky top-0 z-30 bg-card h-16 border-b border-border">
       <div className="px-4 sm:px-6 lg:px-8 h-full">
         <div className="relative flex items-center justify-between h-full gap-3">
           {/* Left side - Menu button, optional left-positioned logo, Date.
@@ -220,7 +220,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick }) => {
           <div className="flex items-center gap-3 min-w-0">
             <button
               onClick={onMenuClick}
-              className="lg:hidden text-neutral-500 hover:text-neutral-700"
+              className="lg:hidden text-muted-foreground hover:text-foreground"
             >
               <Menu className="w-6 h-6" />
             </button>
@@ -254,10 +254,10 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick }) => {
                 logo image. */}
             <div className={`hidden xl:flex items-center self-stretch ml-1 ${
               logoPosition === 'left' && !logoInSidebar
-                ? 'pl-3 border-l border-neutral-200 dark:border-neutral-700'
+                ? 'pl-3 border-l border-border'
                 : ''
             }`}>
-              <p className="text-base leading-none text-neutral-700 dark:text-neutral-300 m-0">
+              <p className="text-base leading-none text-foreground m-0">
                 {format(new Date(), 'PPPP')}
               </p>
             </div>
@@ -281,7 +281,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick }) => {
               cluster so the widgets stay where admins expect them. */}
           <div className="flex items-center gap-3">
             {!logoInSidebar && logoPosition === 'right' && (
-              <div className="hidden md:flex mr-1 pr-2 border-r border-neutral-200 dark:border-neutral-700">
+              <div className="hidden md:flex mr-1 pr-2 border-r border-border">
                 {renderBrandBlock()}
               </div>
             )}
@@ -299,7 +299,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick }) => {
             {!forcedMode && (
               <button
                 onClick={toggleDarkMode}
-                className="p-2 text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors"
+                className="p-2 text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors"
                 title={isDark ? t('admin.lightMode', 'Switch to light mode') : t('admin.darkMode', 'Switch to dark mode')}
               >
                 {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
@@ -310,7 +310,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick }) => {
             <div className="relative" ref={notificationRef}>
               <button
                 onClick={notificationsModal.toggle}
-                className="relative p-2 text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors"
+                className="relative p-2 text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors"
               >
                 <Bell className="w-5 h-5" />
                 {unreadCount > 0 && (
@@ -320,14 +320,14 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick }) => {
 
               {/* Notifications dropdown */}
               {notificationsModal.isOpen && (
-                <div className="absolute right-0 mt-2 w-96 bg-white dark:bg-neutral-800 rounded-lg shadow-lg border border-neutral-200 dark:border-neutral-700">
-                  <div className="px-4 py-3 border-b border-neutral-100 dark:border-neutral-700 flex items-center justify-between">
-                    <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">{t('admin.notifications')}</h3>
+                <div className="absolute right-0 mt-2 w-96 bg-card rounded-lg shadow-lg border border-border">
+                  <div className="px-4 py-3 border-b border-border flex items-center justify-between">
+                    <h3 className="text-sm font-semibold text-foreground">{t('admin.notifications')}</h3>
                     <div className="flex items-center gap-2">
                       {unreadCount > 0 && (
                         <button
                           onClick={() => markAllAsReadMutation.mutate()}
-                          className="text-xs text-accent hover:opacity-80 flex items-center gap-1"
+                          className="text-xs text-brand hover:opacity-80 flex items-center gap-1"
                           title={t('admin.markAllRead')}
                         >
                           <CheckCircle className="w-3 h-3" />
@@ -336,7 +336,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick }) => {
                       )}
                       <button
                         onClick={() => clearAllMutation.mutate()}
-                        className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 flex items-center gap-1"
+                        className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1"
                         title={t('admin.clearAll')}
                       >
                         <Trash2 className="w-3 h-3" />
@@ -346,7 +346,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick }) => {
                   </div>
                   <div className="max-h-96 overflow-y-auto">
                     {notifications.length === 0 ? (
-                      <div className="px-4 py-8 text-center text-sm text-neutral-500 dark:text-neutral-400">
+                      <div className="px-4 py-8 text-center text-sm text-muted-foreground">
                         {t('admin.noNotificationsMessage')}
                       </div>
                     ) : (
@@ -355,8 +355,8 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick }) => {
                         return (
                           <div
                             key={notification.id}
-                            className={`px-4 py-3 hover:bg-neutral-50 dark:hover:bg-neutral-700 cursor-pointer border-l-4 ${
-                              notification.isRead ? 'border-transparent opacity-75' : 'border-accent-dark'
+                            className={`px-4 py-3 hover:bg-accent cursor-pointer border-l-4 ${
+                              notification.isRead ? 'border-transparent opacity-75' : 'border-primary'
                             }`}
                           >
                             <div className="flex items-start gap-3">
@@ -367,10 +367,10 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick }) => {
                                 })()}
                               </div>
                               <div className="flex-1 min-w-0">
-                                <p className="text-sm text-neutral-900 dark:text-neutral-100">
+                                <p className="text-sm text-foreground">
                                   {notificationsService.formatNotificationMessage(notification)}
                                 </p>
-                                <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                                <p className="text-xs text-muted-foreground mt-1">
                                   {formatDistanceToNow(notification.createdAt, { addSuffix: true })}
                                 </p>
                               </div>
@@ -381,10 +381,10 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick }) => {
                     )}
                   </div>
                   {notifications.length > 0 && (
-                    <div className="px-4 py-2 border-t border-neutral-100 dark:border-neutral-700 text-center">
+                    <div className="px-4 py-2 border-t border-border text-center">
                       <button
                         onClick={notificationsModal.close}
-                        className="text-sm text-accent hover:opacity-80"
+                        className="text-sm text-brand hover:opacity-80"
                       >
                         {t('admin.close')}
                       </button>
@@ -398,33 +398,33 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick }) => {
             <div className="relative" ref={userMenuRef}>
               <button
                 onClick={userMenuModal.toggle}
-                className="flex items-center gap-3 p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors"
+                className="flex items-center gap-3 p-2 hover:bg-accent rounded-lg transition-colors"
               >
                 <div className="text-right hidden sm:block">
-                  <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">{user?.username}</p>
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400">{user?.email}</p>
+                  <p className="text-sm font-medium text-foreground">{user?.username}</p>
+                  <p className="text-xs text-muted-foreground">{user?.email}</p>
                 </div>
-                <div className="w-8 h-8 bg-accent-dark rounded-full flex items-center justify-center">
+                <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
                   <User className="w-5 h-5 text-white" />
                 </div>
               </button>
 
               {/* User dropdown */}
               {userMenuModal.isOpen && (
-                <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-neutral-800 rounded-lg shadow-lg border border-neutral-200 dark:border-neutral-700 py-1">
-                  <div className="px-4 py-2 border-b border-neutral-100 dark:border-neutral-700 sm:hidden">
-                    <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">{user?.username}</p>
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400">{user?.email}</p>
+                <div className="absolute right-0 mt-2 w-56 bg-card rounded-lg shadow-lg border border-border py-1">
+                  <div className="px-4 py-2 border-b border-border sm:hidden">
+                    <p className="text-sm font-medium text-foreground">{user?.username}</p>
+                    <p className="text-xs text-muted-foreground">{user?.email}</p>
                   </div>
                   {/* Language sub-section — phone-only (#523 follow-up).
                       Rekoo-PS asked for language to live inside the profile
                       menu since it's a set-once preference; on sm+ it
                       stays in the header cluster where it's been. Collapsible
                       so the menu isn't 8 rows taller by default. */}
-                  <div className="sm:hidden border-b border-neutral-100 dark:border-neutral-700">
+                  <div className="sm:hidden border-b border-border">
                     <button
                       onClick={userMenuLangSectionModal.toggle}
-                      className="w-full px-4 py-2 text-left text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-3"
+                      className="w-full px-4 py-2 text-left text-sm text-foreground hover:bg-accent flex items-center gap-3"
                       aria-expanded={userMenuLangSectionModal.isOpen}
                     >
                       <Globe className="w-4 h-4" />
@@ -433,15 +433,15 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick }) => {
                       <ChevronDown className={`w-4 h-4 transition-transform ${userMenuLangSectionModal.isOpen ? 'rotate-180' : ''}`} />
                     </button>
                     {userMenuLangSectionModal.isOpen && (
-                      <div className="bg-neutral-50 dark:bg-neutral-900 py-1">
+                      <div className="bg-muted py-1">
                         {SUPPORTED_LANGUAGES.map((language) => (
                           <button
                             key={language.code}
                             onClick={() => handleUserMenuLangSelect(language.code)}
-                            className={`w-full pl-11 pr-4 py-2 text-left text-sm flex items-center gap-3 hover:bg-neutral-100 dark:hover:bg-neutral-700 ${
+                            className={`w-full pl-11 pr-4 py-2 text-left text-sm flex items-center gap-3 hover:bg-accent ${
                               language.code === i18n.language
-                                ? 'text-accent bg-accent-dark/15'
-                                : 'text-neutral-700 dark:text-neutral-300'
+                                ? 'text-brand bg-primary/15'
+                                : 'text-foreground'
                             }`}
                           >
                             <language.Flag className="w-4 h-4" />
@@ -456,7 +456,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick }) => {
                       closeUserMenu();
                       navigate('/admin/settings');
                     }}
-                    className="w-full px-4 py-2 text-left text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-3"
+                    className="w-full px-4 py-2 text-left text-sm text-foreground hover:bg-accent flex items-center gap-3"
                   >
                     <Settings className="w-4 h-4" />
                     {t('navigation.settings')}
@@ -466,14 +466,14 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick }) => {
                       closeUserMenu();
                       passwordModal.open();
                     }}
-                    className="w-full px-4 py-2 text-left text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-3"
+                    className="w-full px-4 py-2 text-left text-sm text-foreground hover:bg-accent flex items-center gap-3"
                   >
                     <Lock className="w-4 h-4" />
                     {t('admin.changePassword')}
                   </button>
                   <button
                     onClick={handleLogout}
-                    className="w-full px-4 py-2 text-left text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-3"
+                    className="w-full px-4 py-2 text-left text-sm text-foreground hover:bg-accent flex items-center gap-3"
                   >
                     <LogOut className="w-4 h-4" />
                     {t('common.logout')}

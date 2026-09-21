@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import DOMPurify from 'dompurify';
-import { Card } from './Card';
 import { Loading } from './Loading';
 import { PoweredBy } from './PoweredBy';
 import { cmsService } from '../../services/cms.service';
 import { usePublicSettings } from '../../hooks/usePublicSettings';
 import { buildResourceUrl } from '../../utils/url';
 import '../../styles/prose-overrides.css';
+import { Card, CardContent } from "@/components/ui/card";
 
 interface CMSContentBlockProps {
   /** CMS page slug, e.g. "not-found" or "gallery-not-found". */
@@ -53,7 +53,7 @@ export const CMSContentBlock: React.FC<CMSContentBlockProps> = ({ slug, fallback
     return (
       <div
         className="min-h-screen flex items-center justify-center"
-        style={{ backgroundColor: 'var(--color-background, #fafafa)' }}
+        style={{ backgroundColor: 'var(--background, #fafafa)' }}
       >
         <Loading size="lg" />
       </div>
@@ -72,7 +72,7 @@ export const CMSContentBlock: React.FC<CMSContentBlockProps> = ({ slug, fallback
   const companyName = settings?.branding_company_name || 'PicPeak';
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundColor: 'var(--color-background, #fafafa)' }}>
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: 'var(--background, #fafafa)' }}>
       <div className="p-8 text-center">
         <img
           src={logoSrc}
@@ -89,57 +89,51 @@ export const CMSContentBlock: React.FC<CMSContentBlockProps> = ({ slug, fallback
            * text below rendered near-white text on a white card (QA S3/S4).
            */}
           <Card
-            padding="lg"
-            style={{
-              backgroundColor: 'var(--color-surface)',
-              borderColor: 'var(--color-surface-border)',
-            }}
-          >
-            {/*
-             * Heading + body now read from theme tokens so dark themes
-             * (and force-dark mode) render correctly without dark: variants
-             * fighting the CSS variables.
-             */}
-            <h1
-              className="text-2xl sm:text-3xl font-bold mb-6"
-              style={{ color: 'var(--color-text)' }}
-            >
-              {page.title}
-            </h1>
-            <div
-              className="prose prose-neutral dark:prose-invert max-w-none text-theme"
-              style={{ color: 'var(--color-text)' }}
-              dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(page.content, {
-                  ALLOWED_TAGS,
-                  ALLOWED_ATTR,
-                  ALLOW_DATA_ATTR: false,
-                  KEEP_CONTENT: true,
-                }),
-              }}
-            />
-            <div className="mt-8">
-              <Link
-                to="/"
-                className="text-sm font-medium hover:underline"
-                style={{ color: 'var(--color-accent)' }}
-              >
-                {lang === 'de' ? '← Zur Startseite' : '← Back to home'}
-              </Link>
-            </div>
-          </Card>
+                              style={{
+                                backgroundColor: 'var(--card)',
+                                borderColor: 'var(--border)',
+                              }} className="py-8"
+                            ><CardContent className="px-8">{/*
+                               * Heading + body now read from theme tokens so dark themes
+                               * (and force-dark mode) render correctly without dark: variants
+                               * fighting the CSS variables.
+                               */}<h1
+                                className="text-2xl sm:text-3xl font-bold mb-6"
+                                style={{ color: 'var(--foreground)' }}
+                              >
+                                {page.title}
+                              </h1><div
+                                className="prose prose-neutral dark:prose-invert max-w-none text-foreground"
+                                style={{ color: 'var(--foreground)' }}
+                                dangerouslySetInnerHTML={{
+                                  __html: DOMPurify.sanitize(page.content, {
+                                    ALLOWED_TAGS,
+                                    ALLOWED_ATTR,
+                                    ALLOW_DATA_ATTR: false,
+                                    KEEP_CONTENT: true,
+                                  }),
+                                }}
+                              /><div className="mt-8">
+                                <Link
+                                  to="/"
+                                  className="text-sm font-medium hover:underline"
+                                  style={{ color: 'var(--brand)' }}
+                                >
+                                  {lang === 'de' ? '← Zur Startseite' : '← Back to home'}
+                                </Link>
+                              </div></CardContent></Card>
         </div>
       </main>
 
       <footer
         className="py-8 text-center text-xs"
-        style={{ color: 'var(--color-muted-text)' }}
+        style={{ color: 'var(--muted-foreground)' }}
       >
         <div className="flex justify-center gap-4">
           <Link to="/impressum" className="hover:underline">
             {lang === 'de' ? 'Impressum' : 'Legal Notice'}
           </Link>
-          <span style={{ color: 'var(--color-surface-border)' }}>•</span>
+          <span style={{ color: 'var(--border)' }}>•</span>
           <Link to="/datenschutz" className="hover:underline">
             {lang === 'de' ? 'Datenschutz' : 'Privacy Policy'}
           </Link>

@@ -13,12 +13,14 @@ import {
 } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 
-import { Button, Card, Loading } from '../../components/common';
+import { Loading } from '../../components/common';
 import { useQuery } from '@tanstack/react-query';
 import { adminService } from '../../services/admin.service';
 import { settingsService } from '../../services/settings.service';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../config/api';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 // Map API response to component format
 interface ComponentAnalyticsData {
@@ -239,25 +241,21 @@ export const AnalyticsPage: React.FC = () => {
       <div>
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{t('analytics.title')}</h1>
-            <p className="text-neutral-600 dark:text-neutral-400 mt-1">{t('analytics.detailedSubtitle')}</p>
+            <h1 className="text-2xl font-bold text-foreground">{t('analytics.title')}</h1>
+            <p className="text-muted-foreground mt-1">{t('analytics.detailedSubtitle')}</p>
           </div>
           <Button
-            variant="outline"
-            onClick={() => setIsEmbedMode(false)}
-            leftIcon={<BarChart3 className="w-4 h-4" />}
-          >
-            {t('analytics.showSummaryView')}
-          </Button>
+                            variant="outline"
+                            onClick={() => setIsEmbedMode(false)}
+                          >
+                            <BarChart3 className="w-4 h-4" />{t('analytics.showSummaryView')}</Button>
         </div>
         
-        <Card padding="none" className="overflow-hidden" style={{ height: '800px' }}>
-          <iframe
-            src={umamiConfig.shareUrl}
-            className="w-full h-full border-0"
-            title="Umami Analytics Dashboard"
-          />
-        </Card>
+        <Card className="py-0 overflow-hidden" style={{ height: '800px' }}><CardContent className="px-0"><iframe
+                        src={umamiConfig.shareUrl}
+                        className="w-full h-full border-0"
+                        title="Umami Analytics Dashboard"
+                      /></CardContent></Card>
       </div>
     );
   }
@@ -267,30 +265,26 @@ export const AnalyticsPage: React.FC = () => {
       {/* Page Header */}
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{t('analytics.title')}</h1>
-          <p className="text-neutral-600 dark:text-neutral-400 mt-1">{t('analytics.subtitle')}</p>
+          <h1 className="text-2xl font-bold text-foreground">{t('analytics.title')}</h1>
+          <p className="text-muted-foreground mt-1">{t('analytics.subtitle')}</p>
         </div>
         <div className="flex items-center gap-3">
           {umamiConfig.shareUrl && (
             <Button
-              variant="outline"
-              onClick={() => setIsEmbedMode(true)}
-              leftIcon={<Activity className="w-4 h-4" />}
-            >
-              {t('analytics.fullDashboard')}
-            </Button>
+                                    variant="outline"
+                                    onClick={() => setIsEmbedMode(true)}
+                                  >
+                                    <Activity className="w-4 h-4" />{t('analytics.fullDashboard')}</Button>
           )}
           <Button
-            variant="outline"
-            onClick={() => refetch()}
-            leftIcon={<RefreshCw className="w-4 h-4" />}
-          >
-            {t('analytics.refresh')}
-          </Button>
+                              variant="outline"
+                              onClick={() => refetch()}
+                            >
+                              <RefreshCw className="w-4 h-4" />{t('analytics.refresh')}</Button>
           <select
             value={dateRange}
             onChange={(e) => setDateRange(e.target.value as any)}
-            className="px-4 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-primary-500"
+            className="px-4 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500"
           >
             <option value="7d">{t('analytics.last7Days')}</option>
             <option value="30d">{t('analytics.last30Days')}</option>
@@ -301,140 +295,122 @@ export const AnalyticsPage: React.FC = () => {
 
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        <Card padding="md">
-          <div className="flex items-start justify-between mb-4">
-            <div>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('analytics.pageViews')}</p>
-              <p className="text-3xl font-bold text-neutral-900 dark:text-neutral-100">{analytics?.pageViews.total.toLocaleString()}</p>
-              <div className="mt-1">
-                {renderTrendBadge(analytics?.pageViews.trend || 0)}
-              </div>
-            </div>
-            <Eye className="w-8 h-8 text-blue-600" />
-          </div>
-          {analytics?.pageViews.chartData && renderMiniChart(
-            analytics.pageViews.chartData.map(d => ({ date: d.date, value: d.views })),
-            'bg-blue-500'
-          )}
-        </Card>
+        <Card><CardContent><div className="flex items-start justify-between mb-4">
+                          <div>
+                            <p className="text-sm text-muted-foreground">{t('analytics.pageViews')}</p>
+                            <p className="text-3xl font-bold text-foreground">{analytics?.pageViews.total.toLocaleString()}</p>
+                            <div className="mt-1">
+                              {renderTrendBadge(analytics?.pageViews.trend || 0)}
+                            </div>
+                          </div>
+                          <Eye className="w-8 h-8 text-blue-600" />
+                        </div>{analytics?.pageViews.chartData && renderMiniChart(
+                          analytics.pageViews.chartData.map(d => ({ date: d.date, value: d.views })),
+                          'bg-blue-500'
+                        )}</CardContent></Card>
 
-        <Card padding="md">
-          <div className="flex items-start justify-between mb-4">
-            <div>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('analytics.uniqueVisitors')}</p>
-              <p className="text-3xl font-bold text-neutral-900 dark:text-neutral-100">{analytics?.uniqueVisitors.total.toLocaleString()}</p>
-              <div className="mt-1">
-                {renderTrendBadge(analytics?.uniqueVisitors.trend || 0)}
-              </div>
-            </div>
-            <Users className="w-8 h-8 text-green-600" />
-          </div>
-          {analytics?.uniqueVisitors.chartData && renderMiniChart(
-            analytics.uniqueVisitors.chartData.map(d => ({ date: d.date, value: d.visitors })),
-            'bg-green-500'
-          )}
-        </Card>
+        <Card><CardContent><div className="flex items-start justify-between mb-4">
+                          <div>
+                            <p className="text-sm text-muted-foreground">{t('analytics.uniqueVisitors')}</p>
+                            <p className="text-3xl font-bold text-foreground">{analytics?.uniqueVisitors.total.toLocaleString()}</p>
+                            <div className="mt-1">
+                              {renderTrendBadge(analytics?.uniqueVisitors.trend || 0)}
+                            </div>
+                          </div>
+                          <Users className="w-8 h-8 text-green-600" />
+                        </div>{analytics?.uniqueVisitors.chartData && renderMiniChart(
+                          analytics.uniqueVisitors.chartData.map(d => ({ date: d.date, value: d.visitors })),
+                          'bg-green-500'
+                        )}</CardContent></Card>
 
-        <Card padding="md">
-          <div className="flex items-start justify-between mb-4">
-            <div>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('analytics.totalDownloads')}</p>
-              <p className="text-3xl font-bold text-neutral-900 dark:text-neutral-100">{analytics?.downloads.total.toLocaleString()}</p>
-              <div className="mt-1">
-                {renderTrendBadge(analytics?.downloads.trend || 0)}
-              </div>
-            </div>
-            <Download className="w-8 h-8 text-purple-600" />
-          </div>
-          <div className="mt-4 space-y-2">
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 uppercase">{t('analytics.topGallery')}</p>
-            <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100 truncate">
-              {analytics?.downloads.topGalleries[0]?.name}
-            </p>
-          </div>
-        </Card>
+        <Card><CardContent><div className="flex items-start justify-between mb-4">
+                          <div>
+                            <p className="text-sm text-muted-foreground">{t('analytics.totalDownloads')}</p>
+                            <p className="text-3xl font-bold text-foreground">{analytics?.downloads.total.toLocaleString()}</p>
+                            <div className="mt-1">
+                              {renderTrendBadge(analytics?.downloads.trend || 0)}
+                            </div>
+                          </div>
+                          <Download className="w-8 h-8 text-purple-600" />
+                        </div><div className="mt-4 space-y-2">
+                          <p className="text-xs text-muted-foreground uppercase">{t('analytics.topGallery')}</p>
+                          <p className="text-sm font-medium text-foreground truncate">
+                            {analytics?.downloads.topGalleries[0]?.name}
+                          </p>
+                        </div></CardContent></Card>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Top Pages */}
         <div className="lg:col-span-2">
-          <Card padding="md">
-            <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">{t('analytics.topPages')}</h2>
-            <div className="space-y-3">
-              {analytics?.topPages.map((page, index) => (
-                <div key={index} className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">{page.path}</p>
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                      {page.uniqueVisitors} {t('analytics.visitors')}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">{page.views}</p>
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400">{t('analytics.views')}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Card>
+          <Card><CardContent><h2 className="text-lg font-semibold text-foreground mb-4">{t('analytics.topPages')}</h2><div className="space-y-3">
+                                {analytics?.topPages.map((page, index) => (
+                                  <div key={index} className="flex items-center justify-between">
+                                    <div className="flex-1">
+                                      <p className="text-sm font-medium text-foreground">{page.path}</p>
+                                      <p className="text-xs text-muted-foreground">
+                                        {page.uniqueVisitors} {t('analytics.visitors')}
+                                      </p>
+                                    </div>
+                                    <div className="text-right">
+                                      <p className="text-sm font-semibold text-foreground">{page.views}</p>
+                                      <p className="text-xs text-muted-foreground">{t('analytics.views')}</p>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div></CardContent></Card>
 
           {/* Top Downloads */}
-          <Card padding="md" className="mt-6">
-            <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">{t('analytics.topDownloadsByGallery')}</h2>
-            <div className="space-y-3">
-              {analytics?.downloads.topGalleries.map((gallery, index) => (
-                <div key={index} className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">{gallery.name}</p>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="flex-1 bg-neutral-200 dark:bg-neutral-700 rounded-full h-2 max-w-[100px]">
-                      <div
-                        className="bg-purple-600 h-2 rounded-full"
-                        style={{
-                          width: `${(gallery.downloads / (analytics.downloads.topGalleries[0]?.downloads || 1)) * 100}%`
-                        }}
-                      />
-                    </div>
-                    <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 w-12 text-right">
-                      {gallery.downloads}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Card>
+          <Card className="mt-6"><CardContent><h2 className="text-lg font-semibold text-foreground mb-4">{t('analytics.topDownloadsByGallery')}</h2><div className="space-y-3">
+                                {analytics?.downloads.topGalleries.map((gallery, index) => (
+                                  <div key={index} className="flex items-center justify-between">
+                                    <div className="flex-1">
+                                      <p className="text-sm font-medium text-foreground">{gallery.name}</p>
+                                    </div>
+                                    <div className="flex items-center gap-4">
+                                      <div className="flex-1 bg-muted rounded-full h-2 max-w-[100px]">
+                                        <div
+                                          className="bg-purple-600 h-2 rounded-full"
+                                          style={{
+                                            width: `${(gallery.downloads / (analytics.downloads.topGalleries[0]?.downloads || 1)) * 100}%`
+                                          }}
+                                        />
+                                      </div>
+                                      <p className="text-sm font-semibold text-foreground w-12 text-right">
+                                        {gallery.downloads}
+                                      </p>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div></CardContent></Card>
         </div>
 
         {/* Right Column */}
         <div className="space-y-6">
           {/* Device Breakdown */}
-          <Card padding="md">
-            <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">{t('analytics.deviceBreakdown')}</h2>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Monitor className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
-                  <span className="text-sm text-neutral-700 dark:text-neutral-300">{t('analytics.desktop')}</span>
-                </div>
-                <span className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">{analytics?.devices.desktop}%</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Smartphone className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
-                  <span className="text-sm text-neutral-700 dark:text-neutral-300">{t('analytics.mobile')}</span>
-                </div>
-                <span className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">{analytics?.devices.mobile}%</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Tablet className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
-                  <span className="text-sm text-neutral-700 dark:text-neutral-300">{t('analytics.tablet')}</span>
-                </div>
-                <span className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">{analytics?.devices.tablet}%</span>
-              </div>
-            </div>
-          </Card>
+          <Card><CardContent><h2 className="text-lg font-semibold text-foreground mb-4">{t('analytics.deviceBreakdown')}</h2><div className="space-y-4">
+                                <div className="flex items-center justify-between">
+                                  <div className="flex items-center gap-3">
+                                    <Monitor className="w-5 h-5 text-muted-foreground" />
+                                    <span className="text-sm text-foreground">{t('analytics.desktop')}</span>
+                                  </div>
+                                  <span className="text-sm font-semibold text-foreground">{analytics?.devices.desktop}%</span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                  <div className="flex items-center gap-3">
+                                    <Smartphone className="w-5 h-5 text-muted-foreground" />
+                                    <span className="text-sm text-foreground">{t('analytics.mobile')}</span>
+                                  </div>
+                                  <span className="text-sm font-semibold text-foreground">{analytics?.devices.mobile}%</span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                  <div className="flex items-center gap-3">
+                                    <Tablet className="w-5 h-5 text-muted-foreground" />
+                                    <span className="text-sm text-foreground">{t('analytics.tablet')}</span>
+                                  </div>
+                                  <span className="text-sm font-semibold text-foreground">{analytics?.devices.tablet}%</span>
+                                </div>
+                              </div></CardContent></Card>
 
           {/* Storage Information */}
           {dashboardStats && (() => {
@@ -477,7 +453,7 @@ export const AnalyticsPage: React.FC = () => {
               ? 'bg-red-600'
               : (usagePercent != null && usagePercent >= 90)
                 ? 'bg-amber-500'
-                : 'bg-accent-dark';
+                : 'bg-primary';
             const limitDescriptor = storageInfo
               ? storageInfo.soft_limit_configured
                 ? t('admin.storageSoftLimitConfigured', { limit: limitDisplay })
@@ -485,53 +461,50 @@ export const AnalyticsPage: React.FC = () => {
               : t('admin.storageSoftLimitRecommended', { limit: limitDisplay });
 
             return (
-              <Card padding="md">
-                <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">{t('analytics.storageUsage')}</h2>
-                <div className="space-y-4">
-                  <div>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span className="text-neutral-600 dark:text-neutral-400">{t('analytics.used')}</span>
-                      <span className="font-medium text-neutral-900 dark:text-neutral-100">
-                        {measured == null
-                          ? t('analytics.storageUnavailable', 'unavailable')
-                          : `${adminService.formatBytes(measured)}${dashboardStats.storagePartial ? '+' : ''}`}
-                      </span>
-                    </div>
-                    <div className="w-full bg-neutral-200 dark:bg-neutral-700 rounded-full h-2">
-                      <div
-                        className={`${progressColor} h-2 rounded-full transition-all`}
-                        style={{ width: `${usageWidth}%` }}
-                      />
-                    </div>
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-                      {usagePercent == null
-                        ? t('analytics.storageNoMeasurement', 'no measurement available')
-                        : `${usagePercent}% ${t('analytics.of')} ${limitDisplay}`}
-                    </p>
-                    <p className={`text-xs mt-1 ${overSoftLimit ? 'text-red-600 dark:text-red-400 font-semibold' : 'text-red-500 dark:text-red-400 font-medium'}`}>
-                      {limitDescriptor}
-                    </p>
-                  </div>
-                  <div className="pt-2 border-t border-neutral-200 dark:border-neutral-700">
-                    {/* The catalogued size of the originals, shown separately
-                        rather than as "used" (#1164). On a reference-mode
-                        install this is large and none of it is on this disk,
-                        which is the distinction the old single figure hid. */}
-                    <div className="flex justify-between text-sm">
-                      <span className="text-neutral-600 dark:text-neutral-400">{t('analytics.catalogedMedia', 'Catalogued media')}</span>
-                      <span className="font-medium text-neutral-900 dark:text-neutral-100">{adminService.formatBytes(dashboardStats.catalogedBytes)}</span>
-                    </div>
-                    <div className="flex justify-between text-sm mt-2">
-                      <span className="text-neutral-600 dark:text-neutral-400">{t('analytics.totalPhotos')}</span>
-                      <span className="font-medium text-neutral-900 dark:text-neutral-100">{dashboardStats.totalPhotos.toLocaleString()}</span>
-                    </div>
-                    <div className="flex justify-between text-sm mt-2">
-                      <span className="text-neutral-600 dark:text-neutral-400">{t('analytics.activeEvents')}</span>
-                      <span className="font-medium text-neutral-900 dark:text-neutral-100">{dashboardStats.activeEvents}</span>
-                    </div>
-                  </div>
-                </div>
-              </Card>
+              <Card><CardContent><h2 className="text-lg font-semibold text-foreground mb-4">{t('analytics.storageUsage')}</h2><div className="space-y-4">
+                                  <div>
+                                    <div className="flex justify-between text-sm mb-1">
+                                      <span className="text-muted-foreground">{t('analytics.used')}</span>
+                                      <span className="font-medium text-foreground">
+                                        {measured == null
+                                          ? t('analytics.storageUnavailable', 'unavailable')
+                                          : `${adminService.formatBytes(measured)}${dashboardStats.storagePartial ? '+' : ''}`}
+                                      </span>
+                                    </div>
+                                    <div className="w-full bg-muted rounded-full h-2">
+                                      <div
+                                        className={`${progressColor} h-2 rounded-full transition-all`}
+                                        style={{ width: `${usageWidth}%` }}
+                                      />
+                                    </div>
+                                    <p className="text-xs text-muted-foreground mt-1">
+                                      {usagePercent == null
+                                        ? t('analytics.storageNoMeasurement', 'no measurement available')
+                                        : `${usagePercent}% ${t('analytics.of')} ${limitDisplay}`}
+                                    </p>
+                                    <p className={`text-xs mt-1 ${overSoftLimit ? 'text-red-600 dark:text-red-400 font-semibold' : 'text-red-500 dark:text-red-400 font-medium'}`}>
+                                      {limitDescriptor}
+                                    </p>
+                                  </div>
+                                  <div className="pt-2 border-t border-border">
+                                    {/* The catalogued size of the originals, shown separately
+                                        rather than as "used" (#1164). On a reference-mode
+                                        install this is large and none of it is on this disk,
+                                        which is the distinction the old single figure hid. */}
+                                    <div className="flex justify-between text-sm">
+                                      <span className="text-muted-foreground">{t('analytics.catalogedMedia', 'Catalogued media')}</span>
+                                      <span className="font-medium text-foreground">{adminService.formatBytes(dashboardStats.catalogedBytes)}</span>
+                                    </div>
+                                    <div className="flex justify-between text-sm mt-2">
+                                      <span className="text-muted-foreground">{t('analytics.totalPhotos')}</span>
+                                      <span className="font-medium text-foreground">{dashboardStats.totalPhotos.toLocaleString()}</span>
+                                    </div>
+                                    <div className="flex justify-between text-sm mt-2">
+                                      <span className="text-muted-foreground">{t('analytics.activeEvents')}</span>
+                                      <span className="font-medium text-foreground">{dashboardStats.activeEvents}</span>
+                                    </div>
+                                  </div>
+                                </div></CardContent></Card>
             );
           })()}
         </div>
@@ -539,17 +512,15 @@ export const AnalyticsPage: React.FC = () => {
 
       {/* Configuration Notice */}
       {umamiConfig.enabled === false && (
-        <Card padding="md" className="mt-6 bg-amber-50 dark:bg-amber-900/30 border-amber-200 dark:border-amber-800">
-          <div className="flex items-start gap-3">
-            <Activity className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0" />
-            <div>
-              <p className="text-sm font-medium text-amber-900 dark:text-amber-200">{t('analytics.notConfigured')}</p>
-              <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
-                {t('analytics.configureInstructions')}
-              </p>
-            </div>
-          </div>
-        </Card>
+        <Card className="mt-6 bg-amber-50 dark:bg-amber-900/30 border-amber-200 dark:border-amber-800"><CardContent><div className="flex items-start gap-3">
+                          <Activity className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0" />
+                          <div>
+                            <p className="text-sm font-medium text-amber-900 dark:text-amber-200">{t('analytics.notConfigured')}</p>
+                            <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
+                              {t('analytics.configureInstructions')}
+                            </p>
+                          </div>
+                        </div></CardContent></Card>
       )}
     </div>
   );

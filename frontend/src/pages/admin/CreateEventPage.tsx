@@ -10,12 +10,11 @@ import {
   Eye,
   EyeOff,
   Image,
-  Key
-} from 'lucide-react';
+  Key, Loader2 } from 'lucide-react';
 import { addDays } from 'date-fns';
 import { toast } from 'react-toastify';
 
-import { Button, Input, Card, PasswordGenerator, LocalizedDateInput, TimeField } from '../../components/common';
+import { PasswordGenerator, LocalizedDateInput, TimeField } from '../../components/common';
 import { ThemeCustomizerEnhanced, GalleryPreview, WelcomeMessageEditor, FeedbackSettings } from '../../components/admin';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { eventsService } from '../../services/events.service';
@@ -30,6 +29,10 @@ import { useAdminAuth } from '../../contexts/AdminAuthContext';
 import { useTranslation } from 'react-i18next';
 import { ThemeConfig, GALLERY_THEME_PRESETS } from '../../types/theme.types';
 import { Code } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface FormData {
   event_type: string;
@@ -93,6 +96,7 @@ const FALLBACK_EVENT_TYPES = [
 ];
 
 export const CreateEventPage: React.FC = () => {
+    const __fieldId = React.useId();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { format } = useLocalizedDate();
@@ -576,597 +580,558 @@ export const CreateEventPage: React.FC = () => {
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Button
-            variant="ghost"
-            size="sm"
-            leftIcon={<ArrowLeft className="w-4 h-4" />}
-            onClick={() => navigate('/admin/events')}
-          >
-            {t('common.back')}
-          </Button>
-          <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{t('events.create')}</h1>
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => navigate('/admin/events')}
+                            >
+                              <ArrowLeft className="w-4 h-4" />{t('common.back')}</Button>
+          <h1 className="text-2xl font-bold text-foreground">{t('events.create')}</h1>
         </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Event Details */}
-        <Card>
-          <div className="p-6 space-y-6">
-            <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
-              <Calendar className="w-5 h-5" />
-              {t('events.eventDetails')}
-            </h2>
+        <Card><CardContent><div className="p-6 space-y-6">
+                          <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                            <Calendar className="w-5 h-5" />
+                            {t('events.eventDetails')}
+                          </h2>
 
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                {t('events.eventType')}
-              </label>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {availableEventTypes.map((type) => (
-                  <button
-                    key={type.value}
-                    type="button"
-                    onClick={() => setFormData({ ...formData, event_type: type.value })}
-                    className={`p-4 rounded-lg border-2 transition-all ${
-                      formData.event_type === type.value
-                        ? 'tile-selected'
-                        : 'border-neutral-200 dark:border-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600'
-                    }`}
-                  >
-                    <div className="text-2xl mb-1">{type.emoji}</div>
-                    <div className="text-sm font-medium text-neutral-900 dark:text-neutral-100">{type.name}</div>
-                  </button>
-                ))}
-              </div>
-            </div>
+                          <div>
+                            <label className="block text-sm font-medium text-foreground mb-2">
+                              {t('events.eventType')}
+                            </label>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                              {availableEventTypes.map((type) => (
+                                <button
+                                  key={type.value}
+                                  type="button"
+                                  onClick={() => setFormData({ ...formData, event_type: type.value })}
+                                  className={`p-4 rounded-lg border-2 transition-all ${
+                                    formData.event_type === type.value
+                                      ? 'tile-selected'
+                                      : 'border-border'
+                                  }`}
+                                >
+                                  <div className="text-2xl mb-1">{type.emoji}</div>
+                                  <div className="text-sm font-medium text-foreground">{type.name}</div>
+                                </button>
+                              ))}
+                            </div>
+                          </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Input
-                label={t('events.eventName')}
-                placeholder={t('events.eventNamePlaceholder')}
-                value={formData.event_name}
-                onChange={handleInputChange('event_name')}
-                error={errors.event_name}
-                leftIcon={<Calendar className="w-5 h-5" />}
-              />
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('events.eventName')}</span><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Calendar className="w-5 h-5" />}</div><Input
+                                                    placeholder={t('events.eventNamePlaceholder')}
+                                                    value={formData.event_name}
+                                                    onChange={handleInputChange('event_name')} className="pl-10" aria-invalid={!!(errors.event_name)} aria-describedby={(errors.event_name) ? `${__fieldId}-0-error` : undefined}
+                                                  /></div>{(errors.event_name) && <p id={`${__fieldId}-0-error`} className="mt-1.5 text-sm text-destructive">{errors.event_name}</p>}</Label></div>
 
-              <LocalizedDateInput
-                label={requireEventDate ? t('events.eventDate') : `${t('events.eventDate')} (${t('common.optional')})`}
-                value={formData.event_date}
-                onChange={(iso) => setFormData(prev => ({ ...prev, event_date: iso }))}
-                error={errors.event_date}
-              />
-            </div>
+                            <LocalizedDateInput
+                              label={requireEventDate ? t('events.eventDate') : `${t('events.eventDate')} (${t('common.optional')})`}
+                              value={formData.event_date}
+                              onChange={(iso) => setFormData(prev => ({ ...prev, event_date: iso }))}
+                              error={errors.event_date}
+                            />
+                          </div>
 
-            {/* Migration 137 — calendar time fields. Full-day events stay
-                full-day; admins who unchecks "Full day" get two HH:MM
-                inputs that flow into the events row's event_time_start /
-                event_time_end columns and drive how the admin calendar
-                renders the event (block vs all-day banner). 15-minute
-                snap matches the calendar's drag-create grid. */}
-            <div className="mt-3 space-y-2">
-              <label className="inline-flex items-center gap-2 text-sm text-neutral-800 dark:text-neutral-200">
-                <input
-                  type="checkbox"
-                  checked={formData.is_full_day}
-                  onChange={(e) => setFormData({ ...formData, is_full_day: e.target.checked })}
-                  className="rounded border-neutral-300 dark:border-neutral-600"
-                />
-                {t('events.fullDay', 'Full day')}
-              </label>
-              {!formData.is_full_day && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <TimeField
-                    label={t('events.eventTimeStart', 'Start time') as string}
-                    value={formData.event_time_start}
-                    onChange={(v) => setFormData(prev => ({ ...prev, event_time_start: v }))}
-                  />
-                  <TimeField
-                    label={t('events.eventTimeEnd', 'End time') as string}
-                    value={formData.event_time_end}
-                    onChange={(v) => setFormData(prev => ({ ...prev, event_time_end: v }))}
-                  />
-                </div>
-              )}
-            </div>
+                          {/* Migration 137 — calendar time fields. Full-day events stay
+                              full-day; admins who unchecks "Full day" get two HH:MM
+                              inputs that flow into the events row's event_time_start /
+                              event_time_end columns and drive how the admin calendar
+                              renders the event (block vs all-day banner). 15-minute
+                              snap matches the calendar's drag-create grid. */}
+                          <div className="mt-3 space-y-2">
+                            <label className="inline-flex items-center gap-2 text-sm text-foreground">
+                              <input
+                                type="checkbox"
+                                checked={formData.is_full_day}
+                                onChange={(e) => setFormData({ ...formData, is_full_day: e.target.checked })}
+                                className="rounded border-border"
+                              />
+                              {t('events.fullDay', 'Full day')}
+                            </label>
+                            {!formData.is_full_day && (
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <TimeField
+                                  label={t('events.eventTimeStart', 'Start time') as string}
+                                  value={formData.event_time_start}
+                                  onChange={(v) => setFormData(prev => ({ ...prev, event_time_start: v }))}
+                                />
+                                <TimeField
+                                  label={t('events.eventTimeEnd', 'End time') as string}
+                                  value={formData.event_time_end}
+                                  onChange={(v) => setFormData(prev => ({ ...prev, event_time_end: v }))}
+                                />
+                              </div>
+                            )}
+                          </div>
 
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                {t('events.welcomeMessage')}
-              </label>
-              <WelcomeMessageEditor
-                value={formData.welcome_message}
-                onChange={(value) => setFormData(prev => ({ ...prev, welcome_message: value }))}
-                placeholder={t('events.welcomeMessagePlaceholder')}
-                rows={4}
-              />
-            </div>
-          </div>
-        </Card>
+                          <div>
+                            <label className="block text-sm font-medium text-foreground mb-2">
+                              {t('events.welcomeMessage')}
+                            </label>
+                            <WelcomeMessageEditor
+                              value={formData.welcome_message}
+                              onChange={(value) => setFormData(prev => ({ ...prev, welcome_message: value }))}
+                              placeholder={t('events.welcomeMessagePlaceholder')}
+                              rows={4}
+                            />
+                          </div>
+                        </div></CardContent></Card>
 
         {/* Theme Selection */}
-        <Card>
-          <div className="p-6 space-y-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
-                <Palette className="w-5 h-5" />
-                {t('events.themeAndStyle')}
-              </h2>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => setShowThemeCustomizer(!showThemeCustomizer)}
-                leftIcon={showThemeCustomizer ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-              >
-                {showThemeCustomizer ? t('common.hide') : t('common.customize')}
-              </Button>
-            </div>
+        <Card><CardContent><div className="p-6 space-y-6">
+                          <div className="flex items-center justify-between">
+                            <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                              <Palette className="w-5 h-5" />
+                              {t('events.themeAndStyle')}
+                            </h2>
+                            <Button
+                                                        type="button"
+                                                        variant="outline"
+                                                        size="sm"
+                                                        onClick={() => setShowThemeCustomizer(!showThemeCustomizer)}
+                                                      >
+                                                        {showThemeCustomizer ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}{showThemeCustomizer ? t('common.hide') : t('common.customize')}</Button>
+                          </div>
 
-            {/* Quick Theme Preview */}
-            {!showThemeCustomizer && (
-              <div className="p-4 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-semibold text-neutral-900 dark:text-neutral-100" style={{ fontFamily: formData.theme_config.fontFamily }}>
-                    {GALLERY_THEME_PRESETS[formData.theme_preset]?.name || 'Custom Theme'}
-                  </h3>
-                  <div className="flex gap-2">
-                    <div 
-                      className="w-6 h-6 rounded-full border-2 border-white shadow-sm"
-                      style={{ backgroundColor: formData.theme_config.primaryColor }}
-                    />
-                    <div 
-                      className="w-6 h-6 rounded-full border-2 border-white shadow-sm"
-                      style={{ backgroundColor: formData.theme_config.accentColor }}
-                    />
-                  </div>
-                </div>
-                <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                  Gallery Layout: <span className="font-medium capitalize">{formData.theme_config.galleryLayout || 'grid'}</span>
-                </p>
-              </div>
-            )}
+                          {/* Quick Theme Preview */}
+                          {!showThemeCustomizer && (
+                            <div className="p-4 rounded-lg border border-border bg-muted">
+                              <div className="flex items-center justify-between mb-2">
+                                <h3 className="font-semibold text-foreground" style={{ fontFamily: formData.theme_config.fontFamily }}>
+                                  {GALLERY_THEME_PRESETS[formData.theme_preset]?.name || 'Custom Theme'}
+                                </h3>
+                                <div className="flex gap-2">
+                                  <div 
+                                    className="w-6 h-6 rounded-full border-2 border-white shadow-sm"
+                                    style={{ backgroundColor: formData.theme_config.primaryColor }}
+                                  />
+                                  <div 
+                                    className="w-6 h-6 rounded-full border-2 border-white shadow-sm"
+                                    style={{ backgroundColor: formData.theme_config.accentColor }}
+                                  />
+                                </div>
+                              </div>
+                              <p className="text-sm text-muted-foreground">
+                                Gallery Layout: <span className="font-medium capitalize">{formData.theme_config.galleryLayout || 'grid'}</span>
+                              </p>
+                            </div>
+                          )}
 
-            {/* Theme Customizer */}
-            {showThemeCustomizer && (
-              <div className="space-y-6">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  {/* Theme Customizer */}
-                  <ThemeCustomizerEnhanced
-                    value={formData.theme_config}
-                    onChange={handleThemeChange}
-                    presetName={formData.theme_preset}
-                    onPresetChange={handlePresetChange}
-                    forceColorMode={publicSettings?.branding_force_color_mode ?? null}
-                    showGalleryLayouts={true}
-                    hideActions={true}
-                    onSyncFromBranding={() => {
-                      // Pull the 8 colour tokens (+ legacy primary alias) from
-                      // the global Branding theme into the current event theme.
-                      // Layout / header / typography are kept untouched so an
-                      // admin who has already arranged structure can refresh
-                      // just the palette.
-                      const branding = settings?.theme_config as ThemeConfig | undefined;
-                      if (!branding) {
-                        toast.error(t('toast.brandingThemeMissing', 'No branding theme has been saved yet.'));
-                        return;
-                      }
-                      setFormData(prev => ({
-                        ...prev,
-                        theme_preset: 'custom',
-                        theme_config: {
-                          ...prev.theme_config,
-                          primaryColor: branding.primaryColor,
-                          accentColor: branding.accentColor,
-                          accentDarkColor: branding.accentDarkColor,
-                          backgroundColor: branding.backgroundColor,
-                          surfaceColor: branding.surfaceColor,
-                          elevatedColor: branding.elevatedColor,
-                          surfaceBorderColor: branding.surfaceBorderColor,
-                          textColor: branding.textColor,
-                          mutedTextColor: branding.mutedTextColor,
-                          colorMode: branding.colorMode ?? prev.theme_config.colorMode,
-                        },
-                      }));
-                      toast.success(t('toast.brandingPaletteSynced', 'Palette synced from Branding.'));
-                    }}
-                  />
-                  
-                  {/* Gallery Preview */}
-                  <div className="lg:sticky lg:top-4 lg:h-fit">
-                    <GalleryPreview 
-                      theme={formData.theme_config} 
-                      className="shadow-lg" 
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
+                          {/* Theme Customizer */}
+                          {showThemeCustomizer && (
+                            <div className="space-y-6">
+                              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                {/* Theme Customizer */}
+                                <ThemeCustomizerEnhanced
+                                  value={formData.theme_config}
+                                  onChange={handleThemeChange}
+                                  presetName={formData.theme_preset}
+                                  onPresetChange={handlePresetChange}
+                                  forceColorMode={publicSettings?.branding_force_color_mode ?? null}
+                                  showGalleryLayouts={true}
+                                  hideActions={true}
+                                  onSyncFromBranding={() => {
+                                    // Pull the 8 colour tokens (+ legacy primary alias) from
+                                    // the global Branding theme into the current event theme.
+                                    // Layout / header / typography are kept untouched so an
+                                    // admin who has already arranged structure can refresh
+                                    // just the palette.
+                                    const branding = settings?.theme_config as ThemeConfig | undefined;
+                                    if (!branding) {
+                                      toast.error(t('toast.brandingThemeMissing', 'No branding theme has been saved yet.'));
+                                      return;
+                                    }
+                                    setFormData(prev => ({
+                                      ...prev,
+                                      theme_preset: 'custom',
+                                      theme_config: {
+                                        ...prev.theme_config,
+                                        primaryColor: branding.primaryColor,
+                                        accentColor: branding.accentColor,
+                                        accentDarkColor: branding.accentDarkColor,
+                                        backgroundColor: branding.backgroundColor,
+                                        surfaceColor: branding.surfaceColor,
+                                        elevatedColor: branding.elevatedColor,
+                                        surfaceBorderColor: branding.surfaceBorderColor,
+                                        textColor: branding.textColor,
+                                        mutedTextColor: branding.mutedTextColor,
+                                        colorMode: branding.colorMode ?? prev.theme_config.colorMode,
+                                      },
+                                    }));
+                                    toast.success(t('toast.brandingPaletteSynced', 'Palette synced from Branding.'));
+                                  }}
+                                />
+                                
+                                {/* Gallery Preview */}
+                                <div className="lg:sticky lg:top-4 lg:h-fit">
+                                  <GalleryPreview 
+                                    theme={formData.theme_config} 
+                                    className="shadow-lg" 
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          )}
 
-            {/* Custom CSS Template Selection */}
-            {cssTemplates && cssTemplates.length > 0 && (
-              <div className="pt-6 border-t border-neutral-200 dark:border-neutral-700">
-                <h3 className="text-md font-semibold text-neutral-900 dark:text-neutral-100 mb-3 flex items-center gap-2">
-                  <Code className="w-4 h-4" />
-                  {t('events.customCssTemplate', 'Custom CSS Template')}
-                </h3>
-                <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
-                  {t('events.customCssTemplateDesc', 'Apply a custom CSS template to style the gallery with unique visual effects.')}
-                </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {/* No template option */}
-                  <button
-                    type="button"
-                    onClick={() => setFormData({ ...formData, css_template_id: null })}
-                    className={`p-4 rounded-lg border-2 transition-all text-left ${
-                      formData.css_template_id === null
-                        ? 'tile-selected'
-                        : 'border-neutral-200 dark:border-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600'
-                    }`}
-                  >
-                    <div className="font-medium text-sm text-neutral-900 dark:text-neutral-100">{t('events.noTemplate', 'No Template')}</div>
-                    <div className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-                      {t('events.useThemeOnly', 'Use theme preset only')}
-                    </div>
-                  </button>
+                          {/* Custom CSS Template Selection */}
+                          {cssTemplates && cssTemplates.length > 0 && (
+                            <div className="pt-6 border-t border-border">
+                              <h3 className="text-md font-semibold text-foreground mb-3 flex items-center gap-2">
+                                <Code className="w-4 h-4" />
+                                {t('events.customCssTemplate', 'Custom CSS Template')}
+                              </h3>
+                              <p className="text-sm text-muted-foreground mb-4">
+                                {t('events.customCssTemplateDesc', 'Apply a custom CSS template to style the gallery with unique visual effects.')}
+                              </p>
+                              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                                {/* No template option */}
+                                <button
+                                  type="button"
+                                  onClick={() => setFormData({ ...formData, css_template_id: null })}
+                                  className={`p-4 rounded-lg border-2 transition-all text-left ${
+                                    formData.css_template_id === null
+                                      ? 'tile-selected'
+                                      : 'border-border'
+                                  }`}
+                                >
+                                  <div className="font-medium text-sm text-foreground">{t('events.noTemplate', 'No Template')}</div>
+                                  <div className="text-xs text-muted-foreground mt-1">
+                                    {t('events.useThemeOnly', 'Use theme preset only')}
+                                  </div>
+                                </button>
 
-                  {/* Available templates */}
-                  {cssTemplates.map(template => (
-                    <button
-                      key={template.id}
-                      type="button"
-                      onClick={() => setFormData({ ...formData, css_template_id: template.id })}
-                      className={`p-4 rounded-lg border-2 transition-all text-left ${
-                        formData.css_template_id === template.id
-                          ? 'tile-selected'
-                          : 'border-neutral-200 dark:border-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600'
-                      }`}
-                    >
-                      <div className="font-medium text-sm text-neutral-900 dark:text-neutral-100">{template.name}</div>
-                      <div className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-                        {t('events.customTemplate', 'Custom Template')} {template.slot_number}
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        </Card>
+                                {/* Available templates */}
+                                {cssTemplates.map(template => (
+                                  <button
+                                    key={template.id}
+                                    type="button"
+                                    onClick={() => setFormData({ ...formData, css_template_id: template.id })}
+                                    className={`p-4 rounded-lg border-2 transition-all text-left ${
+                                      formData.css_template_id === template.id
+                                        ? 'tile-selected'
+                                        : 'border-border'
+                                    }`}
+                                  >
+                                    <div className="font-medium text-sm text-foreground">{template.name}</div>
+                                    <div className="text-xs text-muted-foreground mt-1">
+                                      {t('events.customTemplate', 'Custom Template')} {template.slot_number}
+                                    </div>
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div></CardContent></Card>
 
         {/* Access & Security */}
-        <Card>
-          <div className="p-6 space-y-6">
-            <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
-              <Lock className="w-5 h-5" />
-              {t('events.accessAndSecurity')}
-            </h2>
+        <Card><CardContent><div className="p-6 space-y-6">
+                          <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                            <Lock className="w-5 h-5" />
+                            {t('events.accessAndSecurity')}
+                          </h2>
 
-            <div className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Input
-                  label={requireCustomerName ? t('events.hostName') : `${t('events.hostName')} (${t('common.optional')})`}
-                  placeholder={t('events.hostNamePlaceholder')}
-                  value={formData.customer_name}
-                  onChange={handleInputChange('customer_name')}
-                  error={errors.customer_name}
-                  leftIcon={<Calendar className="w-5 h-5" />}
-                />
+                          <div className="space-y-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="w-full"><Label className="block"><span className="mb-1.5 block">{requireCustomerName ? t('events.hostName') : `${t('events.hostName')} (${t('common.optional')})`}</span><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Calendar className="w-5 h-5" />}</div><Input
+                                                          placeholder={t('events.hostNamePlaceholder')}
+                                                          value={formData.customer_name}
+                                                          onChange={handleInputChange('customer_name')} className="pl-10" aria-invalid={!!(errors.customer_name)} aria-describedby={(errors.customer_name) ? `${__fieldId}-1-error` : undefined}
+                                                        /></div>{(errors.customer_name) && <p id={`${__fieldId}-1-error`} className="mt-1.5 text-sm text-destructive">{errors.customer_name}</p>}</Label></div>
 
-                <Input
-                  type="email"
-                  label={requireCustomerEmail ? t('events.hostEmail') : `${t('events.hostEmail')} (${t('common.optional')})`}
-                  placeholder={t('events.hostEmailPlaceholder')}
-                  value={formData.customer_email}
-                  onChange={handleInputChange('customer_email')}
-                  error={errors.customer_email}
-                  leftIcon={<Mail className="w-5 h-5" />}
-                />
-              </div>
+                              <div className="w-full"><Label className="block"><span className="mb-1.5 block">{requireCustomerEmail ? t('events.hostEmail') : `${t('events.hostEmail')} (${t('common.optional')})`}</span><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Mail className="w-5 h-5" />}</div><Input
+                                                          type="email"
+                                                          placeholder={t('events.hostEmailPlaceholder')}
+                                                          value={formData.customer_email}
+                                                          onChange={handleInputChange('customer_email')} className="pl-10" aria-invalid={!!(errors.customer_email)} aria-describedby={(errors.customer_email) ? `${__fieldId}-2-error` : undefined}
+                                                        /></div>{(errors.customer_email) && <p id={`${__fieldId}-2-error`} className="mt-1.5 text-sm text-destructive">{errors.customer_email}</p>}</Label></div>
+                            </div>
 
-              {phoneFieldEnabled && (
-                <Input
-                  type="tel"
-                  label={`${t('events.customerPhone', 'Customer Phone')} (${t('common.optional')})`}
-                  placeholder={t('events.customerPhonePlaceholder', '+1 555 555 1234')}
-                  value={formData.customer_phone}
-                  onChange={handleInputChange('customer_phone')}
-                />
-              )}
+                            {phoneFieldEnabled && (
+                              <div className="w-full"><Label className="block"><span className="mb-1.5 block">{`${t('events.customerPhone', 'Customer Phone')} (${t('common.optional')})`}</span><Input
+                                                          type="tel"
+                                                          placeholder={t('events.customerPhonePlaceholder', '+1 555 555 1234')}
+                                                          value={formData.customer_phone}
+                                                          onChange={handleInputChange('customer_phone')}
+                                                        /></Label></div>
+                            )}
 
-              <Input
-                type="email"
-                label={requireAdminEmail ? t('events.adminEmail') : `${t('events.adminEmail')} (${t('common.optional')})`}
-                placeholder={t('events.adminEmailPlaceholder')}
-                value={formData.admin_email}
-                onChange={handleInputChange('admin_email')}
-                error={errors.admin_email}
-                leftIcon={<Mail className="w-5 h-5" />}
-              />
-              {activeAdmins.length > 1 && (
-                <div className="flex items-center gap-2 -mt-1">
-                  <label htmlFor="admin-email-picker" className="text-xs text-neutral-600 dark:text-neutral-400 whitespace-nowrap">
-                    {t('events.adminEmailPickFromAdmins', 'Pick from admins:')}
-                  </label>
-                  <select
-                    id="admin-email-picker"
-                    value={activeAdmins.some(a => a.email === formData.admin_email) ? formData.admin_email : ''}
-                    onChange={(e) => {
-                      const email = e.target.value;
-                      if (email) {
-                        setFormData(prev => ({ ...prev, admin_email: email }));
-                      }
-                    }}
-                    className="text-xs px-2 py-1 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded focus:ring-2 focus:ring-primary-500 focus:border-accent-dark"
-                  >
-                    <option value="">{t('events.adminEmailCustom', 'Custom email')}</option>
-                    {activeAdmins.map(a => (
-                      <option key={a.id} value={a.email}>
-                        {a.username} ({a.email})
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
-            </div>
+                            <div className="w-full"><Label className="block"><span className="mb-1.5 block">{requireAdminEmail ? t('events.adminEmail') : `${t('events.adminEmail')} (${t('common.optional')})`}</span><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Mail className="w-5 h-5" />}</div><Input
+                                                    type="email"
+                                                    placeholder={t('events.adminEmailPlaceholder')}
+                                                    value={formData.admin_email}
+                                                    onChange={handleInputChange('admin_email')} className="pl-10" aria-invalid={!!(errors.admin_email)} aria-describedby={(errors.admin_email) ? `${__fieldId}-3-error` : undefined}
+                                                  /></div>{(errors.admin_email) && <p id={`${__fieldId}-3-error`} className="mt-1.5 text-sm text-destructive">{errors.admin_email}</p>}</Label></div>
+                            {activeAdmins.length > 1 && (
+                              <div className="flex items-center gap-2 -mt-1">
+                                <label htmlFor="admin-email-picker" className="text-xs text-muted-foreground whitespace-nowrap">
+                                  {t('events.adminEmailPickFromAdmins', 'Pick from admins:')}
+                                </label>
+                                <select
+                                  id="admin-email-picker"
+                                  value={activeAdmins.some(a => a.email === formData.admin_email) ? formData.admin_email : ''}
+                                  onChange={(e) => {
+                                    const email = e.target.value;
+                                    if (email) {
+                                      setFormData(prev => ({ ...prev, admin_email: email }));
+                                    }
+                                  }}
+                                  className="text-xs px-2 py-1 border border-border bg-card text-foreground rounded focus:ring-2 focus:ring-primary-500 focus:border-accent-dark"
+                                >
+                                  <option value="">{t('events.adminEmailCustom', 'Custom email')}</option>
+                                  {activeAdmins.map(a => (
+                                    <option key={a.id} value={a.email}>
+                                      {a.username} ({a.email})
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                            )}
+                          </div>
 
-            <div className="space-y-3">
-              <label className="flex items-start gap-2">
-                <input
-                  type="checkbox"
-                  className="mt-1 w-4 h-4 text-accent border-neutral-300 dark:border-neutral-600 rounded focus:ring-primary-500"
-                  checked={formData.require_password}
-                  onChange={(e) => {
-                    const checked = e.target.checked;
-                    setFormData(prev => ({
-                      ...prev,
-                      require_password: checked,
-                      password: checked ? prev.password : '',
-                      confirm_password: checked ? prev.confirm_password : '',
-                    }));
-                    if (!checked) {
-                      setErrors(prev => ({ ...prev, password: undefined, confirm_password: undefined }));
-                    }
-                  }}
-                />
-                <div>
-                  <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                    {t('events.requirePasswordToggle')}
-                  </span>
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-                    {t('events.requirePasswordToggleHelp', 'Disable this if you want to share the gallery without a password. Anyone with the link will be able to view the photos.')}
-                  </p>
-                </div>
-              </label>
+                          <div className="space-y-3">
+                            <label className="flex items-start gap-2">
+                              <input
+                                type="checkbox"
+                                className="mt-1 w-4 h-4 text-accent border-border rounded focus:ring-primary-500"
+                                checked={formData.require_password}
+                                onChange={(e) => {
+                                  const checked = e.target.checked;
+                                  setFormData(prev => ({
+                                    ...prev,
+                                    require_password: checked,
+                                    password: checked ? prev.password : '',
+                                    confirm_password: checked ? prev.confirm_password : '',
+                                  }));
+                                  if (!checked) {
+                                    setErrors(prev => ({ ...prev, password: undefined, confirm_password: undefined }));
+                                  }
+                                }}
+                              />
+                              <div>
+                                <span className="text-sm font-medium text-foreground">
+                                  {t('events.requirePasswordToggle')}
+                                </span>
+                                <p className="text-xs text-muted-foreground mt-1">
+                                  {t('events.requirePasswordToggleHelp', 'Disable this if you want to share the gallery without a password. Anyone with the link will be able to view the photos.')}
+                                </p>
+                              </div>
+                            </label>
 
-              {!formData.require_password && (
-                <div className="rounded-md border border-orange-200 dark:border-orange-800 bg-orange-50 dark:bg-orange-900/30 p-3 text-xs text-orange-800 dark:text-orange-300">
-                  {t('events.publicGalleryWarning', 'Public galleries are accessible to anyone with the link. Consider enabling download watermarks and monitoring activity.')} 
-                </div>
-              )}
-            </div>
+                            {!formData.require_password && (
+                              <div className="rounded-md border border-orange-200 dark:border-orange-800 bg-orange-50 dark:bg-orange-900/30 p-3 text-xs text-orange-800 dark:text-orange-300">
+                                {t('events.publicGalleryWarning', 'Public galleries are accessible to anyone with the link. Consider enabling download watermarks and monitoring activity.')} 
+                              </div>
+                            )}
+                          </div>
 
-            {formData.require_password && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Input
-                    type={showPassword ? 'text' : 'password'}
-                    label={t('events.galleryPassword')}
-                    placeholder={t('events.passwordPlaceholder')}
-                    value={formData.password}
-                    onChange={handleInputChange('password')}
-                    error={errors.password}
-                    helperText={t('events.passwordHelperText', 'You can use dates like "04.07.2025" or any text with 6+ characters')}
-                    leftIcon={<Lock className="w-5 h-5" />}
-                    rightIcon={
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="p-1"
-                      >
-                        {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                      </button>
-                    }
-                  />
-                  
-                  {/* Password Generator */}
-                  <div className="mt-2">
-                    <PasswordGenerator
-                      eventName={formData.event_name}
-                      eventDate={formData.event_date}
-                      eventType={formData.event_type}
-                      onPasswordGenerated={handlePasswordGenerated}
-                      passwordComplexity="moderate"
-                      className="w-full"
-                    />
-                  </div>
-                </div>
+                          {formData.require_password && (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div>
+                                <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('events.galleryPassword')}</span><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5" />}</div><Input
+                                                                type={showPassword ? 'text' : 'password'}
+                                                                placeholder={t('events.passwordPlaceholder')}
+                                                                value={formData.password}
+                                                                onChange={handleInputChange('password')} className="pl-10 pr-10" aria-invalid={!!(errors.password)} aria-describedby={(errors.password) ? `${__fieldId}-4-error` : undefined}
+                                                              /><div className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground">{<button
+                                                                    type="button"
+                                                                    onClick={() => setShowPassword(!showPassword)}
+                                                                    className="p-1"
+                                                                  >
+                                                                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                                                  </button>}</div></div>{(errors.password) && <p id={`${__fieldId}-4-error`} className="mt-1.5 text-sm text-destructive">{errors.password}</p>}{(t('events.passwordHelperText', 'You can use dates like "04.07.2025" or any text with 6+ characters')) && <p className="mt-1.5 text-sm text-muted-foreground">{t('events.passwordHelperText', 'You can use dates like "04.07.2025" or any text with 6+ characters')}</p>}</Label></div>
+                                
+                                {/* Password Generator */}
+                                <div className="mt-2">
+                                  <PasswordGenerator
+                                    eventName={formData.event_name}
+                                    eventDate={formData.event_date}
+                                    eventType={formData.event_type}
+                                    onPasswordGenerated={handlePasswordGenerated}
+                                    passwordComplexity="moderate"
+                                    className="w-full"
+                                  />
+                                </div>
+                              </div>
 
-                <Input
-                  type={showPassword ? 'text' : 'password'}
-                  label={t('events.confirmPassword')}
-                  placeholder={t('events.confirmPasswordPlaceholder')}
-                  value={formData.confirm_password}
-                  onChange={handleInputChange('confirm_password')}
-                  error={errors.confirm_password}
-                  leftIcon={<Lock className="w-5 h-5" />}
-                />
-              </div>
-            )}
+                              <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('events.confirmPassword')}</span><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5" />}</div><Input
+                                                          type={showPassword ? 'text' : 'password'}
+                                                          placeholder={t('events.confirmPasswordPlaceholder')}
+                                                          value={formData.confirm_password}
+                                                          onChange={handleInputChange('confirm_password')} className="pl-10" aria-invalid={!!(errors.confirm_password)} aria-describedby={(errors.confirm_password) ? `${__fieldId}-5-error` : undefined}
+                                                        /></div>{(errors.confirm_password) && <p id={`${__fieldId}-5-error`} className="mt-1.5 text-sm text-destructive">{errors.confirm_password}</p>}</Label></div>
+                            </div>
+                          )}
 
-            {requireExpiration ? (
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                  {t('events.galleryExpiration')}
-                </label>
-                <div className="flex items-center gap-2">
-                  <div className="w-32">
-                    <Input
-                      type="number"
-                      value={formData.expires_in_days}
-                      onChange={handleInputChange('expires_in_days')}
-                      error={errors.expires_in_days}
-                      min={1}
-                      max={365}
-                      leftIcon={<Clock className="w-5 h-5" />}
-                    />
-                  </div>
-                  <span className="text-sm text-neutral-600 dark:text-neutral-400">{t('events.daysAfterEvent')}</span>
-                </div>
-                {formData.event_date && (
-                  <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
-                    {/* Coerce to Number — handleInputChange stores the
-                        <input type="number"> value as a string, and date-fns
-                        addDays does `_date.setDate(_date.getDate() + amount)`
-                        which string-concatenates (25 + "120" = "25120") and
-                        ends up ~68 years in the future. */}
-                    {t('events.expiresOn')}: {format(addDays(new Date(formData.event_date), Number(formData.expires_in_days)))}
-                  </p>
-                )}
-              </div>
-            ) : (
-              <div className="rounded-md border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/30 p-3">
-                <div className="flex items-center gap-2 text-blue-800 dark:text-blue-300">
-                  <Clock className="w-4 h-4" />
-                  <span className="text-sm font-medium">{t('events.noExpiration', 'No Expiration')}</span>
-                </div>
-                <p className="mt-1 text-xs text-blue-700 dark:text-blue-400">
-                  {t('events.noExpirationHelp', 'This gallery will remain active until manually archived.')}
-                </p>
-              </div>
-            )}
+                          {requireExpiration ? (
+                            <div>
+                              <label className="block text-sm font-medium text-foreground mb-2">
+                                {t('events.galleryExpiration')}
+                              </label>
+                              <div className="flex items-center gap-2">
+                                <div className="w-32">
+                                  <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Clock className="w-5 h-5" />}</div><Input
+                                                                      type="number"
+                                                                      value={formData.expires_in_days}
+                                                                      onChange={handleInputChange('expires_in_days')}
+                                                                      min={1}
+                                                                      max={365} className="pl-10" aria-invalid={!!(errors.expires_in_days)} aria-describedby={(errors.expires_in_days) ? `${__fieldId}-6-error` : undefined}
+                                                                    /></div>{(errors.expires_in_days) && <p id={`${__fieldId}-6-error`} className="mt-1.5 text-sm text-destructive">{errors.expires_in_days}</p>}</div>
+                                </div>
+                                <span className="text-sm text-muted-foreground">{t('events.daysAfterEvent')}</span>
+                              </div>
+                              {formData.event_date && (
+                                <p className="mt-2 text-sm text-muted-foreground">
+                                  {/* Coerce to Number — handleInputChange stores the
+                                      <input type="number"> value as a string, and date-fns
+                                      addDays does `_date.setDate(_date.getDate() + amount)`
+                                      which string-concatenates (25 + "120" = "25120") and
+                                      ends up ~68 years in the future. */}
+                                  {t('events.expiresOn')}: {format(addDays(new Date(formData.event_date), Number(formData.expires_in_days)))}
+                                </p>
+                              )}
+                            </div>
+                          ) : (
+                            <div className="rounded-md border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/30 p-3">
+                              <div className="flex items-center gap-2 text-blue-800 dark:text-blue-300">
+                                <Clock className="w-4 h-4" />
+                                <span className="text-sm font-medium">{t('events.noExpiration', 'No Expiration')}</span>
+                              </div>
+                              <p className="mt-1 text-xs text-blue-700 dark:text-blue-400">
+                                {t('events.noExpirationHelp', 'This gallery will remain active until manually archived.')}
+                              </p>
+                            </div>
+                          )}
 
-            {/* Photo Cap */}
-            <div className="pt-4 border-t border-neutral-200 dark:border-neutral-700">
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                {t('events.photoCap', 'Photo Limit')}
-              </label>
-              <div className="flex items-center gap-2">
-                <div className="w-32">
-                  {/* `max` is required, not cosmetic: without it Blink
-                      reports the spin button's range as unbounded and the
-                      a11y tree exposes aria-valuemax="0" (QA warning), and
-                      an out-of-range value only fails at INSERT time. The
-                      ceiling is the events.photo_cap column's own — a
-                      signed 32-bit integer (migration 074). */}
-                  <Input
-                    type="number"
-                    value={formData.photo_cap}
-                    onChange={(e) => setFormData({ ...formData, photo_cap: parseInt(e.target.value) || 0 })}
-                    min={0}
-                    max={2147483647}
-                    leftIcon={<Image className="w-5 h-5" />}
-                  />
-                </div>
-                <span className="text-sm text-neutral-600 dark:text-neutral-400">
-                  {t('events.photoCapHelp', 'Maximum number of photos allowed. 0 = unlimited')}
-                </span>
-              </div>
-            </div>
+                          {/* Photo Cap */}
+                          <div className="pt-4 border-t border-border">
+                            <label className="block text-sm font-medium text-foreground mb-2">
+                              {t('events.photoCap', 'Photo Limit')}
+                            </label>
+                            <div className="flex items-center gap-2">
+                              <div className="w-32">
+                                {/* `max` is required, not cosmetic: without it Blink
+                                    reports the spin button's range as unbounded and the
+                                    a11y tree exposes aria-valuemax="0" (QA warning), and
+                                    an out-of-range value only fails at INSERT time. The
+                                    ceiling is the events.photo_cap column's own — a
+                                    signed 32-bit integer (migration 074). */}
+                                <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Image className="w-5 h-5" />}</div><Input
+                                                                type="number"
+                                                                value={formData.photo_cap}
+                                                                onChange={(e) => setFormData({ ...formData, photo_cap: parseInt(e.target.value) || 0 })}
+                                                                min={0}
+                                                                max={2147483647} className="pl-10"
+                                                              /></div>
+                              </div>
+                              <span className="text-sm text-muted-foreground">
+                                {t('events.photoCapHelp', 'Maximum number of photos allowed. 0 = unlimited')}
+                              </span>
+                            </div>
+                          </div>
 
-            {/* Default Photo Sort */}
-            <div className="pt-4 border-t border-neutral-200 dark:border-neutral-700">
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                {t('photoSort.defaultSort', 'Default Photo Sort')}
-              </label>
-              <select
-                value={formData.default_photo_sort}
-                onChange={(e) => setFormData({ ...formData, default_photo_sort: e.target.value })}
-                className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-accent-dark"
-              >
-                <option value="upload_date_desc">{t('photoSort.uploadDateNewest', 'Upload Date (Newest First)')}</option>
-                <option value="upload_date_asc">{t('photoSort.uploadDateOldest', 'Upload Date (Oldest First)')}</option>
-                <option value="capture_date_desc">{t('photoSort.captureDateNewest', 'Date Taken (Newest First)')}</option>
-                <option value="capture_date_asc">{t('photoSort.captureDateOldest', 'Date Taken (Oldest First)')}</option>
-                <option value="filename_asc">{t('photoSort.filenameAZ', 'Filename (A-Z)')}</option>
-                <option value="filename_desc">{t('photoSort.filenameZA', 'Filename (Z-A)')}</option>
-              </select>
-            </div>
+                          {/* Default Photo Sort */}
+                          <div className="pt-4 border-t border-border">
+                            <label className="block text-sm font-medium text-foreground mb-2">
+                              {t('photoSort.defaultSort', 'Default Photo Sort')}
+                            </label>
+                            <select
+                              value={formData.default_photo_sort}
+                              onChange={(e) => setFormData({ ...formData, default_photo_sort: e.target.value })}
+                              className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-accent-dark"
+                            >
+                              <option value="upload_date_desc">{t('photoSort.uploadDateNewest', 'Upload Date (Newest First)')}</option>
+                              <option value="upload_date_asc">{t('photoSort.uploadDateOldest', 'Upload Date (Oldest First)')}</option>
+                              <option value="capture_date_desc">{t('photoSort.captureDateNewest', 'Date Taken (Newest First)')}</option>
+                              <option value="capture_date_asc">{t('photoSort.captureDateOldest', 'Date Taken (Oldest First)')}</option>
+                              <option value="filename_asc">{t('photoSort.filenameAZ', 'Filename (A-Z)')}</option>
+                              <option value="filename_desc">{t('photoSort.filenameZA', 'Filename (Z-A)')}</option>
+                            </select>
+                          </div>
 
-            {/* Client Access (#172) */}
-            <div className="pt-4 border-t border-neutral-200 dark:border-neutral-700">
-              <label className="flex items-start gap-2">
-                <input
-                  type="checkbox"
-                  className="mt-1 w-4 h-4 text-accent border-neutral-300 dark:border-neutral-600 rounded focus:ring-primary-500"
-                  checked={formData.client_access_enabled}
-                  onChange={(e) => setFormData(prev => ({
-                    ...prev,
-                    client_access_enabled: e.target.checked,
-                    client_password: e.target.checked ? prev.client_password : '',
-                  }))}
-                />
-                <div>
-                  <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                    {t('clientAccess.enableToggle')}
-                  </span>
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-                    {t('clientAccess.enableDescription')}
-                  </p>
-                </div>
-              </label>
+                          {/* Client Access (#172) */}
+                          <div className="pt-4 border-t border-border">
+                            <label className="flex items-start gap-2">
+                              <input
+                                type="checkbox"
+                                className="mt-1 w-4 h-4 text-accent border-border rounded focus:ring-primary-500"
+                                checked={formData.client_access_enabled}
+                                onChange={(e) => setFormData(prev => ({
+                                  ...prev,
+                                  client_access_enabled: e.target.checked,
+                                  client_password: e.target.checked ? prev.client_password : '',
+                                }))}
+                              />
+                              <div>
+                                <span className="text-sm font-medium text-foreground">
+                                  {t('clientAccess.enableToggle')}
+                                </span>
+                                <p className="text-xs text-muted-foreground mt-1">
+                                  {t('clientAccess.enableDescription')}
+                                </p>
+                              </div>
+                            </label>
 
-              {formData.client_access_enabled && (
-                <div className="mt-3">
-                  <Input
-                    type="text"
-                    label={t('clientAccess.pinLabel')}
-                    placeholder={t('clientAccess.pinPlaceholder')}
-                    value={formData.client_password}
-                    onChange={handleInputChange('client_password')}
-                    leftIcon={<Key className="w-5 h-5" />}
-                    helperText={t('clientAccess.pinHelperText')}
-                  />
-                </div>
-              )}
-            </div>
+                            {formData.client_access_enabled && (
+                              <div className="mt-3">
+                                <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('clientAccess.pinLabel')}</span><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Key className="w-5 h-5" />}</div><Input
+                                                                type="text"
+                                                                placeholder={t('clientAccess.pinPlaceholder')}
+                                                                value={formData.client_password}
+                                                                onChange={handleInputChange('client_password')} className="pl-10"
+                                                              /></div>{(t('clientAccess.pinHelperText')) && <p className="mt-1.5 text-sm text-muted-foreground">{t('clientAccess.pinHelperText')}</p>}</Label></div>
+                              </div>
+                            )}
+                          </div>
 
-            {/* User Upload Settings */}
-            <div className="pt-4 border-t border-neutral-200 dark:border-neutral-700">
-              <label className="flex items-center gap-3">
-                <input
-                  type="checkbox"
-                  checked={formData.allow_user_uploads}
-                  onChange={(e) => setFormData({ ...formData, allow_user_uploads: e.target.checked })}
-                  className="rounded border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
-                />
-                <div>
-                  <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                    {t('events.allowUserUploads')}
-                  </span>
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
-                    {t('events.allowUserUploadsDescription')}
-                  </p>
-                </div>
-              </label>
+                          {/* User Upload Settings */}
+                          <div className="pt-4 border-t border-border">
+                            <label className="flex items-center gap-3">
+                              <input
+                                type="checkbox"
+                                checked={formData.allow_user_uploads}
+                                onChange={(e) => setFormData({ ...formData, allow_user_uploads: e.target.checked })}
+                                className="rounded border-border text-accent focus:ring-primary-500"
+                              />
+                              <div>
+                                <span className="text-sm font-medium text-foreground">
+                                  {t('events.allowUserUploads')}
+                                </span>
+                                <p className="text-xs text-muted-foreground mt-0.5">
+                                  {t('events.allowUserUploadsDescription')}
+                                </p>
+                              </div>
+                            </label>
 
-              {formData.allow_user_uploads && categories && categories.length > 0 && (
-                <div className="mt-4 ml-7">
-                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                    {t('events.uploadCategory')}
-                  </label>
-                  <select
-                    value={formData.upload_category_id || ''}
-                    onChange={(e) => setFormData({
-                      ...formData,
-                      upload_category_id: e.target.value ? Number(e.target.value) : null
-                    })}
-                    className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100"
-                  >
-                    <option value="">{t('events.selectCategory')}</option>
-                    {categories.map(category => (
-                      <option key={category.id} value={category.id}>
-                        {category.name}
-                      </option>
-                    ))}
-                  </select>
-                  <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
-                    {t('events.uploadCategoryHelp')}
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-        </Card>
+                            {formData.allow_user_uploads && categories && categories.length > 0 && (
+                              <div className="mt-4 ml-7">
+                                <label className="block text-sm font-medium text-foreground mb-2">
+                                  {t('events.uploadCategory')}
+                                </label>
+                                <select
+                                  value={formData.upload_category_id || ''}
+                                  onChange={(e) => setFormData({
+                                    ...formData,
+                                    upload_category_id: e.target.value ? Number(e.target.value) : null
+                                  })}
+                                  className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary-500 bg-card text-foreground"
+                                >
+                                  <option value="">{t('events.selectCategory')}</option>
+                                  {categories.map(category => (
+                                    <option key={category.id} value={category.id}>
+                                      {category.name}
+                                    </option>
+                                  ))}
+                                </select>
+                                <p className="mt-1 text-xs text-muted-foreground">
+                                  {t('events.uploadCategoryHelp')}
+                                </p>
+                              </div>
+                            )}
+                          </div>
+                        </div></CardContent></Card>
 
         {/* Feedback Settings */}
         <FeedbackSettings
@@ -1184,13 +1149,9 @@ export const CreateEventPage: React.FC = () => {
             {t('common.cancel')}
           </Button>
           <Button
-            type="submit"
-            variant="primary"
-            isLoading={createMutation.isPending}
-            disabled={createMutation.isPending}
-          >
-            {t('events.createEvent')}
-          </Button>
+                              type="submit" disabled={createMutation.isPending || createMutation.isPending}
+                            >
+                              {createMutation.isPending && <Loader2 className="animate-spin" />}{t('events.createEvent')}</Button>
         </div>
       </form>
     </div>

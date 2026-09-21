@@ -49,11 +49,11 @@ const PreviewPhoto: React.FC<{
   className = '',
   aspectRatio = 'aspect-square'
 }) => (
-  <div className={`relative overflow-hidden rounded-lg bg-gradient-to-br from-neutral-200 to-neutral-300 ${aspectRatio} ${className}`}>
+  <div className={`relative overflow-hidden rounded-lg bg-linear-to-br from-neutral-200 to-neutral-300 ${aspectRatio} ${className}`}>
     <div className="absolute inset-0 flex items-center justify-center">
-      <Camera className="w-8 h-8 text-neutral-400" />
+      <Camera className="w-8 h-8 text-muted-foreground" />
     </div>
-    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2">
+    <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/60 to-transparent p-2">
       <p className="text-white text-xs truncate">{photo.filename}</p>
       {photo.category_name && (
         <p className="text-white/70 text-[10px]">{photo.category_name}</p>
@@ -61,7 +61,7 @@ const PreviewPhoto: React.FC<{
     </div>
     {photo.type === 'collage' && (
       <div className="absolute top-1 right-1">
-        <span className="px-1.5 py-0.5 bg-black/60 text-white text-[10px] rounded">
+        <span className="px-1.5 py-0.5 bg-black/60 text-white text-[10px] rounded-sm">
           Collage
         </span>
       </div>
@@ -158,7 +158,7 @@ export const GalleryPreview: React.FC<GalleryPreviewProps> = ({
               <div key={photo.id} className={`break-inside-avoid mb-${spacing === 'tight' ? '1' : spacing === 'relaxed' ? '4' : '2'}`}>
                 <PreviewPhoto 
                   photo={photo} 
-                  aspectRatio={idx % 3 === 0 ? 'aspect-[4/5]' : idx % 3 === 1 ? 'aspect-[4/3]' : 'aspect-square'}
+                  aspectRatio={idx % 3 === 0 ? 'aspect-4/5' : idx % 3 === 1 ? 'aspect-4/3' : 'aspect-square'}
                 />
               </div>
             ))}
@@ -169,11 +169,11 @@ export const GalleryPreview: React.FC<GalleryPreviewProps> = ({
         return (
           <div className="relative">
             <div className="flex items-center gap-2 overflow-hidden">
-              <PreviewPhoto photo={mockPhotos[0]} className="w-full max-w-md mx-auto" aspectRatio="aspect-[4/3]" />
+              <PreviewPhoto photo={mockPhotos[0]} className="w-full max-w-md mx-auto" aspectRatio="aspect-4/3" />
             </div>
             <div className="flex justify-center gap-1 mt-3">
               {[0, 1, 2, 3].map((idx) => (
-                <div key={idx} className={`w-2 h-2 rounded-full ${idx === 0 ? 'bg-accent-dark' : 'bg-neutral-300'}`} />
+                <div key={idx} className={`w-2 h-2 rounded-full ${idx === 0 ? 'bg-primary' : 'bg-muted'}`} />
               ))}
             </div>
           </div>
@@ -184,7 +184,7 @@ export const GalleryPreview: React.FC<GalleryPreviewProps> = ({
           <div className="space-y-6">
             {['Today', 'Yesterday'].map((date, dateIdx) => (
               <div key={date}>
-                <h4 className="text-sm font-medium text-neutral-700 mb-2">{date}</h4>
+                <h4 className="text-sm font-medium text-foreground mb-2">{date}</h4>
                 <div className={`grid grid-cols-3 ${gapClass}`}>
                   {mockPhotos.slice(dateIdx * 3, (dateIdx * 3) + 3).map((photo) => (
                     <PreviewPhoto key={photo.id} photo={photo} />
@@ -214,7 +214,7 @@ export const GalleryPreview: React.FC<GalleryPreviewProps> = ({
   
   return (
     <div
-      className={`bg-white rounded-lg shadow-sm overflow-hidden ${className}`}
+      className={`bg-card rounded-lg shadow-xs overflow-hidden ${className}`}
       style={{
         backgroundColor: theme.backgroundColor || '#ffffff',
         color: theme.textColor || '#171717',
@@ -291,8 +291,8 @@ export const GalleryPreview: React.FC<GalleryPreviewProps> = ({
                   className="h-8 w-auto object-contain"
                 />
               ) : (
-                <div className="h-8 w-8 rounded-full bg-neutral-200 flex items-center justify-center">
-                  <Camera className="w-4 h-4 text-neutral-500" />
+                <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center">
+                  <Camera className="w-4 h-4 text-muted-foreground" />
                 </div>
               )
             )}
@@ -300,7 +300,7 @@ export const GalleryPreview: React.FC<GalleryPreviewProps> = ({
               <div>
                 <p className="text-sm font-semibold leading-tight">{brandName}</p>
                 {brandTagline && (
-                  <p className="text-xs text-neutral-500 leading-tight">{brandTagline}</p>
+                  <p className="text-xs text-muted-foreground leading-tight">{brandTagline}</p>
                 )}
               </div>
             )}
@@ -334,7 +334,7 @@ export const GalleryPreview: React.FC<GalleryPreviewProps> = ({
       {/* (isNoHeader renders nothing here — goes straight to layout bar) */}
 
       {/* Layout info bar */}
-      <div className="px-4 py-1 border-b text-xs text-neutral-500 flex justify-between" style={{ borderColor: theme.primaryColor ? `${theme.primaryColor}20` : '#e5e7eb' }}>
+      <div className="px-4 py-1 border-b text-xs text-muted-foreground flex justify-between" style={{ borderColor: theme.primaryColor ? `${theme.primaryColor}20` : '#e5e7eb' }}>
         <span>Gallery preview</span>
         <span className="capitalize">{isHeroHeader ? `Hero + ${activeLayout}` : isMinimalHeader ? `Minimal + ${activeLayout}` : isNoHeader ? `No header + ${activeLayout}` : `${activeLayout} layout`}</span>
       </div>

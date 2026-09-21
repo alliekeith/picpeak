@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { AlertCircle, Check, Clock, Copy } from 'lucide-react';
+import { AlertCircle, Check, Clock, Copy, Loader2 } from 'lucide-react';
 import { differenceInDays, parseISO } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { useLocalizedDate } from '../hooks/useLocalizedDate';
 import { usePublicSettings } from '../hooks/usePublicSettings';
 
-import { Card, CardContent, Input, Button, ReCaptcha, CMSContentBlock, PoweredBy } from '../components/common';
+import { ReCaptcha, CMSContentBlock, PoweredBy } from '../components/common';
 import { useGalleryAuth, useTheme } from '../contexts';
 import { useGalleryInfo } from '../hooks/useGallery';
 import { GalleryView } from '../components/gallery';
@@ -19,8 +19,13 @@ import { buildResourceUrl } from '../utils/url';
 import { isGalleryPublic, normalizeRequirePassword } from '../utils/accessControl';
 import { detectInAppBrowser } from '../utils/inAppBrowser';
 import { isAdminSessionExpired, isPasswordChangeRequired } from '../utils/passwordChangeRequired';
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 export const GalleryPage: React.FC = () => {
+    const __fieldId = React.useId();
   const { slug: rawSlug, token: rawToken } = useParams<{ slug: string; token?: string }>();
   const { isAuthenticated, login, event } = useGalleryAuth();
   const { t, i18n } = useTranslation();
@@ -358,7 +363,7 @@ export const GalleryPage: React.FC = () => {
   // Show expired state
   if (galleryInfo?.is_expired) {
     return (
-      <div className="min-h-screen" style={{ backgroundColor: 'var(--color-background, #fafafa)' }}>
+      <div className="min-h-screen" style={{ backgroundColor: 'var(--background, #fafafa)' }}>
         <div className="min-h-screen flex flex-col">
           {/* Logo at top */}
           {settingsData?.branding_logo_url && (
@@ -377,11 +382,11 @@ export const GalleryPage: React.FC = () => {
                 <Clock className="w-16 h-16 text-amber-500 mx-auto mb-4" />
                 <h2 className="text-xl font-semibold mb-2">{t('gallery.expired')}</h2>
                 {galleryInfo.expires_at && (
-                  <p className="text-neutral-600 mb-4">
+                  <p className="text-muted-foreground mb-4">
                     {t('gallery.expiredOn', { date: format(parseISO(galleryInfo.expires_at), 'PP') })}
                   </p>
                 )}
-                <p className="text-sm text-neutral-500">
+                <p className="text-sm text-muted-foreground">
                   {t('gallery.contactOrganizer')}
                 </p>
               </CardContent>
@@ -393,19 +398,19 @@ export const GalleryPage: React.FC = () => {
             <div className="flex items-center justify-center gap-4">
               <Link 
                 to="/impressum" 
-                className="text-xs text-neutral-500 hover:text-neutral-700 transition-colors"
+                className="text-xs text-muted-foreground hover:text-foreground transition-colors"
               >
                 {t('legal.impressum')}
               </Link>
-              <span className="text-xs text-neutral-400">|</span>
+              <span className="text-xs text-muted-foreground">|</span>
               <Link 
                 to="/datenschutz" 
-                className="text-xs text-neutral-500 hover:text-neutral-700 transition-colors"
+                className="text-xs text-muted-foreground hover:text-foreground transition-colors"
               >
                 {t('legal.datenschutz')}
               </Link>
             </div>
-            <PoweredBy className="text-xs mt-2 text-neutral-500" />
+            <PoweredBy className="text-xs mt-2 text-muted-foreground" />
           </div>
         </div>
       </div>
@@ -464,10 +469,10 @@ export const GalleryPage: React.FC = () => {
     // gallery cannot spin.
     return (
       <div className="min-h-screen flex items-center justify-center p-4"
-        style={{ backgroundColor: 'var(--color-background, #fafafa)' }}>
+        style={{ backgroundColor: 'var(--background, #fafafa)' }}>
         <Card className="w-full max-w-md">
           <CardContent className="p-6 text-center">
-            <AlertCircle className="w-10 h-10 mx-auto mb-3 text-muted-theme" />
+            <AlertCircle className="w-10 h-10 mx-auto mb-3 text-muted-foreground" />
             <p className="text-base mb-4">
               {loginError || t('gallery.failedToLoad', 'Failed to load gallery')}
             </p>
@@ -487,7 +492,7 @@ export const GalleryPage: React.FC = () => {
 
   // Show login form
   return (
-    <div className="min-h-screen" style={{ backgroundColor: 'var(--color-background, #fafafa)' }}>
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--background, #fafafa)' }}>
       <div className="min-h-screen flex items-center justify-center p-4">
         <div className="w-full max-w-lg">
           {/* Logo/Header. The logo can be hidden per gallery (#894). */}
@@ -502,7 +507,7 @@ export const GalleryPage: React.FC = () => {
                 className="h-12 sm:h-16 lg:h-20 w-auto object-contain mx-auto mb-3 sm:mb-4"
               />
             )}
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 px-2" style={{ color: 'var(--color-primary, #5C8762)' }}>
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 px-2" style={{ color: 'var(--primary, #5C8762)' }}>
               {galleryInfo?.event_name}
             </h1>
           </div>
@@ -511,7 +516,7 @@ export const GalleryPage: React.FC = () => {
           {daysUntilExpiration !== null && daysUntilExpiration <= 7 && (
             <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
               <div className="flex items-start">
-                <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600 mt-0.5 mr-2 flex-shrink-0" />
+                <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600 mt-0.5 mr-2 shrink-0" />
                 <div>
                   <p className="text-xs sm:text-sm font-medium text-amber-800">
                     {t('gallery.expiresIn', { count: daysUntilExpiration })}
@@ -541,7 +546,7 @@ export const GalleryPage: React.FC = () => {
                   className="rounded-lg border border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-950/40 p-4 text-sm text-red-900 dark:text-red-100"
                 >
                   <div className="flex items-start">
-                    <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5 mr-2 flex-shrink-0" />
+                    <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5 mr-2 shrink-0" />
                     <div>
                       <p className="font-medium">
                         {t('auth.iab.instagram.blockedTitle', "Instagram's browser can't open this gallery")}
@@ -560,17 +565,14 @@ export const GalleryPage: React.FC = () => {
                     </div>
                   </div>
                   <Button
-                    type="button"
-                    variant="primary"
-                    size="lg"
-                    className="w-full mt-4 text-sm sm:text-base"
-                    onClick={handleCopyLink}
-                    leftIcon={linkCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                  >
-                    {linkCopied
-                      ? t('auth.iab.instagram.linkCopied', 'Link copied')
-                      : t('auth.iab.instagram.copyLink', 'Copy link')}
-                  </Button>
+                                                      type="button"
+                                                      size="lg"
+                                                      className="w-full mt-4 text-sm sm:text-base"
+                                                      onClick={handleCopyLink}
+                                                    >
+                                                      {linkCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}{linkCopied
+                                                        ? t('auth.iab.instagram.linkCopied', 'Link copied')
+                                                        : t('auth.iab.instagram.copyLink', 'Copy link')}</Button>
                   <button
                     type="button"
                     onClick={() => setIabOverride(true)}
@@ -583,27 +585,25 @@ export const GalleryPage: React.FC = () => {
 
               {!iabBlocked && (
               <form onSubmit={handleLogin} className="space-y-4">
-                <Input
-                  type="password"
-                  label={t('auth.password')}
-                  placeholder={t('auth.passwordPlaceholder')}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  error={loginError || undefined}
-                  autoFocus
-                  // Defend against in-app-browser keyboard mangling (#654):
-                  //   - autoCapitalize: stop iOS autocaps turning `wedding2026`
-                  //     into `Wedding2026` inside IAB WKWebViews
-                  //   - autoCorrect / spellCheck: stop predictive-text rewrites
-                  //   - autoComplete: tell password managers this is the
-                  //     current-password slot so they autofill the right value
-                  //     (vs the IAB's older saved-password store)
-                  autoCapitalize="none"
-                  autoCorrect="off"
-                  spellCheck={false}
-                  autoComplete="current-password"
-                  className="text-sm sm:text-base"
-                />
+                <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('auth.password')}</span><Input
+                                                    type="password"
+                                                    placeholder={t('auth.passwordPlaceholder')}
+                                                    value={password}
+                                                    onChange={(e) => setPassword(e.target.value)}
+                                                    autoFocus
+                                                    // Defend against in-app-browser keyboard mangling (#654):
+                                                    //   - autoCapitalize: stop iOS autocaps turning `wedding2026`
+                                                    //     into `Wedding2026` inside IAB WKWebViews
+                                                    //   - autoCorrect / spellCheck: stop predictive-text rewrites
+                                                    //   - autoComplete: tell password managers this is the
+                                                    //     current-password slot so they autofill the right value
+                                                    //     (vs the IAB's older saved-password store)
+                                                    autoCapitalize="none"
+                                                    autoCorrect="off"
+                                                    spellCheck={false}
+                                                    autoComplete="current-password"
+                                                    className="text-sm sm:text-base" aria-invalid={!!(loginError || undefined)} aria-describedby={(loginError || undefined) ? `${__fieldId}-0-error` : undefined}
+                                                  />{(loginError || undefined) && <p id={`${__fieldId}-0-error`} className="mt-1.5 text-sm text-destructive">{loginError || undefined}</p>}</Label></div>
 
                 <ReCaptcha
                   onChange={setRecaptchaToken}
@@ -611,20 +611,16 @@ export const GalleryPage: React.FC = () => {
                 />
 
                 <Button
-                  type="submit"
-                  variant="primary"
-                  size="lg"
-                  className="w-full text-sm sm:text-base"
-                  isLoading={isLoggingIn}
-                  disabled={isLoggingIn}
-                >
-                  {t('gallery.viewGallery')}
-                </Button>
+                                                    type="submit"
+                                                    size="lg"
+                                                    className="w-full text-sm sm:text-base" disabled={isLoggingIn || isLoggingIn}
+                                                  >
+                                                    {isLoggingIn && <Loader2 className="animate-spin" />}{t('gallery.viewGallery')}</Button>
               </form>
               )}
 
               {!iabBlocked && (
-                <p className="text-xs text-neutral-500 text-center mt-4 sm:mt-6">
+                <p className="text-xs text-muted-foreground text-center mt-4 sm:mt-6">
                   {t('auth.passwordHint')}
                 </p>
               )}
@@ -636,19 +632,19 @@ export const GalleryPage: React.FC = () => {
             <div className="flex items-center justify-center gap-4">
               <Link 
                 to="/impressum" 
-                className="text-xs text-neutral-500 hover:text-neutral-700 transition-colors"
+                className="text-xs text-muted-foreground hover:text-foreground transition-colors"
               >
                 {t('legal.impressum')}
               </Link>
-              <span className="text-xs text-neutral-400">|</span>
+              <span className="text-xs text-muted-foreground">|</span>
               <Link 
                 to="/datenschutz" 
-                className="text-xs text-neutral-500 hover:text-neutral-700 transition-colors"
+                className="text-xs text-muted-foreground hover:text-foreground transition-colors"
               >
                 {t('legal.datenschutz')}
               </Link>
             </div>
-            <PoweredBy className="text-xs mt-2 text-neutral-500" />
+            <PoweredBy className="text-xs mt-2 text-muted-foreground" />
           </div>
         </div>
       </div>

@@ -46,7 +46,7 @@ describe('CMS editor toolbar stays in reach on long pages', () => {
     expect(source).toMatch(/matchMedia\('\(min-width: 768px\)'\)/);
   });
 
-  it('clips the rounded wrapper without creating a scroll container', () => {
+  it('clips the rounded-sm wrapper without creating a scroll container', () => {
     const wrapper = source.match(/className="([^"]*\brounded-lg\b[^"]*\bh-full flex flex-col\b[^"]*)"/);
     expect(wrapper).not.toBeNull();
     expect(wrapper![1]).toContain('overflow-clip');

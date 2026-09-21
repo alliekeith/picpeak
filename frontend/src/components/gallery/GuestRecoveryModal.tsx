@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { X, ArrowLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Button, Input } from '../common';
 import { useGuestIdentity } from '../../contexts/GuestIdentityContext';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 /**
  * Email-based identity recovery flow (Phase 3.2).
@@ -86,30 +88,30 @@ export const GuestRecoveryModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-60 flex items-center justify-center p-4">
       <div className="fixed inset-0 bg-black bg-opacity-50" onClick={handleClose} />
-      <div className="relative bg-surface rounded-lg shadow-xl max-w-md w-full p-6">
+      <div className="relative bg-card rounded-lg shadow-xl max-w-md w-full p-6">
         <button
           type="button"
           onClick={handleClose}
           className="absolute top-4 right-4 p-1 hover:bg-black/10 rounded-lg transition-colors"
         >
-          <X className="w-5 h-5 text-muted-theme" />
+          <X className="w-5 h-5 text-muted-foreground" />
         </button>
 
         <button
           type="button"
           onClick={backToPrompt}
-          className="flex items-center gap-1 text-sm text-muted-theme hover:text-theme mb-3"
+          className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-3"
         >
           <ArrowLeft className="w-4 h-4" />
           {t('gallery.guestRecovery.back', 'Back')}
         </button>
 
-        <h2 className="text-lg font-semibold text-theme mb-2">
+        <h2 className="text-lg font-semibold text-foreground mb-2">
           {t('gallery.guestRecovery.title', 'Recover your picks')}
         </h2>
-        <p className="text-sm text-muted-theme mb-4">
+        <p className="text-sm text-muted-foreground mb-4">
           {step === 'email'
             ? t(
                 'gallery.guestRecovery.emailStepDescription',
@@ -122,28 +124,27 @@ export const GuestRecoveryModal: React.FC = () => {
         </p>
 
         {info && step === 'code' && (
-          <div className="text-sm text-green-700 bg-green-50 dark:bg-green-900/20 rounded px-3 py-2 mb-3">
+          <div className="text-sm text-green-700 bg-green-50 dark:bg-green-900/20 rounded-sm px-3 py-2 mb-3">
             {info}
           </div>
         )}
         {error && (
-          <div className="text-sm text-red-600 bg-red-50 dark:bg-red-900/20 rounded px-3 py-2 mb-3">
+          <div className="text-sm text-red-600 bg-red-50 dark:bg-red-900/20 rounded-sm px-3 py-2 mb-3">
             {error}
           </div>
         )}
 
         {step === 'email' ? (
           <form onSubmit={handleRequestCode} className="space-y-4">
-            <Input
-              type="email"
-              label={t('gallery.guestRecovery.emailLabel', 'Email')}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              autoFocus
-              required
-            />
-            <Button type="submit" variant="primary" className="w-full" disabled={submitting}>
+            <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('gallery.guestRecovery.emailLabel', 'Email')}</span><Input
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    placeholder="you@example.com"
+                                    autoFocus
+                                    required
+                                  /></Label></div>
+            <Button type="submit" className="w-full" disabled={submitting}>
               {submitting
                 ? t('common.submitting', 'Submitting...')
                 : t('gallery.guestRecovery.sendCode', 'Send code')}
@@ -151,16 +152,15 @@ export const GuestRecoveryModal: React.FC = () => {
           </form>
         ) : (
           <form onSubmit={handleVerify} className="space-y-4">
-            <Input
-              label={t('gallery.guestRecovery.codeLabel', 'Verification code')}
-              value={code}
-              onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-              placeholder="123456"
-              maxLength={6}
-              autoFocus
-              required
-            />
-            <Button type="submit" variant="primary" className="w-full" disabled={submitting}>
+            <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('gallery.guestRecovery.codeLabel', 'Verification code')}</span><Input
+                                        value={code}
+                                        onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                                        placeholder="123456"
+                                        maxLength={6}
+                                        autoFocus
+                                        required
+                                      /></Label></div>
+            <Button type="submit" className="w-full" disabled={submitting}>
               {submitting
                 ? t('common.submitting', 'Submitting...')
                 : t('gallery.guestRecovery.verifyCode', 'Verify and continue')}

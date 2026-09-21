@@ -1,17 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { Calendar, Clock, Download, LogOut, Facebook, Instagram, Twitter, Youtube, MessageCircle } from 'lucide-react';
+import { Calendar, Clock, Download, LogOut, Facebook, Instagram, Twitter, Youtube, MessageCircle, Loader2 } from 'lucide-react';
 import { parseISO } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { useLocalizedDate } from '../../hooks/useLocalizedDate';
-import { Button, MarkdownContent, PoweredBy } from '../common';
+import { MarkdownContent, PoweredBy } from '../common';
 import { DynamicFavicon } from '../common/DynamicFavicon';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useGuestIdentityOptional } from '../../contexts/GuestIdentityContext';
 import { buildResourceUrl } from '../../utils/url';
 import { cmsService, type PublicCMSPage } from '../../services/cms.service';
 import type { HeaderStyleType } from '../../types/theme.types';
+import { Button } from "@/components/ui/button";
 
 interface GalleryLayoutProps {
   event: {
@@ -92,7 +93,7 @@ interface GalleryLayoutProps {
  * Logout button. Identical markup is rendered in three header variants
  * (standard/banner, minimal, hero) — extracted into a small component
  * here so changes (label, icon, contrast) only need to happen in one
- * place. Background reads `--color-accent`; text reads `--color-accent-fg`
+ * place. Background reads `--brand`; text reads `--brand-foreground`
  * which `ThemeContext.applyTheme` derives from the accent's luminance,
  * so a pale accent automatically gets dark text and a saturated accent
  * gets white. Falls back to white if the variable isn't set (legacy
@@ -108,10 +109,10 @@ const HeaderDownloadButton: React.FC<{
     onClick={onClick}
     disabled={isDownloading}
     aria-label={label}
-    className="gallery-btn gallery-btn-download inline-flex items-center gap-2 px-3 sm:px-4 h-9 rounded-lg text-sm font-medium transition-opacity hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+    className="gallery-btn gallery-btn-download inline-flex items-center gap-2 px-3 sm:px-4 h-9 rounded-lg text-sm font-medium transition-opacity hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2"
     style={{
-      backgroundColor: 'var(--color-accent)',
-      color: 'var(--color-accent-fg, #ffffff)',
+      backgroundColor: 'var(--brand)',
+      color: 'var(--brand-foreground, #ffffff)',
     }}
   >
     <Download className="w-4 h-4" />
@@ -275,21 +276,21 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
       : 'text-center';
 
   const promoSlot = promoMarkdown ? (
-    <div className="gallery-promo border-t border-surface bg-surface/50">
+    <div className="gallery-promo border-t border-border bg-card/50">
       {/*
        * Inner block uses .container (matches the footer's container
        * width) + the alignment class. We deliberately drop the
        * previous max-w-3xl wrapper — it created a narrower column
        * that read as visually offset from the full-width footer
        * (#482, reported by Rekoo-PS). The `prose` class is needed
-       * for the prose-a:text-accent modifier to actually take effect
+       * for the prose-a:text-brand modifier to actually take effect
        * (modifiers without an outer .prose are no-ops in Tailwind
        * Typography).
        */}
       <div className={`container py-4 sm:py-6 px-4 ${promoTextAlignClass}`}>
         <MarkdownContent
           source={promoMarkdown}
-          className={`prose prose-sm max-w-none mx-auto text-sm text-theme prose-a:text-accent ${promoTextAlignClass}`}
+          className={`prose prose-sm max-w-none mx-auto text-sm text-foreground prose-a:text-brand ${promoTextAlignClass}`}
         />
       </div>
     </div>
@@ -311,11 +312,11 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
   })().trim();
 
   const infoSlot = infoMarkdown ? (
-    <div className="gallery-info-banner border-b border-surface bg-surface/50">
+    <div className="gallery-info-banner border-b border-border bg-card/50">
       <div className="container py-3 sm:py-4 px-4">
         <MarkdownContent
           source={infoMarkdown}
-          className="prose prose-sm max-w-none text-sm text-theme prose-a:text-accent text-center"
+          className="prose prose-sm max-w-none text-sm text-foreground prose-a:text-brand text-center"
         />
       </div>
     </div>
@@ -330,12 +331,12 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
   const hasFooterRow = hasLegalLinks || socialLinks.length > 0 || !!guestIdentity?.identity;
 
   return (
-    <div className="gallery-page min-h-screen" style={{ backgroundColor: 'var(--color-background)' }}>
+    <div className="gallery-page min-h-screen" style={{ backgroundColor: 'var(--background)' }}>
       {/* Dynamic Favicon */}
       <DynamicFavicon />
 
       {/* Header structure */}
-      <header className={`gallery-header bg-surface border-b border-surface sticky top-0 z-40 ${isHeroHeader || isBannerHeader ? 'shadow-sm' : ''}`}>
+      <header className={`gallery-header bg-card border-b border-border sticky top-0 z-40 ${isHeroHeader || isBannerHeader ? 'shadow-xs' : ''}`}>
         {/* Standard / Banner header - full bar with logo, event info, and actions (all layouts) */}
         {!isHeroHeader && !isMinimalHeader && !isNoHeader && (
           <div className="container py-3 relative">
@@ -353,10 +354,10 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
             )}
             <div className="flex items-center justify-between gap-2 sm:gap-4">
               {/* Left side - Logo (menu lives in the absolute wrapper above) */}
-              <div className={`flex items-center gap-2 sm:gap-4 flex-shrink-0 ${menuButton ? 'pl-12 sm:pl-14' : ''}`}>
+              <div className={`flex items-center gap-2 sm:gap-4 shrink-0 ${menuButton ? 'pl-12 sm:pl-14' : ''}`}>
                 {/* Logo - Show custom logo or fallback to PicPeak logo */}
                 {shouldShowLogo('header') && (
-                  <div className={`gallery-logo-wrapper flex-shrink-0 flex items-center gap-2 ${brandingSettings?.logo_position === 'center' ? 'flex-1' : ''} ${getLogoPositionClass()}`}>
+                  <div className={`gallery-logo-wrapper shrink-0 flex items-center gap-2 ${brandingSettings?.logo_position === 'center' ? 'flex-1' : ''} ${getLogoPositionClass()}`}>
                     <img
                       src={brandLogoUrl ?
                         buildResourceUrl(brandLogoUrl) :
@@ -367,15 +368,15 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
                       style={headerLogoSize.style}
                     />
                     {shouldShowCompanyName() && brandingSettings?.company_name && (
-                      <span className="hidden sm:inline text-lg font-semibold text-theme">
+                      <span className="hidden sm:inline text-lg font-semibold text-foreground">
                         {brandingSettings.company_name}
                       </span>
                     )}
                   </div>
                 )}
                 {!shouldShowLogo('header') && shouldShowCompanyName() && brandingSettings?.company_name && (
-                  <div className={`flex-shrink-0 ${brandingSettings?.logo_position === 'center' ? 'flex-1' : ''} ${getLogoPositionClass()}`}>
-                    <span className="text-lg font-semibold text-theme">
+                  <div className={`shrink-0 ${brandingSettings?.logo_position === 'center' ? 'flex-1' : ''} ${getLogoPositionClass()}`}>
+                    <span className="text-lg font-semibold text-foreground">
                       {brandingSettings.company_name || 'PicPeak'}
                     </span>
                   </div>
@@ -385,22 +386,22 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
               {/* Center - Event info */}
               <div className="flex-1 min-w-0 text-center sm:text-left">
                 <h1 
-                  className="text-base sm:text-lg lg:text-xl font-bold text-theme leading-tight truncate"
+                  className="text-base sm:text-lg lg:text-xl font-bold text-foreground leading-tight truncate"
                   style={{ fontFamily: headingFontFamily }}
                 >
                   {event.event_name}
                 </h1>
                 {(event.event_date || event.expires_at) && (
-                  <div className="hidden sm:flex flex-wrap gap-x-3 gap-y-1 mt-1 text-xs sm:text-sm text-muted-theme">
+                  <div className="hidden sm:flex flex-wrap gap-x-3 gap-y-1 mt-1 text-xs sm:text-sm text-muted-foreground">
                     {event.event_date && (
                       <span className="flex items-center">
-                        <Calendar className="w-3 h-3 sm:w-4 sm:h-4 mr-1 flex-shrink-0" />
+                        <Calendar className="w-3 h-3 sm:w-4 sm:h-4 mr-1 shrink-0" />
                         <span>{format(parseISO(event.event_date), 'PP')}</span>
                       </span>
                     )}
                     {event.expires_at && (
                       <span className="flex items-center">
-                        <Clock className="w-3 h-3 sm:w-4 sm:h-4 mr-1 flex-shrink-0" />
+                        <Clock className="w-3 h-3 sm:w-4 sm:h-4 mr-1 shrink-0" />
                         <span>{t('gallery.expires')} {format(parseISO(event.expires_at), 'PP')}</span>
                       </span>
                     )}
@@ -409,23 +410,18 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
               </div>
               
               {/* Right side - Action buttons */}
-              <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+              <div className="flex items-center gap-2 sm:gap-3 shrink-0">
                 {/* Extra header items (upload button, etc.) */}
                 {headerExtra}
                 
                 {/* Download all button - hidden on mobile when sidebar is shown */}
                 {showDownloadAll && onDownloadAll && (
                   <Button
-                    variant="primary"
-                    size="sm"
-                    leftIcon={<Download className="w-4 h-4" />}
-                    onClick={onDownloadAll}
-                    isLoading={isDownloading}
-                    className="gallery-btn gallery-btn-download hidden sm:flex"
-                  >
-                    <span className="hidden sm:inline">{t('gallery.downloadAll')}</span>
-                    <span className="sm:hidden">{t('common.download')}</span>
-                  </Button>
+                                                      size="sm"
+                                                      onClick={onDownloadAll}
+                                                      className="gallery-btn gallery-btn-download hidden sm:flex" disabled={isDownloading}
+                                                    >
+                                                      {isDownloading && <Loader2 className="animate-spin" />}<Download className="w-4 h-4" /><span className="hidden sm:inline">{t('gallery.downloadAll')}</span><span className="sm:hidden">{t('common.download')}</span></Button>
                 )}
 
                 {/*
@@ -445,30 +441,28 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
                 {/* Logout button */}
                 {showLogout && onLogout && (
                   <Button
-                    variant="outline"
-                    size="sm"
-                    leftIcon={<LogOut className="w-4 h-4" />}
-                    onClick={onLogout}
-                    className="gallery-btn gallery-btn-logout sm:min-w-0"
-                  >
-                    <span className="hidden sm:inline">{t('common.logout')}</span>
-                  </Button>
+                                                      variant="outline"
+                                                      size="sm"
+                                                      onClick={onLogout}
+                                                      className="gallery-btn gallery-btn-logout sm:min-w-0"
+                                                    >
+                                                      <LogOut className="w-4 h-4" /><span className="hidden sm:inline">{t('common.logout')}</span></Button>
                 )}
               </div>
             </div>
             
             {/* Mobile dates row */}
             {(event.event_date || event.expires_at) && (
-              <div className="flex sm:hidden justify-center gap-x-3 mt-2 text-xs text-muted-theme">
+              <div className="flex sm:hidden justify-center gap-x-3 mt-2 text-xs text-muted-foreground">
                 {event.event_date && (
                   <span className="flex items-center">
-                    <Calendar className="w-3 h-3 mr-1 flex-shrink-0" />
+                    <Calendar className="w-3 h-3 mr-1 shrink-0" />
                     <span>{format(parseISO(event.event_date), 'PP')}</span>
                   </span>
                 )}
                 {event.expires_at && (
                   <span className="flex items-center">
-                    <Clock className="w-3 h-3 mr-1 flex-shrink-0" />
+                    <Clock className="w-3 h-3 mr-1 shrink-0" />
                     <span>{t('gallery.expires')} {format(parseISO(event.expires_at), 'PP')}</span>
                   </span>
                 )}
@@ -484,25 +478,21 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
               <div className="flex items-center gap-2 min-w-0">
                 {menuButton}
                 <h1
-                  className="text-sm font-semibold text-theme truncate"
+                  className="text-sm font-semibold text-foreground truncate"
                   style={{ fontFamily: headingFontFamily }}
                 >
                   {event.event_name}
                 </h1>
               </div>
-              <div className="flex items-center gap-2 flex-shrink-0">
+              <div className="flex items-center gap-2 shrink-0">
                 {headerExtra}
                 {showDownloadAll && onDownloadAll && (
                   <Button
-                    variant="primary"
-                    size="sm"
-                    leftIcon={<Download className="w-4 h-4" />}
-                    onClick={onDownloadAll}
-                    isLoading={isDownloading}
-                    className="gallery-btn gallery-btn-download hidden sm:flex"
-                  >
-                    <span className="hidden sm:inline">{t('gallery.downloadAll')}</span>
-                  </Button>
+                                                      size="sm"
+                                                      onClick={onDownloadAll}
+                                                      className="gallery-btn gallery-btn-download hidden sm:flex" disabled={isDownloading}
+                                                    >
+                                                      {isDownloading && <Loader2 className="animate-spin" />}<Download className="w-4 h-4" /><span className="hidden sm:inline">{t('gallery.downloadAll')}</span></Button>
                 )}
                 {/* Accent Download CTA — also rendered in the minimal header
                     so the action stays one click away regardless of header
@@ -516,14 +506,12 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
                 )}
                 {showLogout && onLogout && (
                   <Button
-                    variant="outline"
-                    size="sm"
-                    leftIcon={<LogOut className="w-4 h-4" />}
-                    onClick={onLogout}
-                    className="gallery-btn gallery-btn-logout sm:min-w-0"
-                  >
-                    <span className="hidden sm:inline">{t('common.logout')}</span>
-                  </Button>
+                                                      variant="outline"
+                                                      size="sm"
+                                                      onClick={onLogout}
+                                                      className="gallery-btn gallery-btn-logout sm:min-w-0"
+                                                    >
+                                                      <LogOut className="w-4 h-4" /><span className="hidden sm:inline">{t('common.logout')}</span></Button>
                 )}
               </div>
             </div>
@@ -538,18 +526,14 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
                 {menuButton}
                 {headerExtra}
               </div>
-              <div className="flex items-center gap-2 flex-shrink-0">
+              <div className="flex items-center gap-2 shrink-0">
                 {showDownloadAll && onDownloadAll && (
                   <Button
-                    variant="primary"
-                    size="sm"
-                    leftIcon={<Download className="w-4 h-4" />}
-                    onClick={onDownloadAll}
-                    isLoading={isDownloading}
-                    className="gallery-btn gallery-btn-download hidden sm:flex"
-                  >
-                    <span className="hidden sm:inline">{t('gallery.downloadAll')}</span>
-                  </Button>
+                                                      size="sm"
+                                                      onClick={onDownloadAll}
+                                                      className="gallery-btn gallery-btn-download hidden sm:flex" disabled={isDownloading}
+                                                    >
+                                                      {isDownloading && <Loader2 className="animate-spin" />}<Download className="w-4 h-4" /><span className="hidden sm:inline">{t('gallery.downloadAll')}</span></Button>
                 )}
                 {/* Accent Download CTA — 'none' suppresses the *title* header,
                     not the download affordance: this bar still renders the
@@ -564,14 +548,12 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
                 )}
                 {showLogout && onLogout && (
                   <Button
-                    variant="outline"
-                    size="sm"
-                    leftIcon={<LogOut className="w-4 h-4" />}
-                    onClick={onLogout}
-                    className="gallery-btn gallery-btn-logout sm:min-w-0"
-                  >
-                    <span className="hidden sm:inline">{t('common.logout')}</span>
-                  </Button>
+                                                      variant="outline"
+                                                      size="sm"
+                                                      onClick={onLogout}
+                                                      className="gallery-btn gallery-btn-logout sm:min-w-0"
+                                                    >
+                                                      <LogOut className="w-4 h-4" /><span className="hidden sm:inline">{t('common.logout')}</span></Button>
                 )}
               </div>
             </div>
@@ -589,20 +571,15 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
               </div>
 
               {/* Right side - Action buttons */}
-              <div className="flex items-center gap-3 flex-shrink-0">
+              <div className="flex items-center gap-3 shrink-0">
                 {/* Download all button */}
                 {showDownloadAll && onDownloadAll && (
                   <Button
-                    variant="primary"
-                    size="sm"
-                    leftIcon={<Download className="w-4 h-4" />}
-                    onClick={onDownloadAll}
-                    isLoading={isDownloading}
-                    className="gallery-btn gallery-btn-download"
-                  >
-                    <span className="hidden sm:inline">{t('gallery.downloadAll')}</span>
-                    <span className="sm:hidden">{t('common.download')}</span>
-                  </Button>
+                                                      size="sm"
+                                                      onClick={onDownloadAll}
+                                                      className="gallery-btn gallery-btn-download" disabled={isDownloading}
+                                                    >
+                                                      {isDownloading && <Loader2 className="animate-spin" />}<Download className="w-4 h-4" /><span className="hidden sm:inline">{t('gallery.downloadAll')}</span><span className="sm:hidden">{t('common.download')}</span></Button>
                 )}
 
                 {/* Accent Download CTA — also rendered above the hero so the
@@ -618,14 +595,12 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
                 {/* Logout button */}
                 {showLogout && onLogout && (
                   <Button
-                    variant="outline"
-                    size="sm"
-                    leftIcon={<LogOut className="w-4 h-4" />}
-                    onClick={onLogout}
-                    className="gallery-btn gallery-btn-logout sm:min-w-0"
-                  >
-                    <span className="hidden sm:inline">{t('common.logout')}</span>
-                  </Button>
+                                                      variant="outline"
+                                                      size="sm"
+                                                      onClick={onLogout}
+                                                      className="gallery-btn gallery-btn-logout sm:min-w-0"
+                                                    >
+                                                      <LogOut className="w-4 h-4" /><span className="hidden sm:inline">{t('common.logout')}</span></Button>
                 )}
               </div>
             </div>
@@ -712,7 +687,7 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
           <div className="absolute bottom-0 left-0 right-0">
             <svg className="w-full h-12 sm:h-16" viewBox="0 0 1200 120" preserveAspectRatio="none">
               <path d="M0,60 C150,90 350,30 600,60 C850,90 1050,30 1200,60 L1200,120 L0,120 Z" 
-                fill="var(--color-background, #fafafa)" />
+                fill="var(--background, #fafafa)" />
             </svg>
           </div>
         </div>
@@ -729,25 +704,25 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
       {promoPosition === 'above_footer' && promoSlot}
 
       {/* Footer */}
-      <footer className="gallery-footer mt-8 sm:mt-12 py-6 sm:py-8 border-t border-surface">
+      <footer className="gallery-footer mt-8 sm:mt-12 py-6 sm:py-8 border-t border-border">
         <div className="container text-center px-4">
           {brandingSettings?.support_email && (
-            <p className="text-xs sm:text-sm text-muted-theme mb-2">
+            <p className="text-xs sm:text-sm text-muted-foreground mb-2">
               {t('gallery.needHelp')}{' '}
               <a
                 href={`mailto:${brandingSettings.support_email}`}
-                className="text-accent hover:opacity-80 break-all"
+                className="text-brand hover:opacity-80 break-all"
               >
                 {brandingSettings.support_email}
               </a>
             </p>
           )}
-          <p className="text-xs sm:text-sm text-muted-theme">
+          <p className="text-xs sm:text-sm text-muted-foreground">
             {brandingSettings?.footer_text || `© ${new Date().getFullYear()}${brandingSettings?.company_name ? ` ${brandingSettings.company_name}` : ''}. All rights reserved.`}
             <PoweredBy inline />
           </p>
           {brandingSettings?.company_name && brandingSettings?.company_tagline && (
-            <p className="text-xs text-muted-theme mt-2">
+            <p className="text-xs text-muted-foreground mt-2">
               {brandingSettings.company_name} - {brandingSettings.company_tagline}
             </p>
           )}
@@ -762,7 +737,7 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="text-muted-theme hover:text-accent transition-colors"
+                  className="text-muted-foreground hover:text-brand transition-colors"
                 >
                   <Icon className="w-5 h-5" />
                 </a>
@@ -780,21 +755,21 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
                     href={impressumPage.external_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-xs text-muted-theme hover:text-theme transition-colors"
+                    className="text-xs text-muted-foreground hover:text-foreground transition-colors"
                   >
                     {t('legal.impressum')}
                   </a>
                 ) : (
                   <Link
                     to="/impressum"
-                    className="text-xs text-muted-theme hover:text-theme transition-colors"
+                    className="text-xs text-muted-foreground hover:text-foreground transition-colors"
                   >
                     {t('legal.impressum')}
                   </Link>
                 )
               )}
               {showImpressum && showDatenschutz && (
-                <span className="text-xs text-muted-theme">|</span>
+                <span className="text-xs text-muted-foreground">|</span>
               )}
               {showDatenschutz && (
                 datenschutzPage?.use_external_url && datenschutzPage.external_url ? (
@@ -802,14 +777,14 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
                     href={datenschutzPage.external_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-xs text-muted-theme hover:text-theme transition-colors"
+                    className="text-xs text-muted-foreground hover:text-foreground transition-colors"
                   >
                     {t('legal.datenschutz')}
                   </a>
                 ) : (
                   <Link
                     to="/datenschutz"
-                    className="text-xs text-muted-theme hover:text-theme transition-colors"
+                    className="text-xs text-muted-foreground hover:text-foreground transition-colors"
                   >
                     {t('legal.datenschutz')}
                   </Link>
@@ -817,10 +792,10 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
               )}
               {guestIdentity?.identity && (
                 <>
-                  {hasLegalLinks && <span className="text-xs text-muted-theme">|</span>}
+                  {hasLegalLinks && <span className="text-xs text-muted-foreground">|</span>}
                   <button
                     type="button"
-                    className="text-xs text-muted-theme hover:text-theme transition-colors"
+                    className="text-xs text-muted-foreground hover:text-foreground transition-colors"
                     onClick={async () => {
                       if (window.confirm(t('gallery.footer.forgetMeConfirm', 'Your name and selections will be removed from this gallery.'))) {
                         await guestIdentity.forget();
@@ -834,10 +809,10 @@ export const GalleryLayout: React.FC<GalleryLayoutProps> = ({
                       device can be greeted by the previous visitor's name —
                       and "Forget me" would delete that person's selections.
                       This only clears the identity on this device. */}
-                  <span className="text-xs text-muted-theme">|</span>
+                  <span className="text-xs text-muted-foreground">|</span>
                   <button
                     type="button"
-                    className="text-xs text-muted-theme hover:text-theme transition-colors"
+                    className="text-xs text-muted-foreground hover:text-foreground transition-colors"
                     onClick={() => guestIdentity.signOut()}
                   >
                     {t('gallery.footer.notYou', 'Not you?')}

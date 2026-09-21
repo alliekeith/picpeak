@@ -2,12 +2,13 @@ import { usePhotoSelection } from '../../../hooks/usePhotoSelection';
 import React, { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Download, Maximize2, Play, Pause, Heart, MessageSquare } from 'lucide-react';
 import { useTheme } from '../../../contexts/ThemeContext';
-import { AuthenticatedImage, Button } from '../../common';
+import { AuthenticatedImage } from '../../common';
 import { ColorLabelBadge } from '../ColorLabelBadge';
 import type { BaseGalleryLayoutProps } from './BaseGalleryLayout';
 import { FeedbackIdentityModal } from '../../gallery/FeedbackIdentityModal';
 import { feedbackService } from '../../../services/feedback.service';
 import { useGuestIdentityOptional } from '../../../contexts/GuestIdentityContext';
+import { Button } from "@/components/ui/button";
 
 export const CarouselGalleryLayout: React.FC<BaseGalleryLayoutProps> = ({
   photos,
@@ -236,7 +237,7 @@ export const CarouselGalleryLayout: React.FC<BaseGalleryLayoutProps> = ({
         {isPlaying && (
           <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20">
             <div 
-              className="h-full bg-white transition-all duration-1000 ease-linear"
+              className="h-full bg-card transition-all duration-1000 ease-linear"
               style={{
                 width: '100%',
                 animation: `progress ${interval}ms linear infinite`
@@ -254,9 +255,9 @@ export const CarouselGalleryLayout: React.FC<BaseGalleryLayoutProps> = ({
               <button
                 key={photo.id}
                 onClick={() => setCurrentIndex(index)}
-                className={`relative flex-shrink-0 w-20 h-20 rounded overflow-hidden transition-all ${
+                className={`relative shrink-0 w-20 h-20 rounded overflow-hidden transition-all ${
                   index === currentIndex 
-                    ? 'ring-2 ring-primary-600 scale-110' 
+                    ? 'ring-2 ring-brand-600 scale-110' 
                     : 'opacity-70 hover:opacity-100'
                 }`}
               >

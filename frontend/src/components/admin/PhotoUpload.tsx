@@ -1,6 +1,5 @@
 import React, { useState, useRef, useMemo, useEffect } from 'react';
 import { Upload, X, Image, Loader2, Cog, AlertTriangle } from 'lucide-react';
-import { Button } from '../common';
 import { clsx } from 'clsx';
 import { api } from '../../config/api';
 import { toast } from 'react-toastify';
@@ -11,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { extensionsToMimeTypes, extensionsToAcceptString, extensionsToLabel, normalizeFileMimeType } from '../../utils/fileTypes';
 import { useUploadProgress } from '../../hooks/useUploadProgress';
 import { photosService } from '../../services/photos.service';
+import { Button } from "@/components/ui/button";
 
 interface PhotoUploadProps {
   eventId: number;
@@ -588,13 +588,13 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({ eventId, onUploadCompl
     <div className="space-y-4">
       {/* Category Selection */}
       <div>
-        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+        <label className="block text-sm font-medium text-foreground mb-2">
           {t('upload.photoCategory')}
         </label>
         <select
           value={selectedCategoryId || ''}
           onChange={(e) => setSelectedCategoryId(e.target.value ? Number(e.target.value) : null)}
-          className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-primary-500"
+          className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-brand-500"
         >
           <option value="">{t('upload.noCategory')}</option>
           {categories.map((category) => (
@@ -612,9 +612,9 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({ eventId, onUploadCompl
           id="replace-by-name"
           checked={replaceByName}
           onChange={(e) => setReplaceByName(e.target.checked)}
-          className="rounded border-neutral-300 text-accent focus:ring-primary-500"
+          className="rounded-sm border-border text-brand focus:ring-brand-500"
         />
-        <label htmlFor="replace-by-name" className="text-sm text-neutral-700 dark:text-neutral-300">
+        <label htmlFor="replace-by-name" className="text-sm text-foreground">
           {t('upload.replaceByName', 'Replace existing photos with same name')}
         </label>
       </div>
@@ -623,12 +623,12 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({ eventId, onUploadCompl
       <div
         className={clsx(
           "border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer",
-          "hover:border-accent-dark hover:bg-accent-dark/15",
+          "hover:border-primary hover:bg-primary/15",
           isDragOver
-            ? "border-accent-dark bg-accent-dark/25"
+            ? "border-primary bg-primary/25"
             : selectedFiles.length > 0
-              ? "border-accent-dark bg-accent-dark/15"
-              : "border-neutral-300 dark:border-neutral-600"
+              ? "border-primary bg-primary/15"
+              : "border-border"
         )}
         onClick={() => fileInputRef.current?.click()}
         onDragOver={handleDragOver}
@@ -636,22 +636,22 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({ eventId, onUploadCompl
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        <Upload className="w-12 h-12 mx-auto text-neutral-400 dark:text-neutral-500 mb-4" />
-        <p className="text-neutral-700 dark:text-neutral-300 font-medium mb-1">
+        <Upload className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+        <p className="text-foreground font-medium mb-1">
           {t('upload.clickToUpload')}
         </p>
-        <p className="text-sm text-neutral-500 dark:text-neutral-400">
+        <p className="text-sm text-muted-foreground">
           {t('upload.fileRequirements', { formats: formatsLabel, limit: maxFilesPerUpload, sizeLimit: maxFileSizeMb })}
         </p>
         {videoUploadsAllowed && (
-          <p className="text-sm text-neutral-500 dark:text-neutral-400">
+          <p className="text-sm text-muted-foreground">
             {t('upload.videoSizeLimit', 'Videos: max {{sizeLimit}}MB per file', { sizeLimit: maxVideoSizeMb })}
           </p>
         )}
         <p
           className={clsx(
             "text-xs mt-2",
-            remainingSlots === 0 ? "text-red-600" : "text-neutral-500 dark:text-neutral-400"
+            remainingSlots === 0 ? "text-red-600" : "text-muted-foreground"
           )}
         >
           {remainingSlots === 0
@@ -675,22 +675,22 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({ eventId, onUploadCompl
       {/* Selected Files */}
       {selectedFiles.length > 0 && (
         <div className="space-y-2">
-          <p className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+          <p className="text-sm font-medium text-foreground">
             {t('upload.selectedFiles')} ({selectedFiles.length})
           </p>
           <div className="max-h-48 overflow-y-auto space-y-2">
             {selectedFiles.map((file, index) => (
               <div
                 key={index}
-                className="flex items-center justify-between p-2 bg-neutral-50 dark:bg-neutral-800 rounded-lg"
+                className="flex items-center justify-between p-2 bg-muted rounded-lg"
               >
                 <div className="flex items-center gap-3">
-                  <Image className="w-5 h-5 text-neutral-400" />
+                  <Image className="w-5 h-5 text-muted-foreground" />
                   <div>
-                    <p className="text-sm font-medium text-neutral-700 dark:text-neutral-300 truncate max-w-xs">
+                    <p className="text-sm font-medium text-foreground truncate max-w-xs">
                       {file.name}
                     </p>
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                    <p className="text-xs text-muted-foreground">
                       {formatFileSize(file.size)}
                     </p>
                   </div>
@@ -700,7 +700,7 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({ eventId, onUploadCompl
                     e.stopPropagation();
                     removeFile(index);
                   }}
-                  className="p-1 hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded"
+                  className="p-1 hover:bg-accent rounded-sm"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -713,13 +713,10 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({ eventId, onUploadCompl
       {/* Upload Button */}
       <div className="flex justify-end">
         <Button
-          variant="primary"
-          onClick={handleUpload}
-          disabled={selectedFiles.length === 0 || isUploading}
-          leftIcon={isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
-        >
-          {isUploading ? t('upload.uploading') : t('common.upload') + ` ${selectedFiles.length} ${t(selectedFiles.length === 1 ? 'common.photo' : 'common.photos')}`}
-        </Button>
+                        onClick={handleUpload}
+                        disabled={selectedFiles.length === 0 || isUploading}
+                      >
+                        {isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}{isUploading ? t('upload.uploading') : t('common.upload') + ` ${selectedFiles.length} ${t(selectedFiles.length === 1 ? 'common.photo' : 'common.photos')}`}</Button>
       </div>
 
       {/* Failure report — names every file that didn't make it into the
@@ -734,7 +731,7 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({ eventId, onUploadCompl
         >
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-2 text-amber-800 dark:text-amber-300">
-              <AlertTriangle className="w-5 h-5 flex-shrink-0" />
+              <AlertTriangle className="w-5 h-5 shrink-0" />
               <p className="text-sm font-medium">
                 {t('upload.failures.title', '{{count}} file(s) could not be uploaded', {
                   count: failures.length,
@@ -745,7 +742,7 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({ eventId, onUploadCompl
               type="button"
               onClick={() => setFailuresDismissed(true)}
               aria-label={t('common.dismiss', 'Dismiss')}
-              className="p-1 -m-1 text-amber-700 dark:text-amber-300 hover:bg-amber-100 dark:hover:bg-amber-800/40 rounded"
+              className="p-1 -m-1 text-amber-700 dark:text-amber-300 hover:bg-amber-100 dark:hover:bg-amber-800/40 rounded-sm"
             >
               <X className="w-4 h-4" />
             </button>
@@ -755,7 +752,7 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({ eventId, onUploadCompl
               <li key={`${f.kind}-${f.filename}-${i}`} className="flex items-start gap-2 text-xs">
                 <span
                   className={clsx(
-                    'flex-shrink-0 mt-0.5 px-1.5 py-0.5 rounded font-medium whitespace-nowrap',
+                    'shrink-0 mt-0.5 px-1.5 py-0.5 rounded-sm font-medium whitespace-nowrap',
                     f.kind === 'rejected' && 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
                     f.kind === 'transfer' && 'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300',
                     f.kind === 'processing' && 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300'
@@ -766,10 +763,10 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({ eventId, onUploadCompl
                   {f.kind === 'processing' && t('upload.failures.kindProcessing', 'Processing failed')}
                 </span>
                 <span className="min-w-0">
-                  <span className="font-medium text-neutral-800 dark:text-neutral-200 break-all">
+                  <span className="font-medium text-foreground break-all">
                     {f.filename}
                   </span>
-                  <span className="text-neutral-500 dark:text-neutral-400"> — {f.reason}</span>
+                  <span className="text-muted-foreground"> — {f.reason}</span>
                 </span>
               </li>
             ))}
@@ -825,21 +822,21 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({ eventId, onUploadCompl
             </div>
           ) : (
             <>
-              <div className="flex justify-between text-sm text-neutral-600 dark:text-neutral-400 mb-1">
+              <div className="flex justify-between text-sm text-muted-foreground mb-1">
                 <span>
                   {t('upload.transferring')}
                   {totalChunks > 1 && ` (${t('common.chunk')} ${currentChunk}/${totalChunks})`}
                 </span>
                 <span>{uploadProgress}%</span>
               </div>
-              <div className="w-full bg-neutral-200 dark:bg-neutral-700 rounded-full h-2">
+              <div className="w-full bg-muted rounded-full h-2">
                 <div
-                  className="bg-accent-dark h-2 rounded-full transition-all duration-300"
+                  className="bg-primary h-2 rounded-full transition-all duration-300"
                   style={{ width: `${uploadProgress}%` }}
                 />
               </div>
               {totalChunks > 1 && (
-                <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                <p className="text-xs text-muted-foreground mt-1">
                   {t('upload.uploadingChunks', { count: selectedFiles.length, total: totalChunks })}
                 </p>
               )}

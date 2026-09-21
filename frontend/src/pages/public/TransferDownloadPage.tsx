@@ -17,9 +17,10 @@ import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Download, FileDown, Clock, PackageOpen, AlertCircle } from 'lucide-react';
 
-import { Button, Loading } from '../../components/common';
+import { Loading } from '../../components/common';
 import { useLocalizedDate } from '../../hooks/useLocalizedDate';
 import { transfersService } from '../../services/transfers.service';
+import { Button } from "@/components/ui/button";
 
 function formatBytes(bytes: number | null | undefined): string {
   if (!bytes) return '';
@@ -43,18 +44,18 @@ export const TransferDownloadPage: React.FC = () => {
   const wrap = (children: React.ReactNode) => (
     <div
       className="flex min-h-screen items-center justify-center p-4"
-      style={{ backgroundColor: 'var(--color-background)', color: 'var(--color-text)' }}
+      style={{ backgroundColor: 'var(--background)', color: 'var(--foreground)' }}
     >
       <div
-        className="w-full max-w-lg rounded-lg border shadow-sm"
-        style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-surface-border)' }}
+        className="w-full max-w-lg rounded-lg border shadow-xs"
+        style={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)' }}
       >
         {children}
       </div>
     </div>
   );
 
-  const muted = { color: 'var(--color-muted-text)' } as const;
+  const muted = { color: 'var(--muted-foreground)' } as const;
 
   if (isLoading) return wrap(<div className="p-6"><Loading /></div>);
 
@@ -88,7 +89,7 @@ export const TransferDownloadPage: React.FC = () => {
   return wrap(
     <div className="p-6">
       <div className="mb-5 text-center">
-        <PackageOpen className="mx-auto mb-2 h-10 w-10" style={{ color: 'var(--color-accent)' }} />
+        <PackageOpen className="mx-auto mb-2 h-10 w-10" style={{ color: 'var(--brand)' }} />
         <h1 className="text-2xl font-bold">{data.title}</h1>
         {data.message && <p className="mt-2 whitespace-pre-line" style={muted}>{data.message}</p>}
         <p className="mt-2 text-sm" style={muted}>
@@ -99,26 +100,25 @@ export const TransferDownloadPage: React.FC = () => {
 
       {/* Prominent download-all */}
       <a href={transfersService.publicDownloadAllUrl(token as string)} className="block">
-        <Button size="lg" leftIcon={<Download className="h-5 w-5" />} className="w-full">
-          {t('transfers.downloadAll', 'Download all')}
-        </Button>
+        <Button size="lg" className="w-full">
+                        <Download className="h-5 w-5" />{t('transfers.downloadAll', 'Download all')}</Button>
       </a>
 
       {data.files && data.files.length > 0 && (
-        <ul className="mt-5 border-t" style={{ borderColor: 'var(--color-surface-border)' }}>
+        <ul className="mt-5 border-t" style={{ borderColor: 'var(--border)' }}>
           {data.files.map((f) => (
             <li
               key={f.file_id}
               className="flex items-center justify-between border-b py-2.5 text-sm"
-              style={{ borderColor: 'var(--color-surface-border)' }}
+              style={{ borderColor: 'var(--border)' }}
             >
               <span className="mr-3 truncate">{f.filename}</span>
               <span className="flex shrink-0 items-center gap-3" style={muted}>
                 {f.size_bytes ? <span>{formatBytes(f.size_bytes)}</span> : null}
                 <a
                   href={transfersService.publicFileUrl(token as string, f.file_id)}
-                  className="rounded p-1.5 hover:opacity-70"
-                  style={{ color: 'var(--color-accent)' }}
+                  className="rounded-sm p-1.5 hover:opacity-70"
+                  style={{ color: 'var(--brand)' }}
                   title={t('transfers.public.downloadFile', 'Download')}
                 >
                   <FileDown className="h-4 w-4" />

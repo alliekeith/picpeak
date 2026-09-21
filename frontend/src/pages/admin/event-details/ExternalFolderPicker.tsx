@@ -29,22 +29,22 @@ export const ExternalFolderPicker: React.FC<{ value: string; onChange: (p: strin
   };
 
   return (
-    <div className="mt-2 border border-neutral-200 dark:border-neutral-700 rounded-lg p-2">
+    <div className="mt-2 border border-border rounded-lg p-2">
       <div className="flex items-center justify-between gap-2 mb-2 px-1">
-        <div className="text-xs text-neutral-600 dark:text-neutral-400 truncate">
+        <div className="text-xs text-muted-foreground truncate">
           {t('common.selected', 'Selected')}: /external-media/{value}
         </div>
         {value && (
           <button
             type="button"
-            className="text-xs underline text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 flex-shrink-0"
+            className="text-xs underline text-foreground shrink-0"
             onClick={() => onChange('')}
           >
             {t('events.clearSelection', 'Clear')}
           </button>
         )}
       </div>
-      <div className="max-h-80 overflow-auto [color-scheme:light] dark:[color-scheme:dark]">
+      <div className="max-h-80 overflow-auto scheme-light dark:scheme-dark">
         <FolderTreeNode
           path=""
           name="/external-media"

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Heart, Star, MessageSquare, Bookmark } from 'lucide-react';
-import { Button } from '../common';
 import { useTranslation } from 'react-i18next';
+import { Button } from "@/components/ui/button";
 
 export type FilterType = 'all' | 'liked' | 'favorited' | 'rated' | 'commented';
 // Multi-select feedback filters (#889): the active set holds the concrete
@@ -46,12 +46,12 @@ export const GalleryFilter: React.FC<GalleryFilterProps> = ({
     return (
       <div className={`${className}`}>
         <div className="flex items-center gap-2">
-          <span className="text-sm text-muted-theme whitespace-nowrap">
+          <span className="text-sm text-muted-foreground whitespace-nowrap">
             {t('gallery.feedbackFilter', 'Feedback Filter')}
           </span>
           <div className="flex items-center gap-1">
             <Button
-              variant={isActive('all') ? 'primary' : 'outline'}
+              variant={isActive('all') ? 'default' : 'outline'}
               size="sm"
               onClick={() => onFilterChange('all')}
               className="p-1 w-8 h-8 flex items-center justify-center"
@@ -60,7 +60,7 @@ export const GalleryFilter: React.FC<GalleryFilterProps> = ({
               <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 text-current"><path d="M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 8v-8h8v8h-8z"/></svg>
             </Button>
             <Button
-              variant={isActive('liked') ? 'primary' : 'outline'}
+              variant={isActive('liked') ? 'default' : 'outline'}
               size="sm"
               onClick={() => onFilterChange('liked')}
               className="p-1 w-8 h-8 flex items-center justify-center"
@@ -69,7 +69,7 @@ export const GalleryFilter: React.FC<GalleryFilterProps> = ({
               <Heart className="w-3.5 h-3.5" />
             </Button>
             <Button
-              variant={isActive('favorited') ? 'primary' : 'outline'}
+              variant={isActive('favorited') ? 'default' : 'outline'}
               size="sm"
               onClick={() => onFilterChange('favorited')}
               className="p-1 w-8 h-8 flex items-center justify-center"
@@ -78,7 +78,7 @@ export const GalleryFilter: React.FC<GalleryFilterProps> = ({
               <Bookmark className="w-3.5 h-3.5" />
             </Button>
             <Button
-              variant={isActive('rated') ? 'primary' : 'outline'}
+              variant={isActive('rated') ? 'default' : 'outline'}
               size="sm"
               onClick={() => onFilterChange('rated')}
               className="p-1 w-8 h-8 flex items-center justify-center"
@@ -87,7 +87,7 @@ export const GalleryFilter: React.FC<GalleryFilterProps> = ({
               <Star className="w-3.5 h-3.5" />
             </Button>
             <Button
-              variant={isActive('commented') ? 'primary' : 'outline'}
+              variant={isActive('commented') ? 'default' : 'outline'}
               size="sm"
               onClick={() => onFilterChange('commented')}
               className="p-1 w-8 h-8 flex items-center justify-center"
@@ -106,12 +106,12 @@ export const GalleryFilter: React.FC<GalleryFilterProps> = ({
       {/* Mobile-optimized vertical layout */}
       {isMobile ? (
         <div className="space-y-2">
-          <div className="text-xs text-muted-theme font-medium">
+          <div className="text-xs text-muted-foreground font-medium">
             {t('gallery.feedbackFilter', 'Feedback Filter')}
           </div>
           <div className="flex flex-wrap gap-2">
             <Button
-              variant={isActive('all') ? 'primary' : 'outline'}
+              variant={isActive('all') ? 'default' : 'outline'}
               size="sm"
               onClick={() => onFilterChange('all')}
               className="text-xs flex-1 min-w-[80px]"
@@ -120,7 +120,7 @@ export const GalleryFilter: React.FC<GalleryFilterProps> = ({
             </Button>
             
             <Button
-              variant={isActive('liked') ? 'primary' : 'outline'}
+              variant={isActive('liked') ? 'default' : 'outline'}
               size="sm"
               onClick={() => onFilterChange('liked')}
               className="text-xs flex-1 min-w-[80px] flex items-center justify-center gap-1"
@@ -130,7 +130,7 @@ export const GalleryFilter: React.FC<GalleryFilterProps> = ({
             </Button>
 
             <Button
-              variant={isActive('favorited') ? 'primary' : 'outline'}
+              variant={isActive('favorited') ? 'default' : 'outline'}
               size="sm"
               onClick={() => onFilterChange('favorited')}
               className="text-xs flex-1 min-w-[80px] flex items-center justify-center gap-1"
@@ -140,7 +140,7 @@ export const GalleryFilter: React.FC<GalleryFilterProps> = ({
             </Button>
             
             <Button
-              variant={isActive('rated') ? 'primary' : 'outline'}
+              variant={isActive('rated') ? 'default' : 'outline'}
               size="sm"
               onClick={() => onFilterChange('rated')}
               className="text-xs flex-1 min-w-[80px] flex items-center justify-center gap-1"
@@ -153,12 +153,12 @@ export const GalleryFilter: React.FC<GalleryFilterProps> = ({
       ) : (
         /* Desktop layout - inline with categories */
         <div className="flex items-center gap-3">
-          <span className="text-sm text-muted-theme font-medium whitespace-nowrap">
+          <span className="text-sm text-muted-foreground font-medium whitespace-nowrap">
             {t('gallery.feedbackFilter', 'Feedback Filter')}:
           </span>
           <div className="flex gap-2">
             <Button
-              variant={isActive('all') ? 'primary' : 'outline'}
+              variant={isActive('all') ? 'default' : 'outline'}
               size="sm"
               onClick={() => onFilterChange('all')}
               className="text-xs sm:text-sm"
@@ -167,7 +167,7 @@ export const GalleryFilter: React.FC<GalleryFilterProps> = ({
             </Button>
             
             <Button
-              variant={isActive('liked') ? 'primary' : 'outline'}
+              variant={isActive('liked') ? 'default' : 'outline'}
               size="sm"
               onClick={() => onFilterChange('liked')}
               className="text-xs sm:text-sm flex items-center gap-1"
@@ -175,14 +175,14 @@ export const GalleryFilter: React.FC<GalleryFilterProps> = ({
               <Heart className="w-3 h-3 sm:w-4 sm:h-4" />
               <span className="hidden sm:inline">{t('gallery.liked', 'Liked')}</span>
               {likeCount > 0 && (
-                <span className="bg-accent-dark/15 text-accent-dark px-1.5 rounded">
+                <span className="bg-primary/15 text-primary px-1.5 rounded-sm">
                   {likeCount}
                 </span>
               )}
             </Button>
 
             <Button
-              variant={isActive('favorited') ? 'primary' : 'outline'}
+              variant={isActive('favorited') ? 'default' : 'outline'}
               size="sm"
               onClick={() => onFilterChange('favorited')}
               className="text-xs sm:text-sm flex items-center gap-1"
@@ -190,14 +190,14 @@ export const GalleryFilter: React.FC<GalleryFilterProps> = ({
               <Bookmark className="w-3 h-3 sm:w-4 sm:h-4" />
               <span className="hidden sm:inline">{t('gallery.favorited', 'Saved')}</span>
               {favoriteCount > 0 && (
-                <span className="bg-accent-dark/15 text-accent-dark px-1.5 rounded">
+                <span className="bg-primary/15 text-primary px-1.5 rounded-sm">
                   {favoriteCount}
                 </span>
               )}
             </Button>
             
             <Button
-              variant={isActive('rated') ? 'primary' : 'outline'}
+              variant={isActive('rated') ? 'default' : 'outline'}
               size="sm"
               onClick={() => onFilterChange('rated')}
               className="text-xs sm:text-sm flex items-center gap-1"
@@ -205,14 +205,14 @@ export const GalleryFilter: React.FC<GalleryFilterProps> = ({
               <Star className="w-3 h-3 sm:w-4 sm:h-4" />
               <span className="hidden sm:inline">{t('gallery.rated', 'Rated')}</span>
               {ratedCount > 0 && (
-                <span className="bg-accent-dark/15 text-accent-dark px-1.5 rounded">
+                <span className="bg-primary/15 text-primary px-1.5 rounded-sm">
                   {ratedCount}
                 </span>
               )}
             </Button>
 
             <Button
-              variant={isActive('commented') ? 'primary' : 'outline'}
+              variant={isActive('commented') ? 'default' : 'outline'}
               size="sm"
               onClick={() => onFilterChange('commented')}
               className="text-xs sm:text-sm flex items-center gap-1"

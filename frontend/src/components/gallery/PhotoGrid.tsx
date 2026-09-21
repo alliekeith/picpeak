@@ -7,9 +7,10 @@ import { useTranslation } from 'react-i18next';
 import type { Photo } from '../../types';
 import { useDownloadPhoto } from '../../hooks/useGallery';
 import { PhotoLightbox } from './PhotoLightbox';
-import { Button, AuthenticatedImage } from '../common';
+import { AuthenticatedImage } from '../common';
 import { galleryService } from '../../services/gallery.service';
 import { analyticsService } from '../../services/analytics.service';
+import { Button } from "@/components/ui/button";
 
 interface PhotoGridProps {
   photos: Photo[];
@@ -118,7 +119,7 @@ export const PhotoGrid: React.FC<PhotoGridProps> = ({
   if (photos.length === 0) {
     return (
       <div className="text-center py-12">
-        <p className="text-muted-theme">{t('gallery.noPhotosFound')}</p>
+        <p className="text-muted-foreground">{t('gallery.noPhotosFound')}</p>
       </div>
     );
   }
@@ -155,7 +156,7 @@ export const PhotoGrid: React.FC<PhotoGridProps> = ({
           
           {isSelectionMode && (
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
-              <span className="text-xs sm:text-sm text-muted-theme">
+              <span className="text-xs sm:text-sm text-muted-foreground">
                 {t('gallery.photosSelected', { count: selectedPhotos.size })}
               </span>
               <div className="flex items-center gap-2 flex-wrap">
@@ -167,15 +168,11 @@ export const PhotoGrid: React.FC<PhotoGridProps> = ({
                 </Button>
                 {selectedPhotos.size > 0 && (
                   <Button
-                    variant="primary"
-                    size="sm"
-                    leftIcon={<Package className="w-4 h-4" />}
-                    onClick={handleDownloadSelected}
-                    className="text-xs sm:text-sm"
-                  >
-                    <span className="hidden sm:inline">{t('gallery.downloadSelected', { count: selectedPhotos.size })}</span>
-                    <span className="sm:hidden">{t('common.download')} ({selectedPhotos.size})</span>
-                  </Button>
+                                                      size="sm"
+                                                      onClick={handleDownloadSelected}
+                                                      className="text-xs sm:text-sm"
+                                                    >
+                                                      <Package className="w-4 h-4" /><span className="hidden sm:inline">{t('gallery.downloadSelected', { count: selectedPhotos.size })}</span><span className="sm:hidden">{t('common.download')} ({selectedPhotos.size})</span></Button>
                 )}
               </div>
             </div>
@@ -282,15 +279,15 @@ const PhotoThumbnail: React.FC<PhotoThumbnailProps> = ({
           {feedbackEnabled && (photo.has_feedback || (photo.average_rating ?? 0) > 0 || (photo.comment_count ?? 0) > 0) && (
             <div className="absolute top-2 left-2 flex gap-1 z-10">
               {(photo.comment_count ?? 0) > 0 && (
-                <div className="bg-white/90 backdrop-blur-sm rounded-full px-2 py-1 flex items-center gap-1" title={`${photo.comment_count ?? 0} comments`}>
-                  <MessageSquare className="w-3.5 h-3.5 text-accent" fill="currentColor" />
-                  <span className="text-xs font-medium text-muted-theme">{photo.comment_count ?? 0}</span>
+                <div className="bg-white/90 backdrop-blur-xs rounded-full px-2 py-1 flex items-center gap-1" title={`${photo.comment_count ?? 0} comments`}>
+                  <MessageSquare className="w-3.5 h-3.5 text-brand" fill="currentColor" />
+                  <span className="text-xs font-medium text-muted-foreground">{photo.comment_count ?? 0}</span>
                 </div>
               )}
               {(photo.average_rating ?? 0) > 0 && (
-                <div className="bg-white/90 backdrop-blur-sm rounded-full px-2 py-1 flex items-center gap-1" title={`Rating: ${Number(photo.average_rating ?? 0).toFixed(1)}`}>
+                <div className="bg-white/90 backdrop-blur-xs rounded-full px-2 py-1 flex items-center gap-1" title={`Rating: ${Number(photo.average_rating ?? 0).toFixed(1)}`}>
                   <Star className="w-3.5 h-3.5 text-yellow-500" fill="currentColor" />
-                  <span className="text-xs font-medium text-muted-theme">{Number(photo.average_rating ?? 0).toFixed(1)}</span>
+                  <span className="text-xs font-medium text-muted-foreground">{Number(photo.average_rating ?? 0).toFixed(1)}</span>
                 </div>
               )}
             </div>
@@ -304,18 +301,18 @@ const PhotoThumbnail: React.FC<PhotoThumbnailProps> = ({
             {!isSelectionMode && (
               <>
                 <button
-                  className="p-2 sm:p-2 bg-white/90 rounded-full hover:bg-white transition-colors"
+                  className="p-2 sm:p-2 bg-white/90 rounded-full hover:bg-accent transition-colors"
                   onClick={(e) => {
                     e.stopPropagation();
                     onClick(e);
                   }}
                   aria-label="View full size"
                 >
-                  <Maximize2 className="w-5 h-5 text-theme" />
+                  <Maximize2 className="w-5 h-5 text-foreground" />
                 </button>
                 {allowDownloads && (
                   <button
-                    className="p-2 sm:p-2 bg-white/90 rounded-full hover:bg-white transition-colors"
+                    className="p-2 sm:p-2 bg-white/90 rounded-full hover:bg-accent transition-colors"
                     // #1263 — without stopPropagation the tap also reached the
                     // tile's own onClick, so downloading opened the lightbox too.
                     onClick={(e) => {
@@ -324,7 +321,7 @@ const PhotoThumbnail: React.FC<PhotoThumbnailProps> = ({
                     }}
                     aria-label="Download photo"
                   >
-                    <Download className="w-5 h-5 text-theme" />
+                    <Download className="w-5 h-5 text-foreground" />
                   </button>
                 )}
               </>
@@ -334,7 +331,7 @@ const PhotoThumbnail: React.FC<PhotoThumbnailProps> = ({
           {/* Selection checkbox - Larger on mobile for easier tapping */}
           {isSelectionMode && (
             <div className={`absolute top-2 right-2 ${isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100 sm:opacity-0 sm:group-hover:opacity-100'} transition-opacity`}>
-              <div className={`w-7 h-7 sm:w-6 sm:h-6 rounded-full border-2 ${isSelected ? 'bg-accent-dark border-accent-dark' : 'bg-white/80 border-white'} flex items-center justify-center transition-colors`}>
+              <div className={`w-7 h-7 sm:w-6 sm:h-6 rounded-full border-2 ${isSelected ? 'bg-primary border-primary' : 'bg-white/80 border-white'} flex items-center justify-center transition-colors`}>
                 {isSelected && <Check className="w-4 h-4 text-white" />}
               </div>
             </div>
@@ -343,12 +340,12 @@ const PhotoThumbnail: React.FC<PhotoThumbnailProps> = ({
           {/* Media type badges */}
           <div className="absolute bottom-2 left-2 flex gap-2">
             {photo.type === 'collage' && (
-              <span className="px-2 py-1 bg-black/60 text-white text-xs rounded">
+              <span className="px-2 py-1 bg-black/60 text-white text-xs rounded-sm">
                 Collage
               </span>
             )}
             {photo.media_type === 'video' && (
-              <span className="px-2 py-1 bg-black/60 text-white text-xs rounded flex items-center gap-1">
+              <span className="px-2 py-1 bg-black/60 text-white text-xs rounded-sm flex items-center gap-1">
                 <Play className="w-3 h-3" fill="white" />
                 Video
                 {photo.duration && (

@@ -1,7 +1,7 @@
 /**
  * Pick a readable foreground colour (white or black) for a given background.
  *
- * Used by ThemeContext.applyTheme to derive `--color-accent-fg` so that
+ * Used by ThemeContext.applyTheme to derive `--brand-foreground` so that
  * accent-coloured CTAs (Download button on the gallery header) stay
  * readable regardless of which accent the admin has picked. Without this,
  * a pale accent (e.g. light yellow) would render the hardcoded white text

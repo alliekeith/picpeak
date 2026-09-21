@@ -19,12 +19,14 @@ import { useTranslation } from 'react-i18next';
 import i18n from '../../i18n/config';
 import { useLocalizedDate } from '../../hooks/useLocalizedDate';
 
-import { Button, Card, Loading } from '../../components/common';
+import { Loading } from '../../components/common';
 import { UpdateNotification } from '../../components/admin/UpdateNotification';
 import { WhatsNewBanner } from '../../components/admin/WhatsNewBanner';
 import { useQuery } from '@tanstack/react-query';
 import { eventsService } from '../../services/events.service';
 import { adminService, ActivityType, type Activity } from '../../services/admin.service';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface StatCard {
   title: string;
@@ -225,35 +227,30 @@ export const AdminDashboard: React.FC = () => {
       {/* Page Header */}
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{t('navigation.dashboard')}</h1>
-          <p className="text-neutral-600 dark:text-neutral-400 mt-1">{t('admin.dashboardSubtitle')}</p>
+          <h1 className="text-2xl font-bold text-foreground">{t('navigation.dashboard')}</h1>
+          <p className="text-muted-foreground mt-1">{t('admin.dashboardSubtitle')}</p>
         </div>
         <Button
-          variant="primary"
-          leftIcon={<Plus className="w-5 h-5" />}
-          onClick={() => navigate('/admin/events/new')}
-        >
-          {t('events.createEvent')}
-        </Button>
+                        onClick={() => navigate('/admin/events/new')}
+                      >
+                        <Plus className="w-5 h-5" />{t('events.createEvent')}</Button>
       </div>
 
       {/* Statistics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {stats.map((stat) => (
-          <Card key={stat.title} className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">{stat.title}</p>
-                <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100 mt-1">{stat.value}</p>
-                {stat.change && (
-                  <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">{stat.change}</p>
-                )}
-              </div>
-              <div className={`p-3 rounded-full bg-neutral-100 dark:bg-neutral-700 ${stat.color}`}>
-                <stat.icon className="w-6 h-6" />
-              </div>
-            </div>
-          </Card>
+          <Card key={stat.title} className="p-6"><CardContent><div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-sm font-medium text-muted-foreground">{stat.title}</p>
+                            <p className="text-2xl font-bold text-foreground mt-1">{stat.value}</p>
+                            {stat.change && (
+                              <p className="text-sm text-muted-foreground mt-1">{stat.change}</p>
+                            )}
+                          </div>
+                          <div className={`p-3 rounded-full bg-muted ${stat.color}`}>
+                            <stat.icon className="w-6 h-6" />
+                          </div>
+                        </div></CardContent></Card>
         ))}
       </div>
 
@@ -261,123 +258,112 @@ export const AdminDashboard: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Expiring Events */}
         <div className="lg:col-span-2">
-          <Card padding="md">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">{t('admin.eventsExpiringSoon')}</h2>
-              <AlertTriangle className="w-5 h-5 text-orange-600" />
-            </div>
+          <Card><CardContent><div className="flex items-center justify-between mb-4">
+                                <h2 className="text-lg font-semibold text-foreground">{t('admin.eventsExpiringSoon')}</h2>
+                                <AlertTriangle className="w-5 h-5 text-orange-600" />
+                              </div>{expiringEvents.length === 0 ? (
+                                <p className="text-muted-foreground py-8 text-center">{t('admin.noEventsExpiring')}</p>
+                              ) : (
+                                <div className="space-y-3">
+                                  {expiringEvents.map((event) => {
+                                    // Ceiling so the final partial day reads "1 day", not "0"
+                                    // (#909); clamped since a row can sit at the boundary for the
+                                    // instant before useExpiryRefresh refetches it away.
+                                    const daysLeft = Math.max(1, Math.ceil((parseISO(event.expires_at!).getTime() - Date.now()) / 86400000));
 
-            {expiringEvents.length === 0 ? (
-              <p className="text-neutral-600 dark:text-neutral-400 py-8 text-center">{t('admin.noEventsExpiring')}</p>
-            ) : (
-              <div className="space-y-3">
-                {expiringEvents.map((event) => {
-                  // Ceiling so the final partial day reads "1 day", not "0"
-                  // (#909); clamped since a row can sit at the boundary for the
-                  // instant before useExpiryRefresh refetches it away.
-                  const daysLeft = Math.max(1, Math.ceil((parseISO(event.expires_at!).getTime() - Date.now()) / 86400000));
-
-                  return (
-                    <div
-                      key={event.id}
-                      className="flex items-center justify-between p-4 bg-orange-50 dark:bg-orange-900/30 rounded-lg border border-orange-200 dark:border-orange-800 cursor-pointer hover:bg-orange-100 dark:hover:bg-orange-900/50 transition-colors"
-                      onClick={() => navigate(`/admin/events/${event.id}`)}
-                    >
-                      <div>
-                        <h3 className="font-medium text-neutral-900 dark:text-neutral-100">{event.event_name}</h3>
-                        {event.event_date && (
-                          <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                            {format(parseISO(event.event_date), 'PP')}
-                          </p>
-                        )}
-                      </div>
-                      <div className="text-right">
-                        <p className="text-sm font-medium text-orange-600 dark:text-orange-400">
-                          {t('admin.daysLeft', { count: daysLeft })}
-                        </p>
-                        <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                          {t('gallery.expires')} {format(parseISO(event.expires_at!), 'PP')}
-                        </p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-
-            {expiringTotal > 5 && (
-              <button
-                onClick={() => navigate('/admin/events?filter=expiring')}
-                className="w-full mt-4 text-sm text-accent hover:opacity-80 font-medium"
-              >
-                {t('admin.viewAllExpiringEvents', { count: expiringTotal })} →
-              </button>
-            )}
-          </Card>
+                                    return (
+                                      <div
+                                        key={event.id}
+                                        className="flex items-center justify-between p-4 bg-orange-50 dark:bg-orange-900/30 rounded-lg border border-orange-200 dark:border-orange-800 cursor-pointer hover:bg-orange-100 dark:hover:bg-orange-900/50 transition-colors"
+                                        onClick={() => navigate(`/admin/events/${event.id}`)}
+                                      >
+                                        <div>
+                                          <h3 className="font-medium text-foreground">{event.event_name}</h3>
+                                          {event.event_date && (
+                                            <p className="text-sm text-muted-foreground">
+                                              {format(parseISO(event.event_date), 'PP')}
+                                            </p>
+                                          )}
+                                        </div>
+                                        <div className="text-right">
+                                          <p className="text-sm font-medium text-orange-600 dark:text-orange-400">
+                                            {t('admin.daysLeft', { count: daysLeft })}
+                                          </p>
+                                          <p className="text-xs text-muted-foreground">
+                                            {t('gallery.expires')} {format(parseISO(event.expires_at!), 'PP')}
+                                          </p>
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              )}{expiringTotal > 5 && (
+                                <button
+                                  onClick={() => navigate('/admin/events?filter=expiring')}
+                                  className="w-full mt-4 text-sm text-accent hover:opacity-80 font-medium"
+                                >
+                                  {t('admin.viewAllExpiringEvents', { count: expiringTotal })} →
+                                </button>
+                              )}</CardContent></Card>
 
         </div>
 
         {/* Recent Activity */}
-        <Card padding="md">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">{t('admin.recentActivity')}</h2>
-            <Clock className="w-5 h-5 text-neutral-500 dark:text-neutral-400" />
-          </div>
+        <Card><CardContent><div className="flex items-center justify-between mb-4">
+                          <h2 className="text-lg font-semibold text-foreground">{t('admin.recentActivity')}</h2>
+                          <Clock className="w-5 h-5 text-muted-foreground" />
+                        </div><div className="space-y-4">
+                          {!recentActivity || recentActivity.length === 0 ? (
+                            <p className="text-sm text-muted-foreground text-center py-4">{t('admin.noRecentActivity')}</p>
+                          ) : (
+                            recentActivity.slice(0, 5).map((activity) => {
+                              // Get color based on activity type
+                              const getActivityColor = (type: ActivityType) => {
+                                const colors: Partial<Record<ActivityType, string>> = {
+                                  'event_created': 'bg-green-500',
+                                  'photos_uploaded': 'bg-blue-500',
+                                  'event_archived': 'bg-purple-500',
+                                  'archive_restored': 'bg-indigo-500',
+                                  'archive_deleted': 'bg-red-500',
+                                  'bulk_download': 'bg-blue-500',
+                                  'email_config_updated': 'bg-yellow-500',
+                                  'branding_updated': 'bg-pink-500',
+                                  'theme_updated': 'bg-purple-500',
+                                  'gallery_password_entry': 'bg-gray-500',
+                                };
+                                return colors[type] || 'bg-gray-500';
+                              };
 
-          <div className="space-y-4">
-            {!recentActivity || recentActivity.length === 0 ? (
-              <p className="text-sm text-neutral-500 dark:text-neutral-400 text-center py-4">{t('admin.noRecentActivity')}</p>
-            ) : (
-              recentActivity.slice(0, 5).map((activity) => {
-                // Get color based on activity type
-                const getActivityColor = (type: ActivityType) => {
-                  const colors: Partial<Record<ActivityType, string>> = {
-                    'event_created': 'bg-green-500',
-                    'photos_uploaded': 'bg-blue-500',
-                    'event_archived': 'bg-purple-500',
-                    'archive_restored': 'bg-indigo-500',
-                    'archive_deleted': 'bg-red-500',
-                    'bulk_download': 'bg-blue-500',
-                    'email_config_updated': 'bg-yellow-500',
-                    'branding_updated': 'bg-pink-500',
-                    'theme_updated': 'bg-purple-500',
-                    'gallery_password_entry': 'bg-gray-500',
-                  };
-                  return colors[type] || 'bg-gray-500';
-                };
+                              // Format activity message with translations
+                              const getActivityMessage = (): string => {
+                                const params = buildActivityParams(activity);
+                                const translated = t(`admin.activities.${activity.type}`, params);
 
-                // Format activity message with translations
-                const getActivityMessage = (): string => {
-                  const params = buildActivityParams(activity);
-                  const translated = t(`admin.activities.${activity.type}`, params);
+                                // Translate; if key missing i18n returns the key string itself
+                                if (!translated || translated === `admin.activities.${activity.type}`) {
+                                  // Fallback: format a readable English message
+                                  return adminService.formatActivityMessage(activity);
+                                }
+                                return translated as string;
+                              };
 
-                  // Translate; if key missing i18n returns the key string itself
-                  if (!translated || translated === `admin.activities.${activity.type}`) {
-                    // Fallback: format a readable English message
-                    return adminService.formatActivityMessage(activity);
-                  }
-                  return translated as string;
-                };
-
-                return (
-                  <div key={activity.id} className="flex items-start gap-3">
-                    <div className={`w-2 h-2 rounded-full mt-1.5 flex-shrink-0 ${getActivityColor(activity.type)}`} />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm text-neutral-900 dark:text-neutral-100 break-words">
-                        {getActivityMessage()}
-                      </p>
-                      <p className="text-xs text-neutral-500 dark:text-neutral-400">{activity.actorName}</p>
-                      <p className="text-xs text-neutral-400 dark:text-neutral-500 mt-1">
-                        {formatDistanceToNow(parseISO(activity.createdAt), { addSuffix: true })}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })
-            )}
-          </div>
-
-        </Card>
+                              return (
+                                <div key={activity.id} className="flex items-start gap-3">
+                                  <div className={`w-2 h-2 rounded-full mt-1.5 flex-shrink-0 ${getActivityColor(activity.type)}`} />
+                                  <div className="flex-1 min-w-0">
+                                    <p className="text-sm text-foreground break-words">
+                                      {getActivityMessage()}
+                                    </p>
+                                    <p className="text-xs text-muted-foreground">{activity.actorName}</p>
+                                    <p className="text-xs text-muted-foreground mt-1">
+                                      {formatDistanceToNow(parseISO(activity.createdAt), { addSuffix: true })}
+                                    </p>
+                                  </div>
+                                </div>
+                              );
+                            })
+                          )}
+                        </div></CardContent></Card>
       </div>
 
       {/* CRM overview — quote / invoice pipeline + revenue +

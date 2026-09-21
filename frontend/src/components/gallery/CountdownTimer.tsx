@@ -59,15 +59,15 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({ expiresAt, class
     <div className={`flex items-center gap-3 ${className}`}>
       <Clock className="w-5 h-5 text-orange-600 animate-pulse" />
       <div className="flex items-center gap-1 font-mono text-lg">
-        <div className="bg-orange-100 text-orange-900 px-2 py-1 rounded">
+        <div className="bg-orange-100 text-orange-900 px-2 py-1 rounded-sm">
           {String(timeLeft.hours).padStart(2, '0')}
         </div>
         <span className="text-orange-600">:</span>
-        <div className="bg-orange-100 text-orange-900 px-2 py-1 rounded">
+        <div className="bg-orange-100 text-orange-900 px-2 py-1 rounded-sm">
           {String(timeLeft.minutes).padStart(2, '0')}
         </div>
         <span className="text-orange-600">:</span>
-        <div className="bg-orange-100 text-orange-900 px-2 py-1 rounded">
+        <div className="bg-orange-100 text-orange-900 px-2 py-1 rounded-sm">
           {String(timeLeft.seconds).padStart(2, '0')}
         </div>
       </div>

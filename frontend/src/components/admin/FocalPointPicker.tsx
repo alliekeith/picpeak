@@ -1,6 +1,7 @@
 import React, { useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AuthenticatedImage, Button } from '../common';
+import { AuthenticatedImage } from '../common';
+import { Button } from "@/components/ui/button";
 
 interface FocalPointPickerProps {
   imageUrl: string;
@@ -60,7 +61,7 @@ export const FocalPointPicker: React.FC<FocalPointPickerProps> = ({
       <div
         ref={containerRef}
         onClick={handleClick}
-        className="relative w-full h-48 rounded-lg overflow-hidden cursor-crosshair border border-neutral-300"
+        className="relative w-full h-48 rounded-lg overflow-hidden cursor-crosshair border border-border"
       >
         <AuthenticatedImage
           src={imageUrl}
@@ -81,12 +82,12 @@ export const FocalPointPicker: React.FC<FocalPointPickerProps> = ({
           <div className="absolute inset-0 m-px w-6 h-6 rounded-full border-2 border-white" />
           {/* Center dot */}
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-1.5 h-1.5 rounded-full bg-white shadow-sm" />
+            <div className="w-1.5 h-1.5 rounded-full bg-card shadow-xs" />
           </div>
         </div>
 
         {/* Coordinate label */}
-        <span className="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 text-[10px] font-mono leading-none text-white bg-black/60 rounded">
+        <span className="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 text-[10px] font-mono leading-none text-white bg-black/60 rounded-sm">
           {x}% {y}%
         </span>
       </div>
@@ -102,7 +103,7 @@ export const FocalPointPicker: React.FC<FocalPointPickerProps> = ({
             onClick={() => onChange(p.value)}
             className={
               keywordToPercent(currentValue) === p.value
-                ? 'bg-accent-dark/15 border-accent-dark/30 text-accent-dark'
+                ? 'bg-primary/15 border-primary/30 text-primary'
                 : ''
             }
           >

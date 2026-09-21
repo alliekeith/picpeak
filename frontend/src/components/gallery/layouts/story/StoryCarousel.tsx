@@ -38,7 +38,7 @@ export const StoryCarousel: React.FC<StoryCarouselProps> = ({
         className="w-full"
       >
         {photos.map((photo, index) => (
-          <SwiperSlide key={photo.id} className="!w-auto">
+          <SwiperSlide key={photo.id} className="w-auto!">
             <div className="story-carousel-item">
               <StoryPhotoCard
                 photo={photo}

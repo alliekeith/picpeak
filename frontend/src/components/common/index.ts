@@ -1,12 +1,17 @@
-export { Button } from './Button';
+/*
+ * App-level shared components.
+ *
+ * Button, Input and Card used to be re-exported from here as PicPeak's own
+ * design-system layer. They are gone: the stock shadcn equivalents are
+ * imported directly from @/components/ui/* at each call site. What is left
+ * below is PicPeak-specific and has no shadcn counterpart.
+ */
 export { CMSContentBlock } from './CMSContentBlock';
-export { Input } from './Input';
 export { CountrySelect } from './CountrySelect';
 export { LocalizedDateInput } from './LocalizedDateInput';
 export { TimeField, parseTimeToHHMM } from './TimeField';
 export { SortableHeader, useColumnSort } from './SortableHeader';
 export type { SortDir, SortPair, SortColumnMap } from './SortableHeader';
-export { Card, CardHeader, CardContent, CardFooter } from './Card';
 export { Loading, LoadingSkeleton } from './Loading';
 export { ErrorBoundary, PageErrorBoundary } from './ErrorBoundary';
 export { 

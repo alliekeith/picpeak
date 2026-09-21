@@ -6,8 +6,6 @@ import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { differenceInDays, parseISO } from 'date-fns';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-
-import { Button } from '../common';
 import { GallerySkeleton } from './GallerySkeleton';
 import { PasswordChangeRequiredNotice } from './PasswordChangeRequiredNotice';
 import { isAdminSessionExpired, isPasswordChangeRequired } from '../../utils/passwordChangeRequired';
@@ -46,6 +44,7 @@ import { usePublicSettings } from '../../hooks/usePublicSettings';
 import type { Photo } from '../../types';
 import { GALLERY_THEME_PRESETS } from '../../types/theme.types';
 import { useQueryClient } from '@tanstack/react-query';
+import { Button } from "@/components/ui/button";
 
 interface GalleryViewProps {
   slug: string;
@@ -805,9 +804,9 @@ export const GalleryView: React.FC<GalleryViewProps> = ({ slug, event, requiresP
     }
 
     return (
-      <div className="min-h-screen bg-surface flex items-center justify-center">
+      <div className="min-h-screen bg-card flex items-center justify-center">
         <div className="text-center">
-          <p className="text-lg text-muted-theme">{t('gallery.failedToLoad')}</p>
+          <p className="text-lg text-muted-foreground">{t('gallery.failedToLoad')}</p>
           <Button onClick={() => refetch()} className="mt-4">
             {t('gallery.tryAgain')}
           </Button>
@@ -853,17 +852,17 @@ export const GalleryView: React.FC<GalleryViewProps> = ({ slug, event, requiresP
         brandingSettings={brandingSettings}
       >
         <div className="max-w-xl mx-auto text-center py-16 px-4">
-          <div className="mx-auto mb-5 w-16 h-16 rounded-full bg-surface flex items-center justify-center">
-            <EyeOff className="w-8 h-8 text-muted-theme" />
+          <div className="mx-auto mb-5 w-16 h-16 rounded-full bg-card flex items-center justify-center">
+            <EyeOff className="w-8 h-8 text-muted-foreground" />
           </div>
-          <h2 className="text-2xl font-semibold mb-3" style={{ color: 'var(--color-text, #171717)' }}>
+          <h2 className="text-2xl font-semibold mb-3" style={{ color: 'var(--foreground, #171717)' }}>
             {t('gallery.revealPendingTitle', 'The photos are still a surprise')}
           </h2>
-          <p className="text-muted-theme mb-2">
+          <p className="text-muted-foreground mb-2">
             {t('gallery.revealPendingMessage', 'The host will reveal the gallery later — check back soon!')}
           </p>
           {data.reveal_at && (
-            <p className="text-sm text-muted-theme mb-6">
+            <p className="text-sm text-muted-foreground mb-6">
               {t('gallery.revealScheduledFor', 'Reveal scheduled for {{date}}', {
                 date: new Date(data.reveal_at).toLocaleString(),
               })}
@@ -871,17 +870,14 @@ export const GalleryView: React.FC<GalleryViewProps> = ({ slug, event, requiresP
           )}
           {uploadsOn && (
             <div className="mt-6">
-              <p className="text-sm text-muted-theme mb-3">
+              <p className="text-sm text-muted-foreground mb-3">
                 {t('gallery.revealUploadHint', 'You can already add your own photos to the collection:')}
               </p>
               <Button
-                variant="primary"
-                size="lg"
-                leftIcon={<Upload className="w-5 h-5" />}
-                onClick={() => setShowUploadModal(true)}
-              >
-                {t('upload.uploadPhotos', 'Upload Photos')}
-              </Button>
+                                        size="lg"
+                                        onClick={() => setShowUploadModal(true)}
+                                      >
+                                        <Upload className="w-5 h-5" />{t('upload.uploadPhotos', 'Upload Photos')}</Button>
             </div>
           )}
         </div>
@@ -940,32 +936,30 @@ export const GalleryView: React.FC<GalleryViewProps> = ({ slug, event, requiresP
         type="button"
         onClick={() => openFolderBySlug(null)}
         className="inline-flex items-center gap-1 underline hover:no-underline"
-        style={{ color: 'var(--color-muted-text)' }}
+        style={{ color: 'var(--muted-foreground)' }}
       >
         <ChevronLeft className="w-4 h-4" />
         {t('gallery.backToGallery', 'All photos')}
       </button>
-      <span style={{ color: 'var(--color-muted-text)' }}>/</span>
-      <span className="font-medium" style={{ color: 'var(--color-text)' }}>
+      <span style={{ color: 'var(--muted-foreground)' }}>/</span>
+      <span className="font-medium" style={{ color: 'var(--foreground)' }}>
         {openFolder.name}
       </span>
       {allowDownloads && folderDownloadableIds.length > 0 && (
         <Button
-          variant="outline"
-          size="sm"
-          onClick={handleDownloadFolder}
-          leftIcon={<Download className="w-4 h-4" />}
-          className="ml-auto"
-        >
-          {folderDownloadCapped
-            ? t('gallery.downloadFolderCapped', 'Download first {{limit}} of {{total}}', {
-                limit: SELECTED_DOWNLOAD_LIMIT,
-                total: folderDownloadableIds.length,
-              })
-            : t('gallery.downloadFolder', 'Download folder ({{count}})', {
-                count: folderDownloadableIds.length,
-              })}
-        </Button>
+                        variant="outline"
+                        size="sm"
+                        onClick={handleDownloadFolder}
+                        className="ml-auto"
+                      >
+                        <Download className="w-4 h-4" />{folderDownloadCapped
+                          ? t('gallery.downloadFolderCapped', 'Download first {{limit}} of {{total}}', {
+                              limit: SELECTED_DOWNLOAD_LIMIT,
+                              total: folderDownloadableIds.length,
+                            })
+                          : t('gallery.downloadFolder', 'Download folder ({{count}})', {
+                              count: folderDownloadableIds.length,
+                            })}</Button>
       )}
     </div>
   ) : (
@@ -1007,7 +1001,7 @@ export const GalleryView: React.FC<GalleryViewProps> = ({ slug, event, requiresP
           // container itself must not take hits, or it would block the nav's own
           // search/favourites/logout underneath. Only the real controls opt back
           // in via pointer-events-auto.
-          <div className="relative z-[60] pointer-events-none max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center gap-3 flex-wrap">
+          <div className="relative z-60 pointer-events-none max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center gap-3 flex-wrap">
             <div className="pointer-events-auto flex items-center gap-3 flex-wrap">
               {buildFolderNav(true)}
             </div>
@@ -1025,18 +1019,16 @@ export const GalleryView: React.FC<GalleryViewProps> = ({ slug, event, requiresP
                 breadcrumb already offers that folder's download. */}
             {!openFolder && allowDownloads && !hasRestrictedCategory && (
               <Button
-                variant="outline"
-                size="sm"
-                onClick={handleDownloadAll}
-                disabled={downloadAllMutation.isPending}
-                leftIcon={<Download className="w-4 h-4" />}
-                // No ml-auto: the right of this band belongs to Story's fixed
-                // nav (logout, favourites), and pushing the button over there
-                // physically covers those controls.
-                className="pointer-events-auto"
-              >
-                {t('gallery.downloadEverything', 'Download all photos')}
-              </Button>
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={handleDownloadAll}
+                                        disabled={downloadAllMutation.isPending}
+                                        // No ml-auto: the right of this band belongs to Story's fixed
+                                        // nav (logout, favourites), and pushing the button over there
+                                        // physically covers those controls.
+                                        className="pointer-events-auto"
+                                      >
+                                        <Download className="w-4 h-4" />{t('gallery.downloadEverything', 'Download all photos')}</Button>
             )}
           </div>
         )}
@@ -1257,16 +1249,13 @@ export const GalleryView: React.FC<GalleryViewProps> = ({ slug, event, requiresP
           if (allowUploads) {
             items.push(
               <Button
-                key="upload-button"
-                variant="outline"
-                size="sm"
-                leftIcon={<Upload className="w-4 h-4" />}
-                onClick={() => setShowUploadModal(true)}
-                className={!showSidebar ? 'flex-1 sm:flex-initial' : ''}
-              >
-                <span className="hidden sm:inline">{t('upload.uploadPhotos')}</span>
-                <span className="sm:hidden">{t('common.upload')}</span>
-              </Button>
+                                key="upload-button"
+                                variant="outline"
+                                size="sm"
+                                onClick={() => setShowUploadModal(true)}
+                                className={!showSidebar ? 'flex-1 sm:flex-initial' : ''}
+                              >
+                                <Upload className="w-4 h-4" /><span className="hidden sm:inline">{t('upload.uploadPhotos')}</span><span className="sm:hidden">{t('common.upload')}</span></Button>
             );
           }
           
@@ -1294,21 +1283,17 @@ export const GalleryView: React.FC<GalleryViewProps> = ({ slug, event, requiresP
               {isSelectionMode && selectedPhotos.size > 0 && (
                 <div className="flex items-center gap-2">
                   <Button
-                    variant="outline"
-                    size="sm"
-                    leftIcon={<EyeOff className="w-4 h-4" />}
-                    onClick={() => handleBulkVisibility('hidden')}
-                  >
-                    {t('clientAccess.hideSelected')}
-                  </Button>
+                                                          variant="outline"
+                                                          size="sm"
+                                                          onClick={() => handleBulkVisibility('hidden')}
+                                                        >
+                                                          <EyeOff className="w-4 h-4" />{t('clientAccess.hideSelected')}</Button>
                   <Button
-                    variant="outline"
-                    size="sm"
-                    leftIcon={<Eye className="w-4 h-4" />}
-                    onClick={() => handleBulkVisibility('visible')}
-                  >
-                    {t('clientAccess.showSelected')}
-                  </Button>
+                                                          variant="outline"
+                                                          size="sm"
+                                                          onClick={() => handleBulkVisibility('visible')}
+                                                        >
+                                                          <Eye className="w-4 h-4" />{t('clientAccess.showSelected')}</Button>
                 </div>
               )}
             </div>

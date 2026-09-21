@@ -5,8 +5,9 @@ import { toast } from 'react-toastify';
 import { usePermissions } from '../../contexts/PermissionsContext';
 import { productUsageService } from '../../services/productUsage.service';
 import { ProductUsageConsentDialog } from '../../features/settings/components/ProductUsageConsentDialog';
-import { Button } from '../common/Button';
 import { UsageReportingPoints } from './UsageReportingPitch';
+import { Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 /** The invitation is acknowledged once per installation; consent is a separate, explicit choice. */
 export default function UsageReportingPrompt() {
@@ -71,28 +72,26 @@ export default function UsageReportingPrompt() {
           event.preventDefault();
           if (!isEnabling) void dismiss();
         }}
-        className="w-[calc(100%-2rem)] max-w-md max-h-[90vh] flex flex-col overflow-hidden rounded-xl p-0 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 shadow-xl backdrop:bg-black/50 focus:outline-none"
+        className="w-[calc(100%-2rem)] max-w-md max-h-[90vh] flex flex-col overflow-hidden rounded-xl p-0 bg-card text-neutral-900 dark:text-neutral-100 shadow-xl backdrop:bg-black/50 focus:outline-hidden"
       >
         <header className="px-6 pt-6 pb-4">
-          <h2 id={titleId} className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-1">
+          <h2 id={titleId} className="text-lg font-semibold text-foreground mb-1">
             {t('productUsagePrompt.title')}
           </h2>
-          <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('productUsagePrompt.intro')}</p>
+          <p className="text-sm text-muted-foreground">{t('productUsagePrompt.intro')}</p>
         </header>
 
         <div tabIndex={0} role="group" aria-label={t('productUsagePrompt.title')}
-          className="min-h-0 overflow-y-auto px-6 py-2 focus-visible:outline-primary-600">
+          className="min-h-0 overflow-y-auto px-6 py-2 focus-visible:outline-brand-600">
           <UsageReportingPoints />
         </div>
 
         <footer className="px-6 pt-4 pb-6 space-y-3">
           {data.collector_error && (
-            <p role="alert" className="text-sm text-neutral-700 dark:text-neutral-300">{t('setup.usageReporting.enableFailed')}</p>
+            <p role="alert" className="text-sm text-foreground">{t('setup.usageReporting.enableFailed')}</p>
           )}
-          <Button type="button" size="lg" className="w-full h-auto min-h-12 whitespace-normal"
-            isLoading={isEnabling} disabled={!data.collector_url} onClick={() => setShowConsent(true)}>
-            {t('productUsage.review')}
-          </Button>
+          <Button type="button" size="lg" className="w-full h-auto min-h-12 whitespace-normal" onClick={() => setShowConsent(true)} disabled={!data.collector_url || isEnabling}>
+                              {isEnabling && <Loader2 className="animate-spin" />}{t('productUsage.review')}</Button>
           <Button type="button" variant="outline" size="lg" className="w-full h-auto min-h-12 whitespace-normal"
             disabled={isEnabling} onClick={dismiss}>
             {t('setup.usageReporting.skip')}

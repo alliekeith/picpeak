@@ -263,8 +263,8 @@ export const PhotoCard: React.FC<PhotoCardProps> = ({
   const actionButtonClass =
     actionVariant === 'dark'
       ? 'p-2 bg-white/20 hover:bg-white/40 rounded-full transition-colors'
-      : 'p-2 bg-white/90 rounded-full hover:bg-white transition-colors';
-  const actionIconClass = actionVariant === 'dark' ? 'w-5 h-5 text-white' : 'w-5 h-5 text-neutral-800';
+      : 'p-2 bg-white/90 rounded-full hover:bg-accent transition-colors';
+  const actionIconClass = actionVariant === 'dark' ? 'w-5 h-5 text-white' : 'w-5 h-5 text-foreground';
 
   const handlePhotoClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isTouchDevice && !overlayVisible && !isSelectionMode) {
@@ -352,14 +352,14 @@ export const PhotoCard: React.FC<PhotoCardProps> = ({
     showFeedbackActions && feedbackOptions?.allowLikes ? (
       <button
         className={`p-2 rounded-full transition-colors ${
-          liked ? 'bg-red-500/90 hover:bg-red-500' : 'bg-white/90 hover:bg-white'
+          liked ? 'bg-red-500/90 hover:bg-red-500' : 'bg-white/90 hover:bg-accent'
         }`}
         onClick={handleLike}
         aria-label={likeToggleLabels && liked ? 'Unlike photo' : 'Like photo'}
         aria-pressed={liked}
         title={likeToggleLabels ? (liked ? 'Unlike' : 'Like') : 'Like'}
       >
-        <Heart className={`w-5 h-5 ${liked ? 'text-white fill-white' : 'text-neutral-800'}`} />
+        <Heart className={`w-5 h-5 ${liked ? 'text-white fill-white' : 'text-foreground'}`} />
       </button>
     ) : null;
 
@@ -481,7 +481,7 @@ export const PhotoCard: React.FC<PhotoCardProps> = ({
             className={`absolute top-2 right-2 z-20 transition-opacity ${checkboxVisibilityClass}`}
             onClick={(e) => { e.stopPropagation(); onToggleSelect(); }}
           >
-            <div className={`w-6 h-6 rounded-full border-2 ${isSelected ? 'bg-accent-dark border-accent-dark' : 'bg-white/90 border-white'} flex items-center justify-center transition-colors`}>
+            <div className={`w-6 h-6 rounded-full border-2 ${isSelected ? 'bg-primary border-primary' : 'bg-white/90 border-white'} flex items-center justify-center transition-colors`}>
               {isSelected && <Check className="w-4 h-4 text-white" />}
             </div>
           </button>

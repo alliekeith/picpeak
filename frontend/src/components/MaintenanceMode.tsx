@@ -17,9 +17,9 @@ export const MaintenanceMode: React.FC = () => {
   }, [settings?.default_language, i18n]);
 
   return (
-    <div className="min-h-screen bg-neutral-50 flex flex-col">
+    <div className="min-h-screen bg-muted flex flex-col">
       {/* Header with branding - Always show, with PicPeak logo as fallback */}
-      <div className="bg-white border-b border-neutral-200 py-4">
+      <div className="bg-card border-b border-border py-4">
         <div className="container">
           <div className="flex items-center justify-center">
             <img 
@@ -34,9 +34,9 @@ export const MaintenanceMode: React.FC = () => {
             />
             {settings?.branding_company_name && settings.branding_company_name !== 'PicPeak' && (
               <div className="ml-4 text-center">
-                <h2 className="text-xl font-semibold text-neutral-800">{settings.branding_company_name}</h2>
+                <h2 className="text-xl font-semibold text-foreground">{settings.branding_company_name}</h2>
                 {settings.branding_company_tagline && (
-                  <p className="text-sm text-neutral-600">{settings.branding_company_tagline}</p>
+                  <p className="text-sm text-muted-foreground">{settings.branding_company_tagline}</p>
                 )}
               </div>
             )}
@@ -51,20 +51,20 @@ export const MaintenanceMode: React.FC = () => {
             <AlertTriangle className="w-10 h-10 text-amber-600" />
           </div>
           
-          <h1 className="text-3xl font-bold text-neutral-900 mb-4">
+          <h1 className="text-3xl font-bold text-foreground mb-4">
             {t('maintenance.title')}
           </h1>
           
-          <p className="text-lg text-neutral-600 mb-8">
+          <p className="text-lg text-muted-foreground mb-8">
             {t('maintenance.message')}
           </p>
           
           {settings?.branding_support_email && (
-            <p className="text-sm text-neutral-500 mt-8">
+            <p className="text-sm text-muted-foreground mt-8">
               {t('maintenance.urgentMatters')}{' '}
               <a 
                 href={`mailto:${settings.branding_support_email}`}
-                className="text-primary-600 hover:text-primary-700"
+                className="text-brand-600 hover:text-brand-700"
               >
                 {settings.branding_support_email}
               </a>
@@ -75,9 +75,9 @@ export const MaintenanceMode: React.FC = () => {
 
       {/* Footer */}
       {settings?.branding_footer_text && (
-        <footer className="py-4 border-t border-neutral-200">
+        <footer className="py-4 border-t border-border">
           <div className="container text-center">
-            <p className="text-sm text-neutral-500">
+            <p className="text-sm text-muted-foreground">
               {settings.branding_footer_text}
             </p>
           </div>

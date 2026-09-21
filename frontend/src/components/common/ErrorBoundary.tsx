@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import type { ReactNode } from 'react';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
-import { Button } from './Button';
 import i18n from '../../i18n/config';
+import { Button } from "@/components/ui/button";
 
 interface Props {
   children: ReactNode;
@@ -48,18 +48,16 @@ export class ErrorBoundary extends Component<Props, State> {
         <div className="min-h-[400px] flex items-center justify-center p-4">
           <div className="text-center max-w-md">
             <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-            <h2 className="text-lg font-semibold text-neutral-900 mb-2">
+            <h2 className="text-lg font-semibold text-foreground mb-2">
               {i18n.t('errors.somethingWentWrong')}
             </h2>
-            <p className="text-sm text-neutral-600 mb-6">
+            <p className="text-sm text-muted-foreground mb-6">
               {this.state.error?.message || i18n.t('errors.tryAgainLater')}
             </p>
             <Button
-              onClick={this.handleReset}
-              leftIcon={<RefreshCw className="w-4 h-4" />}
-            >
-              {i18n.t('errors.refreshPage')}
-            </Button>
+                                onClick={this.handleReset}
+                              >
+                                <RefreshCw className="w-4 h-4" />{i18n.t('errors.refreshPage')}</Button>
           </div>
         </div>
       );
@@ -94,24 +92,21 @@ export class PageErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen bg-neutral-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full text-center">
+        <div className="min-h-screen bg-muted flex items-center justify-center p-4">
+          <div className="bg-card rounded-lg shadow-lg p-8 max-w-md w-full text-center">
             <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-6" />
-            <h1 className="text-2xl font-bold text-neutral-900 mb-4">
+            <h1 className="text-2xl font-bold text-foreground mb-4">
               {i18n.t('errors.oopsSomethingWentWrong')}
             </h1>
-            <p className="text-neutral-600 mb-8">
+            <p className="text-muted-foreground mb-8">
               {i18n.t('errors.unexpectedError')}
             </p>
             <div className="space-y-3">
               <Button
-                variant="primary"
-                onClick={this.handleReset}
-                leftIcon={<RefreshCw className="w-4 h-4" />}
-                className="w-full"
-              >
-                {i18n.t('errors.goToHomepage')}
-              </Button>
+                                      onClick={this.handleReset}
+                                      className="w-full"
+                                    >
+                                      <RefreshCw className="w-4 h-4" />{i18n.t('errors.goToHomepage')}</Button>
               <Button
                 variant="outline"
                 onClick={() => window.location.reload()}
@@ -122,10 +117,10 @@ export class PageErrorBoundary extends Component<Props, State> {
             </div>
             {import.meta.env.DEV && this.state.error && (
               <details className="mt-8 text-left">
-                <summary className="text-sm text-neutral-500 cursor-pointer hover:text-neutral-700">
+                <summary className="text-sm text-muted-foreground cursor-pointer hover:text-foreground">
                   {i18n.t('errors.errorDetails')}
                 </summary>
-                <pre className="mt-2 text-xs bg-neutral-100 p-3 rounded overflow-auto">
+                <pre className="mt-2 text-xs bg-muted p-3 rounded-sm overflow-auto">
                   {this.state.error.stack}
                 </pre>
               </details>

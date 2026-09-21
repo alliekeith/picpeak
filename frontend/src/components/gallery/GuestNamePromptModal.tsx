@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Button, Input } from '../common';
 import { useGuestIdentity } from '../../contexts/GuestIdentityContext';
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 interface GuestNamePromptModalProps {
   requireEmail?: boolean;
@@ -23,6 +25,7 @@ export const GuestNamePromptModal: React.FC<GuestNamePromptModalProps> = ({
   allowCancel = true,
   onCancel,
 }) => {
+    const __fieldId = React.useId();
   const { t } = useTranslation();
   const { promptOpen, closePrompt, register, openRecovery } = useGuestIdentity();
   const [name, setName] = useState('');
@@ -72,23 +75,23 @@ export const GuestNamePromptModal: React.FC<GuestNamePromptModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-60 flex items-center justify-center p-4">
       <div className="fixed inset-0 bg-black bg-opacity-50" onClick={allowCancel ? handleClose : undefined} />
-      <div className="relative bg-surface rounded-lg shadow-xl max-w-md w-full p-6">
+      <div className="relative bg-card rounded-lg shadow-xl max-w-md w-full p-6">
         {allowCancel && (
           <button
             type="button"
             onClick={handleClose}
             className="absolute top-4 right-4 p-1 hover:bg-black/10 rounded-lg transition-colors"
           >
-            <X className="w-5 h-5 text-muted-theme" />
+            <X className="w-5 h-5 text-muted-foreground" />
           </button>
         )}
 
-        <h2 className="text-lg font-semibold text-theme mb-2">
+        <h2 className="text-lg font-semibold text-foreground mb-2">
           {t('gallery.guestPrompt.title', "Welcome — what's your name?")}
         </h2>
-        <p className="text-sm text-muted-theme mb-4">
+        <p className="text-sm text-muted-foreground mb-4">
           {t(
             'gallery.guestPrompt.description',
             'Your picks will be saved under this name so the photographer knows which photos you love.'
@@ -96,38 +99,32 @@ export const GuestNamePromptModal: React.FC<GuestNamePromptModalProps> = ({
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            label={t('gallery.guestPrompt.nameLabel', 'Your name')}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            error={errors.name}
-            placeholder={t('gallery.guestPrompt.namePlaceholder', 'Enter your name')}
-            autoFocus
-            required
-            maxLength={100}
-          />
-          <Input
-            type="email"
-            label={
-              requireEmail
-                ? t('gallery.guestPrompt.emailLabelRequired', 'Email')
-                : t('gallery.guestPrompt.emailLabel', 'Email (optional)')
-            }
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            error={errors.email}
-            placeholder={t('gallery.guestPrompt.emailPlaceholder', 'you@example.com')}
-            maxLength={255}
-          />
+          <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('gallery.guestPrompt.nameLabel', 'Your name')}</span><Input
+                              value={name}
+                              onChange={(e) => setName(e.target.value)}
+                              placeholder={t('gallery.guestPrompt.namePlaceholder', 'Enter your name')}
+                              autoFocus
+                              required
+                              maxLength={100} aria-invalid={!!(errors.name)} aria-describedby={(errors.name) ? `${__fieldId}-0-error` : undefined}
+                            />{(errors.name) && <p id={`${__fieldId}-0-error`} className="mt-1.5 text-sm text-destructive">{errors.name}</p>}</Label></div>
+          <div className="w-full"><Label className="block"><span className="mb-1.5 block">{requireEmail
+                                  ? t('gallery.guestPrompt.emailLabelRequired', 'Email')
+                                  : t('gallery.guestPrompt.emailLabel', 'Email (optional)')}</span><Input
+                              type="email"
+                              value={email}
+                              onChange={(e) => setEmail(e.target.value)}
+                              placeholder={t('gallery.guestPrompt.emailPlaceholder', 'you@example.com')}
+                              maxLength={255} aria-invalid={!!(errors.email)} aria-describedby={(errors.email) ? `${__fieldId}-1-error` : undefined}
+                            />{(errors.email) && <p id={`${__fieldId}-1-error`} className="mt-1.5 text-sm text-destructive">{errors.email}</p>}</Label></div>
 
           {submitError && (
-            <div className="text-sm text-red-600 bg-red-50 dark:bg-red-900/20 rounded px-3 py-2">
+            <div className="text-sm text-red-600 bg-red-50 dark:bg-red-900/20 rounded-sm px-3 py-2">
               {submitError}
             </div>
           )}
 
           <div className="flex gap-2 pt-2">
-            <Button type="submit" variant="primary" className="flex-1" disabled={submitting}>
+            <Button type="submit" className="flex-1" disabled={submitting}>
               {submitting
                 ? t('common.submitting', 'Submitting...')
                 : t('gallery.guestPrompt.submit', 'Continue')}
@@ -155,13 +152,13 @@ export const GuestNamePromptModal: React.FC<GuestNamePromptModalProps> = ({
               A dark gallery preset is delivered through CSS variables and does
               NOT add Tailwind's .dark class, so the dark: half never fires and
               this block would render dark grey on a dark surface. The rest of
-              the modal uses text-theme / text-muted-theme for exactly this
+              the modal uses text-foreground / text-muted-foreground for exactly this
               reason. */}
           <div
             className="pt-3 mt-1 border-t text-center"
-            style={{ borderColor: 'var(--color-surface-border, #e5e5e5)' }}
+            style={{ borderColor: 'var(--border, #e5e5e5)' }}
           >
-            <p className="text-sm text-muted-theme">
+            <p className="text-sm text-muted-foreground">
               {t(
                 'gallery.guestPrompt.returningHint',
                 'Been here before? Your earlier picks are still saved.'
@@ -173,7 +170,7 @@ export const GuestNamePromptModal: React.FC<GuestNamePromptModalProps> = ({
                 closePrompt();
                 openRecovery();
               }}
-              className="mt-1 text-sm font-medium text-accent hover:underline"
+              className="mt-1 text-sm font-medium text-brand hover:underline"
             >
               {t('gallery.guestPrompt.recoverPicks', 'Get them back')}
             </button>

@@ -7,7 +7,6 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AdminPhoto } from '../../services/photos.service';
 import { photosService } from '../../services/photos.service';
 import { feedbackService, type PhotoFeedback, type FeedbackSummary } from '../../services/feedback.service';
-import { Button } from '../common';
 import { AdminAuthenticatedImage } from './AdminAuthenticatedImage';
 import { AdminAuthenticatedVideo } from './AdminAuthenticatedVideo';
 import { useLocalizedDate } from '../../hooks/useLocalizedDate';
@@ -15,6 +14,7 @@ import { COLOR_LABELS, COLOR_LABEL_SWATCHES, type ColorLabel, type KeybindMode }
 import { resolveFeedbackKey, colorShortcutHints } from '../../utils/feedbackKeybinds';
 import { useTranslation } from 'react-i18next';
 import { useMutationWithToast, useModal } from '../../hooks';
+import { Button } from "@/components/ui/button";
 
 type AdminFeedbackResponse = {
   feedback: PhotoFeedback[];
@@ -270,7 +270,7 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
               className="max-w-full max-h-full bg-black"
               poster={currentPhoto.thumbnail_url || undefined}
               fallback={
-                <div className="flex items-center justify-center text-neutral-400">
+                <div className="flex items-center justify-center text-muted-foreground">
                   <div className="text-center">
                     <Eye className="w-12 h-12 mx-auto mb-2" />
                     <p className="text-sm">Failed to load media</p>
@@ -284,7 +284,7 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
               alt={currentPhoto.filename}
               className="max-w-full max-h-full object-contain"
               fallback={
-                <div className="flex items-center justify-center text-neutral-400">
+                <div className="flex items-center justify-center text-muted-foreground">
                   <div className="text-center">
                     <Eye className="w-12 h-12 mx-auto mb-2" />
                     <p className="text-sm">Failed to load image</p>
@@ -299,21 +299,19 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
         <div className="lg:w-80 bg-neutral-900 rounded-lg p-6 overflow-y-auto">
           <h3 className="text-white font-medium text-lg">{currentPhoto.filename}</h3>
           {currentPhoto.original_filename && currentPhoto.original_filename !== currentPhoto.filename && (
-            <p className="text-neutral-400 text-sm">Original: {currentPhoto.original_filename}</p>
+            <p className="text-muted-foreground text-sm">Original: {currentPhoto.original_filename}</p>
           )}
           <div className="mb-4" />
 
           {/* Actions */}
           <div className="flex gap-2 mb-6">
             <Button
-              variant="primary"
-              size="sm"
-              onClick={handleDownload}
-              leftIcon={<Download className="w-4 h-4" />}
-              className="flex-1"
-            >
-              Download
-            </Button>
+                                    size="sm"
+                                    onClick={handleDownload}
+                                    className="flex-1"
+                                  >
+                                    <Download className="w-4 h-4" />Download
+                                  </Button>
             <button
               onClick={handleDelete}
               disabled={isDeleting}
@@ -327,13 +325,13 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
           {/* Category */}
           <div className="mb-6">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-neutral-400 text-sm flex items-center gap-1">
+              <span className="text-muted-foreground text-sm flex items-center gap-1">
                 <Tag className="w-4 h-4" />
                 Category
               </span>
               <button
                 onClick={categoryMenuModal.toggle}
-                className="text-xs text-accent hover:text-accent-dark"
+                className="text-xs text-brand hover:text-primary"
               >
                 Change
               </button>
@@ -346,7 +344,7 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
               <div className="mt-2 bg-neutral-800 rounded-lg p-2">
                 <button
                   onClick={() => handleCategoryChange(null)}
-                  className="w-full text-left px-3 py-2 text-sm text-white hover:bg-neutral-700 rounded"
+                  className="w-full text-left px-3 py-2 text-sm text-white hover:bg-neutral-700 rounded-sm"
                 >
                   Uncategorized
                 </button>
@@ -354,7 +352,7 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
                   <button
                     key={cat.id}
                     onClick={() => handleCategoryChange(cat.id)}
-                    className="w-full text-left px-3 py-2 text-sm text-white hover:bg-neutral-700 rounded"
+                    className="w-full text-left px-3 py-2 text-sm text-white hover:bg-neutral-700 rounded-sm"
                   >
                     {cat.name}
                   </button>
@@ -366,7 +364,7 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
           {/* Metadata */}
           <div className="space-y-4 text-sm">
             <div>
-              <span className="text-neutral-400 flex items-center gap-1 mb-1">
+              <span className="text-muted-foreground flex items-center gap-1 mb-1">
                 <HardDrive className="w-4 h-4" />
                 File Size
               </span>
@@ -374,7 +372,7 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
             </div>
 
             <div>
-              <span className="text-neutral-400 flex items-center gap-1 mb-1">
+              <span className="text-muted-foreground flex items-center gap-1 mb-1">
                 <Calendar className="w-4 h-4" />
                 Uploaded
               </span>
@@ -385,7 +383,7 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
 
             {currentPhoto.view_count !== undefined && (
               <div>
-                <span className="text-neutral-400 flex items-center gap-1 mb-1">
+                <span className="text-muted-foreground flex items-center gap-1 mb-1">
                   <Eye className="w-4 h-4" />
                   Views
                 </span>
@@ -395,7 +393,7 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
 
             {currentPhoto.download_count !== undefined && (
               <div>
-                <span className="text-neutral-400 flex items-center gap-1 mb-1">
+                <span className="text-muted-foreground flex items-center gap-1 mb-1">
                   <MousePointer className="w-4 h-4" />
                   Downloads
                 </span>
@@ -413,7 +411,7 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
               <Star className="w-4 h-4" />
               {t('admin.photos.myMarks', 'Your marks')}
             </h4>
-            <p className="text-xs text-neutral-400 mb-3">
+            <p className="text-xs text-muted-foreground mb-3">
               {t('admin.photos.myMarksHelp', 'Only you see these. They never appear in the client gallery, and they export to Lightroom as XMP.')}
             </p>
 
@@ -431,12 +429,12 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
                   title={`${value}`}
                 >
                   <Star
-                    className={`w-5 h-5 ${(currentMark.rating || 0) >= value ? 'text-yellow-400' : 'text-neutral-600'}`}
+                    className={`w-5 h-5 ${(currentMark.rating || 0) >= value ? 'text-yellow-400' : 'text-muted-foreground'}`}
                     fill={(currentMark.rating || 0) >= value ? 'currentColor' : 'none'}
                   />
                 </button>
               ))}
-              <span className="ml-2 text-xs text-neutral-500">1–5</span>
+              <span className="ml-2 text-xs text-muted-foreground">1–5</span>
             </div>
 
             <div className="flex flex-wrap items-center gap-1.5" role="group" aria-label={t('feedback.colorLabelsTitle', 'Color labels')}>
@@ -465,7 +463,7 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
                       style={{ backgroundColor: swatch.fill, borderColor: swatch.ring }}
                       aria-hidden="true"
                     />
-                    {shortcut && <span className="text-neutral-400">{shortcut}</span>}
+                    {shortcut && <span className="text-muted-foreground">{shortcut}</span>}
                   </button>
                 );
               })}
@@ -488,7 +486,7 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
                       <Star className="w-4 h-4" fill="currentColor" />
                       <span className="text-white font-medium">{Number(averageRating).toFixed(1)}</span>
                     </div>
-                    <p className="text-xs text-neutral-400">Avg Rating</p>
+                    <p className="text-xs text-muted-foreground">Avg Rating</p>
                   </div>
                 )}
                 
@@ -498,7 +496,7 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
                       <Heart className="w-4 h-4" fill="currentColor" />
                       <span className="text-white font-medium">{likeCount}</span>
                     </div>
-                    <p className="text-xs text-neutral-400">Likes</p>
+                    <p className="text-xs text-muted-foreground">Likes</p>
                   </div>
                 )}
                 
@@ -508,7 +506,7 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
                       <Star className="w-4 h-4" />
                       <span className="text-white font-medium">{favoriteCount}</span>
                     </div>
-                    <p className="text-xs text-neutral-400">Favorites</p>
+                    <p className="text-xs text-muted-foreground">Favorites</p>
                   </div>
                 )}
                 
@@ -518,7 +516,7 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
                       <MessageSquare className="w-4 h-4" />
                       <span className="text-white font-medium">{comments.length}</span>
                     </div>
-                    <p className="text-xs text-neutral-400">Comments</p>
+                    <p className="text-xs text-muted-foreground">Comments</p>
                   </div>
                 )}
               </div>
@@ -528,7 +526,7 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
                 <div className="space-y-2">
                   <button
                     onClick={commentsModal.toggle}
-                    className="text-xs text-accent hover:text-accent-dark mb-2"
+                    className="text-xs text-brand hover:text-primary mb-2"
                   >
                     {commentsModal.isOpen ? 'Hide' : 'Show'} Comments ({comments.length})
                   </button>
@@ -542,7 +540,7 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
                                 <p className="text-sm font-medium text-white">
                                   {comment.guest_name || 'Anonymous'}
                                 </p>
-                                <p className="text-xs text-neutral-400">
+                                <p className="text-xs text-muted-foreground">
                                   {fmtDateTime(comment.created_at)}
                                 </p>
                               </div>
@@ -550,19 +548,19 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
                               {/* Comment Status Badge */}
                               <div className="flex items-center gap-1">
                                 {!comment.is_approved && !comment.is_hidden && (
-                                  <span className="text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded flex items-center gap-1">
+                                  <span className="text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded-sm flex items-center gap-1">
                                     <AlertCircle className="w-3 h-3" />
                                     Pending
                                   </span>
                                 )}
                                 {comment.is_approved && !comment.is_hidden && (
-                                  <span className="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded flex items-center gap-1">
+                                  <span className="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded-sm flex items-center gap-1">
                                     <CheckCircle className="w-3 h-3" />
                                     Approved
                                   </span>
                                 )}
                                 {comment.is_hidden && (
-                                  <span className="text-xs bg-red-500/20 text-red-400 px-2 py-1 rounded flex items-center gap-1">
+                                  <span className="text-xs bg-red-500/20 text-red-400 px-2 py-1 rounded-sm flex items-center gap-1">
                                     <XCircle className="w-3 h-3" />
                                     Hidden
                                   </span>
@@ -570,7 +568,7 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
                               </div>
                             </div>
                             
-                            <p className="text-sm text-neutral-300 mb-3">
+                            <p className="text-sm text-muted-foreground mb-3">
                               {comment.comment_text}
                             </p>
                             
@@ -583,7 +581,7 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
                                     action: 'approve' 
                                   })}
                                   disabled={moderateFeedbackMutation.isPending}
-                                  className="text-xs px-2 py-1 bg-green-600 hover:bg-green-700 text-white rounded"
+                                  className="text-xs px-2 py-1 bg-green-600 hover:bg-green-700 text-white rounded-sm"
                                 >
                                   Approve
                                 </button>
@@ -596,7 +594,7 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
                                     action: 'hide' 
                                   })}
                                   disabled={moderateFeedbackMutation.isPending}
-                                  className="text-xs px-2 py-1 bg-yellow-600 hover:bg-yellow-700 text-white rounded"
+                                  className="text-xs px-2 py-1 bg-yellow-600 hover:bg-yellow-700 text-white rounded-sm"
                                 >
                                   Hide
                                 </button>
@@ -609,7 +607,7 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
                                     action: 'approve' 
                                   })}
                                   disabled={moderateFeedbackMutation.isPending}
-                                  className="text-xs px-2 py-1 bg-green-600 hover:bg-green-700 text-white rounded"
+                                  className="text-xs px-2 py-1 bg-green-600 hover:bg-green-700 text-white rounded-sm"
                                 >
                                   Unhide
                                 </button>
@@ -622,7 +620,7 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
                                   }
                                 }}
                                 disabled={deleteFeedbackMutation.isPending}
-                                className="text-xs px-2 py-1 bg-red-600 hover:bg-red-700 text-white rounded"
+                                className="text-xs px-2 py-1 bg-red-600 hover:bg-red-700 text-white rounded-sm"
                               >
                                 Delete
                               </button>
@@ -636,14 +634,14 @@ const AdminPhotoViewerContent: React.FC<ViewerContentProps> = ({
               
               {/* No feedback message */}
               {comments.length === 0 && (
-                <p className="text-neutral-400 text-sm">No feedback for this photo yet.</p>
+                <p className="text-muted-foreground text-sm">No feedback for this photo yet.</p>
               )}
             </div>
           )}
 
           {/* Navigation info */}
           <div className="mt-6 pt-6 border-t border-neutral-700">
-            <p className="text-neutral-400 text-sm text-center">
+            <p className="text-muted-foreground text-sm text-center">
               {currentIndex + 1} of {photos.length}
             </p>
           </div>

@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { Key, RefreshCw, Copy, Check, Zap } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { generateEventPassword, generatePasswordSuggestions, validatePassword } from '../../utils/passwordGenerator';
-import { Button } from './Button';
+import { Button } from "@/components/ui/button";
 
 interface PasswordGeneratorProps {
   eventName?: string;
@@ -134,12 +134,12 @@ export const PasswordGenerator: React.FC<PasswordGeneratorProps> = ({
       {/* Password Suggestions Modal */}
       {showSuggestions && (
         <div className="absolute top-full left-0 right-0 mt-2 z-50">
-          <div className="bg-white border border-neutral-200 rounded-lg shadow-lg p-4">
+          <div className="bg-card border border-border rounded-lg shadow-lg p-4">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-medium text-neutral-900">{t('passwordGenerator.suggestions')}</h3>
+              <h3 className="text-sm font-medium text-foreground">{t('passwordGenerator.suggestions')}</h3>
               <button
                 onClick={() => setShowSuggestions(false)}
-                className="text-neutral-400 hover:text-neutral-600"
+                className="text-muted-foreground hover:text-foreground"
               >
                 ×
               </button>
@@ -151,17 +151,17 @@ export const PasswordGenerator: React.FC<PasswordGeneratorProps> = ({
                 return (
                   <div
                     key={index}
-                    className="flex items-center justify-between p-2 border border-neutral-100 rounded-md hover:bg-neutral-50"
+                    className="flex items-center justify-between p-2 border border-border rounded-md hover:bg-accent"
                   >
                     <div className="flex-1 min-w-0">
-                      <code className="text-sm font-mono text-neutral-800 break-all">
+                      <code className="text-sm font-mono text-foreground break-all">
                         {password}
                       </code>
                       <div className="flex items-center gap-2 mt-1">
                         <span className={`text-xs font-medium ${strength.color}`}>
                           {strength.label}
                         </span>
-                        <span className="text-xs text-neutral-500">
+                        <span className="text-xs text-muted-foreground">
                           {password.length} {t('passwordGenerator.characters')}
                         </span>
                       </div>
@@ -170,7 +170,7 @@ export const PasswordGenerator: React.FC<PasswordGeneratorProps> = ({
                     <div className="flex items-center gap-1 ml-2">
                       <button
                         onClick={() => copyToClipboard(password, index)}
-                        className="p-1 text-neutral-400 hover:text-neutral-600"
+                        className="p-1 text-muted-foreground hover:text-foreground"
                         title={t('passwordGenerator.copyPassword')}
                       >
                         {copiedIndex === index ? (

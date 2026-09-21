@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { Plus, X } from 'lucide-react';
+import { Plus, X, Loader2 } from 'lucide-react';
 
-import { Button, Input, Loading } from '../common';
+import { Loading } from '../common';
 import { eventTypesService, EventType } from '../../services/eventTypes.service';
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   onDone: () => void;
@@ -163,8 +165,8 @@ export const SetupEventTypesStep: React.FC<Props> = ({ onDone }) => {
       // Catalog unreadable — don't trap the user; the defaults stay seeded and
       // remain editable later in Settings → Event Types.
       <div className="space-y-6">
-        <p className="text-sm text-neutral-600">{t('setup.eventTypes.loadFailed')}</p>
-        <Button type="button" variant="primary" size="lg" className="w-full" onClick={onDone}>
+        <p className="text-sm text-muted-foreground">{t('setup.eventTypes.loadFailed')}</p>
+        <Button type="button" size="lg" className="w-full" onClick={onDone}>
           {t('setup.continue')}
         </Button>
       </div>
@@ -175,14 +177,14 @@ export const SetupEventTypesStep: React.FC<Props> = ({ onDone }) => {
 
   return (
     <div className="space-y-6">
-      <p className="rounded-lg bg-neutral-50 border border-neutral-200 px-3 py-2 text-xs text-neutral-600">
+      <p className="rounded-lg bg-muted border border-border px-3 py-2 text-xs text-muted-foreground">
         {t('setup.eventTypes.intro')}
       </p>
 
       <div className="space-y-2">
         {rows.map((row, index) => (
           <div key={row.id ?? `new-${index}`} className="flex items-center gap-2">
-            <span className="w-8 text-center text-xl flex-shrink-0" aria-hidden="true">{row.emoji}</span>
+            <span className="w-8 text-center text-xl shrink-0" aria-hidden="true">{row.emoji}</span>
             <div className="flex-1 min-w-0">
               <Input
                 value={row.name}
@@ -191,7 +193,7 @@ export const SetupEventTypesStep: React.FC<Props> = ({ onDone }) => {
                 aria-label={t('setup.eventTypes.nameLabel')}
               />
             </div>
-            <div className="w-32 flex-shrink-0">
+            <div className="w-32 shrink-0">
               <Input
                 value={row.slug_prefix}
                 onChange={(e) => setRow(index, { slug_prefix: normalizeSlug(e.target.value) })}
@@ -202,7 +204,7 @@ export const SetupEventTypesStep: React.FC<Props> = ({ onDone }) => {
             <button
               type="button"
               onClick={() => removeRow(index)}
-              className="flex-shrink-0 p-2 rounded-lg text-neutral-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+              className="shrink-0 p-2 rounded-lg text-muted-foreground hover:text-red-600 hover:bg-red-50 transition-colors"
               aria-label={t('common.delete', 'Delete')}
               title={t('common.delete', 'Delete')}
             >
@@ -215,24 +217,21 @@ export const SetupEventTypesStep: React.FC<Props> = ({ onDone }) => {
       <button
         type="button"
         onClick={addRow}
-        className="w-full rounded-lg border border-dashed border-neutral-300 p-3 text-left hover:bg-neutral-50 transition-colors flex items-center gap-2"
+        className="w-full rounded-lg border border-dashed border-border p-3 text-left hover:bg-accent transition-colors flex items-center gap-2"
       >
-        <Plus className="w-4 h-4 text-neutral-500" />
-        <span className="text-sm font-medium text-neutral-800">{t('setup.eventTypes.add')}</span>
+        <Plus className="w-4 h-4 text-muted-foreground" />
+        <span className="text-sm font-medium text-foreground">{t('setup.eventTypes.add')}</span>
       </button>
 
-      <p className="text-xs text-neutral-500">{t('setup.eventTypes.hint')}</p>
+      <p className="text-xs text-muted-foreground">{t('setup.eventTypes.hint')}</p>
 
       <Button
-        type="button"
-        variant="primary"
-        size="lg"
-        isLoading={saving}
-        className="w-full"
-        onClick={handleContinue}
-      >
-        {t('setup.continue')}
-      </Button>
+                  type="button"
+                  size="lg"
+                  className="w-full"
+                  onClick={handleContinue} disabled={saving}
+                >
+                  {saving && <Loader2 className="animate-spin" />}{t('setup.continue')}</Button>
     </div>
   );
 };

@@ -147,18 +147,18 @@ const GridPhoto: React.FC<GridPhotoProps> = ({
       {(commentCount > 0 || averageRating > 0 || likeCount > 0 || liked) && (
         <div className={`absolute ${photo.type === 'collage' ? 'bottom-8' : 'bottom-2'} left-2 flex items-center gap-1 z-10`}>
           {(likeCount > 0 || liked) && (
-            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm" title="Liked">
+            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/90 backdrop-blur-xs" title="Liked">
               <Heart className="w-3.5 h-3.5 text-red-500" fill="currentColor" />
             </span>
           )}
           {averageRating > 0 && (
-            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm" title="Rated">
+            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/90 backdrop-blur-xs" title="Rated">
               <Star className="w-3.5 h-3.5 text-yellow-500" fill="currentColor" />
             </span>
           )}
           {commentCount > 0 && (
-            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm" title="Commented">
-              <MessageSquare className="w-3.5 h-3.5 text-accent" fill="currentColor" />
+            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/90 backdrop-blur-xs" title="Commented">
+              <MessageSquare className="w-3.5 h-3.5 text-brand" fill="currentColor" />
             </span>
           )}
         </div>
@@ -166,7 +166,7 @@ const GridPhoto: React.FC<GridPhotoProps> = ({
 
       {isVideo && (
         <div className="absolute bottom-2 right-2">
-          <span className="px-2 py-1 bg-black/60 text-white text-xs rounded flex items-center gap-1">
+          <span className="px-2 py-1 bg-black/60 text-white text-xs rounded-sm flex items-center gap-1">
             <Video className="w-3 h-3" />
             {t('common.video', 'Video')}
           </span>
@@ -175,7 +175,7 @@ const GridPhoto: React.FC<GridPhotoProps> = ({
 
       {photo.type === 'collage' && (
         <div className="absolute bottom-2 right-2">
-          <span className="px-2 py-1 bg-black/60 text-white text-xs rounded">
+          <span className="px-2 py-1 bg-black/60 text-white text-xs rounded-sm">
             Collage
           </span>
         </div>
@@ -280,7 +280,7 @@ export const GridGalleryLayout: React.FC<BaseGalleryLayoutProps> = ({
                 className={`absolute top-2 left-2 z-10 p-1.5 rounded-full shadow-md transition-colors ${
                   isHidden
                     ? 'bg-red-500/90 text-white hover:bg-red-600'
-                    : 'bg-white/90 text-neutral-700 hover:bg-white dark:bg-neutral-800/90 dark:text-neutral-200 dark:hover:bg-neutral-700'
+                    : 'bg-white/90 text-foreground hover:bg-accent dark:bg-neutral-800/90'
                 }`}
                 title={isHidden ? 'Hidden from guests' : 'Visible to guests'}
               >

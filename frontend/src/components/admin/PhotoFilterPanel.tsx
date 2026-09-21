@@ -2,8 +2,8 @@ import React from 'react';
 import { Star, Heart, Bookmark, MessageCircle, Filter, X } from 'lucide-react';
 import { COLOR_LABELS, COLOR_LABEL_SWATCHES, type ColorLabel } from '../../services/feedback.service';
 import { useTranslation } from 'react-i18next';
-import { Button } from '../common';
 import { FeedbackFilters, FilterSummary } from '../../services/photos.service';
+import { Button } from "@/components/ui/button";
 
 interface PhotoFilterPanelProps {
   filters: FeedbackFilters;
@@ -87,35 +87,33 @@ export const PhotoFilterPanel: React.FC<PhotoFilterPanelProps> = ({
     (filters.myColorLabels?.length || 0) > 0;
 
   return (
-    <div className="bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 p-4 mb-4">
+    <div className="bg-card rounded-lg border border-border p-4 mb-4">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-medium text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+        <h3 className="font-medium text-foreground flex items-center gap-2">
           <Filter className="w-4 h-4" />
           {t('filter.feedbackFilters', 'Feedback Filters')}
         </h3>
         {hasActiveFilters && (
           <Button
-            variant="ghost"
-            size="sm"
-            onClick={clearFilters}
-            leftIcon={<X className="w-3 h-3" />}
-          >
-            {t('filter.clear', 'Clear')}
-          </Button>
+                              variant="ghost"
+                              size="sm"
+                              onClick={clearFilters}
+                            >
+                              <X className="w-3 h-3" />{t('filter.clear', 'Clear')}</Button>
         )}
       </div>
 
       <div className="space-y-4">
         {/* Rating Filter */}
         <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+          <label className="block text-sm font-medium text-foreground mb-2">
             <Star className="w-4 h-4 inline mr-1" />
             {t('filter.rating', 'Rating')}
           </label>
           <select
             value={filters.minRating ?? ''}
             onChange={(e) => handleRatingChange(e.target.value === '' ? null : parseFloat(e.target.value))}
-            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-primary-500 focus:border-accent-dark"
+            className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-brand-500 focus:border-primary"
             disabled={isLoading}
           >
             {RATING_OPTIONS.map(option => (
@@ -133,14 +131,14 @@ export const PhotoFilterPanel: React.FC<PhotoFilterPanelProps> = ({
               type="checkbox"
               checked={filters.hasLikes || false}
               onChange={() => handleCheckboxChange('hasLikes')}
-              className="rounded border-neutral-300 text-accent focus:ring-primary-500"
+              className="rounded-sm border-border text-brand focus:ring-brand-500"
               disabled={isLoading}
             />
             <Heart className="w-4 h-4 text-red-500" />
-            <span className="text-sm text-neutral-700 dark:text-neutral-300">
+            <span className="text-sm text-foreground">
               {t('filter.hasLikes', 'Has likes')}
               {summary && (
-                <span className="text-neutral-500 dark:text-neutral-400 ml-1">({summary.withLikes})</span>
+                <span className="text-muted-foreground ml-1">({summary.withLikes})</span>
               )}
             </span>
           </label>
@@ -150,14 +148,14 @@ export const PhotoFilterPanel: React.FC<PhotoFilterPanelProps> = ({
               type="checkbox"
               checked={filters.hasFavorites || false}
               onChange={() => handleCheckboxChange('hasFavorites')}
-              className="rounded border-neutral-300 text-accent focus:ring-primary-500"
+              className="rounded-sm border-border text-brand focus:ring-brand-500"
               disabled={isLoading}
             />
             <Bookmark className="w-4 h-4 text-yellow-500" />
-            <span className="text-sm text-neutral-700 dark:text-neutral-300">
+            <span className="text-sm text-foreground">
               {t('filter.hasFavorites', 'Has favorites')}
               {summary && (
-                <span className="text-neutral-500 dark:text-neutral-400 ml-1">({summary.withFavorites})</span>
+                <span className="text-muted-foreground ml-1">({summary.withFavorites})</span>
               )}
             </span>
           </label>
@@ -167,14 +165,14 @@ export const PhotoFilterPanel: React.FC<PhotoFilterPanelProps> = ({
               type="checkbox"
               checked={filters.hasComments || false}
               onChange={() => handleCheckboxChange('hasComments')}
-              className="rounded border-neutral-300 text-accent focus:ring-primary-500"
+              className="rounded-sm border-border text-brand focus:ring-brand-500"
               disabled={isLoading}
             />
             <MessageCircle className="w-4 h-4 text-blue-500" />
-            <span className="text-sm text-neutral-700 dark:text-neutral-300">
+            <span className="text-sm text-foreground">
               {t('filter.hasComments', 'Has comments')}
               {summary && (
-                <span className="text-neutral-500 dark:text-neutral-400 ml-1">({summary.withComments})</span>
+                <span className="text-muted-foreground ml-1">({summary.withComments})</span>
               )}
             </span>
           </label>
@@ -185,7 +183,7 @@ export const PhotoFilterPanel: React.FC<PhotoFilterPanelProps> = ({
             UI in the many galleries that never turn the feature on. */}
         {(summary?.withColorLabels || 0) > 0 && (
           <div>
-            <span className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+            <span className="block text-sm font-medium text-foreground mb-2">
               {t('filter.colorLabels', 'Color labels')}
             </span>
             <div className="flex flex-wrap items-center gap-2">
@@ -204,8 +202,8 @@ export const PhotoFilterPanel: React.FC<PhotoFilterPanelProps> = ({
                     aria-label={t('filter.showOnlyColor', 'Show only {{color}}', { color: name })}
                     className={`flex items-center gap-2 px-2.5 py-1 rounded-full border text-sm transition-colors ${
                       isActive
-                        ? 'border-accent-dark bg-accent-dark/10 text-neutral-900 dark:text-neutral-100'
-                        : 'border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-700'
+                        ? 'border-primary bg-primary/10 text-foreground'
+                        : 'border-border text-muted-foreground hover:bg-accent'
                     }`}
                   >
                     <span
@@ -214,7 +212,7 @@ export const PhotoFilterPanel: React.FC<PhotoFilterPanelProps> = ({
                       aria-hidden="true"
                     />
                     <span>{name}</span>
-                    <span className="text-neutral-500 dark:text-neutral-400">({count})</span>
+                    <span className="text-muted-foreground">({count})</span>
                   </button>
                 );
               })}
@@ -226,7 +224,7 @@ export const PhotoFilterPanel: React.FC<PhotoFilterPanelProps> = ({
             above, labelled so the two are never confused. */}
         {Object.keys(summary?.myColorLabelCounts || {}).length > 0 && (
           <div>
-            <span className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+            <span className="block text-sm font-medium text-foreground mb-2">
               {t('filter.myColorLabels', 'Your marks')}
             </span>
             <div className="flex flex-wrap items-center gap-2">
@@ -246,8 +244,8 @@ export const PhotoFilterPanel: React.FC<PhotoFilterPanelProps> = ({
                     aria-label={t('filter.showOnlyMyColor', 'Show only my {{color}} marks', { color: name })}
                     className={`flex items-center gap-2 px-2.5 py-1 rounded-full border text-sm transition-colors ${
                       isActive
-                        ? 'border-accent-dark bg-accent-dark/10 text-neutral-900 dark:text-neutral-100'
-                        : 'border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-700'
+                        ? 'border-primary bg-primary/10 text-foreground'
+                        : 'border-border text-muted-foreground hover:bg-accent'
                     }`}
                   >
                     <span
@@ -256,7 +254,7 @@ export const PhotoFilterPanel: React.FC<PhotoFilterPanelProps> = ({
                       aria-hidden="true"
                     />
                     <span>{name}</span>
-                    <span className="text-neutral-500 dark:text-neutral-400">({count})</span>
+                    <span className="text-muted-foreground">({count})</span>
                   </button>
                 );
               })}
@@ -267,15 +265,15 @@ export const PhotoFilterPanel: React.FC<PhotoFilterPanelProps> = ({
         {/* Logic Toggle */}
         {(filters.hasLikes || filters.hasFavorites || filters.hasComments) && (
           <div className="flex items-center gap-2">
-            <span className="text-sm text-neutral-600 dark:text-neutral-400">{t('filter.combineWith', 'Combine with')}:</span>
-            <div className="flex rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden">
+            <span className="text-sm text-muted-foreground">{t('filter.combineWith', 'Combine with')}:</span>
+            <div className="flex rounded-lg border border-border overflow-hidden">
               <button
                 type="button"
                 onClick={() => handleLogicChange('AND')}
                 className={`px-3 py-1 text-sm font-medium transition-colors ${
                   filters.logic === 'AND' || !filters.logic
-                    ? 'bg-accent-dark text-white'
-                    : 'bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-700'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-card text-muted-foreground hover:bg-accent'
                 }`}
                 disabled={isLoading}
               >
@@ -286,8 +284,8 @@ export const PhotoFilterPanel: React.FC<PhotoFilterPanelProps> = ({
                 onClick={() => handleLogicChange('OR')}
                 className={`px-3 py-1 text-sm font-medium transition-colors ${
                   filters.logic === 'OR'
-                    ? 'bg-accent-dark text-white'
-                    : 'bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-700'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-card text-muted-foreground hover:bg-accent'
                 }`}
                 disabled={isLoading}
               >
@@ -299,7 +297,7 @@ export const PhotoFilterPanel: React.FC<PhotoFilterPanelProps> = ({
 
         {/* Summary */}
         {summary && (
-          <div className="pt-2 border-t border-neutral-100 dark:border-neutral-700 text-sm text-neutral-600 dark:text-neutral-400">
+          <div className="pt-2 border-t border-border text-sm text-muted-foreground">
             {t('filter.showingPhotos', 'Total photos')}: {summary.total}
             {summary.withRatings > 0 && (
               <span className="ml-2">

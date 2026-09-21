@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Key, Mail, Lock, Eye, EyeOff, AlertCircle, ArrowLeft, ArrowRight, Copy, Check, ExternalLink, Bug, Lightbulb, Star, Coffee } from 'lucide-react';
+import { Key, Mail, Lock, Eye, EyeOff, AlertCircle, ArrowLeft, ArrowRight, Copy, Check, ExternalLink, Bug, Lightbulb, Star, Coffee, Loader2 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
-import { Button, Input, Card, Loading } from '../components/common';
+import { Loading } from '../components/common';
 import { useAdminAuth } from '../contexts';
 import { setupService } from '../services/setup.service';
 import { settingsService } from '../services/settings.service';
@@ -19,6 +19,9 @@ import { SetupEventTypesStep } from '../components/admin/SetupEventTypesStep';
 import { UsageReportingPoints } from '../components/admin/UsageReportingPitch';
 import { resolveLoginLogoClasses } from '../utils/loginLogoSize';
 import type { AdminUser } from '../types';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 // Where the first-run setup is documented, for the case where the server logs
 // have already rotated away and the admin can no longer grep the token out.
@@ -354,314 +357,287 @@ export const SetupPage: React.FC = () => {
           )}
         </div>
 
-        <Card padding="lg">
-          {errors.form && (
-            <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-              <p className="text-sm text-red-800">{errors.form}</p>
-            </div>
-          )}
+        <Card className="py-8"><CardContent className="px-8">{errors.form && (
+                          <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
+                            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                            <p className="text-sm text-red-800">{errors.form}</p>
+                          </div>
+                        )}{step === 'token' ? (
+                          <form onSubmit={handleTokenContinue} className="space-y-6">
+                            <div>
+                              <label htmlFor="setup-token" className="block text-sm font-medium text-foreground mb-1">
+                                {t('setup.tokenLabel')}
+                              </label>
+                              <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Key className="w-5 h-5 text-muted-foreground" />}</div><Input
+                                                              id="setup-token"
+                                                              type="text"
+                                                              value={form.token}
+                                                              onChange={setField('token')}
+                                                              placeholder={t('setup.tokenPlaceholder')}
+                                                              autoFocus className="pl-10" aria-invalid={!!(errors.token)} aria-describedby={(errors.token) ? "setup-token-error" : undefined}
+                                                            /></div>{(errors.token) && <p id={"setup-token-error"} className="mt-1.5 text-sm text-destructive">{errors.token}</p>}</div>
+                              <p className="mt-1 text-xs text-muted-foreground">{t('setup.tokenHint')}</p>
 
-          {step === 'token' ? (
-            <form onSubmit={handleTokenContinue} className="space-y-6">
-              <div>
-                <label htmlFor="setup-token" className="block text-sm font-medium text-neutral-700 mb-1">
-                  {t('setup.tokenLabel')}
-                </label>
-                <Input
-                  id="setup-token"
-                  type="text"
-                  value={form.token}
-                  onChange={setField('token')}
-                  error={errors.token}
-                  placeholder={t('setup.tokenPlaceholder')}
-                  leftIcon={<Key className="w-5 h-5 text-neutral-400" />}
-                  autoFocus
-                />
-                <p className="mt-1 text-xs text-neutral-500">{t('setup.tokenHint')}</p>
+                              {/* Recovery guidance sits directly under the field it explains. */}
+                              <div className="mt-4 rounded-lg border border-border bg-muted p-3">
+                                <p className="text-xs font-medium text-muted-foreground">{t('setup.tokenCommandLabel')}</p>
+                                <div className="mt-2 flex items-center gap-2">
+                                  <code className="flex-1 overflow-x-auto whitespace-nowrap rounded bg-neutral-900 px-3 py-2 font-mono text-xs text-neutral-100">
+                                    {recoveryCommand}
+                                  </code>
+                                  <button
+                                    type="button"
+                                    onClick={copyRecoveryCommand}
+                                    className="flex-shrink-0 rounded-md border border-border bg-card p-2 text-muted-foreground hover:text-foreground transition-colors"
+                                    aria-label={t('setup.copyCommand')}
+                                    title={t('setup.copyCommand')}
+                                  >
+                                    {copied ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
+                                  </button>
+                                </div>
+                                <a
+                                  href={SETUP_DOCS_URL}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="mt-2 inline-flex items-center gap-1 text-xs hover:underline"
+                                  style={{ color: 'var(--color-primary, #5C8762)' }}
+                                >
+                                  {t('setup.tokenRotatedLink')}
+                                  <ExternalLink className="w-3 h-3" />
+                                </a>
+                              </div>
+                            </div>
 
-                {/* Recovery guidance sits directly under the field it explains. */}
-                <div className="mt-4 rounded-lg border border-neutral-200 bg-neutral-50 p-3">
-                  <p className="text-xs font-medium text-neutral-600">{t('setup.tokenCommandLabel')}</p>
-                  <div className="mt-2 flex items-center gap-2">
-                    <code className="flex-1 overflow-x-auto whitespace-nowrap rounded bg-neutral-900 px-3 py-2 font-mono text-xs text-neutral-100">
-                      {recoveryCommand}
-                    </code>
-                    <button
-                      type="button"
-                      onClick={copyRecoveryCommand}
-                      className="flex-shrink-0 rounded-md border border-neutral-200 bg-white p-2 text-neutral-500 hover:text-neutral-700 transition-colors"
-                      aria-label={t('setup.copyCommand')}
-                      title={t('setup.copyCommand')}
-                    >
-                      {copied ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
-                    </button>
-                  </div>
-                  <a
-                    href={SETUP_DOCS_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-2 inline-flex items-center gap-1 text-xs hover:underline"
-                    style={{ color: 'var(--color-primary, #5C8762)' }}
-                  >
-                    {t('setup.tokenRotatedLink')}
-                    <ExternalLink className="w-3 h-3" />
-                  </a>
-                </div>
-              </div>
+                            <Button type="submit" size="lg" className="w-full" disabled={isVerifyingToken}>
+                                                        {isVerifyingToken && <Loader2 className="animate-spin" />}{t('setup.continue')}
+                                                        <ArrowRight className="w-4 h-4" /></Button>
+                          </form>
+                        ) : step === 'account' ? (
+                          <form onSubmit={handleSubmit} className="space-y-6">
+                            <div>
+                              <label htmlFor="setup-email" className="block text-sm font-medium text-foreground mb-1">
+                                {t('setup.emailLabel')}
+                              </label>
+                              <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Mail className="w-5 h-5 text-muted-foreground" />}</div><Input
+                                                                  id="setup-email"
+                                                                  type="email"
+                                                                  value={form.email}
+                                                                  onChange={setField('email')}
+                                                                  placeholder={t('setup.emailPlaceholder')}
+                                                                  autoComplete="email"
+                                                                  autoFocus className="pl-10" aria-invalid={!!(errors.email)} aria-describedby={(errors.email) ? "setup-email-error" : undefined}
+                                                                /></div>{(errors.email) && <p id={"setup-email-error"} className="mt-1.5 text-sm text-destructive">{errors.email}</p>}</div>
+                            </div>
 
-              <Button type="submit" variant="primary" size="lg" isLoading={isVerifyingToken} className="w-full" rightIcon={<ArrowRight className="w-4 h-4" />}>
-                {t('setup.continue')}
-              </Button>
-            </form>
-          ) : step === 'account' ? (
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label htmlFor="setup-email" className="block text-sm font-medium text-neutral-700 mb-1">
-                  {t('setup.emailLabel')}
-                </label>
-                <Input
-                  id="setup-email"
-                  type="email"
-                  value={form.email}
-                  onChange={setField('email')}
-                  error={errors.email}
-                  placeholder={t('setup.emailPlaceholder')}
-                  leftIcon={<Mail className="w-5 h-5 text-neutral-400" />}
-                  autoComplete="email"
-                  autoFocus
-                />
-              </div>
+                            <div>
+                              <label htmlFor="setup-password" className="block text-sm font-medium text-foreground mb-1">
+                                {t('setup.passwordLabel')}
+                              </label>
+                              <div className="relative">
+                                <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-muted-foreground" />}</div><Input
+                                                                        id="setup-password"
+                                                                        type={showPassword ? 'text' : 'password'}
+                                                                        value={form.password}
+                                                                        onChange={setField('password')}
+                                                                        placeholder={t('setup.passwordPlaceholder')}
+                                                                        autoComplete="new-password" className="pl-10" aria-invalid={!!(errors.password)} aria-describedby={(errors.password) ? "setup-password-error" : undefined}
+                                                                      /></div>{(errors.password) && <p id={"setup-password-error"} className="mt-1.5 text-sm text-destructive">{errors.password}</p>}</div>
+                                <button
+                                  type="button"
+                                  onClick={() => setShowPassword(!showPassword)}
+                                  className="absolute right-3 top-3 text-muted-foreground hover:text-foreground transition-colors"
+                                  tabIndex={-1}
+                                >
+                                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                </button>
+                              </div>
+                            </div>
 
-              <div>
-                <label htmlFor="setup-password" className="block text-sm font-medium text-neutral-700 mb-1">
-                  {t('setup.passwordLabel')}
-                </label>
-                <div className="relative">
-                  <Input
-                    id="setup-password"
-                    type={showPassword ? 'text' : 'password'}
-                    value={form.password}
-                    onChange={setField('password')}
-                    error={errors.password}
-                    placeholder={t('setup.passwordPlaceholder')}
-                    leftIcon={<Lock className="w-5 h-5 text-neutral-400" />}
-                    autoComplete="new-password"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3 text-neutral-400 hover:text-neutral-600 transition-colors"
-                    tabIndex={-1}
-                  >
-                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                  </button>
-                </div>
-              </div>
+                            <div>
+                              <label htmlFor="setup-confirm" className="block text-sm font-medium text-foreground mb-1">
+                                {t('setup.confirmLabel')}
+                              </label>
+                              <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-muted-foreground" />}</div><Input
+                                                                  id="setup-confirm"
+                                                                  type={showPassword ? 'text' : 'password'}
+                                                                  value={form.confirm}
+                                                                  onChange={setField('confirm')}
+                                                                  placeholder={t('setup.confirmPlaceholder')}
+                                                                  autoComplete="new-password" className="pl-10" aria-invalid={!!(errors.confirm)} aria-describedby={(errors.confirm) ? "setup-confirm-error" : undefined}
+                                                                /></div>{(errors.confirm) && <p id={"setup-confirm-error"} className="mt-1.5 text-sm text-destructive">{errors.confirm}</p>}</div>
+                            </div>
 
-              <div>
-                <label htmlFor="setup-confirm" className="block text-sm font-medium text-neutral-700 mb-1">
-                  {t('setup.confirmLabel')}
-                </label>
-                <Input
-                  id="setup-confirm"
-                  type={showPassword ? 'text' : 'password'}
-                  value={form.confirm}
-                  onChange={setField('confirm')}
-                  error={errors.confirm}
-                  placeholder={t('setup.confirmPlaceholder')}
-                  leftIcon={<Lock className="w-5 h-5 text-neutral-400" />}
-                  autoComplete="new-password"
-                />
-              </div>
+                            {/* Stacked full-width (not a side-by-side flex row): the primary
+                                label + loading spinner exceeded the card width when squeezed
+                                next to Back, so the button overflowed the card outline while
+                                submitting (#730). Full-width also keeps longer translations
+                                (e.g. German) inside the button. Matches every other step. */}
+                            <div className="space-y-3">
+                              <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
+                                                                  {isSubmitting && <Loader2 className="animate-spin" />}{t('setup.submit')}</Button>
+                              <Button
+                                                                  type="button"
+                                                                  variant="outline"
+                                                                  size="lg"
+                                                                  onClick={() => { toast.dismiss(); setErrors({}); setStep('token'); }}
+                                                                  disabled={isSubmitting}
+                                                                  className="w-full"
+                                                                >
+                                                                  <ArrowLeft className="w-4 h-4" />{t('setup.back')}</Button>
+                            </div>
+                          </form>
+                        ) : step === 'usage' ? (
+                          <div className="space-y-6">
+                            <p className="rounded-lg bg-muted border border-border px-3 py-2 text-xs text-muted-foreground">
+                              {t('setup.usageAlwaysOn')}
+                            </p>
 
-              {/* Stacked full-width (not a side-by-side flex row): the primary
-                  label + loading spinner exceeded the card width when squeezed
-                  next to Back, so the button overflowed the card outline while
-                  submitting (#730). Full-width also keeps longer translations
-                  (e.g. German) inside the button. Matches every other step. */}
-              <div className="space-y-3">
-                <Button type="submit" variant="primary" size="lg" isLoading={isSubmitting} className="w-full">
-                  {t('setup.submit')}
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="lg"
-                  onClick={() => { toast.dismiss(); setErrors({}); setStep('token'); }}
-                  disabled={isSubmitting}
-                  leftIcon={<ArrowLeft className="w-4 h-4" />}
-                  className="w-full"
-                >
-                  {t('setup.back')}
-                </Button>
-              </div>
-            </form>
-          ) : step === 'usage' ? (
-            <div className="space-y-6">
-              <p className="rounded-lg bg-neutral-50 border border-neutral-200 px-3 py-2 text-xs text-neutral-600">
-                {t('setup.usageAlwaysOn')}
-              </p>
+                            <button
+                              type="button"
+                              onClick={() => setStep('restore')}
+                              className="w-full rounded-lg border border-dashed border-border p-3 text-left hover:bg-accent transition-colors"
+                            >
+                              <span className="block text-sm font-medium text-foreground">{t('setup.restoreEntry')}</span>
+                              <span className="block text-xs text-muted-foreground">{t('setup.restoreEntryHint')}</span>
+                            </button>
 
-              <button
-                type="button"
-                onClick={() => setStep('restore')}
-                className="w-full rounded-lg border border-dashed border-neutral-300 p-3 text-left hover:bg-neutral-50 transition-colors"
-              >
-                <span className="block text-sm font-medium text-neutral-800">{t('setup.restoreEntry')}</span>
-                <span className="block text-xs text-neutral-500">{t('setup.restoreEntryHint')}</span>
-              </button>
+                            {USAGE_GROUPS.map((group) => (
+                              <div key={group.id}>
+                                <h3 className="text-sm font-semibold text-foreground mb-2">{t(group.titleKey)}</h3>
+                                <div className="space-y-2">
+                                  {group.features.map((key) => (
+                                    <label
+                                      key={key}
+                                      className="flex items-start gap-3 rounded-lg border border-border p-3 cursor-pointer hover:bg-accent transition-colors"
+                                    >
+                                      <input
+                                        type="checkbox"
+                                        className="mt-0.5 h-4 w-4 rounded border-border"
+                                        checked={selectedFeatures.has(key)}
+                                        onChange={() => toggleFeature(key)}
+                                      />
+                                      <span className="min-w-0">
+                                        <span className="block text-sm font-medium text-foreground">
+                                          {t(`settings.features.${key}.title`)}
+                                        </span>
+                                        <span className="block text-xs text-muted-foreground">
+                                          {t(`settings.features.${key}.description`)}
+                                        </span>
+                                      </span>
+                                    </label>
+                                  ))}
+                                </div>
+                              </div>
+                            ))}
 
-              {USAGE_GROUPS.map((group) => (
-                <div key={group.id}>
-                  <h3 className="text-sm font-semibold text-neutral-800 mb-2">{t(group.titleKey)}</h3>
-                  <div className="space-y-2">
-                    {group.features.map((key) => (
-                      <label
-                        key={key}
-                        className="flex items-start gap-3 rounded-lg border border-neutral-200 p-3 cursor-pointer hover:bg-neutral-50 transition-colors"
-                      >
-                        <input
-                          type="checkbox"
-                          className="mt-0.5 h-4 w-4 rounded border-neutral-300"
-                          checked={selectedFeatures.has(key)}
-                          onChange={() => toggleFeature(key)}
-                        />
-                        <span className="min-w-0">
-                          <span className="block text-sm font-medium text-neutral-800">
-                            {t(`settings.features.${key}.title`)}
-                          </span>
-                          <span className="block text-xs text-neutral-500">
-                            {t(`settings.features.${key}.description`)}
-                          </span>
-                        </span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              ))}
+                            <Button
+                                                                type="button"
+                                                                size="lg"
+                                                                className="w-full"
+                                                                onClick={finishSetup} disabled={isSavingFeatures}
+                                                              >
+                                                                {isSavingFeatures && <Loader2 className="animate-spin" />}{selectedFeatures.size > 0 ? t('setup.finish') : t('setup.usageSkip')}</Button>
+                          </div>
+                        ) : step === 'restore' ? (
+                          <div className="space-y-6">
+                            <p className="text-sm text-muted-foreground">{t('setup.restoreIntro')}</p>
+                            <PicpeakRestoreCard />
+                            <Button
+                                                                    type="button"
+                                                                    variant="outline"
+                                                                    size="lg"
+                                                                    onClick={() => setStep('usage')}
+                                                                  >
+                                                                    <ArrowLeft className="w-4 h-4" />{t('setup.back')}</Button>
+                          </div>
+                        ) : step === 'eventTypes' ? (
+                          <SetupEventTypesStep onDone={continueAfterEventTypes} />
+                        ) : step === 'config' ? (
+                          <SetupConfigStep
+                            selectedFeatures={selectedFeatures}
+                            onDone={() => setStep('usageReporting')}
+                          />
+                        ) : step === 'usageReporting' ? (
+                          <div className="space-y-6">
+                            <p className="text-sm text-foreground">{t('setup.usageReporting.intro')}</p>
 
-              <Button
-                type="button"
-                variant="primary"
-                size="lg"
-                isLoading={isSavingFeatures}
-                className="w-full"
-                onClick={finishSetup}
-              >
-                {selectedFeatures.size > 0 ? t('setup.finish') : t('setup.usageSkip')}
-              </Button>
-            </div>
-          ) : step === 'restore' ? (
-            <div className="space-y-6">
-              <p className="text-sm text-neutral-600">{t('setup.restoreIntro')}</p>
-              <PicpeakRestoreCard />
-              <Button
-                type="button"
-                variant="outline"
-                size="lg"
-                onClick={() => setStep('usage')}
-                leftIcon={<ArrowLeft className="w-4 h-4" />}
-              >
-                {t('setup.back')}
-              </Button>
-            </div>
-          ) : step === 'eventTypes' ? (
-            <SetupEventTypesStep onDone={continueAfterEventTypes} />
-          ) : step === 'config' ? (
-            <SetupConfigStep
-              selectedFeatures={selectedFeatures}
-              onDone={() => setStep('usageReporting')}
-            />
-          ) : step === 'usageReporting' ? (
-            <div className="space-y-6">
-              <p className="text-sm text-neutral-700">{t('setup.usageReporting.intro')}</p>
+                            <UsageReportingPoints />
 
-              <UsageReportingPoints />
+                            {(usageStatusError || usageStatus?.collector_error) && (
+                              <p role="alert" className="text-sm text-foreground">{t('setup.usageReporting.enableFailed')}</p>
+                            )}
 
-              {(usageStatusError || usageStatus?.collector_error) && (
-                <p role="alert" className="text-sm text-neutral-700">{t('setup.usageReporting.enableFailed')}</p>
-              )}
+                            <div className="space-y-3">
+                              <Button
+                                                                                      type="button"
+                                                                                      size="lg"
+                                                                                      className="w-full"
+                                                                                      onClick={() => setShowUsageConsent(true)} disabled={!usageStatus?.collector_url || isEnablingUsageReporting}
+                                                                                    >
+                                                                                      {isEnablingUsageReporting && <Loader2 className="animate-spin" />}{t('productUsage.review')}</Button>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="lg"
+                                className="w-full"
+                                disabled={isEnablingUsageReporting}
+                                onClick={skipUsageReporting}
+                              >
+                                {t('setup.usageReporting.skip')}
+                              </Button>
+                            </div>
+                            {showUsageConsent && usageStatus?.collector_url && (
+                              <ProductUsageConsentDialog
+                                collector={usageStatus.collector_url}
+                                busy={isEnablingUsageReporting}
+                                close={() => setShowUsageConsent(false)}
+                                enable={enableUsageReporting}
+                              />
+                            )}
+                          </div>
+                        ) : (
+                          <div className="space-y-6">
+                            <p className="text-sm text-foreground">{t('setup.community.mission')}</p>
 
-              <div className="space-y-3">
-                <Button
-                  type="button"
-                  variant="primary"
-                  size="lg"
-                  className="w-full"
-                  isLoading={isEnablingUsageReporting}
-                  disabled={!usageStatus?.collector_url}
-                  onClick={() => setShowUsageConsent(true)}
-                >
-                  {t('productUsage.review')}
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="lg"
-                  className="w-full"
-                  disabled={isEnablingUsageReporting}
-                  onClick={skipUsageReporting}
-                >
-                  {t('setup.usageReporting.skip')}
-                </Button>
-              </div>
-              {showUsageConsent && usageStatus?.collector_url && (
-                <ProductUsageConsentDialog
-                  collector={usageStatus.collector_url}
-                  busy={isEnablingUsageReporting}
-                  close={() => setShowUsageConsent(false)}
-                  enable={enableUsageReporting}
-                />
-              )}
-            </div>
-          ) : (
-            <div className="space-y-6">
-              <p className="text-sm text-neutral-700">{t('setup.community.mission')}</p>
+                            <div className="space-y-3">
+                              {COMMUNITY_LINKS.map(({ key, href, icon: Icon }) => (
+                                <a
+                                  key={key}
+                                  href={href}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-start gap-3 rounded-lg border border-border p-3 hover:bg-accent transition-colors"
+                                >
+                                  <Icon className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: 'var(--color-primary, #5C8762)' }} />
+                                  <span className="min-w-0">
+                                    <span className="block text-sm font-medium text-foreground">
+                                      {t(`setup.community.${key}Title`)}
+                                    </span>
+                                    <span className="block text-xs text-muted-foreground">
+                                      {t(`setup.community.${key}Desc`)}
+                                    </span>
+                                  </span>
+                                  <ExternalLink className="w-4 h-4 flex-shrink-0 text-muted-foreground self-center" aria-hidden="true" />
+                                </a>
+                              ))}
+                            </div>
 
-              <div className="space-y-3">
-                {COMMUNITY_LINKS.map(({ key, href, icon: Icon }) => (
-                  <a
-                    key={key}
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-start gap-3 rounded-lg border border-neutral-200 p-3 hover:bg-neutral-50 transition-colors"
-                  >
-                    <Icon className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: 'var(--color-primary, #5C8762)' }} />
-                    <span className="min-w-0">
-                      <span className="block text-sm font-medium text-neutral-800">
-                        {t(`setup.community.${key}Title`)}
-                      </span>
-                      <span className="block text-xs text-neutral-500">
-                        {t(`setup.community.${key}Desc`)}
-                      </span>
-                    </span>
-                    <ExternalLink className="w-4 h-4 flex-shrink-0 text-neutral-400 self-center" aria-hidden="true" />
-                  </a>
-                ))}
-              </div>
-
-              <Button
-                type="button"
-                variant="primary"
-                size="lg"
-                className="w-full"
-                onClick={async () => {
-                  // One-way marker: re-locks the seeded system event types
-                  // (#800). Best-effort — a failure must not trap the user on
-                  // the thank-you screen, and the flag re-arms nothing risky
-                  // (the delete window also requires zero usage server-side).
-                  try { await setupService.completeSetup(); } catch { /* best-effort */ }
-                  navigate('/admin/dashboard', { replace: true });
-                }}
-                rightIcon={<ArrowRight className="w-4 h-4" />}
-              >
-                {t('setup.community.finish')}
-              </Button>
-            </div>
-          )}
-        </Card>
+                            <Button
+                                                                                    type="button"
+                                                                                    size="lg"
+                                                                                    className="w-full"
+                                                                                    onClick={async () => {
+                                                                                      // One-way marker: re-locks the seeded system event types
+                                                                                      // (#800). Best-effort — a failure must not trap the user on
+                                                                                      // the thank-you screen, and the flag re-arms nothing risky
+                                                                                      // (the delete window also requires zero usage server-side).
+                                                                                      try { await setupService.completeSetup(); } catch { /* best-effort */ }
+                                                                                      navigate('/admin/dashboard', { replace: true });
+                                                                                    }}
+                                                                                  >{t('setup.community.finish')}
+                                                                                    <ArrowRight className="w-4 h-4" /></Button>
+                          </div>
+                        )}</CardContent></Card>
       </div>
     </div>
   );

@@ -277,7 +277,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
       {controls && !loadError && (
         <div
-          className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 transition-opacity duration-300 ${
+          className={`absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/80 to-transparent p-4 transition-opacity duration-300 ${
             showControls ? 'opacity-100' : 'opacity-0 pointer-events-none'
           }`}
           onMouseEnter={handleControlsMouseEnter}
@@ -289,7 +289,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
             onClick={handleProgressClick}
           >
             <div
-              className="h-full bg-white rounded-full transition-all"
+              className="h-full bg-card rounded-full transition-all"
               style={{ width: `${progress}%` }}
             />
           </div>

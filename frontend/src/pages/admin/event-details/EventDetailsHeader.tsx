@@ -12,16 +12,16 @@ import {
   AlertTriangle,
   MessageSquare,
   Type,
-  Send
-} from 'lucide-react';
+  Send, Loader2 } from 'lucide-react';
 import type { Event } from '../../../types';
-import { Button, Card } from '../../../components/common';
 import { PermissionGate } from '../../../components/admin/PermissionGate';
 import { useLocalizedDate } from '../../../hooks/useLocalizedDate';
 import { buildShareLinkUrl } from '../../../utils/url';
 import { isGalleryPublic } from '../../../utils/accessControl';
 import type { FeedbackSettings as FeedbackSettingsType } from '../../../services/feedback.service';
 import { safeParseDate } from './utils';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface EventDetailsHeaderProps {
   event: Event;
@@ -67,19 +67,17 @@ export const EventDetailsHeader: React.FC<EventDetailsHeaderProps> = ({
       {/* Page Header */}
       <div className="mb-6">
         <Button
-          variant="outline"
-          size="sm"
-          leftIcon={<ArrowLeft className="w-4 h-4" />}
-          onClick={() => navigate('/admin/events')}
-          className="mb-4"
-        >
-          {t('events.backToEvents')}
-        </Button>
+                        variant="outline"
+                        size="sm"
+                        onClick={() => navigate('/admin/events')}
+                        className="mb-4"
+                      >
+                        <ArrowLeft className="w-4 h-4" />{t('events.backToEvents')}</Button>
 
         <div className="flex items-start justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{event.event_name}</h1>
-            <div className="flex items-center gap-4 mt-2 text-sm text-neutral-600 dark:text-neutral-400">
+            <h1 className="text-2xl font-bold text-foreground">{event.event_name}</h1>
+            <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
               {event.event_date && (
                 <span className="flex items-center">
                   <Calendar className="w-4 h-4 mr-1" />
@@ -91,7 +89,7 @@ export const EventDetailsHeader: React.FC<EventDetailsHeaderProps> = ({
                 className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${
                   isGalleryPublic(event.require_password)
                     ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300'
-                    : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300'
+                    : 'bg-muted text-foreground'
                 }`}
               >
                 {isGalleryPublic(event.require_password) ? t('events.publicAccess', 'Public access') : t('events.passwordProtected', 'Password protected')}
@@ -102,7 +100,7 @@ export const EventDetailsHeader: React.FC<EventDetailsHeaderProps> = ({
                 </span>
               ) : null}
               {event.is_archived ? (
-                <span className="text-neutral-500 dark:text-neutral-400 flex items-center">
+                <span className="text-muted-foreground flex items-center">
                   <Archive className="w-4 h-4 mr-1" />
                   {t('events.archived')}
                 </span>
@@ -116,52 +114,40 @@ export const EventDetailsHeader: React.FC<EventDetailsHeaderProps> = ({
                 {isEditing ? (
                   <>
                     <Button
-                      variant="outline"
-                      size="sm"
-                      leftIcon={<X className="w-4 h-4" />}
-                      onClick={() => setIsEditing(false)}
-                    >
-                      {t('common.cancel')}
-                    </Button>
+                                                            variant="outline"
+                                                            size="sm"
+                                                            onClick={() => setIsEditing(false)}
+                                                          >
+                                                            <X className="w-4 h-4" />{t('common.cancel')}</Button>
                     <Button
-                      variant="primary"
-                      size="sm"
-                      leftIcon={<Save className="w-4 h-4" />}
-                      onClick={handleSaveEdit}
-                      isLoading={isSaving}
-                    >
-                      {t('events.saveChanges')}
-                    </Button>
+                                                            size="sm"
+                                                            onClick={handleSaveEdit} disabled={isSaving}
+                                                          >
+                                                            {isSaving && <Loader2 className="animate-spin" />}<Save className="w-4 h-4" />{t('events.saveChanges')}</Button>
                   </>
                 ) : (
                   <>
                     <PermissionGate permission="events.edit">
                       <Button
-                        variant="outline"
-                        size="sm"
-                        leftIcon={<Edit2 className="w-4 h-4" />}
-                        onClick={handleStartEdit}
-                      >
-                        {t('common.edit')}
-                      </Button>
+                                                                      variant="outline"
+                                                                      size="sm"
+                                                                      onClick={handleStartEdit}
+                                                                    >
+                                                                      <Edit2 className="w-4 h-4" />{t('common.edit')}</Button>
                       <Button
-                        variant="outline"
-                        size="sm"
-                        leftIcon={<Type className="w-4 h-4" />}
-                        onClick={() => setShowRenameDialog(true)}
-                      >
-                        {t('events.rename.button', 'Rename')}
-                      </Button>
+                                                                      variant="outline"
+                                                                      size="sm"
+                                                                      onClick={() => setShowRenameDialog(true)}
+                                                                    >
+                                                                      <Type className="w-4 h-4" />{t('events.rename.button', 'Rename')}</Button>
                     </PermissionGate>
                     {feedbackSettings?.feedback_enabled && (
                       <Button
-                        variant="outline"
-                        size="sm"
-                        leftIcon={<MessageSquare className="w-4 h-4" />}
-                        onClick={() => navigate(`/admin/events/${id}/feedback`)}
-                      >
-                        {t('feedback.manage', 'Manage Feedback')}
-                      </Button>
+                                                                      variant="outline"
+                                                                      size="sm"
+                                                                      onClick={() => navigate(`/admin/events/${id}/feedback`)}
+                                                                    >
+                                                                      <MessageSquare className="w-4 h-4" />{t('feedback.manage', 'Manage Feedback')}</Button>
                     )}
                   </>
                 )}
@@ -191,65 +177,57 @@ export const EventDetailsHeader: React.FC<EventDetailsHeaderProps> = ({
       {/* Draft Banner */}
       {/* !! — SQLite returns integer booleans; a bare 0 would render as literal "0" */}
       {!!event.is_draft && !event.is_archived && (
-        <Card className="p-4 mb-6 border-2 border-yellow-500 bg-yellow-50 dark:bg-yellow-900/20">
-          <div className="flex items-start gap-3">
-            <AlertTriangle className="w-5 h-5 flex-shrink-0 text-yellow-600 dark:text-yellow-400" />
-            <div className="flex-1">
-              <p className="font-medium text-yellow-900 dark:text-yellow-200">
-                {t('events.draft')}
-              </p>
-              <p className="text-sm mt-1 text-yellow-700 dark:text-yellow-300">
-                {t('events.draftBanner')}
-              </p>
-            </div>
-            <PermissionGate permission="events.edit">
-              <Button
-                variant="primary"
-                size="sm"
-                leftIcon={<Send className="w-4 h-4" />}
-                onClick={() => setShowPublishDialog(true)}
-                isLoading={isPublishing}
-              >
-                {t('events.publishAndNotify')}
-              </Button>
-            </PermissionGate>
-          </div>
-        </Card>
+        <Card className="p-4 mb-6 border-2 border-yellow-500 bg-yellow-50 dark:bg-yellow-900/20"><CardContent><div className="flex items-start gap-3">
+                          <AlertTriangle className="w-5 h-5 flex-shrink-0 text-yellow-600 dark:text-yellow-400" />
+                          <div className="flex-1">
+                            <p className="font-medium text-yellow-900 dark:text-yellow-200">
+                              {t('events.draft')}
+                            </p>
+                            <p className="text-sm mt-1 text-yellow-700 dark:text-yellow-300">
+                              {t('events.draftBanner')}
+                            </p>
+                          </div>
+                          <PermissionGate permission="events.edit">
+                            <Button
+                                                        size="sm"
+                                                        onClick={() => setShowPublishDialog(true)} disabled={isPublishing}
+                                                      >
+                                                        {isPublishing && <Loader2 className="animate-spin" />}<Send className="w-4 h-4" />{t('events.publishAndNotify')}</Button>
+                          </PermissionGate>
+                        </div></CardContent></Card>
       )}
 
       {/* Expiration Warning */}
       {!event.is_archived && (isExpired || isExpiring) && (
-        <Card className={`p-4 mb-6 border-2 ${isExpired ? 'border-red-500 bg-red-50' : 'border-orange-500 bg-orange-50'}`}>
-          <div className="flex items-start gap-3">
-            <AlertTriangle className={`w-5 h-5 flex-shrink-0 ${isExpired ? 'text-red-600' : 'text-orange-600'}`} />
-            <div className="flex-1">
-              <p className={`font-medium ${isExpired ? 'text-red-900' : 'text-orange-900'}`}>
-                {isExpired
-                  ? t('events.eventExpiredMessage')
-                  : t('events.eventExpiresIn', { days: daysUntilExpiration })
-                }
-              </p>
-              <p className={`text-sm mt-1 ${isExpired ? 'text-red-700' : 'text-orange-700'}`}>
-                {isExpired
-                  ? t('events.guestsCannotAccessGallery')
-                  : t('events.warningEmailsHaveBeenSent')}
-              </p>
-            </div>
-            {!isExpired && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  if (confirm(t('events.extendExpiration', { days: 7 }) + '?')) {
-                    onExtendExpiration(7);
-                  }
-                }}
-              >
-                {t('events.extendSevenDays')}
-              </Button>
-            )}
-          </div>
-        </Card>
+        <Card className={`p-4 mb-6 border-2 ${isExpired ? 'border-red-500 bg-red-50' : 'border-orange-500 bg-orange-50'}`}><CardContent><div className="flex items-start gap-3">
+                          <AlertTriangle className={`w-5 h-5 flex-shrink-0 ${isExpired ? 'text-red-600' : 'text-orange-600'}`} />
+                          <div className="flex-1">
+                            <p className={`font-medium ${isExpired ? 'text-red-900' : 'text-orange-900'}`}>
+                              {isExpired
+                                ? t('events.eventExpiredMessage')
+                                : t('events.eventExpiresIn', { days: daysUntilExpiration })
+                              }
+                            </p>
+                            <p className={`text-sm mt-1 ${isExpired ? 'text-red-700' : 'text-orange-700'}`}>
+                              {isExpired
+                                ? t('events.guestsCannotAccessGallery')
+                                : t('events.warningEmailsHaveBeenSent')}
+                            </p>
+                          </div>
+                          {!isExpired && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                if (confirm(t('events.extendExpiration', { days: 7 }) + '?')) {
+                                  onExtendExpiration(7);
+                                }
+                              }}
+                            >
+                              {t('events.extendSevenDays')}
+                            </Button>
+                          )}
+                        </div></CardContent></Card>
       )}
     </>
   );

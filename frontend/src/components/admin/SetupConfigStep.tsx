@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { ShieldAlert } from 'lucide-react';
-
-import { Button, Input } from '../common';
+import { ShieldAlert, Loader2 } from 'lucide-react';
 import type { FeatureKey } from '../../services/featureFlags.service';
 import { businessProfileService } from '../../services/businessProfile.service';
 import { emailService, type EmailConfig } from '../../services/email.service';
 import { settingsService } from '../../services/settings.service';
 import { isAbsoluteHttpUrl } from '../../utils/url';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 // Email is NOT feature-gated (#705): a gallery-only install still mails the
 // gallery link, guest invites and expiry warnings through the same
@@ -27,6 +27,7 @@ interface Props {
 // in is validated before it is posted, and a save that fails keeps them on the
 // step with their input intact rather than advancing into a silent data loss.
 export const SetupConfigStep: React.FC<Props> = ({ onDone }) => {
+    const __fieldId = React.useId();
   const { t } = useTranslation();
   const showInvoicing = false;
   const [saving, setSaving] = useState(false);
@@ -179,29 +180,28 @@ export const SetupConfigStep: React.FC<Props> = ({ onDone }) => {
 
   return (
     <div className="space-y-8">
-      <p className="rounded-lg bg-neutral-50 border border-neutral-200 px-3 py-2 text-xs text-neutral-600">
+      <p className="rounded-lg bg-muted border border-border px-3 py-2 text-xs text-muted-foreground">
         {t('setup.config.intro', 'A few details to finish setting up. Anything you skip keeps its default and can be set later in Settings.')}
       </p>
 
       <div className="space-y-3">
-        <h3 className="text-sm font-semibold text-neutral-800">
+        <h3 className="text-sm font-semibold text-foreground">
           {t('setup.config.siteUrl', 'Public address')}
         </h3>
-        <p className="text-xs text-neutral-500">
+        <p className="text-xs text-muted-foreground">
           {t('setup.config.siteUrlHint', 'Where your clients will reach this gallery. Prefilled with the address you opened right now — change it if you will put PicPeak behind a domain or reverse proxy. You can update this any time in Settings → General.')}
         </p>
-        <Input
-          type="url"
-          placeholder="https://gallery.example.com"
-          value={siteUrl}
-          onChange={(e) => setSiteUrl(e.target.value)}
-          error={errors.siteUrl}
-        />
+        <div className="w-full"><Input
+                        type="url"
+                        placeholder="https://gallery.example.com"
+                        value={siteUrl}
+                        onChange={(e) => setSiteUrl(e.target.value)} aria-invalid={!!(errors.siteUrl)} aria-describedby={(errors.siteUrl) ? `${__fieldId}-0-error` : undefined}
+                      />{(errors.siteUrl) && <p id={`${__fieldId}-0-error`} className="mt-1.5 text-sm text-destructive">{errors.siteUrl}</p>}</div>
       </div>
 
       {showInvoicing && (
         <div className="space-y-3">
-          <h3 className="text-sm font-semibold text-neutral-800">{t('setup.config.invoicing', 'Invoicing details')}</h3>
+          <h3 className="text-sm font-semibold text-foreground">{t('setup.config.invoicing', 'Invoicing details')}</h3>
           <div className="flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3">
             <ShieldAlert className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-600" />
             <p className="text-xs text-amber-800">
@@ -227,26 +227,25 @@ export const SetupConfigStep: React.FC<Props> = ({ onDone }) => {
       )}
 
       <div className="space-y-3">
-        <h3 className="text-sm font-semibold text-neutral-800">{t('setup.config.email', 'Email delivery (SMTP)')}</h3>
-        <p className="text-xs text-neutral-500">{t('setup.config.emailHint', 'Used to send gallery links to your clients, plus guest invites, expiry warnings and any reminders or invoices you enable. Leave blank to set it up later in Settings → Email.')}</p>
+        <h3 className="text-sm font-semibold text-foreground">{t('setup.config.email', 'Email delivery (SMTP)')}</h3>
+        <p className="text-xs text-muted-foreground">{t('setup.config.emailHint', 'Used to send gallery links to your clients, plus guest invites, expiry warnings and any reminders or invoices you enable. Leave blank to set it up later in Settings → Email.')}</p>
           <div className="grid grid-cols-3 gap-3">
             <div className="col-span-2"><Input placeholder={t('setup.config.smtpHost', 'SMTP host')} value={mail.smtp_host} onChange={mailField('smtp_host')} /></div>
-            <Input placeholder={t('setup.config.smtpPort', 'Port')} value={mail.smtp_port} onChange={mailField('smtp_port')} error={errors.smtp_port} />
+            <div className="w-full"><Input placeholder={t('setup.config.smtpPort', 'Port')} value={mail.smtp_port} onChange={mailField('smtp_port')} aria-invalid={!!(errors.smtp_port)} aria-describedby={(errors.smtp_port) ? `${__fieldId}-1-error` : undefined} />{(errors.smtp_port) && <p id={`${__fieldId}-1-error`} className="mt-1.5 text-sm text-destructive">{errors.smtp_port}</p>}</div>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <Input placeholder={t('setup.config.smtpUser', 'Username')} value={mail.smtp_user} onChange={mailField('smtp_user')} autoComplete="off" />
             <Input type="password" placeholder={t('setup.config.smtpPass', 'Password')} value={mail.smtp_pass} onChange={mailField('smtp_pass')} autoComplete="new-password" />
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <Input
-              type="email"
-              placeholder={mail.smtp_host.trim()
-                ? t('setup.config.fromEmailRequiredPlaceholder', 'From address (required)')
-                : t('setup.config.fromEmail', 'From address')}
-              value={mail.from_email}
-              onChange={mailField('from_email')}
-              error={errors.from_email}
-            />
+            <div className="w-full"><Input
+                                type="email"
+                                placeholder={mail.smtp_host.trim()
+                                  ? t('setup.config.fromEmailRequiredPlaceholder', 'From address (required)')
+                                  : t('setup.config.fromEmail', 'From address')}
+                                value={mail.from_email}
+                                onChange={mailField('from_email')} aria-invalid={!!(errors.from_email)} aria-describedby={(errors.from_email) ? `${__fieldId}-2-error` : undefined}
+                              />{(errors.from_email) && <p id={`${__fieldId}-2-error`} className="mt-1.5 text-sm text-destructive">{errors.from_email}</p>}</div>
             <Input placeholder={t('setup.config.fromName', 'From name')} value={mail.from_name} onChange={mailField('from_name')} />
           </div>
       </div>
@@ -255,9 +254,8 @@ export const SetupConfigStep: React.FC<Props> = ({ onDone }) => {
         <Button type="button" variant="outline" size="lg" onClick={skip} disabled={saving}>
           {t('setup.config.skip', 'Skip for now')}
         </Button>
-        <Button type="button" variant="primary" size="lg" isLoading={saving} className="flex-1" onClick={finish}>
-          {t('setup.config.finish', 'Finish setup')}
-        </Button>
+        <Button type="button" size="lg" className="flex-1" onClick={finish} disabled={saving}>
+                        {saving && <Loader2 className="animate-spin" />}{t('setup.config.finish', 'Finish setup')}</Button>
       </div>
     </div>
   );

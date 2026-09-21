@@ -19,12 +19,13 @@ import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { MonitorPlay, Copy, CheckCircle, RotateCw, Trash2, Save } from 'lucide-react';
-import { Button, Card } from '../common';
+import { MonitorPlay, Copy, CheckCircle, RotateCw, Trash2, Save, Loader2 } from 'lucide-react';
 import { eventsService } from '../../services/events.service';
 import { categoriesService } from '../../services/categories.service';
 import { DEFAULT_SLIDESHOW_STYLE, type SlideshowStyle } from '../../services/slideshow.service';
 import { SlideshowStyleFields } from './SlideshowStyleFields';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 export interface SlideshowSettingsCardProps {
   eventId: number;
@@ -161,90 +162,68 @@ export const SlideshowSettingsCard: React.FC<SlideshowSettingsCardProps> = ({
   };
 
   const inputClass =
-    'w-full px-3 py-2 bg-neutral-50 dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 text-neutral-900 dark:text-neutral-100 rounded-lg text-sm';
-  const labelClass = 'block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1';
+    'w-full px-3 py-2 bg-muted border border-border text-foreground rounded-lg text-sm';
+  const labelClass = 'block text-sm font-medium text-foreground mb-1';
 
   return (
-    <Card padding="md">
-      <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-1 flex items-center gap-2">
-        <MonitorPlay className="w-5 h-5" />
-        {t('slideshow.adminTitle', 'Live Slideshow')}
-      </h2>
-      <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-4">
-        {t('slideshow.adminDescription', 'A separate fullscreen link for projectors at live events. It shows all published photos and automatically picks up new uploads while running.')}
-      </p>
+    <Card><CardContent><h2 className="text-lg font-semibold text-foreground mb-1 flex items-center gap-2">
+              <MonitorPlay className="w-5 h-5" />
+              {t('slideshow.adminTitle', 'Live Slideshow')}
+            </h2><p className="text-xs text-muted-foreground mb-4">
+              {t('slideshow.adminDescription', 'A separate fullscreen link for projectors at live events. It shows all published photos and automatically picks up new uploads while running.')}
+            </p><div className="space-y-4">
+              {!token ? (
+                <Button
+                                    onClick={generate} disabled={isArchived || busy}
+                                  >
+                                    {busy && <Loader2 className="animate-spin" />}<MonitorPlay className="w-4 h-4" />{t('slideshow.generateLink', 'Generate slideshow link')}</Button>
+              ) : (
+                <>
+                  <div>
+                    <label className={labelClass}>{t('slideshow.linkLabel', 'Slideshow link')}</label>
+                    <div className="flex items-center gap-2">
+                      <input type="text" value={link} readOnly className={`flex-1 ${inputClass}`} />
+                      <Button
+                                                          variant="outline"
+                                                          onClick={copy}
+                                                        >
+                                                          {copied ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}{copied ? t('events.copied', 'Copied') : t('events.copy', 'Copy')}</Button>
+                    </div>
+                    <div className="flex items-center gap-3 mt-2">
+                      <Button
+                                                          variant="ghost"
+                                                          size="sm"
+                                                          className="text-xs"
+                                                          onClick={generate}
+                                                          disabled={busy || isArchived}
+                                                        >
+                                                          <RotateCw className="w-3.5 h-3.5" />{t('slideshow.regenerate', 'Regenerate')}</Button>
+                      <Button
+                                                          variant="ghost"
+                                                          size="sm"
+                                                          className="text-xs text-red-600 dark:text-red-400"
+                                                          onClick={disable}
+                                                          disabled={busy}
+                                                        >
+                                                          <Trash2 className="w-3.5 h-3.5" />{t('slideshow.disable', 'Disable')}</Button>
+                    </div>
+                  </div>
 
-      <div className="space-y-4">
-        {!token ? (
-          <Button
-            variant="primary"
-            size="md"
-            leftIcon={<MonitorPlay className="w-4 h-4" />}
-            onClick={generate}
-            isLoading={busy}
-            disabled={isArchived}
-          >
-            {t('slideshow.generateLink', 'Generate slideshow link')}
-          </Button>
-        ) : (
-          <>
-            <div>
-              <label className={labelClass}>{t('slideshow.linkLabel', 'Slideshow link')}</label>
-              <div className="flex items-center gap-2">
-                <input type="text" value={link} readOnly className={`flex-1 ${inputClass}`} />
-                <Button
-                  variant="outline"
-                  size="md"
-                  leftIcon={copied ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                  onClick={copy}
-                >
-                  {copied ? t('events.copied', 'Copied') : t('events.copy', 'Copy')}
-                </Button>
-              </div>
-              <div className="flex items-center gap-3 mt-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-xs"
-                  leftIcon={<RotateCw className="w-3.5 h-3.5" />}
-                  onClick={generate}
-                  disabled={busy || isArchived}
-                >
-                  {t('slideshow.regenerate', 'Regenerate')}
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-xs text-red-600 dark:text-red-400"
-                  leftIcon={<Trash2 className="w-3.5 h-3.5" />}
-                  onClick={disable}
-                  disabled={busy}
-                >
-                  {t('slideshow.disable', 'Disable')}
-                </Button>
-              </div>
-            </div>
-
-            {/* Live style settings */}
-            <div className="pt-2 border-t border-neutral-200 dark:border-neutral-700">
-              <SlideshowStyleFields value={style} onChange={setStyle} categories={categories} />
-            </div>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400">
-              {t('slideshow.liveHint', 'Changes apply to a running slideshow within a few seconds — no need to regenerate the link.')}
-            </p>
-            <Button
-              variant="outline"
-              size="md"
-              leftIcon={<Save className="w-4 h-4" />}
-              onClick={saveSettings}
-              isLoading={saving}
-            >
-              {t('slideshow.saveSettings', 'Save slideshow settings')}
-            </Button>
-          </>
-        )}
-      </div>
-    </Card>
+                  {/* Live style settings */}
+                  <div className="pt-2 border-t border-border">
+                    <SlideshowStyleFields value={style} onChange={setStyle} categories={categories} />
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    {t('slideshow.liveHint', 'Changes apply to a running slideshow within a few seconds — no need to regenerate the link.')}
+                  </p>
+                  <Button
+                                              variant="outline"
+                                              onClick={saveSettings} disabled={saving}
+                                            >
+                                              {saving && <Loader2 className="animate-spin" />}<Save className="w-4 h-4" />{t('slideshow.saveSettings', 'Save slideshow settings')}</Button>
+                </>
+              )}
+            </div></CardContent></Card>
   );
 };
 

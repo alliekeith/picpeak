@@ -7,7 +7,6 @@ import type { Photo, DownloadResolutionChoice } from '../../types';
 import { useDownloadPhoto } from '../../hooks/useGallery';
 import { PhotoLightbox } from './PhotoLightbox';
 import { DownloadResolutionModal } from './DownloadResolutionModal';
-import { Button } from '../common';
 import { galleryService } from '../../services/gallery.service';
 import { analyticsService } from '../../services/analytics.service';
 import { useTheme } from '../../contexts/ThemeContext';
@@ -24,6 +23,7 @@ import {
 } from './layouts';
 import { HeroHeader } from './HeroHeader';
 import type { HeaderStyleType, HeroDividerStyle } from '../../types/theme.types';
+import { Button } from "@/components/ui/button";
 
 interface PhotoGridWithLayoutsProps {
   photos: Photo[];
@@ -239,7 +239,7 @@ export const PhotoGridWithLayouts: React.FC<PhotoGridWithLayoutsProps> = ({
     if (!suppressEmptyState) {
       return (
         <div className="text-center py-12">
-          <p className="text-muted-theme">{t('gallery.noPhotosFound')}</p>
+          <p className="text-muted-foreground">{t('gallery.noPhotosFound')}</p>
         </div>
       );
     }
@@ -353,7 +353,7 @@ export const PhotoGridWithLayouts: React.FC<PhotoGridWithLayoutsProps> = ({
       {/* Welcome Message - shown for non-fullpage layouts when set */}
       {!isFullPageLayout && welcomeMessage && (
         <div className="mb-6 px-4 py-3 rounded-lg bg-card-theme/50 border border-border-theme text-center">
-          <p className="text-sm text-muted-theme whitespace-pre-line">{welcomeMessage}</p>
+          <p className="text-sm text-muted-foreground whitespace-pre-line">{welcomeMessage}</p>
         </div>
       )}
 
@@ -387,7 +387,7 @@ export const PhotoGridWithLayouts: React.FC<PhotoGridWithLayoutsProps> = ({
           
           {isSelectionMode && (
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
-              <span className="text-xs sm:text-sm text-muted-theme">
+              <span className="text-xs sm:text-sm text-muted-foreground">
                 {t('gallery.photosSelected', { count: selectedPhotos.size })}
               </span>
               <div className="flex items-center gap-2 flex-wrap">
@@ -399,15 +399,11 @@ export const PhotoGridWithLayouts: React.FC<PhotoGridWithLayoutsProps> = ({
                 </Button>
                 {selectedPhotos.size > 0 && (
                   <Button
-                    variant="primary"
-                    size="sm"
-                    leftIcon={<Package className="w-4 h-4" />}
-                    onClick={handleDownloadSelected}
-                    className="text-xs sm:text-sm"
-                  >
-                    <span className="hidden sm:inline">{t('gallery.downloadSelected', { count: selectedPhotos.size })}</span>
-                    <span className="sm:hidden">{t('common.download')} ({selectedPhotos.size})</span>
-                  </Button>
+                                                      size="sm"
+                                                      onClick={handleDownloadSelected}
+                                                      className="text-xs sm:text-sm"
+                                                    >
+                                                      <Package className="w-4 h-4" /><span className="hidden sm:inline">{t('gallery.downloadSelected', { count: selectedPhotos.size })}</span><span className="sm:hidden">{t('common.download')} ({selectedPhotos.size})</span></Button>
                 )}
               </div>
             </div>

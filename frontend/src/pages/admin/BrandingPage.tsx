@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Save, Eye, Palette, Upload } from 'lucide-react';
 import { toast } from 'react-toastify';
-import { Button, Card, Input, ErrorBoundary, Loading, MarkdownContent } from '../../components/common';
+import { ErrorBoundary, Loading, MarkdownContent } from '../../components/common';
 import { ThemeCustomizerEnhanced, GalleryPreview } from '../../components/admin';
 import { useTheme, type ThemeConfig, GALLERY_THEME_PRESETS } from '../../contexts/ThemeContext';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -11,6 +11,10 @@ import { useTranslation } from 'react-i18next';
 import { buildResourceUrl } from '../../utils/url';
 import { usePublicSettings } from '../../hooks/usePublicSettings';
 import { useMutationWithToast } from '../../hooks';
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 export const BrandingPage: React.FC = () => {
   const { t } = useTranslation();
@@ -381,738 +385,685 @@ export const BrandingPage: React.FC = () => {
         {/* Page Header */}
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{t('branding.title')}</h1>
-            <p className="text-neutral-600 dark:text-neutral-400 mt-1">{t('branding.subtitle')}</p>
+            <h1 className="text-2xl font-bold text-foreground">{t('branding.title')}</h1>
+            <p className="text-muted-foreground mt-1">{t('branding.subtitle')}</p>
           </div>
           <div className="flex items-center gap-3">
             <Button
-              variant="outline"
-              leftIcon={<Eye className="w-4 h-4" />}
-              onClick={handlePreview}
-            >
-              {t('branding.preview')}
-            </Button>
+                                    variant="outline"
+                                    onClick={handlePreview}
+                                  >
+                                    <Eye className="w-4 h-4" />{t('branding.preview')}</Button>
             <Button
-              variant="primary"
-              leftIcon={<Save className="w-4 h-4" />}
-              onClick={handleSave}
-            >
-              {t('branding.saveChanges')}
-            </Button>
+                                    onClick={handleSave}
+                                  >
+                                    <Save className="w-4 h-4" />{t('branding.saveChanges')}</Button>
           </div>
         </div>
 
         {/* Company Branding */}
-        <Card padding="md" className="mb-6">
-          <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">{t('branding.companyInfo')}</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Input
-              label={t('branding.companyName')}
-              value={brandingSettings.company_name}
-              onChange={(e) => handleBrandingChange('company_name', e.target.value)}
-              placeholder={t('branding.companyName')}
-              helperText={t('branding.companyNameHelp')}
-            />
-            <Input
-              label={t('branding.companyTagline')}
-              value={brandingSettings.company_tagline}
-              onChange={(e) => handleBrandingChange('company_tagline', e.target.value)}
-              placeholder={t('branding.companyTagline')}
-              helperText={t('branding.companyTaglineHelp')}
-            />
-            <Input
-              label={t('branding.supportEmail')}
-              type="email"
-              value={brandingSettings.support_email}
-              onChange={(e) => handleBrandingChange('support_email', e.target.value)}
-              placeholder="support@yourcompany.com"
-              helperText={t('branding.supportEmailHelp')}
-            />
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                {t('branding.footerText')}
-              </label>
-              <textarea
-                value={brandingSettings.footer_text}
-                onChange={(e) => handleBrandingChange('footer_text', e.target.value)}
-                className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-primary-500"
-                rows={2}
-                placeholder={`© ${new Date().getFullYear()} Your Company. All rights reserved.`}
-              />
-            </div>
-          </div>
+        <Card className="mb-6"><CardContent><h2 className="text-lg font-semibold text-foreground mb-4">{t('branding.companyInfo')}</h2><div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('branding.companyName')}</span><Input
+                                              value={brandingSettings.company_name}
+                                              onChange={(e) => handleBrandingChange('company_name', e.target.value)}
+                                              placeholder={t('branding.companyName')}
+                                            />{(t('branding.companyNameHelp')) && <p className="mt-1.5 text-sm text-muted-foreground">{t('branding.companyNameHelp')}</p>}</Label></div>
+                          <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('branding.companyTagline')}</span><Input
+                                              value={brandingSettings.company_tagline}
+                                              onChange={(e) => handleBrandingChange('company_tagline', e.target.value)}
+                                              placeholder={t('branding.companyTagline')}
+                                            />{(t('branding.companyTaglineHelp')) && <p className="mt-1.5 text-sm text-muted-foreground">{t('branding.companyTaglineHelp')}</p>}</Label></div>
+                          <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('branding.supportEmail')}</span><Input
+                                              type="email"
+                                              value={brandingSettings.support_email}
+                                              onChange={(e) => handleBrandingChange('support_email', e.target.value)}
+                                              placeholder="support@yourcompany.com"
+                                            />{(t('branding.supportEmailHelp')) && <p className="mt-1.5 text-sm text-muted-foreground">{t('branding.supportEmailHelp')}</p>}</Label></div>
+                          <div>
+                            <label className="block text-sm font-medium text-foreground mb-2">
+                              {t('branding.footerText')}
+                            </label>
+                            <textarea
+                              value={brandingSettings.footer_text}
+                              onChange={(e) => handleBrandingChange('footer_text', e.target.value)}
+                              className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500"
+                              rows={2}
+                              placeholder={`© ${new Date().getFullYear()} Your Company. All rights reserved.`}
+                            />
+                          </div>
+                        </div>{/* Social media links (#441) — appear as icons in the gallery
+                            footer above the legal-links row. Empty = hidden. */}<div className="mt-6 pt-6 border-t border-border">
+                          <h3 className="text-sm font-semibold text-foreground mb-3">
+                            {t('branding.socialMedia.title', 'Social Media')}
+                          </h3>
+                          <p className="text-xs text-muted-foreground mb-4">
+                            {t('branding.socialMedia.help', 'Add URLs to render social-media icons in the gallery footer. Leave a field empty to hide that icon.')}
+                          </p>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div className="w-full"><Label className="block"><span className="mb-1.5 block">Facebook</span><Input
+                                                        type="url"
+                                                        value={brandingSettings.facebook_url || ''}
+                                                        onChange={(e) => handleBrandingChange('facebook_url', e.target.value)}
+                                                        placeholder="https://facebook.com/yourstudio"
+                                                      /></Label></div>
+                            <div className="w-full"><Label className="block"><span className="mb-1.5 block">Instagram</span><Input
+                                                        type="url"
+                                                        value={brandingSettings.instagram_url || ''}
+                                                        onChange={(e) => handleBrandingChange('instagram_url', e.target.value)}
+                                                        placeholder="https://instagram.com/yourstudio"
+                                                      /></Label></div>
+                            <div className="w-full"><Label className="block"><span className="mb-1.5 block">WhatsApp</span><Input
+                                                        type="text"
+                                                        value={brandingSettings.whatsapp_url || ''}
+                                                        onChange={(e) => handleBrandingChange('whatsapp_url', e.target.value)}
+                                                        placeholder="https://wa.me/491234567890 or +491234567890"
+                                                      />{(t('branding.socialMedia.whatsappHelp', 'A wa.me URL or a phone number with country code (will be converted).')) && <p className="mt-1.5 text-sm text-muted-foreground">{t('branding.socialMedia.whatsappHelp', 'A wa.me URL or a phone number with country code (will be converted).')}</p>}</Label></div>
+                            <div className="w-full"><Label className="block"><span className="mb-1.5 block">X / Twitter</span><Input
+                                                        type="url"
+                                                        value={brandingSettings.twitter_url || ''}
+                                                        onChange={(e) => handleBrandingChange('twitter_url', e.target.value)}
+                                                        placeholder="https://x.com/yourstudio"
+                                                      /></Label></div>
+                            <div className="w-full"><Label className="block"><span className="mb-1.5 block">YouTube</span><Input
+                                                        type="url"
+                                                        value={brandingSettings.youtube_url || ''}
+                                                        onChange={(e) => handleBrandingChange('youtube_url', e.target.value)}
+                                                        placeholder="https://youtube.com/@yourstudio"
+                                                      /></Label></div>
+                          </div>
+                        </div>{/* Promotional banner (#440) — markdown content rendered above
+                            or below the gallery footer. Per-event override is set on
+                            the Edit Event form; this is the global default. */}<div className="mt-6 pt-6 border-t border-border">
+                          <h3 className="text-sm font-semibold text-foreground mb-3">
+                            {t('branding.promo.title', 'Gallery Promotional Banner')}
+                          </h3>
+                          <p className="text-xs text-muted-foreground mb-4">
+                            {t('branding.promo.help', 'Markdown shown above or below the gallery footer (e.g. seasonal offer, print discount). Per-event overrides take priority.')}
+                          </p>
+                          <div className="space-y-3">
+                            <div className="flex flex-col sm:flex-row gap-3">
+                              <div className="flex-1">
+                                <label className="block text-sm font-medium text-foreground mb-2">
+                                  {t('branding.promo.position', 'Position')}
+                                </label>
+                                <select
+                                  value={brandingSettings.promo_position || 'above_footer'}
+                                  onChange={(e) => handleBrandingChange('promo_position', e.target.value as 'above_footer' | 'below_footer')}
+                                  className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500"
+                                >
+                                  <option value="above_footer">{t('branding.promo.aboveFooter', 'Above footer')}</option>
+                                  <option value="below_footer">{t('branding.promo.belowFooter', 'Below footer')}</option>
+                                </select>
+                              </div>
+                              {/* Horizontal alignment (#482). Defaults to center
+                                  so the banner aligns with the gallery footer. */}
+                              <div className="flex-1">
+                                <label className="block text-sm font-medium text-foreground mb-2">
+                                  {t('branding.promo.alignment', 'Alignment')}
+                                </label>
+                                <select
+                                  value={brandingSettings.promo_alignment || 'center'}
+                                  onChange={(e) => handleBrandingChange('promo_alignment', e.target.value as 'left' | 'center' | 'right')}
+                                  className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500"
+                                >
+                                  <option value="left">{t('branding.promo.alignLeft', 'Left')}</option>
+                                  <option value="center">{t('branding.promo.alignCenter', 'Center (default — matches footer)')}</option>
+                                  <option value="right">{t('branding.promo.alignRight', 'Right')}</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-foreground mb-2">
+                                {t('branding.promo.content', 'Content (markdown)')}
+                              </label>
+                              <textarea
+                                value={brandingSettings.promo_markdown || ''}
+                                onChange={(e) => handleBrandingChange('promo_markdown', e.target.value)}
+                                className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500 font-mono text-sm"
+                                rows={5}
+                                placeholder={t('branding.promo.placeholder', '**Spring offer**: 20% off prints with code SPRING — see the [print shop](https://example.com).')}
+                              />
+                              <p className="text-xs text-muted-foreground mt-1">
+                                {t('branding.promo.markdownHelp', 'Bold, italic, links, lists, and headings supported. HTML is stripped.')}
+                              </p>
+                            </div>
+                            {brandingSettings.promo_markdown && brandingSettings.promo_markdown.trim() && (
+                              <div className="rounded-lg border border-border p-4 bg-muted">
+                                <div className="text-xs uppercase tracking-wider text-muted-foreground mb-2">
+                                  {t('branding.promo.preview', 'Preview')}
+                                </div>
+                                {/* Preview mirrors the live gallery render — same
+                                    alignment class so the admin sees what guests
+                                    will see (#482). */}
+                                <MarkdownContent
+                                  source={brandingSettings.promo_markdown}
+                                  className={`text-sm text-foreground prose prose-sm dark:prose-invert max-w-none prose-a:text-brand-600 dark:prose-a:text-brand-400 ${
+                                    brandingSettings.promo_alignment === 'left' ? 'text-left'
+                                      : brandingSettings.promo_alignment === 'right' ? 'text-right'
+                                      : 'text-center'
+                                  }`}
+                                />
+                              </div>
+                            )}
+                          </div>
+                        </div>{/* Gallery info banner (#932) — markdown rendered ABOVE the photo
+                            grid, so guests see it on load. Distinct from the promotional
+                            banner above, which stays by the footer for marketing copy.
+                            Per-event override lives on the Edit Event form; this is the
+                            global default that applies to every gallery. */}<div className="mt-6 pt-6 border-t border-border">
+                          <h3 className="text-sm font-semibold text-foreground mb-3">
+                            {t('branding.infoBanner.title', 'Gallery Info Banner')}
+                          </h3>
+                          <p className="text-xs text-muted-foreground mb-4">
+                            {t('branding.infoBanner.description', 'A short note shown at the top of every gallery, above the photos — useful for usage hints. Leave empty to hide it. Individual events can override or switch it off.')}
+                          </p>
+                          <div className="space-y-4">
+                            <div>
+                              <label className="block text-sm font-medium text-foreground mb-2">
+                                {t('branding.infoBanner.content', 'Content (markdown)')}
+                              </label>
+                              <textarea
+                                value={brandingSettings.info_markdown || ''}
+                                onChange={(e) => handleBrandingChange('info_markdown', e.target.value)}
+                                className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500 font-mono text-sm"
+                                rows={3}
+                                placeholder={t('branding.infoBanner.placeholder', 'Use the menu button in the top-left corner to filter the photos.')}
+                              />
+                              <p className="text-xs text-muted-foreground mt-1">
+                                {t('branding.infoBanner.markdownHelp', 'Bold, italic, links, lists, and headings supported. HTML is stripped.')}
+                              </p>
+                            </div>
+                            {brandingSettings.info_markdown && brandingSettings.info_markdown.trim() && (
+                              <div className="rounded-lg border border-border p-4 bg-muted">
+                                <div className="text-xs uppercase tracking-wider text-muted-foreground mb-2">
+                                  {t('branding.infoBanner.preview', 'Preview')}
+                                </div>
+                                {/* Mirrors the live gallery render — centred, same prose
+                                    classes — so the admin sees what guests will see. */}
+                                <MarkdownContent
+                                  source={brandingSettings.info_markdown}
+                                  className="text-sm text-foreground prose prose-sm dark:prose-invert max-w-none prose-a:text-brand-600 dark:prose-a:text-brand-400 text-center"
+                                />
+                              </div>
+                            )}
+                          </div>
+                        </div><div className="mt-6 pt-6 border-t border-border">
+                          <div>
+                            <label className="block text-sm font-medium text-foreground mb-2">
+                              {t('branding.favicon')}
+                            </label>
+                            <div className="space-y-2">
+                              {brandingSettings.favicon_url && (
+                                <div className="flex items-center gap-2">
+                                  <img 
+                                    src={brandingSettings.favicon_url.startsWith('http') ? brandingSettings.favicon_url : buildResourceUrl(brandingSettings.favicon_url)} 
+                                    alt="Current favicon" 
+                                    className="w-8 h-8"
+                                  />
+                                  <span className="text-sm text-muted-foreground">{t('branding.currentFavicon')}</span>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => handleBrandingChange('favicon_url', '')}
+                                  >
+                                    {t('branding.removeFavicon')}
+                                  </Button>
+                                </div>
+                              )}
+                              <div>
+                                <input
+                                  ref={faviconInputRef}
+                                  type="file"
+                                  accept="image/png,image/x-icon"
+                                  onChange={handleFaviconUpload}
+                                  className="hidden"
+                                />
+                                <Button
+                                                                    variant="secondary"
+                                                                    size="sm"
+                                                                    onClick={() => faviconInputRef.current?.click()}
+                                                                  >
+                                                                    <Upload className="w-4 h-4" />{t('branding.uploadFavicon')}</Button>
+                                <p className="text-xs text-muted-foreground mt-1">{t('branding.faviconHelp')}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>{/* Logo Customization Settings */}<div className="mt-6 pt-6 border-t border-border">
+                          <h3 className="text-md font-semibold text-foreground mb-4">{t('branding.logoCustomization', 'Logo Customization')}</h3>
 
-          {/* Social media links (#441) — appear as icons in the gallery
-              footer above the legal-links row. Empty = hidden. */}
-          <div className="mt-6 pt-6 border-t border-neutral-200 dark:border-neutral-700">
-            <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 mb-3">
-              {t('branding.socialMedia.title', 'Social Media')}
-            </h3>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-4">
-              {t('branding.socialMedia.help', 'Add URLs to render social-media icons in the gallery footer. Leave a field empty to hide that icon.')}
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <Input
-                label="Facebook"
-                type="url"
-                value={brandingSettings.facebook_url || ''}
-                onChange={(e) => handleBrandingChange('facebook_url', e.target.value)}
-                placeholder="https://facebook.com/yourstudio"
-              />
-              <Input
-                label="Instagram"
-                type="url"
-                value={brandingSettings.instagram_url || ''}
-                onChange={(e) => handleBrandingChange('instagram_url', e.target.value)}
-                placeholder="https://instagram.com/yourstudio"
-              />
-              <Input
-                label="WhatsApp"
-                type="text"
-                value={brandingSettings.whatsapp_url || ''}
-                onChange={(e) => handleBrandingChange('whatsapp_url', e.target.value)}
-                placeholder="https://wa.me/491234567890 or +491234567890"
-                helperText={t('branding.socialMedia.whatsappHelp', 'A wa.me URL or a phone number with country code (will be converted).')}
-              />
-              <Input
-                label="X / Twitter"
-                type="url"
-                value={brandingSettings.twitter_url || ''}
-                onChange={(e) => handleBrandingChange('twitter_url', e.target.value)}
-                placeholder="https://x.com/yourstudio"
-              />
-              <Input
-                label="YouTube"
-                type="url"
-                value={brandingSettings.youtube_url || ''}
-                onChange={(e) => handleBrandingChange('youtube_url', e.target.value)}
-                placeholder="https://youtube.com/@yourstudio"
-              />
-            </div>
-          </div>
+                          <div className="space-y-4">
+                            {/* Logo Upload */}
+                            <div>
+                              <label className="block text-sm font-medium text-foreground mb-2">
+                                {t('branding.logo', 'Logo')}
+                              </label>
+                              <div className="flex items-center gap-4">
+                                {brandingSettings.logo_url && (
+                                  <div className="relative">
+                                    <img 
+                                      src={brandingSettings.logo_url.startsWith('http') ? brandingSettings.logo_url : buildResourceUrl(brandingSettings.logo_url)} 
+                                      alt="Logo"
+                                      className="h-16 object-contain bg-muted rounded-sm p-2"
+                                    />
+                                    <button
+                                      type="button"
+                                      onClick={handleRemoveLogo}
+                                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
+                                    >
+                                      ×
+                                    </button>
+                                  </div>
+                                )}
+                                <div>
+                                  <input
+                                    type="file"
+                                    accept="image/png,image/jpeg,image/svg+xml"
+                                    onChange={handleLogoUpload}
+                                    className="hidden"
+                                    id="logo-upload"
+                                  />
+                                  <Button
+                                                                          variant="secondary"
+                                                                          size="sm"
+                                                                          onClick={() => document.getElementById('logo-upload')?.click()}
+                                                                        >
+                                                                          <Upload className="w-4 h-4" />{brandingSettings.logo_url ? t('branding.changeLogo', 'Change Logo') : t('branding.uploadLogo', 'Upload Logo')}</Button>
+                                </div>
+                              </div>
+                              <p className="text-xs text-muted-foreground mt-1">
+                                {t('branding.logoHelp', 'PNG, JPG or SVG format, recommended width: 200px')}
+                              </p>
+                            </div>
+                            {/* Dark-mode logo */}
+                            <div>
+                              <label className="block text-sm font-medium text-foreground mb-2">
+                                {t('branding.logoDark', 'Dark-mode logo')}
+                              </label>
+                              <div className="flex items-center gap-4">
+                                {logoDarkUrl && (
+                                  <div className="relative">
+                                    <img
+                                      src={logoDarkUrl.startsWith('http') ? logoDarkUrl : buildResourceUrl(logoDarkUrl)}
+                                      alt="Dark logo"
+                                      className="h-16 object-contain bg-neutral-800 rounded-sm p-2"
+                                    />
+                                    <button
+                                      type="button"
+                                      onClick={handleRemoveDarkLogo}
+                                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
+                                    >
+                                      ×
+                                    </button>
+                                  </div>
+                                )}
+                                <div>
+                                  <input
+                                    type="file"
+                                    accept="image/png,image/jpeg,image/svg+xml"
+                                    onChange={handleDarkLogoUpload}
+                                    className="hidden"
+                                    id="logo-dark-upload"
+                                  />
+                                  <Button
+                                                                          variant="secondary"
+                                                                          size="sm"
+                                                                          onClick={() => document.getElementById('logo-dark-upload')?.click()}
+                                                                        >
+                                                                          <Upload className="w-4 h-4" />{logoDarkUrl ? t('branding.changeLogo', 'Change Logo') : t('branding.uploadLogo', 'Upload Logo')}</Button>
+                                </div>
+                              </div>
+                              <p className="text-xs text-muted-foreground mt-1">
+                                {t('branding.logoDarkHelp', 'Optional. Shown on dark themes / dark mode; falls back to the main logo when unset.')}
+                              </p>
+                            </div>
+                            {/* Logo Size */}
+                            <div>
+                              <label className="block text-sm font-medium text-foreground mb-2">
+                                {t('branding.logoSize', 'Logo Size')}
+                              </label>
+                              <select
+                                value={brandingSettings.logo_size || 'medium'}
+                                onChange={(e) => handleBrandingChange('logo_size', e.target.value)}
+                                className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500"
+                              >
+                                <option value="small">{t('branding.logoSizeSmall', 'Small (32px)')}</option>
+                                <option value="medium">{t('branding.logoSizeMedium', 'Medium (48px)')}</option>
+                                <option value="large">{t('branding.logoSizeLarge', 'Large (64px)')}</option>
+                                <option value="xlarge">{t('branding.logoSizeXLarge', 'Extra Large (96px)')}</option>
+                                <option value="custom">{t('branding.logoSizeCustom', 'Custom')}</option>
+                              </select>
+                            </div>
 
-          {/* Promotional banner (#440) — markdown content rendered above
-              or below the gallery footer. Per-event override is set on
-              the Edit Event form; this is the global default. */}
-          <div className="mt-6 pt-6 border-t border-neutral-200 dark:border-neutral-700">
-            <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 mb-3">
-              {t('branding.promo.title', 'Gallery Promotional Banner')}
-            </h3>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-4">
-              {t('branding.promo.help', 'Markdown shown above or below the gallery footer (e.g. seasonal offer, print discount). Per-event overrides take priority.')}
-            </p>
-            <div className="space-y-3">
-              <div className="flex flex-col sm:flex-row gap-3">
-                <div className="flex-1">
-                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                    {t('branding.promo.position', 'Position')}
-                  </label>
-                  <select
-                    value={brandingSettings.promo_position || 'above_footer'}
-                    onChange={(e) => handleBrandingChange('promo_position', e.target.value as 'above_footer' | 'below_footer')}
-                    className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-primary-500"
-                  >
-                    <option value="above_footer">{t('branding.promo.aboveFooter', 'Above footer')}</option>
-                    <option value="below_footer">{t('branding.promo.belowFooter', 'Below footer')}</option>
-                  </select>
-                </div>
-                {/* Horizontal alignment (#482). Defaults to center
-                    so the banner aligns with the gallery footer. */}
-                <div className="flex-1">
-                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                    {t('branding.promo.alignment', 'Alignment')}
-                  </label>
-                  <select
-                    value={brandingSettings.promo_alignment || 'center'}
-                    onChange={(e) => handleBrandingChange('promo_alignment', e.target.value as 'left' | 'center' | 'right')}
-                    className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-primary-500"
-                  >
-                    <option value="left">{t('branding.promo.alignLeft', 'Left')}</option>
-                    <option value="center">{t('branding.promo.alignCenter', 'Center (default — matches footer)')}</option>
-                    <option value="right">{t('branding.promo.alignRight', 'Right')}</option>
-                  </select>
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                  {t('branding.promo.content', 'Content (markdown)')}
-                </label>
-                <textarea
-                  value={brandingSettings.promo_markdown || ''}
-                  onChange={(e) => handleBrandingChange('promo_markdown', e.target.value)}
-                  className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-primary-500 font-mono text-sm"
-                  rows={5}
-                  placeholder={t('branding.promo.placeholder', '**Spring offer**: 20% off prints with code SPRING — see the [print shop](https://example.com).')}
-                />
-                <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-                  {t('branding.promo.markdownHelp', 'Bold, italic, links, lists, and headings supported. HTML is stripped.')}
-                </p>
-              </div>
-              {brandingSettings.promo_markdown && brandingSettings.promo_markdown.trim() && (
-                <div className="rounded-lg border border-neutral-200 dark:border-neutral-700 p-4 bg-neutral-50 dark:bg-neutral-800/40">
-                  <div className="text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2">
-                    {t('branding.promo.preview', 'Preview')}
-                  </div>
-                  {/* Preview mirrors the live gallery render — same
-                      alignment class so the admin sees what guests
-                      will see (#482). */}
-                  <MarkdownContent
-                    source={brandingSettings.promo_markdown}
-                    className={`text-sm text-neutral-800 dark:text-neutral-200 prose prose-sm dark:prose-invert max-w-none prose-a:text-primary-600 dark:prose-a:text-primary-400 ${
-                      brandingSettings.promo_alignment === 'left' ? 'text-left'
-                        : brandingSettings.promo_alignment === 'right' ? 'text-right'
-                        : 'text-center'
-                    }`}
-                  />
-                </div>
-              )}
-            </div>
-          </div>
+                            {/* Custom Height (only shown when size is custom) */}
+                            {brandingSettings.logo_size === 'custom' && (
+                              <div>
+                                <label className="block text-sm font-medium text-foreground mb-2">
+                                  {t('branding.logoMaxHeight', 'Maximum Height (pixels)')}
+                                </label>
+                                <input
+                                  type="number"
+                                  min="20"
+                                  max="200"
+                                  value={brandingSettings.logo_max_height || 48}
+                                  onChange={(e) => handleBrandingChange('logo_max_height', parseInt(e.target.value))}
+                                  className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500"
+                                />
+                                <p className="text-xs text-muted-foreground mt-1">
+                                  {t('branding.logoMaxHeightHelp', 'Set a custom maximum height for the logo (20-200 pixels)')}
+                                </p>
+                              </div>
+                            )}
 
-          {/* Gallery info banner (#932) — markdown rendered ABOVE the photo
-              grid, so guests see it on load. Distinct from the promotional
-              banner above, which stays by the footer for marketing copy.
-              Per-event override lives on the Edit Event form; this is the
-              global default that applies to every gallery. */}
-          <div className="mt-6 pt-6 border-t border-neutral-200 dark:border-neutral-700">
-            <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 mb-3">
-              {t('branding.infoBanner.title', 'Gallery Info Banner')}
-            </h3>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-4">
-              {t('branding.infoBanner.description', 'A short note shown at the top of every gallery, above the photos — useful for usage hints. Leave empty to hide it. Individual events can override or switch it off.')}
-            </p>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                  {t('branding.infoBanner.content', 'Content (markdown)')}
-                </label>
-                <textarea
-                  value={brandingSettings.info_markdown || ''}
-                  onChange={(e) => handleBrandingChange('info_markdown', e.target.value)}
-                  className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-primary-500 font-mono text-sm"
-                  rows={3}
-                  placeholder={t('branding.infoBanner.placeholder', 'Use the menu button in the top-left corner to filter the photos.')}
-                />
-                <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-                  {t('branding.infoBanner.markdownHelp', 'Bold, italic, links, lists, and headings supported. HTML is stripped.')}
-                </p>
-              </div>
-              {brandingSettings.info_markdown && brandingSettings.info_markdown.trim() && (
-                <div className="rounded-lg border border-neutral-200 dark:border-neutral-700 p-4 bg-neutral-50 dark:bg-neutral-800/40">
-                  <div className="text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2">
-                    {t('branding.infoBanner.preview', 'Preview')}
-                  </div>
-                  {/* Mirrors the live gallery render — centred, same prose
-                      classes — so the admin sees what guests will see. */}
-                  <MarkdownContent
-                    source={brandingSettings.info_markdown}
-                    className="text-sm text-neutral-800 dark:text-neutral-200 prose prose-sm dark:prose-invert max-w-none prose-a:text-primary-600 dark:prose-a:text-primary-400 text-center"
-                  />
-                </div>
-              )}
-            </div>
-          </div>
+                            {/* Logo Position
+                                - left / center / right: position inside the gallery header bar.
+                                - sidepanel: moves the logo out of the gallery header
+                                  and into the admin sidebar's brand row (replaces the
+                                  "PicPeak Admin" text; the favicon takes over when
+                                  the sidebar is collapsed). The gallery falls back
+                                  to 'left' for its own rendering. */}
+                            <div>
+                              <label className="block text-sm font-medium text-foreground mb-2">
+                                {t('branding.logoPosition', 'Logo Position in Header')}
+                              </label>
+                              <div className="flex flex-wrap gap-2">
+                                {(['sidepanel', 'left', 'center', 'right'] as const).map((position) => (
+                                  <button
+                                    key={position}
+                                    type="button"
+                                    onClick={() => handleBrandingChange('logo_position', position)}
+                                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                                      brandingSettings.logo_position === position
+                                        ? 'bg-primary text-primary-foreground'
+                                        : 'bg-muted text-foreground hover:bg-accent'
+                                    }`}
+                                  >
+                                    {t(`branding.position${position.charAt(0).toUpperCase() + position.slice(1)}`, position.charAt(0).toUpperCase() + position.slice(1))}
+                                  </button>
+                                ))}
+                              </div>
+                              {brandingSettings.logo_position === 'sidepanel' && (
+                                <p className="text-xs text-muted-foreground mt-2">
+                                  {t('branding.positionSidepanelHelp',
+                                    'The logo appears in the admin sidebar instead of the header. When the sidebar is collapsed, the favicon is shown.')}
+                                </p>
+                              )}
+                            </div>
 
-          <div className="mt-6 pt-6 border-t border-neutral-200 dark:border-neutral-700">
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                {t('branding.favicon')}
-              </label>
-              <div className="space-y-2">
-                {brandingSettings.favicon_url && (
-                  <div className="flex items-center gap-2">
-                    <img 
-                      src={brandingSettings.favicon_url.startsWith('http') ? brandingSettings.favicon_url : buildResourceUrl(brandingSettings.favicon_url)} 
-                      alt="Current favicon" 
-                      className="w-8 h-8"
-                    />
-                    <span className="text-sm text-neutral-600 dark:text-neutral-400">{t('branding.currentFavicon')}</span>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleBrandingChange('favicon_url', '')}
-                    >
-                      {t('branding.removeFavicon')}
-                    </Button>
-                  </div>
-                )}
-                <div>
-                  <input
-                    ref={faviconInputRef}
-                    type="file"
-                    accept="image/png,image/x-icon"
-                    onChange={handleFaviconUpload}
-                    className="hidden"
-                  />
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    onClick={() => faviconInputRef.current?.click()}
-                    leftIcon={<Upload className="w-4 h-4" />}
-                  >
-                    {t('branding.uploadFavicon')}
-                  </Button>
-                  <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1">{t('branding.faviconHelp')}</p>
-                </div>
-              </div>
-            </div>
-          </div>
+                            {/* Display Mode */}
+                            <div>
+                              <label className="block text-sm font-medium text-foreground mb-2">
+                                {t('branding.logoDisplayMode', 'Display Mode')}
+                              </label>
+                              <select
+                                value={brandingSettings.logo_display_mode || 'logo_and_text'}
+                                onChange={(e) => handleBrandingChange('logo_display_mode', e.target.value)}
+                                className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500"
+                              >
+                                <option value="logo_only">{t('branding.logoOnly', 'Logo Only')}</option>
+                                <option value="text_only">{t('branding.textOnly', 'Company Name Only')}</option>
+                                <option value="logo_and_text">{t('branding.logoAndText', 'Logo and Company Name')}</option>
+                              </select>
+                            </div>
 
-          {/* Logo Customization Settings */}
-          <div className="mt-6 pt-6 border-t border-neutral-200 dark:border-neutral-700">
-            <h3 className="text-md font-semibold text-neutral-900 dark:text-neutral-100 mb-4">{t('branding.logoCustomization', 'Logo Customization')}</h3>
+                            {/* Display Options */}
+                            <div className="space-y-3">
+                              <label className="flex items-center gap-3 cursor-pointer">
+                                <input
+                                  type="checkbox"
+                                  checked={brandingSettings.logo_display_header !== false}
+                                  onChange={(e) => handleBrandingChange('logo_display_header', e.target.checked)}
+                                  className="rounded-sm border-border text-brand focus:ring-brand-500"
+                                />
+                                <div>
+                                  <span className="text-sm font-medium text-foreground">
+                                    {t('branding.showLogoInHeader', 'Show logo in gallery header')}
+                                  </span>
+                                  <p className="text-xs text-muted-foreground">
+                                    {t('branding.showLogoInHeaderHelp', 'Display the logo in the main header bar')}
+                                  </p>
+                                </div>
+                              </label>
 
-            <div className="space-y-4">
-              {/* Logo Upload */}
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                  {t('branding.logo', 'Logo')}
-                </label>
-                <div className="flex items-center gap-4">
-                  {brandingSettings.logo_url && (
-                    <div className="relative">
-                      <img 
-                        src={brandingSettings.logo_url.startsWith('http') ? brandingSettings.logo_url : buildResourceUrl(brandingSettings.logo_url)} 
-                        alt="Logo"
-                        className="h-16 object-contain bg-neutral-100 dark:bg-neutral-700 rounded p-2"
-                      />
-                      <button
-                        type="button"
-                        onClick={handleRemoveLogo}
-                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
-                      >
-                        ×
-                      </button>
-                    </div>
-                  )}
-                  <div>
-                    <input
-                      type="file"
-                      accept="image/png,image/jpeg,image/svg+xml"
-                      onChange={handleLogoUpload}
-                      className="hidden"
-                      id="logo-upload"
-                    />
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      onClick={() => document.getElementById('logo-upload')?.click()}
-                      leftIcon={<Upload className="w-4 h-4" />}
-                    >
-                      {brandingSettings.logo_url ? t('branding.changeLogo', 'Change Logo') : t('branding.uploadLogo', 'Upload Logo')}
-                    </Button>
-                  </div>
-                </div>
-                <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1">
-                  {t('branding.logoHelp', 'PNG, JPG or SVG format, recommended width: 200px')}
-                </p>
-              </div>
-              {/* Dark-mode logo */}
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                  {t('branding.logoDark', 'Dark-mode logo')}
-                </label>
-                <div className="flex items-center gap-4">
-                  {logoDarkUrl && (
-                    <div className="relative">
-                      <img
-                        src={logoDarkUrl.startsWith('http') ? logoDarkUrl : buildResourceUrl(logoDarkUrl)}
-                        alt="Dark logo"
-                        className="h-16 object-contain bg-neutral-800 rounded p-2"
-                      />
-                      <button
-                        type="button"
-                        onClick={handleRemoveDarkLogo}
-                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
-                      >
-                        ×
-                      </button>
-                    </div>
-                  )}
-                  <div>
-                    <input
-                      type="file"
-                      accept="image/png,image/jpeg,image/svg+xml"
-                      onChange={handleDarkLogoUpload}
-                      className="hidden"
-                      id="logo-dark-upload"
-                    />
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      onClick={() => document.getElementById('logo-dark-upload')?.click()}
-                      leftIcon={<Upload className="w-4 h-4" />}
-                    >
-                      {logoDarkUrl ? t('branding.changeLogo', 'Change Logo') : t('branding.uploadLogo', 'Upload Logo')}
-                    </Button>
-                  </div>
-                </div>
-                <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1">
-                  {t('branding.logoDarkHelp', 'Optional. Shown on dark themes / dark mode; falls back to the main logo when unset.')}
-                </p>
-              </div>
-              {/* Logo Size */}
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                  {t('branding.logoSize', 'Logo Size')}
-                </label>
-                <select
-                  value={brandingSettings.logo_size || 'medium'}
-                  onChange={(e) => handleBrandingChange('logo_size', e.target.value)}
-                  className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-primary-500"
-                >
-                  <option value="small">{t('branding.logoSizeSmall', 'Small (32px)')}</option>
-                  <option value="medium">{t('branding.logoSizeMedium', 'Medium (48px)')}</option>
-                  <option value="large">{t('branding.logoSizeLarge', 'Large (64px)')}</option>
-                  <option value="xlarge">{t('branding.logoSizeXLarge', 'Extra Large (96px)')}</option>
-                  <option value="custom">{t('branding.logoSizeCustom', 'Custom')}</option>
-                </select>
-              </div>
+                              <label className="flex items-center gap-3 cursor-pointer">
+                                <input
+                                  type="checkbox"
+                                  checked={brandingSettings.logo_display_hero !== false}
+                                  onChange={(e) => handleBrandingChange('logo_display_hero', e.target.checked)}
+                                  className="rounded-sm border-border text-brand focus:ring-brand-500"
+                                />
+                                <div>
+                                  <span className="text-sm font-medium text-foreground">
+                                    {t('branding.showLogoInHero', 'Show logo in hero section')}
+                                  </span>
+                                  <p className="text-xs text-muted-foreground">
+                                    {t('branding.showLogoInHeroHelp', 'Display the logo in hero sections (for non-grid layouts)')}
+                                  </p>
+                                </div>
+                              </label>
+                            </div>
+                          </div>
+                        </div>{/* Login-page-only logo controls (#354 follow-up). These do
+                           NOT affect gallery/admin headers — those keep their own
+                           logo_size knob above. */}<div className="mt-6 pt-6 border-t border-border">
+                          <h3 className="text-md font-semibold text-foreground mb-1">
+                            {t('branding.loginLogo.title', 'Login pages logo')}
+                          </h3>
+                          <p className="text-xs text-muted-foreground mb-4">
+                            {t('branding.loginLogo.subtitle', 'Controls only /admin/login and /customer/login. Gallery and admin chrome use the logo settings above.')}
+                          </p>
 
-              {/* Custom Height (only shown when size is custom) */}
-              {brandingSettings.logo_size === 'custom' && (
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                    {t('branding.logoMaxHeight', 'Maximum Height (pixels)')}
-                  </label>
-                  <input
-                    type="number"
-                    min="20"
-                    max="200"
-                    value={brandingSettings.logo_max_height || 48}
-                    onChange={(e) => handleBrandingChange('logo_max_height', parseInt(e.target.value))}
-                    className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-primary-500"
-                  />
-                  <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1">
-                    {t('branding.logoMaxHeightHelp', 'Set a custom maximum height for the logo (20-200 pixels)')}
-                  </p>
-                </div>
-              )}
+                          <div className="space-y-4">
+                            {/* Frame toggle */}
+                            <label className="flex items-start gap-3 cursor-pointer">
+                              <input
+                                type="checkbox"
+                                checked={brandingSettings.login_logo_frame_enabled !== false}
+                                onChange={(e) => handleBrandingChange('login_logo_frame_enabled', e.target.checked)}
+                                className="mt-0.5 rounded-sm border-border text-brand focus:ring-brand-500"
+                              />
+                              <div>
+                                <span className="text-sm font-medium text-foreground">
+                                  {t('branding.loginLogo.frame', 'Show tinted frame behind the logo')}
+                                </span>
+                                <p className="text-xs text-muted-foreground">
+                                  {t(
+                                    'branding.loginLogo.frameHelp',
+                                    'When off, the logo sits directly on the page background. Useful for logos that already include their own backdrop.',
+                                  )}
+                                </p>
+                              </div>
+                            </label>
 
-              {/* Logo Position
-                  - left / center / right: position inside the gallery header bar.
-                  - sidepanel: moves the logo out of the gallery header
-                    and into the admin sidebar's brand row (replaces the
-                    "PicPeak Admin" text; the favicon takes over when
-                    the sidebar is collapsed). The gallery falls back
-                    to 'left' for its own rendering. */}
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                  {t('branding.logoPosition', 'Logo Position in Header')}
-                </label>
-                <div className="flex flex-wrap gap-2">
-                  {(['sidepanel', 'left', 'center', 'right'] as const).map((position) => (
-                    <button
-                      key={position}
-                      type="button"
-                      onClick={() => handleBrandingChange('logo_position', position)}
-                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                        brandingSettings.logo_position === position
-                          ? 'bg-accent-dark text-white'
-                          : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-600'
-                      }`}
-                    >
-                      {t(`branding.position${position.charAt(0).toUpperCase() + position.slice(1)}`, position.charAt(0).toUpperCase() + position.slice(1))}
-                    </button>
-                  ))}
-                </div>
-                {brandingSettings.logo_position === 'sidepanel' && (
-                  <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-2">
-                    {t('branding.positionSidepanelHelp',
-                      'The logo appears in the admin sidebar instead of the header. When the sidebar is collapsed, the favicon is shown.')}
-                  </p>
-                )}
-              </div>
+                            {/* Size selector */}
+                            <div>
+                              <label className="block text-sm font-medium text-foreground mb-2">
+                                {t('branding.loginLogo.size', 'Logo size on login pages')}
+                              </label>
+                              <select
+                                value={brandingSettings.login_logo_size || 'medium'}
+                                onChange={(e) => handleBrandingChange('login_logo_size', e.target.value as 'small' | 'medium' | 'large' | 'xlarge')}
+                                className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500"
+                              >
+                                <option value="small">{t('branding.loginLogo.sizeSmall', 'Small')}</option>
+                                <option value="medium">{t('branding.loginLogo.sizeMedium', 'Medium (default)')}</option>
+                                <option value="large">{t('branding.loginLogo.sizeLarge', 'Large')}</option>
+                                <option value="xlarge">{t('branding.loginLogo.sizeXLarge', 'Extra large')}</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>{/* White Label Settings */}<div className="mt-6 pt-6 border-t border-border">
+                          <h3 className="text-md font-semibold text-foreground mb-4">{t('branding.whiteLabel', 'White Label')}</h3>
+                          <label className="flex items-center gap-3 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={brandingSettings.hide_powered_by === true}
+                              onChange={(e) => handleBrandingChange('hide_powered_by', e.target.checked)}
+                              className="rounded-sm border-border text-brand focus:ring-brand-500"
+                            />
+                            <div>
+                              <span className="text-sm font-medium text-foreground">
+                                {t('branding.hidePoweredBy', 'Hide "Powered by PicPeak" branding')}
+                              </span>
+                              <p className="text-xs text-muted-foreground">
+                                {t('branding.hidePoweredByHelp', 'Remove the PicPeak attribution from gallery footers for a fully white-labeled experience')}
+                              </p>
+                            </div>
+                          </label>
+                        </div><div className="mt-6 pt-6 border-t border-border">
+                          <label className="flex items-center gap-3 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={brandingSettings.watermark_enabled}
+                              onChange={(e) => handleBrandingChange('watermark_enabled', e.target.checked)}
+                              className="rounded-sm border-border text-brand focus:ring-brand-500"
+                            />
+                            <div>
+                              <span className="text-sm font-medium text-foreground">{t('branding.enableWatermarks')}</span>
+                              <p className="text-xs text-muted-foreground">{t('branding.watermarkHelp')}</p>
+                            </div>
+                          </label>
+                        </div>{/* Watermark Settings */}{brandingSettings.watermark_enabled && (
+                          <div className="mt-6 space-y-6 border-t border-border pt-6">
+                            <h3 className="text-md font-semibold text-foreground">{t('branding.watermarkSettings')}</h3>
 
-              {/* Display Mode */}
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                  {t('branding.logoDisplayMode', 'Display Mode')}
-                </label>
-                <select
-                  value={brandingSettings.logo_display_mode || 'logo_and_text'}
-                  onChange={(e) => handleBrandingChange('logo_display_mode', e.target.value)}
-                  className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-primary-500"
-                >
-                  <option value="logo_only">{t('branding.logoOnly', 'Logo Only')}</option>
-                  <option value="text_only">{t('branding.textOnly', 'Company Name Only')}</option>
-                  <option value="logo_and_text">{t('branding.logoAndText', 'Logo and Company Name')}</option>
-                </select>
-              </div>
+                            {/* Watermark Logo Upload */}
+                            <div>
+                              <label className="block text-sm font-medium text-foreground mb-2">
+                                {t('branding.watermarkLogo')}
+                              </label>
+                              <div className="space-y-2">
+                                {brandingSettings.watermark_logo_url && (
+                                  <div className="flex items-center gap-2">
+                                    <img 
+                                      src={brandingSettings.watermark_logo_url.startsWith('http') ? brandingSettings.watermark_logo_url : buildResourceUrl(brandingSettings.watermark_logo_url)} 
+                                      alt="Current watermark" 
+                                      className="h-16 w-auto object-contain bg-muted p-2 rounded-sm"
+                                    />
+                                    <span className="text-sm text-muted-foreground">{t('branding.currentWatermark')}</span>
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => handleBrandingChange('watermark_logo_url', '')}
+                                    >
+                                      {t('common.delete')}
+                                    </Button>
+                                  </div>
+                                )}
+                                <div>
+                                  <input
+                                    type="file"
+                                    accept="image/png"
+                                    onChange={handleWatermarkLogoUpload}
+                                    className="hidden"
+                                    id="watermark-upload"
+                                  />
+                                  <label htmlFor="watermark-upload">
+                                    <Button
+                                                                                variant="secondary"
+                                                                                size="sm"
+                                                                                onClick={() => document.getElementById('watermark-upload')?.click()}
+                                                                              >
+                                                                                <Upload className="w-4 h-4" />{t('branding.uploadWatermarkLogo')}</Button>
+                                  </label>
+                                  <p className="text-xs text-muted-foreground mt-1">{t('branding.watermarkHelp')}</p>
+                                </div>
+                              </div>
+                            </div>
 
-              {/* Display Options */}
-              <div className="space-y-3">
-                <label className="flex items-center gap-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={brandingSettings.logo_display_header !== false}
-                    onChange={(e) => handleBrandingChange('logo_display_header', e.target.checked)}
-                    className="rounded border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
-                  />
-                  <div>
-                    <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
-                      {t('branding.showLogoInHeader', 'Show logo in gallery header')}
-                    </span>
-                    <p className="text-xs text-neutral-600 dark:text-neutral-400">
-                      {t('branding.showLogoInHeaderHelp', 'Display the logo in the main header bar')}
-                    </p>
-                  </div>
-                </label>
+                            {/* Position Selector */}
+                            <div>
+                              <label className="block text-sm font-medium text-foreground mb-2">
+                                {t('branding.watermarkPosition')}
+                              </label>
+                              <div className="grid grid-cols-3 gap-2 max-w-xs">
+                                {[
+                                  { value: 'top-left', label: t('branding.topLeft') },
+                                  { value: 'top-right', label: t('branding.topRight') },
+                                  { value: 'center', label: t('branding.center') },
+                                  { value: 'bottom-left', label: t('branding.bottomLeft') },
+                                  { value: 'bottom-right', label: t('branding.bottomRight') }
+                                ].map((position) => (
+                                  <button
+                                    key={position.value}
+                                    type="button"
+                                    onClick={() => handleBrandingChange('watermark_position', position.value)}
+                                    className={`px-3 py-2 text-sm rounded-lg border transition-colors ${
+                                      brandingSettings.watermark_position === position.value
+                                        ? 'bg-primary text-primary-foreground border-primary'
+                                        : 'bg-card text-foreground border-border hover:bg-accent'
+                                    }`}
+                                  >
+                                    {position.label}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
 
-                <label className="flex items-center gap-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={brandingSettings.logo_display_hero !== false}
-                    onChange={(e) => handleBrandingChange('logo_display_hero', e.target.checked)}
-                    className="rounded border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
-                  />
-                  <div>
-                    <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
-                      {t('branding.showLogoInHero', 'Show logo in hero section')}
-                    </span>
-                    <p className="text-xs text-neutral-600 dark:text-neutral-400">
-                      {t('branding.showLogoInHeroHelp', 'Display the logo in hero sections (for non-grid layouts)')}
-                    </p>
-                  </div>
-                </label>
-              </div>
-            </div>
-          </div>
+                            {/* Opacity Slider */}
+                            <div>
+                              <label className="block text-sm font-medium text-foreground mb-2">
+                                {t('branding.watermarkOpacity')}: {brandingSettings.watermark_opacity || 50}%
+                              </label>
+                              <input
+                                type="range"
+                                min="10"
+                                max="100"
+                                step="10"
+                                value={brandingSettings.watermark_opacity || 50}
+                                onChange={(e) => handleBrandingChange('watermark_opacity', parseInt(e.target.value))}
+                                className="w-full slider"
+                                style={{
+                                  WebkitAppearance: 'none',
+                                  appearance: 'none',
+                                  height: '8px',
+                                  background: '#d4d4d4',
+                                  borderRadius: '4px',
+                                  outline: 'none'
+                                }}
+                              />
+                              <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                                <span>10%</span>
+                                <span>50%</span>
+                                <span>100%</span>
+                              </div>
+                            </div>
 
-          {/* Login-page-only logo controls (#354 follow-up). These do
-             NOT affect gallery/admin headers — those keep their own
-             logo_size knob above. */}
-          <div className="mt-6 pt-6 border-t border-neutral-200 dark:border-neutral-700">
-            <h3 className="text-md font-semibold text-neutral-900 dark:text-neutral-100 mb-1">
-              {t('branding.loginLogo.title', 'Login pages logo')}
-            </h3>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-4">
-              {t('branding.loginLogo.subtitle', 'Controls only /admin/login and /customer/login. Gallery and admin chrome use the logo settings above.')}
-            </p>
-
-            <div className="space-y-4">
-              {/* Frame toggle */}
-              <label className="flex items-start gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={brandingSettings.login_logo_frame_enabled !== false}
-                  onChange={(e) => handleBrandingChange('login_logo_frame_enabled', e.target.checked)}
-                  className="mt-0.5 rounded border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
-                />
-                <div>
-                  <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
-                    {t('branding.loginLogo.frame', 'Show tinted frame behind the logo')}
-                  </span>
-                  <p className="text-xs text-neutral-600 dark:text-neutral-400">
-                    {t(
-                      'branding.loginLogo.frameHelp',
-                      'When off, the logo sits directly on the page background. Useful for logos that already include their own backdrop.',
-                    )}
-                  </p>
-                </div>
-              </label>
-
-              {/* Size selector */}
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                  {t('branding.loginLogo.size', 'Logo size on login pages')}
-                </label>
-                <select
-                  value={brandingSettings.login_logo_size || 'medium'}
-                  onChange={(e) => handleBrandingChange('login_logo_size', e.target.value as 'small' | 'medium' | 'large' | 'xlarge')}
-                  className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-primary-500"
-                >
-                  <option value="small">{t('branding.loginLogo.sizeSmall', 'Small')}</option>
-                  <option value="medium">{t('branding.loginLogo.sizeMedium', 'Medium (default)')}</option>
-                  <option value="large">{t('branding.loginLogo.sizeLarge', 'Large')}</option>
-                  <option value="xlarge">{t('branding.loginLogo.sizeXLarge', 'Extra large')}</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          {/* White Label Settings */}
-          <div className="mt-6 pt-6 border-t border-neutral-200 dark:border-neutral-700">
-            <h3 className="text-md font-semibold text-neutral-900 dark:text-neutral-100 mb-4">{t('branding.whiteLabel', 'White Label')}</h3>
-            <label className="flex items-center gap-3 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={brandingSettings.hide_powered_by === true}
-                onChange={(e) => handleBrandingChange('hide_powered_by', e.target.checked)}
-                className="rounded border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
-              />
-              <div>
-                <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
-                  {t('branding.hidePoweredBy', 'Hide "Powered by PicPeak" branding')}
-                </span>
-                <p className="text-xs text-neutral-600 dark:text-neutral-400">
-                  {t('branding.hidePoweredByHelp', 'Remove the PicPeak attribution from gallery footers for a fully white-labeled experience')}
-                </p>
-              </div>
-            </label>
-          </div>
-
-          <div className="mt-6 pt-6 border-t border-neutral-200 dark:border-neutral-700">
-            <label className="flex items-center gap-3 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={brandingSettings.watermark_enabled}
-                onChange={(e) => handleBrandingChange('watermark_enabled', e.target.checked)}
-                className="rounded border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
-              />
-              <div>
-                <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100">{t('branding.enableWatermarks')}</span>
-                <p className="text-xs text-neutral-600 dark:text-neutral-400">{t('branding.watermarkHelp')}</p>
-              </div>
-            </label>
-          </div>
-
-          {/* Watermark Settings */}
-          {brandingSettings.watermark_enabled && (
-            <div className="mt-6 space-y-6 border-t border-neutral-200 dark:border-neutral-700 pt-6">
-              <h3 className="text-md font-semibold text-neutral-900 dark:text-neutral-100">{t('branding.watermarkSettings')}</h3>
-
-              {/* Watermark Logo Upload */}
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                  {t('branding.watermarkLogo')}
-                </label>
-                <div className="space-y-2">
-                  {brandingSettings.watermark_logo_url && (
-                    <div className="flex items-center gap-2">
-                      <img 
-                        src={brandingSettings.watermark_logo_url.startsWith('http') ? brandingSettings.watermark_logo_url : buildResourceUrl(brandingSettings.watermark_logo_url)} 
-                        alt="Current watermark" 
-                        className="h-16 w-auto object-contain bg-neutral-100 dark:bg-neutral-700 p-2 rounded"
-                      />
-                      <span className="text-sm text-neutral-600 dark:text-neutral-400">{t('branding.currentWatermark')}</span>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleBrandingChange('watermark_logo_url', '')}
-                      >
-                        {t('common.delete')}
-                      </Button>
-                    </div>
-                  )}
-                  <div>
-                    <input
-                      type="file"
-                      accept="image/png"
-                      onChange={handleWatermarkLogoUpload}
-                      className="hidden"
-                      id="watermark-upload"
-                    />
-                    <label htmlFor="watermark-upload">
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        onClick={() => document.getElementById('watermark-upload')?.click()}
-                        leftIcon={<Upload className="w-4 h-4" />}
-                      >
-                        {t('branding.uploadWatermarkLogo')}
-                      </Button>
-                    </label>
-                    <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1">{t('branding.watermarkHelp')}</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Position Selector */}
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                  {t('branding.watermarkPosition')}
-                </label>
-                <div className="grid grid-cols-3 gap-2 max-w-xs">
-                  {[
-                    { value: 'top-left', label: t('branding.topLeft') },
-                    { value: 'top-right', label: t('branding.topRight') },
-                    { value: 'center', label: t('branding.center') },
-                    { value: 'bottom-left', label: t('branding.bottomLeft') },
-                    { value: 'bottom-right', label: t('branding.bottomRight') }
-                  ].map((position) => (
-                    <button
-                      key={position.value}
-                      type="button"
-                      onClick={() => handleBrandingChange('watermark_position', position.value)}
-                      className={`px-3 py-2 text-sm rounded-lg border transition-colors ${
-                        brandingSettings.watermark_position === position.value
-                          ? 'bg-accent-dark text-white border-accent-dark'
-                          : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-neutral-300 dark:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-700'
-                      }`}
-                    >
-                      {position.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Opacity Slider */}
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                  {t('branding.watermarkOpacity')}: {brandingSettings.watermark_opacity || 50}%
-                </label>
-                <input
-                  type="range"
-                  min="10"
-                  max="100"
-                  step="10"
-                  value={brandingSettings.watermark_opacity || 50}
-                  onChange={(e) => handleBrandingChange('watermark_opacity', parseInt(e.target.value))}
-                  className="w-full slider"
-                  style={{
-                    WebkitAppearance: 'none',
-                    appearance: 'none',
-                    height: '8px',
-                    background: '#d4d4d4',
-                    borderRadius: '4px',
-                    outline: 'none'
-                  }}
-                />
-                <div className="flex justify-between text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-                  <span>10%</span>
-                  <span>50%</span>
-                  <span>100%</span>
-                </div>
-              </div>
-
-              {/* Size Slider */}
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                  {t('branding.watermarkSize')}: {brandingSettings.watermark_size || 15}%
-                </label>
-                <input
-                  type="range"
-                  min="5"
-                  max="30"
-                  step="5"
-                  value={brandingSettings.watermark_size || 15}
-                  onChange={(e) => handleBrandingChange('watermark_size', parseInt(e.target.value))}
-                  className="w-full slider"
-                  style={{
-                    WebkitAppearance: 'none',
-                    appearance: 'none',
-                    height: '8px',
-                    background: '#d4d4d4',
-                    borderRadius: '4px',
-                    outline: 'none'
-                  }}
-                />
-                <div className="flex justify-between text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-                  <span>5%</span>
-                  <span>15%</span>
-                  <span>30%</span>
-                </div>
-              </div>
-            </div>
-          )}
-        </Card>
+                            {/* Size Slider */}
+                            <div>
+                              <label className="block text-sm font-medium text-foreground mb-2">
+                                {t('branding.watermarkSize')}: {brandingSettings.watermark_size || 15}%
+                              </label>
+                              <input
+                                type="range"
+                                min="5"
+                                max="30"
+                                step="5"
+                                value={brandingSettings.watermark_size || 15}
+                                onChange={(e) => handleBrandingChange('watermark_size', parseInt(e.target.value))}
+                                className="w-full slider"
+                                style={{
+                                  WebkitAppearance: 'none',
+                                  appearance: 'none',
+                                  height: '8px',
+                                  background: '#d4d4d4',
+                                  borderRadius: '4px',
+                                  outline: 'none'
+                                }}
+                              />
+                              <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                                <span>5%</span>
+                                <span>15%</span>
+                                <span>30%</span>
+                              </div>
+                            </div>
+                          </div>
+                        )}</CardContent></Card>
 
         {/* Customer dashboard branding (#354). Sits between "Company
             Information" and "Gallery Theme" so it stays adjacent to the
         {/* Theme Customization */}
         <div className="mb-6">
-          <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4 flex items-center gap-2">
+          <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
             <Palette className="w-5 h-5" />
             {t('branding.galleryTheme')}
           </h2>
@@ -1122,9 +1073,9 @@ export const BrandingPage: React.FC = () => {
                 type="checkbox"
                 checked={isPreviewMode}
                 onChange={(e) => setIsPreviewMode(e.target.checked)}
-                className="rounded border-neutral-300 dark:border-neutral-600 text-accent focus:ring-primary-500"
+                className="rounded-sm border-border text-brand focus:ring-brand-500"
               />
-              <span className="text-sm text-neutral-700 dark:text-neutral-300">{t('branding.applyLivePreview')}</span>
+              <span className="text-sm text-foreground">{t('branding.applyLivePreview')}</span>
             </label>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -1151,32 +1102,27 @@ export const BrandingPage: React.FC = () => {
 
             {/* Right side - Gallery Preview */}
             <div className="lg:sticky lg:top-4 lg:h-fit">
-              <Card className="p-4">
-                <h3 className="text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-3">
-                  {t('branding.livePreview')}
-                </h3>
-                <GalleryPreview
-                  theme={currentTheme}
-                  branding={{ ...brandingSettings, logo_url_dark: logoDarkUrl }}
-                  className="shadow-lg"
-                />
-              </Card>
+              <Card className="p-4"><CardContent><h3 className="text-sm font-medium text-foreground mb-3">
+                                            {t('branding.livePreview')}
+                                          </h3><GalleryPreview
+                                            theme={currentTheme}
+                                            branding={{ ...brandingSettings, logo_url_dark: logoDarkUrl }}
+                                            className="shadow-lg"
+                                          /></CardContent></Card>
             </div>
           </div>
         </div>
 
         {/* Event-Specific Themes Info */}
-        <Card padding="md" className="bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800">
-          <div className="flex items-start gap-3">
-            <Palette className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
-            <div>
-              <h3 className="text-sm font-medium text-blue-900 dark:text-blue-200">{t('branding.eventSpecificThemes')}</h3>
-              <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
-                {t('branding.eventThemesInfo')}
-              </p>
-            </div>
-          </div>
-        </Card>
+        <Card className="bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800"><CardContent><div className="flex items-start gap-3">
+                          <Palette className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
+                          <div>
+                            <h3 className="text-sm font-medium text-blue-900 dark:text-blue-200">{t('branding.eventSpecificThemes')}</h3>
+                            <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
+                              {t('branding.eventThemesInfo')}
+                            </p>
+                          </div>
+                        </div></CardContent></Card>
       </div>
     </ErrorBoundary>
   );

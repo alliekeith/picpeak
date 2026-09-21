@@ -1,8 +1,8 @@
 import { useEffect, useId, useRef, useState, type ComponentType } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowUpFromLine, Globe, ListChecks, MessageSquare, Send, ShieldOff, Sparkles, Trash2 } from 'lucide-react';
-import { Button } from '../../../components/common/Button';
 import { UsageCatalog } from '../UsageCatalog';
+import { Button } from "@/components/ui/button";
 
 /**
  * Sections of the disclosure, in reading order. Each is a translated
@@ -78,20 +78,20 @@ export function ProductUsageConsentDialog({
       // does not follow dark mode, so it stayed white while the dark: text
       // variants below turned near-white. neutral-800 is what `.card`
       // resolves to in dark, which is what the rest of the admin UI uses.
-      className="w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden rounded-xl p-0 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 shadow-xl backdrop:bg-black/50 focus:outline-none"
+      className="w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden rounded-xl p-0 bg-card text-neutral-900 dark:text-neutral-100 shadow-xl backdrop:bg-black/50 focus:outline-hidden"
     >
       <header className="flex items-start gap-3 px-6 pt-6 pb-4">
-        <span className="mt-0.5 flex h-9 w-9 flex-none items-center justify-center rounded-full bg-primary-50 dark:bg-primary-900/30">
-          <Sparkles className="h-5 w-5 text-primary-600 dark:text-primary-300" />
+        <span className="mt-0.5 flex h-9 w-9 flex-none items-center justify-center rounded-full bg-brand-50 dark:bg-brand-900/30">
+          <Sparkles className="h-5 w-5 text-brand-600 dark:text-brand-300" />
         </span>
         <div className="min-w-0">
           <h2
             id={titleId}
-            className="text-lg font-semibold text-neutral-900 dark:text-neutral-100"
+            className="text-lg font-semibold text-foreground"
           >
             {t('productUsage.consentTitle')}
           </h2>
-          <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
+          <p className="mt-1 text-sm text-muted-foreground">
             {t('productUsage.purpose')}
           </p>
         </div>
@@ -105,15 +105,15 @@ export function ProductUsageConsentDialog({
         tabIndex={0}
         role="group"
         aria-label={t('productUsage.consentTitle') as string}
-        className="min-h-0 flex-auto overflow-y-auto border-y border-neutral-200 dark:border-neutral-700 px-6 py-4 space-y-4 focus:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-primary-400"
+        className="min-h-0 flex-auto overflow-y-auto border-y border-border px-6 py-4 space-y-4 focus:outline-hidden focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-brand-400"
       >
         {DISCLOSURE.map(({ key, heading, Icon }) => (
           <section key={key}>
-            <h3 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+            <h3 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               <Icon className="h-3.5 w-3.5" />
               {t(`productUsage.${heading}`)}
             </h3>
-            <p className="mt-1 text-sm text-neutral-700 dark:text-neutral-300">
+            <p className="mt-1 text-sm text-foreground">
               {t(`productUsage.${key}`, { collector })}
             </p>
           </section>
@@ -123,7 +123,7 @@ export function ProductUsageConsentDialog({
 
         <div className="flex flex-wrap gap-x-6 gap-y-1 pt-1 text-sm">
           <a
-            className="text-primary-600 dark:text-primary-400 hover:underline"
+            className="text-brand-600 dark:text-brand-400 hover:underline"
             href={collector}
             target="_blank"
             rel="noreferrer"
@@ -131,7 +131,7 @@ export function ProductUsageConsentDialog({
             {t('productUsage.linkCollector')}
           </a>
           <a
-            className="text-primary-600 dark:text-primary-400 hover:underline"
+            className="text-brand-600 dark:text-brand-400 hover:underline"
             href={`${collector}/transparency`}
             target="_blank"
             rel="noreferrer"
@@ -142,7 +142,7 @@ export function ProductUsageConsentDialog({
       </div>
 
       <footer className="px-6 pt-4 pb-6 space-y-4">
-        <label className="flex items-start gap-2.5 text-sm text-neutral-800 dark:text-neutral-200">
+        <label className="flex items-start gap-2.5 text-sm text-foreground">
           <input
             type="checkbox"
             className="mt-0.5 h-4 w-4 flex-none"

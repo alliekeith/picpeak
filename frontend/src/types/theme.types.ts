@@ -11,7 +11,7 @@ export interface GalleryLayoutSettings {
   // Common settings
   spacing?: 'tight' | 'normal' | 'relaxed';
   photoAnimation?: 'none' | 'fade' | 'scale' | 'slide';
-  photoShape?: 'square' | 'rounded' | 'circle';
+  photoShape?: 'square' | 'rounded-sm' | 'circle';
   
   // Grid specific
   gridColumns?: {
@@ -172,7 +172,7 @@ export const GALLERY_THEME_PRESETS: Record<string, EventTheme> = {
       gallerySettings: {
         spacing: 'relaxed',
         photoAnimation: 'scale',
-        photoShape: 'rounded',
+        photoShape: 'rounded-sm',
         heroOverlayOpacity: 0.3
       },
       legacyHeaderStyle: 'full',
@@ -350,7 +350,7 @@ export const GALLERY_THEME_PRESETS: Record<string, EventTheme> = {
       gallerySettings: {
         spacing: 'relaxed',
         photoAnimation: 'scale',
-        photoShape: 'rounded',
+        photoShape: 'rounded-sm',
         heroOverlayOpacity: 0.4
       },
       footerStyle: 'minimal',

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Palette, RotateCcw } from 'lucide-react';
-import { Button } from '../common';
 import { ThemeConfig, GALLERY_THEME_PRESETS, GalleryLayoutType } from '../../types/theme.types';
 import type { EnabledTemplate } from '../../services/cssTemplates.service';
 import { settingsService } from '../../services/settings.service';
@@ -15,6 +14,7 @@ import { ColorCustomizationCard } from './theme-customizer/ColorCustomizationCar
 import { TypographyStyleCard } from './theme-customizer/TypographyStyleCard';
 import { CssTemplateCard } from './theme-customizer/CssTemplateCard';
 import { CustomCssCard } from './theme-customizer/CustomCssCard';
+import { Button } from "@/components/ui/button";
 
 interface ThemeCustomizerEnhancedProps {
   value: ThemeConfig;
@@ -118,7 +118,7 @@ export const ThemeCustomizerEnhanced: React.FC<ThemeCustomizerEnhancedProps> = (
   const handleChange = (key: keyof ThemeConfig, newValue: any) => {
     const updated: ThemeConfig = { ...localTheme, [key]: newValue };
     // Legacy alias: keep primaryColor in lockstep with accentDarkColor so
-    // any consumer that still reads --color-primary or themeConfig.primaryColor
+    // any consumer that still reads --primary or themeConfig.primaryColor
     // doesn't drift after the 8-token migration.
     if (key === 'accentDarkColor') {
       updated.primaryColor = newValue;
@@ -328,20 +328,15 @@ export const ThemeCustomizerEnhanced: React.FC<ThemeCustomizerEnhancedProps> = (
       {!hideActions && (
         <div className="flex items-center justify-end gap-3">
           <Button
-            variant="outline"
-            leftIcon={<RotateCcw className="w-4 h-4" />}
-            onClick={handleReset}
-          >
-            {t('branding.resetToDefault')}
-          </Button>
+                              variant="outline"
+                              onClick={handleReset}
+                            >
+                              <RotateCcw className="w-4 h-4" />{t('branding.resetToDefault')}</Button>
           <Button
-            variant="primary"
-            leftIcon={<Palette className="w-4 h-4" />}
-            onClick={handleApply}
-            disabled={isApplying}
-          >
-            {isApplying ? t('common.applying', 'Applying...') : t('branding.applyTheme')}
-          </Button>
+                              onClick={handleApply}
+                              disabled={isApplying}
+                            >
+                              <Palette className="w-4 h-4" />{isApplying ? t('common.applying', 'Applying...') : t('branding.applyTheme')}</Button>
         </div>
       )}
     </div>

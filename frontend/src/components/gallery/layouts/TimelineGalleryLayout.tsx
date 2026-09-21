@@ -101,10 +101,10 @@ export const TimelineGalleryLayout: React.FC<BaseGalleryLayoutProps> = ({
             {/* Date marker */}
             {showDates && (
               <div className="flex items-center gap-4 mb-6">
-                <div className="hidden lg:flex items-center justify-center w-16 h-16 bg-white border-4 border-accent-dark rounded-full z-10">
-                  <Calendar className="w-6 h-6 text-accent" />
+                <div className="hidden lg:flex items-center justify-center w-16 h-16 bg-card border-4 border-primary rounded-full z-10">
+                  <Calendar className="w-6 h-6 text-brand" />
                 </div>
-                <h3 className="text-xl font-semibold text-theme">
+                <h3 className="text-xl font-semibold text-foreground">
                   {group.label}
                 </h3>
               </div>
@@ -155,13 +155,13 @@ export const TimelineGalleryLayout: React.FC<BaseGalleryLayoutProps> = ({
                     likeBeforeComment
                     checkboxTestId
                     beforeOverlay={
-                      <div className="absolute bottom-2 left-2 px-2 py-1 bg-black/60 text-white text-xs rounded">
+                      <div className="absolute bottom-2 left-2 px-2 py-1 bg-black/60 text-white text-xs rounded-sm">
                         {fmtTime(photo.uploaded_at)}
                       </div>
                     }
                     afterOverlay={((photo.like_count ?? 0) > 0 || likedIds.has(photo.id)) ? (
                       <div className={`absolute ${photo.type === 'collage' ? 'bottom-8' : 'bottom-2'} left-2 z-10`}>
-                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm" title="Liked">
+                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/90 backdrop-blur-xs" title="Liked">
                           <Heart className="w-3.5 h-3.5 text-red-500" fill="currentColor" />
                         </span>
                       </div>

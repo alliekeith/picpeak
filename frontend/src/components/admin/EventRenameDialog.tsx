@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { X, AlertCircle, CheckCircle, Loader2, Type, Mail } from 'lucide-react';
-import { Button, Input, Card } from '../common';
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface EventRenameDialogProps {
   isOpen: boolean;
@@ -126,188 +128,182 @@ export const EventRenameDialog: React.FC<EventRenameDialogProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <Card className="max-w-lg w-full">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-neutral-900">
-            {t('events.rename.title', 'Rename Event')}
-          </h2>
-          <button
-            onClick={onClose}
-            disabled={isRenaming}
-            className="text-neutral-400 hover:text-neutral-600 disabled:opacity-50"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
+      <Card className="max-w-lg w-full"><CardContent><div className="flex items-center justify-between mb-4">
+                    <h2 className="text-xl font-semibold text-foreground">
+                      {t('events.rename.title', 'Rename Event')}
+                    </h2>
+                    <button
+                      onClick={onClose}
+                      disabled={isRenaming}
+                      className="text-muted-foreground hover:text-foreground disabled:opacity-50"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>{renameResult?.success ? (
+                    // Success state
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-3 p-4 bg-green-50 rounded-lg">
+                        <CheckCircle className="w-6 h-6 text-green-600 shrink-0" />
+                        <div>
+                          <p className="font-medium text-green-900">
+                            {t('events.rename.success', 'Event renamed successfully!')}
+                          </p>
+                          {renameResult.filesRenamed !== undefined && renameResult.filesRenamed > 0 && (
+                            <p className="text-sm text-green-700 mt-1">
+                              {t('events.rename.filesRenamed', '{{count}} files updated', { count: renameResult.filesRenamed })}
+                            </p>
+                          )}
+                        </div>
+                      </div>
 
-        {renameResult?.success ? (
-          // Success state
-          <div className="space-y-4">
-            <div className="flex items-center gap-3 p-4 bg-green-50 rounded-lg">
-              <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0" />
-              <div>
-                <p className="font-medium text-green-900">
-                  {t('events.rename.success', 'Event renamed successfully!')}
-                </p>
-                {renameResult.filesRenamed !== undefined && renameResult.filesRenamed > 0 && (
-                  <p className="text-sm text-green-700 mt-1">
-                    {t('events.rename.filesRenamed', '{{count}} files updated', { count: renameResult.filesRenamed })}
-                  </p>
-                )}
-              </div>
-            </div>
+                      {renameResult.newShareLink && (
+                        <div className="p-3 bg-muted rounded-lg">
+                          <p className="text-sm font-medium text-foreground mb-1">
+                            {t('events.rename.newLink', 'New Gallery Link')}
+                          </p>
+                          <p className="text-sm text-foreground break-all">{renameResult.newShareLink}</p>
+                        </div>
+                      )}
 
-            {renameResult.newShareLink && (
-              <div className="p-3 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
-                <p className="text-sm font-medium text-neutral-700 dark:text-neutral-200 mb-1">
-                  {t('events.rename.newLink', 'New Gallery Link')}
-                </p>
-                <p className="text-sm text-neutral-900 dark:text-neutral-100 break-all">{renameResult.newShareLink}</p>
-              </div>
-            )}
+                      <div className="flex justify-end">
+                        <Button onClick={onClose}>
+                          {t('common.done', 'Done')}
+                        </Button>
+                      </div>
+                    </div>
+                  ) : renameResult?.error ? (
+                    // Error state
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-3 p-4 bg-red-50 rounded-lg">
+                        <AlertCircle className="w-6 h-6 text-red-600 shrink-0" />
+                        <div>
+                          <p className="font-medium text-red-900">
+                            {t('events.rename.failed', 'Rename failed')}
+                          </p>
+                          <p className="text-sm text-red-700 mt-1">{renameResult.error}</p>
+                        </div>
+                      </div>
 
-            <div className="flex justify-end">
-              <Button variant="primary" onClick={onClose}>
-                {t('common.done', 'Done')}
-              </Button>
-            </div>
-          </div>
-        ) : renameResult?.error ? (
-          // Error state
-          <div className="space-y-4">
-            <div className="flex items-center gap-3 p-4 bg-red-50 rounded-lg">
-              <AlertCircle className="w-6 h-6 text-red-600 flex-shrink-0" />
-              <div>
-                <p className="font-medium text-red-900">
-                  {t('events.rename.failed', 'Rename failed')}
-                </p>
-                <p className="text-sm text-red-700 mt-1">{renameResult.error}</p>
-              </div>
-            </div>
+                      <div className="flex justify-end gap-2">
+                        <Button variant="outline" onClick={() => setRenameResult(null)}>
+                          {t('common.retry', 'Retry')}
+                        </Button>
+                        <Button onClick={onClose}>
+                          {t('common.close', 'Close')}
+                        </Button>
+                      </div>
+                    </div>
+                  ) : isRenaming ? (
+                    // Renaming in progress
+                    <div className="space-y-4 py-8">
+                      <div className="flex flex-col items-center gap-4">
+                        <Loader2 className="w-10 h-10 text-brand animate-spin" />
+                        <p className="text-foreground font-medium">{renameStatus}</p>
+                      </div>
+                    </div>
+                  ) : (
+                    // Input form
+                    <div className="space-y-4">
+                      <div>
+                        <p className="text-sm text-muted-foreground mb-3">
+                          {t('events.rename.currentName', 'Current name:')} <span className="font-medium">{eventName}</span>
+                        </p>
+                      </div>
 
-            <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setRenameResult(null)}>
-                {t('common.retry', 'Retry')}
-              </Button>
-              <Button variant="primary" onClick={onClose}>
-                {t('common.close', 'Close')}
-              </Button>
-            </div>
-          </div>
-        ) : isRenaming ? (
-          // Renaming in progress
-          <div className="space-y-4 py-8">
-            <div className="flex flex-col items-center gap-4">
-              <Loader2 className="w-10 h-10 text-accent animate-spin" />
-              <p className="text-neutral-700 font-medium">{renameStatus}</p>
-            </div>
-          </div>
-        ) : (
-          // Input form
-          <div className="space-y-4">
-            <div>
-              <p className="text-sm text-neutral-600 mb-3">
-                {t('events.rename.currentName', 'Current name:')} <span className="font-medium">{eventName}</span>
-              </p>
-            </div>
+                      <div>
+                        <label className="block text-sm font-medium text-foreground mb-1">
+                          {t('events.rename.newName', 'New Event Name')}
+                        </label>
+                        <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Type className="w-5 h-5 text-muted-foreground" />}</div><Input
+                                                                type="text"
+                                                                value={newName}
+                                                                onChange={(e) => setNewName(e.target.value)}
+                                                                placeholder={t('events.rename.enterNewName', 'Enter new event name')}
+                                                                autoFocus className="pl-10"
+                                                              /></div>
+                      </div>
 
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1">
-                {t('events.rename.newName', 'New Event Name')}
-              </label>
-              <Input
-                type="text"
-                value={newName}
-                onChange={(e) => setNewName(e.target.value)}
-                placeholder={t('events.rename.enterNewName', 'Enter new event name')}
-                leftIcon={<Type className="w-5 h-5 text-neutral-400" />}
-                autoFocus
-              />
-            </div>
+                      {/* New slug preview */}
+                      {validationResult?.valid && validationResult.newSlug && (
+                        <div className="p-3 bg-green-50 rounded-lg">
+                          <p className="text-sm text-green-800">
+                            <span className="font-medium">{t('events.rename.newUrl', 'New URL:')}</span>{' '}
+                            <span className="break-all">/gallery/{validationResult.newSlug}/...</span>
+                          </p>
+                        </div>
+                      )}
 
-            {/* New slug preview */}
-            {validationResult?.valid && validationResult.newSlug && (
-              <div className="p-3 bg-green-50 rounded-lg">
-                <p className="text-sm text-green-800">
-                  <span className="font-medium">{t('events.rename.newUrl', 'New URL:')}</span>{' '}
-                  <span className="break-all">/gallery/{validationResult.newSlug}/...</span>
-                </p>
-              </div>
-            )}
+                      {/* Validation status */}
+                      {isValidating && (
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          {t('events.rename.checkingAvailability', 'Checking availability...')}
+                        </div>
+                      )}
 
-            {/* Validation status */}
-            {isValidating && (
-              <div className="flex items-center gap-2 text-sm text-neutral-500">
-                <Loader2 className="w-4 h-4 animate-spin" />
-                {t('events.rename.checkingAvailability', 'Checking availability...')}
-              </div>
-            )}
+                      {validationResult && !validationResult.valid && (
+                        <div className="flex items-center gap-2 p-3 bg-red-50 rounded-lg">
+                          <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
+                          <p className="text-sm text-red-700">{validationResult.error}</p>
+                        </div>
+                      )}
 
-            {validationResult && !validationResult.valid && (
-              <div className="flex items-center gap-2 p-3 bg-red-50 rounded-lg">
-                <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0" />
-                <p className="text-sm text-red-700">{validationResult.error}</p>
-              </div>
-            )}
+                      {/* Resend email option */}
+                      {customerEmail && (
+                        <div className="pt-2 border-t border-border">
+                          <label className="flex items-start gap-2">
+                            <input
+                              type="checkbox"
+                              checked={resendEmail}
+                              onChange={(e) => setResendEmail(e.target.checked)}
+                              className="mt-1 w-4 h-4 text-brand border-border rounded-sm focus:ring-brand-500"
+                            />
+                            <div>
+                              <span className="text-sm font-medium text-foreground flex items-center gap-1">
+                                <Mail className="w-4 h-4" />
+                                {t('events.rename.resendEmail', 'Resend invitation email with new gallery link')}
+                              </span>
+                              <p className="text-xs text-muted-foreground mt-1">
+                                {t('events.rename.emailTo', 'Send updated gallery access email to')} {customerEmail}
+                              </p>
+                            </div>
+                          </label>
+                        </div>
+                      )}
 
-            {/* Resend email option */}
-            {customerEmail && (
-              <div className="pt-2 border-t border-neutral-200">
-                <label className="flex items-start gap-2">
-                  <input
-                    type="checkbox"
-                    checked={resendEmail}
-                    onChange={(e) => setResendEmail(e.target.checked)}
-                    className="mt-1 w-4 h-4 text-accent border-neutral-300 rounded focus:ring-primary-500"
-                  />
-                  <div>
-                    <span className="text-sm font-medium text-neutral-700 flex items-center gap-1">
-                      <Mail className="w-4 h-4" />
-                      {t('events.rename.resendEmail', 'Resend invitation email with new gallery link')}
-                    </span>
-                    <p className="text-xs text-neutral-500 mt-1">
-                      {t('events.rename.emailTo', 'Send updated gallery access email to')} {customerEmail}
-                    </p>
-                  </div>
-                </label>
-              </div>
-            )}
+                      {/* Warning */}
+                      <div className="p-3 bg-amber-50 rounded-lg border border-amber-200">
+                        <div className="flex gap-2">
+                          <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                          <div className="text-sm text-amber-800">
+                            <p className="font-medium">{t('events.rename.warningTitle', 'Please note:')}</p>
+                            <ul className="mt-1 list-disc list-inside space-y-1">
+                              <li>{t('events.rename.warning1', 'The gallery URL will change')}</li>
+                              <li>{t('events.rename.warning2', 'Old URLs will automatically redirect to the new URL')}</li>
+                              <li>{t('events.rename.warning3', 'Photo files may be renamed')}</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
 
-            {/* Warning */}
-            <div className="p-3 bg-amber-50 rounded-lg border border-amber-200">
-              <div className="flex gap-2">
-                <AlertCircle className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
-                <div className="text-sm text-amber-800">
-                  <p className="font-medium">{t('events.rename.warningTitle', 'Please note:')}</p>
-                  <ul className="mt-1 list-disc list-inside space-y-1">
-                    <li>{t('events.rename.warning1', 'The gallery URL will change')}</li>
-                    <li>{t('events.rename.warning2', 'Old URLs will automatically redirect to the new URL')}</li>
-                    <li>{t('events.rename.warning3', 'Photo files may be renamed')}</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex justify-end gap-2 pt-2">
-              <Button variant="outline" onClick={onClose}>
-                {t('common.cancel')}
-              </Button>
-              <Button
-                variant="primary"
-                onClick={handleRename}
-                disabled={
-                  !validationResult?.valid ||
-                  isValidating ||
-                  newName.trim() === eventName.trim() ||
-                  newName.trim().length < 3
-                }
-              >
-                {t('events.rename.confirm', 'Rename Event')}
-              </Button>
-            </div>
-          </div>
-        )}
-      </Card>
+                      <div className="flex justify-end gap-2 pt-2">
+                        <Button variant="outline" onClick={onClose}>
+                          {t('common.cancel')}
+                        </Button>
+                        <Button
+                          onClick={handleRename}
+                          disabled={
+                            !validationResult?.valid ||
+                            isValidating ||
+                            newName.trim() === eventName.trim() ||
+                            newName.trim().length < 3
+                          }
+                        >
+                          {t('events.rename.confirm', 'Rename Event')}
+                        </Button>
+                      </div>
+                    </div>
+                  )}</CardContent></Card>
     </div>
   );
 };

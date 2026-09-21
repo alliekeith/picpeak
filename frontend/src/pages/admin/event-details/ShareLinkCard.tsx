@@ -2,12 +2,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
-import { Copy, CheckCircle, Key, Mail, QrCode, Download, Eye, EyeOff } from 'lucide-react';
+import { Copy, CheckCircle, Key, Mail, QrCode, Download, Eye, EyeOff, Loader2 } from 'lucide-react';
 import type { Event } from '../../../types';
-import { Button, Card } from '../../../components/common';
 import { eventsService } from '../../../services/events.service';
 import { buildShareLinkUrl } from '../../../utils/url';
 import { isGalleryPublic } from '../../../utils/accessControl';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 // Clipboard with the textarea/execCommand fallback for non-HTTPS installs
 // (the documented http://host:3000/admin setup has no navigator.clipboard).
@@ -161,154 +162,134 @@ export const ShareLinkCard: React.FC<ShareLinkCardProps> = ({ event, setShowPass
   };
 
   return (
-    <Card padding="md">
-      <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">{t('events.shareLink')}</h2>
-
-      {event.share_secrets_hidden ? (
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
-          {t('events.shareLinkOwnerOnly', 'Only the gallery owner can see and share this link.')}
-        </p>
-      ) : (
-      <>
-      <div className="flex items-center gap-2">
-        <input
-          type="text"
-          value={buildShareLinkUrl(event.share_link)}
-          readOnly
-          className="flex-1 px-3 py-2 bg-neutral-50 dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 text-neutral-900 dark:text-neutral-100 rounded-lg text-sm"
-        />
-        <Button
-          variant="outline"
-          size="md"
-          leftIcon={copiedLink ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-          onClick={handleCopyLink}
-        >
-          {copiedLink ? t('events.copied') : t('events.copy')}
-        </Button>
-      </div>
-
-      <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-2">
-        {isGalleryPublic(event.require_password)
-          ? t('events.shareWithGuestsPublic', 'Anyone with this link can view the gallery. No password is required.')
-          : t('events.shareWithGuests')}
-      </p>
-      </>
-      )}
-
-      {event.share_link && (
-        <div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
-          <h3 className="text-sm font-medium text-neutral-900 dark:text-neutral-100 mb-3 flex items-center gap-2">
-            <QrCode className="w-4 h-4" />
-            {t('events.qrCode', 'QR code')}
-          </h3>
-          {/* Stacks on phones; downloads stay available even when the preview
-              request failed — the section keys off share-link availability,
-              not off a successfully loaded preview (codex review of #847). */}
-          <div className="flex flex-col sm:flex-row items-start gap-4">
-            {qrPreviewUrl ? (
-              <img
-                src={qrPreviewUrl}
-                alt={t('events.qrCode', 'QR code')}
-                className="w-28 h-28 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white p-1"
-              />
+    <Card><CardContent><h2 className="text-lg font-semibold text-foreground mb-4">{t('events.shareLink')}</h2>{event.share_secrets_hidden ? (
+              <p className="text-sm text-muted-foreground">
+                {t('events.shareLinkOwnerOnly', 'Only the gallery owner can see and share this link.')}
+              </p>
             ) : (
-              <div className="w-28 h-28 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-700 flex items-center justify-center">
-                <QrCode className="w-8 h-8 text-neutral-300 dark:text-neutral-500" />
-              </div>
-            )}
-            <div className="flex-1 w-full grid grid-cols-1 sm:grid-cols-2 gap-2">
-              <Button variant="outline" size="sm" leftIcon={<Download className="w-4 h-4" />} onClick={() => handleQrDownload('png')}>
-                PNG
-              </Button>
-              <Button variant="outline" size="sm" leftIcon={<Download className="w-4 h-4" />} onClick={() => handleQrDownload('svg')}>
-                SVG
-              </Button>
-              <Button variant="outline" size="sm" leftIcon={<Download className="w-4 h-4" />} onClick={() => handleQrDownload('table-card')}>
-                {t('events.qrTableCard', 'Table card (A6)')}
-              </Button>
-              <Button variant="outline" size="sm" leftIcon={<Download className="w-4 h-4" />} onClick={() => handleQrDownload('poster')}>
-                {t('events.qrPoster', 'Poster (A4)')}
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {!event.is_archived && (
-        <div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700 space-y-2">
-          {passwordRecoverable && hasSecret && (
             <>
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                value={buildShareLinkUrl(event.share_link)}
+                readOnly
+                className="flex-1 px-3 py-2 bg-muted border border-border text-foreground rounded-lg text-sm"
+              />
               <Button
-                variant="outline"
-                size="sm"
-                leftIcon={stored ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                onClick={handleShowPassword}
-                isLoading={loadingStored}
-                className="w-full justify-center"
-                data-testid="show-gallery-password"
-              >
-                {stored ? t('events.hideGalleryPassword', 'Hide password') : t('events.showGalleryPassword', 'Show password')}
-              </Button>
-              {stored && (
-                <div className="rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-700/50 p-3 space-y-2 text-sm" data-testid="stored-gallery-password">
-                  {!stored.password && !stored.client_password ? (
-                    <p className="text-neutral-600 dark:text-neutral-400">{t('events.galleryPasswordNotStored')}</p>
-                  ) : (
-                    ([
-                      ['password', t('events.galleryPasswordLabel', 'Gallery password'), stored.password],
-                      ['client_password', t('events.clientPinLabel', 'Client PIN'), stored.client_password],
-                    ] as const).filter(([, , value]) => Boolean(value)).map(([key, label, value]) => (
-                      <div key={key} className="flex items-center gap-2">
-                        <span className="text-neutral-600 dark:text-neutral-400 shrink-0">{label}</span>
-                        <code className="flex-1 min-w-0 truncate font-mono text-neutral-900 dark:text-neutral-100">{value}</code>
-                        <button
-                          type="button"
-                          onClick={() => copySecret(key, value as string)}
-                          className="p-1 text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100"
-                          aria-label={`${t('events.copy')} ${label}`}
-                        >
-                          {copiedSecret === key ? <CheckCircle className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
-                        </button>
-                      </div>
-                    ))
-                  )}
-                </div>
-              )}
+                                          variant="outline"
+                                          onClick={handleCopyLink}
+                                        >
+                                          {copiedLink ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}{copiedLink ? t('events.copied') : t('events.copy')}</Button>
+            </div>
+
+            <p className="text-sm text-muted-foreground mt-2">
+              {isGalleryPublic(event.require_password)
+                ? t('events.shareWithGuestsPublic', 'Anyone with this link can view the gallery. No password is required.')
+                : t('events.shareWithGuests')}
+            </p>
             </>
-          )}
-          <Button
-            variant="outline"
-            size="sm"
-            leftIcon={<Key className="w-4 h-4" />}
-            onClick={() => setShowPasswordReset(true)}
-            className="w-full justify-center"
-          >
-            {t('events.resetGalleryPassword')}
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            leftIcon={<Mail className="w-4 h-4" />}
-            onClick={async () => {
-              try {
-                await eventsService.resendCreationEmail(event.id);
-                // #1262 — "queued" was being read as "delivered". Queueing only
-                // writes an email_queue row; say where to look when it doesn't
-                // turn up, because a queue nobody is working raises no failure.
-                toast.success(`${t('events.creationEmailResent')} ${t('events.emailQueuedHint', 'The queue processor sends it — check System health if it does not arrive.')}`);
-              } catch {
-                toast.error(t('events.failedToResendEmail'));
-              }
-            }}
-            className="w-full justify-center"
-          >
-            {t('events.resendCreationEmail')}
-          </Button>
-          {passwordRecoverable && hasSecret && (
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 text-center">{t('events.resendWithStoredPasswordHint')}</p>
-          )}
-        </div>
-      )}
-    </Card>
+            )}{event.share_link && (
+              <div className="mt-4 pt-4 border-t border-border">
+                <h3 className="text-sm font-medium text-foreground mb-3 flex items-center gap-2">
+                  <QrCode className="w-4 h-4" />
+                  {t('events.qrCode', 'QR code')}
+                </h3>
+                {/* Stacks on phones; downloads stay available even when the preview
+                    request failed — the section keys off share-link availability,
+                    not off a successfully loaded preview (codex review of #847). */}
+                <div className="flex flex-col sm:flex-row items-start gap-4">
+                  {qrPreviewUrl ? (
+                    <img
+                      src={qrPreviewUrl}
+                      alt={t('events.qrCode', 'QR code')}
+                      className="w-28 h-28 rounded-lg border border-border bg-card p-1"
+                    />
+                  ) : (
+                    <div className="w-28 h-28 rounded-lg border border-border bg-muted flex items-center justify-center">
+                      <QrCode className="w-8 h-8 text-muted-foreground" />
+                    </div>
+                  )}
+                  <div className="flex-1 w-full grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <Button variant="outline" size="sm" onClick={() => handleQrDownload('png')}>
+                                                <Download className="w-4 h-4" />PNG
+                                              </Button>
+                    <Button variant="outline" size="sm" onClick={() => handleQrDownload('svg')}>
+                                                <Download className="w-4 h-4" />SVG
+                                              </Button>
+                    <Button variant="outline" size="sm" onClick={() => handleQrDownload('table-card')}>
+                                                <Download className="w-4 h-4" />{t('events.qrTableCard', 'Table card (A6)')}</Button>
+                    <Button variant="outline" size="sm" onClick={() => handleQrDownload('poster')}>
+                                                <Download className="w-4 h-4" />{t('events.qrPoster', 'Poster (A4)')}</Button>
+                  </div>
+                </div>
+              </div>
+            )}{!event.is_archived && (
+              <div className="mt-4 pt-4 border-t border-border space-y-2">
+                {passwordRecoverable && hasSecret && (
+                  <>
+                    <Button
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={handleShowPassword}
+                                                className="w-full justify-center"
+                                                data-testid="show-gallery-password" disabled={loadingStored}
+                                              >
+                                                {loadingStored && <Loader2 className="animate-spin" />}{stored ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}{stored ? t('events.hideGalleryPassword', 'Hide password') : t('events.showGalleryPassword', 'Show password')}</Button>
+                    {stored && (
+                      <div className="rounded-lg border border-border bg-muted p-3 space-y-2 text-sm" data-testid="stored-gallery-password">
+                        {!stored.password && !stored.client_password ? (
+                          <p className="text-muted-foreground">{t('events.galleryPasswordNotStored')}</p>
+                        ) : (
+                          ([
+                            ['password', t('events.galleryPasswordLabel', 'Gallery password'), stored.password],
+                            ['client_password', t('events.clientPinLabel', 'Client PIN'), stored.client_password],
+                          ] as const).filter(([, , value]) => Boolean(value)).map(([key, label, value]) => (
+                            <div key={key} className="flex items-center gap-2">
+                              <span className="text-muted-foreground shrink-0">{label}</span>
+                              <code className="flex-1 min-w-0 truncate font-mono text-foreground">{value}</code>
+                              <button
+                                type="button"
+                                onClick={() => copySecret(key, value as string)}
+                                className="p-1 text-muted-foreground hover:text-foreground"
+                                aria-label={`${t('events.copy')} ${label}`}
+                              >
+                                {copiedSecret === key ? <CheckCircle className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
+                              </button>
+                            </div>
+                          ))
+                        )}
+                      </div>
+                    )}
+                  </>
+                )}
+                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => setShowPasswordReset(true)}
+                                    className="w-full justify-center"
+                                  >
+                                    <Key className="w-4 h-4" />{t('events.resetGalleryPassword')}</Button>
+                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={async () => {
+                                      try {
+                                        await eventsService.resendCreationEmail(event.id);
+                                        // #1262 — "queued" was being read as "delivered". Queueing only
+                                        // writes an email_queue row; say where to look when it doesn't
+                                        // turn up, because a queue nobody is working raises no failure.
+                                        toast.success(`${t('events.creationEmailResent')} ${t('events.emailQueuedHint', 'The queue processor sends it — check System health if it does not arrive.')}`);
+                                      } catch {
+                                        toast.error(t('events.failedToResendEmail'));
+                                      }
+                                    }}
+                                    className="w-full justify-center"
+                                  >
+                                    <Mail className="w-4 h-4" />{t('events.resendCreationEmail')}</Button>
+                {passwordRecoverable && hasSecret && (
+                  <p className="text-xs text-muted-foreground text-center">{t('events.resendWithStoredPasswordHint')}</p>
+                )}
+              </div>
+            )}</CardContent></Card>
   );
 };

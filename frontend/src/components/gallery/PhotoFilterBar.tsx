@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Search, SortAsc, SortDesc, Grid, Heart, Star, MessageSquare, Bookmark } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Button, Input } from '../common';
 import type { FilterType, FeedbackFilterType } from './GalleryFilter';
 import { ColorLabelFilterChips } from './ColorLabelFilterChips';
 import type { ColorLabel } from '../../services/feedback.service';
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 interface PhotoCategory {
   id: number | string;
@@ -83,45 +84,39 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
       <div className="flex flex-col md:flex-row gap-3 md:gap-4">
         {/* Search Bar */}
         <div className="flex-1">
-          <Input
-            type="text"
-            placeholder={t('gallery.searchPhotos')}
-            leftIcon={<Search className="w-5 h-5 text-neutral-400" />}
-            value={searchTerm}
-            onChange={(e) => onSearchChange(e.target.value)}
-            className="text-sm md:text-base"
-          />
+          <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Search className="w-5 h-5 text-muted-foreground" />}</div><Input
+                              type="text"
+                              placeholder={t('gallery.searchPhotos')}
+                              value={searchTerm}
+                              onChange={(e) => onSearchChange(e.target.value)}
+                              className="pl-10 text-sm md:text-base"
+                            /></div>
         </div>
         
         {/* Sort Dropdown */}
         <div className="relative">
           <Button
-            variant="outline"
-            size="md"
-            // Direction-aware icon only when the parent controls direction —
-            // PreviewPage renders this bar without it and sorts its own way.
-            leftIcon={onSortDescChange && sortDesc ? <SortDesc className="w-4 h-4" /> : <SortAsc className="w-4 h-4" />}
-            onClick={() => setShowSortMenu(!showSortMenu)}
-            className="w-full md:w-auto text-sm md:text-base"
-          >
-            <span className="hidden md:inline">{t('common.sortBy')}{" "}
-            {sortBy === 'date' ? t('gallery.sortByDate').replace(t('common.sortBy'), '') :
-             sortBy === 'name' ? t('gallery.sortByName').replace(t('common.sortBy'), '') :
-             sortBy === 'size' ? t('gallery.sortBySize').replace(t('common.sortBy'), '') :
-             sortBy === 'capture_date' ? t('photoSort.dateTaken', 'Date Taken') :
-             t('gallery.sortByRating', 'Rating')}
-              </span>
-          </Button>
+                              variant="outline"
+                              onClick={() => setShowSortMenu(!showSortMenu)}
+                              className="w-full md:w-auto text-sm md:text-base"
+                            >
+                              {onSortDescChange && sortDesc ? <SortDesc className="w-4 h-4" /> : <SortAsc className="w-4 h-4" />}<span className="hidden md:inline">{t('common.sortBy')}{" "}
+                              {sortBy === 'date' ? t('gallery.sortByDate').replace(t('common.sortBy'), '') :
+                               sortBy === 'name' ? t('gallery.sortByName').replace(t('common.sortBy'), '') :
+                               sortBy === 'size' ? t('gallery.sortBySize').replace(t('common.sortBy'), '') :
+                               sortBy === 'capture_date' ? t('photoSort.dateTaken', 'Date Taken') :
+                               t('gallery.sortByRating', 'Rating')}
+                                </span></Button>
           
           {showSortMenu && (
-            <div className="absolute right-0 md:right-auto md:left-0 mt-2 w-48 bg-surface rounded-lg shadow-lg border border-surface py-1 z-10">
+            <div className="absolute right-0 md:right-auto md:left-0 mt-2 w-48 bg-card rounded-lg shadow-lg border border-border py-1 z-10">
               <button
                 onClick={() => {
                   onSortChange('date');
                   setShowSortMenu(false);
                 }}
                 className={`w-full text-left px-4 py-2 text-sm hover:bg-black/10 ${
-                  sortBy === 'date' ? 'bg-accent-dark text-white' : 'text-muted-theme'
+                  sortBy === 'date' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'
                 }`}
               >
                 {t('gallery.sortByDate')}
@@ -132,7 +127,7 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
                   setShowSortMenu(false);
                 }}
                 className={`w-full text-left px-4 py-2 text-sm hover:bg-black/10 ${
-                  sortBy === 'capture_date' ? 'bg-accent-dark text-white' : 'text-muted-theme'
+                  sortBy === 'capture_date' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'
                 }`}
               >
                 {t('photoSort.dateTaken', 'Date Taken')}
@@ -143,7 +138,7 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
                   setShowSortMenu(false);
                 }}
                 className={`w-full text-left px-4 py-2 text-sm hover:bg-black/10 ${
-                  sortBy === 'name' ? 'bg-accent-dark text-white' : 'text-muted-theme'
+                  sortBy === 'name' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'
                 }`}
               >
                 {t('gallery.sortByName')}
@@ -154,7 +149,7 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
                   setShowSortMenu(false);
                 }}
                 className={`w-full text-left px-4 py-2 text-sm hover:bg-black/10 ${
-                  sortBy === 'size' ? 'bg-accent-dark text-white' : 'text-muted-theme'
+                  sortBy === 'size' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'
                 }`}
               >
                 {t('gallery.sortBySize')}
@@ -165,7 +160,7 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
                   setShowSortMenu(false);
                 }}
                 className={`w-full text-left px-4 py-2 text-sm hover:bg-black/10 ${
-                  sortBy === 'rating' ? 'bg-accent-dark text-white' : 'text-muted-theme'
+                  sortBy === 'rating' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'
                 }`}
               >
                 {t('gallery.sortByRating', 'Sort by Rating')}
@@ -173,14 +168,14 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
 
               {/* Sort direction (#889) */}
               {onSortDescChange && (
-                <div className="border-t border-surface mt-1 pt-1">
+                <div className="border-t border-border mt-1 pt-1">
                   <button
                     onClick={() => {
                       onSortDescChange(false);
                       setShowSortMenu(false);
                     }}
                     className={`w-full text-left px-4 py-2 text-sm hover:bg-black/10 flex items-center gap-2 ${
-                      !sortDesc ? 'bg-accent-dark text-white' : 'text-muted-theme'
+                      !sortDesc ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'
                     }`}
                   >
                     <SortAsc className="w-4 h-4" />
@@ -192,7 +187,7 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
                       setShowSortMenu(false);
                     }}
                     className={`w-full text-left px-4 py-2 text-sm hover:bg-black/10 flex items-center gap-2 ${
-                      sortDesc ? 'bg-accent-dark text-white' : 'text-muted-theme'
+                      sortDesc ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'
                     }`}
                   >
                     <SortDesc className="w-4 h-4" />
@@ -219,14 +214,13 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
               <div className="w-full overflow-x-auto pb-2 lg:pb-0">
                 <div className="flex items-center gap-2 min-w-max">
                   <Button
-                    variant={selectedCategoryId === null ? 'primary' : 'outline'}
-                    size="sm"
-                    onClick={() => onCategoryChange(null)}
-                    leftIcon={<Grid className="w-3 h-3 md:w-4 md:h-4" />}
-                    className="text-xs md:text-sm whitespace-nowrap flex-shrink-0"
-                  >
-                    {showMediaFilter ? t('gallery.allMedia', 'All media') : t('gallery.allPhotos')} ({photos.length})
-                  </Button>
+                                                      variant={selectedCategoryId === null ? 'default' : 'outline'}
+                                                      size="sm"
+                                                      onClick={() => onCategoryChange(null)}
+                                                      className="text-xs md:text-sm whitespace-nowrap shrink-0"
+                                                    >
+                                                      <Grid className="w-3 h-3 md:w-4 md:h-4" />{showMediaFilter ? t('gallery.allMedia', 'All media') : t('gallery.allPhotos')}({photos.length})
+                                                    </Button>
                   {categories.map((category) => {
                     const categoryPhotoCount = photos.filter(p => p.category_id === category.id).length;
                     if (categoryPhotoCount === 0) return null;
@@ -234,10 +228,10 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
                     return (
                       <Button
                         key={category.id}
-                        variant={selectedCategoryId === category.id ? 'primary' : 'outline'}
+                        variant={selectedCategoryId === category.id ? 'default' : 'outline'}
                         size="sm"
                         onClick={() => onCategoryChange(category.id)}
-                        className="text-xs md:text-sm whitespace-nowrap flex-shrink-0"
+                        className="text-xs md:text-sm whitespace-nowrap shrink-0"
                       >
                         {category.name} ({categoryPhotoCount})
                       </Button>
@@ -249,13 +243,13 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
 
             {/* Desktop: compact horizontal feedback filter with headline (icons only) */}
             {feedbackEnabled && onFilterChange && (
-              <div className="hidden lg:flex items-center gap-2 mx-2 flex-shrink-0">
-                <span className="text-sm text-muted-theme whitespace-nowrap">
+              <div className="hidden lg:flex items-center gap-2 mx-2 shrink-0">
+                <span className="text-sm text-muted-foreground whitespace-nowrap">
                   {t('gallery.feedbackFilter', 'Feedback Filter')}
                 </span>
                 <div className="flex items-center gap-1">
                   <Button
-                    variant={isActive('all') ? 'primary' : 'outline'}
+                    variant={isActive('all') ? 'default' : 'outline'}
                     size="sm"
                     onClick={() => onFilterChange('all')}
                     className="p-1 w-8 h-8 flex items-center justify-center"
@@ -264,7 +258,7 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
                     <Grid className="w-3.5 h-3.5" />
                   </Button>
                   <Button
-                    variant={isActive('liked') ? 'primary' : 'outline'}
+                    variant={isActive('liked') ? 'default' : 'outline'}
                     size="sm"
                     onClick={() => onFilterChange('liked')}
                     className="p-1 w-8 h-8 flex items-center justify-center"
@@ -273,7 +267,7 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
                     <Heart className="w-3.5 h-3.5" />
                   </Button>
                   <Button
-                    variant={isActive('favorited') ? 'primary' : 'outline'}
+                    variant={isActive('favorited') ? 'default' : 'outline'}
                     size="sm"
                     onClick={() => onFilterChange('favorited')}
                     className="p-1 w-8 h-8 flex items-center justify-center"
@@ -282,7 +276,7 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
                     <Bookmark className="w-3.5 h-3.5" />
                   </Button>
                   <Button
-                    variant={isActive('rated') ? 'primary' : 'outline'}
+                    variant={isActive('rated') ? 'default' : 'outline'}
                     size="sm"
                     onClick={() => onFilterChange('rated')}
                     className="p-1 w-8 h-8 flex items-center justify-center"
@@ -291,7 +285,7 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
                     <Star className="w-3.5 h-3.5" />
                   </Button>
                   <Button
-                    variant={isActive('commented') ? 'primary' : 'outline'}
+                    variant={isActive('commented') ? 'default' : 'outline'}
                     size="sm"
                     onClick={() => onFilterChange('commented')}
                     className="p-1 w-8 h-8 flex items-center justify-center"
@@ -306,7 +300,7 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
             {/* Colour filter (#1044), desktop */}
             {feedbackEnabled && colorLabelsEnabled && onColorFilterChange && (
               <ColorLabelFilterChips
-                className="hidden lg:flex flex-shrink-0"
+                className="hidden lg:flex shrink-0"
                 activeColors={activeColorFilters}
                 onToggle={onColorFilterChange}
                 counts={colorLabelCounts}
@@ -316,7 +310,7 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
             {/* Without categories this row only carries desktop content (the
                 chips are lg-only; mobile has its own block below), so hide
                 the count below lg to keep the mobile layout unchanged. */}
-            <p className={`text-xs md:text-sm text-muted-theme flex-shrink-0 ml-auto ${categories && categories.length > 0 ? '' : 'hidden lg:block'}`}>
+            <p className={`text-xs md:text-sm text-muted-foreground shrink-0 ml-auto ${categories && categories.length > 0 ? '' : 'hidden lg:block'}`}>
               {photoCount} {t('common.media', 'media')}
             </p>
           </div>
@@ -324,12 +318,12 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
 
         {showMediaFilter && onMediaFilterChange && (
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-xs md:text-sm text-muted-theme whitespace-nowrap">
+            <span className="text-xs md:text-sm text-muted-foreground whitespace-nowrap">
               {t('gallery.mediaType', 'Media')}
             </span>
             <div className="flex items-center gap-2">
               <Button
-                variant={mediaFilter === 'all' ? 'primary' : 'outline'}
+                variant={mediaFilter === 'all' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => onMediaFilterChange('all')}
                 className="text-xs md:text-sm"
@@ -337,7 +331,7 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
                 {t('gallery.allMedia', 'All')}
               </Button>
               <Button
-                variant={mediaFilter === 'photo' ? 'primary' : 'outline'}
+                variant={mediaFilter === 'photo' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => onMediaFilterChange('photo')}
                 className="text-xs md:text-sm"
@@ -345,7 +339,7 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
                 {t('gallery.photosOnly', 'Photos')}
               </Button>
               <Button
-                variant={mediaFilter === 'video' ? 'primary' : 'outline'}
+                variant={mediaFilter === 'video' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => onMediaFilterChange('video')}
                 className="text-xs md:text-sm"
@@ -359,12 +353,12 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
         {/* Mobile/Tablet: compact horizontal icons with headline below categories */}
         {feedbackEnabled && onFilterChange && (
           <div className="flex lg:hidden items-center gap-2">
-            <span className="text-xs text-muted-theme whitespace-nowrap">
+            <span className="text-xs text-muted-foreground whitespace-nowrap">
               {t('gallery.feedbackFilter', 'Feedback Filter')}
             </span>
             <div className="flex items-center gap-1">
               <Button
-                variant={isActive('all') ? 'primary' : 'outline'}
+                variant={isActive('all') ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => onFilterChange('all')}
                 className="p-1 w-8 h-8 flex items-center justify-center"
@@ -373,7 +367,7 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
                 <Grid className="w-3.5 h-3.5" />
               </Button>
               <Button
-                variant={isActive('liked') ? 'primary' : 'outline'}
+                variant={isActive('liked') ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => onFilterChange('liked')}
                 className="p-1 w-8 h-8 flex items-center justify-center"
@@ -382,7 +376,7 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
                 <Heart className="w-3.5 h-3.5" />
               </Button>
               <Button
-                variant={isActive('favorited') ? 'primary' : 'outline'}
+                variant={isActive('favorited') ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => onFilterChange('favorited')}
                 className="p-1 w-8 h-8 flex items-center justify-center"
@@ -391,7 +385,7 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
                 <Bookmark className="w-3.5 h-3.5" />
               </Button>
               <Button
-                variant={isActive('rated') ? 'primary' : 'outline'}
+                variant={isActive('rated') ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => onFilterChange('rated')}
                 className="p-1 w-8 h-8 flex items-center justify-center"
@@ -400,7 +394,7 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
                 <Star className="w-3.5 h-3.5" />
               </Button>
               <Button
-                variant={isActive('commented') ? 'primary' : 'outline'}
+                variant={isActive('commented') ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => onFilterChange('commented')}
                 className="p-1 w-8 h-8 flex items-center justify-center"

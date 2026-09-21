@@ -1,58 +1,14 @@
 import React from 'react';
 import { cn } from '../../lib/utils';
+import { Skeleton } from "@/components/ui/skeleton";
 
-interface SkeletonProps {
-  className?: string;
-  variant?: 'text' | 'circular' | 'rectangular';
-  width?: string | number;
-  height?: string | number;
-  animation?: 'pulse' | 'wave' | 'none';
-}
+/*
+ * The Skeleton primitive that used to live here is gone; the stock shadcn one
+ * is used instead. What remains are PicPeak's loading layouts composed from
+ * it, which is how shadcn's own documentation suggests building these.
+ */
 
-export const Skeleton: React.FC<SkeletonProps> = ({
-  className,
-  variant = 'rectangular',
-  width,
-  height,
-  animation = 'pulse'
-}) => {
-  const animationClasses = {
-    pulse: 'animate-pulse',
-    wave: 'animate-shimmer',
-    none: ''
-  };
-
-  const variantClasses = {
-    text: 'rounded',
-    circular: 'rounded-full',
-    rectangular: 'rounded-lg'
-  };
-
-  // Theme-aware placeholder colour. Without this the skeleton tiles
-  // rendered as bright bg-neutral-200 light grey on dark gallery
-  // themes — the "most annoying" frame in #358's screenshots. Using
-  // var(--color-surface-border) tracks whatever shade ThemeContext
-  // resolves for the current colour mode (light: #e5e5e5, dark:
-  // #2e2e2e by default; per-event themes can override).
-  const style: React.CSSProperties = {
-    backgroundColor: 'var(--color-surface-border, #e5e5e5)',
-  };
-  if (width) style.width = typeof width === 'number' ? `${width}px` : width;
-  if (height) style.height = typeof height === 'number' ? `${height}px` : height;
-
-  return (
-    <div
-      className={cn(
-        animationClasses[animation],
-        variantClasses[variant],
-        className
-      )}
-      style={style}
-      aria-busy="true"
-      aria-live="polite"
-    />
-  );
-};
+export { Skeleton };
 
 // Skeleton group for consistent loading states
 interface SkeletonGroupProps {
@@ -73,27 +29,27 @@ export const SkeletonGroup: React.FC<SkeletonGroupProps> = ({
   return (
     <div className={cn('space-y-3', className)}>
       {Array.from({ length: count }).map((_, index) => (
-        <Skeleton key={index} height={20} />
+        <Skeleton key={index} style={{ height: '20px' }} />
       ))}
     </div>
   );
 };
 
 // Theme-aware container surface — same reasoning as the Skeleton
-// itself. Reads var(--color-surface) so the card sits on the right
+// itself. Reads var(--card) so the card sits on the right
 // background regardless of the active theme's colour mode.
 const SURFACE_STYLE: React.CSSProperties = {
-  backgroundColor: 'var(--color-surface, #ffffff)',
+  backgroundColor: 'var(--card, #ffffff)',
 };
 
 // Common skeleton patterns
 export const SkeletonCard: React.FC<{ className?: string }> = ({ className }) => (
-  <div className={cn('rounded-lg shadow-sm p-6', className)} style={SURFACE_STYLE}>
-    <Skeleton height={24} width="60%" className="mb-4" />
+  <div className={cn('rounded-lg shadow-xs p-6', className)} style={SURFACE_STYLE}>
+    <Skeleton className="mb-4" style={{ width: "60%", height: '24px' }} />
     <SkeletonGroup count={3} />
     <div className="flex gap-3 mt-6">
-      <Skeleton width={100} height={36} />
-      <Skeleton width={100} height={36} />
+      <Skeleton style={{ width: '100px', height: '36px' }} />
+      <Skeleton style={{ width: '100px', height: '36px' }} />
     </div>
   </div>
 );
@@ -102,23 +58,23 @@ export const SkeletonTable: React.FC<{ rows?: number; className?: string }> = ({
   rows = 5,
   className
 }) => (
-  <div className={cn('rounded-lg shadow-sm overflow-hidden', className)} style={SURFACE_STYLE}>
-    <div className="border-b border-neutral-200 dark:border-neutral-700 p-4">
+  <div className={cn('rounded-lg shadow-xs overflow-hidden', className)} style={SURFACE_STYLE}>
+    <div className="border-b border-border p-4">
       <div className="flex gap-4">
-        <Skeleton width="30%" height={20} />
-        <Skeleton width="25%" height={20} />
-        <Skeleton width="20%" height={20} />
-        <Skeleton width="25%" height={20} />
+        <Skeleton style={{ width: "30%", height: '20px' }} />
+        <Skeleton style={{ width: "25%", height: '20px' }} />
+        <Skeleton style={{ width: "20%", height: '20px' }} />
+        <Skeleton style={{ width: "25%", height: '20px' }} />
       </div>
     </div>
     <div className="divide-y divide-neutral-100 dark:divide-neutral-800">
       {Array.from({ length: rows }).map((_, index) => (
         <div key={index} className="p-4">
           <div className="flex gap-4">
-            <Skeleton width="30%" height={16} />
-            <Skeleton width="25%" height={16} />
-            <Skeleton width="20%" height={16} />
-            <Skeleton width="25%" height={16} />
+            <Skeleton style={{ width: "30%", height: '16px' }} />
+            <Skeleton style={{ width: "25%", height: '16px' }} />
+            <Skeleton style={{ width: "20%", height: '16px' }} />
+            <Skeleton style={{ width: "25%", height: '16px' }} />
           </div>
         </div>
       ))}
@@ -130,11 +86,10 @@ export const SkeletonGalleryGrid: React.FC<{ count?: number; className?: string 
   count = 12, 
   className 
 }) => (
-  <div className={cn('gallery-grid', className)}>
+  <div className={cn('gallery-grid', className)} aria-busy="true" aria-live="polite">
     {Array.from({ length: count }).map((_, index) => (
       <Skeleton
         key={index}
-        variant="rectangular"
         className="aspect-square w-full"
       />
     ))}
@@ -148,10 +103,10 @@ export const SkeletonList: React.FC<{ count?: number; className?: string }> = ({
   <div className={cn('space-y-4', className)}>
     {Array.from({ length: count }).map((_, index) => (
       <div key={index} className="flex items-center gap-4">
-        <Skeleton variant="circular" width={48} height={48} />
+        <Skeleton style={{ width: '48px', height: '48px' }} className="rounded-full" />
         <div className="flex-1">
-          <Skeleton height={20} width="70%" className="mb-2" />
-          <Skeleton height={16} width="40%" />
+          <Skeleton className="mb-2" style={{ width: "70%", height: '20px' }} />
+          <Skeleton style={{ width: "40%", height: '16px' }} />
         </div>
       </div>
     ))}

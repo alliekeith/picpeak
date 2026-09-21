@@ -24,8 +24,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import { Type } from 'lucide-react';
-import { Card } from '../common';
 import { fontsService } from '../../services/fonts.service';
+import { Card, CardContent } from "@/components/ui/card";
 
 /**
  * The bundled-fonts API returns the DISPLAY name (e.g. "Playfair
@@ -58,45 +58,39 @@ export const PdfTypographyCard: React.FC<PdfTypographyCardProps> = ({ value, onC
   const selection = value || '';
 
   return (
-    <Card className="p-6">
-      <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-1 flex items-center gap-2">
-        <Type className="w-5 h-5" />
-        {t('branding.pdfTypography', 'PDF typography')}
-      </h3>
-      <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
-        {t('branding.pdfTypographyHelp',
-          'Used for invoice + quote letterheads. Pick one of the bundled fonts, or leave on default to use Helvetica.')}
-      </p>
-
-      <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-        {t('branding.pdfFontFamily', 'Body font')}
-      </label>
-      <select
-        value={selection}
-        onChange={(e) => onChange(e.target.value ? e.target.value : null)}
-        className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100"
-      >
-        <option value="">
-          {t('branding.pdfFontFamilyDefault', 'Use Helvetica (default)')}
-        </option>
-        {(availableFonts || []).map((f) => (
-          <option key={f.family} value={familyToDirectory(f.family)}>
-            {/* Show the display name (with spaces) — but persist
-                the directory name (with hyphens) so pdfService can
-                find the on-disk family without an extra lookup. */}
-            {f.family}
-          </option>
-        ))}
-        {/* When the saved value points at a family that's no
-            longer on disk (e.g. uploaded by an earlier admin,
-            later removed), still show it so the admin sees what
-            they have rather than silently re-mapping to default. */}
-        {selection && !(availableFonts || []).some((f) => familyToDirectory(f.family) === selection) && (
-          <option value={selection}>
-            {directoryToFamily(selection)} ({t('branding.pdfFontFamilyMissing', 'missing')})
-          </option>
-        )}
-      </select>
-    </Card>
+    <Card className="p-6"><CardContent><h3 className="text-lg font-semibold text-foreground mb-1 flex items-center gap-2">
+              <Type className="w-5 h-5" />
+              {t('branding.pdfTypography', 'PDF typography')}
+            </h3><p className="text-sm text-muted-foreground mb-4">
+              {t('branding.pdfTypographyHelp',
+                'Used for invoice + quote letterheads. Pick one of the bundled fonts, or leave on default to use Helvetica.')}
+            </p><label className="block text-sm font-medium text-foreground mb-2">
+              {t('branding.pdfFontFamily', 'Body font')}
+            </label><select
+              value={selection}
+              onChange={(e) => onChange(e.target.value ? e.target.value : null)}
+              className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground"
+            >
+              <option value="">
+                {t('branding.pdfFontFamilyDefault', 'Use Helvetica (default)')}
+              </option>
+              {(availableFonts || []).map((f) => (
+                <option key={f.family} value={familyToDirectory(f.family)}>
+                  {/* Show the display name (with spaces) — but persist
+                      the directory name (with hyphens) so pdfService can
+                      find the on-disk family without an extra lookup. */}
+                  {f.family}
+                </option>
+              ))}
+              {/* When the saved value points at a family that's no
+                  longer on disk (e.g. uploaded by an earlier admin,
+                  later removed), still show it so the admin sees what
+                  they have rather than silently re-mapping to default. */}
+              {selection && !(availableFonts || []).some((f) => familyToDirectory(f.family) === selection) && (
+                <option value={selection}>
+                  {directoryToFamily(selection)} ({t('branding.pdfFontFamilyMissing', 'missing')})
+                </option>
+              )}
+            </select></CardContent></Card>
   );
 };

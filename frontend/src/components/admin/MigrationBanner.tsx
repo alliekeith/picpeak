@@ -36,7 +36,7 @@ export const MigrationBanner: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-start justify-between gap-3 py-3">
           <div className="flex items-start gap-3 min-w-0">
-            <Info className="w-5 h-5 text-blue-600 dark:text-blue-300 flex-shrink-0 mt-0.5" />
+            <Info className="w-5 h-5 text-blue-600 dark:text-blue-300 shrink-0 mt-0.5" />
             <div className="text-sm text-blue-900 dark:text-blue-100 min-w-0">
               <p className="font-medium">{t('migrationBanner.title', "PicPeak's image registry has moved")}</p>
               <p className="text-blue-800 dark:text-blue-200 mt-0.5">
@@ -57,7 +57,7 @@ export const MigrationBanner: React.FC = () => {
           </div>
           <button
             onClick={handleDismiss}
-            className="text-blue-600 dark:text-blue-300 hover:text-blue-700 dark:hover:text-blue-200 flex-shrink-0"
+            className="text-blue-600 dark:text-blue-300 hover:text-blue-700 dark:hover:text-blue-200 shrink-0"
             aria-label={t('common.dismiss', 'Dismiss')}
           >
             <X className="w-5 h-5" />

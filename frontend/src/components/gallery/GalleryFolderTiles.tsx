@@ -46,19 +46,19 @@ export const GalleryFolderTiles: React.FC<GalleryFolderTilesProps> = ({
   if (compact) {
     return (
       <div className="flex items-center gap-2 flex-wrap">
-        <span className="text-sm text-muted-theme">{t('gallery.folders', 'Folders')}</span>
+        <span className="text-sm text-muted-foreground">{t('gallery.folders', 'Folders')}</span>
         {tiles.map(({ category, count }) => (
           <button
             key={category.id}
             type="button"
             onClick={() => onOpen(folderKey(category))}
             aria-label={t('gallery.openFolder', 'Open folder {{name}}', { name: category.name })}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-surface bg-surface text-sm hover:shadow-sm transition-shadow focus:outline-none focus:ring-2 focus:ring-primary-500"
-            style={{ color: 'var(--color-text)' }}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border bg-card text-sm hover:shadow-xs transition-shadow focus:outline-hidden focus:ring-2 focus:ring-brand-500"
+            style={{ color: 'var(--foreground)' }}
           >
-            <Folder className="w-3.5 h-3.5 text-muted-theme" />
+            <Folder className="w-3.5 h-3.5 text-muted-foreground" />
             <span className="font-medium">{category.name}</span>
-            <span className="text-muted-theme">{count}</span>
+            <span className="text-muted-foreground">{count}</span>
           </button>
         ))}
       </div>
@@ -70,7 +70,7 @@ export const GalleryFolderTiles: React.FC<GalleryFolderTilesProps> = ({
       {/* Theme tokens, not Tailwind `dark:` — the gallery is themed through CSS
           variables per event, so a hardcoded light card renders white on a dark
           gallery (the #1106 class of bug). */}
-      <h2 className="text-sm font-medium text-muted-theme mb-3">
+      <h2 className="text-sm font-medium text-muted-foreground mb-3">
         {t('gallery.folders', 'Folders')}
       </h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -80,9 +80,9 @@ export const GalleryFolderTiles: React.FC<GalleryFolderTilesProps> = ({
             type="button"
             onClick={() => onOpen(folderKey(category))}
             aria-label={t('gallery.openFolder', 'Open folder {{name}}', { name: category.name })}
-            className="group text-left rounded-lg overflow-hidden border border-surface bg-surface hover:shadow-md transition-all focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="group text-left rounded-lg overflow-hidden border border-border bg-card hover:shadow-md transition-all focus:outline-hidden focus:ring-2 focus:ring-brand-500"
           >
-            <div className="aspect-[4/3] relative" style={{ backgroundColor: 'var(--color-background)' }}>
+            <div className="aspect-4/3 relative" style={{ backgroundColor: 'var(--background)' }}>
               {coverPhoto?.thumbnail_url ? (
                 <AuthenticatedImage
                   src={coverPhoto.thumbnail_url}
@@ -94,18 +94,18 @@ export const GalleryFolderTiles: React.FC<GalleryFolderTilesProps> = ({
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
-                  <Folder className="w-8 h-8 text-muted-theme" />
+                  <Folder className="w-8 h-8 text-muted-foreground" />
                 </div>
               )}
             </div>
             <div className="p-3">
               <div className="flex items-center gap-2">
-                <Folder className="w-4 h-4 text-muted-theme shrink-0" />
-                <span className="font-medium truncate" style={{ color: 'var(--color-text)' }}>
+                <Folder className="w-4 h-4 text-muted-foreground shrink-0" />
+                <span className="font-medium truncate" style={{ color: 'var(--foreground)' }}>
                   {category.name}
                 </span>
               </div>
-              <p className="mt-1 text-sm text-muted-theme">
+              <p className="mt-1 text-sm text-muted-foreground">
                 {t('gallery.folderPhotoCount', '{{count}} photos', { count })}
               </p>
             </div>

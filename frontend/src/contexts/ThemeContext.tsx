@@ -127,36 +127,36 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
     const themeConfig = applyForceColorMode(rawThemeConfig, forcedMode);
 
     // Apply CSS variables — 8-token CI palette.
-    // Legacy --color-primary / --color-primary-light / --color-primary-dark
+    // Legacy --primary / --brand-light / --brand-dark
     // are kept for any consumer still reading them; they mirror accent-dark.
     if (themeConfig.primaryColor) {
-      root.style.setProperty('--color-primary', themeConfig.primaryColor);
-      root.style.setProperty('--color-primary-light', lightenColor(themeConfig.primaryColor, 20));
-      root.style.setProperty('--color-primary-dark', darkenColor(themeConfig.primaryColor, 20));
+      root.style.setProperty('--primary', themeConfig.primaryColor);
+      root.style.setProperty('--brand-light', lightenColor(themeConfig.primaryColor, 20));
+      root.style.setProperty('--brand-dark', darkenColor(themeConfig.primaryColor, 20));
     }
 
     if (themeConfig.accentColor) {
-      root.style.setProperty('--color-accent', themeConfig.accentColor);
+      root.style.setProperty('--brand', themeConfig.accentColor);
       // Pick a readable foreground (white or black) for text/icons sitting
-      // on top of `--color-accent`. The gallery header Download CTA reads
-      // this via `var(--color-accent-fg, #ffffff)` so a pale accent doesn't
+      // on top of `--brand`. The gallery header Download CTA reads
+      // this via `var(--brand-foreground, #ffffff)` so a pale accent doesn't
       // leave the button text unreadable (PR #401 review follow-up).
-      root.style.setProperty('--color-accent-fg', getReadableForeground(themeConfig.accentColor));
+      root.style.setProperty('--brand-foreground', getReadableForeground(themeConfig.accentColor));
     }
 
     // Accent-dark: filled CTA background. Falls back to primaryColor for
     // legacy themes that pre-date the explicit token (matches the previous
-    // implicit behavior where .btn-primary used --color-primary).
+    // implicit behavior where .btn-primary used --primary).
     const accentDark = themeConfig.accentDarkColor || themeConfig.primaryColor;
     if (accentDark) {
-      root.style.setProperty('--color-accent-dark', accentDark);
+      root.style.setProperty('--primary', accentDark);
       // Same readable-foreground treatment for filled CTAs (.btn-primary
       // and .tile-selected) that paint on top of accent-dark.
-      root.style.setProperty('--color-accent-dark-fg', getReadableForeground(accentDark));
+      root.style.setProperty('--primary-foreground', getReadableForeground(accentDark));
     }
     
     if (themeConfig.backgroundColor) {
-      root.style.setProperty('--color-background', themeConfig.backgroundColor);
+      root.style.setProperty('--background', themeConfig.backgroundColor);
 
       // Cache the resolved background by slug so the next visit can
       // apply it from the inline bootstrap in index.html before React
@@ -175,7 +175,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
     }
     
     if (themeConfig.textColor) {
-      root.style.setProperty('--color-text', themeConfig.textColor);
+      root.style.setProperty('--foreground', themeConfig.textColor);
     }
     
     if (themeConfig.fontFamily) {
@@ -207,7 +207,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
         md: '0.5rem',
         lg: '1rem',
       };
-      root.style.setProperty('--border-radius', radiusMap[themeConfig.borderRadius]);
+      root.style.setProperty('--radius', radiusMap[themeConfig.borderRadius]);
     }
     
     // Apply font size
@@ -236,38 +236,38 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
     setResolvedColorMode(effectiveMode);
 
     if (themeConfig.surfaceColor) {
-      root.style.setProperty('--color-surface', themeConfig.surfaceColor);
+      root.style.setProperty('--card', themeConfig.surfaceColor);
     } else if (effectiveMode === 'dark') {
       // Auto-derive dark surface if not explicitly set
-      root.style.setProperty('--color-surface', '#1a1a1a');
+      root.style.setProperty('--card', '#1a1a1a');
     } else {
-      root.style.setProperty('--color-surface', '#ffffff');
+      root.style.setProperty('--card', '#ffffff');
     }
 
     // Elevated: raised panels, image placeholders. Falls back to a slight
     // shift from surface so the layering still reads on legacy themes.
     if (themeConfig.elevatedColor) {
-      root.style.setProperty('--color-elevated', themeConfig.elevatedColor);
+      root.style.setProperty('--muted', themeConfig.elevatedColor);
     } else if (effectiveMode === 'dark') {
-      root.style.setProperty('--color-elevated', '#242424');
+      root.style.setProperty('--muted', '#242424');
     } else {
-      root.style.setProperty('--color-elevated', '#f5f5f5');
+      root.style.setProperty('--muted', '#f5f5f5');
     }
 
     if (themeConfig.surfaceBorderColor) {
-      root.style.setProperty('--color-surface-border', themeConfig.surfaceBorderColor);
+      root.style.setProperty('--border', themeConfig.surfaceBorderColor);
     } else if (effectiveMode === 'dark') {
-      root.style.setProperty('--color-surface-border', '#2e2e2e');
+      root.style.setProperty('--border', '#2e2e2e');
     } else {
-      root.style.setProperty('--color-surface-border', '#e5e5e5');
+      root.style.setProperty('--border', '#e5e5e5');
     }
 
     if (themeConfig.mutedTextColor) {
-      root.style.setProperty('--color-muted-text', themeConfig.mutedTextColor);
+      root.style.setProperty('--muted-foreground', themeConfig.mutedTextColor);
     } else if (effectiveMode === 'dark') {
-      root.style.setProperty('--color-muted-text', '#a3a3a3');
+      root.style.setProperty('--muted-foreground', '#a3a3a3');
     } else {
-      root.style.setProperty('--color-muted-text', '#737373');
+      root.style.setProperty('--muted-foreground', '#737373');
     }
 
     // Adjust shadow intensity for dark mode

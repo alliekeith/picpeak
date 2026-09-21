@@ -11,15 +11,18 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import {
   Plus, Send, Link2, Download, Trash2, Upload, X, Copy, Image as ImageIcon,
-  Clock, Ban, RefreshCw, Mail, Paperclip, FileText,
-} from 'lucide-react';
+  Clock, Ban, RefreshCw, Mail, Paperclip, FileText, Loader2 } from 'lucide-react';
 
-import { Button, Input, Card, CardContent, Loading, useConfirm } from '../../../components/common';
+import { Loading, useConfirm } from '../../../components/common';
 import { AdminAuthenticatedImage } from '../../../components/admin/AdminAuthenticatedImage';
 import { TransferPhotoPicker, type PickedPhoto } from '../../../components/admin/TransferPhotoPicker';
 import { useMutationWithToast } from '../../../hooks/useMutationWithToast';
 import { useLocalizedDate } from '../../../hooks/useLocalizedDate';
 import { transfersService } from '../../../services/transfers.service';
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 function formatBytes(bytes: number | null | undefined): string {
   if (!bytes) return '0 B';
@@ -36,7 +39,7 @@ function uploadUrl(uploadToken: string): string {
 
 const STATUS_STYLES: Record<string, string> = {
   active: 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300',
-  expired: 'bg-neutral-200 text-neutral-600 dark:bg-neutral-700 dark:text-neutral-300',
+  expired: 'bg-muted text-muted-foreground',
   deleted: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
 };
 
@@ -66,68 +69,65 @@ export const TransfersPage: React.FC = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="flex items-center gap-2 text-2xl font-bold text-neutral-900 dark:text-neutral-100">
+          <h1 className="flex items-center gap-2 text-2xl font-bold text-foreground">
             <Send className="h-6 w-6" /> {t('transfers.title', 'PicTransfer')}
           </h1>
-          <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+          <p className="mt-1 text-sm text-muted-foreground">
             {t('transfers.subtitle', 'Send original files from any event as a download link.')}
           </p>
         </div>
-        <Button leftIcon={<Plus className="h-4 w-4" />} onClick={() => setShowCreate(true)}>
-          {t('transfers.new', 'New transfer')}
-        </Button>
+        <Button onClick={() => setShowCreate(true)}>
+                        <Plus className="h-4 w-4" />{t('transfers.new', 'New transfer')}</Button>
       </div>
 
       {isLoading ? (
         <Loading />
       ) : !transfers || transfers.length === 0 ? (
         <Card>
-          <CardContent className="py-12 text-center text-neutral-500">
-            <Send className="mx-auto mb-3 h-10 w-10 text-neutral-300" />
+          <CardContent className="py-12 text-center text-muted-foreground">
+            <Send className="mx-auto mb-3 h-10 w-10 text-muted-foreground" />
             <p>{t('transfers.empty', 'No transfers yet. Create one to share files.')}</p>
           </CardContent>
         </Card>
       ) : (
-        <Card>
-          <div className="overflow-x-auto">
-            <table className="min-w-full text-sm">
-              <thead>
-                <tr className="border-b border-neutral-200 text-left text-neutral-500 dark:border-neutral-700">
-                  <th className="px-4 py-3 font-medium">{t('transfers.col.title', 'Title')}</th>
-                  <th className="px-4 py-3 font-medium">{t('transfers.col.files', 'Files')}</th>
-                  <th className="px-4 py-3 font-medium">{t('transfers.col.status', 'Status')}</th>
-                  <th className="px-4 py-3 font-medium">{t('transfers.col.downloads', 'Downloads')}</th>
-                  <th className="px-4 py-3 font-medium">{t('transfers.col.expires', 'Expires')}</th>
-                  <th className="px-4 py-3 font-medium">{t('transfers.col.uploads', 'Uploads')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {transfers.map((tr) => (
-                  <tr
-                    key={tr.id}
-                    className="cursor-pointer border-b border-neutral-100 hover:bg-neutral-50 dark:border-neutral-800 dark:hover:bg-neutral-800/50"
-                    onClick={() => setDetailId(tr.id)}
-                  >
-                    <td className="px-4 py-3 font-medium text-neutral-900 dark:text-neutral-100">
-                      {tr.title || t('transfers.untitled', 'Untitled transfer')}
-                    </td>
-                    <td className="px-4 py-3">{tr.file_count}</td>
-                    <td className="px-4 py-3">
-                      <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_STYLES[tr.status] || ''}`}>
-                        {t(`transfers.status.${tr.status}`, tr.status)}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3">
-                      {tr.download_count}{tr.max_downloads ? ` / ${tr.max_downloads}` : ''}
-                    </td>
-                    <td className="px-4 py-3 text-neutral-500 dark:text-neutral-400">{fmtDate(tr.expires_at)}</td>
-                    <td className="px-4 py-3">{tr.allow_uploads ? tr.upload_count : '—'}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </Card>
+        <Card><CardContent><div className="overflow-x-auto">
+                                  <table className="min-w-full text-sm">
+                                    <thead>
+                                      <tr className="border-b border-border text-left text-muted-foreground">
+                                        <th className="px-4 py-3 font-medium">{t('transfers.col.title', 'Title')}</th>
+                                        <th className="px-4 py-3 font-medium">{t('transfers.col.files', 'Files')}</th>
+                                        <th className="px-4 py-3 font-medium">{t('transfers.col.status', 'Status')}</th>
+                                        <th className="px-4 py-3 font-medium">{t('transfers.col.downloads', 'Downloads')}</th>
+                                        <th className="px-4 py-3 font-medium">{t('transfers.col.expires', 'Expires')}</th>
+                                        <th className="px-4 py-3 font-medium">{t('transfers.col.uploads', 'Uploads')}</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {transfers.map((tr) => (
+                                        <tr
+                                          key={tr.id}
+                                          className="cursor-pointer border-b border-border hover:bg-accent"
+                                          onClick={() => setDetailId(tr.id)}
+                                        >
+                                          <td className="px-4 py-3 font-medium text-foreground">
+                                            {tr.title || t('transfers.untitled', 'Untitled transfer')}
+                                          </td>
+                                          <td className="px-4 py-3">{tr.file_count}</td>
+                                          <td className="px-4 py-3">
+                                            <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_STYLES[tr.status] || ''}`}>
+                                              {t(`transfers.status.${tr.status}`, tr.status)}
+                                            </span>
+                                          </td>
+                                          <td className="px-4 py-3">
+                                            {tr.download_count}{tr.max_downloads ? ` / ${tr.max_downloads}` : ''}
+                                          </td>
+                                          <td className="px-4 py-3 text-muted-foreground">{fmtDate(tr.expires_at)}</td>
+                                          <td className="px-4 py-3">{tr.allow_uploads ? tr.upload_count : '—'}</td>
+                                        </tr>
+                                      ))}
+                                    </tbody>
+                                  </table>
+                                </div></CardContent></Card>
       )}
 
       {showCreate && (
@@ -205,52 +205,51 @@ const CreateTransferModal: React.FC<{ onClose: () => void; onCreated: () => void
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-lg bg-white shadow-xl dark:bg-neutral-900">
-        <div className="flex items-center justify-between border-b border-neutral-200 px-5 py-3 dark:border-neutral-700">
-          <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">{t('transfers.new', 'New transfer')}</h2>
-          <button onClick={onClose} className="rounded p-1 text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800"><X className="h-5 w-5" /></button>
+      <div className="flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-lg bg-card shadow-xl">
+        <div className="flex items-center justify-between border-b border-border px-5 py-3">
+          <h2 className="text-lg font-semibold text-foreground">{t('transfers.new', 'New transfer')}</h2>
+          <button onClick={onClose} className="rounded-sm p-1 text-muted-foreground hover:bg-accent"><X className="h-5 w-5" /></button>
         </div>
 
         <div className="min-h-0 flex-1 space-y-4 overflow-y-auto p-5">
-          <Input label={t('transfers.field.title', 'Title')} value={title} onChange={(e) => setTitle(e.target.value)} placeholder={t('transfers.field.titlePlaceholder', 'e.g. Wedding finals for the Smiths')} />
+          <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('transfers.field.title', 'Title')}</span><Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder={t('transfers.field.titlePlaceholder', 'e.g. Wedding finals for the Smiths')} /></Label></div>
           <div>
-            <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">{t('transfers.field.message', 'Message (optional)')}</label>
+            <label className="mb-1 block text-sm font-medium text-foreground">{t('transfers.field.message', 'Message (optional)')}</label>
             <textarea
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               rows={2}
-              className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-600 dark:bg-neutral-800"
+              className="w-full rounded-md border border-border px-3 py-2 text-sm dark:bg-neutral-800"
               placeholder={t('transfers.field.messagePlaceholder', 'Shown to the recipient on the download page')}
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <Input type="number" min={1} label={t('transfers.field.expiresInDays', 'Link active for (days)')} value={expiresInDays} onChange={(e) => setExpiresInDays(e.target.value)} />
-            <Input type="number" min={0} label={t('transfers.field.maxDownloads', 'Max downloads (0 = unlimited)')} value={maxDownloads} onChange={(e) => setMaxDownloads(e.target.value)} placeholder="0" />
+            <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('transfers.field.expiresInDays', 'Link active for (days)')}</span><Input type="number" min={1} value={expiresInDays} onChange={(e) => setExpiresInDays(e.target.value)} /></Label></div>
+            <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('transfers.field.maxDownloads', 'Max downloads (0 = unlimited)')}</span><Input type="number" min={0} value={maxDownloads} onChange={(e) => setMaxDownloads(e.target.value)} placeholder="0" /></Label></div>
           </div>
-          <label className="flex items-center gap-2 text-sm text-neutral-700 dark:text-neutral-300">
-            <input type="checkbox" checked={allowUploads} onChange={(e) => setAllowUploads(e.target.checked)} className="rounded" />
+          <label className="flex items-center gap-2 text-sm text-foreground">
+            <input type="checkbox" checked={allowUploads} onChange={(e) => setAllowUploads(e.target.checked)} className="rounded-sm" />
             {t('transfers.field.allowUploads', 'Also give the client an upload link (to send logos etc.)')}
           </label>
 
           {/* Picker entry + selection preview */}
-          <div className="rounded-md border border-neutral-200 p-3 dark:border-neutral-700">
+          <div className="rounded-md border border-border p-3">
             <div className="mb-2 flex items-center justify-between">
-              <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+              <span className="text-sm font-medium text-foreground">
                 {t('transfers.field.files', 'Files')} · {picked.length}
               </span>
-              <Button size="sm" variant="outline" leftIcon={<ImageIcon className="h-4 w-4" />} onClick={() => setShowPicker(true)}>
-                {t('transfers.picker.title', 'Select images from other events')}
-              </Button>
+              <Button size="sm" variant="outline" onClick={() => setShowPicker(true)}>
+                                          <ImageIcon className="h-4 w-4" />{t('transfers.picker.title', 'Select images from other events')}</Button>
             </div>
             {picked.length === 0 ? (
-              <p className="text-sm text-neutral-400">{t('transfers.field.noFiles', 'No images selected yet.')}</p>
+              <p className="text-sm text-muted-foreground">{t('transfers.field.noFiles', 'No images selected yet.')}</p>
             ) : (
               <div className="grid grid-cols-6 gap-2">
                 {picked.slice(0, 18).map((p) => (
-                  <div key={p.id} className="relative aspect-square overflow-hidden rounded">
+                  <div key={p.id} className="relative aspect-square overflow-hidden rounded-sm">
                     {p.thumbnail_url ? (
                       <AdminAuthenticatedImage src={p.thumbnail_url} alt={p.filename} className="h-full w-full object-cover" />
-                    ) : <div className="h-full w-full bg-neutral-100 dark:bg-neutral-800" />}
+                    ) : <div className="h-full w-full bg-muted" />}
                     <button
                       onClick={() => setPicked((prev) => prev.filter((x) => x.id !== p.id))}
                       className="absolute right-0.5 top-0.5 rounded-full bg-black/60 p-0.5 text-white"
@@ -258,7 +257,7 @@ const CreateTransferModal: React.FC<{ onClose: () => void; onCreated: () => void
                   </div>
                 ))}
                 {picked.length > 18 && (
-                  <div className="flex aspect-square items-center justify-center rounded bg-neutral-100 text-xs text-neutral-500 dark:bg-neutral-800">
+                  <div className="flex aspect-square items-center justify-center rounded-sm bg-muted text-xs text-muted-foreground">
                     +{picked.length - 18}
                   </div>
                 )}
@@ -267,12 +266,12 @@ const CreateTransferModal: React.FC<{ onClose: () => void; onCreated: () => void
           </div>
 
           {/* Upload your own files (deliverables not tied to an event) */}
-          <div className="rounded-md border border-neutral-200 p-3 dark:border-neutral-700">
+          <div className="rounded-md border border-border p-3">
             <div className="mb-2 flex items-center justify-between">
-              <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+              <span className="text-sm font-medium text-foreground">
                 {t('transfers.field.uploadFiles', 'Upload your own files')} · {files.length}
               </span>
-              <label className="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-neutral-300 px-2.5 py-1.5 text-sm text-neutral-700 hover:bg-neutral-50 dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-800">
+              <label className="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-sm text-foreground hover:bg-accent">
                 <Upload className="h-4 w-4" />
                 {t('transfers.field.chooseFiles', 'Choose files')}
                 <input
@@ -284,19 +283,19 @@ const CreateTransferModal: React.FC<{ onClose: () => void; onCreated: () => void
               </label>
             </div>
             {files.length === 0 ? (
-              <p className="text-sm text-neutral-400">{t('transfers.field.noUploadFiles', 'Optionally add files from your computer to send along.')}</p>
+              <p className="text-sm text-muted-foreground">{t('transfers.field.noUploadFiles', 'Optionally add files from your computer to send along.')}</p>
             ) : (
               <ul className="divide-y divide-neutral-100 dark:divide-neutral-800">
                 {files.map((f, idx) => (
                   <li key={`${f.name}-${idx}`} className="flex items-center justify-between py-1.5 text-sm">
                     <span className="flex min-w-0 items-center gap-2">
-                      <FileText className="h-4 w-4 shrink-0 text-neutral-400" />
-                      <span className="truncate text-neutral-700 dark:text-neutral-300">{f.name}</span>
+                      <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />
+                      <span className="truncate text-foreground">{f.name}</span>
                     </span>
                     <button
                       type="button"
                       onClick={() => setFiles((prev) => prev.filter((_, i) => i !== idx))}
-                      className="rounded p-1 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600 dark:hover:bg-neutral-700"
+                      className="rounded-sm p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
                     ><X className="h-3.5 w-3.5" /></button>
                   </li>
                 ))}
@@ -305,43 +304,39 @@ const CreateTransferModal: React.FC<{ onClose: () => void; onCreated: () => void
           </div>
 
           {/* Delivery: copy a link yourself, or email it to recipients */}
-          <div className="rounded-md border border-neutral-200 p-3 dark:border-neutral-700">
-            <span className="mb-2 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+          <div className="rounded-md border border-border p-3">
+            <span className="mb-2 block text-sm font-medium text-foreground">
               {t('transfers.field.delivery', 'Delivery')}
             </span>
             <div className="flex gap-2">
               <Button
-                type="button"
-                variant={deliveryMethod === 'link' ? 'primary' : 'outline'}
-                className="flex-1"
-                leftIcon={<Link2 className="h-4 w-4" />}
-                onClick={() => setDeliveryMethod('link')}
-              >
-                {t('transfers.delivery.link', 'Share a link')}
-              </Button>
+                                          type="button"
+                                          variant={deliveryMethod === 'link' ? 'default' : 'outline'}
+                                          className="flex-1"
+                                          onClick={() => setDeliveryMethod('link')}
+                                        >
+                                          <Link2 className="h-4 w-4" />{t('transfers.delivery.link', 'Share a link')}</Button>
               <Button
-                type="button"
-                variant={deliveryMethod === 'email' ? 'primary' : 'outline'}
-                className="flex-1"
-                leftIcon={<Mail className="h-4 w-4" />}
-                onClick={() => setDeliveryMethod('email')}
-              >
-                {t('transfers.delivery.email', 'Send by email')}
-              </Button>
+                                          type="button"
+                                          variant={deliveryMethod === 'email' ? 'default' : 'outline'}
+                                          className="flex-1"
+                                          onClick={() => setDeliveryMethod('email')}
+                                        >
+                                          <Mail className="h-4 w-4" />{t('transfers.delivery.email', 'Send by email')}</Button>
             </div>
             {deliveryMethod === 'email' && (
               <div className="mt-3">
-                <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                <label className="mb-1 block text-sm font-medium text-foreground">
                   {t('transfers.field.recipients', 'Recipient email addresses')}
                 </label>
                 <textarea
                   value={emails}
                   onChange={(e) => setEmails(e.target.value)}
                   rows={2}
-                  className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-600 dark:bg-neutral-800"
+                  className="w-full rounded-md border border-border px-3 py-2 text-sm dark:bg-neutral-800"
                   placeholder={t('transfers.field.recipientsPlaceholder', 'anna@example.com, ben@example.com')}
                 />
-                <p className="mt-1 text-xs text-neutral-400">
+                <p className="mt-1 text-xs text-muted-foreground">
                   {parsedEmails.length > 0
                     ? t('transfers.field.recipientsCount', '{{count}} recipient(s) — each gets the download link', { count: parsedEmails.length })
                     : t('transfers.field.recipientsHint', 'Separate multiple addresses with commas. Each recipient gets the download link.')}
@@ -351,20 +346,15 @@ const CreateTransferModal: React.FC<{ onClose: () => void; onCreated: () => void
           </div>
         </div>
 
-        <div className="flex justify-end gap-2 border-t border-neutral-200 px-5 py-3 dark:border-neutral-700">
+        <div className="flex justify-end gap-2 border-t border-border px-5 py-3">
           <Button variant="outline" onClick={onClose}>{t('common.cancel', 'Cancel')}</Button>
           <Button
-            onClick={() => createMutation.mutate()}
-            isLoading={createMutation.isPending}
-            disabled={
-              (picked.length === 0 && files.length === 0 && !allowUploads)
-              || (deliveryMethod === 'email' && parsedEmails.length === 0)
-            }
-          >
-            {deliveryMethod === 'email'
-              ? t('transfers.createAndSend', 'Create & send')
-              : t('transfers.create', 'Create transfer')}
-          </Button>
+                              onClick={() => createMutation.mutate()} disabled={(picked.length === 0 && files.length === 0 && !allowUploads)
+                                                      || (deliveryMethod === 'email' && parsedEmails.length === 0) || createMutation.isPending}
+                            >
+                              {createMutation.isPending && <Loader2 className="animate-spin" />}{deliveryMethod === 'email'
+                                ? t('transfers.createAndSend', 'Create & send')
+                                : t('transfers.create', 'Create transfer')}</Button>
         </div>
       </div>
 
@@ -455,12 +445,12 @@ const TransferDetailModal: React.FC<DetailProps> = ({ transferId, onClose, onCop
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="flex max-h-[92vh] w-full max-w-3xl flex-col overflow-hidden rounded-lg bg-white shadow-xl dark:bg-neutral-900">
-        <div className="flex items-center justify-between border-b border-neutral-200 px-5 py-3 dark:border-neutral-700">
-          <h2 className="truncate text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+      <div className="flex max-h-[92vh] w-full max-w-3xl flex-col overflow-hidden rounded-lg bg-card shadow-xl">
+        <div className="flex items-center justify-between border-b border-border px-5 py-3">
+          <h2 className="truncate text-lg font-semibold text-foreground">
             {transfer?.title || t('transfers.untitled', 'Untitled transfer')}
           </h2>
-          <button onClick={onClose} className="rounded p-1 text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800"><X className="h-5 w-5" /></button>
+          <button onClick={onClose} className="rounded-sm p-1 text-muted-foreground hover:bg-accent"><X className="h-5 w-5" /></button>
         </div>
 
         {isLoading || !transfer ? (
@@ -468,49 +458,45 @@ const TransferDetailModal: React.FC<DetailProps> = ({ transferId, onClose, onCop
         ) : (
           <div className="min-h-0 flex-1 space-y-5 overflow-y-auto p-5">
             {/* Prominent recipient link + download-all, up top */}
-            <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-4 dark:border-neutral-700 dark:bg-neutral-800/50">
+            <div className="rounded-lg border border-border bg-muted p-4">
               <div className="flex flex-wrap items-center gap-2">
                 <Input readOnly value={recipientUrl(transfer.token)} className="flex-1 min-w-[220px]" />
-                <Button variant="outline" leftIcon={<Copy className="h-4 w-4" />} onClick={() => onCopy(recipientUrl(transfer.token))}>
-                  {t('transfers.copyLink', 'Copy link')}
-                </Button>
+                <Button variant="outline" onClick={() => onCopy(recipientUrl(transfer.token))}>
+                                                    <Copy className="h-4 w-4" />{t('transfers.copyLink', 'Copy link')}</Button>
                 <a href={transfersService.adminDownloadUrl(transfer.id)}>
-                  <Button leftIcon={<Download className="h-4 w-4" />}>{t('transfers.downloadAll', 'Download all')}</Button>
+                  <Button>
+                                                          <Download className="h-4 w-4" />{t('transfers.downloadAll', 'Download all')}</Button>
                 </a>
               </div>
-              <div className="mt-3 flex flex-wrap gap-4 text-sm text-neutral-600 dark:text-neutral-400">
+              <div className="mt-3 flex flex-wrap gap-4 text-sm text-muted-foreground">
                 <span className="flex items-center gap-1"><Clock className="h-4 w-4" /> {t('transfers.expiresOn', 'Expires')}: {fmtDate(transfer.expires_at)}</span>
                 <span>{t('transfers.col.downloads', 'Downloads')}: {transfer.download_count}{transfer.max_downloads ? ` / ${transfer.max_downloads}` : ''}</span>
                 <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_STYLES[transfer.status] || ''}`}>{t(`transfers.status.${transfer.status}`, transfer.status)}</span>
               </div>
               <div className="mt-3 flex gap-2">
                 {transfer.is_active ? (
-                  <Button size="sm" variant="outline" leftIcon={<Ban className="h-4 w-4" />} onClick={() => disableMutation.mutate()} isLoading={disableMutation.isPending}>
-                    {t('transfers.disableLink', 'Disable link')}
-                  </Button>
+                  <Button size="sm" variant="outline" onClick={() => disableMutation.mutate()} disabled={disableMutation.isPending}>
+                                                          {disableMutation.isPending && <Loader2 className="animate-spin" />}<Ban className="h-4 w-4" />{t('transfers.disableLink', 'Disable link')}</Button>
                 ) : (
-                  <Button size="sm" variant="outline" leftIcon={<RefreshCw className="h-4 w-4" />} onClick={() => reactivateMutation.mutate()} isLoading={reactivateMutation.isPending}>
-                    {t('transfers.reactivate', 'Re-activate (14 days)')}
-                  </Button>
+                  <Button size="sm" variant="outline" onClick={() => reactivateMutation.mutate()} disabled={reactivateMutation.isPending}>
+                                                              {reactivateMutation.isPending && <Loader2 className="animate-spin" />}<RefreshCw className="h-4 w-4" />{t('transfers.reactivate', 'Re-activate (14 days)')}</Button>
                 )}
-                <Button size="sm" variant="ghost" className="text-red-600" leftIcon={<Trash2 className="h-4 w-4" />} onClick={handleDelete}>
-                  {t('common.delete', 'Delete')}
-                </Button>
+                <Button size="sm" variant="ghost" className="text-red-600" onClick={handleDelete}>
+                                                    <Trash2 className="h-4 w-4" />{t('common.delete', 'Delete')}</Button>
               </div>
             </div>
 
             {/* Files */}
             <div>
               <div className="mb-2 flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">{t('transfers.field.files', 'Files')} · {transfer.file_count}</h3>
-                <Button size="sm" variant="outline" leftIcon={<ImageIcon className="h-4 w-4" />} onClick={() => setShowPicker(true)}>
-                  {t('transfers.addImages', 'Add images')}
-                </Button>
+                <h3 className="text-sm font-semibold text-foreground">{t('transfers.field.files', 'Files')} · {transfer.file_count}</h3>
+                <Button size="sm" variant="outline" onClick={() => setShowPicker(true)}>
+                                                    <ImageIcon className="h-4 w-4" />{t('transfers.addImages', 'Add images')}</Button>
               </div>
               {transfer.files && transfer.files.length > 0 ? (
                 <div className="grid grid-cols-4 gap-3 sm:grid-cols-6">
                   {transfer.files.map((f) => (
-                    <div key={f.file_id} className="group relative aspect-square overflow-hidden rounded">
+                    <div key={f.file_id} className="group relative aspect-square overflow-hidden rounded-sm">
                       <AdminAuthenticatedImage src={f.thumbnail_url} alt={f.filename} className="h-full w-full object-cover" />
                       <button
                         onClick={() => removeFileMutation.mutate(f.file_id)}
@@ -522,17 +508,17 @@ const TransferDetailModal: React.FC<DetailProps> = ({ transferId, onClose, onCop
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-neutral-400">{t('transfers.field.noFiles', 'No images selected yet.')}</p>
+                <p className="text-sm text-muted-foreground">{t('transfers.field.noFiles', 'No images selected yet.')}</p>
               )}
             </div>
 
             {/* Admin-uploaded deliverable files */}
             <div>
               <div className="mb-2 flex items-center justify-between">
-                <h3 className="flex items-center gap-2 text-sm font-semibold text-neutral-700 dark:text-neutral-300">
+                <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground">
                   <Paperclip className="h-4 w-4" /> {t('transfers.uploadedFiles', 'Uploaded files')} · {transfer.extra_files?.length || 0}
                 </h3>
-                <label className="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-neutral-300 px-2.5 py-1.5 text-sm text-neutral-700 hover:bg-neutral-50 dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-800">
+                <label className="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-sm text-foreground hover:bg-accent">
                   <Upload className="h-4 w-4" />
                   {t('transfers.addFiles', 'Add files')}
                   <input
@@ -551,17 +537,17 @@ const TransferDetailModal: React.FC<DetailProps> = ({ transferId, onClose, onCop
                   {transfer.extra_files.map((f) => (
                     <li key={f.id} className="flex items-center justify-between py-2 text-sm">
                       <span className="flex min-w-0 items-center gap-2">
-                        <FileText className="h-4 w-4 shrink-0 text-neutral-400" />
-                        <span className="truncate text-neutral-700 dark:text-neutral-300">{f.filename}</span>
+                        <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />
+                        <span className="truncate text-foreground">{f.filename}</span>
                       </span>
-                      <span className="flex shrink-0 items-center gap-3 text-neutral-500">
+                      <span className="flex shrink-0 items-center gap-3 text-muted-foreground">
                         <span>{formatBytes(f.size_bytes)}</span>
-                        <a href={transfersService.adminExtraFileDownloadUrl(transferId, f.id)} className="text-primary-600 hover:underline">
+                        <a href={transfersService.adminExtraFileDownloadUrl(transferId, f.id)} className="text-brand-600 hover:underline">
                           <Download className="h-4 w-4" />
                         </a>
                         <button
                           onClick={() => removeExtraFileMutation.mutate(f.id)}
-                          className="rounded p-1 text-neutral-400 hover:bg-neutral-100 hover:text-red-600 dark:hover:bg-neutral-700"
+                          className="rounded-sm p-1 text-muted-foreground hover:bg-accent hover:text-red-600"
                           title={t('common.remove', 'Remove')}
                         ><X className="h-3.5 w-3.5" /></button>
                       </span>
@@ -569,19 +555,19 @@ const TransferDetailModal: React.FC<DetailProps> = ({ transferId, onClose, onCop
                   ))}
                 </ul>
               ) : (
-                <p className="text-sm text-neutral-400">{t('transfers.noUploadedFiles', 'No uploaded files. Add files from your computer to include them in the download.')}</p>
+                <p className="text-sm text-muted-foreground">{t('transfers.noUploadedFiles', 'No uploaded files. Add files from your computer to include them in the download.')}</p>
               )}
             </div>
 
             {/* Email recipients (when delivered by email) */}
             {transfer.recipients && transfer.recipients.length > 0 && (
-              <div className="rounded-lg border border-neutral-200 p-4 dark:border-neutral-700">
-                <h3 className="mb-2 flex items-center gap-2 text-sm font-semibold text-neutral-700 dark:text-neutral-300">
+              <div className="rounded-lg border border-border p-4">
+                <h3 className="mb-2 flex items-center gap-2 text-sm font-semibold text-foreground">
                   <Mail className="h-4 w-4" /> {t('transfers.sentTo', 'Emailed to')}
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   {transfer.recipients.map((r) => (
-                    <span key={r.id} className="rounded-full bg-neutral-100 px-2.5 py-1 text-xs text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300">
+                    <span key={r.id} className="rounded-full bg-muted px-2.5 py-1 text-xs text-foreground">
                       {r.email}
                     </span>
                   ))}
@@ -590,9 +576,9 @@ const TransferDetailModal: React.FC<DetailProps> = ({ transferId, onClose, onCop
             )}
 
             {/* Client uploads */}
-            <div className="rounded-lg border border-neutral-200 p-4 dark:border-neutral-700">
+            <div className="rounded-lg border border-border p-4">
               <div className="mb-2 flex items-center justify-between">
-                <h3 className="flex items-center gap-2 text-sm font-semibold text-neutral-700 dark:text-neutral-300">
+                <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground">
                   <Upload className="h-4 w-4" /> {t('transfers.clientUpload', 'Client upload')}
                 </h3>
                 {transfer.allow_uploads ? (
@@ -600,28 +586,26 @@ const TransferDetailModal: React.FC<DetailProps> = ({ transferId, onClose, onCop
                     {t('transfers.disableUploads', 'Disable')}
                   </Button>
                 ) : (
-                  <Button size="sm" variant="outline" onClick={() => enableUploadsMutation.mutate()} isLoading={enableUploadsMutation.isPending}>
-                    {t('transfers.enableUploads', 'Enable upload link')}
-                  </Button>
+                  <Button size="sm" variant="outline" onClick={() => enableUploadsMutation.mutate()} disabled={enableUploadsMutation.isPending}>
+                                                              {enableUploadsMutation.isPending && <Loader2 className="animate-spin" />}{t('transfers.enableUploads', 'Enable upload link')}</Button>
                 )}
               </div>
               {transfer.allow_uploads && transfer.upload_token ? (
                 <>
                   <div className="flex flex-wrap items-center gap-2">
-                    <div className="rounded bg-neutral-100 px-3 py-1.5 font-mono text-lg tracking-widest dark:bg-neutral-800">{transfer.upload_token}</div>
+                    <div className="rounded-sm bg-muted px-3 py-1.5 font-mono text-lg tracking-widest">{transfer.upload_token}</div>
                     <Input readOnly value={uploadUrl(transfer.upload_token)} className="flex-1 min-w-[200px]" />
-                    <Button variant="outline" size="sm" leftIcon={<Copy className="h-4 w-4" />} onClick={() => onCopy(uploadUrl(transfer.upload_token as string))}>
-                      {t('transfers.copyLink', 'Copy link')}
-                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => onCopy(uploadUrl(transfer.upload_token as string))}>
+                                                                <Copy className="h-4 w-4" />{t('transfers.copyLink', 'Copy link')}</Button>
                   </div>
                   {transfer.uploads && transfer.uploads.length > 0 ? (
                     <ul className="mt-3 divide-y divide-neutral-100 dark:divide-neutral-800">
                       {transfer.uploads.map((u) => (
                         <li key={u.id} className="flex items-center justify-between py-2 text-sm">
                           <span className="truncate">{u.original_filename}</span>
-                          <span className="flex items-center gap-3 text-neutral-500">
+                          <span className="flex items-center gap-3 text-muted-foreground">
                             <span>{formatBytes(u.size_bytes)}</span>
-                            <a href={transfersService.adminUploadDownloadUrl(transferId, u.id)} className="text-primary-600 hover:underline">
+                            <a href={transfersService.adminUploadDownloadUrl(transferId, u.id)} className="text-brand-600 hover:underline">
                               <Download className="h-4 w-4" />
                             </a>
                           </span>
@@ -629,11 +613,11 @@ const TransferDetailModal: React.FC<DetailProps> = ({ transferId, onClose, onCop
                       ))}
                     </ul>
                   ) : (
-                    <p className="mt-2 text-sm text-neutral-400">{t('transfers.noUploads', 'No files uploaded by the client yet.')}</p>
+                    <p className="mt-2 text-sm text-muted-foreground">{t('transfers.noUploads', 'No files uploaded by the client yet.')}</p>
                   )}
                 </>
               ) : (
-                <p className="text-sm text-neutral-400">
+                <p className="text-sm text-muted-foreground">
                   {t('transfers.uploadHint', 'Enable this to give the client a 6-character code to send you files (logos etc.).')}
                 </p>
               )}

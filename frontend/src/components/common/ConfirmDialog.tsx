@@ -1,8 +1,18 @@
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AlertCircle, AlertTriangle, X } from 'lucide-react';
-import { Button } from './Button';
-import { Card } from './Card';
+import { AlertCircle, AlertTriangle } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { buttonVariants } from '@/components/ui/button';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 /**
  * Promise-based confirm dialog (#640 part C, ported from 8digit/picpeak@88bfde1).
@@ -25,9 +35,14 @@ import { Card } from './Card';
  *   - 'danger'            — red AlertCircle, red confirm button
  *   - 'warning'           — amber AlertTriangle
  *
- * Keyboard: Escape cancels, Enter confirms, backdrop click cancels. The cancel
- * button is focused by default so a stray Enter doesn't accidentally confirm a
- * destructive action.
+ * Keyboard: Escape cancels, Enter confirms. The cancel button is focused by
+ * default so a stray Enter doesn't accidentally confirm a destructive action.
+ *
+ * Rendering is the stock shadcn AlertDialog. AlertDialog rather than Dialog is
+ * deliberate: it will not close on a backdrop click, which suits a yes/no
+ * question about a destructive action, and it brings real focus trapping,
+ * inert background content and the aria wiring the previous hand-rolled
+ * overlay never had.
  *
  * This is the generic primitive. Existing inline-modal flows (PublishGalleryDialog,
  * DuplicateEventDialog, PasswordResetModal, etc.) stay as-is — they collect
@@ -116,67 +131,42 @@ export const ConfirmDialogProvider: React.FC<{ children: React.ReactNode }> = ({
         ? 'text-amber-600 dark:text-amber-400'
         : '';
 
-  // Danger uses the outline button + an inline red override so the visual
-  // weight matches the action without redefining a Button variant for one case.
-  const confirmButtonVariant: 'primary' | 'outline' = variant === 'danger' ? 'outline' : 'primary';
-  const confirmButtonClass = variant === 'danger'
-    ? 'bg-red-600 hover:bg-red-700 text-white border-red-600'
-    : '';
+  // Danger uses shadcn's own destructive button styling rather than an
+  // inline red override.
+
+  const open = options !== null && options !== undefined;
 
   return (
     <ConfirmContext.Provider value={{ confirm }}>
       {children}
-      {options && (
-        <div
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999] p-4"
-          onClick={() => settle(false)}
-          role="dialog"
-          aria-modal="true"
-        >
-          <Card
-            className="max-w-md w-full"
-            onClick={(e: React.MouseEvent) => e.stopPropagation()}
-          >
-            <div className="flex items-start gap-3 mb-4">
-              {Icon && <Icon className={`w-6 h-6 flex-shrink-0 mt-0.5 ${iconClass}`} />}
-              <div className="flex-1 min-w-0">
-                {options.title && (
-                  <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-1">
-                    {options.title}
-                  </h2>
-                )}
-                <p className="text-sm text-neutral-700 dark:text-neutral-300 whitespace-pre-line break-words">
-                  {options.message}
-                </p>
+      <AlertDialog open={open} onOpenChange={(next) => { if (!next) settle(false); }}>
+        {options && (
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <div className="flex items-start gap-3">
+                {Icon && <Icon className={`size-6 shrink-0 mt-0.5 ${iconClass}`} />}
+                <div className="flex-1 min-w-0">
+                  {options.title && <AlertDialogTitle>{options.title}</AlertDialogTitle>}
+                  <AlertDialogDescription className="whitespace-pre-line wrap-break-word">
+                    {options.message}
+                  </AlertDialogDescription>
+                </div>
               </div>
-              <button
-                onClick={() => settle(false)}
-                className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300"
-                aria-label={t('common.close', 'Close')}
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="flex gap-2 justify-end">
-              <Button
-                ref={cancelButtonRef}
-                variant="outline"
-                onClick={() => settle(false)}
-              >
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel ref={cancelButtonRef} onClick={() => settle(false)}>
                 {options.cancelLabel ?? t('common.cancel', 'Cancel')}
-              </Button>
-              <Button
-                variant={confirmButtonVariant}
+              </AlertDialogCancel>
+              <AlertDialogAction
                 onClick={() => settle(true)}
-                className={confirmButtonClass}
+                className={cn(variant === 'danger' && buttonVariants({ variant: 'destructive' }))}
               >
                 {options.confirmLabel ?? t('common.confirm', 'Confirm')}
-              </Button>
-            </div>
-          </Card>
-        </div>
-      )}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        )}
+      </AlertDialog>
     </ConfirmContext.Provider>
   );
 };

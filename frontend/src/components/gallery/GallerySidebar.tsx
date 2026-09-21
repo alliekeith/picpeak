@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import { X, Download, Filter, SortAsc, SortDesc, Search, Calendar, Type, HardDrive, Check, Star, Upload, Camera } from 'lucide-react';
-import { Button } from '../common';
 import { PhotoCategory } from '../../types';
 import { useTranslation } from 'react-i18next';
 import { GalleryFilter, type FilterType, type FeedbackFilterType } from './GalleryFilter';
 import { ColorLabelFilterChips } from './ColorLabelFilterChips';
 import type { ColorLabel } from '../../services/feedback.service';
+import { Button } from "@/components/ui/button";
 
 interface GallerySidebarProps {
   isOpen: boolean;
@@ -146,20 +146,20 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
       <div
         ref={sidebarRef}
         className={`
-          gallery-sidebar fixed top-0 left-0 h-full bg-surface shadow-xl z-50 transition-transform duration-300 ease-in-out flex flex-col
+          gallery-sidebar fixed top-0 left-0 h-full bg-card shadow-xl z-50 transition-transform duration-300 ease-in-out flex flex-col
           ${isMobile ? 'w-full max-w-sm' : 'w-80'}
           ${isOpen ? 'translate-x-0' : '-translate-x-full'}
         `}
       >
         {/* Header */}
-        <div className="gallery-sidebar-header flex items-center justify-between p-4 border-b border-surface">
-          <h2 className="gallery-sidebar-title text-lg font-semibold text-theme">{t('gallery.filters')}</h2>
+        <div className="gallery-sidebar-header flex items-center justify-between p-4 border-b border-border">
+          <h2 className="gallery-sidebar-title text-lg font-semibold text-foreground">{t('gallery.filters')}</h2>
           <button
             onClick={onClose}
             className="gallery-sidebar-close p-2 hover:bg-black/10 rounded-lg transition-colors"
             aria-label={t('common.close')}
           >
-            <X className="w-5 h-5 text-muted-theme" />
+            <X className="w-5 h-5 text-muted-foreground" />
           </button>
         </div>
 
@@ -167,33 +167,31 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
         <div className="gallery-sidebar-content flex-1 overflow-y-auto">
           {/* Upload Section - Show prominently at top for mobile users */}
           {allowUploads && onUploadClick && (
-            <div className="gallery-sidebar-section gallery-sidebar-upload p-4 border-b border-surface">
+            <div className="gallery-sidebar-section gallery-sidebar-upload p-4 border-b border-border">
               <Button
-                variant="outline"
-                size="sm"
-                leftIcon={<Upload className="w-4 h-4" />}
-                onClick={() => {
-                  onUploadClick();
-                  if (isMobile) onClose();
-                }}
-                className="gallery-btn w-full"
-              >
-                {t('upload.uploadPhotos')}
-              </Button>
+                                          variant="outline"
+                                          size="sm"
+                                          onClick={() => {
+                                            onUploadClick();
+                                            if (isMobile) onClose();
+                                          }}
+                                          className="gallery-btn w-full"
+                                        >
+                                          <Upload className="w-4 h-4" />{t('upload.uploadPhotos')}</Button>
             </div>
           )}
 
           {/* Search Section - Hidden for carousel layout */}
           {galleryLayout !== 'carousel' && (
-            <div className="gallery-sidebar-section gallery-sidebar-search p-4 border-b border-surface">
+            <div className="gallery-sidebar-section gallery-sidebar-search p-4 border-b border-border">
               <div className="relative">
-                <Search className="gallery-sidebar-search-icon absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-theme" />
+                <Search className="gallery-sidebar-search-icon absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <input
                   type="text"
                   value={searchTerm}
                   onChange={(e) => onSearchChange(e.target.value)}
                   placeholder={t('gallery.searchPlaceholder')}
-                  className="gallery-sidebar-search-input w-full pl-10 pr-4 py-2 bg-surface border border-surface rounded-lg text-theme placeholder:text-muted-theme focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="gallery-sidebar-search-input w-full pl-10 pr-4 py-2 bg-card border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:border-transparent"
                 />
               </div>
             </div>
@@ -201,23 +199,21 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
 
           {/* Download Section - Hidden if gallery is expired or downloads disabled */}
           {allowDownloads && (
-            <div className="gallery-sidebar-section gallery-sidebar-downloads p-4 border-b border-surface">
-              <h3 className="gallery-sidebar-section-title text-sm font-semibold text-muted-theme mb-3 flex items-center gap-2">
+            <div className="gallery-sidebar-section gallery-sidebar-downloads p-4 border-b border-border">
+              <h3 className="gallery-sidebar-section-title text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-2">
                 <Download className="w-4 h-4" />
                 {t('gallery.download')}
               </h3>
 
               <div className="space-y-2">
                 <Button
-                  variant="primary"
-                  size="sm"
-                  leftIcon={<Download className="w-4 h-4" />}
-                  onClick={onDownloadAll}
-                  disabled={isDownloading || (downloadAllTotal ?? totalPhotos) === 0}
-                  className="gallery-btn gallery-btn-download w-full"
-                >
-                  {t('gallery.downloadAll')} ({downloadAllTotal ?? totalPhotos})
-                </Button>
+                                                size="sm"
+                                                onClick={onDownloadAll}
+                                                disabled={isDownloading || (downloadAllTotal ?? totalPhotos) === 0}
+                                                className="gallery-btn gallery-btn-download w-full"
+                                              >
+                                                <Download className="w-4 h-4" />{t('gallery.downloadAll')}({downloadAllTotal ?? totalPhotos})
+                                              </Button>
 
                 <Button
                   variant={isSelectionMode ? 'secondary' : 'outline'}
@@ -230,15 +226,13 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
 
                 {isSelectionMode && selectedCount > 0 && (
                   <Button
-                    variant="primary"
-                    size="sm"
-                    leftIcon={<Download className="w-4 h-4" />}
-                    onClick={onDownloadSelected}
-                    disabled={isDownloading}
-                    className="gallery-btn gallery-btn-download w-full"
-                  >
-                    {t('gallery.downloadSelected', { count: selectedCount })} ({selectedCount})
-                  </Button>
+                                                      size="sm"
+                                                      onClick={onDownloadSelected}
+                                                      disabled={isDownloading}
+                                                      className="gallery-btn gallery-btn-download w-full"
+                                                    >
+                                                      <Download className="w-4 h-4" />{t('gallery.downloadSelected', { count: selectedCount })}({selectedCount})
+                                                    </Button>
                 )}
               </div>
             </div>
@@ -246,7 +240,7 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
 
           {/* Feedback Filter Section */}
           {feedbackEnabled && onFilterChange && (
-            <div className="gallery-sidebar-section gallery-sidebar-feedback p-4 border-b border-surface">
+            <div className="gallery-sidebar-section gallery-sidebar-feedback p-4 border-b border-border">
               <GalleryFilter
                 activeFilters={activeFilters}
                 // Unlike the single-select category/sort buttons, feedback
@@ -274,8 +268,8 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
 
           {/* Categories Section - Hidden for carousel layout */}
           {galleryLayout !== 'carousel' && categories.length > 0 && (
-            <div className="gallery-sidebar-section gallery-sidebar-categories p-4 border-b border-surface">
-              <h3 className="gallery-sidebar-section-title text-sm font-semibold text-muted-theme mb-3 flex items-center gap-2">
+            <div className="gallery-sidebar-section gallery-sidebar-categories p-4 border-b border-border">
+              <h3 className="gallery-sidebar-section-title text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-2">
                 <Filter className="w-4 h-4" />
                 {t('gallery.categories')}
               </h3>
@@ -289,13 +283,13 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
                   className={`
                     gallery-btn w-full text-left px-3 py-2 rounded-lg transition-colors flex items-center justify-between
                     ${selectedCategoryId === null
-                      ? 'bg-accent-dark text-white'
-                      : 'hover:bg-black/10 text-muted-theme'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'hover:bg-black/10 text-muted-foreground'
                     }
                   `}
                 >
                   <span>{t('gallery.allCategories')}</span>
-                  <span className="text-sm text-muted-theme">{totalPhotos}</span>
+                  <span className="text-sm text-muted-foreground">{totalPhotos}</span>
                 </button>
 
                 {categories.map((category) => {
@@ -312,8 +306,8 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
                       className={`
                         gallery-btn w-full text-left px-3 py-2 rounded-lg transition-colors flex items-center justify-between
                         ${isSelected
-                          ? 'bg-accent-dark text-white'
-                          : 'hover:bg-black/10 text-muted-theme'
+                          ? 'bg-primary text-primary-foreground'
+                          : 'hover:bg-black/10 text-muted-foreground'
                         }
                       `}
                     >
@@ -321,7 +315,7 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
                         {isSelected && <Check className="w-4 h-4" />}
                         {category.name}
                       </span>
-                      <span className="text-sm text-muted-theme">{count}</span>
+                      <span className="text-sm text-muted-foreground">{count}</span>
                     </button>
                   );
                 })}
@@ -330,14 +324,14 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
           )}
 
           {showMediaFilter && onMediaFilterChange && (
-            <div className="gallery-sidebar-section gallery-sidebar-media p-4 border-b border-surface">
-              <h3 className="gallery-sidebar-section-title text-sm font-semibold text-muted-theme mb-3 flex items-center gap-2">
+            <div className="gallery-sidebar-section gallery-sidebar-media p-4 border-b border-border">
+              <h3 className="gallery-sidebar-section-title text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-2">
                 <Filter className="w-4 h-4" />
                 {t('gallery.mediaType', 'Media')}
               </h3>
               <div className="flex items-center gap-2 flex-wrap">
                 <Button
-                  variant={mediaFilter === 'all' ? 'primary' : 'outline'}
+                  variant={mediaFilter === 'all' ? 'default' : 'outline'}
                   size="sm"
                   className="gallery-btn"
                   onClick={() => {
@@ -348,7 +342,7 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
                   {t('gallery.allMedia', 'All')}
                 </Button>
                 <Button
-                  variant={mediaFilter === 'photo' ? 'primary' : 'outline'}
+                  variant={mediaFilter === 'photo' ? 'default' : 'outline'}
                   size="sm"
                   className="gallery-btn"
                   onClick={() => {
@@ -359,7 +353,7 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
                   {t('gallery.photosOnly', 'Photos')}
                 </Button>
                 <Button
-                  variant={mediaFilter === 'video' ? 'primary' : 'outline'}
+                  variant={mediaFilter === 'video' ? 'default' : 'outline'}
                   size="sm"
                   className="gallery-btn"
                   onClick={() => {
@@ -376,7 +370,7 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
           {/* Sort Section - Hidden for carousel and timeline layouts */}
           {galleryLayout !== 'carousel' && galleryLayout !== 'timeline' && (
             <div className="gallery-sidebar-section gallery-sidebar-sort p-4">
-              <h3 className="gallery-sidebar-section-title text-sm font-semibold text-muted-theme mb-3 flex items-center gap-2">
+              <h3 className="gallery-sidebar-section-title text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-2">
                 <SortAsc className="w-4 h-4" />
                 {t('gallery.sortBy')}
               </h3>
@@ -396,8 +390,8 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
                       className={`
                         gallery-btn w-full text-left px-3 py-2 rounded-lg transition-colors flex items-center gap-3
                         ${isSelected
-                          ? 'bg-accent-dark text-white'
-                          : 'hover:bg-black/10 text-muted-theme'
+                          ? 'bg-primary text-primary-foreground'
+                          : 'hover:bg-black/10 text-muted-foreground'
                         }
                       `}
                     >
@@ -413,23 +407,19 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
               {onSortDescChange && (
                 <div className="flex items-center gap-2 mt-3">
                   <Button
-                    variant={!sortDesc ? 'primary' : 'outline'}
-                    size="sm"
-                    leftIcon={<SortAsc className="w-4 h-4" />}
-                    onClick={() => onSortDescChange(false)}
-                    className="gallery-btn flex-1"
-                  >
-                    {t('gallery.sortAscending', 'Sort ascending')}
-                  </Button>
+                                                      variant={!sortDesc ? 'default' : 'outline'}
+                                                      size="sm"
+                                                      onClick={() => onSortDescChange(false)}
+                                                      className="gallery-btn flex-1"
+                                                    >
+                                                      <SortAsc className="w-4 h-4" />{t('gallery.sortAscending', 'Sort ascending')}</Button>
                   <Button
-                    variant={sortDesc ? 'primary' : 'outline'}
-                    size="sm"
-                    leftIcon={<SortDesc className="w-4 h-4" />}
-                    onClick={() => onSortDescChange(true)}
-                    className="gallery-btn flex-1"
-                  >
-                    {t('gallery.sortDescending', 'Sort descending')}
-                  </Button>
+                                                      variant={sortDesc ? 'default' : 'outline'}
+                                                      size="sm"
+                                                      onClick={() => onSortDescChange(true)}
+                                                      className="gallery-btn flex-1"
+                                                    >
+                                                      <SortDesc className="w-4 h-4" />{t('gallery.sortDescending', 'Sort descending')}</Button>
                 </div>
               )}
             </div>

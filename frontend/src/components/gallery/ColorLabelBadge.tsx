@@ -85,7 +85,7 @@ export const ColorLabelBadge: React.FC<ColorLabelBadgeProps> = ({
       <span className={`absolute ${position} pointer-events-none flex items-center gap-1`}>
         {mine && swatch && (
           <span
-            className={`flex items-center justify-center ${mineDotClass} rounded-full border-white/90 shadow`}
+            className={`flex items-center justify-center ${mineDotClass} rounded-full border-white/90 shadow-sm`}
             style={{ backgroundColor: swatch.fill }}
             // Colour alone can't carry the meaning — the accessible name does.
             title={t('feedback.markedAs', 'Marked as {{color}}', { color: name })}
@@ -103,7 +103,7 @@ export const ColorLabelBadge: React.FC<ColorLabelBadgeProps> = ({
             {others.map((c) => (
               <span
                 key={c}
-                className={`block ${otherDotClass} rounded-full border border-white/90 shadow-sm`}
+                className={`block ${otherDotClass} rounded-full border border-white/90 shadow-xs`}
                 style={{ backgroundColor: COLOR_LABEL_SWATCHES[c].fill }}
               />
             ))}
