@@ -28,7 +28,7 @@ const PAGE_NUMBERS: PdfPageNumbers[] = ['bottom-right', 'bottom-center', 'none']
 const FOLDING_MARKS: PdfFoldingMarks[] = ['none', 'half', 'third', 'both'];
 const HEX = /^#[0-9a-f]{6}$/i;
 
-const fieldClass = 'focus:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900 w-full px-3 py-2 rounded-md border border-border '
+const fieldClass = 'focus:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900 w-full px-3 py-2 rounded-md border border-border '
   + 'bg-card text-sm text-foreground';
 const labelClass = 'block text-sm font-medium text-foreground mb-1';
 
@@ -115,7 +115,7 @@ export const PdfThemeCard: React.FC = () => {
                   aria-pressed={scope === s}
                   onClick={() => setScope(s)}
                   className={`px-3 py-1.5 rounded-md text-sm border ${scope === s
-                    ? 'bg-brand-600 text-primary-foreground border-brand-600'
+                    ? 'bg-primary text-primary-foreground border-primary'
                     : 'border-border text-foreground hover:bg-accent'}`}
                 >
                   {t(`branding.pdfTheme.scope.${s}`, s)}

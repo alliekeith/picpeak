@@ -68,7 +68,7 @@ export const BulkCategoryModal: React.FC<BulkCategoryModalProps> = ({
                         id="category-select"
                         value={selectedCategoryId ?? ''}
                         onChange={(e) => setSelectedCategoryId(e.target.value === '' ? null : Number(e.target.value))}
-                        className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-brand-500 focus:border-primary"
+                        className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-ring focus:border-primary"
                         disabled={isLoading}
                       >
                         <option value="">{t('photos.uncategorized', 'Uncategorized')}</option>

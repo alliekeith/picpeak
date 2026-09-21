@@ -56,7 +56,7 @@ export const FolderTreeNode: React.FC<{
           }
         >
           {isExpanded ? (
-            <FolderOpen className="w-4 h-4 shrink-0 text-brand" />
+            <FolderOpen className="w-4 h-4 shrink-0 text-primary" />
           ) : (
             <Folder className="w-4 h-4 shrink-0 text-muted-foreground" />
           )}

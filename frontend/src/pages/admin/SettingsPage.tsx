@@ -400,7 +400,7 @@ export const SettingsPage: React.FC = () => {
             id="settings-section"
             value={activeTab}
             onChange={(e) => setActiveTab(e.target.value as TabType)}
-            className="w-full rounded-md border border-border bg-card px-3 py-2 text-sm font-medium text-foreground focus:outline-hidden focus:ring-2 focus:ring-brand-500"
+            className="w-full rounded-md border border-border bg-card px-3 py-2 text-sm font-medium text-foreground focus:outline-hidden focus:ring-2 focus:ring-ring"
           >
             {visibleGroups.map((group) => (
               <optgroup key={group.label} label={group.label}>
@@ -444,7 +444,7 @@ export const SettingsPage: React.FC = () => {
                           {/* Active-state icon paints white to sit on the
                               accent-dark pill (matches the label colour
                               and avoids the accent-on-accent low-contrast
-                              that the prior `text-brand` produced). */}
+                              that the prior `text-primary` produced). */}
                           <Icon
                             className={`w-4 h-4 shrink-0 ${
                               isActive

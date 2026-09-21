@@ -22,7 +22,7 @@ const FeedbackCountIndicators: React.FC<{ photo: Photo; withTitles?: boolean }> 
     <div className="absolute top-2 left-2 flex gap-1 z-10">
       {(photo.comment_count ?? 0) > 0 && (
         <div className="bg-white/90 backdrop-blur-xs rounded-full px-2 py-1 flex items-center gap-1" title={withTitles ? `${photo.comment_count ?? 0} comments` : undefined}>
-          <MessageSquare className="w-3.5 h-3.5 text-brand" fill="currentColor" />
+          <MessageSquare className="w-3.5 h-3.5 text-primary" fill="currentColor" />
           <span className="text-xs font-medium text-foreground">{photo.comment_count ?? 0}</span>
         </div>
       )}

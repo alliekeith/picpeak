@@ -1,23 +1,20 @@
 /**
- * Guards the fix for the branding-theme text colour leak (QA S3 / S4 / S13).
+ * Guards against the branding-theme text colour leak (QA S3 / S4 / S13).
  *
- * The original symptom: ThemeContext.applyTheme() writes the instance
+ * The original symptom: ThemeContext.applyTheme() wrote the instance
  * branding's `--foreground` as an inline style on <html>, and
- * GlobalThemeProvider applies that theme on every non-gallery route — the
+ * GlobalThemeProvider applied that theme on every non-gallery route — the
  * admin panel included. Headings that shipped without their own colour class
  * inherited the themed body colour through `body { color: var(--foreground) }`
  * and rendered near-white on white as soon as an install picked a dark-toned
  * branding theme.
  *
- * That was originally fixed per heading, by giving each one a hardcoded
- * colour. It is now fixed at the cause: the admin panel is scoped out of
- * branding entirely (`.unbranded-surface` on <body> for /admin and /setup),
- * so its tokens always resolve to the built-in palette however the instance
- * is branded, and a heading using `text-foreground` is safe again.
- *
- * These tests therefore assert the scoping mechanism rather than the old
- * per-heading workaround. What must never regress is that admin text and the
- * surface behind it come from the same palette.
+ * It was first fixed per heading, then by scoping admin out of branding with
+ * `.unbranded-surface`. Both are gone: the colour system is now stock
+ * shadcn/ui and nothing writes colour tokens at runtime, so there is no
+ * branded value left to leak anywhere. These tests assert that property
+ * directly — if colour branding is ever reintroduced, the leak has to be
+ * reasoned about again and these will fail first.
  */
 import fs from 'fs';
 import path from 'path';
@@ -28,13 +25,11 @@ const read = (rel: string) => fs.readFileSync(path.join(SRC, rel), 'utf8');
 
 describe('branding-theme text colour leak (QA S3 / S4 / S13)', () => {
   const css = read('index.css');
-  const scope = read('components/UnbrandedSurfaceScope.tsx');
+  const themeContext = read('contexts/ThemeContext.tsx');
 
-  it('declares an unbranded scope that re-points the base tokens at the defaults', () => {
-    const block = /\.unbranded-surface\s*\{([^}]*)\}/.exec(css)?.[1] ?? '';
-    expect(block).not.toBe('');
-    // Every token applyTheme() writes must be reset, or branding leaks in
-    // through whichever one was missed.
+  it('writes no colour tokens at runtime', () => {
+    // The leak was only possible because applyTheme() set colour custom
+    // properties on <html>. Nothing may write these again.
     for (const token of [
       '--background',
       '--foreground',
@@ -44,38 +39,29 @@ describe('branding-theme text colour leak (QA S3 / S4 / S13)', () => {
       '--border',
       '--primary',
       '--primary-foreground',
-      '--brand',
     ]) {
-      expect(block).toContain(`${token}: var(--default-${token.slice(2)})`);
+      expect(themeContext).not.toContain(`setProperty('${token}'`);
     }
   });
 
-  it('applies that scope to the admin and setup routes', () => {
-    expect(scope).toMatch(/UNBRANDED_PREFIXES\s*=\s*\[[^\]]*'\/admin'[^\]]*\]/);
-    expect(scope).toMatch(/UNBRANDED_PREFIXES\s*=\s*\[[^\]]*'\/setup'[^\]]*\]/);
+  it('keeps no brand palette alongside the shadcn tokens', () => {
+    // --brand / --brand-light / --brand-dark were PicPeak's own layer on top
+    // of shadcn and the vehicle for per-instance colour.
+    expect(css).not.toMatch(/--brand(-light|-dark|-foreground)?\s*:/);
+    expect(css).not.toContain('.unbranded-surface');
   });
 
-  it('puts the scope on <body>, so portalled dialogs and toasts are covered', () => {
-    // A scope on a layout element would leave anything portalled to body
-    // outside it, rendering branded over an unbranded page.
-    expect(scope).toContain("document.body.classList.toggle('unbranded-surface'");
-  });
-
-  it('mounts the scope inside the router so it reacts to navigation', () => {
-    const app = read('App.tsx');
-    expect(app).toContain('<UnbrandedSurfaceScope />');
-    const routerAt = app.indexOf('<Router>');
-    expect(routerAt).toBeGreaterThan(-1);
-    expect(app.indexOf('<UnbrandedSurfaceScope />')).toBeGreaterThan(routerAt);
-  });
-
-  it('keeps the dark palette reachable through the defaults', () => {
-    // `.dark` must redefine the --default-* values, not the live tokens,
-    // otherwise the unbranded scope would pin admin to the light palette and
-    // the admin dark-mode switch would stop working.
-    const darkBlock = /\.dark\s*\{([^}]*)\}/.exec(css)?.[1] ?? '';
-    expect(darkBlock).toContain('--default-background:');
-    expect(darkBlock).toContain('--default-foreground:');
+  it('defines the stock shadcn light and dark palettes', () => {
+    const root = /:root\s*\{([^}]*)\}/.exec(css)?.[1] ?? '';
+    const dark = /\.dark\s*\{([^}]*)\}/.exec(css)?.[1] ?? '';
+    // Stock new-york-v4 values: near-black primary on light, near-white on dark.
+    expect(root).toContain('--primary: oklch(0.205 0 0)');
+    expect(root).toContain('--background: oklch(1 0 0)');
+    expect(dark).toContain('--primary: oklch(0.922 0 0)');
+    expect(dark).toContain('--background: oklch(0.145 0 0)');
+    // The chart and sidebar families ship with stock shadcn.
+    expect(root).toContain('--chart-1:');
+    expect(root).toContain('--sidebar:');
   });
 
   it('keeps the themed page background outside @layer base', () => {

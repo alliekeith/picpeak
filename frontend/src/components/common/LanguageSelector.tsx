@@ -104,7 +104,7 @@ export const LanguageSelector: React.FC = () => {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-2 sm:px-3 py-2 text-sm font-medium text-foreground bg-card border border-border rounded-lg hover:bg-accent focus:outline-hidden focus:ring-2 focus:ring-brand-500"
+        className="flex items-center gap-2 px-2 sm:px-3 py-2 text-sm font-medium text-foreground bg-card border border-border rounded-lg hover:bg-accent focus:outline-hidden focus:ring-2 focus:ring-ring"
         // On <sm the language *name* is hidden — the Globe + flag pair
         // is enough recognition on its own and stops this control from
         // pushing into the company-name title on narrow mobile widths
@@ -125,7 +125,7 @@ export const LanguageSelector: React.FC = () => {
               onClick={() => handleLanguageChange(language.code)}
               className={`w-full text-left px-4 py-2 text-sm hover:bg-accent flex items-center gap-3 ${
                 language.code === i18n.language
-                  ? 'text-brand bg-primary/15'
+                  ? 'text-primary bg-primary/15'
                   : 'text-foreground'
               }`}
             >

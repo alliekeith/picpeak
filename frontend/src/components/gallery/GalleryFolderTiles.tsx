@@ -53,7 +53,7 @@ export const GalleryFolderTiles: React.FC<GalleryFolderTilesProps> = ({
             type="button"
             onClick={() => onOpen(folderKey(category))}
             aria-label={t('gallery.openFolder', 'Open folder {{name}}', { name: category.name })}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border bg-card text-sm hover:shadow-xs transition-shadow focus:outline-hidden focus:ring-2 focus:ring-brand-500"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border bg-card text-sm hover:shadow-xs transition-shadow focus:outline-hidden focus:ring-2 focus:ring-ring"
             style={{ color: 'var(--foreground)' }}
           >
             <Folder className="w-3.5 h-3.5 text-muted-foreground" />
@@ -80,7 +80,7 @@ export const GalleryFolderTiles: React.FC<GalleryFolderTilesProps> = ({
             type="button"
             onClick={() => onOpen(folderKey(category))}
             aria-label={t('gallery.openFolder', 'Open folder {{name}}', { name: category.name })}
-            className="group text-left rounded-lg overflow-hidden border border-border bg-card hover:shadow-md transition-all focus:outline-hidden focus:ring-2 focus:ring-brand-500"
+            className="group text-left rounded-lg overflow-hidden border border-border bg-card hover:shadow-md transition-all focus:outline-hidden focus:ring-2 focus:ring-ring"
           >
             <div className="aspect-4/3 relative" style={{ backgroundColor: 'var(--background)' }}>
               {coverPhoto?.thumbnail_url ? (

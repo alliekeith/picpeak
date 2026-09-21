@@ -141,7 +141,7 @@ export const DownloadResolutionModal: React.FC<DownloadResolutionModalProps> = (
                             key={choice.id}
                             className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
                               selected === choice.id
-                                ? 'border-brand-500 bg-brand-50 dark:bg-brand-900/20'
+                                ? 'border-primary bg-accent'
                                 : 'border-border hover:bg-accent'
                             }`}
                           >
@@ -151,7 +151,7 @@ export const DownloadResolutionModal: React.FC<DownloadResolutionModalProps> = (
                               value={choice.id}
                               checked={selected === choice.id}
                               onChange={() => setSelected(choice.id)}
-                              className="accent-brand-600"
+                              className="accent-primary"
                             />
                             <span className="flex-1 min-w-0">
                               <span className="block text-sm font-medium text-foreground">
@@ -180,7 +180,7 @@ export const DownloadResolutionModal: React.FC<DownloadResolutionModalProps> = (
         )}
         {phase === 'preparing' && (
                     <div className="py-6 text-center">
-                      <Loader2 className="w-8 h-8 mx-auto mb-3 animate-spin text-brand-600" />
+                      <Loader2 className="w-8 h-8 mx-auto mb-3 animate-spin text-primary" />
                       <p className="text-sm font-medium text-foreground">
                         {t('gallery.preparingDownload', 'Preparing your download…')}
                       </p>

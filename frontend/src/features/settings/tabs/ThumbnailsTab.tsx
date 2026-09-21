@@ -184,7 +184,7 @@ export const ThumbnailsTab: React.FC = () => {
       <fieldset disabled={!canEdit} className="space-y-6 min-w-0">
       {/* Dimensions & Quality */}
       <Card><CardContent><h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-                        <Image className="w-5 h-5 text-brand-600" />
+                        <Image className="w-5 h-5 text-primary" />
                         {t('settings.thumbnails.dimensionsTitle', 'Thumbnail Dimensions & Quality')}
                       </h2><p className="text-sm text-muted-foreground mb-4">
                         {t('settings.thumbnails.dimensionsHelp', 'Configure the size and quality of auto-generated thumbnails. Higher values produce better-looking previews but increase storage and load times.')}
@@ -199,7 +199,7 @@ export const ThumbnailsTab: React.FC = () => {
                             max="1000"
                             value={settings.width}
                             onChange={(e) => handleChange('width', parseInt(e.target.value) || 300)}
-                            className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                            className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-ring focus:border-primary"
                           />
                           <p className="text-xs text-muted-foreground mt-1">
                             {t('settings.thumbnails.widthHelp', '50-1000 pixels')}
@@ -216,7 +216,7 @@ export const ThumbnailsTab: React.FC = () => {
                             max="1000"
                             value={settings.height}
                             onChange={(e) => handleChange('height', parseInt(e.target.value) || 300)}
-                            className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                            className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-ring focus:border-primary"
                           />
                           <p className="text-xs text-muted-foreground mt-1">
                             {t('settings.thumbnails.heightHelp', '50-1000 pixels')}
@@ -233,7 +233,7 @@ export const ThumbnailsTab: React.FC = () => {
                             max="100"
                             value={settings.quality}
                             onChange={(e) => handleChange('quality', parseInt(e.target.value) || 85)}
-                            className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                            className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-ring focus:border-primary"
                           />
                           <p className="text-xs text-muted-foreground mt-1">
                             {t('settings.thumbnails.qualityHelp', '1-100, higher = better quality but larger files')}
@@ -247,7 +247,7 @@ export const ThumbnailsTab: React.FC = () => {
                           <select
                             value={settings.format}
                             onChange={(e) => handleChange('format', e.target.value)}
-                            className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                            className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-ring focus:border-primary"
                           >
                             {formatOptions.map((fmt) => (
                               <option key={fmt} value={fmt}>{fmt.toUpperCase()}</option>
@@ -261,7 +261,7 @@ export const ThumbnailsTab: React.FC = () => {
                         <select
                           value={settings.fit}
                           onChange={(e) => handleChange('fit', e.target.value)}
-                          className="w-full sm:w-64 px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                          className="w-full sm:w-64 px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-ring focus:border-primary"
                         >
                           {fitOptions.map((opt) => (
                             <option key={opt} value={opt}>
@@ -279,7 +279,7 @@ export const ThumbnailsTab: React.FC = () => {
 
       {/* Regenerate */}
       <Card><CardContent><h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-                        <RefreshCw className="w-5 h-5 text-brand-600" />
+                        <RefreshCw className="w-5 h-5 text-primary" />
                         {t('settings.thumbnails.regenerateTitle', 'Regenerate Thumbnails')}
                       </h2><p className="text-sm text-muted-foreground mb-4">
                         {t('settings.thumbnails.regenerateHelp', 'After changing thumbnail settings, regenerate all existing thumbnails to apply the new configuration. This runs in the background and may take a while for large galleries.')}
@@ -296,14 +296,14 @@ export const ThumbnailsTab: React.FC = () => {
           what it does is unlock the regenerate button below and keep
           preview_url emitted. */}
       <Card><CardContent><h2 className="text-lg font-semibold text-foreground mb-1 flex items-center gap-2">
-                        <Image className="w-5 h-5 text-brand-600" />
+                        <Image className="w-5 h-5 text-primary" />
                         {t('settings.thumbnails.lightboxTitle', 'Lightbox Preview Tier')}
                       </h2><p className="text-sm text-muted-foreground mb-4">
                         {t('settings.thumbnails.lightboxHelp', 'The lightbox shows an aspect-preserved ~1920px JPEG (typically 200–500 KB) rather than the full original (often 5–12 MB). Originals are still served when guests click Download. Previews cost roughly one extra file per photo on disk and are stored in /previews.')}
                       </p><label className="flex items-start gap-3 cursor-pointer mb-4">
                         <input
                           type="checkbox"
-                          className="mt-0.5 rounded-sm border-border text-brand focus:ring-brand-500"
+                          className="mt-0.5 rounded-sm border-border text-primary focus:ring-ring"
                           checked={settings.lightbox_preview_enabled}
                           onChange={(e) => handleChange('lightbox_preview_enabled', e.target.checked)}
                         />

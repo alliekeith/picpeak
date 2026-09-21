@@ -20,7 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
 const labelCls = 'block text-sm font-medium text-foreground mb-1';
-const selectCls = 'w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary';
+const selectCls = 'w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-ring focus:border-primary';
 
 export const IncomingMailConfigCard: React.FC = () => {
   const { t } = useTranslation();

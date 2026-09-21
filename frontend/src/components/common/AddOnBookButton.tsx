@@ -21,9 +21,9 @@ export const AddOnBookButton: React.FC<AddOnBookButtonProps> = ({ booked, onTogg
       type="button"
       onClick={onToggle}
       disabled={disabled}
-      className={`rounded-md border px-2 py-0.5 font-medium focus:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-neutral-900 disabled:cursor-not-allowed disabled:opacity-50 ${booked
+      className={`rounded-md border px-2 py-0.5 font-medium focus:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 dark:focus-visible:ring-offset-neutral-900 disabled:cursor-not-allowed disabled:opacity-50 ${booked
         ? 'border-border bg-card text-foreground hover:bg-accent'
-        : 'border-brand-600 bg-brand-600 text-primary-foreground hover:bg-brand-700 hover:border-brand-700'}`}
+        : 'border-primary bg-primary text-primary-foreground hover:bg-primary hover:border-primary'}`}
     >
       {booked
         ? t('crm.lineItems.removeBooking', 'Remove booking')

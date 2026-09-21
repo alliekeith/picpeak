@@ -120,7 +120,7 @@ export const SEOTab: React.FC<SEOTabProps> = ({
     <div className="space-y-6">
       {/* Search Engine Indexing */}
       <Card><CardContent><div className="flex items-center gap-2 mb-4">
-                    <Globe className="w-5 h-5 text-brand-600" />
+                    <Globe className="w-5 h-5 text-primary" />
                     <h2 className="text-lg font-semibold text-foreground">{t('settings.seo.indexingTitle', 'Search Engine Indexing')}</h2>
                   </div><div className="space-y-4">
                     <label className="flex items-start gap-3">
@@ -128,7 +128,7 @@ export const SEOTab: React.FC<SEOTabProps> = ({
                         type="checkbox"
                         checked={seoSettings.allow_indexing}
                         onChange={(e) => setSeoSettings(prev => ({ ...prev, allow_indexing: e.target.checked }))}
-                        className="w-4 h-4 mt-0.5 text-brand-600 rounded-sm focus:ring-brand-500"
+                        className="w-4 h-4 mt-0.5 text-primary rounded-sm focus:ring-ring"
                       />
                       <div>
                         <span className="text-sm font-medium text-foreground">{t('settings.seo.allowIndexing', 'Allow search engine indexing')}</span>
@@ -152,7 +152,7 @@ export const SEOTab: React.FC<SEOTabProps> = ({
 
       {/* AI & Bot Blocking */}
       <Card><CardContent><div className="flex items-center gap-2 mb-4">
-                    <Bot className="w-5 h-5 text-brand-600" />
+                    <Bot className="w-5 h-5 text-primary" />
                     <h2 className="text-lg font-semibold text-foreground">{t('settings.seo.aiBlockingTitle', 'AI & Bot Blocking')}</h2>
                   </div><div className="space-y-4">
                     <label className="flex items-start gap-3">
@@ -160,7 +160,7 @@ export const SEOTab: React.FC<SEOTabProps> = ({
                         type="checkbox"
                         checked={seoSettings.block_ai_crawlers}
                         onChange={(e) => setSeoSettings(prev => ({ ...prev, block_ai_crawlers: e.target.checked }))}
-                        className="w-4 h-4 mt-0.5 text-brand-600 rounded-sm focus:ring-brand-500"
+                        className="w-4 h-4 mt-0.5 text-primary rounded-sm focus:ring-ring"
                       />
                       <div>
                         <span className="text-sm font-medium text-foreground">{t('settings.seo.blockAiCrawlers', 'Block AI/LLM crawlers')}</span>
@@ -206,7 +206,7 @@ export const SEOTab: React.FC<SEOTabProps> = ({
                         type="checkbox"
                         checked={seoSettings.block_social_bots}
                         onChange={(e) => setSeoSettings(prev => ({ ...prev, block_social_bots: e.target.checked }))}
-                        className="w-4 h-4 mt-0.5 text-brand-600 rounded-sm focus:ring-brand-500"
+                        className="w-4 h-4 mt-0.5 text-primary rounded-sm focus:ring-ring"
                       />
                       <div>
                         <span className="text-sm font-medium text-foreground">{t('settings.seo.blockSocialBots', 'Block social media preview bots')}</span>
@@ -217,7 +217,7 @@ export const SEOTab: React.FC<SEOTabProps> = ({
 
       {/* Meta Tags & Custom Rules */}
       <Card><CardContent><div className="flex items-center gap-2 mb-4">
-                    <Shield className="w-5 h-5 text-brand-600" />
+                    <Shield className="w-5 h-5 text-primary" />
                     <h2 className="text-lg font-semibold text-foreground">{t('settings.seo.metaTagsTitle', 'Meta Tags & Custom Rules')}</h2>
                   </div><div className="space-y-4">
                     <div className="space-y-3">
@@ -226,7 +226,7 @@ export const SEOTab: React.FC<SEOTabProps> = ({
                           type="checkbox"
                           checked={seoSettings.meta_noindex}
                           onChange={(e) => setSeoSettings(prev => ({ ...prev, meta_noindex: e.target.checked }))}
-                          className="w-4 h-4 mt-0.5 text-brand-600 rounded-sm focus:ring-brand-500"
+                          className="w-4 h-4 mt-0.5 text-primary rounded-sm focus:ring-ring"
                         />
                         <div>
                           <span className="text-sm font-medium text-foreground">{t('settings.seo.metaNoindex', 'Add noindex meta tag')}</span>
@@ -239,7 +239,7 @@ export const SEOTab: React.FC<SEOTabProps> = ({
                           type="checkbox"
                           checked={seoSettings.meta_nofollow}
                           onChange={(e) => setSeoSettings(prev => ({ ...prev, meta_nofollow: e.target.checked }))}
-                          className="w-4 h-4 mt-0.5 text-brand-600 rounded-sm focus:ring-brand-500"
+                          className="w-4 h-4 mt-0.5 text-primary rounded-sm focus:ring-ring"
                         />
                         <div>
                           <span className="text-sm font-medium text-foreground">{t('settings.seo.metaNofollow', 'Add nofollow meta tag')}</span>
@@ -252,7 +252,7 @@ export const SEOTab: React.FC<SEOTabProps> = ({
                           type="checkbox"
                           checked={seoSettings.meta_noai}
                           onChange={(e) => setSeoSettings(prev => ({ ...prev, meta_noai: e.target.checked }))}
-                          className="w-4 h-4 mt-0.5 text-brand-600 rounded-sm focus:ring-brand-500"
+                          className="w-4 h-4 mt-0.5 text-primary rounded-sm focus:ring-ring"
                         />
                         <div>
                           <span className="text-sm font-medium text-foreground">{t('settings.seo.metaNoai', 'Add noai/noimageai meta tag')}</span>
@@ -306,7 +306,7 @@ export const SEOTab: React.FC<SEOTabProps> = ({
                     <div className="border-t border-border pt-4">
                       <button
                         onClick={() => setShowPreview(!showPreview)}
-                        className="flex items-center gap-2 text-sm font-medium text-brand-600 hover:text-brand-700 transition-colors"
+                        className="flex items-center gap-2 text-sm font-medium text-primary hover:text-primary transition-colors"
                       >
                         <Eye className="w-4 h-4" />
                         {showPreview

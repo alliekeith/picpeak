@@ -222,7 +222,7 @@ export const StatusTab: React.FC<StatusTabProps> = ({
           ? 'bg-red-600'
           : usagePercentage >= 90
             ? 'bg-amber-500'
-            : 'bg-brand-600';
+            : 'bg-primary';
         const limitCardClass = overSoftLimit ? 'bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800' : 'bg-muted';
         const limitValueClass = overSoftLimit ? 'text-amber-700 dark:text-amber-300' : 'text-foreground';
         const limitDescriptorClass = overSoftLimit ? 'text-amber-700 dark:text-amber-300 font-semibold' : 'text-muted-foreground';
@@ -727,7 +727,7 @@ export const StatusTab: React.FC<StatusTabProps> = ({
 
       {orientationStatus && canManageSystem && (
         <Card><CardContent><h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-                          <RotateCw className="w-5 h-5 text-brand-600" />
+                          <RotateCw className="w-5 h-5 text-primary" />
                           {t('settings.orientationBackfill.title', 'Photo Orientation')}
                         </h2><p className="text-sm text-muted-foreground mb-4">
                           {t('settings.orientationBackfill.description', 'Re-read EXIF orientation for photos imported before rotation was applied, correct their stored dimensions, and clear the thumbnails, previews and hero images generated from the unrotated originals. Only photos whose orientation actually changed are touched.')}

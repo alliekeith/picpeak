@@ -334,7 +334,7 @@ export const EventsListPage: React.FC = () => {
                                 <p className="text-sm text-muted-foreground">{t('events.stats.totalEvents')}</p>
                                 <p className="text-2xl font-bold text-foreground">{dashboardStats?.totalEvents ?? 0}</p>
                               </div>
-                              <Calendar className="w-8 h-8 text-brand" />
+                              <Calendar className="w-8 h-8 text-primary" />
                             </div></CardContent></Card>
 
         <Card className="py-4"><CardContent className="px-4"><div className="flex items-center justify-between">
@@ -456,7 +456,7 @@ export const EventsListPage: React.FC = () => {
                                   type="checkbox"
                                   checked={selectedEvents.length === events.length && events.length > 0}
                                   onChange={handleSelectAll}
-                                  className="w-4 h-4 text-brand border-border rounded-sm focus:ring-brand-500 dark:bg-neutral-700"
+                                  className="w-4 h-4 text-primary border-border rounded-sm focus:ring-ring dark:bg-neutral-700"
                                 />
                               </th>
                               <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
@@ -504,7 +504,7 @@ export const EventsListPage: React.FC = () => {
                                         type="checkbox"
                                         checked={selectedEvents.includes(event.id)}
                                         onChange={() => handleSelectEvent(event.id)}
-                                        className="w-4 h-4 text-brand border-border rounded-sm focus:ring-brand-500 dark:bg-neutral-700"
+                                        className="w-4 h-4 text-primary border-border rounded-sm focus:ring-ring dark:bg-neutral-700"
                                       />
                                     </td>
                                     <td className="px-6 py-4">

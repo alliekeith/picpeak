@@ -170,7 +170,7 @@ export const GuestNamePromptModal: React.FC<GuestNamePromptModalProps> = ({
                 closePrompt();
                 openRecovery();
               }}
-              className="mt-1 text-sm font-medium text-brand hover:underline"
+              className="mt-1 text-sm font-medium text-primary hover:underline"
             >
               {t('gallery.guestPrompt.recoverPicks', 'Get them back')}
             </button>

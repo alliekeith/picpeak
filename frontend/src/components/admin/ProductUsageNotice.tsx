@@ -61,14 +61,14 @@ export default function ProductUsageNotice() {
 
   return (
     <aside
-      className="mx-6 mt-4 rounded-lg border border-brand-200 dark:border-brand-800 bg-brand-50 dark:bg-brand-900/20 p-4"
+      className="mx-6 mt-4 rounded-lg border border-border bg-accent p-4"
       aria-label={t('productUsage.title')}
     >
       <div className="flex items-start gap-3">
-        <Sparkles className="w-5 h-5 shrink-0 mt-0.5 text-brand-600 dark:text-brand-300" />
-        <div className="min-w-0 text-sm text-brand-900 dark:text-brand-100">
+        <Sparkles className="w-5 h-5 shrink-0 mt-0.5 text-primary" />
+        <div className="min-w-0 text-sm text-primary">
           <p className="font-medium">{t('productUsage.noticeTitle')}</p>
-          <p className="mt-0.5 text-brand-800 dark:text-brand-200">
+          <p className="mt-0.5 text-primary">
             {t('productUsage.notice')}
           </p>
           <div className="mt-2 flex flex-wrap items-center gap-4">
@@ -97,7 +97,7 @@ export default function ProductUsageNotice() {
                 server, not a session flag — so the label says "Ignore" and
                 this line says where to find it again. "Not now" implied the
                 invitation would come back, and it never does. */}
-            <span className="text-brand-700 dark:text-brand-300">
+            <span className="text-primary">
               {t('productUsage.ignoreHint')}
             </span>
           </div>

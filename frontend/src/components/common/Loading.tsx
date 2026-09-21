@@ -23,7 +23,7 @@ export const Loading: React.FC<LoadingProps> = ({
 
   const content = (
     <div className={clsx('flex flex-col items-center justify-center', className)}>
-      <Loader2 className={clsx('animate-spin text-brand', sizeStyles[size])} />
+      <Loader2 className={clsx('animate-spin text-primary', sizeStyles[size])} />
       {text && (
         <p className="mt-4 text-sm text-muted-foreground">{text}</p>
       )}

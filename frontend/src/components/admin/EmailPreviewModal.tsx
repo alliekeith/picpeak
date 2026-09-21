@@ -26,7 +26,7 @@ export const EmailPreviewModal: React.FC<EmailPreviewModalProps> = ({
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <Card className="w-full max-w-4xl max-h-[90vh] flex flex-col"><CardContent>{/* Header */}<div className="flex items-center justify-between p-6 border-b border-border">
                     <div className="flex items-center gap-3">
-                      <Mail className="w-6 h-6 text-brand" />
+                      <Mail className="w-6 h-6 text-primary" />
                       <h2 className="text-xl font-semibold text-foreground">Email Preview</h2>
                     </div>
                     <button

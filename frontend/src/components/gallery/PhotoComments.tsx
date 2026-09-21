@@ -179,7 +179,7 @@ export const PhotoComments: React.FC<PhotoCommentsProps> = ({
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
               placeholder={t('feedback.writeComment', 'Write a comment...')}
-              className={`w-full px-3 py-2 text-sm border rounded-lg resize-vertical min-h-[100px] focus:ring-2 focus:ring-brand-500 focus:border-primary ${
+              className={`w-full px-3 py-2 text-sm border rounded-lg resize-vertical min-h-[100px] focus:ring-2 focus:ring-ring focus:border-primary ${
                 errors.comment_text ? 'border-red-500' : 'border-border'
               }`}
               rows={4}

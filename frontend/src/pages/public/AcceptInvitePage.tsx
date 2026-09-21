@@ -353,8 +353,8 @@ export const AcceptInvitePage: React.FC = () => {
 
         {/* Invitation Info Card */}
         <Card className="mb-6"><CardContent><div className="flex items-start gap-3">
-                          <div className="w-10 h-10 rounded-full bg-brand-100 flex items-center justify-center shrink-0">
-                            <Mail className="w-5 h-5 text-brand-600" />
+                          <div className="w-10 h-10 rounded-full bg-accent flex items-center justify-center shrink-0">
+                            <Mail className="w-5 h-5 text-primary" />
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="text-sm text-muted-foreground">{t('acceptInvitation.invitedAs')}</p>

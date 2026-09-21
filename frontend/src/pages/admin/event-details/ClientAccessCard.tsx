@@ -25,7 +25,7 @@ export const ClientAccessCard: React.FC<ClientAccessCardProps> = ({ event, refet
               <label className="flex items-start gap-2">
                 <input
                   type="checkbox"
-                  className="mt-1 w-4 h-4 text-brand border-border rounded-sm focus:ring-brand-500"
+                  className="mt-1 w-4 h-4 text-primary border-border rounded-sm focus:ring-ring"
                   checked={!!event?.client_access_enabled}
                   onChange={async (e) => {
                     try {

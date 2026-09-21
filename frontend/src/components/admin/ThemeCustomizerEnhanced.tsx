@@ -70,14 +70,10 @@ export const ThemeCustomizerEnhanced: React.FC<ThemeCustomizerEnhancedProps> = (
 }) => {
   const { t } = useTranslation();
   // A force lock (instance-wide light/dark) overrides the per-theme color
-  // mode. On the Branding page (where the Force control lives —
-  // onForceColorModeChange is provided) we hide only the now-redundant
-  // per-theme Color Mode picker. In per-event gallery editors (no Force
-  // control) we ALSO hide the colour pickers, since a gallery can't override
-  // the site-wide lock. Presets, fonts and style always stay.
+  // mode, so the Branding page hides the now-redundant per-theme Color Mode
+  // picker. Presets, fonts and style always stay.
   const forcedColorActive = (forceColorMode ?? null) !== null;
   const isBrandingContext = !!onForceColorModeChange;
-  const hideGalleryColors = forcedColorActive && !isBrandingContext;
   const [localTheme, setLocalTheme] = useState<ThemeConfig>(value);
   const [selectedPreset, setSelectedPreset] = useState(presetName);
   const [customCss, setCustomCss] = useState(value.customCss || '');
@@ -286,11 +282,9 @@ export const ThemeCustomizerEnhanced: React.FC<ThemeCustomizerEnhancedProps> = (
       {/* Color Customization */}
       <ColorCustomizationCard
         localTheme={localTheme}
-        handleChange={handleChange}
         handleColorModeSelect={handleColorModeSelect}
         forcedColorActive={forcedColorActive}
         isBrandingContext={isBrandingContext}
-        hideGalleryColors={hideGalleryColors}
         forceColorMode={forceColorMode}
         onForceColorModeChange={onForceColorModeChange}
         onSyncFromBranding={onSyncFromBranding}

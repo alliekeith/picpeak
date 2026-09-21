@@ -158,7 +158,7 @@ export const EventCategoryManager: React.FC<EventCategoryManagerProps> = ({ even
   if (isLoading) {
     return (
       <div className="flex justify-center items-center py-4">
-        <Loader2 className="w-5 h-5 animate-spin text-brand" />
+        <Loader2 className="w-5 h-5 animate-spin text-primary" />
       </div>
     );
   }
@@ -205,7 +205,7 @@ export const EventCategoryManager: React.FC<EventCategoryManagerProps> = ({ even
             onKeyPress={(e) => e.key === 'Enter' && handleCreate()}
             placeholder={t('categories.categoryName')}
             maxLength={100}
-            className="flex-1 px-3 py-1.5 text-sm border border-border rounded-md bg-card text-foreground focus:ring-2 focus:ring-brand-500"
+            className="flex-1 px-3 py-1.5 text-sm border border-border rounded-md bg-card text-foreground focus:ring-2 focus:ring-ring"
             autoFocus
           />
           <Button
@@ -281,7 +281,7 @@ export const EventCategoryManager: React.FC<EventCategoryManagerProps> = ({ even
                         className="w-full h-full object-cover"
                       />
                     ) : category.hero_photo_id ? (
-                      <ImageIcon className="w-4 h-4 text-brand" />
+                      <ImageIcon className="w-4 h-4 text-primary" />
                     ) : (
                       <ImageIcon className="w-4 h-4 text-muted-foreground" />
                     )}
@@ -305,8 +305,8 @@ export const EventCategoryManager: React.FC<EventCategoryManagerProps> = ({ even
                         })}
                         className={`p-1 transition-colors ${
                           category.is_folder
-                            ? 'text-brand-600 dark:text-brand-400 hover:text-muted-foreground'
-                            : 'text-muted-foreground hover:text-brand-600 dark:hover:text-brand-400'
+                            ? 'text-primary hover:text-muted-foreground'
+                            : 'text-muted-foreground hover:text-primary dark:hover:text-primary'
                         }`}
                         title={
                           category.is_folder
@@ -403,7 +403,7 @@ export const EventCategoryManager: React.FC<EventCategoryManagerProps> = ({ even
                                           onClick={() => handleSelectHeroPhoto(heroPickerCategoryId, photo.id)}
                                           className={`relative cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${
                                             isSelected
-                                              ? 'border-primary ring-2 ring-brand-500 ring-offset-2'
+                                              ? 'border-primary ring-2 ring-ring ring-offset-2'
                                               : 'border-transparent hover:border-border'
                                           }`}
                                         >

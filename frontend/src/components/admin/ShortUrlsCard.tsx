@@ -124,7 +124,7 @@ export const ShortUrlsCard: React.FC<Props> = ({ eventId }) => {
 
   return (
     <Card><CardContent><div className="flex items-center gap-2 mb-3">
-              <LinkIcon className="w-5 h-5 text-brand-600 dark:text-brand-400" />
+              <LinkIcon className="w-5 h-5 text-primary" />
               <h3 className="text-lg font-semibold text-foreground">
                 {t('events.shortUrls.title', 'Branded short URLs')}
               </h3>
@@ -157,7 +157,7 @@ export const ShortUrlsCard: React.FC<Props> = ({ eventId }) => {
                 <button
                   type="button"
                   onClick={handleUseSuggested}
-                  className="mt-2 text-xs text-brand-600 dark:text-brand-400 underline hover:no-underline"
+                  className="mt-2 text-xs text-primary underline hover:no-underline"
                 >
                   {t('events.shortUrls.useSuggested', 'Use “{{suggested}}” instead', { suggested })}
                 </button>
@@ -203,7 +203,7 @@ export const ShortUrlsCard: React.FC<Props> = ({ eventId }) => {
                       <button
                         type="button"
                         onClick={() => handleCopy(row)}
-                        className="p-2 text-muted-foreground hover:text-brand-600 dark:hover:text-brand-400"
+                        className="p-2 text-muted-foreground hover:text-primary dark:hover:text-primary"
                         title={t('common.copy', 'Copy') as string}
                         aria-label={t('common.copy', 'Copy') as string}
                       >

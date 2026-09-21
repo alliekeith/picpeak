@@ -143,7 +143,7 @@ export const WebhookDeliveriesPage: React.FC = () => {
         <p className="text-sm text-muted-foreground">
           {t('settings.webhooks.deliveries.notFound', 'Webhook not found.')}
         </p>
-        <Link to="/admin/settings" className="text-brand hover:underline">
+        <Link to="/admin/settings" className="text-primary hover:underline">
           ← {t('settings.webhooks.deliveries.back', 'Back to Settings')}
         </Link>
       </div>

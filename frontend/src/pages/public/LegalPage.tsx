@@ -100,7 +100,7 @@ export const LegalPage: React.FC = () => {
                         </p>
                         <Link
                           to="/"
-                          className="inline-flex items-center gap-2 text-brand-600 hover:text-brand-700"
+                          className="inline-flex items-center gap-2 text-primary hover:text-primary"
                         >
                           <Home className="w-4 h-4" />
                           Go to Homepage

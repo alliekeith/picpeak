@@ -356,7 +356,7 @@ export const notificationsService = {
       case 'theme_updated':
         return { icon: 'Settings', color: 'text-gray-600' };
       case 'admin_profile_updated':
-        return { icon: 'User', color: 'text-brand-600' };
+        return { icon: 'User', color: 'text-primary' };
       case 'email_template_updated':
       case 'email_config_updated':
         return { icon: 'Mail', color: 'text-teal-600' };
