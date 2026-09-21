@@ -3,8 +3,8 @@ import { Layout, Check, AlertTriangle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { ThemeConfig, GalleryLayoutType } from '../../../types/theme.types';
 import { layoutIcons } from './icons';
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface GalleryLayoutCardProps {
   localTheme: ThemeConfig;

@@ -88,36 +88,6 @@ async function checkGalleryPasswordPolicy(password, eventName) {
 }
 
 /**
- * Can this assigned customer account actually receive — and act on — the
- * gallery notice? (#1235)
- *
- * Shared by publish, by the send-later route, and mirrored by the UI that
- * decides whether to offer the button at all. All four have to agree, or the
- * admin gets an action that 400s, or worse, one that reports success for a
- * notice nobody can use.
- *
- * - `is_active`: compared loosely because SQLite stores it as 0/1 and a
- *   strict `!== false` lets 0 through.
- * - `can_sign_in`: a PASSIVE customer (password_hash IS NULL — see
- *   customerAccountsService.createDirect) is a real, active account that has
- *   simply never been invited. customer_gallery_assigned links to
- *   /customer/dashboard, and customerAuth rejects login without a hash, so
- *   mailing one sends a link to a door that will not open. Excluded here
- *   rather than mailed, because a silent non-delivery the admin believes
- *   succeeded is worse than a visible refusal. Sending them an invitation
- *   instead is the better answer, and a separate feature.
- * - the column is emitted by a raw SQL predicate, so it arrives as a boolean
- *   on Postgres and 0/1 on SQLite; `== false` and `=== 0` cover both, and
- *   undefined (older callers) stays permissive.
- */
-function canReceiveGalleryNotice(account) {
-  if (!account || !account.email) return false;
-  if (account.is_active === false || account.is_active === 0) return false;
-  if (account.can_sign_in === false || account.can_sign_in === 0) return false;
-  return true;
-}
-
-/**
  * Queue the gallery_created email for an event (#1235).
  *
  * Shared by publish and by the send-later route, because the two must produce
@@ -281,9 +251,6 @@ module.exports = (router) => {
     // the brand logo for og:image / Twitter Card.
     body('og_image_share_enabled').optional().isBoolean(),
     // Customer accounts assigned to this event (#354). Optional array of
-    // customer_accounts.id — many-to-many via event_customer_assignments.
-    body('customer_account_ids').optional().isArray(),
-    body('customer_account_ids.*').optional().isInt({ min: 1 })
   ], async (req, res) => {
     try {
       // Redact credentials — the body carries the gallery password (GHSA-r794).
@@ -455,17 +422,6 @@ module.exports = (router) => {
         .where('event_id', id)
         .countDistinct('ip_address as uniqueVisitors');
 
-      // Customer accounts assigned to this event (#354). Hydrates the
-      // CustomerAccountPicker on the EventDetailsPage admin form. Returns
-      // an empty array on installs missing the table (e.g. pre-migrate).
-      let customerAccounts = [];
-      try {
-        const customerAccountsService = require('../../services/customerAccountsService');
-        customerAccounts = await customerAccountsService.getAssignmentsForEvent(parseInt(id, 10));
-      } catch (e) {
-        logger.warn('Failed to load customer assignments for event', { eventId: id, error: e.message });
-      }
-
       res.json(withoutForeignEventSecrets(mapEventForApi({
         ...event,
         photo_count: parseInt(photoCount) || 0,
@@ -474,20 +430,6 @@ module.exports = (router) => {
         total_downloads: parseInt(totalDownloads) || 0,
         unique_visitors: parseInt(uniqueVisitors) || 0,
         recent_photos: recentPhotos,
-        customer_accounts: customerAccounts.map((c) => ({
-          id: c.id,
-          email: c.email,
-          display_name: c.display_name,
-          first_name: c.first_name,
-          last_name: c.last_name,
-          // The send-gallery-email fallback below filters on these, so the UI
-          // needs them to predict whether the action has any recipient at all.
-          // Without them every assigned account looked reachable and a gallery
-          // whose only assignments were deactivated or passive offered a
-          // button that then 400'd — or worse, reported success.
-          is_active: c.is_active,
-          can_sign_in: c.can_sign_in,
-        })),
       }), req.admin));
     } catch (error) {
       errorResponse(res, error, 500, 'Failed to fetch event details');
@@ -578,34 +520,6 @@ module.exports = (router) => {
       const queued = hasInlineRecipient
         && await queueGalleryCreatedEmail(event, { password, requirePassword });
       if (!queued) {
-        // No inline recipient, but the gallery may be assigned to registered
-        // customer account(s) — the same path publish takes. Without this the
-        // publish dialog's promise that the notice can be sent later is false
-        // for exactly those galleries.
-        let notified = 0;
-        try {
-          const customerAccountsService = require('../../services/customerAccountsService');
-          const assigned = await customerAccountsService.getAssignmentsForEvent(parseInt(id, 10));
-          for (const c of assigned.filter(canReceiveGalleryNotice)) {
-            await customerAccountsService
-              .notifyCustomerOfNewAssignments(c.id, [parseInt(id, 10)])
-              .then(() => { notified += 1; })
-              .catch((err) => logger.warn('Send gallery email: customer notice failed', { customerId: c.id, error: err.message }));
-          }
-        } catch (err) {
-          logger.warn('Send gallery email: assigned-customer lookup failed', { eventId: id, error: err.message });
-        }
-        if (notified > 0) {
-          await logActivity('gallery_email_sent',
-            { event_name: event.event_name, assigned_accounts: notified },
-            id,
-            { type: 'admin', id: req.admin.id, name: req.admin.username }
-          );
-          return res.json({
-            message: 'Gallery notice queued',
-            recipient: `${notified} assigned customer account(s)`,
-          });
-        }
         return res.status(400).json({
           error: 'No customer email is set for this event',
         });
@@ -699,23 +613,6 @@ module.exports = (router) => {
       if (notifyCustomer) {
         if (customerEmail) {
           await queueGalleryCreatedEmail(event, { password, requirePassword });
-        } else {
-        // No inline email, but the gallery may be assigned to registered
-        // customer account(s). Notify them via the account "your galleries"
-        // email (customer_gallery_assigned, in the customer's own language)
-        // instead of the gallery_created mail, which needs an inline
-        // recipient. Best-effort.
-          try {
-            const customerAccountsService = require('../../services/customerAccountsService');
-            const assigned = await customerAccountsService.getAssignmentsForEvent(parseInt(id, 10));
-            for (const c of assigned.filter(canReceiveGalleryNotice)) {
-              await customerAccountsService
-                .notifyCustomerOfNewAssignments(c.id, [parseInt(id, 10)])
-                .catch((err) => logger.warn('Publish: customer gallery notice failed', { customerId: c.id, error: err.message }));
-            }
-          } catch (err) {
-            logger.warn('Publish: assigned-customer notification skipped', { eventId: id, error: err.message });
-          }
         }
       }
 
@@ -1114,9 +1011,6 @@ module.exports = (router) => {
     // the brand logo for og:image / Twitter Card.
     body('og_image_share_enabled').optional().isBoolean(),
     // Customer accounts assigned to this event (#354). Optional array of
-    // customer_accounts.id — many-to-many via event_customer_assignments.
-    body('customer_account_ids').optional().isArray(),
-    body('customer_account_ids.*').optional().isInt({ min: 1 })
   ], async (req, res) => {
     try {
       const errors = validationResult(req);
@@ -1135,11 +1029,9 @@ module.exports = (router) => {
       // column allow-list, so such a value reaches a scalar column: a PG
       // insert error, and `[false]` coerced to true by formatBoolean.
       //
-      // Guarded here rather than per field because it applies to all 44
-      // validated fields, not to a chosen few. `customer_account_ids` is the
-      // only field that is legitimately an array, and it is deleted from
-      // `updates` below before the write (#1296).
-      const ARRAY_VALUED_FIELDS = new Set(['customer_account_ids']);
+      // Guarded here rather than per field because it applies to all
+      // validated fields, not to a chosen few.
+      const ARRAY_VALUED_FIELDS = new Set();
       const arrayValued = Object.keys(updates)
         .filter((key) => Array.isArray(updates[key]) && !ARRAY_VALUED_FIELDS.has(key));
       if (arrayValued.length > 0) {
@@ -1351,13 +1243,6 @@ module.exports = (router) => {
         credentialChanges.add('client');
       }
       delete updates.regenerate_client_token;
-
-      // customer_account_ids (#354) is a body-only field consumed
-      // separately below by customerAccountsService.setAssignmentsForEvent
-      // — it isn't a column on the events table, so spreading it into
-      // the UPDATE statement throws "column does not exist" and crashes
-      // the entire edit with 500 Failed to update event.
-      delete updates.customer_account_ids;
 
       // Migration 137 — calendar time triple. Renormalise only when at
       // least one of the three fields was supplied; otherwise leave the
@@ -1607,26 +1492,6 @@ module.exports = (router) => {
         }
       }
       if (Object.keys(recoverable).length > 0) await dropCopiesIfStorageOff(id);
-
-      // Customer-account assignments (#354). Same skip semantics as POST:
-      // ignore when the customer portal flag is off so stale tabs don't
-      // 4xx the whole edit.
-      if (Array.isArray(req.body.customer_account_ids)) {
-        try {
-          const customerAccountsService = require('../../services/customerAccountsService');
-          if (await customerAccountsService.isCustomerPortalEnabled()) {
-            await customerAccountsService.setAssignmentsForEvent(
-              parseInt(id, 10),
-              req.body.customer_account_ids,
-              req.admin.id
-            );
-          }
-        } catch (e) {
-          logger.error('Failed to set customer assignments on event update', {
-            eventId: id, error: e.message,
-          });
-        }
-      }
 
       // Log activity
       await logActivity('event_updated',

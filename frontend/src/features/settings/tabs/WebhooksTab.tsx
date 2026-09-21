@@ -7,9 +7,9 @@ import { Trash2, Copy, AlertTriangle, Activity, CheckCircle2, XCircle, Loader2 }
 import { Loading } from '../../../components/common';
 import { api } from '../../../config/api';
 import { useLocalizedDate } from '../../../hooks/useLocalizedDate';
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 
 const WEBHOOK_EVENT_TYPES = [
   'event.created',

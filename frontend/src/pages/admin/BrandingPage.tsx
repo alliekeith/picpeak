@@ -9,23 +9,18 @@ import { settingsService, type BrandingSettings } from '../../services/settings.
 import { businessProfileService } from '../../services/businessProfile.service';
 import { useTranslation } from 'react-i18next';
 import { buildResourceUrl } from '../../utils/url';
-import { useFeatureEnabled, useFeatureFlags } from '../../contexts/FeatureFlagsContext';
-import { CustomerDashboardBrandingCard } from '../../components/admin/CustomerDashboardBrandingCard';
-import { PdfTypographyCard } from '../../components/admin/PdfTypographyCard';
-import { PdfThemeCard } from '../../components/admin/PdfThemeCard';
 import { usePublicSettings } from '../../hooks/usePublicSettings';
 import { useMutationWithToast } from '../../hooks';
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 export const BrandingPage: React.FC = () => {
   const { t } = useTranslation();
   const { theme, setTheme } = useTheme();
   // Used to gate the PDF typography card — when no PDF-producing
   // feature is enabled the setting has no surface to apply to.
-  const { flags } = useFeatureFlags();
   const [brandingSettings, setBrandingSettings] = useState<BrandingSettings>({
     company_name: '',
     company_tagline: '',
@@ -1066,12 +1061,6 @@ export const BrandingPage: React.FC = () => {
 
         {/* Customer dashboard branding (#354). Sits between "Company
             Information" and "Gallery Theme" so it stays adjacent to the
-            other brand-visibility controls. Self-hides when the
-            customerPortal feature flag is off. */}
-        <div className="mb-6">
-          <CustomerDashboardBrandingSection />
-        </div>
-
         {/* Theme Customization */}
         <div className="mb-6">
           <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
@@ -1108,11 +1097,6 @@ export const BrandingPage: React.FC = () => {
                 hideActions={true}
                 forceColorMode={brandingSettings.force_color_mode ?? null}
                 onForceColorModeChange={handleForceColorModeChange}
-                slotBeforeCustomCss={
-                  (flags.quotes || flags.bills || flags.taxReport)
-                    ? <PdfTypographyCard value={pdfFontFamily} onChange={setPdfFontFamily} />
-                    : null
-                }
               />
             </div>
 
@@ -1129,8 +1113,6 @@ export const BrandingPage: React.FC = () => {
           </div>
         </div>
 
-        {(flags.quotes || flags.bills || flags.taxReport || flags.contracts) && <PdfThemeCard />}
-
         {/* Event-Specific Themes Info */}
         <Card className="bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800"><CardContent><div className="flex items-start gap-3">
                           <Palette className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
@@ -1146,13 +1128,3 @@ export const BrandingPage: React.FC = () => {
   );
 };
 
-/**
- * Customer-dashboard branding card. Pulled out so the BrandingPage
- * stays readable and the feature-flag gate is local — no conditional
- * hooks in the parent.
- */
-const CustomerDashboardBrandingSection: React.FC = () => {
-  const customerPortalEnabled = useFeatureEnabled('customerPortal');
-  if (!customerPortalEnabled) return null;
-  return <CustomerDashboardBrandingCard />;
-};

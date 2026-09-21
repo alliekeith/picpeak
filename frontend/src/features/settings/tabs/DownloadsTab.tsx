@@ -6,9 +6,9 @@ import { toast } from 'react-toastify';
 
 import { Loading } from '../../../components/common';
 import { api } from '../../../config/api';
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 
 /**
  * Download resolutions (#858).

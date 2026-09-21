@@ -37,17 +37,6 @@ const {
 const DEFAULT_COLLECTOR_URL = 'https://usage.picpeak.app';
 
 const FLAG_MAP = {
-  crm: 'clients',
-  crm_quotes: 'quotes',
-  crm_invoices: 'bills',
-  crm_contracts: 'contracts',
-  crm_projects: 'projects',
-  crm_calendar: 'calendar',
-  crm_hours: 'hoursLogging',
-  customer_portal: 'customerPortal',
-  accounting: 'accounting',
-  workflows: 'workflows',
-  newsletters: 'newsletters',
   whatsapp: 'whatsapp'
 };
 const SETTING_KEYS = [

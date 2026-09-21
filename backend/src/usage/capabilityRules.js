@@ -5,30 +5,6 @@
 // passed to the usage service. Read-only status/health/options polls are absent.
 const WRITE = ['POST', 'PUT', 'PATCH', 'DELETE'];
 const RULES_V2 = [
-  [WRITE, /^\/customers(?:\/|$)/, ['crm']],
-  [WRITE, /^\/quotes(?:\/|$)/, ['crm', 'crm_quotes']],
-  [WRITE, /^\/invoices(?:\/|$)/, ['crm', 'crm_invoices']],
-  [WRITE, /^\/contracts(?:\/|$)/, ['crm', 'crm_contracts']],
-  [WRITE, /^\/projects(?:\/|$)/, ['crm', 'crm_projects']],
-  [['GET'], /^\/calendar\/items\/?$/, ['crm', 'crm_calendar']],
-  [WRITE, /^\/customers\/[^/]+\/(?:hour-entries|bill-combined|trigger-monthly-bill)(?:\/|$)/, ['crm', 'crm_hours']],
-  [['POST'], /^\/customers\/(?:invite|[^/]+\/send-invite)\/?$/, ['customer_portal']],
-  [WRITE, /^\/deals\/[^/]+\/installment-plan\/?$/, ['crm', 'crm_installments']],
-  [WRITE, /^\/(?:quotes\/presets|contracts\/blocks)(?:\/|$)/, ['document_templates']],
-  [WRITE, /^\/contract-templates(?:\/|$)/, ['document_templates']],
-  [WRITE, /^\/document-attachments(?:\/|$)/, ['document_templates']],
-  // Quote catalogue + templates (#1451): creating a quote from a template is
-  // quote use, maintaining the catalogue is template use.
-  [['POST'], /^\/quote-catalog\/templates\/[^/]+\/quotes\/?$/, ['crm', 'crm_quotes']],
-  [WRITE, /^\/quote-catalog(?:\/|$)/, ['document_templates']],
-  [WRITE, /^\/expenses\/inbound(?:\/|$)/, ['accounting', 'accounting_incoming_invoices']],
-  [WRITE, /^\/expenses(?:\/(?!inbound(?:\/|$))|$)/, ['accounting', 'accounting_expenses']],
-  [WRITE, /^\/ledger(?:\/|$)/, ['accounting', 'accounting_ledger']],
-  [['GET'], /^\/ledger\/export\/?$/, ['accounting', 'accounting_ledger']],
-  [['GET'], /^\/tax-report(?:\/(?:pdf|csv))?\/?$/, ['accounting', 'accounting_tax_report']],
-  [WRITE, /^\/workflows(?:\/|$)/, ['workflows']],
-  [WRITE, /^\/newsletters(?:\/[^/]+)?\/?$/, ['newsletters']],
-  [['POST'], /^\/newsletters\/[^/]+\/(?:test|queue|cancel)\/?$/, ['newsletters']],
   [['POST'], /^\/external-media\/events\/[^/]+\/import-external\/?$/, ['share_mounts']],
   [['POST'], /^\/events\/?$/, ['galleries']],
   [['PUT', 'DELETE'], /^\/events\/[^/]+\/?$/, ['galleries']],

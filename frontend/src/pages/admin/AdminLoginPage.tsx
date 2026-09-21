@@ -15,9 +15,9 @@ import { useAdminDarkMode } from '../../contexts/AdminDarkModeContext';
 import { resolveLoginLogoClasses } from '../../utils/loginLogoSize';
 import { buildResourceUrl } from '../../utils/url';
 import { api } from '../../config/api';
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 
 export const AdminLoginPage: React.FC = () => {
   const { t } = useTranslation();

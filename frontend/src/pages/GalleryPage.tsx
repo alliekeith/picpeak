@@ -19,10 +19,10 @@ import { buildResourceUrl } from '../utils/url';
 import { isGalleryPublic, normalizeRequirePassword } from '../utils/accessControl';
 import { detectInAppBrowser } from '../utils/inAppBrowser';
 import { isAdminSessionExpired, isPasswordChangeRequired } from '../utils/passwordChangeRequired';
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 export const GalleryPage: React.FC = () => {
     const __fieldId = React.useId();

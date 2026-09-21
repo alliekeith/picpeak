@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 import type { FilterType, FeedbackFilterType } from './GalleryFilter';
 import { ColorLabelFilterChips } from './ColorLabelFilterChips';
 import type { ColorLabel } from '../../services/feedback.service';
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 interface PhotoCategory {
   id: number | string;

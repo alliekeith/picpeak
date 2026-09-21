@@ -3,13 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { Download, Check, AlertCircle, Loader2 } from 'lucide-react';
 import { galleryService } from '../../services/gallery.service';
 import type { DownloadResolutionChoice, DownloadJobStatus } from '../../types';
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 /**
  * Resolution picker for gallery downloads (#858).

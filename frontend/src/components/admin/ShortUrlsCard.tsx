@@ -20,8 +20,8 @@ import { shortUrlsService, type GalleryShortUrl } from '../../services/shortUrls
 import { useLocalizedDate } from '../../hooks/useLocalizedDate';
 import { toast } from 'react-toastify';
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface Props {
   eventId: number;

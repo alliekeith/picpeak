@@ -9,9 +9,9 @@ import {
   WHATSAPP_TEMPLATE_PARAMS,
   type WhatsAppTemplateParam,
 } from '../../../services/whatsapp.service';
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 
 /**
  * WhatsApp Business API configuration tab (#640D).

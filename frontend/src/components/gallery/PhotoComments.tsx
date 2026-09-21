@@ -7,8 +7,8 @@ import { toast } from 'react-toastify';
 import { format } from 'date-fns';
 import type { PhotoFeedback } from '../../services/feedback.service';
 import { useGuestIdentityOptional } from '../../contexts/GuestIdentityContext';
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 interface PhotoCommentsProps {
   photoId: string;

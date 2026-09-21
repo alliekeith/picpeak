@@ -3,8 +3,8 @@ import { Save, Globe, Key, Activity, AlertCircle, Code, ShieldCheck, Loader2 } f
 import { useTranslation } from 'react-i18next';
 import type { AnalyticsSettings, TrackerProvider } from '../hooks/useSettingsState';
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface AnalyticsTabProps {
   analyticsSettings: AnalyticsSettings;

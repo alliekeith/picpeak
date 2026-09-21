@@ -28,10 +28,10 @@ import { useTranslation } from 'react-i18next';
 import { Bell, BellOff, Save, Loader2 } from 'lucide-react';
 import { api } from '../../config/api';
 import { useMutationWithToast } from '../../hooks';
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 export interface EventReminderOverrideCardProps {
   eventId: number;

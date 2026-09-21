@@ -15,9 +15,9 @@ import { Save, Server, User, Lock, Eye, EyeOff, FolderSearch, PlugZap, Mailbox, 
 import { Loading } from '../common';
 import { emailService, type IncomingMailConfig, type ImapFolder } from '../../services/email.service';
 import { useMutationWithToast, useModal } from '../../hooks';
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 
 const labelCls = 'block text-sm font-medium text-foreground mb-1';
 const selectCls = 'w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary';

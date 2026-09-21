@@ -19,10 +19,10 @@ import { useStatusTab } from '../hooks/useStatusTab';
 import { UpdateNotificationSettings } from '../components/UpdateNotificationSettings';
 import { useLocalizedDate } from '../../../hooks/useLocalizedDate';
 import { usePermission } from '../../../hooks/usePermission';
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 const BYTES_PER_GB = 1024 * 1024 * 1024;
 

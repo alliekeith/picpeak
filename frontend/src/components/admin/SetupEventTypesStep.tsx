@@ -6,8 +6,8 @@ import { Plus, X, Loader2 } from 'lucide-react';
 
 import { Loading } from '../common';
 import { eventTypesService, EventType } from '../../services/eventTypes.service';
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   onDone: () => void;

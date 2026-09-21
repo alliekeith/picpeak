@@ -11,13 +11,11 @@ import {
   X,
   AlertTriangle,
   MessageSquare,
-  Receipt,
   Type,
   Send, Loader2 } from 'lucide-react';
 import type { Event } from '../../../types';
 import { PermissionGate } from '../../../components/admin/PermissionGate';
 import { useLocalizedDate } from '../../../hooks/useLocalizedDate';
-import { useFeatureFlags } from '../../../contexts/FeatureFlagsContext';
 import { buildShareLinkUrl } from '../../../utils/url';
 import { isGalleryPublic } from '../../../utils/accessControl';
 import type { FeedbackSettings as FeedbackSettingsType } from '../../../services/feedback.service';
@@ -63,7 +61,6 @@ export const EventDetailsHeader: React.FC<EventDetailsHeaderProps> = ({
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { format } = useLocalizedDate();
-  const { flags } = useFeatureFlags();
 
   return (
     <>
@@ -152,26 +149,6 @@ export const EventDetailsHeader: React.FC<EventDetailsHeaderProps> = ({
                                                                     >
                                                                       <MessageSquare className="w-4 h-4" />{t('feedback.manage', 'Manage Feedback')}</Button>
                     )}
-                    {/* Create a draft invoice for this event — pre-fills the
-                        bill editor with the event snapshot + (when exactly
-                        one is linked) the customer. Gated on the bills flag. */}
-                    {flags.bills && (
-                      <PermissionGate permission="bills.manage">
-                        <Button
-                                                                            variant="outline"
-                                                                            size="sm"
-                                                                            onClick={() => {
-                                                                              const accts = ((event as { customer_accounts?: Array<{ id: number }> }).customer_accounts) || [];
-                                                                              const params = new URLSearchParams({ eventId: String(event.id) });
-                                                                              if (event.event_name) params.set('eventName', event.event_name);
-                                                                              if (event.event_date) params.set('eventDate', String(event.event_date).slice(0, 10));
-                                                                              if (accts.length === 1) params.set('customerAccountId', String(accts[0].id));
-                                                                              navigate(`/admin/clients/bills/new?${params.toString()}`);
-                                                                            }}
-                                                                          >
-                                                                            <Receipt className="w-4 h-4" />{t('events.createInvoice', 'Create invoice')}</Button>
-                      </PermissionGate>
-                    )}
                   </>
                 )}
               </>
@@ -187,7 +164,7 @@ export const EventDetailsHeader: React.FC<EventDetailsHeaderProps> = ({
                 href={`${buildShareLinkUrl(event.share_link)}${buildShareLinkUrl(event.share_link).includes('?') ? '&' : '?'}admin_preview=1`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-brand hover:opacity-80 border border-primary rounded-lg hover:bg-primary/15 transition-colors"
+                className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-accent hover:opacity-80 border border-accent-dark rounded-lg hover:bg-accent-dark/15 transition-colors"
               >
                 <ExternalLink className="w-4 h-4" />
                 {t('events.viewGallery')}
@@ -201,7 +178,7 @@ export const EventDetailsHeader: React.FC<EventDetailsHeaderProps> = ({
       {/* !! — SQLite returns integer booleans; a bare 0 would render as literal "0" */}
       {!!event.is_draft && !event.is_archived && (
         <Card className="p-4 mb-6 border-2 border-yellow-500 bg-yellow-50 dark:bg-yellow-900/20"><CardContent><div className="flex items-start gap-3">
-                          <AlertTriangle className="w-5 h-5 shrink-0 text-yellow-600 dark:text-yellow-400" />
+                          <AlertTriangle className="w-5 h-5 flex-shrink-0 text-yellow-600 dark:text-yellow-400" />
                           <div className="flex-1">
                             <p className="font-medium text-yellow-900 dark:text-yellow-200">
                               {t('events.draft')}
@@ -223,7 +200,7 @@ export const EventDetailsHeader: React.FC<EventDetailsHeaderProps> = ({
       {/* Expiration Warning */}
       {!event.is_archived && (isExpired || isExpiring) && (
         <Card className={`p-4 mb-6 border-2 ${isExpired ? 'border-red-500 bg-red-50' : 'border-orange-500 bg-orange-50'}`}><CardContent><div className="flex items-start gap-3">
-                          <AlertTriangle className={`w-5 h-5 shrink-0 ${isExpired ? 'text-red-600' : 'text-orange-600'}`} />
+                          <AlertTriangle className={`w-5 h-5 flex-shrink-0 ${isExpired ? 'text-red-600' : 'text-orange-600'}`} />
                           <div className="flex-1">
                             <p className={`font-medium ${isExpired ? 'text-red-900' : 'text-orange-900'}`}>
                               {isExpired

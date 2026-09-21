@@ -5,9 +5,9 @@ import { useQuery } from '@tanstack/react-query';
 import { Loading } from '../common';
 import { guestsService, GuestInvite } from '../../services/guests.service';
 import { useMutationWithToast } from '../../hooks';
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 interface GuestInviteDialogProps {
   eventId: number;

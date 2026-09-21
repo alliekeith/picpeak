@@ -6,9 +6,9 @@ import { ShieldCheck, ShieldOff, Copy, Download, Check, KeyRound, AlertTriangle,
 
 import { Loading, useConfirm } from '../../../components/common';
 import { mfaService } from '../../../services/mfa.service';
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 
 // Per-user admin TOTP MFA management (issue #738). Lives on the admin's own
 // account surface (Settings → General → Admin Account). Self-service: acts on

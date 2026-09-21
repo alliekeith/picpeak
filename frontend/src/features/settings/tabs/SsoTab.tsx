@@ -7,10 +7,10 @@ import type { AxiosError } from 'axios';
 
 import { Loading } from '../../../components/common';
 import { ssoService, SsoSettings, UpdateSsoSettings } from '../../../services/sso.service';
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface MappingRow {
   idpRole: string;

@@ -17,10 +17,10 @@ import { Loading } from '../../components/common';
 import { useModal, useMutationWithToast } from '../../hooks';
 import { eventTypesService, EventType, CreateEventTypeData, UpdateEventTypeData } from '../../services/eventTypes.service';
 import { GALLERY_THEME_PRESETS } from '../../types/theme.types';
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 // Common emoji options for event types
 const EMOJI_OPTIONS = [

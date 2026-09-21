@@ -49,9 +49,7 @@ const COMMUNITY_LINKS: {
 // Server-side applyDependencyRules resolves dependencies (e.g. Invoices pulls in
 // Accounting) when we PUT the selection, so we only send the raw ticks.
 const USAGE_GROUPS: { id: string; titleKey: string; features: FeatureKey[] }[] = [
-  { id: 'crm', titleKey: 'setup.usageGroupCrm', features: ['quotes', 'contracts', 'bills', 'hoursLogging', 'customerPortal', 'calendar'] },
-  { id: 'accounting', titleKey: 'setup.usageGroupAccounting', features: ['taxReport', 'incomingInvoices', 'expenses'] },
-  { id: 'automation', titleKey: 'setup.usageGroupAutomation', features: ['reminderEmails', 'slideshow', 'workflows', 'whatsapp', 'incomingMail'] },
+  { id: 'automation', titleKey: 'setup.usageGroupAutomation', features: ['reminderEmails', 'slideshow', 'whatsapp'] },
 ];
 const ALL_USAGE_FEATURES: FeatureKey[] = USAGE_GROUPS.flatMap((g) => g.features);
 
@@ -361,7 +359,7 @@ export const SetupPage: React.FC = () => {
 
         <Card className="py-8"><CardContent className="px-8">{errors.form && (
                           <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
-                            <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+                            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
                             <p className="text-sm text-red-800">{errors.form}</p>
                           </div>
                         )}{step === 'token' ? (
@@ -384,13 +382,13 @@ export const SetupPage: React.FC = () => {
                               <div className="mt-4 rounded-lg border border-border bg-muted p-3">
                                 <p className="text-xs font-medium text-muted-foreground">{t('setup.tokenCommandLabel')}</p>
                                 <div className="mt-2 flex items-center gap-2">
-                                  <code className="flex-1 overflow-x-auto whitespace-nowrap rounded-sm bg-neutral-900 px-3 py-2 font-mono text-xs text-neutral-100">
+                                  <code className="flex-1 overflow-x-auto whitespace-nowrap rounded bg-neutral-900 px-3 py-2 font-mono text-xs text-neutral-100">
                                     {recoveryCommand}
                                   </code>
                                   <button
                                     type="button"
                                     onClick={copyRecoveryCommand}
-                                    className="shrink-0 rounded-md border border-border bg-card p-2 text-muted-foreground hover:text-foreground transition-colors"
+                                    className="flex-shrink-0 rounded-md border border-border bg-card p-2 text-muted-foreground hover:text-foreground transition-colors"
                                     aria-label={t('setup.copyCommand')}
                                     title={t('setup.copyCommand')}
                                   >
@@ -402,7 +400,7 @@ export const SetupPage: React.FC = () => {
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   className="mt-2 inline-flex items-center gap-1 text-xs hover:underline"
-                                  style={{ color: 'var(--primary, #5C8762)' }}
+                                  style={{ color: 'var(--color-primary, #5C8762)' }}
                                 >
                                   {t('setup.tokenRotatedLink')}
                                   <ExternalLink className="w-3 h-3" />
@@ -514,7 +512,7 @@ export const SetupPage: React.FC = () => {
                                     >
                                       <input
                                         type="checkbox"
-                                        className="mt-0.5 h-4 w-4 rounded-sm border-border"
+                                        className="mt-0.5 h-4 w-4 rounded border-border"
                                         checked={selectedFeatures.has(key)}
                                         onChange={() => toggleFeature(key)}
                                       />
@@ -531,10 +529,6 @@ export const SetupPage: React.FC = () => {
                                 </div>
                               </div>
                             ))}
-
-                            {selectedFeatures.has('bills') && !selectedFeatures.has('taxReport') && (
-                              <p className="text-xs text-muted-foreground">{t('setup.usageDepsNote')}</p>
-                            )}
 
                             <Button
                                                                 type="button"
@@ -614,7 +608,7 @@ export const SetupPage: React.FC = () => {
                                   rel="noopener noreferrer"
                                   className="flex items-start gap-3 rounded-lg border border-border p-3 hover:bg-accent transition-colors"
                                 >
-                                  <Icon className="w-5 h-5 shrink-0 mt-0.5" style={{ color: 'var(--primary, #5C8762)' }} />
+                                  <Icon className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: 'var(--color-primary, #5C8762)' }} />
                                   <span className="min-w-0">
                                     <span className="block text-sm font-medium text-foreground">
                                       {t(`setup.community.${key}Title`)}
@@ -623,7 +617,7 @@ export const SetupPage: React.FC = () => {
                                       {t(`setup.community.${key}Desc`)}
                                     </span>
                                   </span>
-                                  <ExternalLink className="w-4 h-4 shrink-0 text-muted-foreground self-center" aria-hidden="true" />
+                                  <ExternalLink className="w-4 h-4 flex-shrink-0 text-muted-foreground self-center" aria-hidden="true" />
                                 </a>
                               ))}
                             </div>

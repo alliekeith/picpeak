@@ -31,9 +31,9 @@ import { useMutationWithToast } from '../../hooks';
 // AM/PM) and 'PPP' (US-locale long date), which ignored the settings —
 // Ralf 2026-05-31 flagged "11:25 PM" on a 24h-configured install.
 import { useLocalizedDate } from '../../hooks/useLocalizedDate';
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 
 const statusIcons = {
   completed: { icon: CheckCircle, color: 'text-green-500' },

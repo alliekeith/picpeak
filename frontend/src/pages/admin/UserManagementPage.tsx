@@ -24,9 +24,9 @@ import type { AdminUser, AdminRole, AdminInvitation } from '../../types';
 import { useLocalizedDate, useModal, useMutationWithToast } from "../../hooks";
 import { usePermissions } from '../../contexts/PermissionsContext';
 import { RoleManagementTab } from '../../components/admin/RoleManagementTab';
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 
 type TabType = 'users' | 'invitations' | 'roles';
 

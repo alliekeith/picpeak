@@ -30,9 +30,9 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { Loading } from '../common';
 import { api } from '../../config/api';
 import { useLocalizedDate } from '../../hooks/useLocalizedDate';
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 
 export const RestoreWizard = ({ onVerifyIntegrity } = {}) => {
   const { t } = useTranslation();

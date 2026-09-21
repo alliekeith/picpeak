@@ -39,11 +39,10 @@ import { EmailTemplateEditor } from '../../../components/admin/EmailTemplateEdit
 import { eventTypesService } from '../../../services/eventTypes.service';
 import { emailService, type EmailTemplateTranslation } from '../../../services/email.service';
 import { settingsService } from '../../../services/settings.service';
-import { useFeatureFlags } from '../../../contexts/FeatureFlagsContext';
 import { useMutationWithToast } from '../../../hooks';
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 
 const TEMPLATE_KEY_DEFAULT = 'event_reminder_default';
 const TEMPLATE_KEY_PREFIX = 'event_reminder_';
@@ -68,8 +67,7 @@ export const ReminderTemplatesPage: React.FC = () => {
   // the engine is live; otherwise the legacy crm_event_reminders_* settings drive
   // the hourly pass, so we keep their controls. Per-event override (disable /
   // offset / custom body) always lives on the event detail page.
-  const { flags } = useFeatureFlags();
-  const workflowsLive = !!flags.workflows;
+  const workflowsLive = false;
 
   const { data: settings } = useQuery({
     queryKey: ['reminder-settings'],

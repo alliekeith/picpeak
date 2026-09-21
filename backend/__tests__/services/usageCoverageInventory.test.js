@@ -57,7 +57,7 @@ test('v1/v2/v3 wire validation is immutable; v5 catalog, UI and translated descr
     .toBe('cc8d0a865d21e36d2b24d23ca6aa8dd8d48000cb17aef83996786f70755bc922');
   expect(crypto.createHash('sha256').update(JSON.stringify(protocol.envelopeSchemas['usage.v2'].properties)).digest('hex'))
     .toBe('159821cf45c1951016d33a4ed9ca55a0a7ee1b60dd715b803fcfed33e5c8a846');
-  expect(protocol.FEATURE_KEYS).toHaveLength(86);
+  expect(protocol.FEATURE_KEYS).toHaveLength(62);
   expect(crypto.createHash('sha256').update(JSON.stringify(protocol.envelopeSchemas['usage.v3'].properties)).digest('hex'))
     .toBe('93214702c79f47823f154544ebad6612dd313604f69e60b86de4c0e4c904571a');
   expect(protocol.FEATURE_KEYS).toContain('gallery_downloads_restricted');
@@ -65,7 +65,7 @@ test('v1/v2/v3 wire validation is immutable; v5 catalog, UI and translated descr
   expect(protocol.ALL_FEATURE_KEYS).toHaveLength(94);
   expect(protocol.ALL_FEATURE_KEYS).toContain('gallery_downloads');
   expect(protocol.LEGACY_FEATURE_KEYS).toHaveLength(19);
-  expect(inventory.configuration_only).toHaveLength(23);
+  expect(inventory.configuration_only).toHaveLength(22);
   const frontend = path.resolve(__dirname, '../../../frontend');
   expect(JSON.parse(fs.readFileSync(path.join(frontend, 'src/features/settings/usageFeatures.v5.json')))).toEqual(catalog);
   // The catalog is source, and source is English only: its strings are the
@@ -95,14 +95,11 @@ test('every used field has either a fixed route rule or explicit trusted success
 test.each([
   ['POST', '/events', 'galleries'], ['POST', '/events/123/publish', 'galleries'],
   ['POST', '/photos/repair-dimensions', 'photo_processing'], ['GET', '/events/123/photos/456/download', 'photo_exports'],
-  ['PUT', '/events/123/slideshow', 'slideshow'], ['POST', '/expenses/inbound', 'accounting_incoming_invoices'],
-  ['POST', '/expenses', 'accounting_expenses'], ['GET', '/tax-report/csv', 'accounting_tax_report'],
-  ['POST', '/deals/123/installment-plan', 'crm_installments'], ['GET', '/ledger/export', 'accounting_ledger'],
-  ['POST', '/quotes/presets', 'document_templates'], ['PUT', '/cms/pages/home', 'cms'],
+  ['PUT', '/events/123/slideshow', 'slideshow'], ['PUT', '/cms/pages/home', 'cms'],
   ['POST', '/webhooks/123/test', 'webhooks'], ['POST', '/webhooks/123/deliveries/456/replay', 'webhooks'],
-  ['POST', '/email/send', 'messaging'], ['PUT', '/feedback/feedback/123/approve', 'feedback_moderation'],
+  ['PUT', '/feedback/feedback/123/approve', 'feedback_moderation'],
   ['GET', '/events/123/guests/export-all', 'guest_management'], ['POST', '/backup/picpeak/import', 'portable_backup'],
-  ['PUT', '/roles/123', 'admin_management'], ['POST', '/newsletters/123/queue', 'newsletters']
+  ['PUT', '/roles/123', 'admin_management']
 ])('fixed allowlist recognizes %s %s', (method, url, expected) => {
   expect(capabilityKeys(method, url)).toContain(expected);
   expect(JSON.stringify(capabilityKeys(method, url))).not.toContain('123');

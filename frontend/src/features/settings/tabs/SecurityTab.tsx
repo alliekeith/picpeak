@@ -3,8 +3,8 @@ import { Save, Key, AlertCircle, AlertTriangle, ShieldCheck, Loader2 } from 'luc
 import { useTranslation } from 'react-i18next';
 import type { SecuritySettings, RateLimitSettings } from '../hooks/useSettingsState';
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface SecurityTabProps {
   securitySettings: SecuritySettings;

@@ -34,9 +34,9 @@ import { isGalleryPublic } from '../../utils/accessControl';
 import { buildShareLinkUrl } from '../../utils/url';
 import type { Event } from '../../types';
 import { useTranslation } from 'react-i18next';
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 
 const PAGE_SIZE = 20;
 

@@ -15,9 +15,9 @@ import { toast } from 'react-toastify';
 import { Loading } from '../common';
 import { feedbackService } from '../../services/feedback.service';
 import { useMutationWithToast } from '../../hooks';
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 
 interface WordFilter {
   id: number;

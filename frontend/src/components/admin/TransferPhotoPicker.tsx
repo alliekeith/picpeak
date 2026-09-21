@@ -16,8 +16,8 @@ import { AdminAuthenticatedImage } from './AdminAuthenticatedImage';
 import { eventsService } from '../../services/events.service';
 import { photosService, type AdminPhoto } from '../../services/photos.service';
 import { useAdminAuth } from '../../contexts/AdminAuthContext';
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export interface PickedPhoto {
   id: number;

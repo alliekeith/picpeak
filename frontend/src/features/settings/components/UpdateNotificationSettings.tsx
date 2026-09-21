@@ -4,10 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { Bell, Save, Mail, Send, RefreshCw, Loader2 } from 'lucide-react';
 import { api } from '../../../config/api';
 import { toast } from 'react-toastify';
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface UpdateNotificationSettingsData {
   enabled: boolean;

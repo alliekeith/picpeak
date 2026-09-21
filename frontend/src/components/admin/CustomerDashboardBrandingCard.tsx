@@ -20,8 +20,8 @@ import { Loading } from '../common';
 import { api } from '../../config/api';
 import { useMutationWithToast } from '../../hooks';
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface CustomerSurfaceSettings {
   customer_show_logo: boolean;

@@ -16,7 +16,6 @@ import { toast } from 'react-toastify';
 
 import { PasswordGenerator, LocalizedDateInput, TimeField } from '../../components/common';
 import { ThemeCustomizerEnhanced, GalleryPreview, WelcomeMessageEditor, FeedbackSettings } from '../../components/admin';
-import { CustomerAccountPicker } from '../../components/admin/CustomerAccountPicker';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { eventsService } from '../../services/events.service';
 import { useLocalizedDate } from '../../hooks/useLocalizedDate';
@@ -528,7 +527,6 @@ export const CreateEventPage: React.FC = () => {
       // Customer accounts assigned to this event (#354). Sent as a flat
       // array of ids; the backend service diffs against the existing
       // assignments and applies adds/removes inside one transaction.
-      customer_account_ids: formData.customer_accounts.map((c) => c.id),
     };
 
     isSubmittingRef.current = true;
@@ -649,7 +647,7 @@ export const CreateEventPage: React.FC = () => {
                                 type="checkbox"
                                 checked={formData.is_full_day}
                                 onChange={(e) => setFormData({ ...formData, is_full_day: e.target.checked })}
-                                className="rounded-sm border-border"
+                                className="rounded border-border"
                               />
                               {t('events.fullDay', 'Full day')}
                             </label>
@@ -707,11 +705,11 @@ export const CreateEventPage: React.FC = () => {
                                 </h3>
                                 <div className="flex gap-2">
                                   <div 
-                                    className="w-6 h-6 rounded-full border-2 border-white shadow-xs"
+                                    className="w-6 h-6 rounded-full border-2 border-white shadow-sm"
                                     style={{ backgroundColor: formData.theme_config.primaryColor }}
                                   />
                                   <div 
-                                    className="w-6 h-6 rounded-full border-2 border-white shadow-xs"
+                                    className="w-6 h-6 rounded-full border-2 border-white shadow-sm"
                                     style={{ backgroundColor: formData.theme_config.accentColor }}
                                   />
                                 </div>
@@ -860,15 +858,6 @@ export const CreateEventPage: React.FC = () => {
                                                         /></Label></div>
                             )}
 
-                            {/* Customer accounts (#354). The picker is decoupled from
-                                the freeform customer_name / customer_email fields above
-                                — those stay as the event's primary contact while
-                                customer_account_ids drives login-level access. */}
-                            <CustomerAccountPicker
-                              value={formData.customer_accounts}
-                              onChange={(next) => setFormData((prev) => ({ ...prev, customer_accounts: next }))}
-                            />
-
                             <div className="w-full"><Label className="block"><span className="mb-1.5 block">{requireAdminEmail ? t('events.adminEmail') : `${t('events.adminEmail')} (${t('common.optional')})`}</span><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Mail className="w-5 h-5" />}</div><Input
                                                     type="email"
                                                     placeholder={t('events.adminEmailPlaceholder')}
@@ -889,7 +878,7 @@ export const CreateEventPage: React.FC = () => {
                                       setFormData(prev => ({ ...prev, admin_email: email }));
                                     }
                                   }}
-                                  className="text-xs px-2 py-1 border border-border bg-card text-foreground rounded-sm focus:ring-2 focus:ring-brand-500 focus:border-primary"
+                                  className="text-xs px-2 py-1 border border-border bg-card text-foreground rounded focus:ring-2 focus:ring-primary-500 focus:border-accent-dark"
                                 >
                                   <option value="">{t('events.adminEmailCustom', 'Custom email')}</option>
                                   {activeAdmins.map(a => (
@@ -906,7 +895,7 @@ export const CreateEventPage: React.FC = () => {
                             <label className="flex items-start gap-2">
                               <input
                                 type="checkbox"
-                                className="mt-1 w-4 h-4 text-brand border-border rounded-sm focus:ring-brand-500"
+                                className="mt-1 w-4 h-4 text-accent border-border rounded focus:ring-primary-500"
                                 checked={formData.require_password}
                                 onChange={(e) => {
                                   const checked = e.target.checked;
@@ -1051,7 +1040,7 @@ export const CreateEventPage: React.FC = () => {
                             <select
                               value={formData.default_photo_sort}
                               onChange={(e) => setFormData({ ...formData, default_photo_sort: e.target.value })}
-                              className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
+                              className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-accent-dark"
                             >
                               <option value="upload_date_desc">{t('photoSort.uploadDateNewest', 'Upload Date (Newest First)')}</option>
                               <option value="upload_date_asc">{t('photoSort.uploadDateOldest', 'Upload Date (Oldest First)')}</option>
@@ -1067,7 +1056,7 @@ export const CreateEventPage: React.FC = () => {
                             <label className="flex items-start gap-2">
                               <input
                                 type="checkbox"
-                                className="mt-1 w-4 h-4 text-brand border-border rounded-sm focus:ring-brand-500"
+                                className="mt-1 w-4 h-4 text-accent border-border rounded focus:ring-primary-500"
                                 checked={formData.client_access_enabled}
                                 onChange={(e) => setFormData(prev => ({
                                   ...prev,
@@ -1104,7 +1093,7 @@ export const CreateEventPage: React.FC = () => {
                                 type="checkbox"
                                 checked={formData.allow_user_uploads}
                                 onChange={(e) => setFormData({ ...formData, allow_user_uploads: e.target.checked })}
-                                className="rounded-sm border-border text-brand focus:ring-brand-500"
+                                className="rounded border-border text-accent focus:ring-primary-500"
                               />
                               <div>
                                 <span className="text-sm font-medium text-foreground">
@@ -1127,7 +1116,7 @@ export const CreateEventPage: React.FC = () => {
                                     ...formData,
                                     upload_category_id: e.target.value ? Number(e.target.value) : null
                                   })}
-                                  className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-brand-500 bg-card text-foreground"
+                                  className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary-500 bg-card text-foreground"
                                 >
                                   <option value="">{t('events.selectCategory')}</option>
                                   {categories.map(category => (

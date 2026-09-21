@@ -8,8 +8,8 @@ import { SUPPORTED_LANGUAGES } from "../../../components/common/LanguageSelector
 import { MfaSettingsCard } from '../components/MfaSettingsCard';
 import { isAbsoluteHttpUrl } from '../../../utils/url';
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface GeneralTabProps {
   generalSettings: GeneralSettings;

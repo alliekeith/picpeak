@@ -13,9 +13,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
-import { AlertCircle, RefreshCw, Trash2, CheckCircle, Clock, FileCheck, KeyRound, Mail, MailX, Loader2 } from 'lucide-react';
+import { AlertCircle, RefreshCw, Trash2, CheckCircle, Clock, Mail, MailX, Loader2 } from 'lucide-react';
 import { Loading } from '../../components/common';
-import { useFeatureFlags } from '../../contexts/FeatureFlagsContext';
 import { useMutationWithToast } from '../../hooks';
 import { useLocalizedDate } from '../../hooks/useLocalizedDate';
 import { systemHealthService, type StuckEmail } from '../../services/systemHealth.service';
@@ -25,7 +24,6 @@ import { Card, CardContent } from "@/components/ui/card";
 export const SystemHealthPage: React.FC = () => {
   const { t } = useTranslation();
   const { formatDateTime: fmtDateTime } = useLocalizedDate();
-  const { flags } = useFeatureFlags();
 
   const { data, isLoading } = useQuery({
     queryKey: ['system-health-failures'],
@@ -97,7 +95,7 @@ export const SystemHealthPage: React.FC = () => {
                 <td className="px-3 py-2 font-mono text-xs">{m.emailType}</td>
                 <td className="px-3 py-2 max-w-xs">
                   {showError ? (
-                    <span className="text-xs text-red-700 dark:text-red-400 wrap-break-word">
+                    <span className="text-xs text-red-700 dark:text-red-400 break-words">
                       {m.errorMessage || t('systemHealth.stuckEmails.noError', 'retries exhausted')}
                     </span>
                   ) : (
@@ -181,69 +179,6 @@ export const SystemHealthPage: React.FC = () => {
                                   })}
                                 </>
                               )}
-                            </p>
-                          </div>
-                        </div></CardContent></Card>
-      )}
-
-      {/* Customer documents (#1444). Uploads stay unavailable to the customer
-          until someone reviews them on the customer record, so a pending
-          count here is work waiting, not an error. */}
-      {!isLoading && data?.customerDocuments
-        && (flags.documents || data.customerDocuments.pending + data.customerDocuments.rejected > 0) && (
-        <Card className="py-8 mb-4"><CardContent className="px-8"><div className="flex items-start gap-3">
-                          <FileCheck className="w-5 h-5 mt-0.5 text-muted-foreground shrink-0" />
-                          <div className="min-w-0">
-                            <h2 className="text-lg font-semibold text-foreground">
-                              {t('systemHealth.customerDocuments.title', 'Customer documents')}
-                            </h2>
-                            <p className="text-sm mt-0.5 text-muted-foreground">
-                              {t('systemHealth.customerDocuments.counts', '{{pending}} awaiting review, {{rejected}} rejected.', {
-                                pending: data.customerDocuments.pending,
-                                rejected: data.customerDocuments.rejected,
-                              })}
-                            </p>
-                            <p className="text-xs text-muted-foreground mt-1">
-                              {t('systemHealth.customerDocuments.hint',
-                                'Customer uploads stay unavailable to them until they are marked clean on the customer record. Rejected files are deleted after the retention period.')}
-                            </p>
-                          </div>
-                        </div></CardContent></Card>
-      )}
-
-      {/* Where the key for signing evidence comes from (#1446) — never the key
-          itself. Shown while contracts are on, or once a key exists. */}
-      {!isLoading && data?.evidenceKey && (flags.contracts || data.evidenceKey.source !== 'none') && (
-        <Card className="py-8 mb-4"><CardContent className="px-8"><div className="flex items-start gap-3">
-                          <KeyRound className={`w-5 h-5 mt-0.5 shrink-0 ${data.evidenceKey.source === 'unreadable'
-                            ? 'text-red-600 dark:text-red-400' : 'text-muted-foreground'}`} />
-                          <div className="min-w-0">
-                            <h2 className="text-lg font-semibold text-foreground">
-                              {t('systemHealth.evidenceKey.title', 'Signing evidence key')}
-                            </h2>
-                            <p className={`text-sm mt-0.5 ${data.evidenceKey.source === 'unreadable'
-                              ? 'text-red-700 dark:text-red-300' : 'text-muted-foreground'}`}>
-                              {{
-                                env: t('systemHealth.evidenceKey.env', 'Set with PICPEAK_EVIDENCE_KEY.'),
-                                file: t('systemHealth.evidenceKey.file', 'Stored in business-docs/keys/evidence.key, which is part of every backup.'),
-                                none: t('systemHealth.evidenceKey.none', 'Not created yet. It is created with the first signature.'),
-                                unreadable: t('systemHealth.evidenceKey.unreadable',
-                                  'The key file can\'t be read. Restore it from a backup, otherwise stored signing evidence can\'t be decrypted.'),
-                              }[data.evidenceKey.source]}
-                              {data.evidenceKey.keyId && (
-                                <span className="font-mono"> · {t('systemHealth.evidenceKey.id', 'Key ID {{id}}', { id: data.evidenceKey.keyId })}</span>
-                              )}
-                            </p>
-                            {data.evidenceKey.matchesStored === false && (
-                              <p role="alert" className="text-sm mt-1 text-red-700 dark:text-red-300">
-                                {t('systemHealth.evidenceKey.mismatch',
-                                  'The evidence already stored was written under key {{stored}}, so it can no longer be read — and signer names and email addresses come back empty. Put the earlier key back, or expect blank names on contracts signed before.',
-                                  { stored: data.evidenceKey.storedKeyId || '—' })}
-                              </p>
-                            )}
-                            <p className="text-xs text-muted-foreground mt-1">
-                              {t('systemHealth.evidenceKey.hint',
-                                'Signers\' IP addresses and browsers are stored encrypted with this key. Without it that evidence can\'t be read; the signatures and PDFs stay valid.')}
                             </p>
                           </div>
                         </div></CardContent></Card>

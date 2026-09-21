@@ -6,9 +6,9 @@ import { Trash2, Copy, AlertTriangle, Loader2 } from 'lucide-react';
 import { Loading } from '../../../components/common';
 import { api } from '../../../config/api';
 import { useLocalizedDate } from '../../../hooks/useLocalizedDate';
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 
 interface ApiTokenRow {
   id: number;

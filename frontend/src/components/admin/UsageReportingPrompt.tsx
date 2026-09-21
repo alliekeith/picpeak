@@ -6,8 +6,8 @@ import { usePermissions } from '../../contexts/PermissionsContext';
 import { productUsageService } from '../../services/productUsage.service';
 import { ProductUsageConsentDialog } from '../../features/settings/components/ProductUsageConsentDialog';
 import { UsageReportingPoints } from './UsageReportingPitch';
-import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 /** The invitation is acknowledged once per installation; consent is a separate, explicit choice. */
 export default function UsageReportingPrompt() {

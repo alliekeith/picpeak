@@ -2,9 +2,9 @@ import React, { useState, useMemo } from 'react';
 import { Save, Globe, Bot, X, Plus, Eye, Shield, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { SeoSettings } from '../hooks/useSettingsState';
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 
 interface SEOTabProps {
   seoSettings: SeoSettings;

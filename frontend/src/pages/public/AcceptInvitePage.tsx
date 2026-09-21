@@ -16,9 +16,9 @@ import { toast } from 'react-toastify';
 import { Loading, PoweredBy } from '../../components/common';
 import { useLocalizedDate } from '../../hooks/useLocalizedDate';
 import { api } from '../../config/api';
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 
 interface InvitationValidation {
   valid: boolean;

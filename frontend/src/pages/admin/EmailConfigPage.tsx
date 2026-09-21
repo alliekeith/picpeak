@@ -19,8 +19,6 @@ import { EmailPreviewModal } from '../../components/admin/EmailPreviewModal';
 import { EmailTemplateEditor } from '../../components/admin/EmailTemplateEditor';
 import { SentEmailsPanel } from '../../components/admin/SentEmailsPanel';
 import { ReceivedEmailsPanel } from '../../components/admin/ReceivedEmailsPanel';
-import { IncomingMailConfigCard } from '../../components/admin/IncomingMailConfigCard';
-import { CustomerMailboxCard } from '../../components/admin/CustomerMailboxCard';
 import { Palette, RefreshCw, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useQuery, useMutation } from '@tanstack/react-query';
@@ -511,7 +509,7 @@ export const EmailConfigPage: React.FC = () => {
             onClick={() => setActiveTab('smtp')}
             className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
               activeTab === 'smtp'
-                ? 'border-brand text-brand'
+                ? 'border-accent text-accent'
                 : 'border-transparent text-muted-foreground hover:text-foreground'
             }`}
           >
@@ -521,7 +519,7 @@ export const EmailConfigPage: React.FC = () => {
             onClick={() => setActiveTab('templates')}
             className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
               activeTab === 'templates'
-                ? 'border-brand text-brand'
+                ? 'border-accent text-accent'
                 : 'border-transparent text-muted-foreground hover:text-foreground'
             }`}
           >
@@ -531,24 +529,12 @@ export const EmailConfigPage: React.FC = () => {
             onClick={() => setActiveTab('sent')}
             className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
               activeTab === 'sent'
-                ? 'border-brand text-brand'
+                ? 'border-accent text-accent'
                 : 'border-transparent text-muted-foreground hover:text-foreground'
             }`}
           >
             {t('email.sentEmails.tab', 'Sent emails')}
           </button>
-          {featureFlags.incomingMail && (
-            <button
-              onClick={() => setActiveTab('received')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
-                activeTab === 'received'
-                  ? 'border-brand text-brand'
-                  : 'border-transparent text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              {t('email.received.tab', 'Received emails')}
-            </button>
-          )}
         </nav>
       </div>
 
@@ -573,7 +559,7 @@ export const EmailConfigPage: React.FC = () => {
                 ? t('email.signatureOn', 'Footer signature is on — your business address is appended to automatic emails. Replies you write in Messages are sent as typed.')
                 : t('email.signatureOff', 'Footer signature is off — emails show the logo and company name only.')}
               {' '}
-              <Link to="/admin/settings?tab=businessProfile" className="underline hover:no-underline" style={{ color: 'var(--brand)' }}>
+              <Link to="/admin/settings?tab=businessProfile" className="underline hover:no-underline" style={{ color: 'var(--color-accent)' }}>
                 {t('email.signatureEdit', 'Edit in Business profile')}
               </Link>
             </span>
@@ -612,7 +598,7 @@ export const EmailConfigPage: React.FC = () => {
                                     <select
                                       value={smtpConfig.smtp_secure ? 'ssl' : 'tls'}
                                       onChange={(e) => setSmtpConfig(prev => ({ ...prev, smtp_secure: e.target.value === 'ssl' }))}
-                                      className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
+                                      className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-accent-dark"
                                     >
                                       <option value="tls">TLS</option>
                                       <option value="ssl">SSL</option>
@@ -627,7 +613,7 @@ export const EmailConfigPage: React.FC = () => {
                                       type="checkbox"
                                       checked={!smtpConfig.tls_reject_unauthorized}
                                       onChange={(e) => setSmtpConfig(prev => ({ ...prev, tls_reject_unauthorized: !e.target.checked }))}
-                                      className="w-4 h-4 text-brand border-border rounded-sm focus:ring-brand-500"
+                                      className="w-4 h-4 text-accent border-border rounded focus:ring-primary-500"
                                     />
                                     <span className="text-sm font-medium text-foreground">
                                       {t('email.ignoreSslErrors')}
@@ -636,7 +622,7 @@ export const EmailConfigPage: React.FC = () => {
                                   {!smtpConfig.tls_reject_unauthorized && (
                                     <div className="mt-2 p-3 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 rounded-lg">
                                       <div className="flex items-start gap-2">
-                                        <ShieldAlert className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+                                        <ShieldAlert className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
                                         <p className="text-xs text-amber-800 dark:text-amber-300">
                                           {t('email.ignoreSslWarning')}
                                         </p>
@@ -710,7 +696,7 @@ export const EmailConfigPage: React.FC = () => {
 
           <Card><CardContent><h2 className="text-lg font-semibold text-foreground mb-4">{t('email.testEmailSection')}</h2><div className="mb-4 p-4 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 rounded-lg">
                                 <div className="flex items-start gap-3">
-                                  <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0" />
+                                  <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0" />
                                   <div className="text-sm text-amber-800 dark:text-amber-300">
                                     <p className="font-medium">{t('email.beforeTesting')}</p>
                                     <ul className="list-disc list-inside mt-1">
@@ -741,7 +727,7 @@ export const EmailConfigPage: React.FC = () => {
                                                             {testEmailMutation.isPending && <Loader2 className="animate-spin" />}<Send className="w-5 h-5" />{t('email.sendTestEmailButton')}</Button>
                               </div><div className="mt-6 p-4 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-lg">
                                 <div className="flex items-start gap-3">
-                                  <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 shrink-0" />
+                                  <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0" />
                                   <div className="text-sm text-green-800 dark:text-green-300">
                                     <p className="font-medium">{t('email.commonSmtpSettings')}</p>
                                     <ul className="mt-2 space-y-1">
@@ -807,7 +793,7 @@ export const EmailConfigPage: React.FC = () => {
                                         type="color"
                                         value={value}
                                         onChange={(e) => setter(e.target.value)}
-                                        className="w-10 h-10 rounded-sm border border-border cursor-pointer"
+                                        className="w-10 h-10 rounded border border-border cursor-pointer"
                                       />
                                       <Input
                                         type="text"
@@ -829,9 +815,6 @@ export const EmailConfigPage: React.FC = () => {
       )}
 
       {/* Email Templates Tab */}
-      {/* Incoming mail (IMAP) — a second block under SMTP, flag-gated. */}
-      {activeTab === 'smtp' && featureFlags.incomingMail && <IncomingMailConfigCard />}
-      {activeTab === 'smtp' && featureFlags.messaging && <CustomerMailboxCard />}
 
       {activeTab === 'templates' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -881,10 +864,10 @@ export const EmailConfigPage: React.FC = () => {
                                         <p className="font-medium text-foreground truncate">
                                           {templateName}
                                         </p>
-                                        <div className="flex items-center gap-1.5 shrink-0">
+                                        <div className="flex items-center gap-1.5 flex-shrink-0">
                                           {featureOff && (
                                             <span
-                                              className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-sm font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200"
+                                              className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200"
                                               title={t('email.featureOffTooltip', 'The feature this template belongs to is currently disabled. You can still edit the template — it will be used once the feature is re-enabled.')}
                                             >
                                               {t('email.featureOff', 'Feature off')}
@@ -980,7 +963,7 @@ export const EmailConfigPage: React.FC = () => {
                                             onClick={() => setEditingLang(lang.code)}
                                             className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors flex items-center gap-1.5 ${
                                               editingLang === lang.code
-                                                ? 'bg-card text-primary shadow-xs'
+                                                ? 'bg-card text-accent-dark shadow-sm'
                                                 : 'text-muted-foreground hover:text-foreground'
                                             }`}
                                           >

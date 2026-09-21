@@ -12,6 +12,17 @@ const knex = require('knex');
 const { UsageService } = require('../../src/usage/UsageService');
 const { featureKeysFor, CATALOGS, generateIdentity, makePacket, signPacket, verifyEnvelope } = require('../../src/usage/protocol.cjs');
 const FEATURE_KEYS = featureKeysFor('usage.v2');
+// Capability areas removed from this fork. The frozen v2 catalog still asks
+// about them; they can never be configured again.
+const RETIRED = new Set([
+  'face_recognition', 'crm', 'crm_quotes', 'crm_invoices', 'crm_contracts',
+  'crm_projects', 'crm_calendar', 'crm_hours', 'crm_installments',
+  'crm_invoice_import', 'crm_combined_billing', 'crm_monthly_billing_manual',
+  'crm_document_conversion', 'customer_portal', 'accounting',
+  'accounting_incoming_invoices', 'accounting_expenses', 'accounting_tax_report',
+  'accounting_ledger', 'document_templates', 'workflows', 'newsletters',
+  'incoming_mail', 'messaging', 'workflow_automation_enabled',
+]);
 const CATALOG = CATALOGS['usage.v2'];
 
 async function bootDb() {
@@ -364,11 +375,11 @@ describe('v2 technical configuration and privacy boundaries', () => {
     const report = await client.snapshot();
     expect(Object.keys(report.features)).toEqual(FEATURE_KEYS);
     for (const [key, definition] of Object.entries(CATALOG.features)) {
-      // face_recognition is a RETIRED capability: the v2 catalog is frozen and
-      // still asks about it, but the install no longer has the feature, so the
-      // only honest configured answer is false. Still reported, never true.
-      if (key === 'face_recognition') {
-        expect(report.features[key].configured).toBe(false);
+      // RETIRED capabilities: the v2 catalog is frozen and still asks about
+      // these, but the install no longer has the features, so the only honest
+      // configured answer is false. Still reported, never true.
+      if (RETIRED.has(key)) {
+        expect([key, report.features[key].configured]).toEqual([key, false]);
         continue;
       }
       expect(report.features[key].configured).toBe(true);

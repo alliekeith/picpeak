@@ -4,9 +4,9 @@ import { toast } from 'react-toastify';
 import { useMutation } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { adminService } from '../../services/admin.service';
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 
 interface PasswordChangeModalProps {
   isOpen: boolean;

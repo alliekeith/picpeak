@@ -26,10 +26,10 @@ interface Props {
 // is optional — "Skip for now" always leaves — but a section the user DID fill
 // in is validated before it is posted, and a save that fails keeps them on the
 // step with their input intact rather than advancing into a silent data loss.
-export const SetupConfigStep: React.FC<Props> = ({ selectedFeatures, onDone }) => {
+export const SetupConfigStep: React.FC<Props> = ({ onDone }) => {
     const __fieldId = React.useId();
   const { t } = useTranslation();
-  const showInvoicing = selectedFeatures.has('bills');
+  const showInvoicing = false;
   const [saving, setSaving] = useState(false);
 
   const [inv, setInv] = useState({
@@ -203,7 +203,7 @@ export const SetupConfigStep: React.FC<Props> = ({ selectedFeatures, onDone }) =
         <div className="space-y-3">
           <h3 className="text-sm font-semibold text-foreground">{t('setup.config.invoicing', 'Invoicing details')}</h3>
           <div className="flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3">
-            <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
+            <ShieldAlert className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-600" />
             <p className="text-xs text-amber-800">
               {t('setup.config.invoicingDisclaimer', 'Used on your invoices. Bank/IBAN and VAT details are your responsibility — verify them with your bank and Treuhänder/tax advisor.')}
             </p>
