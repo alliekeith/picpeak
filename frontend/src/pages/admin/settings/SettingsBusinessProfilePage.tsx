@@ -25,6 +25,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 
 // Full IANA timezone list for the picker. `Intl.supportedValuesOf` is ES2022
 // (all current browsers); fall back to a small CH/LI-relevant set on the rare
@@ -367,18 +368,7 @@ const PdfToggleRow: React.FC<PdfToggleRowProps> = ({ label, description, enabled
         <span className="block text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">{description}</span>
       )}
     </span>
-    <button
-      type="button"
-      role="switch"
-      aria-checked={enabled}
-      onClick={() => onChange(!enabled)}
-      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 shrink-0 ${enabled ? '' : 'bg-neutral-300 dark:bg-neutral-600'}`}
-      style={enabled ? { backgroundColor: 'var(--brand)' } : undefined}
-    >
-      <span
-        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${enabled ? 'translate-x-6' : 'translate-x-1'}`}
-      />
-    </button>
+    <Switch checked={enabled} onCheckedChange={onChange} className="shrink-0" />
   </label>
 );
 

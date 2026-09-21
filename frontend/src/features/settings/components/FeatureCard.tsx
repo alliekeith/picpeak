@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import { CornerDownRight, Lock, AlertTriangle } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
-import { Switch } from './Switch';
+import { Switch } from '@/components/ui/switch';
 import { StatusBadge, type FeatureStatus } from './StatusBadge';
 
 interface FeatureCardProps {
@@ -109,8 +109,8 @@ export const FeatureCard: React.FC<FeatureCardProps> = ({
       <Switch
         checked={enabled}
         disabled={disabled}
-        onChange={onToggle}
-        ariaLabel={title}
+        onCheckedChange={onToggle}
+        aria-label={title}
       />
     </div>
   </li>

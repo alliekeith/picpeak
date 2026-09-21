@@ -37,6 +37,7 @@ import { useFeatureFlags } from '../../contexts/FeatureFlagsContext';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 
 type EditableFields =
   | 'email' | 'salutation' | 'firstName' | 'lastName' | 'displayName'
@@ -671,18 +672,7 @@ export const CustomerDetailPage: React.FC = () => {
                                   </span>
                                 )}
                               </span>
-                              <button
-                                type="button"
-                                role="switch"
-                                aria-checked={enabled}
-                                onClick={() => toggleFeature(key)}
-                                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 ${enabled ? '' : 'bg-neutral-300 dark:bg-neutral-600'}`}
-                                style={enabled ? { backgroundColor: 'var(--brand)' } : undefined}
-                              >
-                                <span
-                                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${enabled ? 'translate-x-6' : 'translate-x-1'}`}
-                                />
-                              </button>
+                              <Switch checked={enabled} onCheckedChange={() => toggleFeature(key)} />
                             </label>
                           );
                         })}

@@ -28,6 +28,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 type Tab = 'services' | 'packages' | 'promotions' | 'textBlocks' | 'templates';
 const TABS: Tab[] = ['services', 'packages', 'promotions', 'textBlocks', 'templates'];
@@ -878,31 +879,29 @@ export const QuoteCatalogPage: React.FC = () => {
         <h2 className="text-xl font-bold text-neutral-900 dark:text-neutral-100">{t('quotes.catalog.title', 'Catalogue & templates')}</h2>
       </div>
 
-      <div role="tablist" className="flex flex-wrap gap-1 border-b border-neutral-200 dark:border-neutral-700">
-        {TABS.map((key) => (
-          <button
-            key={key}
-            role="tab"
-            aria-selected={tab === key}
-            onClick={() => setSearchParams({ tab: key })}
-            className={`px-3 py-2 text-sm -mb-px border-b-2 ${tab === key
-              ? 'border-brand-600 dark:border-brand-400 text-neutral-900 dark:text-neutral-100 font-medium'
-              : 'border-transparent text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100'}`}
-          >
-            {tabLabel(key)}
-          </button>
-        ))}
-      </div>
+      {/* Stock shadcn Tabs. The active tab still lives in the query string,
+          so a catalogue tab stays linkable and survives a reload; Tabs is
+          driven from it rather than owning the state itself. Radix adds the
+          arrow-key roving focus the hand-rolled tablist never had. */}
+      <Tabs value={tab} onValueChange={(next) => setSearchParams({ tab: next })}>
+        <TabsList className="flex flex-wrap h-auto">
+          {TABS.map((key) => (
+            <TabsTrigger key={key} value={key}>
+              {tabLabel(key)}
+            </TabsTrigger>
+          ))}
+        </TabsList>
 
-      <p className="text-xs text-neutral-500 dark:text-neutral-400">
-        {t('quotes.catalog.examplesHint', 'Archived entries named "Example: …" show how each part works. Edit one and restore it to use it.')}
-      </p>
+        <p className="text-xs text-muted-foreground mt-4">
+          {t('quotes.catalog.examplesHint', 'Archived entries named "Example: …" show how each part works. Edit one and restore it to use it.')}
+        </p>
 
-      {tab === 'services' && <ServicesTab />}
-      {tab === 'packages' && <PackagesTab />}
-      {tab === 'promotions' && <PromotionsTab />}
-      {tab === 'textBlocks' && <TextBlocksTab />}
-      {tab === 'templates' && <TemplatesTab />}
+        <TabsContent value="services"><ServicesTab /></TabsContent>
+        <TabsContent value="packages"><PackagesTab /></TabsContent>
+        <TabsContent value="promotions"><PromotionsTab /></TabsContent>
+        <TabsContent value="textBlocks"><TextBlocksTab /></TabsContent>
+        <TabsContent value="templates"><TemplatesTab /></TabsContent>
+      </Tabs>
     </div>
   );
 };

@@ -21,6 +21,7 @@ import { api } from '../../config/api';
 import { useMutationWithToast } from '../../hooks';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
 
 interface CustomerSurfaceSettings {
   customer_show_logo: boolean;
@@ -59,18 +60,7 @@ const Toggle: React.FC<ToggleProps> = ({ enabled, onChange, label, hint, icon: I
         {hint && <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">{hint}</p>}
       </div>
     </div>
-    <button
-      type="button"
-      role="switch"
-      aria-checked={enabled}
-      onClick={onChange}
-      className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 ${enabled ? '' : 'bg-neutral-300 dark:bg-neutral-600'}`}
-      style={enabled ? { backgroundColor: 'var(--brand, #5C8762)' } : undefined}
-    >
-      <span
-        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${enabled ? 'translate-x-6' : 'translate-x-1'}`}
-      />
-    </button>
+    <Switch checked={enabled} onCheckedChange={onChange} />
   </label>
 );
 
