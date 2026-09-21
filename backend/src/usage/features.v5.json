@@ -178,22 +178,6 @@
         "en": "A documented successful authenticated admin capability operation was observed since consent to this schema. No actor, operation history, parameters or counts."
       }
     },
-    "face_recognition": {
-      "category": "gallery",
-      "since": "usage.v1",
-      "measurement": "configuration_and_use",
-      "configuration": "flag",
-      "flag": "faces",
-      "name": {
-        "en": "ML face recognition"
-      },
-      "configured": {
-        "en": "The faces capability switch is effectively enabled; only a boolean."
-      },
-      "used": {
-        "en": "A documented successful authenticated admin capability operation was observed since consent to this schema. No actor, operation history, parameters or counts."
-      }
-    },
     "custom_css": {
       "category": "appearance",
       "since": "usage.v1",

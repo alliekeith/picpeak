@@ -600,7 +600,7 @@ router.post('/repair-orientation', adminAuth, requirePermission('system.manage')
         .select(
           'photos.id', 'photos.path', 'photos.filename',
           'photos.source_origin', 'photos.external_relpath', 'photos.event_id',
-          'photos.width', 'photos.height', 'photos.face_status',
+          'photos.width', 'photos.height',
           // Every rendition the invalidation below deletes. Selecting only
           // preview_path left thumbnail_path and hero_path undefined, so their
           // database pointers were cleared while the objects stayed in storage.
@@ -641,7 +641,6 @@ router.post('/repair-orientation', adminAuth, requirePermission('system.manage')
 
       let checked = 0;
       let corrected = 0;
-      let requeuedFaces = 0;
       let staleTiers = 0;
       let errorCount = 0;
       let lostClaim = false;
@@ -761,15 +760,6 @@ router.post('/repair-orientation', adminAuth, requirePermission('system.manage')
                   // most visible rendition of all.
                   watermark_path: null,
                 });
-
-                // whereNotNull: face_status NULL means this photo was never
-                // scanned, and an install that never enabled the feature must
-                // not start scanning because of a dimension repair.
-                requeuedFaces += await trx('photos')
-                  .where(fence)
-                  .whereNotNull('face_status')
-                  .whereNot('face_status', 'pending')
-                  .update({ face_status: 'pending' });
               }
 
               // Same transaction as the work it records: a marker written
@@ -837,7 +827,7 @@ router.post('/repair-orientation', adminAuth, requirePermission('system.manage')
             // photo was not corrected and must not be reported as such.
             if (dimsWritten > 0) corrected++;
 
-            if ((corrected + requeuedFaces) % 50 === 0 && (corrected + requeuedFaces) > 0) {
+            if (corrected % 50 === 0 && corrected > 0) {
               logger.info(`Orientation backfill progress: ${corrected} corrected...`);
             }
           } catch (error) {
@@ -851,17 +841,17 @@ router.post('/repair-orientation', adminAuth, requirePermission('system.manage')
           return;
         }
         await maintenanceJobs.release(JOB_ORIENTATION_BACKFILL, token, {
-          checked, corrected, requeuedFaces, staleTiers, failed: errorCount,
+          checked, corrected, staleTiers, failed: errorCount,
         });
         logger.info(
           `Orientation backfill complete: ${checked} checked, ${corrected} corrected, `
-          + `${requeuedFaces} requeued for face scanning, ${errorCount} errors`
+          + `${errorCount} errors`
         );
       } catch (err) {
         logger.error('Orientation backfill aborted:', err);
         await maintenanceJobs
           .release(JOB_ORIENTATION_BACKFILL, token, {
-            checked, corrected, requeuedFaces, staleTiers, failed: errorCount, error: err.message,
+            checked, corrected, staleTiers, failed: errorCount, error: err.message,
           })
           .catch(() => {});
       } finally {

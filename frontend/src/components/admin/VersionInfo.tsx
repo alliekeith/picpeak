@@ -21,7 +21,6 @@ interface SystemVersion {
   environment: string;
   channel?: 'stable' | 'beta';
   // True on the all-in-one image; some features are unavailable there.
-  single_container?: boolean;
 }
 
 interface UpdateInfo {

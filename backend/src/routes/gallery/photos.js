@@ -61,64 +61,6 @@ router.get('/:slug/photos', verifyGalleryAccess, resolveGuest, noStoreCache, asy
   } catch (error) { errorResponse(res, error, 500, 'Failed to fetch photos'); }
 });
 
-/**
- * People in this gallery (#1074).
- *
- * Returns [] rather than 403 whenever the feature is unavailable — a guest
- * must not be able to tell "this gallery has no people" from "this gallery
- * has the feature switched off". Same reasoning as reveal mode returning an
- * empty photo set rather than an error.
- *
- * Counts and cover faces are computed against the caller's own visibility
- * scope inside facePeopleService; nothing here reads face_count_total.
- */
-// no-store for the same reason as /photos: the people list and its scan
-// progress are scoped to what THIS viewer may see.
-router.get('/:slug/people', verifyGalleryAccess, resolveGuest, noStoreCache, async (req, res) => {
-  try {
-    const isClient = req.accessLevel === 'client';
-    const { isEnabledForEvent, areFacesVisibleToGuests, getThresholds } =
-      require('../../services/faceSettings');
-
-    if (!(await isEnabledForEvent(req.event))) {
-      return res.json({ people: [] });
-    }
-    if (!isClient && !areFacesVisibleToGuests(req.event)) {
-      return res.json({ people: [] });
-    }
-    // While a gallery is hidden behind reveal mode (#838), a plain guest sees
-    // no photos — so they see no people either.
-    if (guestBlockedByReveal(req)) {
-      return res.json({ people: [] });
-    }
-
-    const { listPeople, getScanStatus } = require('../../services/facePeopleService');
-    const thresholds = await getThresholds();
-
-    const people = await listPeople(req.event.id, {
-      isClient,
-      forAdmin: false,
-      minClusterSize: thresholds.face_min_cluster_size,
-    });
-
-    // Drives the "Finding people… 240/1200" progress line during a backfill.
-    // Scoped to what this viewer may see — an unscoped total would leak the
-    // number of hidden photos through the progress bar.
-    const status = await getScanStatus(req.event.id, { isClient });
-
-    res.json({
-      people,
-      scan: {
-        in_progress: status.in_progress,
-        scanned: status.scanned,
-        total: status.total,
-      },
-    });
-  } catch (error) {
-    errorResponse(res, error, 500, 'Failed to fetch people');
-  }
-});
-
 // Toggle photo visibility (client-only)
 router.patch('/:slug/photos/:photoId/visibility', verifyGalleryAccess, async (req, res) => {
   try {

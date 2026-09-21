@@ -360,11 +360,17 @@ describe('v2 technical configuration and privacy boundaries', () => {
     await db('api_tokens').insert({ token_hash: 'PRIVATE-token', expires_at: '2028-01-01T00:00:00.000Z' });
     await db('webhooks').insert({ active: true, url: 'https://PRIVATE.example.test', secret: 'PRIVATE-secret' });
     Object.assign(process.env, { STORAGE_BACKEND: 's3', STORAGE_S3_BUCKET: 'PRIVATE', STORAGE_S3_ACCESS_KEY: 'PRIVATE', STORAGE_S3_SECRET_KEY: 'PRIVATE', EMAIL_WEBHOOK_URL: 'https://PRIVATE.example.test', EMAIL_WEBHOOK_SECRET: 'PRIVATE' });
-    delete process.env.PICPEAK_SINGLE_CONTAINER;
     await client.markUsed([...FEATURE_KEYS, 'PRIVATE@example.test']);
     const report = await client.snapshot();
     expect(Object.keys(report.features)).toEqual(FEATURE_KEYS);
     for (const [key, definition] of Object.entries(CATALOG.features)) {
+      // face_recognition is a RETIRED capability: the v2 catalog is frozen and
+      // still asks about it, but the install no longer has the feature, so the
+      // only honest configured answer is false. Still reported, never true.
+      if (key === 'face_recognition') {
+        expect(report.features[key].configured).toBe(false);
+        continue;
+      }
       expect(report.features[key].configured).toBe(true);
       if (definition.used) expect(report.features[key].used).toBe(true);
       else expect(report.features[key]).toEqual({ configured: true });
@@ -376,10 +382,9 @@ describe('v2 technical configuration and privacy boundaries', () => {
     expect(verifyEnvelope(envelope, Date.parse(report.generated_at))).toEqual(envelope.packet);
   });
 
-  it('applies parent/AIO gates and does not confuse disabled or expired config with availability', async () => {
+  it('applies parent gates and does not confuse disabled or expired config with availability', async () => {
     const client = await expandedDb();
-    process.env.PICPEAK_SINGLE_CONTAINER = 'yes';
-    await db('feature_flags').insert(['bills', 'incomingInvoices', 'expenses', 'taxReport', 'faces', 'incomingMail'].map((key) => ({ key, value: true })));
+    await db('feature_flags').insert(['bills', 'incomingInvoices', 'expenses', 'taxReport', 'incomingMail'].map((key) => ({ key, value: true })));
     await db('api_tokens').insert([
       { revoked_at: '2026-01-01', expires_at: null },
       { revoked_at: null, expires_at: '2026-01-01' }
@@ -389,7 +394,7 @@ describe('v2 technical configuration and privacy boundaries', () => {
     await db('event_feedback_settings').insert({ feedback_enabled: false, identity_mode: 'guest', allow_likes: true });
     await db('events').insert({ allow_user_uploads: false, reveal_mode: true });
     const report = await client.snapshot();
-    for (const key of ['crm_invoices', 'accounting_incoming_invoices', 'accounting_expenses', 'accounting_tax_report', 'face_recognition', 'api_integration', 'webhooks', 'incoming_mail', 'gallery_feedback_likes', 'gallery_guest_accounts', 'gallery_reveal']) expect(report.features[key].configured).toBe(false);
+    for (const key of ['crm_invoices', 'accounting_incoming_invoices', 'accounting_expenses', 'accounting_tax_report', 'api_integration', 'webhooks', 'incoming_mail', 'gallery_feedback_likes', 'gallery_guest_accounts', 'gallery_reveal']) expect(report.features[key].configured).toBe(false);
     expect(report.features.galleries).toEqual({ configured: true, used: false });
     expect(report.features.admin_management.configured).toBe(true);
     expect(report.features.analytics_dashboard.configured).toBe(true);

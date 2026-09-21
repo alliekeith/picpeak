@@ -5,7 +5,6 @@ import { PermissionGate } from '../../../components/admin/PermissionGate';
 import { EventReminderOverrideCard } from '../../../components/admin/EventReminderOverrideCard';
 import { SlideshowSettingsCard } from '../../../components/admin/SlideshowSettingsCard';
 import { DownloadResolutionCard } from '../../../components/admin/DownloadResolutionCard';
-import { FaceRecognitionCard } from '../../../components/admin/FaceRecognitionCard';
 import { ShortUrlsCard } from '../../../components/admin/ShortUrlsCard';
 import { useFeatureFlags } from '../../../contexts/FeatureFlagsContext';
 import type { AdminPhoto } from '../../../services/photos.service';
@@ -129,14 +128,6 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
         {/* Per-gallery download resolution override (#858). Sits with the
             other "what the customer receives" controls. */}
         <DownloadResolutionCard eventId={event.id} onChanged={() => refetchEvent()} />
-
-        {/* People in this gallery (#1074). Gated behind the `faces` feature
-            flag — which is itself gated on the operator running the optional
-            picpeak-ml sidecar, so this card is invisible on the vast majority
-            of installs. */}
-        {flags.faces && (
-          <FaceRecognitionCard eventId={event.id} isArchived={event.is_archived} />
-        )}
 
         {/* Live Slideshow ("Diashow") link + live display settings (migrations 138/139).
             Gated behind the `slideshow` feature flag. */}

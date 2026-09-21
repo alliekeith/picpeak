@@ -29,8 +29,6 @@ const RULES_V2 = [
   [WRITE, /^\/workflows(?:\/|$)/, ['workflows']],
   [WRITE, /^\/newsletters(?:\/[^/]+)?\/?$/, ['newsletters']],
   [['POST'], /^\/newsletters\/[^/]+\/(?:test|queue|cancel)\/?$/, ['newsletters']],
-  [WRITE, /^\/events\/[^/]+\/(?:faces|people)(?:\/|$)/, ['face_recognition']],
-  [WRITE, /^\/events\/faces\/auto-categories\/?$/, ['face_recognition']],
   [['POST'], /^\/external-media\/events\/[^/]+\/import-external\/?$/, ['share_mounts']],
   [['POST'], /^\/events\/?$/, ['galleries']],
   [['PUT', 'DELETE'], /^\/events\/[^/]+\/?$/, ['galleries']],

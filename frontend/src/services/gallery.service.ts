@@ -2,7 +2,7 @@ import type { AxiosResponse } from 'axios';
 import { api } from '../config/api';
 import type {
   GalleryInfo, GalleryData, GalleryStats, ResolvedGalleryIdentifier,
-  DownloadJobStatus, DownloadJobState, GalleryPeopleResponse,
+  DownloadJobStatus, DownloadJobState,
 } from '../types';
 import { normalizeRequirePassword } from '../utils/accessControl';
 import { parseContentDispositionFilename } from '../utils/contentDisposition';
@@ -91,7 +91,7 @@ export const galleryService = {
     const response = await api.get<GalleryData>(`/gallery/${slug}/photos`, { params: { ...params }, signal });
     const data = response.data;
     // Existing filter/folder/lightbox consumers require the complete set.
-    // Fetch bounded pages so the API only hydrates feedback and faces for 250
+    // Fetch bounded pages so the API only hydrates feedback for 250
     // photos at once. A cancelled gallery query also cancels later pages.
     const photos = new Map(data.photos.map(photo => [photo.id, photo]));
     let pagination = data.pagination;
@@ -444,15 +444,4 @@ export const galleryService = {
     return response.data;
   },
 
-  /**
-   * People detected in this gallery (#1074).
-   *
-   * Returns an empty list rather than an error when the feature is off, so a
-   * guest can't tell "no people here" from "feature disabled". Counts and
-   * cover faces are scoped server-side to the photos this viewer may see.
-   */
-  async getPeople(slug: string): Promise<GalleryPeopleResponse> {
-    const response = await api.get<GalleryPeopleResponse>(`/gallery/${slug}/people`);
-    return response.data;
-  },
 };

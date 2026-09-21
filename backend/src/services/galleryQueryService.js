@@ -278,35 +278,6 @@ async function getGalleryPhotos({ event, query = {}, identity, accessLevel, admi
     });
   }
 
-  // People in each photo (#1074). Two independent gates: the feature must
-  // be on for this event AND, for a plain guest, the photographer must have
-  // left the strip visible. A client (PIN access) is the photographer's own
-  // view, so faces_visible_to_guests doesn't restrict them.
-  //
-  // `photos` is already visibility-filtered above, and this only ever asks
-  // about ids in that set, so it cannot widen what the caller sees.
-  let peopleEnabled = false;
-  let personIdsByPhoto = new Map();
-  try {
-    const { isEnabledForEvent, areFacesVisibleToGuests } = require('./faceSettings');
-    if (photos.length > 0 && await isEnabledForEvent(event)) {
-      peopleEnabled = isClient || areFacesVisibleToGuests(event);
-      if (peopleEnabled) {
-        const { getPersonIdsByPhoto } = require('./facePeopleService');
-        personIdsByPhoto = await getPersonIdsByPhoto(
-          event.id,
-          photos.map(p => p.id),
-          { forAdmin: isClient }
-        );
-      }
-    }
-  } catch (err) {
-    // A face-feature failure must never take down the gallery payload.
-    logger.warn(`gallery: person_ids lookup failed for event ${event.id}`, { error: err.message });
-    peopleEnabled = false;
-    personIdsByPhoto = new Map();
-  }
-
   // Get actual categories used by photos in this event
   // This includes both global categories and event-specific ones
   const usedCategoryIds = hiddenForGuest ? [] : await db('photos')
@@ -446,11 +417,6 @@ async function getGalleryPhotos({ event, query = {}, identity, accessLevel, admi
       // Mirror of the admin-side toggle so the lightbox can decide
       // whether to surface original camera filenames (#508).
       use_original_filenames: useOriginalFilenames,
-      // "People in this gallery" (#1074). False whenever the global flag
-      // is off, detection is off for this event, or the photographer chose
-      // to keep the strip to themselves — the frontend renders no face UI
-      // at all in that case.
-      people_enabled: peopleEnabled,
       ...protectionSettings
     },
     // Reveal mode (#838): the guest UI switches to the upload-only view
@@ -562,12 +528,6 @@ async function getGalleryPhotos({ event, query = {}, identity, accessLevel, admi
         // grid can show them beside the viewer's own badge. Empty with
         // sharing off — it is other people's feedback.
         other_color_labels: otherColorLabelsByPhoto[photo.id] || [],
-        // People in this photo (#1074). Empty array when the feature is
-        // off for this event or hidden from guests, so the frontend has
-        // one shape to handle. Riding along on this payload is what keeps
-        // face filtering client-side and instant, like the category and
-        // liked/rated filters.
-        person_ids: personIdsByPhoto.get(photo.id) || [],
         // Visibility (only included for clients)
         ...(isClient ? { visibility: photo.visibility || 'visible' } : {})
       };

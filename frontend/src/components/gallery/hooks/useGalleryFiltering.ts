@@ -9,11 +9,11 @@ export interface GalleryFilterOptions {
   selectedCategoryId: number | string | null; searchTerm: string; sortBy: GallerySort; sortDesc: boolean;
   watermarkEnabled: boolean; slug: string; activeFilters: FeedbackFilterType[]; activeColorFilters: ColorLabel[];
   mediaFilter: 'all' | 'photo' | 'video'; isGuestIdentityMode: boolean;
-  myFeedbackPhotoIds: Record<FeedbackFilterType, Set<number>>; selectedPersonIds: number[]; peopleMatchAny: boolean;
+  myFeedbackPhotoIds: Record<FeedbackFilterType, Set<number>>;
 }
 export const resolveMediaType = (photo: Photo): 'photo' | 'video' =>
   photo.media_type === 'video' || photo.mime_type?.startsWith('video/') || photo.type === 'video' ? 'video' : 'photo';
-export function useGalleryFiltering({ sourcePhotos, categories, folderId, selectedCategoryId, searchTerm, sortBy, sortDesc, watermarkEnabled, slug, activeFilters, activeColorFilters, mediaFilter, isGuestIdentityMode, myFeedbackPhotoIds, selectedPersonIds, peopleMatchAny }: GalleryFilterOptions) {
+export function useGalleryFiltering({ sourcePhotos, categories, folderId, selectedCategoryId, searchTerm, sortBy, sortDesc, watermarkEnabled, slug, activeFilters, activeColorFilters, mediaFilter, isGuestIdentityMode, myFeedbackPhotoIds }: GalleryFilterOptions) {
   return useMemo(() => {
     if (!sourcePhotos) return [];
 
@@ -69,25 +69,10 @@ export function useGalleryFiltering({ sourcePhotos, categories, folderId, select
       photos = photos.filter(photo => activeFilters.some(filter => matchers[filter](photo)));
     }
 
-    // Apply people filter (#1074). Composes with every filter above rather
-    // than replacing them, so "photos of Anna that I liked" works.
-    //
-    // Two people selected means AND by default ("photos with both Anna and
-    // Ben") — that is what someone picking a second face is almost always
-    // asking for. `peopleMatchAny` flips it to OR for the couple-shots case.
-    if (selectedPersonIds.length > 0) {
-      photos = photos.filter(photo => {
-        const ids = photo.person_ids || [];
-        return peopleMatchAny
-          ? selectedPersonIds.some(id => ids.includes(id))
-          : selectedPersonIds.every(id => ids.includes(id));
-      });
-    }
-
     // Apply colour-label filters (#1044). Guest-scoped by construction:
     // `my_color_label` is the requesting viewer's own label, which is what a
     // proofing client means by "show me my greens". Composes with (ANDs
-    // against) every filter above, like the people filter.
+    // against) every filter above.
     if (activeColorFilters.length > 0) {
       photos = photos.filter(photo =>
         !!photo.my_color_label && activeColorFilters.includes(photo.my_color_label as ColorLabel)
@@ -134,5 +119,5 @@ export function useGalleryFiltering({ sourcePhotos, categories, folderId, select
     }
     
     return photos;
-  }, [sourcePhotos, categories, folderId, selectedCategoryId, searchTerm, sortBy, sortDesc, watermarkEnabled, slug, activeFilters, activeColorFilters, mediaFilter, isGuestIdentityMode, myFeedbackPhotoIds, selectedPersonIds, peopleMatchAny]);
+  }, [sourcePhotos, categories, folderId, selectedCategoryId, searchTerm, sortBy, sortDesc, watermarkEnabled, slug, activeFilters, activeColorFilters, mediaFilter, isGuestIdentityMode, myFeedbackPhotoIds]);
 }

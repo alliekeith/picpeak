@@ -27,7 +27,6 @@ const RULES = [
   ],
   [/^\/workflows(?:\/|$)/, ['workflows']],
   [/^\/newsletters(?:\/|$)/, ['newsletters']],
-  [/^\/events\/[^/]+\/(?:faces|people)(?:\/|$)/, ['face_recognition']],
   [/^\/whatsapp\/(?:send|test)(?:\/|$)/, ['whatsapp']],
   [
     /^\/(?:backup|database-backup)\/(?:run|backup|create|start|test|picpeak\/export)(?:\/|$)/,

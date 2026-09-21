@@ -121,15 +121,6 @@ const deletePhoto = async (photoId, options = {}) => {
         }
       }
 
-      // Face data (#1074) — see purgePhotoFaces on why the FK cascade is not
-      // relied on. Must run BEFORE the photo row goes.
-      try {
-        const { purgePhotoFaces } = require('./faceProcessor');
-        await purgePhotoFaces(photoId);
-      } catch (err) {
-        logger.warn(`deletePhoto: face purge failed for photo ${photoId}`, { error: err.message });
-      }
-
       // Delete from database
       await db('photos').where('id', photoId).delete();
     }
