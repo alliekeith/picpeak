@@ -53,23 +53,23 @@ export const WorkflowApprovalsPage: React.FC = () => {
           <ArrowLeft className="w-4 h-4" />
         </Button>
         <div>
-          <h1 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">{t('workflows.approvals.title', 'Approvals')}</h1>
-          <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('workflows.approvals.subtitle', 'Workflow runs waiting on your confirmation.')}</p>
+          <h1 className="text-xl font-semibold text-foreground">{t('workflows.approvals.title', 'Approvals')}</h1>
+          <p className="text-sm text-muted-foreground">{t('workflows.approvals.subtitle', 'Workflow runs waiting on your confirmation.')}</p>
         </div>
       </div>
 
       <Card className="py-0"><CardContent className="px-0">{isLoading ? (
                     <div className="p-10"><Loading /></div>
                   ) : !approvals || approvals.length === 0 ? (
-                    <div className="p-10 text-center text-neutral-500 dark:text-neutral-400">{t('workflows.approvals.empty', 'Nothing waiting for you right now.')}</div>
+                    <div className="p-10 text-center text-muted-foreground">{t('workflows.approvals.empty', 'Nothing waiting for you right now.')}</div>
                   ) : (
                     <ul className="divide-y divide-neutral-200 dark:divide-neutral-700">
                       {approvals.map((a) => {
                         const href = entityHref(a);
                         const meta = (
                           <>
-                            <div className="text-sm text-neutral-900 dark:text-neutral-100">{promptOf(a)}</div>
-                            <div className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+                            <div className="text-sm text-foreground">{promptOf(a)}</div>
+                            <div className="text-xs text-muted-foreground mt-0.5">
                               {a.workflow_name}
                               {a.entity_type ? ` · ${a.entity_type} #${a.entity_id}` : ''}
                               {a.created_at ? ` · ${formatDateTime(a.created_at)}` : ''}
@@ -82,7 +82,7 @@ export const WorkflowApprovalsPage: React.FC = () => {
                               <button
                                 type="button"
                                 onClick={() => navigate(href)}
-                                className="min-w-0 flex-1 text-left rounded-sm -mx-1 px-1 py-0.5 hover:bg-neutral-50 dark:hover:bg-neutral-800/60 transition-colors cursor-pointer"
+                                className="min-w-0 flex-1 text-left rounded-sm -mx-1 px-1 py-0.5 hover:bg-accent transition-colors cursor-pointer"
                                 title={t('workflows.approvals.openEntity', 'Open {{type}} #{{id}}', { type: a.entity_type, id: a.entity_id }) as string}
                               >
                                 {meta}

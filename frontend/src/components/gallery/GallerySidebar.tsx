@@ -283,7 +283,7 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
                   className={`
                     gallery-btn w-full text-left px-3 py-2 rounded-lg transition-colors flex items-center justify-between
                     ${selectedCategoryId === null
-                      ? 'bg-primary text-white'
+                      ? 'bg-primary text-primary-foreground'
                       : 'hover:bg-black/10 text-muted-foreground'
                     }
                   `}
@@ -306,7 +306,7 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
                       className={`
                         gallery-btn w-full text-left px-3 py-2 rounded-lg transition-colors flex items-center justify-between
                         ${isSelected
-                          ? 'bg-primary text-white'
+                          ? 'bg-primary text-primary-foreground'
                           : 'hover:bg-black/10 text-muted-foreground'
                         }
                       `}
@@ -390,7 +390,7 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
                       className={`
                         gallery-btn w-full text-left px-3 py-2 rounded-lg transition-colors flex items-center gap-3
                         ${isSelected
-                          ? 'bg-primary text-white'
+                          ? 'bg-primary text-primary-foreground'
                           : 'hover:bg-black/10 text-muted-foreground'
                         }
                       `}

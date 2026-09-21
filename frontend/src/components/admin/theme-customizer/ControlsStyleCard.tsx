@@ -13,10 +13,10 @@ export const ControlsStyleCard: React.FC<ControlsStyleCardProps> = ({ localTheme
   const { t } = useTranslation();
 
   return (
-    <Card className="p-6"><CardContent><h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4 flex items-center gap-2">
+    <Card className="p-6"><CardContent><h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
               <SlidersHorizontal className="w-5 h-5" />
               {t('branding.controlsStyle', 'Controls Style')}
-            </h3><p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
+            </h3><p className="text-sm text-muted-foreground mb-4">
               {t('branding.controlsStyleDescription', 'Choose how gallery filters and controls are displayed.')}
             </p><div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <button
@@ -25,17 +25,17 @@ export const ControlsStyleCard: React.FC<ControlsStyleCardProps> = ({ localTheme
                 className={`relative p-4 rounded-lg border-2 transition-all ${
                   (localTheme.controlsStyle || 'classic') === 'classic'
                     ? 'tile-selected'
-                    : 'border-neutral-200 dark:border-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600'
+                    : 'border-border'
                 }`}
               >
                 <div className="flex flex-col items-center text-center">
-                  <div className="mb-2 text-neutral-700 dark:text-neutral-300">
+                  <div className="mb-2 text-foreground">
                     <SlidersHorizontal className="w-6 h-6" />
                   </div>
-                  <span className="font-medium text-sm text-neutral-900 dark:text-neutral-100">
+                  <span className="font-medium text-sm text-foreground">
                     {t('branding.controlsStyleOptions.classic', 'Classic')}
                   </span>
-                  <span className="text-xs text-neutral-600 dark:text-neutral-400 mt-1">
+                  <span className="text-xs text-muted-foreground mt-1">
                     {t('branding.controlsStyleDescriptions.classic', 'Inline filter bar below header')}
                   </span>
                 </div>
@@ -49,17 +49,17 @@ export const ControlsStyleCard: React.FC<ControlsStyleCardProps> = ({ localTheme
                 className={`relative p-4 rounded-lg border-2 transition-all ${
                   localTheme.controlsStyle === 'sidebar'
                     ? 'tile-selected'
-                    : 'border-neutral-200 dark:border-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600'
+                    : 'border-border'
                 }`}
               >
                 <div className="flex flex-col items-center text-center">
-                  <div className="mb-2 text-neutral-700 dark:text-neutral-300">
+                  <div className="mb-2 text-foreground">
                     <Menu className="w-6 h-6" />
                   </div>
-                  <span className="font-medium text-sm text-neutral-900 dark:text-neutral-100">
+                  <span className="font-medium text-sm text-foreground">
                     {t('branding.controlsStyleOptions.sidebar', 'Sidebar')}
                   </span>
-                  <span className="text-xs text-neutral-600 dark:text-neutral-400 mt-1">
+                  <span className="text-xs text-muted-foreground mt-1">
                     {t('branding.controlsStyleDescriptions.sidebar', 'Menu button opens sidebar with filters')}
                   </span>
                 </div>

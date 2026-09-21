@@ -62,10 +62,10 @@ const MenuButton: React.FC<{
     onMouseDown={event => event.preventDefault()}
     onClick={onClick}
     disabled={disabled}
-    className={`p-2 rounded hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors ${
+    className={`p-2 rounded hover:bg-accent transition-colors ${
       active
         ? 'bg-primary/15 text-primary'
-        : 'text-neutral-700 dark:text-neutral-200'
+        : 'text-foreground'
     } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
     title={title}
     type="button"
@@ -218,15 +218,15 @@ export const CMSEditor: React.FC<CMSEditorProps> = ({ content, onChange, onSave,
     `px-3 py-1.5 text-sm font-medium rounded transition-colors ${
       viewMode === mode
         ? 'bg-primary/15 text-primary'
-        : 'text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700'
+        : 'text-muted-foreground hover:bg-accent'
     }`;
 
   return (
-    <div className={`relative ${isFullscreen ? 'fixed inset-0 z-50 bg-white dark:bg-neutral-900' : ''}`}>
+    <div className={`relative ${isFullscreen ? 'fixed inset-0 z-50 bg-card' : ''}`}>
       {/* overflow-clip, not overflow-hidden: both clip the rounded corners, but
           hidden makes this box a scroll container, and the sticky toolbar
           below would pin to it instead of to the admin page's scroller. */}
-      <div className="border border-neutral-300 dark:border-neutral-700 rounded-lg overflow-clip h-full flex flex-col bg-white dark:bg-neutral-900">
+      <div className="border border-border rounded-lg overflow-clip h-full flex flex-col bg-card">
         {/* Top Toolbar — sticky from md up (#1289). The editor pane has no
             bounded height on the CMS page, so a long document scrolls the
             whole admin content area and the toolbar used to leave with it;
@@ -235,9 +235,9 @@ export const CMSEditor: React.FC<CMSEditorProps> = ({ content, onChange, onSave,
             (mode/save and formatting) in reach. Not below md: there the
             formatting row wraps to several lines and would permanently eat
             most of a phone's editing area. */}
-        <div ref={toolbarRef} className="border-b border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 md:sticky md:top-0 md:z-10">
+        <div ref={toolbarRef} className="border-b border-border bg-muted md:sticky md:top-0 md:z-10">
           {/* View Mode Controls */}
-          <div className="flex items-center justify-between p-2 border-b border-neutral-200 dark:border-neutral-700">
+          <div className="flex items-center justify-between p-2 border-b border-border">
             <div className="flex items-center gap-2">
               <button onClick={() => setViewMode('edit')} className={viewModeChipClass('edit')}>
                 <Edit3 className="w-4 h-4 inline-block mr-1" />
@@ -332,7 +332,7 @@ export const CMSEditor: React.FC<CMSEditorProps> = ({ content, onChange, onSave,
                 <Heading6 className="w-4 h-4" />
               </MenuButton>
 
-              <div className="w-px h-6 bg-neutral-300 dark:bg-neutral-600 mx-1" />
+              <div className="w-px h-6 bg-muted mx-1" />
               
               <MenuButton
                 onClick={() => editor.chain().focus().toggleBold().run()}
@@ -366,7 +366,7 @@ export const CMSEditor: React.FC<CMSEditorProps> = ({ content, onChange, onSave,
                 <Code2 className="w-4 h-4" />
               </MenuButton>
 
-              <div className="w-px h-6 bg-neutral-300 dark:bg-neutral-600 mx-1" />
+              <div className="w-px h-6 bg-muted mx-1" />
               
               <MenuButton
                 onClick={() => editor.chain().focus().toggleBulletList().run()}
@@ -392,7 +392,7 @@ export const CMSEditor: React.FC<CMSEditorProps> = ({ content, onChange, onSave,
                 <Quote className="w-4 h-4" />
               </MenuButton>
 
-              <div className="w-px h-6 bg-neutral-300 dark:bg-neutral-600 mx-1" />
+              <div className="w-px h-6 bg-muted mx-1" />
               
               <MenuButton
                 onClick={() => setShowLinkDialog(true)}
@@ -409,7 +409,7 @@ export const CMSEditor: React.FC<CMSEditorProps> = ({ content, onChange, onSave,
                 <Minus className="w-4 h-4" />
               </MenuButton>
 
-              <div className="w-px h-6 bg-neutral-300 dark:bg-neutral-600 mx-1" />
+              <div className="w-px h-6 bg-muted mx-1" />
               
               <MenuButton
                 onClick={() => editor.chain().focus().setTextAlign('left').run()}
@@ -443,7 +443,7 @@ export const CMSEditor: React.FC<CMSEditorProps> = ({ content, onChange, onSave,
                 <AlignJustify className="w-4 h-4" />
               </MenuButton>
 
-              <div className="w-px h-6 bg-neutral-300 dark:bg-neutral-600 mx-1" />
+              <div className="w-px h-6 bg-muted mx-1" />
               
               <MenuButton
                 onClick={() => editor.chain().focus().clearNodes().unsetAllMarks().run()}
@@ -452,7 +452,7 @@ export const CMSEditor: React.FC<CMSEditorProps> = ({ content, onChange, onSave,
                 <RemoveFormatting className="w-4 h-4" />
               </MenuButton>
 
-              <div className="w-px h-6 bg-neutral-300 dark:bg-neutral-600 mx-1" />
+              <div className="w-px h-6 bg-muted mx-1" />
               
               <MenuButton
                 onClick={() => editor.chain().focus().undo().run()}
@@ -482,7 +482,7 @@ export const CMSEditor: React.FC<CMSEditorProps> = ({ content, onChange, onSave,
                 onChange={(e) => setLinkUrl(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && addLink()}
                 placeholder={t('cms.editor.linkUrlPlaceholder', 'Enter URL...')}
-                className="flex-1 px-3 py-1 border border-primary/30 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 rounded-md focus:ring-2 focus:ring-brand-500"
+                className="flex-1 px-3 py-1 border border-primary/30 bg-card text-foreground rounded-md focus:ring-2 focus:ring-brand-500"
                 autoFocus
               />
               <Button size="sm" onClick={addLink}>{t('cms.editor.addLink', 'Add Link')}</Button>
@@ -501,17 +501,17 @@ export const CMSEditor: React.FC<CMSEditorProps> = ({ content, onChange, onSave,
           {/* Editor — prose-invert in dark mode flips the prose typography
               palette without us having to override every prose-* class. */}
           {viewMode !== 'preview' && (
-            <div className={`${viewMode === 'split' ? 'w-1/2 border-r border-neutral-200 dark:border-neutral-700' : 'w-full'} overflow-auto bg-white dark:bg-neutral-900`}>
+            <div className={`${viewMode === 'split' ? 'w-1/2 border-r border-border' : 'w-full'} overflow-auto bg-card`}>
               <EditorContent
                 editor={editor}
-                className="min-h-[400px] p-4 prose prose-neutral dark:prose-invert max-w-none focus:outline-hidden [&_.ProseMirror]:min-h-[400px] [&_.ProseMirror]:outline-hidden [&_.ProseMirror]:text-neutral-900 dark:[&_.ProseMirror]:text-neutral-100 [&_.ProseMirror_p.is-editor-empty:first-child::before]:content-[attr(data-placeholder)] [&_.ProseMirror_p.is-editor-empty:first-child::before]:text-neutral-400 dark:[&_.ProseMirror_p.is-editor-empty:first-child::before]:text-neutral-500 [&_.ProseMirror_p.is-editor-empty:first-child::before]:pointer-events-none [&_.ProseMirror_p.is-editor-empty:first-child::before]:float-left [&_.ProseMirror_p.is-editor-empty:first-child::before]:h-0 [&_.ProseMirror_br.hard-break]:display-block [&_.ProseMirror_br.hard-break]:content-[''] [&_.ProseMirror_br.hard-break]:margin-[0.5em_0] [&_.ProseMirror_pre]:bg-neutral-100 dark:[&_.ProseMirror_pre]:bg-neutral-800 [&_.ProseMirror_pre]:rounded-md [&_.ProseMirror_pre]:p-4 [&_.ProseMirror_pre]:overflow-x-auto [&_.ProseMirror_code]:bg-neutral-100 dark:[&_.ProseMirror_code]:bg-neutral-800 [&_.ProseMirror_code]:rounded-sm [&_.ProseMirror_code]:px-1 [&_.ProseMirror_code]:py-0.5 [&_.ProseMirror_code]:text-sm [&_.ProseMirror_pre_code]:bg-transparent [&_.ProseMirror_pre_code]:p-0"
+                className="min-h-[400px] p-4 prose prose-neutral dark:prose-invert max-w-none focus:outline-hidden [&_.ProseMirror]:min-h-[400px] [&_.ProseMirror]:outline-hidden [&_.ProseMirror]:text-foreground [&_.ProseMirror_p.is-editor-empty:first-child::before]:content-[attr(data-placeholder)] [&_.ProseMirror_p.is-editor-empty:first-child::before]:text-muted-foreground [&_.ProseMirror_p.is-editor-empty:first-child::before]:pointer-events-none [&_.ProseMirror_p.is-editor-empty:first-child::before]:float-left [&_.ProseMirror_p.is-editor-empty:first-child::before]:h-0 [&_.ProseMirror_br.hard-break]:display-block [&_.ProseMirror_br.hard-break]:content-[''] [&_.ProseMirror_br.hard-break]:margin-[0.5em_0] [&_.ProseMirror_pre]:bg-muted [&_.ProseMirror_pre]:rounded-md [&_.ProseMirror_pre]:p-4 [&_.ProseMirror_pre]:overflow-x-auto [&_.ProseMirror_code]:bg-muted [&_.ProseMirror_code]:rounded-sm [&_.ProseMirror_code]:px-1 [&_.ProseMirror_code]:py-0.5 [&_.ProseMirror_code]:text-sm [&_.ProseMirror_pre_code]:bg-transparent [&_.ProseMirror_pre_code]:p-0"
               />
             </div>
           )}
 
           {/* Preview */}
           {viewMode !== 'edit' && (
-            <div className={`${viewMode === 'split' ? 'w-1/2' : 'w-full'} overflow-auto bg-neutral-50 dark:bg-neutral-800 p-4`}>
+            <div className={`${viewMode === 'split' ? 'w-1/2' : 'w-full'} overflow-auto bg-muted p-4`}>
               <div
                 className="prose prose-neutral dark:prose-invert max-w-none"
                 dangerouslySetInnerHTML={{ __html: getPreviewContent() }}
@@ -521,12 +521,12 @@ export const CMSEditor: React.FC<CMSEditorProps> = ({ content, onChange, onSave,
         </div>
 
         {/* Status Bar */}
-        <div className="flex items-center justify-between px-4 py-2 bg-neutral-50 dark:bg-neutral-800 border-t border-neutral-200 dark:border-neutral-700 text-sm text-neutral-600 dark:text-neutral-300">
+        <div className="flex items-center justify-between px-4 py-2 bg-muted border-t border-border text-sm text-muted-foreground">
           <div className="flex items-center gap-4">
             <span>{t('cms.editor.wordCount', '{{count}} words', { count: wordCount })}</span>
             <span>{t('cms.editor.charCount', '{{count}} characters', { count: charCount })}</span>
           </div>
-          <div className="text-xs text-neutral-500 dark:text-neutral-400">
+          <div className="text-xs text-muted-foreground">
             {t('cms.editor.lineBreakHint', 'Press Shift+Enter for line break, Enter for new paragraph')}
           </div>
         </div>
@@ -535,7 +535,7 @@ export const CMSEditor: React.FC<CMSEditorProps> = ({ content, onChange, onSave,
       {/* Help Modal */}
       {showHelp && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 rounded-lg max-w-2xl w-full max-h-[80vh] overflow-auto">
+          <div className="bg-card text-foreground rounded-lg max-w-2xl w-full max-h-[80vh] overflow-auto">
             <div className="p-6">
               <h2 className="text-xl font-semibold mb-4">
                 {t('cms.editor.helpTitle', 'Editor Help & Keyboard Shortcuts')}

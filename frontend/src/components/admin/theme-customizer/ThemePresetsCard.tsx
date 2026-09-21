@@ -29,7 +29,7 @@ export const ThemePresetsCard: React.FC<ThemePresetsCardProps> = ({
   const { t } = useTranslation();
 
   return (
-    <Card className="p-6"><CardContent><h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4 flex items-center gap-2">
+    <Card className="p-6"><CardContent><h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
               <Sparkles className="w-5 h-5" />
               {t('branding.themePresets')}
             </h3><div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -41,14 +41,14 @@ export const ThemePresetsCard: React.FC<ThemePresetsCardProps> = ({
                   className={`relative p-4 rounded-lg border-2 transition-all text-left ${
                     selectedPreset === key
                       ? 'tile-selected'
-                      : 'border-neutral-200 dark:border-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600'
+                      : 'border-border'
                   }`}
                 >
                   <div className="flex items-start justify-between mb-2">
                     <div>
-                      <span className="font-medium text-sm block text-neutral-900 dark:text-neutral-100">{theme.name}</span>
+                      <span className="font-medium text-sm block text-foreground">{theme.name}</span>
                       {theme.description && (
-                        <span className="text-xs text-neutral-600 dark:text-neutral-400 mt-1 block">{theme.description}</span>
+                        <span className="text-xs text-muted-foreground mt-1 block">{theme.description}</span>
                       )}
                     </div>
                     {selectedPreset === key && (
@@ -60,24 +60,24 @@ export const ThemePresetsCard: React.FC<ThemePresetsCardProps> = ({
                       {/* Preview swatches: background, surface, accent-dark, accent
                           — gives a quick read of the preset's full palette. */}
                       <div
-                        className="w-5 h-5 rounded-full border border-neutral-200 dark:border-neutral-600"
+                        className="w-5 h-5 rounded-full border border-border"
                         style={{ backgroundColor: theme.config.backgroundColor }}
                       />
                       <div
-                        className="w-5 h-5 rounded-full border border-neutral-200 dark:border-neutral-600"
+                        className="w-5 h-5 rounded-full border border-border"
                         style={{ backgroundColor: theme.config.surfaceColor || theme.config.backgroundColor }}
                       />
                       <div
-                        className="w-5 h-5 rounded-full border border-neutral-200 dark:border-neutral-600"
+                        className="w-5 h-5 rounded-full border border-border"
                         style={{ backgroundColor: theme.config.accentDarkColor || theme.config.primaryColor }}
                       />
                       <div
-                        className="w-5 h-5 rounded-full border border-neutral-200 dark:border-neutral-600"
+                        className="w-5 h-5 rounded-full border border-border"
                         style={{ backgroundColor: theme.config.accentColor }}
                       />
                     </div>
                     {theme.config.galleryLayout && layoutIcons[theme.config.galleryLayout] && (
-                      <div className="ml-auto text-neutral-400">
+                      <div className="ml-auto text-muted-foreground">
                         {layoutIcons[theme.config.galleryLayout]}
                       </div>
                     )}

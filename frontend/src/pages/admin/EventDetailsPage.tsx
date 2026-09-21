@@ -385,7 +385,7 @@ export const EventDetailsPage: React.FC = () => {
   // this branch the spinner above never resolved (QA 7.02).
   if (eventError || !event) {
     return (
-      <Card className="py-8"><CardContent className="px-8"><p className="text-neutral-900 dark:text-neutral-100">{t('events.notFound', 'Event not found')}</p><Button variant="outline" className="mt-4" onClick={() => navigate('/admin/events')}>
+      <Card className="py-8"><CardContent className="px-8"><p className="text-foreground">{t('events.notFound', 'Event not found')}</p><Button variant="outline" className="mt-4" onClick={() => navigate('/admin/events')}>
                   {t('events.backToEvents')}
                 </Button></CardContent></Card>
     );

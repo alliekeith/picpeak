@@ -54,11 +54,11 @@ const nextKey = () => {
   return `clause-${keyCounter}`;
 };
 
-const fieldClass = 'focus:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900 w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 '
-  + 'bg-white dark:bg-neutral-800 text-sm text-neutral-900 dark:text-neutral-100';
-const labelClass = 'block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1';
-const iconButton = 'focus:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900 p-1 rounded-sm border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-200 '
-  + 'disabled:opacity-40 hover:bg-neutral-50 dark:hover:bg-neutral-700';
+const fieldClass = 'focus:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900 w-full px-3 py-2 rounded-md border border-border '
+  + 'bg-card text-sm text-foreground';
+const labelClass = 'block text-sm font-medium text-foreground mb-1';
+const iconButton = 'focus:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900 p-1 rounded-sm border border-border text-foreground '
+  + 'disabled:opacity-40 hover:bg-accent';
 
 function libraryBodies(block: ContractBlock): LocaleText {
   const out: LocaleText = {};
@@ -103,7 +103,7 @@ const LocaleTextField: React.FC<{
   return (
     <div>
       <div className="flex items-center justify-between gap-2 flex-wrap mb-1">
-        <label htmlFor={`${id}-${locale}`} className="text-sm font-medium text-neutral-700 dark:text-neutral-300">{label}</label>
+        <label htmlFor={`${id}-${locale}`} className="text-sm font-medium text-foreground">{label}</label>
         <div className="flex gap-1" role="group" aria-label={t('contracts.templates.languages', 'Languages') as string}>
           {CONTRACT_LOCALES.map((l) => (
             <button
@@ -112,8 +112,8 @@ const LocaleTextField: React.FC<{
               aria-pressed={locale === l}
               onClick={() => setLocale(l)}
               className={`px-2 py-0.5 rounded text-xs border ${locale === l
-                ? 'bg-brand-600 text-white border-brand-600'
-                : 'border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300'}`}
+                ? 'bg-brand-600 text-primary-foreground border-brand-600'
+                : 'border-border text-foreground'}`}
             >
               {l.toUpperCase()}{value[l] ? ' •' : ''}
             </button>
@@ -317,12 +317,12 @@ export const ContractTemplateEditorPage: React.FC = () => {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3 flex-wrap">
-        <Link to="/admin/clients/contracts/templates" className="p-1 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-800"
+        <Link to="/admin/clients/contracts/templates" className="p-1 rounded-sm hover:bg-accent"
           aria-label={t('contracts.templates.backToTemplates', 'Back to templates') as string}>
           <ArrowLeft className="w-5 h-5" />
         </Link>
-        <h1 className="text-2xl font-bold flex-1 text-neutral-900 dark:text-neutral-100">{template.name}</h1>
-        <span className="text-sm text-neutral-600 dark:text-neutral-400">
+        <h1 className="text-2xl font-bold flex-1 text-foreground">{template.name}</h1>
+        <span className="text-sm text-muted-foreground">
           {template.status === 'archived'
             ? t('contracts.templates.status.archived', 'Archived')
             : template.currentVersion
@@ -333,7 +333,7 @@ export const ContractTemplateEditorPage: React.FC = () => {
       </div>
 
       {template.isSystem && (
-        <Card className="flex flex-wrap items-center gap-3"><CardContent><p className="flex-1 text-sm text-neutral-700 dark:text-neutral-300">
+        <Card className="flex flex-wrap items-center gap-3"><CardContent><p className="flex-1 text-sm text-foreground">
                           {t('contracts.templates.systemNotice', 'The standard template can\'t be edited. Duplicate it to make a version of your own.')}
                         </p><PermissionGate permission="contracts.templates.manage">
                           <Button variant="outline" onClick={onDuplicate} disabled={busy}>{t('contracts.templates.duplicate', 'Duplicate')}</Button>
@@ -358,7 +358,7 @@ export const ContractTemplateEditorPage: React.FC = () => {
         </div>
       )}
 
-      <Card className="py-8 space-y-3"><CardContent className="px-8"><h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">{t('contracts.templates.details', 'Details')}</h2><div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <Card className="py-8 space-y-3"><CardContent className="px-8"><h2 className="text-lg font-semibold text-foreground">{t('contracts.templates.details', 'Details')}</h2><div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('contracts.templates.name', 'Name') as string}</span><Input id="contract-template-name" value={name}
                                     maxLength={128} readOnly={readOnly} onChange={(e) => setName(e.target.value)} /></Label></div>
                     <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('contracts.templates.useCase', 'Use case') as string}</span><Input id="contract-template-use-case" value={useCase}
@@ -374,28 +374,28 @@ export const ContractTemplateEditorPage: React.FC = () => {
                     </div>
                   </div><LocaleTextField id="contract-template-intro" label={t('contracts.templates.introText', 'Intro text') as string}
                     value={intro} onChange={setIntro} readOnly={readOnly} /><LocaleTextField id="contract-template-outro" label={t('contracts.templates.outroText', 'Closing text') as string}
-                    value={outro} onChange={setOutro} rows={2} readOnly={readOnly} /><p className="text-xs text-neutral-500 dark:text-neutral-400">
+                    value={outro} onChange={setOutro} rows={2} readOnly={readOnly} /><p className="text-xs text-muted-foreground">
                     {t('contracts.templates.placeholders', 'Placeholders you can use:')}{' '}
                     <span className="font-mono">{CONTRACT_PLACEHOLDERS.map((key) => `{{${key}}}`).join(' ')}</span>
                   </p></CardContent></Card>
 
-      <Card className="py-8 space-y-3"><CardContent className="px-8"><h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">{t('contracts.templates.clauses', 'Clauses')}</h2>{items.length === 0 && (
-                    <p className="text-sm text-neutral-600 dark:text-neutral-400">
+      <Card className="py-8 space-y-3"><CardContent className="px-8"><h2 className="text-lg font-semibold text-foreground">{t('contracts.templates.clauses', 'Clauses')}</h2>{items.length === 0 && (
+                    <p className="text-sm text-muted-foreground">
                       {t('contracts.templates.noClauses', 'No clauses yet. Add clauses from the library or free text.')}
                     </p>
                   )}<ol className="space-y-2">
                     {items.map((item, index) => (
-                      <li key={item.key} className="rounded-sm border border-neutral-200 dark:border-neutral-700 p-2">
+                      <li key={item.key} className="rounded-sm border border-border p-2">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-xs tabular-nums text-neutral-500 dark:text-neutral-400 w-6">{index + 1}.</span>
-                          <span className="text-[10px] uppercase tracking-wide px-1.5 py-0.5 rounded-sm bg-neutral-200 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-200">
+                          <span className="text-xs tabular-nums text-muted-foreground w-6">{index + 1}.</span>
+                          <span className="text-[10px] uppercase tracking-wide px-1.5 py-0.5 rounded-sm bg-muted text-foreground">
                             {item.kind === 'block' ? t('contracts.templates.clause', 'Clause') : t('contracts.templates.freeText', 'Free text')}
                           </span>
-                          <span className="text-xs text-neutral-500 dark:text-neutral-400">{t(`contracts.sections.${item.section}`, item.section)}</span>
-                          <span className="flex-1 min-w-[160px] text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                          <span className="text-xs text-muted-foreground">{t(`contracts.sections.${item.section}`, item.section)}</span>
+                          <span className="flex-1 min-w-[160px] text-sm font-medium text-foreground">
                             {item.kind === 'block' ? item.name : (item.heading || t('contracts.templates.untitled', 'Untitled'))}
                             {item.kind === 'block' && Object.keys(item.body).length > 0 && (
-                              <span className="ml-2 text-xs font-normal text-neutral-500 dark:text-neutral-400">{t('contracts.templates.customised', 'customised')}</span>
+                              <span className="ml-2 text-xs font-normal text-muted-foreground">{t('contracts.templates.customised', 'customised')}</span>
                             )}
                             {item.blockArchived && (
                               <span className="ml-2 text-xs font-normal text-red-700 dark:text-red-400">{t('contracts.templates.archivedBlock', 'Archived in the library')}</span>
@@ -406,7 +406,7 @@ export const ContractTemplateEditorPage: React.FC = () => {
                               aria-label={t('contracts.templates.moveUp', 'Move up') as string}><ArrowUp className="w-3.5 h-3.5" /></button>
                             <button type="button" className={iconButton} disabled={readOnly || index === items.length - 1} onClick={() => move(index, 1)}
                               aria-label={t('contracts.templates.moveDown', 'Move down') as string}><ArrowDown className="w-3.5 h-3.5" /></button>
-                            <button type="button" className="text-xs underline text-neutral-700 dark:text-neutral-300 px-1"
+                            <button type="button" className="text-xs underline text-foreground px-1"
                               aria-expanded={item.expanded} onClick={() => update(item.key, { expanded: !item.expanded })}>
                               {item.expanded ? t('contracts.templates.hideText', 'Hide text') : t('contracts.templates.showText', 'Text')}
                             </button>
@@ -448,7 +448,7 @@ export const ContractTemplateEditorPage: React.FC = () => {
                       </li>
                     ))}
                   </ol>{!readOnly && (
-                    <div className="flex flex-wrap items-end gap-2 pt-2 border-t border-neutral-200 dark:border-neutral-700">
+                    <div className="flex flex-wrap items-end gap-2 pt-2 border-t border-border">
                       <div className="flex-1 min-w-[220px]">
                         <label htmlFor="contract-template-pick-block" className={labelClass}>{t('contracts.templates.pickClause', 'Clause from the library')}</label>
                         <select id="contract-template-pick-block" className={fieldClass} value={pickBlockId} onChange={(e) => setPickBlockId(e.target.value)}>
@@ -469,7 +469,7 @@ export const ContractTemplateEditorPage: React.FC = () => {
                     </div>
                   )}</CardContent></Card>
 
-      <Card className="py-8 space-y-3"><CardContent className="px-8"><h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">{t('contracts.attachments.heading', 'Attachments')}</h2><AttachmentListEditor idPrefix="contract-template-attachment" value={attachments} onChange={setAttachments} readOnly={readOnly} /></CardContent></Card>
+      <Card className="py-8 space-y-3"><CardContent className="px-8"><h2 className="text-lg font-semibold text-foreground">{t('contracts.attachments.heading', 'Attachments')}</h2><AttachmentListEditor idPrefix="contract-template-attachment" value={attachments} onChange={setAttachments} readOnly={readOnly} /></CardContent></Card>
 
       <div className="flex flex-wrap justify-end gap-2">
         <Button variant="outline" onClick={() => onPreview()} disabled={busy}>{t('contracts.templates.preview', 'Preview PDF')}</Button>
@@ -481,19 +481,19 @@ export const ContractTemplateEditorPage: React.FC = () => {
         )}
       </div>
 
-      <Card className="py-8"><CardContent className="px-8"><h2 className="text-lg font-semibold mb-2 text-neutral-900 dark:text-neutral-100">{t('contracts.templates.versions', 'Versions')}</h2>{detail.versions.length === 0 ? (
-                    <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('contracts.templates.noVersions', 'Not published yet.')}</p>
+      <Card className="py-8"><CardContent className="px-8"><h2 className="text-lg font-semibold mb-2 text-foreground">{t('contracts.templates.versions', 'Versions')}</h2>{detail.versions.length === 0 ? (
+                    <p className="text-sm text-muted-foreground">{t('contracts.templates.noVersions', 'Not published yet.')}</p>
                   ) : (
                     <ul className="divide-y divide-neutral-200 dark:divide-neutral-700">
                       {detail.versions.map((v) => (
                         <li key={v.id} className="py-2 flex flex-wrap items-center gap-3 text-sm">
-                          <span className="font-medium text-neutral-900 dark:text-neutral-100">v{v.version}</span>
-                          <span className="text-neutral-600 dark:text-neutral-400">
+                          <span className="font-medium text-foreground">v{v.version}</span>
+                          <span className="text-muted-foreground">
                             {v.status === 'published' ? t('contracts.templates.versionCurrent', 'Current') : t('contracts.templates.versionEarlier', 'Earlier')}
                             {v.publishedAt ? ` · ${formatDateTime(v.publishedAt)}` : ''}
                           </span>
                           {v.contentSha256 && (
-                            <span className="font-mono text-xs text-neutral-500 dark:text-neutral-400" title={v.contentSha256}>
+                            <span className="font-mono text-xs text-muted-foreground" title={v.contentSha256}>
                               {v.contentSha256.slice(0, 12)}
                             </span>
                           )}

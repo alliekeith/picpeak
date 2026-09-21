@@ -132,32 +132,32 @@ export const ArchivesPage: React.FC = () => {
     <div>
       {/* Page Header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{t('archives.title')}</h1>
-        <p className="text-neutral-600 dark:text-neutral-400 mt-1">{t('archives.subtitle')}</p>
+        <h1 className="text-2xl font-bold text-foreground">{t('archives.title')}</h1>
+        <p className="text-muted-foreground mt-1">{t('archives.subtitle')}</p>
       </div>
 
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <Card className="py-4"><CardContent className="px-4"><div className="flex items-center justify-between">
                           <div>
-                            <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('archives.totalArchives')}</p>
-                            <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{totals.archives}</p>
+                            <p className="text-sm text-muted-foreground">{t('archives.totalArchives')}</p>
+                            <p className="text-2xl font-bold text-foreground">{totals.archives}</p>
                           </div>
                           <Archive className="w-8 h-8 text-brand" />
                         </div></CardContent></Card>
 
         <Card className="py-4"><CardContent className="px-4"><div className="flex items-center justify-between">
                           <div>
-                            <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('archives.storageUsed')}</p>
-                            <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{archiveService.formatBytes(totals.archiveSize)}</p>
+                            <p className="text-sm text-muted-foreground">{t('archives.storageUsed')}</p>
+                            <p className="text-2xl font-bold text-foreground">{archiveService.formatBytes(totals.archiveSize)}</p>
                           </div>
                           <HardDrive className="w-8 h-8 text-blue-600" />
                         </div></CardContent></Card>
 
         <Card className="py-4"><CardContent className="px-4"><div className="flex items-center justify-between">
                           <div>
-                            <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('archives.totalPhotos')}</p>
-                            <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
+                            <p className="text-sm text-muted-foreground">{t('archives.totalPhotos')}</p>
+                            <p className="text-2xl font-bold text-foreground">
                               {totals.photos === 0 ? '0' : totals.photos.toLocaleString()}
                             </p>
                           </div>
@@ -166,8 +166,8 @@ export const ArchivesPage: React.FC = () => {
 
         <Card className="py-4"><CardContent className="px-4"><div className="flex items-center justify-between">
                           <div>
-                            <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('archives.avgArchiveSize')}</p>
-                            <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
+                            <p className="text-sm text-muted-foreground">{t('archives.avgArchiveSize')}</p>
+                            <p className="text-2xl font-bold text-foreground">
                               {totals.archives > 0
                                 ? archiveService.formatBytes(totals.archiveSize / totals.archives)
                                 : '0 Bytes'
@@ -181,7 +181,7 @@ export const ArchivesPage: React.FC = () => {
       {/* Filters and Search */}
       <Card className="py-4 mb-6"><CardContent className="px-4"><div className="flex flex-col lg:flex-row gap-4">
                     <div className="flex-1">
-                      <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Search className="w-5 h-5 text-neutral-400" />}</div><Input
+                      <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Search className="w-5 h-5 text-muted-foreground" />}</div><Input
                                           type="text"
                                           placeholder={t('archives.searchPlaceholder')}
                                           value={searchTerm}
@@ -193,7 +193,7 @@ export const ArchivesPage: React.FC = () => {
                       <select
                         value={filterType}
                         onChange={(e) => setFilterType(e.target.value)}
-                        className="px-4 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
+                        className="px-4 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
                       >
                         <option value="all">{t('archives.allTypes')}</option>
                         <option value="wedding">{t('archives.wedding')}</option>
@@ -206,7 +206,7 @@ export const ArchivesPage: React.FC = () => {
                       <select
                         value={sortBy}
                         onChange={(e) => setSortBy(e.target.value as any)}
-                        className="px-4 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
+                        className="px-4 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
                       >
                         <option value="date">{t('archives.sortByDate')}</option>
                         <option value="name">{t('archives.sortByName')}</option>
@@ -218,61 +218,61 @@ export const ArchivesPage: React.FC = () => {
       {/* Archives Table */}
       <Card className="overflow-hidden"><CardContent><div className="overflow-x-auto">
                     <table className="w-full">
-                      <thead className="bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700">
+                      <thead className="bg-muted border-b border-border">
                         <tr>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                          <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                             {t('archives.tableHeaders.event')}
                           </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                          <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                             {t('archives.tableHeaders.type')}
                           </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                          <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                             {t('archives.tableHeaders.archivedDate')}
                           </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                          <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                             {t('archives.tableHeaders.size')}
                           </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                          <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                             {t('archives.tableHeaders.photos')}
                           </th>
-                          <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                          <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
                             {t('archives.tableHeaders.actions')}
                           </th>
                         </tr>
                       </thead>
-                      <tbody className="bg-white dark:bg-neutral-800 divide-y divide-neutral-200 dark:divide-neutral-700">
+                      <tbody className="bg-card divide-y divide-neutral-200 dark:divide-neutral-700">
                         {archives.length === 0 ? (
                           <tr>
-                            <td colSpan={6} className="px-6 py-12 text-center text-neutral-500 dark:text-neutral-400">
+                            <td colSpan={6} className="px-6 py-12 text-center text-muted-foreground">
                               {t('archives.noArchivesFound')}
                             </td>
                           </tr>
                         ) : (
                           archives.map((archive) => (
-                            <tr key={archive.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-700/50">
+                            <tr key={archive.id} className="hover:bg-accent">
                               <td className="px-6 py-4">
                                 <div>
-                                  <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">{archive.eventName}</p>
-                                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                                  <p className="text-sm font-medium text-foreground">{archive.eventName}</p>
+                                  <p className="text-xs text-muted-foreground">
                                     {t('archives.eventDateNA').replace('N/A', formatDate(archive.eventDate, 'MMM d, yyyy') || 'N/A')}
                                   </p>
                                 </div>
                               </td>
-                              <td className="px-6 py-4 text-sm text-neutral-700 dark:text-neutral-300 capitalize">
+                              <td className="px-6 py-4 text-sm text-foreground capitalize">
                                 {archive.eventType}
                               </td>
-                              <td className="px-6 py-4 text-sm text-neutral-700 dark:text-neutral-300">
+                              <td className="px-6 py-4 text-sm text-foreground">
                                 <div>
                                   <p>{formatDate(archive.archivedAt, 'MMM d, yyyy') || t('archives.processing')}</p>
-                                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                                  <p className="text-xs text-muted-foreground">
                                     {archive.archivedAt ? fmtTime(archive.archivedAt) : ''}
                                   </p>
                                 </div>
                               </td>
-                              <td className="px-6 py-4 text-sm text-neutral-700 dark:text-neutral-300">
+                              <td className="px-6 py-4 text-sm text-foreground">
                                 {archiveService.formatBytes(archive.archiveSize)}
                               </td>
-                              <td className="px-6 py-4 text-sm text-neutral-700 dark:text-neutral-300">
+                              <td className="px-6 py-4 text-sm text-foreground">
                                 {archive.photoCount}
                               </td>
                               <td className="px-6 py-4 text-right">
@@ -331,7 +331,7 @@ export const ArchivesPage: React.FC = () => {
           controls are conditional now. */}
       {archivesData?.pagination && archivesData.pagination.total > 0 && (
         <div className="mt-6 flex items-center justify-between">
-          <div className="text-sm text-neutral-600">
+          <div className="text-sm text-muted-foreground">
             {t('archives.showing', {
               from: ((currentPage - 1) * archivesData.pagination.limit) + 1,
               to: Math.min(currentPage * archivesData.pagination.limit, archivesData.pagination.total),

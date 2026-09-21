@@ -301,7 +301,7 @@ const PhotoThumbnail: React.FC<PhotoThumbnailProps> = ({
             {!isSelectionMode && (
               <>
                 <button
-                  className="p-2 sm:p-2 bg-white/90 rounded-full hover:bg-white transition-colors"
+                  className="p-2 sm:p-2 bg-white/90 rounded-full hover:bg-accent transition-colors"
                   onClick={(e) => {
                     e.stopPropagation();
                     onClick(e);
@@ -312,7 +312,7 @@ const PhotoThumbnail: React.FC<PhotoThumbnailProps> = ({
                 </button>
                 {allowDownloads && (
                   <button
-                    className="p-2 sm:p-2 bg-white/90 rounded-full hover:bg-white transition-colors"
+                    className="p-2 sm:p-2 bg-white/90 rounded-full hover:bg-accent transition-colors"
                     // #1263 — without stopPropagation the tap also reached the
                     // tile's own onClick, so downloading opened the lightbox too.
                     onClick={(e) => {

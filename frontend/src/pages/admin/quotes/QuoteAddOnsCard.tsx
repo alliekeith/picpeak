@@ -107,24 +107,24 @@ export const QuoteAddOnsCard: React.FC<{ quote: QuoteDetail; lineItems: QuoteLin
   const changes = [...(quote.selectionChanges || [])].reverse();
 
   return (
-    <Card><CardContent><h3 className="font-semibold mb-2 text-neutral-900 dark:text-neutral-100">{t('quotes.selection.title', 'Add-ons at acceptance')}</h3>{quote.selectionAcceptedAt && quote.optionalSelection && (
-              <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-2">
+    <Card><CardContent><h3 className="font-semibold mb-2 text-foreground">{t('quotes.selection.title', 'Add-ons at acceptance')}</h3>{quote.selectionAcceptedAt && quote.optionalSelection && (
+              <p className="text-sm text-muted-foreground mb-2">
                 {quote.optionalSelection.by === 'customer'
                   ? t('quotes.selection.byCustomer', 'Chosen by the customer on {{date}}', { date: fmtDateTime(quote.selectionAcceptedAt) })
                   : t('quotes.selection.byAdmin', 'Recorded when you accepted on {{date}}', { date: fmtDateTime(quote.selectionAcceptedAt) })}
               </p>
             )}{editable && (
               <PermissionGate permission="quotes.manage">
-                <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-2">
+                <p className="text-sm text-muted-foreground mb-2">
                   {t('quotes.addOns.editHint', 'Book or remove add-ons, then save. The customer is emailed the updated quote.')}
                 </p>
               </PermissionGate>
             )}{converted && (
-              <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-2">
+              <p className="text-sm text-muted-foreground mb-2">
                 {t('quotes.addOns.convertedHint', 'Change the add-ons on the contract or invoice.')}
               </p>
             )}{chosen.size === 0 && (
-              <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-2">{t('quotes.selection.none', 'No add-ons chosen')}</p>
+              <p className="text-sm text-muted-foreground mb-2">{t('quotes.selection.none', 'No add-ons chosen')}</p>
             )}<ul className="text-sm divide-y divide-neutral-100 dark:divide-neutral-800">
               {rows.map((row) => {
                 const booked = chosen.has(row.position);
@@ -134,22 +134,22 @@ export const QuoteAddOnsCard: React.FC<{ quote: QuoteDetail; lineItems: QuoteLin
                 return (
                   <li key={row.position} className="py-2">
                     <div className={`flex items-start justify-between gap-4 ${dim}`}>
-                      <span className="text-neutral-900 dark:text-neutral-100">{row.description}</span>
+                      <span className="text-foreground">{row.description}</span>
                       {row.lineTotalMinor != null && (
-                        <span className="shrink-0 tabular-nums text-neutral-900 dark:text-neutral-100">
+                        <span className="shrink-0 tabular-nums text-foreground">
                           {formatMoneyMinor(row.lineTotalMinor, quote.currency)}
                         </span>
                       )}
                     </div>
                     {row.detailsText && (
-                      <p className={`mt-0.5 text-xs italic whitespace-pre-line text-neutral-500 dark:text-neutral-400 ${dim}`}>
+                      <p className={`mt-0.5 text-xs italic whitespace-pre-line text-muted-foreground ${dim}`}>
                         {row.detailsText}
                       </p>
                     )}
                     <div className="mt-1 flex items-center gap-2 flex-wrap text-xs">
                       {editable ? (
                         <>
-                          <span className={`italic text-neutral-500 dark:text-neutral-400 ${dim}`}>
+                          <span className={`italic text-muted-foreground ${dim}`}>
                             <AddOnBookingState booked={booked} />
                           </span>
                           <PermissionGate permission="quotes.manage">
@@ -157,7 +157,7 @@ export const QuoteAddOnsCard: React.FC<{ quote: QuoteDetail; lineItems: QuoteLin
                           </PermissionGate>
                         </>
                       ) : (
-                        <span className={booked ? 'text-green-700 dark:text-green-400' : 'text-neutral-500 dark:text-neutral-400'}>
+                        <span className={booked ? 'text-green-700 dark:text-green-400' : 'text-muted-foreground'}>
                           {booked ? t('quotes.selection.chosen', 'Booked') : t('quotes.selection.notChosen', 'Not booked')}
                         </span>
                       )}
@@ -174,14 +174,14 @@ export const QuoteAddOnsCard: React.FC<{ quote: QuoteDetail; lineItems: QuoteLin
                 </div>
               </PermissionGate>
             )}{changes.length > 0 && (
-              <div className="mt-4 pt-3 border-t border-neutral-200 dark:border-neutral-700">
-                <h4 className="text-sm font-semibold mb-2 text-neutral-900 dark:text-neutral-100">
+              <div className="mt-4 pt-3 border-t border-border">
+                <h4 className="text-sm font-semibold mb-2 text-foreground">
                   {t('quotes.addOns.historyTitle', 'Changes')}
                 </h4>
                 <ol className="space-y-2 text-sm">
                   {changes.map((change, index) => (
-                    <li key={`${change.at}-${index}`} className="text-neutral-700 dark:text-neutral-300">
-                      <div className="text-neutral-900 dark:text-neutral-100">
+                    <li key={`${change.at}-${index}`} className="text-foreground">
+                      <div className="text-foreground">
                         <span className="font-medium">{fmtDateTime(change.at)}</span>
                         {' · '}
                         {change.by === 'customer'
@@ -194,7 +194,7 @@ export const QuoteAddOnsCard: React.FC<{ quote: QuoteDetail; lineItems: QuoteLin
                       {change.removed.length > 0 && (
                         <div>{t('quotes.addOns.removed', 'Removed: {{items}}', { items: change.removed.join(', ') })}</div>
                       )}
-                      <div className="tabular-nums text-neutral-600 dark:text-neutral-400">
+                      <div className="tabular-nums text-muted-foreground">
                         {t('quotes.addOns.totalChange', 'Total {{before}} → {{after}}', {
                           before: formatMoneyMinor(Number(change.totalBeforeMinor), quote.currency),
                           after: formatMoneyMinor(Number(change.totalAfterMinor), quote.currency),

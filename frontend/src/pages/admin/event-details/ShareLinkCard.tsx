@@ -162,8 +162,8 @@ export const ShareLinkCard: React.FC<ShareLinkCardProps> = ({ event, setShowPass
   };
 
   return (
-    <Card><CardContent><h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">{t('events.shareLink')}</h2>{event.share_secrets_hidden ? (
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">
+    <Card><CardContent><h2 className="text-lg font-semibold text-foreground mb-4">{t('events.shareLink')}</h2>{event.share_secrets_hidden ? (
+              <p className="text-sm text-muted-foreground">
                 {t('events.shareLinkOwnerOnly', 'Only the gallery owner can see and share this link.')}
               </p>
             ) : (
@@ -173,7 +173,7 @@ export const ShareLinkCard: React.FC<ShareLinkCardProps> = ({ event, setShowPass
                 type="text"
                 value={buildShareLinkUrl(event.share_link)}
                 readOnly
-                className="flex-1 px-3 py-2 bg-neutral-50 dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 text-neutral-900 dark:text-neutral-100 rounded-lg text-sm"
+                className="flex-1 px-3 py-2 bg-muted border border-border text-foreground rounded-lg text-sm"
               />
               <Button
                                           variant="outline"
@@ -182,15 +182,15 @@ export const ShareLinkCard: React.FC<ShareLinkCardProps> = ({ event, setShowPass
                                           {copiedLink ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}{copiedLink ? t('events.copied') : t('events.copy')}</Button>
             </div>
 
-            <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-2">
+            <p className="text-sm text-muted-foreground mt-2">
               {isGalleryPublic(event.require_password)
                 ? t('events.shareWithGuestsPublic', 'Anyone with this link can view the gallery. No password is required.')
                 : t('events.shareWithGuests')}
             </p>
             </>
             )}{event.share_link && (
-              <div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
-                <h3 className="text-sm font-medium text-neutral-900 dark:text-neutral-100 mb-3 flex items-center gap-2">
+              <div className="mt-4 pt-4 border-t border-border">
+                <h3 className="text-sm font-medium text-foreground mb-3 flex items-center gap-2">
                   <QrCode className="w-4 h-4" />
                   {t('events.qrCode', 'QR code')}
                 </h3>
@@ -202,11 +202,11 @@ export const ShareLinkCard: React.FC<ShareLinkCardProps> = ({ event, setShowPass
                     <img
                       src={qrPreviewUrl}
                       alt={t('events.qrCode', 'QR code')}
-                      className="w-28 h-28 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white p-1"
+                      className="w-28 h-28 rounded-lg border border-border bg-card p-1"
                     />
                   ) : (
-                    <div className="w-28 h-28 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-700 flex items-center justify-center">
-                      <QrCode className="w-8 h-8 text-neutral-300 dark:text-neutral-500" />
+                    <div className="w-28 h-28 rounded-lg border border-border bg-muted flex items-center justify-center">
+                      <QrCode className="w-8 h-8 text-muted-foreground" />
                     </div>
                   )}
                   <div className="flex-1 w-full grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -224,7 +224,7 @@ export const ShareLinkCard: React.FC<ShareLinkCardProps> = ({ event, setShowPass
                 </div>
               </div>
             )}{!event.is_archived && (
-              <div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700 space-y-2">
+              <div className="mt-4 pt-4 border-t border-border space-y-2">
                 {passwordRecoverable && hasSecret && (
                   <>
                     <Button
@@ -236,21 +236,21 @@ export const ShareLinkCard: React.FC<ShareLinkCardProps> = ({ event, setShowPass
                                               >
                                                 {loadingStored && <Loader2 className="animate-spin" />}{stored ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}{stored ? t('events.hideGalleryPassword', 'Hide password') : t('events.showGalleryPassword', 'Show password')}</Button>
                     {stored && (
-                      <div className="rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-700/50 p-3 space-y-2 text-sm" data-testid="stored-gallery-password">
+                      <div className="rounded-lg border border-border bg-muted p-3 space-y-2 text-sm" data-testid="stored-gallery-password">
                         {!stored.password && !stored.client_password ? (
-                          <p className="text-neutral-600 dark:text-neutral-400">{t('events.galleryPasswordNotStored')}</p>
+                          <p className="text-muted-foreground">{t('events.galleryPasswordNotStored')}</p>
                         ) : (
                           ([
                             ['password', t('events.galleryPasswordLabel', 'Gallery password'), stored.password],
                             ['client_password', t('events.clientPinLabel', 'Client PIN'), stored.client_password],
                           ] as const).filter(([, , value]) => Boolean(value)).map(([key, label, value]) => (
                             <div key={key} className="flex items-center gap-2">
-                              <span className="text-neutral-600 dark:text-neutral-400 shrink-0">{label}</span>
-                              <code className="flex-1 min-w-0 truncate font-mono text-neutral-900 dark:text-neutral-100">{value}</code>
+                              <span className="text-muted-foreground shrink-0">{label}</span>
+                              <code className="flex-1 min-w-0 truncate font-mono text-foreground">{value}</code>
                               <button
                                 type="button"
                                 onClick={() => copySecret(key, value as string)}
-                                className="p-1 text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100"
+                                className="p-1 text-muted-foreground hover:text-foreground"
                                 aria-label={`${t('events.copy')} ${label}`}
                               >
                                 {copiedSecret === key ? <CheckCircle className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
@@ -287,7 +287,7 @@ export const ShareLinkCard: React.FC<ShareLinkCardProps> = ({ event, setShowPass
                                   >
                                     <Mail className="w-4 h-4" />{t('events.resendCreationEmail')}</Button>
                 {passwordRecoverable && hasSecret && (
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400 text-center">{t('events.resendWithStoredPasswordHint')}</p>
+                  <p className="text-xs text-muted-foreground text-center">{t('events.resendWithStoredPasswordHint')}</p>
                 )}
               </div>
             )}</CardContent></Card>

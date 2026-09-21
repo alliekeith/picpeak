@@ -24,21 +24,21 @@ export const EmailPreviewModal: React.FC<EmailPreviewModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <Card className="w-full max-w-4xl max-h-[90vh] flex flex-col"><CardContent>{/* Header */}<div className="flex items-center justify-between p-6 border-b border-neutral-200 dark:border-neutral-700">
+      <Card className="w-full max-w-4xl max-h-[90vh] flex flex-col"><CardContent>{/* Header */}<div className="flex items-center justify-between p-6 border-b border-border">
                     <div className="flex items-center gap-3">
                       <Mail className="w-6 h-6 text-brand" />
-                      <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">Email Preview</h2>
+                      <h2 className="text-xl font-semibold text-foreground">Email Preview</h2>
                     </div>
                     <button
                       onClick={onClose}
-                      className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
+                      className="text-muted-foreground hover:text-foreground transition-colors"
                     >
                       <X className="w-6 h-6" />
                     </button>
-                  </div>{/* Subject */}<div className="px-6 py-4 border-b border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800">
-                    <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Subject:</p>
-                    <p className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mt-1">{subject}</p>
-                  </div>{/* View mode toggle */}<div className="px-6 py-3 border-b border-neutral-200 dark:border-neutral-700">
+                  </div>{/* Subject */}<div className="px-6 py-4 border-b border-border bg-muted">
+                    <p className="text-sm font-medium text-muted-foreground">Subject:</p>
+                    <p className="text-lg font-semibold text-foreground mt-1">{subject}</p>
+                  </div>{/* View mode toggle */}<div className="px-6 py-3 border-b border-border">
                     <div className="flex gap-2">
                       <Button
                                               variant={viewMode === 'html' ? 'default' : 'outline'}
@@ -59,7 +59,7 @@ export const EmailPreviewModal: React.FC<EmailPreviewModalProps> = ({
                     </div>
                   </div>{/* Content */}<div className="flex-1 overflow-auto p-6">
                     {viewMode === 'html' ? (
-                      <div className="bg-white border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-xs">
+                      <div className="bg-card border border-border rounded-lg shadow-xs">
                         <iframe
                           srcDoc={htmlContent}
                           className="w-full h-[600px] border-0"
@@ -68,13 +68,13 @@ export const EmailPreviewModal: React.FC<EmailPreviewModalProps> = ({
                         />
                       </div>
                     ) : (
-                      <div className="bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg p-6">
-                        <pre className="whitespace-pre-wrap font-mono text-sm text-neutral-700 dark:text-neutral-300">
+                      <div className="bg-muted border border-border rounded-lg p-6">
+                        <pre className="whitespace-pre-wrap font-mono text-sm text-foreground">
                           {textContent}
                         </pre>
                       </div>
                     )}
-                  </div>{/* Footer */}<div className="flex justify-end gap-3 p-6 border-t border-neutral-200 dark:border-neutral-700">
+                  </div>{/* Footer */}<div className="flex justify-end gap-3 p-6 border-t border-border">
                     <Button variant="outline" onClick={onClose}>
                       Close
                     </Button>

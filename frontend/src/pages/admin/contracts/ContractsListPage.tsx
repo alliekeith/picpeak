@@ -69,7 +69,7 @@ export const ContractsListPage: React.FC = () => {
       <div className="flex items-center justify-between mb-6">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{t('contracts.title', 'Contracts')}</h1>
+            <h1 className="text-2xl font-bold text-foreground">{t('contracts.title', 'Contracts')}</h1>
             {/* Beta badge — matches Customers + Quotes + Invoices. */}
             <span
               className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-sm font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
@@ -78,7 +78,7 @@ export const ContractsListPage: React.FC = () => {
               {t('navigation.betaTag', 'Beta')}
             </span>
           </div>
-          <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             {t('contracts.subtitle', 'Compose contracts from reusable blocks and have customers sign in-browser or upload a wet-signed PDF.')}
           </p>
         </div>
@@ -106,11 +106,11 @@ export const ContractsListPage: React.FC = () => {
 
       <Card className="py-8"><CardContent className="px-8"><div className="flex flex-wrap items-center gap-3">
                     <div className="relative flex-1 min-w-[200px]">
-                      <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
+                      <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                       <input
                         type="text"
                         placeholder={t('contracts.list.searchPlaceholder', 'Search by number, title or customer…') as string}
-                        className="w-full pl-9 pr-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm"
+                        className="w-full pl-9 pr-3 py-2 rounded-md border border-border bg-card text-sm"
                         value={search}
                         onChange={(e) => { setSearch(e.target.value); setPage(1); }}
                       />
@@ -122,8 +122,8 @@ export const ContractsListPage: React.FC = () => {
                         <button key={s} type="button" onClick={() => toggleStatus(s)}
                           className={`px-2.5 py-1 rounded-full text-xs font-medium border transition-colors ${
                             active
-                              ? 'bg-primary text-white border-primary'
-                              : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-neutral-300 dark:border-neutral-600'
+                              ? 'bg-primary text-primary-foreground border-primary'
+                              : 'bg-card text-foreground border-border'
                           }`}
                         >{t(`contracts.status.${s}`, s)}</button>
                       );
@@ -131,12 +131,12 @@ export const ContractsListPage: React.FC = () => {
                   </div>{/* Body of the same card — table or empty state. Matches the
                       single-card layout used by Customers / Quotes / Invoices. */}<div className="mt-4">
                     {isLoading ? <Loading /> : !data || data.contracts.length === 0 ? (
-                      <p className="text-center text-neutral-500 dark:text-neutral-400 py-8">{t('contracts.list.empty', 'No contracts yet.')}</p>
+                      <p className="text-center text-muted-foreground py-8">{t('contracts.list.empty', 'No contracts yet.')}</p>
                     ) : (
-                      <div className="rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden">
+                      <div className="rounded-lg border border-border overflow-hidden">
                         <div className="overflow-x-auto">
                           <table className="w-full text-sm">
-                            <thead className="bg-neutral-50 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300">
+                            <thead className="bg-muted text-foreground">
                               <tr>
                                 <SortableHeader label={t('contracts.list.table.number', 'Number')} columnKey="number" activeKey={activeKey} activeDir={activeDir} onSort={onSort} />
                                 <SortableHeader label={t('contracts.list.table.customer', 'Customer')} columnKey="customer" activeKey={activeKey} activeDir={activeDir} onSort={onSort} />
@@ -148,7 +148,7 @@ export const ContractsListPage: React.FC = () => {
                             <tbody>
                               {data.contracts.map((c) => (
                                 <tr key={c.id}
-                                  className="border-t border-neutral-200 dark:border-neutral-700 cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-800"
+                                  className="border-t border-border cursor-pointer hover:bg-accent"
                                   onClick={() => navigate(`/admin/clients/contracts/${c.id}`)}
                                 >
                                   <td className="px-3 py-2 font-mono text-xs">{c.contractNumber}</td>
@@ -171,8 +171,8 @@ export const ContractsListPage: React.FC = () => {
                                         : c.status === 'signed_by_customer' || c.status === 'signed_by_admin' ? 'bg-blue-100 text-blue-800'
                                         : c.status === 'sent' ? 'bg-amber-100 text-amber-800'
                                         : c.status === 'declined' ? 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-200'
-                                        : c.status === 'cancelled' ? 'bg-neutral-200 text-neutral-600'
-                                        : 'bg-neutral-100 text-neutral-700'
+                                        : c.status === 'cancelled' ? 'bg-muted text-muted-foreground'
+                                        : 'bg-muted text-foreground'
                                     }`}>{t(`contracts.status.${c.status}`, c.status)}</span>
                                   </td>
                                 </tr>
@@ -181,8 +181,8 @@ export const ContractsListPage: React.FC = () => {
                           </table>
                         </div>
                         {totalPages > 1 && (
-                          <div className="flex justify-between items-center px-3 py-2 border-t border-neutral-200 dark:border-neutral-700 text-sm">
-                            <span className="text-neutral-500 dark:text-neutral-400">
+                          <div className="flex justify-between items-center px-3 py-2 border-t border-border text-sm">
+                            <span className="text-muted-foreground">
                               {t('contracts.list.pagination', 'Page {{page}} of {{total}} · {{count}} contracts', {
                                 page, total: totalPages, count: data.total,
                               })}

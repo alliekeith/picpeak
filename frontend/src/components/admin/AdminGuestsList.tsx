@@ -175,13 +175,13 @@ export const AdminGuestsList: React.FC<AdminGuestsListProps> = ({ eventId, event
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between flex-wrap gap-2">
-        <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+        <h3 className="text-lg font-semibold text-foreground">
           {t('admin.guests.title', 'Guests')} ({guests.length})
         </h3>
         <div className="flex items-center gap-2">
           {mergeMode ? (
             <>
-              <span className="text-sm text-neutral-600 dark:text-neutral-400">
+              <span className="text-sm text-muted-foreground">
                 {t('admin.guests.mergeSelected', '{{count}} selected', { count: mergeSelection.length })}
               </span>
               {keepId === null && (
@@ -221,12 +221,12 @@ export const AdminGuestsList: React.FC<AdminGuestsListProps> = ({ eventId, event
               <div className="relative group">
                 <Button variant="outline" size="sm">
                                                     <Download className="w-4 h-4" />{t('admin.guests.exportAll', 'Export all')}</Button>
-                <div className="absolute right-0 top-full mt-1 hidden group-hover:block bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-sm shadow-lg z-10 min-w-[120px]">
+                <div className="absolute right-0 top-full mt-1 hidden group-hover:block bg-card border border-border rounded-sm shadow-lg z-10 min-w-[120px]">
                   {(['csv', 'txt', 'json'] as const).map((fmt) => (
                     <button
                       key={fmt}
                       onClick={() => handleExportAll(fmt)}
-                      className="block w-full text-left px-3 py-2 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                      className="block w-full text-left px-3 py-2 text-sm hover:bg-accent"
                     >
                       {fmt.toUpperCase()}
                     </button>
@@ -273,45 +273,45 @@ export const AdminGuestsList: React.FC<AdminGuestsListProps> = ({ eventId, event
       )}
 
       {guests.length === 0 ? (
-        <Card><CardContent><div className="p-8 text-center text-neutral-500 dark:text-neutral-400">
+        <Card><CardContent><div className="p-8 text-center text-muted-foreground">
                           {t('admin.guests.empty', 'No guests have registered yet.')}
                         </div></CardContent></Card>
       ) : (
         <Card><CardContent><div className="overflow-x-auto">
                               <table className="w-full">
-                                <thead className="bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700">
+                                <thead className="bg-muted border-b border-border">
                                   <tr>
                                     {mergeMode && <th className="px-4 py-3 w-8" />}
                                     {mergeMode && (
-                                      <th className="px-4 py-3 w-16 text-left text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase">
+                                      <th className="px-4 py-3 w-16 text-left text-xs font-medium text-muted-foreground uppercase">
                                         {t('admin.guests.mergeKeepColumn', 'Keep')}
                                       </th>
                                     )}
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase">
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase">
                                       {t('admin.guests.columns.name', 'Name')}
                                     </th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase">
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase">
                                       {t('admin.guests.columns.email', 'Email')}
                                     </th>
-                                    <th className="px-4 py-3 text-right text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase">
+                                    <th className="px-4 py-3 text-right text-xs font-medium text-muted-foreground uppercase">
                                       {t('admin.guests.columns.likes', 'Likes')}
                                     </th>
-                                    <th className="px-4 py-3 text-right text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase">
+                                    <th className="px-4 py-3 text-right text-xs font-medium text-muted-foreground uppercase">
                                       {t('admin.guests.columns.favorites', 'Favorites')}
                                     </th>
-                                    <th className="px-4 py-3 text-right text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase">
+                                    <th className="px-4 py-3 text-right text-xs font-medium text-muted-foreground uppercase">
                                       {t('admin.guests.columns.comments', 'Comments')}
                                     </th>
-                                    <th className="px-4 py-3 text-right text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase">
+                                    <th className="px-4 py-3 text-right text-xs font-medium text-muted-foreground uppercase">
                                       {t('admin.guests.columns.ratings', 'Ratings')}
                                     </th>
-                                    <th className="px-4 py-3 text-right text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase">
+                                    <th className="px-4 py-3 text-right text-xs font-medium text-muted-foreground uppercase">
                                       {t('admin.guests.columns.reactions', 'Reactions')}
                                     </th>
-                                    <th className="px-4 py-3 text-right text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase">
+                                    <th className="px-4 py-3 text-right text-xs font-medium text-muted-foreground uppercase">
                                       {t('admin.guests.columns.colorLabels', 'Color labels')}
                                     </th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase">
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase">
                                       {t('admin.guests.columns.lastSeen', 'Last seen')}
                                     </th>
                                     <th className="px-4 py-3" />
@@ -319,7 +319,7 @@ export const AdminGuestsList: React.FC<AdminGuestsListProps> = ({ eventId, event
                                 </thead>
                                 <tbody className="divide-y divide-neutral-200 dark:divide-neutral-700">
                                   {guests.map((guest) => (
-                                    <tr key={guest.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800">
+                                    <tr key={guest.id} className="hover:bg-accent">
                                       {mergeMode && (
                                         <td className="px-4 py-3">
                                           <input
@@ -346,13 +346,13 @@ export const AdminGuestsList: React.FC<AdminGuestsListProps> = ({ eventId, event
                                           />
                                         </td>
                                       )}
-                                      <td className="px-4 py-3 font-medium text-neutral-900 dark:text-neutral-100">
+                                      <td className="px-4 py-3 font-medium text-foreground">
                                         {guest.name}
                                         {guest.email_verified_at && (
                                           <span className="ml-2 text-xs text-green-600">✓</span>
                                         )}
                                       </td>
-                                      <td className="px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400">
+                                      <td className="px-4 py-3 text-sm text-muted-foreground">
                                         {guest.email || '—'}
                                         {guest.duplicate_group && (
                                           <span
@@ -363,25 +363,25 @@ export const AdminGuestsList: React.FC<AdminGuestsListProps> = ({ eventId, event
                                           </span>
                                         )}
                                       </td>
-                                      <td className="px-4 py-3 text-right text-sm text-neutral-900 dark:text-neutral-100">
+                                      <td className="px-4 py-3 text-right text-sm text-foreground">
                                         {guest.stats.likes}
                                       </td>
-                                      <td className="px-4 py-3 text-right text-sm text-neutral-900 dark:text-neutral-100">
+                                      <td className="px-4 py-3 text-right text-sm text-foreground">
                                         {guest.stats.favorites}
                                       </td>
-                                      <td className="px-4 py-3 text-right text-sm text-neutral-900 dark:text-neutral-100">
+                                      <td className="px-4 py-3 text-right text-sm text-foreground">
                                         {guest.stats.comments}
                                       </td>
-                                      <td className="px-4 py-3 text-right text-sm text-neutral-900 dark:text-neutral-100">
+                                      <td className="px-4 py-3 text-right text-sm text-foreground">
                                         {guest.stats.ratings}
                                       </td>
-                                      <td className="px-4 py-3 text-right text-sm text-neutral-900 dark:text-neutral-100">
+                                      <td className="px-4 py-3 text-right text-sm text-foreground">
                                         {guest.stats.reactions}
                                       </td>
-                                      <td className="px-4 py-3 text-right text-sm text-neutral-900 dark:text-neutral-100">
+                                      <td className="px-4 py-3 text-right text-sm text-foreground">
                                         {guest.stats.color_labels ?? 0}
                                       </td>
-                                      <td className="px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400">
+                                      <td className="px-4 py-3 text-sm text-muted-foreground">
                                         {fmtDate(guest.last_seen_at)}
                                       </td>
                                       <td className="px-4 py-3 text-right">
@@ -389,7 +389,7 @@ export const AdminGuestsList: React.FC<AdminGuestsListProps> = ({ eventId, event
                                           <button
                                             type="button"
                                             onClick={() => setSelectedGuest(guest)}
-                                            className="p-1 text-neutral-500 hover:text-brand"
+                                            className="p-1 text-muted-foreground hover:text-brand"
                                             title={t('admin.guests.view', 'View details')}
                                           >
                                             <Eye className="w-4 h-4" />
@@ -397,17 +397,17 @@ export const AdminGuestsList: React.FC<AdminGuestsListProps> = ({ eventId, event
                                           <div className="relative group">
                                             <button
                                               type="button"
-                                              className="p-1 text-neutral-500 hover:text-brand"
+                                              className="p-1 text-muted-foreground hover:text-brand"
                                               title={t('admin.guests.export', 'Export')}
                                             >
                                               <Download className="w-4 h-4" />
                                             </button>
-                                            <div className="absolute right-0 top-full mt-1 hidden group-hover:block bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-sm shadow-lg z-10 min-w-[100px]">
+                                            <div className="absolute right-0 top-full mt-1 hidden group-hover:block bg-card border border-border rounded-sm shadow-lg z-10 min-w-[100px]">
                                               {(['csv', 'txt', 'json'] as const).map((fmt) => (
                                                 <button
                                                   key={fmt}
                                                   onClick={() => handleExport(guest, fmt)}
-                                                  className="block w-full text-left px-3 py-2 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                                                  className="block w-full text-left px-3 py-2 text-sm hover:bg-accent"
                                                 >
                                                   {fmt.toUpperCase()}
                                                 </button>
@@ -417,7 +417,7 @@ export const AdminGuestsList: React.FC<AdminGuestsListProps> = ({ eventId, event
                                           <button
                                             type="button"
                                             onClick={() => handleDelete(guest)}
-                                            className="p-1 text-neutral-500 hover:text-red-600"
+                                            className="p-1 text-muted-foreground hover:text-red-600"
                                             title={t('admin.guests.forgetGuest', 'Remove guest')}
                                           >
                                             <Trash2 className="w-4 h-4" />

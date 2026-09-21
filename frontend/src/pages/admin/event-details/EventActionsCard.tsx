@@ -46,7 +46,7 @@ export const EventActionsCard: React.FC<EventActionsCardProps> = ({
   const canSendGalleryEmail = hasRecipient && !isExpired && !isInactive;
 
   return (
-    <Card><CardContent><h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">{t('events.actions')}</h2><div className="space-y-3">
+    <Card><CardContent><h2 className="text-lg font-semibold text-foreground mb-4">{t('events.actions')}</h2><div className="space-y-3">
               {event.is_draft ? (
                 <PermissionGate permission="events.edit">
                   <Button
@@ -54,7 +54,7 @@ export const EventActionsCard: React.FC<EventActionsCardProps> = ({
                                           className="w-full justify-center" disabled={isPublishing}
                                         >
                                           {isPublishing && <Loader2 className="animate-spin" />}<Send className="w-4 h-4" />{t('events.publishAndNotify')}</Button>
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400 text-center">
+                  <p className="text-xs text-muted-foreground text-center">
                     {t('events.draftBanner')}
                   </p>
                 </PermissionGate>
@@ -82,7 +82,7 @@ export const EventActionsCard: React.FC<EventActionsCardProps> = ({
                                                           className="w-full justify-center" disabled={isSendingGalleryEmail}
                                                         >
                                                           {isSendingGalleryEmail && <Loader2 className="animate-spin" />}<Mail className="w-4 h-4" />{t('events.sendGalleryEmail.button', 'Send gallery email')}</Button>
-                      <p className="text-xs text-neutral-500 dark:text-neutral-400 text-center mb-3">
+                      <p className="text-xs text-muted-foreground text-center mb-3">
                         {t('events.sendGalleryEmail.help', 'Sends the gallery link to the customer. You confirm the password first if the gallery has one.')}
                       </p>
                     </PermissionGate>
@@ -98,7 +98,7 @@ export const EventActionsCard: React.FC<EventActionsCardProps> = ({
                                                   className="w-full justify-center" disabled={isArchiving}
                                                 >
                                                   {isArchiving && <Loader2 className="animate-spin" />}<Archive className="w-4 h-4" />{t('events.archiveEvent')}</Button>
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400 text-center">
+                  <p className="text-xs text-muted-foreground text-center">
                     {t('events.archivingInfo')}
                   </p>
                   </PermissionGate>

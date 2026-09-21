@@ -382,11 +382,11 @@ export const GalleryPage: React.FC = () => {
                 <Clock className="w-16 h-16 text-amber-500 mx-auto mb-4" />
                 <h2 className="text-xl font-semibold mb-2">{t('gallery.expired')}</h2>
                 {galleryInfo.expires_at && (
-                  <p className="text-neutral-600 mb-4">
+                  <p className="text-muted-foreground mb-4">
                     {t('gallery.expiredOn', { date: format(parseISO(galleryInfo.expires_at), 'PP') })}
                   </p>
                 )}
-                <p className="text-sm text-neutral-500">
+                <p className="text-sm text-muted-foreground">
                   {t('gallery.contactOrganizer')}
                 </p>
               </CardContent>
@@ -398,19 +398,19 @@ export const GalleryPage: React.FC = () => {
             <div className="flex items-center justify-center gap-4">
               <Link 
                 to="/impressum" 
-                className="text-xs text-neutral-500 hover:text-neutral-700 transition-colors"
+                className="text-xs text-muted-foreground hover:text-foreground transition-colors"
               >
                 {t('legal.impressum')}
               </Link>
-              <span className="text-xs text-neutral-400">|</span>
+              <span className="text-xs text-muted-foreground">|</span>
               <Link 
                 to="/datenschutz" 
-                className="text-xs text-neutral-500 hover:text-neutral-700 transition-colors"
+                className="text-xs text-muted-foreground hover:text-foreground transition-colors"
               >
                 {t('legal.datenschutz')}
               </Link>
             </div>
-            <PoweredBy className="text-xs mt-2 text-neutral-500" />
+            <PoweredBy className="text-xs mt-2 text-muted-foreground" />
           </div>
         </div>
       </div>
@@ -620,7 +620,7 @@ export const GalleryPage: React.FC = () => {
               )}
 
               {!iabBlocked && (
-                <p className="text-xs text-neutral-500 text-center mt-4 sm:mt-6">
+                <p className="text-xs text-muted-foreground text-center mt-4 sm:mt-6">
                   {t('auth.passwordHint')}
                 </p>
               )}
@@ -632,19 +632,19 @@ export const GalleryPage: React.FC = () => {
             <div className="flex items-center justify-center gap-4">
               <Link 
                 to="/impressum" 
-                className="text-xs text-neutral-500 hover:text-neutral-700 transition-colors"
+                className="text-xs text-muted-foreground hover:text-foreground transition-colors"
               >
                 {t('legal.impressum')}
               </Link>
-              <span className="text-xs text-neutral-400">|</span>
+              <span className="text-xs text-muted-foreground">|</span>
               <Link 
                 to="/datenschutz" 
-                className="text-xs text-neutral-500 hover:text-neutral-700 transition-colors"
+                className="text-xs text-muted-foreground hover:text-foreground transition-colors"
               >
                 {t('legal.datenschutz')}
               </Link>
             </div>
-            <PoweredBy className="text-xs mt-2 text-neutral-500" />
+            <PoweredBy className="text-xs mt-2 text-muted-foreground" />
           </div>
         </div>
       </div>

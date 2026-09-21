@@ -367,10 +367,10 @@ export const SetupPage: React.FC = () => {
                         )}{step === 'token' ? (
                           <form onSubmit={handleTokenContinue} className="space-y-6">
                             <div>
-                              <label htmlFor="setup-token" className="block text-sm font-medium text-neutral-700 mb-1">
+                              <label htmlFor="setup-token" className="block text-sm font-medium text-foreground mb-1">
                                 {t('setup.tokenLabel')}
                               </label>
-                              <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Key className="w-5 h-5 text-neutral-400" />}</div><Input
+                              <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Key className="w-5 h-5 text-muted-foreground" />}</div><Input
                                                               id="setup-token"
                                                               type="text"
                                                               value={form.token}
@@ -378,11 +378,11 @@ export const SetupPage: React.FC = () => {
                                                               placeholder={t('setup.tokenPlaceholder')}
                                                               autoFocus className="pl-10" aria-invalid={!!(errors.token)} aria-describedby={(errors.token) ? "setup-token-error" : undefined}
                                                             /></div>{(errors.token) && <p id={"setup-token-error"} className="mt-1.5 text-sm text-destructive">{errors.token}</p>}</div>
-                              <p className="mt-1 text-xs text-neutral-500">{t('setup.tokenHint')}</p>
+                              <p className="mt-1 text-xs text-muted-foreground">{t('setup.tokenHint')}</p>
 
                               {/* Recovery guidance sits directly under the field it explains. */}
-                              <div className="mt-4 rounded-lg border border-neutral-200 bg-neutral-50 p-3">
-                                <p className="text-xs font-medium text-neutral-600">{t('setup.tokenCommandLabel')}</p>
+                              <div className="mt-4 rounded-lg border border-border bg-muted p-3">
+                                <p className="text-xs font-medium text-muted-foreground">{t('setup.tokenCommandLabel')}</p>
                                 <div className="mt-2 flex items-center gap-2">
                                   <code className="flex-1 overflow-x-auto whitespace-nowrap rounded-sm bg-neutral-900 px-3 py-2 font-mono text-xs text-neutral-100">
                                     {recoveryCommand}
@@ -390,7 +390,7 @@ export const SetupPage: React.FC = () => {
                                   <button
                                     type="button"
                                     onClick={copyRecoveryCommand}
-                                    className="shrink-0 rounded-md border border-neutral-200 bg-white p-2 text-neutral-500 hover:text-neutral-700 transition-colors"
+                                    className="shrink-0 rounded-md border border-border bg-card p-2 text-muted-foreground hover:text-foreground transition-colors"
                                     aria-label={t('setup.copyCommand')}
                                     title={t('setup.copyCommand')}
                                   >
@@ -417,10 +417,10 @@ export const SetupPage: React.FC = () => {
                         ) : step === 'account' ? (
                           <form onSubmit={handleSubmit} className="space-y-6">
                             <div>
-                              <label htmlFor="setup-email" className="block text-sm font-medium text-neutral-700 mb-1">
+                              <label htmlFor="setup-email" className="block text-sm font-medium text-foreground mb-1">
                                 {t('setup.emailLabel')}
                               </label>
-                              <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Mail className="w-5 h-5 text-neutral-400" />}</div><Input
+                              <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Mail className="w-5 h-5 text-muted-foreground" />}</div><Input
                                                                   id="setup-email"
                                                                   type="email"
                                                                   value={form.email}
@@ -432,11 +432,11 @@ export const SetupPage: React.FC = () => {
                             </div>
 
                             <div>
-                              <label htmlFor="setup-password" className="block text-sm font-medium text-neutral-700 mb-1">
+                              <label htmlFor="setup-password" className="block text-sm font-medium text-foreground mb-1">
                                 {t('setup.passwordLabel')}
                               </label>
                               <div className="relative">
-                                <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-neutral-400" />}</div><Input
+                                <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-muted-foreground" />}</div><Input
                                                                         id="setup-password"
                                                                         type={showPassword ? 'text' : 'password'}
                                                                         value={form.password}
@@ -447,7 +447,7 @@ export const SetupPage: React.FC = () => {
                                 <button
                                   type="button"
                                   onClick={() => setShowPassword(!showPassword)}
-                                  className="absolute right-3 top-3 text-neutral-400 hover:text-neutral-600 transition-colors"
+                                  className="absolute right-3 top-3 text-muted-foreground hover:text-foreground transition-colors"
                                   tabIndex={-1}
                                 >
                                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -456,10 +456,10 @@ export const SetupPage: React.FC = () => {
                             </div>
 
                             <div>
-                              <label htmlFor="setup-confirm" className="block text-sm font-medium text-neutral-700 mb-1">
+                              <label htmlFor="setup-confirm" className="block text-sm font-medium text-foreground mb-1">
                                 {t('setup.confirmLabel')}
                               </label>
-                              <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-neutral-400" />}</div><Input
+                              <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-muted-foreground" />}</div><Input
                                                                   id="setup-confirm"
                                                                   type={showPassword ? 'text' : 'password'}
                                                                   value={form.confirm}
@@ -490,39 +490,39 @@ export const SetupPage: React.FC = () => {
                           </form>
                         ) : step === 'usage' ? (
                           <div className="space-y-6">
-                            <p className="rounded-lg bg-neutral-50 border border-neutral-200 px-3 py-2 text-xs text-neutral-600">
+                            <p className="rounded-lg bg-muted border border-border px-3 py-2 text-xs text-muted-foreground">
                               {t('setup.usageAlwaysOn')}
                             </p>
 
                             <button
                               type="button"
                               onClick={() => setStep('restore')}
-                              className="w-full rounded-lg border border-dashed border-neutral-300 p-3 text-left hover:bg-neutral-50 transition-colors"
+                              className="w-full rounded-lg border border-dashed border-border p-3 text-left hover:bg-accent transition-colors"
                             >
-                              <span className="block text-sm font-medium text-neutral-800">{t('setup.restoreEntry')}</span>
-                              <span className="block text-xs text-neutral-500">{t('setup.restoreEntryHint')}</span>
+                              <span className="block text-sm font-medium text-foreground">{t('setup.restoreEntry')}</span>
+                              <span className="block text-xs text-muted-foreground">{t('setup.restoreEntryHint')}</span>
                             </button>
 
                             {USAGE_GROUPS.map((group) => (
                               <div key={group.id}>
-                                <h3 className="text-sm font-semibold text-neutral-800 mb-2">{t(group.titleKey)}</h3>
+                                <h3 className="text-sm font-semibold text-foreground mb-2">{t(group.titleKey)}</h3>
                                 <div className="space-y-2">
                                   {group.features.map((key) => (
                                     <label
                                       key={key}
-                                      className="flex items-start gap-3 rounded-lg border border-neutral-200 p-3 cursor-pointer hover:bg-neutral-50 transition-colors"
+                                      className="flex items-start gap-3 rounded-lg border border-border p-3 cursor-pointer hover:bg-accent transition-colors"
                                     >
                                       <input
                                         type="checkbox"
-                                        className="mt-0.5 h-4 w-4 rounded-sm border-neutral-300"
+                                        className="mt-0.5 h-4 w-4 rounded-sm border-border"
                                         checked={selectedFeatures.has(key)}
                                         onChange={() => toggleFeature(key)}
                                       />
                                       <span className="min-w-0">
-                                        <span className="block text-sm font-medium text-neutral-800">
+                                        <span className="block text-sm font-medium text-foreground">
                                           {t(`settings.features.${key}.title`)}
                                         </span>
-                                        <span className="block text-xs text-neutral-500">
+                                        <span className="block text-xs text-muted-foreground">
                                           {t(`settings.features.${key}.description`)}
                                         </span>
                                       </span>
@@ -533,7 +533,7 @@ export const SetupPage: React.FC = () => {
                             ))}
 
                             {selectedFeatures.has('bills') && !selectedFeatures.has('taxReport') && (
-                              <p className="text-xs text-neutral-500">{t('setup.usageDepsNote')}</p>
+                              <p className="text-xs text-muted-foreground">{t('setup.usageDepsNote')}</p>
                             )}
 
                             <Button
@@ -546,7 +546,7 @@ export const SetupPage: React.FC = () => {
                           </div>
                         ) : step === 'restore' ? (
                           <div className="space-y-6">
-                            <p className="text-sm text-neutral-600">{t('setup.restoreIntro')}</p>
+                            <p className="text-sm text-muted-foreground">{t('setup.restoreIntro')}</p>
                             <PicpeakRestoreCard />
                             <Button
                                                                     type="button"
@@ -565,12 +565,12 @@ export const SetupPage: React.FC = () => {
                           />
                         ) : step === 'usageReporting' ? (
                           <div className="space-y-6">
-                            <p className="text-sm text-neutral-700">{t('setup.usageReporting.intro')}</p>
+                            <p className="text-sm text-foreground">{t('setup.usageReporting.intro')}</p>
 
                             <UsageReportingPoints />
 
                             {(usageStatusError || usageStatus?.collector_error) && (
-                              <p role="alert" className="text-sm text-neutral-700">{t('setup.usageReporting.enableFailed')}</p>
+                              <p role="alert" className="text-sm text-foreground">{t('setup.usageReporting.enableFailed')}</p>
                             )}
 
                             <div className="space-y-3">
@@ -603,7 +603,7 @@ export const SetupPage: React.FC = () => {
                           </div>
                         ) : (
                           <div className="space-y-6">
-                            <p className="text-sm text-neutral-700">{t('setup.community.mission')}</p>
+                            <p className="text-sm text-foreground">{t('setup.community.mission')}</p>
 
                             <div className="space-y-3">
                               {COMMUNITY_LINKS.map(({ key, href, icon: Icon }) => (
@@ -612,18 +612,18 @@ export const SetupPage: React.FC = () => {
                                   href={href}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="flex items-start gap-3 rounded-lg border border-neutral-200 p-3 hover:bg-neutral-50 transition-colors"
+                                  className="flex items-start gap-3 rounded-lg border border-border p-3 hover:bg-accent transition-colors"
                                 >
                                   <Icon className="w-5 h-5 shrink-0 mt-0.5" style={{ color: 'var(--primary, #5C8762)' }} />
                                   <span className="min-w-0">
-                                    <span className="block text-sm font-medium text-neutral-800">
+                                    <span className="block text-sm font-medium text-foreground">
                                       {t(`setup.community.${key}Title`)}
                                     </span>
-                                    <span className="block text-xs text-neutral-500">
+                                    <span className="block text-xs text-muted-foreground">
                                       {t(`setup.community.${key}Desc`)}
                                     </span>
                                   </span>
-                                  <ExternalLink className="w-4 h-4 shrink-0 text-neutral-400 self-center" aria-hidden="true" />
+                                  <ExternalLink className="w-4 h-4 shrink-0 text-muted-foreground self-center" aria-hidden="true" />
                                 </a>
                               ))}
                             </div>

@@ -271,7 +271,7 @@ export const AdminLoginPage: React.FC = () => {
                         // while oidc_disable_local_login is effective, so the form would
                         // only produce 403s — show the SSO entry alone instead.
                         <div className="space-y-6">
-                          <p className="text-sm text-center text-neutral-600">
+                          <p className="text-sm text-center text-muted-foreground">
                             {t('adminLogin.ssoOnlyHint', 'Password login is disabled on this instance — sign in through your identity provider.')}
                           </p>
                           <Button
@@ -294,10 +294,10 @@ export const AdminLoginPage: React.FC = () => {
 
                           {/* Email Field */}
                           <div>
-                            <label htmlFor="email" className="block text-sm font-medium text-neutral-700 mb-1">
+                            <label htmlFor="email" className="block text-sm font-medium text-foreground mb-1">
                               {t('adminLogin.emailLabel')}
                             </label>
-                            <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Mail className="w-5 h-5 text-neutral-400" />}</div><Input
+                            <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Mail className="w-5 h-5 text-muted-foreground" />}</div><Input
                                                             id="email"
                                                             type="email"
                                                             value={formData.email}
@@ -310,11 +310,11 @@ export const AdminLoginPage: React.FC = () => {
 
                           {/* Password Field */}
                           <div>
-                            <label htmlFor="password" className="block text-sm font-medium text-neutral-700 mb-1">
+                            <label htmlFor="password" className="block text-sm font-medium text-foreground mb-1">
                               {t('adminLogin.passwordLabel')}
                             </label>
                             <div className="relative">
-                              <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-neutral-400" />}</div><Input
+                              <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-muted-foreground" />}</div><Input
                                                                   id="password"
                                                                   type={showPassword ? 'text' : 'password'}
                                                                   value={formData.password}
@@ -325,7 +325,7 @@ export const AdminLoginPage: React.FC = () => {
                               <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-3 top-3 text-neutral-400 hover:text-neutral-600 transition-colors"
+                                className="absolute right-3 top-3 text-muted-foreground hover:text-foreground transition-colors"
                                 tabIndex={-1}
                               >
                                 {showPassword ? (
@@ -344,9 +344,9 @@ export const AdminLoginPage: React.FC = () => {
                                 type="checkbox"
                                 checked={rememberMe}
                                 onChange={(e) => setRememberMe(e.target.checked)}
-                                className="w-4 h-4 text-brand border-neutral-300 rounded-sm focus:ring-brand-500"
+                                className="w-4 h-4 text-brand border-border rounded-sm focus:ring-brand-500"
                               />
-                              <span className="ml-2 text-sm text-neutral-700">{t('adminLogin.rememberMe')}</span>
+                              <span className="ml-2 text-sm text-foreground">{t('adminLogin.rememberMe')}</span>
                             </label>
                           </div>
 
@@ -370,11 +370,11 @@ export const AdminLoginPage: React.FC = () => {
                           {settingsData?.oidc_enabled === true && (
                             <>
                               <div className="flex items-center gap-3">
-                                <div className="flex-1 border-t border-neutral-200" />
-                                <span className="text-xs uppercase tracking-wide text-neutral-400">
+                                <div className="flex-1 border-t border-border" />
+                                <span className="text-xs uppercase tracking-wide text-muted-foreground">
                                   {t('adminLogin.ssoDivider', 'or')}
                                 </span>
-                                <div className="flex-1 border-t border-neutral-200" />
+                                <div className="flex-1 border-t border-border" />
                               </div>
                               <Button
                                                                       type="button"
@@ -413,10 +413,10 @@ export const AdminLoginPage: React.FC = () => {
                           )}
 
                           <div>
-                            <label htmlFor="mfa-code" className="block text-sm font-medium text-neutral-700 mb-1">
+                            <label htmlFor="mfa-code" className="block text-sm font-medium text-foreground mb-1">
                               {useRecoveryCode ? t('adminLogin.mfa.recoveryCodeLabel') : t('adminLogin.mfa.codeLabel')}
                             </label>
-                            <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<KeyRound className="w-5 h-5 text-neutral-400" />}</div><Input
+                            <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<KeyRound className="w-5 h-5 text-muted-foreground" />}</div><Input
                                                                 id="mfa-code"
                                                                 type="text"
                                                                 value={mfaCode}
@@ -442,7 +442,7 @@ export const AdminLoginPage: React.FC = () => {
                             <button
                               type="button"
                               onClick={backToCredentials}
-                              className="inline-flex items-center gap-1 text-neutral-500 hover:text-neutral-700 transition-colors"
+                              className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors"
                             >
                               <ArrowLeft className="w-4 h-4" />
                               {t('adminLogin.mfa.back')}

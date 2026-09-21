@@ -80,15 +80,15 @@ export const ContractTemplatesPage: React.FC = () => {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3">
-        <Link to="/admin/clients/contracts" className="p-1 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-800"
+        <Link to="/admin/clients/contracts" className="p-1 rounded-sm hover:bg-accent"
           aria-label={t('contracts.templates.back', 'Back to contracts') as string}>
           <ArrowLeft className="w-5 h-5" />
         </Link>
-        <h1 className="text-2xl font-bold flex-1 text-neutral-900 dark:text-neutral-100">
+        <h1 className="text-2xl font-bold flex-1 text-foreground">
           {t('contracts.templates.title', 'Contract templates')}
         </h1>
       </div>
-      <p className="text-sm text-neutral-600 dark:text-neutral-400 max-w-3xl">
+      <p className="text-sm text-muted-foreground max-w-3xl">
         {t('contracts.templates.intro', 'A template sets the clauses a new contract starts with, their order and their wording. Publishing freezes a version; a contract keeps the version it was made from.')}
       </p>
 
@@ -106,7 +106,7 @@ export const ContractTemplatesPage: React.FC = () => {
 
       {isLoading ? <Loading /> : (
         <Card><CardContent>{templates.length === 0 ? (
-                          <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('contracts.templates.empty', 'No templates yet.')}</p>
+                          <p className="text-sm text-muted-foreground">{t('contracts.templates.empty', 'No templates yet.')}</p>
                         ) : (
                           <ul className="divide-y divide-neutral-200 dark:divide-neutral-700">
                             {templates.map((tpl) => (
@@ -114,11 +114,11 @@ export const ContractTemplatesPage: React.FC = () => {
                                 <div className="flex-1 min-w-[200px]">
                                   <div className="flex items-center gap-2 flex-wrap">
                                     <Link to={`/admin/clients/contracts/templates/${tpl.id}`}
-                                      className="font-medium text-neutral-900 dark:text-neutral-100 hover:underline">
+                                      className="font-medium text-foreground hover:underline">
                                       {tpl.name}
                                     </Link>
                                     {tpl.isSystem && (
-                                      <span className={`${badgeClass} bg-neutral-200 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-200`}>
+                                      <span className={`${badgeClass} bg-muted text-foreground`}>
                                         {t('contracts.templates.standard', 'Standard')}
                                       </span>
                                     )}
@@ -128,7 +128,7 @@ export const ContractTemplatesPage: React.FC = () => {
                                       </span>
                                     )}
                                   </div>
-                                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                                  <p className="text-xs text-muted-foreground">
                                     {statusLabel(tpl)}
                                     {tpl.hasDraft && tpl.currentVersion ? ` · ${t('contracts.templates.unpublished', 'Unpublished changes')}` : ''}
                                     {tpl.description ? ` · ${tpl.description}` : ''}

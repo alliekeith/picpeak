@@ -134,7 +134,7 @@ export const UpdateInstructionsDialog: React.FC<UpdateInstructionsDialogProps> =
         />
 
         {/* Dialog */}
-        <div className="inline-block w-full max-w-2xl my-8 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-gray-800 rounded-lg shadow-xl">
+        <div className="inline-block w-full max-w-2xl my-8 overflow-hidden text-left align-middle transition-all transform bg-card dark:bg-gray-800 rounded-lg shadow-xl">
           {/* Header */}
           <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -329,7 +329,7 @@ export const UpdateInstructionsDialog: React.FC<UpdateInstructionsDialogProps> =
               {data?.instructions && (
                 <button
                   onClick={copyAllCommands}
-                  className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600"
+                  className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-card dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600"
                 >
                   {copiedCommand === 'all' ? (
                     <>

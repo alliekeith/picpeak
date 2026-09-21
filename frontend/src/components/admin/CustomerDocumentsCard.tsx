@@ -38,7 +38,7 @@ const STATUS_STYLE: Record<AdminCustomerDocument['status'], string> = {
   rejected: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300',
 };
 
-const selectClass = 'focus:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900 h-9 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-2 text-sm text-neutral-900 dark:text-neutral-100';
+const selectClass = 'focus:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900 h-9 rounded-lg border border-border bg-card px-2 text-sm text-foreground';
 
 interface Props {
   customerId: number;
@@ -140,10 +140,10 @@ export const CustomerDocumentsCard: React.FC<Props> = ({ customerId, events }) =
   );
 
   return (
-    <Card className="py-8"><CardContent className="px-8"><h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-1 flex items-center gap-2">
+    <Card className="py-8"><CardContent className="px-8"><h2 className="text-lg font-semibold text-foreground mb-1 flex items-center gap-2">
               <FolderOpen className="w-5 h-5" />
               {t('customers.documents.title', 'Documents')}
-            </h2><p className="text-xs text-neutral-500 dark:text-neutral-400 mb-4">
+            </h2><p className="text-xs text-muted-foreground mb-4">
               {t('customers.documents.hint', 'PDFs shared with this customer in their portal, and the files they sent you. A customer upload stays unavailable to them until you mark it clean.')}
               {limits && (
                 <> {t('customers.documents.usage', 'Customer uploads: {{used}} of {{quota}}.', {
@@ -153,7 +153,7 @@ export const CustomerDocumentsCard: React.FC<Props> = ({ customerId, events }) =
               )}
             </p><PermissionGate permission={PERMISSION}>
               <div className="flex flex-col md:flex-row md:items-end gap-3 mb-4">
-                <label className="flex-1 min-w-0 text-sm text-neutral-700 dark:text-neutral-300">
+                <label className="flex-1 min-w-0 text-sm text-foreground">
                   <span className="block mb-1">{t('customers.documents.fileLabel', 'PDF to share')}</span>
                   <input
                     ref={inputRef}
@@ -161,11 +161,11 @@ export const CustomerDocumentsCard: React.FC<Props> = ({ customerId, events }) =
                     accept="application/pdf,.pdf"
                     disabled={uploading}
                     onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-                    className="block w-full text-sm text-neutral-700 dark:text-neutral-300"
+                    className="block w-full text-sm text-foreground"
                   />
                 </label>
                 {events.length > 0 && (
-                  <label className="text-sm text-neutral-700 dark:text-neutral-300">
+                  <label className="text-sm text-foreground">
                     <span className="block mb-1">{t('customers.documents.eventLabel', 'Event')}</span>
                     <select value={uploadEventId} onChange={(e) => setUploadEventId(e.target.value)} className={selectClass}>
                       <option value="">{t('customers.documents.noLink', 'None')}</option>
@@ -173,7 +173,7 @@ export const CustomerDocumentsCard: React.FC<Props> = ({ customerId, events }) =
                     </select>
                   </label>
                 )}
-                <label className="flex items-center gap-2 text-sm text-neutral-700 dark:text-neutral-300 md:pb-2">
+                <label className="flex items-center gap-2 text-sm text-foreground md:pb-2">
                   <input type="checkbox" checked={share} onChange={(e) => setShare(e.target.checked)} className="h-4 w-4" />
                   {t('customers.documents.shareNow', 'Share with the customer')}
                 </label>
@@ -189,7 +189,7 @@ export const CustomerDocumentsCard: React.FC<Props> = ({ customerId, events }) =
                 {t('customers.documents.loadError', 'Could not load documents.')}
               </p>
             ) : documents.length === 0 ? (
-              <p className="text-sm text-neutral-500 dark:text-neutral-400">
+              <p className="text-sm text-muted-foreground">
                 {t('customers.documents.empty', 'No documents yet.')}
               </p>
             ) : (
@@ -201,17 +201,17 @@ export const CustomerDocumentsCard: React.FC<Props> = ({ customerId, events }) =
                       <div className="flex items-start justify-between gap-3 flex-wrap">
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100 break-all">{doc.name}</span>
+                            <span className="text-sm font-medium text-foreground break-all">{doc.name}</span>
                             <span className={`text-[11px] px-1.5 py-0.5 rounded-sm font-semibold ${STATUS_STYLE[doc.status]}`}>
                               {statusLabel(doc.status)}
                             </span>
-                            <span className="text-[11px] px-1.5 py-0.5 rounded-sm font-semibold bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300">
+                            <span className="text-[11px] px-1.5 py-0.5 rounded-sm font-semibold bg-muted text-foreground">
                               {doc.shared
                                 ? t('customers.documents.shared', 'Shared')
                                 : t('customers.documents.notShared', 'Not shared')}
                             </span>
                           </div>
-                          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                          <p className="text-xs text-muted-foreground mt-1">
                             {doc.uploaderType === 'customer'
                               ? t('customers.documents.fromCustomer', 'Uploaded by the customer')
                               : t('customers.documents.fromAdmin', 'Uploaded by {{name}}', { name: doc.uploaderName || t('customers.documents.anAdmin', 'an admin') })}
@@ -220,7 +220,7 @@ export const CustomerDocumentsCard: React.FC<Props> = ({ customerId, events }) =
                             {doc.eventName && <>{' · '}{doc.eventName}</>}
                             {doc.contractNumber && <>{' · '}{doc.contractNumber}</>}
                           </p>
-                          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+                          <p className="text-xs text-muted-foreground mt-0.5">
                             {doc.customerLastViewedAt
                               ? t('customers.documents.viewed', 'Customer downloaded it {{times}}×, last {{date}}', {
                                 times: doc.customerViewCount, date: fmtDateTime(doc.customerLastViewedAt),
@@ -299,7 +299,7 @@ export const CustomerDocumentsCard: React.FC<Props> = ({ customerId, events }) =
                               onChange={(e) => setRejecting({ id: doc.id, note: e.target.value })}
                               placeholder={t('customers.documents.rejectPlaceholder', 'Reason, shown to the customer (optional)')}
                               aria-label={t('customers.documents.rejectPlaceholder', 'Reason, shown to the customer (optional)')}
-                              className="flex-1 h-9 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-2 text-sm text-neutral-900 dark:text-neutral-100"
+                              className="flex-1 h-9 rounded-lg border border-border bg-card px-2 text-sm text-foreground"
                             />
                             <Button
                               type="button" size="sm" disabled={busy}
@@ -321,7 +321,7 @@ export const CustomerDocumentsCard: React.FC<Props> = ({ customerId, events }) =
                       {linking?.id === doc.id && (
                         <PermissionGate permission={PERMISSION}>
                           <div className="mt-2 flex flex-col sm:flex-row sm:items-end gap-2">
-                            <label className="text-xs text-neutral-600 dark:text-neutral-400">
+                            <label className="text-xs text-muted-foreground">
                               <span className="block mb-1">{t('customers.documents.eventLabel', 'Event')}</span>
                               <select
                                 value={linking.eventId}
@@ -333,7 +333,7 @@ export const CustomerDocumentsCard: React.FC<Props> = ({ customerId, events }) =
                               </select>
                             </label>
                             {canListContracts && (
-                              <label className="text-xs text-neutral-600 dark:text-neutral-400">
+                              <label className="text-xs text-muted-foreground">
                                 <span className="block mb-1">{t('customers.documents.contractLabel', 'Contract')}</span>
                                 <select
                                   value={linking.contractId}

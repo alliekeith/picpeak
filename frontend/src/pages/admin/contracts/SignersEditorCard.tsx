@@ -30,7 +30,7 @@ interface SignerRow {
   email: string;
 }
 
-const INPUT = 'focus:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900 w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm text-neutral-900 dark:text-neutral-100';
+const INPUT = 'focus:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900 w-full px-3 py-2 rounded-md border border-border bg-card text-sm text-foreground';
 
 function rowsFrom(overview: ContractSignersOverview): SignerRow[] {
   return overview.signers
@@ -146,10 +146,10 @@ export const SignersEditorCard: React.FC<SignersEditorCardProps> = ({ contractId
     : t('contracts.signers.emptyNoName', 'No signers added yet — the contract\'s customer signs by default.');
 
   const issuerRow = (position: number) => (
-    <li className="flex flex-wrap items-center gap-2 p-2 rounded-sm border border-dashed border-neutral-300 dark:border-neutral-600 text-sm">
-      <span className="w-5 text-neutral-500 dark:text-neutral-400">{position}.</span>
-      <span className="font-medium text-neutral-900 dark:text-neutral-100">{issuerName}</span>
-      <span className="text-xs text-neutral-500 dark:text-neutral-400">
+    <li className="flex flex-wrap items-center gap-2 p-2 rounded-sm border border-dashed border-border text-sm">
+      <span className="w-5 text-muted-foreground">{position}.</span>
+      <span className="font-medium text-foreground">{issuerName}</span>
+      <span className="text-xs text-muted-foreground">
         {t('contracts.signers.issuerRow', 'Signs last, from this page')}
       </span>
     </li>
@@ -158,14 +158,14 @@ export const SignersEditorCard: React.FC<SignersEditorCardProps> = ({ contractId
   const readOnly = (
     <div className="space-y-3">
       {rows.length === 0 ? (
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">{defaultHint}</p>
+        <p className="text-sm text-muted-foreground">{defaultHint}</p>
       ) : (
         <ol className="space-y-2">
           {rows.map((r, i) => (
-            <li key={r.key} className="flex flex-wrap gap-2 text-sm text-neutral-900 dark:text-neutral-100">
-              <span className="w-5 text-neutral-500 dark:text-neutral-400">{i + 1}.</span>
+            <li key={r.key} className="flex flex-wrap gap-2 text-sm text-foreground">
+              <span className="w-5 text-muted-foreground">{i + 1}.</span>
               <span className="font-medium">{r.name}</span>
-              <span className="text-neutral-600 dark:text-neutral-400">{r.email}</span>
+              <span className="text-muted-foreground">{r.email}</span>
             </li>
           ))}
           {issuerRow(rows.length + 1)}
@@ -176,7 +176,7 @@ export const SignersEditorCard: React.FC<SignersEditorCardProps> = ({ contractId
 
   return (
     <Card className="py-8 mb-3"><CardContent className="px-8"><div className="flex items-center justify-between gap-2 flex-wrap mb-1">
-              <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+              <h2 className="text-lg font-semibold text-foreground">
                 {t('contracts.signers.title', 'Signers')}
               </h2>
               {dirty && (
@@ -184,7 +184,7 @@ export const SignersEditorCard: React.FC<SignersEditorCardProps> = ({ contractId
                   {t('contracts.signers.unsaved', 'Unsaved changes')}
                 </span>
               )}
-            </div><p className="text-xs text-neutral-500 dark:text-neutral-400 mb-3">
+            </div><p className="text-xs text-muted-foreground mb-3">
               {t('contracts.signers.hint', 'Saved separately from the contract. Signers can change until the contract is sent.')}
             </p>{isLoading ? (
               <Loading />
@@ -196,13 +196,13 @@ export const SignersEditorCard: React.FC<SignersEditorCardProps> = ({ contractId
               <PermissionGate permission="contracts.manage" fallback={readOnly}>
                 <div className="space-y-4">
                   {rows.length === 0 ? (
-                    <p className="text-sm text-neutral-600 dark:text-neutral-400">{defaultHint}</p>
+                    <p className="text-sm text-muted-foreground">{defaultHint}</p>
                   ) : (
                     <>
                       <ol className="space-y-2">
                         {rows.map((r, i) => (
                           <li key={r.key} className="flex flex-wrap items-center gap-2">
-                            <span className="w-5 text-sm text-neutral-500 dark:text-neutral-400">{i + 1}.</span>
+                            <span className="w-5 text-sm text-muted-foreground">{i + 1}.</span>
                             <div className="flex-1 min-w-[160px]">
                               <input
                                 type="text"
@@ -229,7 +229,7 @@ export const SignersEditorCard: React.FC<SignersEditorCardProps> = ({ contractId
                               type="button"
                               onClick={() => removeRow(r.key)}
                               aria-label={t('contracts.signers.remove', 'Remove signer {{number}}', { number: i + 1 })}
-                              className="p-2 rounded-md text-neutral-500 dark:text-neutral-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                              className="p-2 rounded-md text-muted-foreground hover:text-red-600 dark:hover:text-red-400 hover:bg-accent"
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
@@ -237,7 +237,7 @@ export const SignersEditorCard: React.FC<SignersEditorCardProps> = ({ contractId
                         ))}
                         {issuerRow(rows.length + 1)}
                       </ol>
-                      <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                      <p className="text-xs text-muted-foreground">
                         {t('contracts.signers.onlyListedHint', 'Only the people listed here sign. Add the customer too if they should sign.')}
                       </p>
                     </>
@@ -254,19 +254,19 @@ export const SignersEditorCard: React.FC<SignersEditorCardProps> = ({ contractId
                       {t('contracts.signers.add', 'Add signer')}
                     </Button>
                     {rows.length >= MAX_CUSTOMER_SIGNERS && (
-                      <span className="text-xs text-neutral-500 dark:text-neutral-400">
+                      <span className="text-xs text-muted-foreground">
                         {t('contracts.signers.max', 'You can add up to {{max}} signers.', { max: MAX_CUSTOMER_SIGNERS })}
                       </span>
                     )}
                   </div>
 
                   <fieldset>
-                    <legend className="text-sm font-medium mb-1 text-neutral-900 dark:text-neutral-100">
+                    <legend className="text-sm font-medium mb-1 text-foreground">
                       {t('contracts.signers.orderLabel', 'Signing order')}
                     </legend>
                     <div className="space-y-2">
                       {(['parallel', 'sequential'] as const).map((value) => (
-                        <label key={value} className="flex items-start gap-2 text-sm text-neutral-800 dark:text-neutral-200">
+                        <label key={value} className="flex items-start gap-2 text-sm text-foreground">
                           <input
                             type="radio"
                             name={`contract-${contractId}-signing-order`}
@@ -281,7 +281,7 @@ export const SignersEditorCard: React.FC<SignersEditorCardProps> = ({ contractId
                                 ? t('contracts.signers.orderParallel', 'All at once')
                                 : t('contracts.signers.orderSequential', 'One after the other')}
                             </span>
-                            <span className="block text-xs text-neutral-500 dark:text-neutral-400">
+                            <span className="block text-xs text-muted-foreground">
                               {value === 'parallel'
                                 ? t('contracts.signers.orderParallelHint', 'Everyone gets their link when you send the contract.')
                                 : t('contracts.signers.orderSequentialHint', 'Signers get their link in the order listed, each once the one before has signed.')}

@@ -221,7 +221,7 @@ const QuoteRow: React.FC<{ q: CustomerQuote }> = ({ q }) => {
     q.status === 'accepted' || q.status === 'converted' ? 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300'
       : q.status === 'declined' ? 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300'
         : q.status === 'sent' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300'
-          : 'bg-neutral-100 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-300';
+          : 'bg-muted text-foreground';
 
   const body = (
     <div className="flex items-center justify-between gap-3 px-4 py-3">
@@ -262,7 +262,7 @@ const QuoteRow: React.FC<{ q: CustomerQuote }> = ({ q }) => {
   return (
     <li>
       {linkHref ? (
-        <Link to={linkHref} className="block hover:bg-neutral-50 dark:hover:bg-neutral-800">
+        <Link to={linkHref} className="block hover:bg-accent">
           {body}
         </Link>
       ) : body}

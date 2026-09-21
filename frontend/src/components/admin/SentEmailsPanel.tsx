@@ -50,17 +50,17 @@ export const SentEmailsPanel: React.FC = () => {
   const resetTo1 = () => setPage(1);
 
   return (
-    <Card className="py-8"><CardContent className="px-8"><h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-1">
+    <Card className="py-8"><CardContent className="px-8"><h2 className="text-lg font-semibold text-foreground mb-1">
               {t('email.sentEmails.title', 'Sent emails')}
-            </h2><p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
+            </h2><p className="text-sm text-muted-foreground mb-4">
               {t('email.sentEmails.subtitle', 'Delivery status of every queued and sent notification.')}
             </p><div className="flex flex-wrap items-end gap-3">
               <div className="relative flex-1 min-w-[220px]">
-                <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
+                <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                 <input
                   type="text"
                   placeholder={t('email.sentEmails.searchPlaceholder', 'Search by recipient or type…') as string}
-                  className="w-full pl-9 pr-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm"
+                  className="w-full pl-9 pr-3 py-2 rounded-md border border-border bg-card text-sm"
                   value={search}
                   onChange={(e) => { setSearch(e.target.value); resetTo1(); }}
                 />
@@ -81,22 +81,22 @@ export const SentEmailsPanel: React.FC = () => {
                     onClick={() => { setStatusFilter(active ? null : s); resetTo1(); }}
                     className={`px-2.5 py-1 rounded-full text-xs font-medium border transition-colors ${
                       active
-                        ? 'bg-primary text-white border-primary'
-                        : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-neutral-300 dark:border-neutral-600'
+                        ? 'bg-primary text-primary-foreground border-primary'
+                        : 'bg-card text-foreground border-border'
                     }`}
                   >{t(`email.sentEmails.status.${s}`, s)}</button>
                 );
               })}
             </div><div className="mt-4">
               {isLoading ? <Loading /> : !data || data.items.length === 0 ? (
-                <p className="text-center text-neutral-500 dark:text-neutral-400 py-8">
+                <p className="text-center text-muted-foreground py-8">
                   {t('email.sentEmails.empty', 'No emails match these filters.')}
                 </p>
               ) : (
-                <div className="rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden">
+                <div className="rounded-lg border border-border overflow-hidden">
                   <div className="overflow-x-auto">
                     <table className="w-full text-sm">
-                      <thead className="bg-neutral-50 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300">
+                      <thead className="bg-muted text-foreground">
                         <tr>
                           <th className="px-3 py-2 text-left">{t('email.sentEmails.col.recipient', 'Recipient')}</th>
                           <th className="px-3 py-2 text-left">{t('email.sentEmails.col.type', 'Type')}</th>
@@ -108,7 +108,7 @@ export const SentEmailsPanel: React.FC = () => {
                       </thead>
                       <tbody>
                         {data.items.map((m) => (
-                          <tr key={m.id} className="border-t border-neutral-200 dark:border-neutral-700 align-top">
+                          <tr key={m.id} className="border-t border-border align-top">
                             <td className="px-3 py-2 break-all">{m.recipientEmail}</td>
                             <td className="px-3 py-2 font-mono text-xs">{m.emailType}</td>
                             <td className="px-3 py-2">
@@ -142,8 +142,8 @@ export const SentEmailsPanel: React.FC = () => {
                     </table>
                   </div>
                   {data.pagination.totalPages > 1 && (
-                    <div className="flex justify-between items-center px-3 py-2 border-t border-neutral-200 dark:border-neutral-700 text-sm">
-                      <span className="text-neutral-500 dark:text-neutral-400">
+                    <div className="flex justify-between items-center px-3 py-2 border-t border-border text-sm">
+                      <span className="text-muted-foreground">
                         {t('email.sentEmails.pagination', 'Page {{page}} of {{total}} · {{count}} emails', {
                           page: data.pagination.page, total: data.pagination.totalPages, count: data.pagination.total,
                         })}

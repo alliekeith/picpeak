@@ -280,7 +280,7 @@ export const GridGalleryLayout: React.FC<BaseGalleryLayoutProps> = ({
                 className={`absolute top-2 left-2 z-10 p-1.5 rounded-full shadow-md transition-colors ${
                   isHidden
                     ? 'bg-red-500/90 text-white hover:bg-red-600'
-                    : 'bg-white/90 text-neutral-700 hover:bg-white dark:bg-neutral-800/90 dark:text-neutral-200 dark:hover:bg-neutral-700'
+                    : 'bg-white/90 text-foreground hover:bg-accent dark:bg-neutral-800/90'
                 }`}
                 title={isHidden ? 'Hidden from guests' : 'Visible to guests'}
               >

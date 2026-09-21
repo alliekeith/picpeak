@@ -48,27 +48,27 @@ export const BulkCategoryModal: React.FC<BulkCategoryModalProps> = ({
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <Card className="w-full max-w-md"><CardContent><div className="p-6">
                     <div className="flex items-center justify-between mb-4">
-                      <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+                      <h2 className="text-xl font-semibold text-foreground">
                         {t('photos.moveToCategory', 'Move {{count}} photos to category', { count: photoCount })}
                       </h2>
                       <button
                         onClick={handleClose}
-                        className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors"
+                        className="p-1 hover:bg-accent rounded-lg transition-colors"
                         disabled={isLoading}
                       >
-                        <X className="w-5 h-5 text-neutral-500 dark:text-neutral-400" />
+                        <X className="w-5 h-5 text-muted-foreground" />
                       </button>
                     </div>
 
                     <div className="mb-6">
-                      <label htmlFor="category-select" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+                      <label htmlFor="category-select" className="block text-sm font-medium text-foreground mb-2">
                         {t('photos.selectCategory', 'Select category')}
                       </label>
                       <select
                         id="category-select"
                         value={selectedCategoryId ?? ''}
                         onChange={(e) => setSelectedCategoryId(e.target.value === '' ? null : Number(e.target.value))}
-                        className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-brand-500 focus:border-primary"
+                        className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-brand-500 focus:border-primary"
                         disabled={isLoading}
                       >
                         <option value="">{t('photos.uncategorized', 'Uncategorized')}</option>

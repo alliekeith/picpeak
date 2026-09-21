@@ -182,13 +182,13 @@ export const PhotosTab: React.FC<PhotosTabProps> = ({
       {showExternalImport && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <Card className="max-w-2xl w-full"><CardContent><div className="flex items-center justify-between mb-4">
-                                <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">{t('events.importExternal', 'Import from External Folder')}</h2>
-                                <button onClick={() => setShowExternalImport(false)} className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300">
+                                <h2 className="text-xl font-semibold text-foreground">{t('events.importExternal', 'Import from External Folder')}</h2>
+                                <button onClick={() => setShowExternalImport(false)} className="text-muted-foreground hover:text-foreground">
                                   <X className="w-5 h-5" />
                                 </button>
-                              </div><div className="mb-3 text-sm text-neutral-700 dark:text-neutral-300">
+                              </div><div className="mb-3 text-sm text-foreground">
                                 {t('events.externalImportInfo', 'All pictures from the selected folder will be imported.')}
-                              </div><div className="mb-2 text-sm text-neutral-700 dark:text-neutral-300">
+                              </div><div className="mb-2 text-sm text-foreground">
                                 {t('events.selectExternalFolder', 'Select external folder under /external-media')}
                               </div><ExternalFolderPicker value={externalPath || event.external_path || ''} onChange={setExternalPath} /><div className="mt-4 flex justify-end gap-2">
                                 <Button variant="outline" onClick={() => setShowExternalImport(false)}>

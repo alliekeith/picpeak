@@ -193,7 +193,7 @@ export function DocumentVerificationStep<Result = DocumentAccessGrant>({
     : t('documentVerification.resend', 'Send a new code');
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100">
+    <div className="min-h-screen bg-muted text-foreground">
       <div className="max-w-md mx-auto py-12 px-4">
         <div className="text-center mb-6">
           {logo && (
@@ -202,9 +202,9 @@ export function DocumentVerificationStep<Result = DocumentAccessGrant>({
           {issuer?.companyName && <h2 className="text-xl font-bold">{issuer.companyName}</h2>}
         </div>
 
-        <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-xs border border-neutral-200 dark:border-neutral-700 p-6">
+        <div className="bg-card rounded-xl shadow-xs border border-border p-6">
           {documentLabel && (
-            <p className="text-xs font-mono inline-block mb-3 px-2 py-1 rounded-sm bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300">
+            <p className="text-xs font-mono inline-block mb-3 px-2 py-1 rounded-sm bg-muted text-muted-foreground">
               {documentLabel}
             </p>
           )}
@@ -215,7 +215,7 @@ export function DocumentVerificationStep<Result = DocumentAccessGrant>({
 
           {notice && <p className="text-sm text-amber-700 dark:text-amber-300 mb-3">{notice}</p>}
 
-          <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
+          <p className="text-sm text-muted-foreground mb-4">
             {hint
               ? t('documentVerification.explanation',
                 "To protect your personal data, please confirm it's you. We'll email a 6-digit code to {{email}}.",
@@ -233,7 +233,7 @@ export function DocumentVerificationStep<Result = DocumentAccessGrant>({
               type="button"
               onClick={handleSend}
               disabled={busy || waitSeconds > 0}
-              className="w-full inline-flex justify-center items-center gap-2 px-4 py-2 rounded-md bg-primary text-white text-sm hover:opacity-90 disabled:opacity-50"
+              className="w-full inline-flex justify-center items-center gap-2 px-4 py-2 rounded-md bg-primary text-primary-foreground text-sm hover:opacity-90 disabled:opacity-50"
             >
               <Mail className="w-4 h-4" />
               {busy
@@ -242,7 +242,7 @@ export function DocumentVerificationStep<Result = DocumentAccessGrant>({
             </button>
           ) : (
             <form onSubmit={handleConfirm} className="space-y-3">
-              <p className="text-sm text-neutral-700 dark:text-neutral-300">
+              <p className="text-sm text-foreground">
                 {hint
                   ? t('documentVerification.codeSent', 'We sent a code to {{email}}.', { email: hint })
                   : t('documentVerification.codeSentNoHint', 'We sent you a code by email.')}
@@ -261,13 +261,13 @@ export function DocumentVerificationStep<Result = DocumentAccessGrant>({
                   maxLength={6}
                   value={code}
                   onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                  className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 text-lg tracking-widest text-center font-mono text-neutral-900 dark:text-neutral-100"
+                  className="w-full px-3 py-2 rounded-md border border-border bg-card text-lg tracking-widest text-center font-mono text-foreground"
                 />
               </div>
               <button
                 type="submit"
                 disabled={busy || code.length !== 6}
-                className="w-full px-4 py-2 rounded-md bg-primary text-white text-sm hover:opacity-90 disabled:opacity-50"
+                className="w-full px-4 py-2 rounded-md bg-primary text-primary-foreground text-sm hover:opacity-90 disabled:opacity-50"
               >
                 {busy ? t('documentVerification.confirming', 'Checking…') : t('documentVerification.confirm', 'Confirm')}
               </button>
@@ -275,7 +275,7 @@ export function DocumentVerificationStep<Result = DocumentAccessGrant>({
                 type="button"
                 onClick={handleSend}
                 disabled={busy || waitSeconds > 0}
-                className="w-full text-sm text-neutral-600 dark:text-neutral-400 hover:underline disabled:opacity-50 disabled:no-underline"
+                className="w-full text-sm text-muted-foreground hover:underline disabled:opacity-50 disabled:no-underline"
               >
                 {resendLabel}
               </button>

@@ -237,7 +237,7 @@ const InvoiceRow: React.FC<{ inv: CustomerInvoice; onViewPdf: () => void }> = ({
     ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300'
     : inv.status === 'paid' ? 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300'
       : inv.status === 'overdue' ? 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300'
-        : inv.status === 'cancelled' ? 'bg-neutral-200 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-300'
+        : inv.status === 'cancelled' ? 'bg-muted text-foreground'
           : 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300';
 
   // Cancelled invoices and Storni display the absolute total. The
@@ -296,7 +296,7 @@ const InvoiceRow: React.FC<{ inv: CustomerInvoice; onViewPdf: () => void }> = ({
             </div>
           )}
           {!isStorno && isCancelled && inv.cancellationStornoId && (
-            <div className="text-xs text-neutral-600 dark:text-neutral-400 mt-1">
+            <div className="text-xs text-muted-foreground mt-1">
               {t('customer.bills.cancelledByLabel', 'Cancelled by cancellation invoice')}{' '}
               {inv.cancellationStornoNumber || `#${inv.cancellationStornoId}`}
             </div>

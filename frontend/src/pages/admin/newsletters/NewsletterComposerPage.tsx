@@ -220,7 +220,7 @@ export const NewsletterComposerPage: React.FC = () => {
 
   if (draft.status !== 'draft') {
     return (
-      <Card><CardContent><p className="text-neutral-700 dark:text-neutral-300">
+      <Card><CardContent><p className="text-foreground">
                   {t('newsletters.notEditable',
                     'This campaign has already been queued and can no longer be edited.')}
                 </p><Button
@@ -239,7 +239,7 @@ export const NewsletterComposerPage: React.FC = () => {
         <button
           type="button"
           onClick={() => navigate('/admin/clients/newsletters')}
-          className="flex items-center gap-1 text-sm text-neutral-600 dark:text-neutral-400 hover:underline"
+          className="flex items-center gap-1 text-sm text-muted-foreground hover:underline"
         >
           <ArrowLeft className="w-4 h-4" />
           {t('newsletters.backToList', 'All campaigns')}
@@ -266,7 +266,7 @@ export const NewsletterComposerPage: React.FC = () => {
           full-width below where it can render at true email size. */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         {/* ---- 1. Content ---- */}
-        <Card className="xl:col-span-2"><CardContent><h3 className="font-semibold mb-4 text-neutral-900 dark:text-neutral-100">
+        <Card className="xl:col-span-2"><CardContent><h3 className="font-semibold mb-4 text-foreground">
                           {t('newsletters.section.content', 'Content')}
                         </h3><div className="space-y-4">
                           <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('newsletters.field.name', 'Campaign name (internal)') as string}</span><Input
@@ -279,7 +279,7 @@ export const NewsletterComposerPage: React.FC = () => {
                                                   onChange={(e) => patch({ subject: e.target.value })}
                                                 /></Label></div>
                           <div>
-                            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                            <label className="block text-sm font-medium text-foreground mb-1">
                               {t('newsletters.field.body', 'Body')}
                             </label>
                             <EmailTemplateEditor
@@ -307,9 +307,9 @@ export const NewsletterComposerPage: React.FC = () => {
                                   value={draft.bodyCss}
                                   onChange={(e) => patch({ bodyCss: e.target.value })}
                                   placeholder=".cta { background: #5C8762; color: #fff; }"
-                                  className="mt-2 w-full font-mono text-xs rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-3 py-2"
+                                  className="mt-2 w-full font-mono text-xs rounded-md border border-border bg-card px-3 py-2"
                                 />
-                                <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                                <p className="mt-1 text-xs text-muted-foreground">
                                   {t('newsletters.cssHelp',
                                     'Many email clients drop a <style> block — keep the important styling on inline attributes. Remote images and @import are stripped.')}
                                 </p>
@@ -320,8 +320,8 @@ export const NewsletterComposerPage: React.FC = () => {
 
         {/* ---- 2. Recipients ---- */}
         <Card><CardContent><div className="flex items-center gap-2 mb-4">
-                          <Users className="w-5 h-5 text-neutral-500" />
-                          <h3 className="font-semibold text-neutral-900 dark:text-neutral-100">
+                          <Users className="w-5 h-5 text-muted-foreground" />
+                          <h3 className="font-semibold text-foreground">
                             {t('newsletters.section.recipients', 'Recipients & send')}
                           </h3>
                         </div><div className="space-y-2 mb-4">
@@ -337,7 +337,7 @@ export const NewsletterComposerPage: React.FC = () => {
                                 onChange={() => patch({ recipientMode: mode })}
                               />
                               <span className="text-sm">
-                                <span className="font-medium text-neutral-900 dark:text-neutral-100">
+                                <span className="font-medium text-foreground">
                                   {mode === 'all_active'
                                     ? t('newsletters.mode.allActive', 'All active customers')
                                     : t('newsletters.mode.manual', 'Pick customers')}
@@ -346,7 +346,7 @@ export const NewsletterComposerPage: React.FC = () => {
                             </label>
                           ))}
                         </div>{draft.recipientMode === 'manual' && (
-                          <div className="mb-4 max-h-64 overflow-y-auto border border-neutral-200 dark:border-neutral-700 rounded-md p-2">
+                          <div className="mb-4 max-h-64 overflow-y-auto border border-border rounded-md p-2">
                             {(customers ?? []).map((c) => (
                               <label key={c.id} className="flex items-center gap-2 py-1 cursor-pointer text-sm">
                                 <input
@@ -358,7 +358,7 @@ export const NewsletterComposerPage: React.FC = () => {
                                       : draft.customerIds.filter((x) => x !== c.id),
                                   })}
                                 />
-                                <span className="text-neutral-800 dark:text-neutral-200">
+                                <span className="text-foreground">
                                   {c.displayName || c.email}
                                 </span>
                               </label>
@@ -366,19 +366,19 @@ export const NewsletterComposerPage: React.FC = () => {
                           </div>
                         )}{/* The server's own count, not a local estimate. */}<div
                           data-testid="recipient-summary"
-                          className="rounded-md bg-neutral-50 dark:bg-neutral-800/60 p-3 text-sm"
+                          className="rounded-md bg-muted p-3 text-sm"
                         >
-                          <p className="font-medium text-neutral-900 dark:text-neutral-100">
+                          <p className="font-medium text-foreground">
                             {t('newsletters.recipientCount', '{{count}} recipients',
                               { count: resolution?.recipientCount ?? 0 })}
                           </p>
                           {(resolution?.skippedOptOut ?? 0) > 0 && (
-                            <p className="text-neutral-600 dark:text-neutral-400 mt-1">
+                            <p className="text-muted-foreground mt-1">
                               {t('newsletters.skippedOptOut', '{{count}} skipped (opted out)',
                                 { count: resolution?.skippedOptOut ?? 0 })}
                             </p>
                           )}
-                          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-2">
+                          <p className="text-xs text-muted-foreground mt-2">
                             {t('newsletters.saveToRefresh', 'Save to refresh this count.')}
                           </p>
                         </div><div className="mt-4">
@@ -392,13 +392,13 @@ export const NewsletterComposerPage: React.FC = () => {
                                                   value={String(draft.sendRatePerMinute)}
                                                   onChange={(e) => patch({ sendRatePerMinute: Number(e.target.value) })}
                                                 /></Label></div>
-                          <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                          <p className="mt-1 text-xs text-muted-foreground">
                             {t('newsletters.rateHelp',
                               'Sends are spread out so your mail provider does not rate-limit you, and so a '
                               + 'sudden burst does not look like spam. Check your provider\'s hourly cap '
                               + 'before raising this.')}
                           </p>
-                        </div>{/* Test + queue live with the recipient rule they act on. */}<div className="mt-6 pt-4 border-t border-neutral-200 dark:border-neutral-700 space-y-3">
+                        </div>{/* Test + queue live with the recipient rule they act on. */}<div className="mt-6 pt-4 border-t border-border space-y-3">
                           <div className="flex gap-2 items-end">
                             <div className="flex-1">
                               <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('newsletters.field.testTo', 'Send a test to') as string}</span><Input
@@ -461,7 +461,7 @@ export const NewsletterComposerPage: React.FC = () => {
                                                 >
                                                   <Send className="w-4 h-4" />{t('newsletters.queueButton', 'Queue campaign')}</Button>
                           {!canQueue && (
-                            <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                            <p className="text-xs text-muted-foreground">
                               {t('newsletters.queueBlocked',
                                 'A subject, a body and at least one recipient are needed before sending.')}
                             </p>
@@ -472,8 +472,8 @@ export const NewsletterComposerPage: React.FC = () => {
       {/* ---- Preview, full width ---- */}
       <Card className="mt-6"><CardContent><div className="flex items-center justify-between gap-4 mb-4">
                     <div className="flex items-center gap-2">
-                      <Eye className="w-5 h-5 text-neutral-500" />
-                      <h3 className="font-semibold text-neutral-900 dark:text-neutral-100">
+                      <Eye className="w-5 h-5 text-muted-foreground" />
+                      <h3 className="font-semibold text-foreground">
                         {t('newsletters.section.preview', 'Preview')}
                       </h3>
                     </div>
@@ -491,10 +491,10 @@ export const NewsletterComposerPage: React.FC = () => {
                       srcDoc={previewHtml}
                       // 680px: the 600px email plus its wrapper padding, so it renders
                       // at the width a recipient sees instead of side-scrolling.
-                      className="w-full max-w-[680px] mx-auto h-[640px] border border-neutral-200 dark:border-neutral-700 rounded-md bg-white"
+                      className="w-full max-w-[680px] mx-auto h-[640px] border border-border rounded-md bg-card"
                     />
                   ) : (
-                    <div className="max-w-[680px] mx-auto h-[240px] rounded-md border border-dashed border-neutral-300 dark:border-neutral-600 flex items-center justify-center text-sm text-neutral-500 dark:text-neutral-400">
+                    <div className="max-w-[680px] mx-auto h-[240px] rounded-md border border-dashed border-border flex items-center justify-center text-sm text-muted-foreground">
                       {t('newsletters.previewEmpty', 'Refresh the preview to see the email as a customer will.')}
                     </div>
                   )}</CardContent></Card>

@@ -23,28 +23,28 @@ export const headerStyleIcons: Record<HeaderStyleType, React.ReactNode> = {
 export const dividerStylePreviews: Record<HeroDividerStyle, React.ReactNode> = {
   wave: (
     <svg className="w-full h-6" viewBox="0 0 100 24" preserveAspectRatio="none">
-      <path d="M0,12 C12,18 37,6 50,12 C63,18 88,6 100,12 L100,24 L0,24 Z" fill="currentColor" className="text-neutral-300" />
+      <path d="M0,12 C12,18 37,6 50,12 C63,18 88,6 100,12 L100,24 L0,24 Z" fill="currentColor" className="text-muted-foreground" />
     </svg>
   ),
   straight: (
     <svg className="w-full h-6" viewBox="0 0 100 24" preserveAspectRatio="none">
-      <rect x="0" y="12" width="100" height="12" fill="currentColor" className="text-neutral-300" />
+      <rect x="0" y="12" width="100" height="12" fill="currentColor" className="text-muted-foreground" />
     </svg>
   ),
   angle: (
     <svg className="w-full h-6" viewBox="0 0 100 24" preserveAspectRatio="none">
-      <path d="M0,24 L100,8 L100,24 Z" fill="currentColor" className="text-neutral-300" />
+      <path d="M0,24 L100,8 L100,24 Z" fill="currentColor" className="text-muted-foreground" />
     </svg>
   ),
   curve: (
     <svg className="w-full h-6" viewBox="0 0 100 24" preserveAspectRatio="none">
-      <path d="M0,16 Q50,0 100,16 L100,24 L0,24 Z" fill="currentColor" className="text-neutral-300" />
+      <path d="M0,16 Q50,0 100,16 L100,24 L0,24 Z" fill="currentColor" className="text-muted-foreground" />
     </svg>
   ),
   none: (
     <svg className="w-full h-6" viewBox="0 0 100 24" preserveAspectRatio="none">
       <rect x="0" y="0" width="100" height="24" fill="currentColor" className="text-neutral-100" />
-      <text x="50" y="16" textAnchor="middle" fontSize="10" fill="currentColor" className="text-neutral-400">No divider</text>
+      <text x="50" y="16" textAnchor="middle" fontSize="10" fill="currentColor" className="text-muted-foreground">No divider</text>
     </svg>
   )
 };

@@ -29,7 +29,7 @@ export const SecurityTab: React.FC<SecurityTabProps> = ({
     setRateLimitSettings((prev) => ({ ...prev, [key]: value }));
   const numberField = (key: keyof RateLimitSettings, min: number, max: number, labelKey: string, helpKey: string) => (
     <div>
-      <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+      <label className="block text-sm font-medium text-foreground mb-1">
         {t(`settings.security.${labelKey}`)}
       </label>
       <Input
@@ -40,15 +40,15 @@ export const SecurityTab: React.FC<SecurityTabProps> = ({
         onChange={(e) => setRateLimit(key, Number(e.target.value) as RateLimitSettings[typeof key])}
         aria-label={t(`settings.security.${labelKey}`)}
       />
-      <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">{t(`settings.security.${helpKey}`)}</p>
+      <p className="text-xs text-muted-foreground mt-1">{t(`settings.security.${helpKey}`)}</p>
     </div>
   );
 
   return (
     <div className="space-y-6">
-      <Card><CardContent><h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">{t('settings.security.passwordSettings')}</h2><div className="space-y-4">
+      <Card><CardContent><h2 className="text-lg font-semibold text-foreground mb-4">{t('settings.security.passwordSettings')}</h2><div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                      <label className="block text-sm font-medium text-foreground mb-1">
                         {t('settings.security.minPasswordLength')}
                       </label>
                       <Input
@@ -61,29 +61,29 @@ export const SecurityTab: React.FC<SecurityTabProps> = ({
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                      <label className="block text-sm font-medium text-foreground mb-1">
                         {t('settings.security.passwordComplexity')}
                       </label>
                       <select
                         value={securitySettings.password_complexity}
                         onChange={(e) => setSecuritySettings(prev => ({ ...prev, password_complexity: e.target.value }))}
-                        className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                        className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
                       >
                         <option value="simple">{t('settings.security.complexitySimple')}</option>
                         <option value="moderate">{t('settings.security.complexityModerate')}</option>
                         <option value="strong">{t('settings.security.complexityStrong')}</option>
                         <option value="very_strong">{t('settings.security.complexityVeryStrong')}</option>
                       </select>
-                      <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
+                      <p className="mt-1 text-sm text-muted-foreground">
                         {t('settings.security.passwordComplexityHelp')}
                       </p>
                     </div>
                   </div></CardContent></Card>
 
-      <Card><CardContent><h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">{t('settings.security.sessionAuth')}</h2><div className="space-y-4">
+      <Card><CardContent><h2 className="text-lg font-semibold text-foreground mb-4">{t('settings.security.sessionAuth')}</h2><div className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                        <label className="block text-sm font-medium text-foreground mb-1">
                           {t('settings.security.sessionTimeout')}
                         </label>
                         <Input
@@ -95,7 +95,7 @@ export const SecurityTab: React.FC<SecurityTabProps> = ({
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                        <label className="block text-sm font-medium text-foreground mb-1">
                           {t('settings.security.attemptWindowMinutes')}
                         </label>
                         <Input
@@ -105,12 +105,12 @@ export const SecurityTab: React.FC<SecurityTabProps> = ({
                           min="1"
                           max="1440"
                         />
-                        <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
+                        <p className="mt-1 text-sm text-muted-foreground">
                           {t('settings.security.attemptWindowMinutesHelp')}
                         </p>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                        <label className="block text-sm font-medium text-foreground mb-1">
                           {t('settings.security.lockoutDurationMinutes')}
                         </label>
                         <Input
@@ -120,12 +120,12 @@ export const SecurityTab: React.FC<SecurityTabProps> = ({
                           min="1"
                           max="1440"
                         />
-                        <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
+                        <p className="mt-1 text-sm text-muted-foreground">
                           {t('settings.security.lockoutDurationMinutesHelp')}
                         </p>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                        <label className="block text-sm font-medium text-foreground mb-1">
                           {t('settings.security.maxLoginAttempts')}
                         </label>
                         <Input
@@ -135,17 +135,17 @@ export const SecurityTab: React.FC<SecurityTabProps> = ({
                           min="1"
                           max="50"
                         />
-                        <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
+                        <p className="mt-1 text-sm text-muted-foreground">
                           {t('settings.security.maxLoginAttemptsHelp')}
                         </p>
                       </div>
                     </div>
 
-                    <div className="p-4 bg-neutral-50 dark:bg-neutral-800/60 border border-neutral-200 dark:border-neutral-700 rounded-lg">
+                    <div className="p-4 bg-muted border border-border rounded-lg">
                       <div className="flex items-start gap-3">
                         <ShieldCheck className="w-5 h-5 text-brand-600 dark:text-brand-400 shrink-0 mt-0.5" />
-                        <div className="text-sm text-neutral-700 dark:text-neutral-300">
-                          <p className="font-medium text-neutral-900 dark:text-neutral-100">{t('settings.security.twoFactorTitle')}</p>
+                        <div className="text-sm text-foreground">
+                          <p className="font-medium text-foreground">{t('settings.security.twoFactorTitle')}</p>
                           <p className="mt-1">{t('settings.security.twoFactorNote')}</p>
                         </div>
                       </div>
@@ -154,7 +154,7 @@ export const SecurityTab: React.FC<SecurityTabProps> = ({
 
       {/* General API rate limiter (#1337). These keys had a backend route and
           no screen, so installs ran on a budget nobody could see. */}
-      <Card><CardContent><h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-1">{t('settings.security.rateLimitTitle')}</h2><p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">{t('settings.security.rateLimitIntro')}</p><div className="space-y-4">
+      <Card><CardContent><h2 className="text-lg font-semibold text-foreground mb-1">{t('settings.security.rateLimitTitle')}</h2><p className="text-sm text-muted-foreground mb-4">{t('settings.security.rateLimitIntro')}</p><div className="space-y-4">
                     <label className="flex items-center">
                       <input
                         type="checkbox"
@@ -162,7 +162,7 @@ export const SecurityTab: React.FC<SecurityTabProps> = ({
                         onChange={(e) => setRateLimit('rate_limit_enabled', e.target.checked)}
                         className="w-4 h-4 text-brand-600 rounded-sm focus:ring-brand-500"
                       />
-                      <span className="ml-2 text-sm text-neutral-700 dark:text-neutral-300">{t('settings.security.rateLimitEnabled')}</span>
+                      <span className="ml-2 text-sm text-foreground">{t('settings.security.rateLimitEnabled')}</span>
                     </label>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -178,9 +178,9 @@ export const SecurityTab: React.FC<SecurityTabProps> = ({
                         onChange={(e) => setRateLimit('rate_limit_skip_authenticated', e.target.checked)}
                         className="mt-0.5 w-4 h-4 text-brand-600 rounded-sm focus:ring-brand-500"
                       />
-                      <span className="ml-2 text-sm text-neutral-700 dark:text-neutral-300">
+                      <span className="ml-2 text-sm text-foreground">
                         {t('settings.security.rateLimitSkipAuthenticated')}
-                        <span className="block text-xs text-neutral-500 dark:text-neutral-400">{t('settings.security.rateLimitSkipAuthenticatedHelp')}</span>
+                        <span className="block text-xs text-muted-foreground">{t('settings.security.rateLimitSkipAuthenticatedHelp')}</span>
                       </span>
                     </label>
 
@@ -191,9 +191,9 @@ export const SecurityTab: React.FC<SecurityTabProps> = ({
                         onChange={(e) => setRateLimit('rate_limit_public_endpoints_only', e.target.checked)}
                         className="mt-0.5 w-4 h-4 text-brand-600 rounded-sm focus:ring-brand-500"
                       />
-                      <span className="ml-2 text-sm text-neutral-700 dark:text-neutral-300">
+                      <span className="ml-2 text-sm text-foreground">
                         {t('settings.security.rateLimitPublicOnly')}
-                        <span className="block text-xs text-neutral-500 dark:text-neutral-400">{t('settings.security.rateLimitPublicOnlyHelp')}</span>
+                        <span className="block text-xs text-muted-foreground">{t('settings.security.rateLimitPublicOnlyHelp')}</span>
                       </span>
                     </label>
 
@@ -203,7 +203,7 @@ export const SecurityTab: React.FC<SecurityTabProps> = ({
                     </div>
                   </div></CardContent></Card>
 
-      <Card><CardContent><h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">{t('settings.security.galleryPasswordsTitle')}</h2><div className="space-y-4">
+      <Card><CardContent><h2 className="text-lg font-semibold text-foreground mb-4">{t('settings.security.galleryPasswordsTitle')}</h2><div className="space-y-4">
                     <label className="flex items-start">
                       <input
                         type="checkbox"
@@ -211,8 +211,8 @@ export const SecurityTab: React.FC<SecurityTabProps> = ({
                         onChange={(e) => setSecuritySettings(prev => ({ ...prev, gallery_password_recoverable: e.target.checked }))}
                         className="w-4 h-4 mt-0.5 text-brand-600 rounded-sm focus:ring-brand-500"
                       />
-                      <span className="ml-2 text-sm text-neutral-700 dark:text-neutral-300">
-                        <span className="block font-medium text-neutral-900 dark:text-neutral-100">{t('settings.security.galleryPasswordRecoverable')}</span>
+                      <span className="ml-2 text-sm text-foreground">
+                        <span className="block font-medium text-foreground">{t('settings.security.galleryPasswordRecoverable')}</span>
                         <span className="block mt-1">{t('settings.security.galleryPasswordRecoverableHelp')}</span>
                       </span>
                     </label>
@@ -231,7 +231,7 @@ export const SecurityTab: React.FC<SecurityTabProps> = ({
                     </div>
                   </div></CardContent></Card>
 
-      <Card><CardContent><h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">{t('settings.security.recaptchaSettings')}</h2><div className="space-y-4">
+      <Card><CardContent><h2 className="text-lg font-semibold text-foreground mb-4">{t('settings.security.recaptchaSettings')}</h2><div className="space-y-4">
                     <label className="flex items-center">
                       <input
                         type="checkbox"
@@ -239,16 +239,16 @@ export const SecurityTab: React.FC<SecurityTabProps> = ({
                         onChange={(e) => setSecuritySettings(prev => ({ ...prev, enable_recaptcha: e.target.checked }))}
                         className="w-4 h-4 text-brand-600 rounded-sm focus:ring-brand-500"
                       />
-                      <span className="ml-2 text-sm text-neutral-700 dark:text-neutral-300">{t('settings.security.enableRecaptcha')}</span>
+                      <span className="ml-2 text-sm text-foreground">{t('settings.security.enableRecaptcha')}</span>
                     </label>
 
                     {securitySettings.enable_recaptcha && (
                       <>
                         <div>
-                          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                          <label className="block text-sm font-medium text-foreground mb-1">
                             {t('settings.security.siteKey')}
                           </label>
-                          <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Key className="w-5 h-5 text-neutral-400" />}</div><Input
+                          <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Key className="w-5 h-5 text-muted-foreground" />}</div><Input
                                                       type="text"
                                                       value={securitySettings.recaptcha_site_key}
                                                       onChange={(e) => setSecuritySettings(prev => ({ ...prev, recaptcha_site_key: e.target.value }))}
@@ -256,10 +256,10 @@ export const SecurityTab: React.FC<SecurityTabProps> = ({
                                                     /></div>
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                          <label className="block text-sm font-medium text-foreground mb-1">
                             {t('settings.security.secretKey')}
                           </label>
-                          <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Key className="w-5 h-5 text-neutral-400" />}</div><Input
+                          <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Key className="w-5 h-5 text-muted-foreground" />}</div><Input
                                                       type="password"
                                                       value={securitySettings.recaptcha_secret_key}
                                                       onChange={(e) => setSecuritySettings(prev => ({ ...prev, recaptcha_secret_key: e.target.value }))}

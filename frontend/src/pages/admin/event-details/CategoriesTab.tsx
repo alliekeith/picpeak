@@ -13,8 +13,8 @@ export const CategoriesTab: React.FC<CategoriesTabProps> = ({ id }) => {
   return (
     <div>
       <Card><CardContent><div className="mb-6">
-                    <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-2">{t('events.photoCategories')}</h2>
-                    <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                    <h2 className="text-lg font-semibold text-foreground mb-2">{t('events.photoCategories')}</h2>
+                    <p className="text-sm text-muted-foreground">
                       {t('events.organizeCategoriesInfo')}
                     </p>
                   </div><EventCategoryManager

@@ -237,7 +237,7 @@ export const CarouselGalleryLayout: React.FC<BaseGalleryLayoutProps> = ({
         {isPlaying && (
           <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20">
             <div 
-              className="h-full bg-white transition-all duration-1000 ease-linear"
+              className="h-full bg-card transition-all duration-1000 ease-linear"
               style={{
                 width: '100%',
                 animation: `progress ${interval}ms linear infinite`

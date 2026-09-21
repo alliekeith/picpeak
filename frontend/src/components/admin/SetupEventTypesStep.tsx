@@ -165,7 +165,7 @@ export const SetupEventTypesStep: React.FC<Props> = ({ onDone }) => {
       // Catalog unreadable — don't trap the user; the defaults stay seeded and
       // remain editable later in Settings → Event Types.
       <div className="space-y-6">
-        <p className="text-sm text-neutral-600">{t('setup.eventTypes.loadFailed')}</p>
+        <p className="text-sm text-muted-foreground">{t('setup.eventTypes.loadFailed')}</p>
         <Button type="button" size="lg" className="w-full" onClick={onDone}>
           {t('setup.continue')}
         </Button>
@@ -177,7 +177,7 @@ export const SetupEventTypesStep: React.FC<Props> = ({ onDone }) => {
 
   return (
     <div className="space-y-6">
-      <p className="rounded-lg bg-neutral-50 border border-neutral-200 px-3 py-2 text-xs text-neutral-600">
+      <p className="rounded-lg bg-muted border border-border px-3 py-2 text-xs text-muted-foreground">
         {t('setup.eventTypes.intro')}
       </p>
 
@@ -204,7 +204,7 @@ export const SetupEventTypesStep: React.FC<Props> = ({ onDone }) => {
             <button
               type="button"
               onClick={() => removeRow(index)}
-              className="shrink-0 p-2 rounded-lg text-neutral-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+              className="shrink-0 p-2 rounded-lg text-muted-foreground hover:text-red-600 hover:bg-red-50 transition-colors"
               aria-label={t('common.delete', 'Delete')}
               title={t('common.delete', 'Delete')}
             >
@@ -217,13 +217,13 @@ export const SetupEventTypesStep: React.FC<Props> = ({ onDone }) => {
       <button
         type="button"
         onClick={addRow}
-        className="w-full rounded-lg border border-dashed border-neutral-300 p-3 text-left hover:bg-neutral-50 transition-colors flex items-center gap-2"
+        className="w-full rounded-lg border border-dashed border-border p-3 text-left hover:bg-accent transition-colors flex items-center gap-2"
       >
-        <Plus className="w-4 h-4 text-neutral-500" />
-        <span className="text-sm font-medium text-neutral-800">{t('setup.eventTypes.add')}</span>
+        <Plus className="w-4 h-4 text-muted-foreground" />
+        <span className="text-sm font-medium text-foreground">{t('setup.eventTypes.add')}</span>
       </button>
 
-      <p className="text-xs text-neutral-500">{t('setup.eventTypes.hint')}</p>
+      <p className="text-xs text-muted-foreground">{t('setup.eventTypes.hint')}</p>
 
       <Button
                   type="button"

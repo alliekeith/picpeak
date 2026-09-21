@@ -19,8 +19,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
-const labelCls = 'block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1';
-const selectCls = 'w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary';
+const labelCls = 'block text-sm font-medium text-foreground mb-1';
+const selectCls = 'w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary';
 
 export const IncomingMailConfigCard: React.FC = () => {
   const { t } = useTranslation();
@@ -102,10 +102,10 @@ export const IncomingMailConfigCard: React.FC = () => {
   if (isLoading) return <Loading />;
 
   return (
-    <Card className="mt-6"><CardContent><h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-1">{t('email.incoming.title', 'Incoming mail (IMAP)')}</h2><p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">{t('email.incoming.subtitle', 'A dedicated mailbox polled every minute; attachments land in Accounting → Incoming invoices.')}</p><div className="space-y-4">
+    <Card className="mt-6"><CardContent><h2 className="text-lg font-semibold text-foreground mb-1">{t('email.incoming.title', 'Incoming mail (IMAP)')}</h2><p className="text-sm text-muted-foreground mb-4">{t('email.incoming.subtitle', 'A dedicated mailbox polled every minute; attachments land in Accounting → Incoming invoices.')}</p><div className="space-y-4">
               <div>
                 <label className={labelCls}>{t('email.incoming.host', 'IMAP Host')} <span className="text-red-500">*</span></label>
-                <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Server className="w-5 h-5 text-neutral-400" />}</div><Input
+                <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Server className="w-5 h-5 text-muted-foreground" />}</div><Input
                                 type="text"
                                 value={cfg.imap_host}
                                 onChange={(e) => set('imap_host', e.target.value)}
@@ -129,7 +129,7 @@ export const IncomingMailConfigCard: React.FC = () => {
 
               <div>
                 <label className={labelCls}>{t('email.incoming.user', 'Username')} <span className="text-red-500">*</span></label>
-                <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<User className="w-5 h-5 text-neutral-400" />}</div><Input
+                <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<User className="w-5 h-5 text-muted-foreground" />}</div><Input
                                 type="text"
                                 value={cfg.imap_user}
                                 onChange={(e) => set('imap_user', e.target.value)}
@@ -141,14 +141,14 @@ export const IncomingMailConfigCard: React.FC = () => {
               <div>
                 <label className={labelCls}>{t('email.incoming.pass', 'Password')}</label>
                 <div className="relative">
-                  <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-neutral-400" />}</div><Input
+                  <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-muted-foreground" />}</div><Input
                                       type={passwordVisibilityModal.isOpen ? 'text' : 'password'}
                                       value={cfg.imap_pass}
                                       onChange={(e) => set('imap_pass', e.target.value)}
                                       autoComplete="new-password"
                                       placeholder={t('email.enterPassword', 'Enter password')} className="pl-10"
                                     /></div>
-                  <button type="button" onClick={passwordVisibilityModal.toggle} className="absolute right-3 top-3 text-neutral-400 hover:text-neutral-600">
+                  <button type="button" onClick={passwordVisibilityModal.toggle} className="absolute right-3 top-3 text-muted-foreground hover:text-foreground">
                     {passwordVisibilityModal.isOpen ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
                 </div>
@@ -172,7 +172,7 @@ export const IncomingMailConfigCard: React.FC = () => {
                                         >
                                           {detect.isPending && <Loader2 className="animate-spin" />}<FolderSearch className="w-4 h-4" />{t('email.incoming.detectFolders', 'Detect')}</Button>
                 </div>
-                <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">{t('email.incoming.folderHint', 'Enter host, username and password, then Detect to list the mailbox folders.')}</p>
+                <p className="mt-1 text-xs text-muted-foreground">{t('email.incoming.folderHint', 'Enter host, username and password, then Detect to list the mailbox folders.')}</p>
               </div>
 
               <div className="flex flex-wrap gap-2">

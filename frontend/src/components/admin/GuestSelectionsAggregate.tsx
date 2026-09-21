@@ -31,7 +31,7 @@ export const GuestSelectionsAggregate: React.FC<GuestSelectionsAggregateProps> =
 
   if (photos.length === 0) {
     return (
-      <Card><CardContent><div className="p-8 text-center text-neutral-500 dark:text-neutral-400">
+      <Card><CardContent><div className="p-8 text-center text-muted-foreground">
                   {t('admin.guests.aggregate.empty', 'No guest picks yet.')}
                 </div></CardContent></Card>
     );
@@ -39,7 +39,7 @@ export const GuestSelectionsAggregate: React.FC<GuestSelectionsAggregateProps> =
 
   return (
     <div className="space-y-3">
-      <p className="text-sm text-neutral-600 dark:text-neutral-400">
+      <p className="text-sm text-muted-foreground">
         {t(
           'admin.guests.aggregate.description',
           'Photos sorted by how many distinct guests liked or favorited them.'
@@ -53,7 +53,7 @@ export const GuestSelectionsAggregate: React.FC<GuestSelectionsAggregateProps> =
               alt={p.filename}
               className="w-full aspect-square object-cover rounded-sm"
             />
-            <div className="absolute top-2 right-2 bg-primary text-white text-xs font-semibold px-2 py-1 rounded-full flex items-center gap-1 shadow-sm">
+            <div className="absolute top-2 right-2 bg-primary text-primary-foreground text-xs font-semibold px-2 py-1 rounded-full flex items-center gap-1 shadow-sm">
               <Users className="w-3 h-3" />
               {p.picker_count}
             </div>

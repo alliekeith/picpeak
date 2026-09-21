@@ -101,10 +101,10 @@ export const TransferPhotoPicker: React.FC<TransferPhotoPickerProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="flex h-[90vh] w-full max-w-6xl flex-col overflow-hidden rounded-lg bg-white shadow-xl dark:bg-neutral-900">
+      <div className="flex h-[90vh] w-full max-w-6xl flex-col overflow-hidden rounded-lg bg-card shadow-xl">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-neutral-200 px-5 py-3 dark:border-neutral-700">
-          <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+        <div className="flex items-center justify-between border-b border-border px-5 py-3">
+          <h2 className="text-lg font-semibold text-foreground">
             {t('transfers.picker.title', 'Select images from other events')}
           </h2>
           <div className="flex items-center gap-2">
@@ -114,7 +114,7 @@ export const TransferPhotoPicker: React.FC<TransferPhotoPickerProps> = ({
                                     onClick={() => setLightboxEnabled((v) => !v)}
                                   >
                                     <Maximize2 className="h-4 w-4" />{t('transfers.picker.lightbox', 'Lightbox')}</Button>
-            <button onClick={onClose} className="rounded-sm p-1 text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800">
+            <button onClick={onClose} className="rounded-sm p-1 text-muted-foreground hover:bg-accent">
               <X className="h-5 w-5" />
             </button>
           </div>
@@ -122,7 +122,7 @@ export const TransferPhotoPicker: React.FC<TransferPhotoPickerProps> = ({
 
         <div className="flex min-h-0 flex-1">
           {/* Event list */}
-          <div className="flex w-64 flex-col border-r border-neutral-200 dark:border-neutral-700">
+          <div className="flex w-64 flex-col border-r border-border">
             <div className="p-3">
               <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Search className="h-4 w-4" />}</div><Input
                                           placeholder={t('transfers.picker.searchEvents', 'Search events…')}
@@ -138,8 +138,8 @@ export const TransferPhotoPicker: React.FC<TransferPhotoPickerProps> = ({
                   <button
                     key={ev.id}
                     onClick={() => { setSelectedEventId(ev.id); setSelectedEventName(ev.event_name); }}
-                    className={`block w-full truncate px-4 py-2 text-left text-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 ${
-                      selectedEventId === ev.id ? 'bg-brand-50 font-medium text-brand-700 dark:bg-neutral-800' : 'text-neutral-700 dark:text-neutral-300'
+                    className={`block w-full truncate px-4 py-2 text-left text-sm hover:bg-accent ${
+                      selectedEventId === ev.id ? 'bg-brand-50 font-medium text-brand-700 dark:bg-neutral-800' : 'text-foreground'
                     }`}
                   >
                     {ev.event_name}
@@ -152,7 +152,7 @@ export const TransferPhotoPicker: React.FC<TransferPhotoPickerProps> = ({
           {/* Photo grid */}
           <div className="min-h-0 flex-1 overflow-y-auto p-4">
             {!selectedEventId ? (
-              <div className="flex h-full items-center justify-center text-neutral-400">
+              <div className="flex h-full items-center justify-center text-muted-foreground">
                 <div className="text-center">
                   <ImageIcon className="mx-auto mb-2 h-10 w-10" />
                   <p>{t('transfers.picker.pickEvent', 'Pick an event to browse its photos')}</p>
@@ -161,7 +161,7 @@ export const TransferPhotoPicker: React.FC<TransferPhotoPickerProps> = ({
             ) : photosLoading ? (
               <Loading />
             ) : !photos || photos.length === 0 ? (
-              <div className="flex h-full items-center justify-center text-neutral-400">
+              <div className="flex h-full items-center justify-center text-muted-foreground">
                 {t('transfers.picker.noPhotos', 'No photos in this event')}
               </div>
             ) : (
@@ -180,8 +180,8 @@ export const TransferPhotoPicker: React.FC<TransferPhotoPickerProps> = ({
                       {photo.thumbnail_url ? (
                         <AdminAuthenticatedImage src={photo.thumbnail_url} alt={photo.filename} className="h-full w-full object-cover" />
                       ) : (
-                        <div className="flex h-full w-full items-center justify-center bg-neutral-100 dark:bg-neutral-800">
-                          <ImageIcon className="h-6 w-6 text-neutral-400" />
+                        <div className="flex h-full w-full items-center justify-center bg-muted">
+                          <ImageIcon className="h-6 w-6 text-muted-foreground" />
                         </div>
                       )}
                       {isExcluded && (
@@ -190,7 +190,7 @@ export const TransferPhotoPicker: React.FC<TransferPhotoPickerProps> = ({
                         </span>
                       )}
                       {isSelected && (
-                        <span className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-brand-500 text-white">
+                        <span className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-brand-500 text-primary-foreground">
                           <Check className="h-3 w-3" />
                         </span>
                       )}
@@ -203,8 +203,8 @@ export const TransferPhotoPicker: React.FC<TransferPhotoPickerProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between border-t border-neutral-200 px-5 py-3 dark:border-neutral-700">
-          <span className="text-sm text-neutral-600 dark:text-neutral-400">
+        <div className="flex items-center justify-between border-t border-border px-5 py-3">
+          <span className="text-sm text-muted-foreground">
             {t('transfers.picker.selectedCount', '{{count}} selected', { count: selected.size })}
           </span>
           <div className="flex gap-2">

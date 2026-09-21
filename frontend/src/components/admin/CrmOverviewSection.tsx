@@ -86,7 +86,7 @@ export const CrmOverviewSection: React.FC = () => {
     // backend). Keep it small so it doesn't disrupt the page.
     return (
       <section className="mt-8">
-        <h2 className="text-xl font-bold text-neutral-900 dark:text-neutral-100 mb-2">
+        <h2 className="text-xl font-bold text-foreground mb-2">
           {t('crmOverview.title', 'CRM overview')}
         </h2>
         <p className="text-sm text-red-600">
@@ -102,7 +102,7 @@ export const CrmOverviewSection: React.FC = () => {
 
   return (
     <section className="mt-8 space-y-5">
-      <h2 className="text-xl font-bold text-neutral-900 dark:text-neutral-100">
+      <h2 className="text-xl font-bold text-foreground">
         {t('crmOverview.title', 'CRM overview')}
       </h2>
 
@@ -156,7 +156,7 @@ export const CrmOverviewSection: React.FC = () => {
       {quotesBlock && (
         <div>
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-base font-semibold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+            <h3 className="text-base font-semibold text-foreground flex items-center gap-2">
               <FileText className="w-5 h-5" />
               {t('crmOverview.quotes.title', 'Quotes')}
             </h3>
@@ -190,7 +190,7 @@ export const CrmOverviewSection: React.FC = () => {
               to="/admin/clients/quotes?status=declined"
             />
             <StatCard
-              icon={<Clock className="w-5 h-5 text-neutral-500" />}
+              icon={<Clock className="w-5 h-5 text-muted-foreground" />}
               label={t('quotes.status.expired', 'Expired')}
               value={d.quotes.expired}
               to="/admin/clients/quotes?status=expired"
@@ -209,7 +209,7 @@ export const CrmOverviewSection: React.FC = () => {
       {invoicesBlock && (
         <div>
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-base font-semibold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+            <h3 className="text-base font-semibold text-foreground flex items-center gap-2">
               <Receipt className="w-5 h-5" />
               {t('crmOverview.invoices.title', 'Invoices')}
             </h3>
@@ -243,7 +243,7 @@ export const CrmOverviewSection: React.FC = () => {
               to="/admin/clients/bills?status=overdue"
             />
             <StatCard
-              icon={<XCircle className="w-5 h-5 text-neutral-500" />}
+              icon={<XCircle className="w-5 h-5 text-muted-foreground" />}
               label={t('bills.status.cancelled', 'Cancelled')}
               value={d.invoices.cancelled}
               to="/admin/clients/bills?status=cancelled"
@@ -270,9 +270,9 @@ const StatCard: React.FC<StatCardProps> = ({ icon, label, value, sub, to, onClic
     <Card className="h-full"><CardContent><div className="flex items-start gap-3">
               <div className="shrink-0 mt-0.5">{icon}</div>
               <div className="min-w-0">
-                <div className="text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400">{label}</div>
+                <div className="text-xs uppercase tracking-wider text-muted-foreground">{label}</div>
                 <div className="text-2xl font-bold tabular-nums mt-1">{value}</div>
-                {sub && <div className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">{sub}</div>}
+                {sub && <div className="text-xs text-muted-foreground mt-1">{sub}</div>}
               </div>
             </div></CardContent></Card>
   );

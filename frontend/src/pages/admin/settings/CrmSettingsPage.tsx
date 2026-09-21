@@ -140,7 +140,7 @@ export const CrmSettingsPage: React.FC = () => {
 
   const setVal = (k: string, v: any) => setValues((s) => ({ ...s, [k]: v }));
   const checkbox = (k: string, label: string) => (
-    <label className="flex items-center gap-2 text-sm text-neutral-800 dark:text-neutral-200 py-1">
+    <label className="flex items-center gap-2 text-sm text-foreground py-1">
       <input type="checkbox" checked={!!values[k]} onChange={(e) => setVal(k, e.target.checked)} />
       <span>{t(`crmSettings.${k}.label`, label)}</span>
     </label>
@@ -162,7 +162,7 @@ export const CrmSettingsPage: React.FC = () => {
     const stored = values[k];
     const effective = stored === undefined || stored === null ? true : !!stored;
     return (
-      <label className="flex items-center gap-2 text-sm text-neutral-800 dark:text-neutral-200 py-1">
+      <label className="flex items-center gap-2 text-sm text-foreground py-1">
         <input
           type="checkbox"
           checked={effective}
@@ -181,7 +181,7 @@ export const CrmSettingsPage: React.FC = () => {
           the nav label the admin just clicked (QA warning). The subtitle
           stays. */}
       <div className="flex items-center justify-between gap-4">
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
+        <p className="text-sm text-muted-foreground">
           {t('crmSettings.subtitle', 'Fine-tune quote and invoice behaviour.')}
         </p>
         <Button onClick={() => saveAll.mutate()} disabled={saveAll.isPending || !anySection}>
@@ -190,14 +190,14 @@ export const CrmSettingsPage: React.FC = () => {
       </div>
 
       {!anySection && (
-        <Card><CardContent><p className="text-sm text-neutral-500 dark:text-neutral-400">
+        <Card><CardContent><p className="text-sm text-muted-foreground">
                           {t('crmSettings.emptyState',
                             'No CRM features are currently enabled. Turn on Quotes, Invoices, or Contracts in Settings → Features to see the matching configuration here.')}
                         </p></CardContent></Card>
       )}
 
       {showQuotes && (
-      <Card><CardContent><h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-3">{t('crmSettings.section.quotes', 'Quotes')}</h3>{checkbox('crm_quotes_pdf_attachment_enabled', 'Attach quote PDF to email')}{checkbox('crm_quotes_skonto_enabled', 'Allow early-payment discount (Skonto) on quotes')}<div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
+      <Card><CardContent><h3 className="font-semibold text-foreground mb-3">{t('crmSettings.section.quotes', 'Quotes')}</h3>{checkbox('crm_quotes_pdf_attachment_enabled', 'Attach quote PDF to email')}{checkbox('crm_quotes_skonto_enabled', 'Allow early-payment discount (Skonto) on quotes')}<div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
                         <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('crmSettings.crm_quotes_accept_window_minutes.label', 'Accept window (minutes)') as string}</span><Input type="number" min={1} max={120}
                                             value={values.crm_quotes_accept_window_minutes ?? 15}
                                             onChange={(e) => setVal('crm_quotes_accept_window_minutes', Number(e.target.value))} /></Label></div>
@@ -210,8 +210,8 @@ export const CrmSettingsPage: React.FC = () => {
                       </div>{/* Terms of Service step (migration 104). When required, the
                           public quote response page shows a checkbox the customer
                           must tick before Accept fires. The text snapshot is
-                          recorded on the quote at acceptance time for audit. */}<div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
-                        <h4 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-2 text-sm">
+                          recorded on the quote at acceptance time for audit. */}<div className="mt-4 pt-4 border-t border-border">
+                        <h4 className="font-semibold text-foreground mb-2 text-sm">
                           {t('crmSettings.section.quotesTos', 'Terms of Service / AGB step')}
                         </h4>
                         {checkbox('crm_quotes_tos_required', 'Require customers to tick "I accept the Terms of Service" before accepting')}
@@ -222,12 +222,12 @@ export const CrmSettingsPage: React.FC = () => {
                                                       onChange={(e) => setVal('crm_quotes_tos_url', e.target.value)} /></Label></div>
                         </div>
                         <div className="mt-3">
-                          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                          <label className="block text-sm font-medium text-foreground mb-1">
                             {t('crmSettings.crm_quotes_tos_text.label', 'Inline Terms text shown on the quote page')}
                           </label>
                           <textarea
                             rows={6}
-                            className="w-full rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:border-primary"
+                            className="w-full rounded-md border border-border bg-card text-foreground px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:border-primary"
                             value={values.crm_quotes_tos_text ?? ''}
                             onChange={(e) => setVal('crm_quotes_tos_text', e.target.value)}
                             placeholder={t('crmSettings.crm_quotes_tos_text.placeholder',
@@ -238,10 +238,10 @@ export const CrmSettingsPage: React.FC = () => {
       )}
 
       {showInvoices && (
-      <Card><CardContent><h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-3">{t('crmSettings.section.invoices', 'Invoices')}</h3>{checkbox('crm_invoices_qr_enabled', 'Render payment QR on invoice PDFs')}{checkbox('crm_invoice_round_total', 'Reconcile sub-cent rounding to a clean total (adds a "Rundung" row when per-line rounding drifts from qty × rate)')}{/* Free-text VAT / legal note (#794) — printed directly under the MwSt.
+      <Card><CardContent><h3 className="font-semibold text-foreground mb-3">{t('crmSettings.section.invoices', 'Invoices')}</h3>{checkbox('crm_invoices_qr_enabled', 'Render payment QR on invoice PDFs')}{checkbox('crm_invoice_round_total', 'Reconcile sub-cent rounding to a clean total (adds a "Rundung" row when per-line rounding drifts from qty × rate)')}{/* Free-text VAT / legal note (#794) — printed directly under the MwSt.
                           line on every invoice PDF. Data-driven: the admin types the exact
                           wording (Austrian Kleinunternehmer, German §19, reverse-charge, …). */}<div className="mt-3">
-                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                        <label className="block text-sm font-medium text-foreground mb-1">
                           {t('crmSettings.crm_invoices_vat_note_text.label', 'VAT / free-text note on invoices')}
                         </label>
                         <textarea
@@ -249,9 +249,9 @@ export const CrmSettingsPage: React.FC = () => {
                           onChange={(e) => setVal('crm_invoices_vat_note_text', e.target.value)}
                           rows={2}
                           placeholder={t('crmSettings.crm_invoices_vat_note_text.placeholder', 'e.g. Gemäß § 6 Abs. 1 Z 27 UStG 1994 wird keine Umsatzsteuer berechnet (Kleinunternehmer).') as string}
-                          className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100"
+                          className="w-full px-3 py-2 rounded-lg border border-border bg-card text-foreground"
                         />
-                        <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                        <p className="mt-1 text-xs text-muted-foreground">
                           {t('crmSettings.crm_invoices_vat_note_text.help', 'Printed directly under the MwSt. line on every invoice PDF. If the business isn\'t VAT-registered (Settings → Accounting), it replaces that line on invoices and quotes without VAT. Leave empty to hide. Please confirm the exact wording with your tax advisor.')}
                         </p>
                       </div>{/* Reminder TIMING: owned by the Invoice dunning workflow when the
@@ -285,13 +285,13 @@ export const CrmSettingsPage: React.FC = () => {
                           </>
                         )}
                         <div>
-                          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                          <label className="block text-sm font-medium text-foreground mb-1">
                             {t('crmSettings.crm_invoices_late_fee_type.label', 'Late fee type')}
                           </label>
                           <select
                             value={values.crm_invoices_late_fee_type ?? 'flat'}
                             onChange={(e) => setVal('crm_invoices_late_fee_type', e.target.value)}
-                            className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100"
+                            className="w-full px-3 py-2 rounded-lg border border-border bg-card text-foreground"
                           >
                             <option value="flat">{t('crmSettings.lateFeeType.flat', 'Flat amount (Rappen)')}</option>
                             <option value="percent">{t('crmSettings.lateFeeType.percent', 'Percentage of invoice')}</option>
@@ -322,23 +322,23 @@ export const CrmSettingsPage: React.FC = () => {
                           ad-hoc rows in the Quote / Invoice editors' Installments
                           panel — admins type these defaults exactly once instead of
                           on every new multi-installment plan. Per-document edits
-                          still override. */}<div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
-                        <h4 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-2 text-sm">
+                          still override. */}<div className="mt-4 pt-4 border-t border-border">
+                        <h4 className="font-semibold text-foreground mb-2 text-sm">
                           {t('crmSettings.section.installmentDefaults', 'Default installment triggers')}
                         </h4>
-                        <p className="text-xs text-neutral-500 mb-3">
+                        <p className="text-xs text-muted-foreground mb-3">
                           {t('crmSettings.installmentDefaults.help',
                             'Pre-fill the trigger for fresh rows in the Installments panel. Per-document edits override; existing documents keep their snapshotted plan.')}
                         </p>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                           <div>
-                            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                            <label className="block text-sm font-medium text-foreground mb-1">
                               {t('crmSettings.crm_invoices_installment_trigger_first.label', 'First installment trigger')}
                             </label>
                             <select
                               value={values.crm_invoices_installment_trigger_first ?? 'quote_accepted'}
                               onChange={(e) => setVal('crm_invoices_installment_trigger_first', e.target.value)}
-                              className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm"
+                              className="w-full px-3 py-2 rounded-md border border-border bg-card text-foreground text-sm"
                             >
                               <option value="quote_accepted">{t('crmSettings.installmentDefaults.trigger.quote_accepted', 'At signing / creation')}</option>
                               <option value="before_event">{t('crmSettings.installmentDefaults.trigger.before_event', 'Before event')}</option>
@@ -360,21 +360,21 @@ export const CrmSettingsPage: React.FC = () => {
                           templates live there in one place. */}{/* Default payment-term pickers (migration 124+125). The
                           per-quote / per-invoice editor still always shows the
                           pickers — admin can override per document — but new
-                          drafts auto-prefill from these two settings. */}<div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
-                        <h4 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-2 text-sm">
+                          drafts auto-prefill from these two settings. */}<div className="mt-4 pt-4 border-t border-border">
+                        <h4 className="font-semibold text-foreground mb-2 text-sm">
                           {t('crmSettings.section.paymentDefaults', 'Default payment conditions')}
                         </h4>
-                        <p className="text-xs text-neutral-500 mb-3">
+                        <p className="text-xs text-muted-foreground mb-3">
                           {t('crmSettings.paymentDefaults.help',
                             'Pre-filled on every new quote and invoice. The editor still lets you pick a different combination per document.')}
                         </p>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                           <div>
-                            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                            <label className="block text-sm font-medium text-foreground mb-1">
                               {t('crmSettings.crm_invoices_default_payment_net_days_template_id.label', 'Default net days')}
                             </label>
                             <select
-                              className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm"
+                              className="w-full px-3 py-2 rounded-md border border-border bg-card text-foreground text-sm"
                               value={values.crm_invoices_default_payment_net_days_template_id ?? ''}
                               onChange={(e) => setVal('crm_invoices_default_payment_net_days_template_id', e.target.value ? Number(e.target.value) : null)}
                             >
@@ -385,11 +385,11 @@ export const CrmSettingsPage: React.FC = () => {
                             </select>
                           </div>
                           <div>
-                            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                            <label className="block text-sm font-medium text-foreground mb-1">
                               {t('crmSettings.crm_invoices_default_payment_timing_template_id.label', 'Default payment schedule')}
                             </label>
                             <select
-                              className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm"
+                              className="w-full px-3 py-2 rounded-md border border-border bg-card text-foreground text-sm"
                               value={values.crm_invoices_default_payment_timing_template_id ?? ''}
                               onChange={(e) => setVal('crm_invoices_default_payment_timing_template_id', e.target.value ? Number(e.target.value) : null)}
                             >
@@ -407,12 +407,12 @@ export const CrmSettingsPage: React.FC = () => {
       /* Contracts (migration 130). Mirrors the Quotes / Invoices block
          shape: 3 behaviour toggles, then a 2-column input grid, then
          the number-format input with helper text. */
-      <Card><CardContent><h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-3">{t('crmSettings.section.contracts', 'Contracts')}</h3>{/* Three of these four toggles use `!== false` semantics on
+      <Card><CardContent><h3 className="font-semibold text-foreground mb-3">{t('crmSettings.section.contracts', 'Contracts')}</h3>{/* Three of these four toggles use `!== false` semantics on
                           the backend — a missing app_settings row behaves as if
                           checked. `checkboxDefaultOn` mirrors that so the UI tells
                           the truth on installs whose DB never received the seed
                           rows. `require_drawn_signature` uses `=== true` (default
-                          off) so it stays on the plain `checkbox`. */}{checkboxDefaultOn('crm_contracts_pdf_attachment_enabled', 'Attach contract PDF to email')}{checkbox('crm_contracts_require_drawn_signature', 'Require drawn signature (typed name alone is not enough)')}{checkboxDefaultOn('crm_contracts_allow_pdf_upload', 'Allow customer to upload a wet-signed PDF')}{checkboxDefaultOn('crm_contracts_store_ip', "Store signer's IP address (recommended — corroborating evidence in civil disputes)")}<p className="text-xs text-neutral-500 mt-1 ml-6">
+                          off) so it stays on the plain `checkbox`. */}{checkboxDefaultOn('crm_contracts_pdf_attachment_enabled', 'Attach contract PDF to email')}{checkbox('crm_contracts_require_drawn_signature', 'Require drawn signature (typed name alone is not enough)')}{checkboxDefaultOn('crm_contracts_allow_pdf_upload', 'Allow customer to upload a wet-signed PDF')}{checkboxDefaultOn('crm_contracts_store_ip', "Store signer's IP address (recommended — corroborating evidence in civil disputes)")}<p className="text-xs text-muted-foreground mt-1 ml-6">
                         {t('crmSettings.crm_contracts_store_ip.help',
                           "When off, the customer's and admin's IP at signing time is NOT recorded into the contract row or the public sign-page audit confirmation. Per GDPR data-minimisation principle some operators prefer this — but IP is corroborating identity evidence if the contract is challenged, so we recommend keeping it on.")}
                       </p><div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
@@ -424,7 +424,7 @@ export const CrmSettingsPage: React.FC = () => {
                                                 onChange={(e) => setVal('crm_contracts_number_format', e.target.value)}
                                                 placeholder="C-{YEAR}-{SEQ:04d}"
                                               /></Label></div>
-                      </div><p className="text-xs text-neutral-500 mt-2">
+                      </div><p className="text-xs text-muted-foreground mt-2">
                         {t('crmSettings.crm_contracts_number_format.help',
                           'Supported tokens: {YEAR}, {MONTH}, {SEQ:04d}. Example: LBM-C-{YEAR}-{SEQ:04d} → LBM-C-2026-0001.')}
                       </p></CardContent></Card>
@@ -436,9 +436,9 @@ export const CrmSettingsPage: React.FC = () => {
          unset, matching the contracts card's pattern. The dashboard
          component reads these via /public/settings and hides the
          matching tile when the value is explicit false. */
-      <Card><CardContent><h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-1">
+      <Card><CardContent><h3 className="font-semibold text-foreground mb-1">
                         {t('crmSettings.section.dashboardOverview', 'Dashboard CRM overview')}
-                      </h3><p className="text-xs text-neutral-500 mb-3">
+                      </h3><p className="text-xs text-muted-foreground mb-3">
                         {t('crmSettings.section.dashboardOverviewHint',
                           'Hide CRM overview tiles on the admin dashboard. All tiles render by default; uncheck to hide.')}
                       </p>{checkboxDefaultOn('crm_overview_show_revenue', 'Revenue tiles (30 / 90 / 365 days)')}{checkboxDefaultOn('crm_overview_show_outstanding', 'Outstanding payments tile')}{checkboxDefaultOn('crm_overview_show_quotes', 'Quotes pipeline (per-status)')}{checkboxDefaultOn('crm_overview_show_invoices', 'Invoices pipeline (per-status)')}</CardContent></Card>

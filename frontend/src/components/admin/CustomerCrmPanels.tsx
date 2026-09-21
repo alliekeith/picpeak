@@ -64,7 +64,7 @@ const QuotesPanel: React.FC<Props> = ({ customerAccountId }) => {
 
   return (
     <Card className="py-8"><CardContent className="px-8"><div className="flex items-center justify-between mb-3">
-              <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+              <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
                 <FileText className="w-5 h-5" /> {t('customers.detail.quotesSection', 'Quotes')}
               </h2>
               <div className="flex gap-2">
@@ -83,7 +83,7 @@ const QuotesPanel: React.FC<Props> = ({ customerAccountId }) => {
                 </Link>
               </div>
             </div>{isLoading ? <Loading /> : !data || data.quotes.length === 0 ? (
-              <p className="text-sm text-neutral-500 dark:text-neutral-400">
+              <p className="text-sm text-muted-foreground">
                 {t('customers.detail.noQuotes', 'No quotes for this customer yet.')}
               </p>
             ) : (
@@ -91,17 +91,17 @@ const QuotesPanel: React.FC<Props> = ({ customerAccountId }) => {
                 {data.quotes.map((q) => (
                   <li key={q.id} className="py-2 flex items-center justify-between gap-3">
                     <div className="min-w-0 flex-1">
-                      <Link to={`/admin/clients/quotes/${q.id}`} className="text-neutral-900 dark:text-neutral-100 hover:underline font-mono text-sm">
+                      <Link to={`/admin/clients/quotes/${q.id}`} className="text-foreground hover:underline font-mono text-sm">
                         {q.quoteNumber}
                       </Link>
-                      <span className="text-xs text-neutral-500 dark:text-neutral-400 ml-2">{q.eventName || fmtDate(q.issueDate)}</span>
+                      <span className="text-xs text-muted-foreground ml-2">{q.eventName || fmtDate(q.issueDate)}</span>
                     </div>
                     <span className="text-sm tabular-nums">{formatMoney(Number(q.totalAmountMinor) / 100, q.currency)}</span>
                     <span className={`px-2 py-0.5 rounded text-xs font-medium ${
                       q.status === 'accepted' || q.status === 'converted' ? 'bg-green-100 text-green-800'
                         : q.status === 'declined' ? 'bg-red-100 text-red-800'
                         : q.status === 'sent' ? 'bg-blue-100 text-blue-800'
-                        : 'bg-neutral-100 text-neutral-700'
+                        : 'bg-muted text-foreground'
                     }`}>{t(`quotes.status.${q.status}`, q.status)}</span>
                   </li>
                 ))}
@@ -121,7 +121,7 @@ const ContractsPanel: React.FC<Props> = ({ customerAccountId }) => {
 
   return (
     <Card className="py-8"><CardContent className="px-8"><div className="flex items-center justify-between mb-3">
-              <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+              <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
                 <ScrollText className="w-5 h-5" /> {t('customers.detail.contractsSection', 'Contracts')}
               </h2>
               <div className="flex gap-2">
@@ -133,7 +133,7 @@ const ContractsPanel: React.FC<Props> = ({ customerAccountId }) => {
                 </Link>
               </div>
             </div>{isLoading ? <Loading /> : !data || data.contracts.length === 0 ? (
-              <p className="text-sm text-neutral-500 dark:text-neutral-400">
+              <p className="text-sm text-muted-foreground">
                 {t('customers.detail.noContracts', 'No contracts for this customer yet.')}
               </p>
             ) : (
@@ -141,18 +141,18 @@ const ContractsPanel: React.FC<Props> = ({ customerAccountId }) => {
                 {data.contracts.map((c) => (
                   <li key={c.id} className="py-2 flex items-center justify-between gap-3">
                     <div className="min-w-0 flex-1">
-                      <Link to={`/admin/clients/contracts/${c.id}`} className="text-neutral-900 dark:text-neutral-100 hover:underline font-mono text-sm">
+                      <Link to={`/admin/clients/contracts/${c.id}`} className="text-foreground hover:underline font-mono text-sm">
                         {c.contractNumber}
                       </Link>
-                      <span className="text-xs text-neutral-500 dark:text-neutral-400 ml-2 truncate">{c.title || fmtDate(c.issueDate)}</span>
+                      <span className="text-xs text-muted-foreground ml-2 truncate">{c.title || fmtDate(c.issueDate)}</span>
                     </div>
                     <span className={`px-2 py-0.5 rounded text-xs font-medium ${
                       c.status === 'fully_signed' ? 'bg-green-100 text-green-800'
                         : c.status === 'signed_by_customer' || c.status === 'signed_by_admin' ? 'bg-blue-100 text-blue-800'
                         : c.status === 'sent' ? 'bg-amber-100 text-amber-800'
                         : c.status === 'declined' ? 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-200'
-                        : c.status === 'cancelled' ? 'bg-neutral-200 text-neutral-600'
-                        : 'bg-neutral-100 text-neutral-700'
+                        : c.status === 'cancelled' ? 'bg-muted text-muted-foreground'
+                        : 'bg-muted text-foreground'
                     }`}>{t(`contracts.status.${c.status}`, c.status)}</span>
                   </li>
                 ))}
@@ -172,7 +172,7 @@ const InvoicesPanel: React.FC<Props> = ({ customerAccountId }) => {
 
   return (
     <Card className="py-8"><CardContent className="px-8"><div className="flex items-center justify-between mb-3">
-              <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+              <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
                 <Receipt className="w-5 h-5" /> {t('customers.detail.billsSection', 'Invoices')}
               </h2>
               <div className="flex gap-2">
@@ -185,7 +185,7 @@ const InvoicesPanel: React.FC<Props> = ({ customerAccountId }) => {
                 </Link>
               </div>
             </div>{isLoading ? <Loading /> : !data || data.invoices.length === 0 ? (
-              <p className="text-sm text-neutral-500 dark:text-neutral-400">
+              <p className="text-sm text-muted-foreground">
                 {t('customers.detail.noBills', 'No invoices for this customer yet.')}
               </p>
             ) : (
@@ -193,10 +193,10 @@ const InvoicesPanel: React.FC<Props> = ({ customerAccountId }) => {
                 {data.invoices.map((inv) => (
                   <li key={inv.id} className="py-2 flex items-center justify-between gap-3">
                     <div className="min-w-0 flex-1">
-                      <Link to={`/admin/clients/bills/${inv.id}`} className="text-neutral-900 dark:text-neutral-100 hover:underline font-mono text-sm">
+                      <Link to={`/admin/clients/bills/${inv.id}`} className="text-foreground hover:underline font-mono text-sm">
                         {inv.invoiceNumber}
                       </Link>
-                      <span className="text-xs text-neutral-500 dark:text-neutral-400 ml-2">
+                      <span className="text-xs text-muted-foreground ml-2">
                         {fmtDate(inv.dueDate)}
                         {inv.installmentTotal > 1 ? ` · ${inv.installmentIndex + 1}/${inv.installmentTotal}` : ''}
                       </span>
@@ -211,8 +211,8 @@ const InvoicesPanel: React.FC<Props> = ({ customerAccountId }) => {
                         inv.status === 'paid' ? 'bg-green-100 text-green-800'
                           : inv.status === 'overdue' ? 'bg-red-100 text-red-800'
                           : inv.status === 'sent' ? 'bg-blue-100 text-blue-800'
-                          : inv.status === 'cancelled' ? 'bg-neutral-200 text-neutral-600'
-                          : inv.status === 'skipped' ? 'bg-neutral-100 text-neutral-500 italic'
+                          : inv.status === 'cancelled' ? 'bg-muted text-muted-foreground'
+                          : inv.status === 'skipped' ? 'bg-muted text-muted-foreground italic'
                           : 'bg-amber-100 text-amber-800'
                       }`}>{t(`bills.status.${inv.status}`, inv.status)}</span>
                     )}
@@ -311,7 +311,7 @@ const RebillsPanel: React.FC<Props> = ({ customerAccountId }) => {
 
   return (
     <Card className="py-8"><CardContent className="px-8"><div className="flex items-center justify-between mb-3">
-              <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+              <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
                 <Repeat2 className="w-5 h-5" /> {t('customers.detail.rebillsSection', 'Re-bills & passthrough')}
               </h2>
               {openItems.length > 0 && canManage && (
@@ -320,7 +320,7 @@ const RebillsPanel: React.FC<Props> = ({ customerAccountId }) => {
                 </Button>
               )}
             </div>{isLoading ? <Loading /> : items.length === 0 ? (
-              <p className="text-sm text-neutral-500 dark:text-neutral-400">
+              <p className="text-sm text-muted-foreground">
                 {t('customers.detail.noRebills', 'No re-billed or passed-through supplier invoices for this customer yet.')}
               </p>
             ) : (
@@ -330,20 +330,20 @@ const RebillsPanel: React.FC<Props> = ({ customerAccountId }) => {
                   if (group.length === 0) return null;
                   return (
                     <div key={status}>
-                      <h3 className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-1">
+                      <h3 className="text-xs font-medium uppercase tracking-wider text-muted-foreground mb-1">
                         {t(`rebills.status.${status}`, status)} · {group.length}
                       </h3>
                       <ul className="divide-y divide-neutral-200 dark:divide-neutral-700">
                         {group.map((r) => (
                           <li key={r.id} className="py-2 flex items-center justify-between gap-3">
                             <div className="min-w-0 flex-1">
-                              <div className="text-sm text-neutral-900 dark:text-neutral-100 truncate">
+                              <div className="text-sm text-foreground truncate">
                                 {r.supplierName || t('rebills.unknownSupplier', 'Supplier')}
-                                <span className="ml-2 text-xs px-1.5 py-0.5 rounded-sm bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300">
+                                <span className="ml-2 text-xs px-1.5 py-0.5 rounded-sm bg-muted text-muted-foreground">
                                   {r.mode === 'passthrough' ? t('rebills.mode.passthrough', 'Passthrough') : t('rebills.mode.rebill', 'Re-bill')}
                                 </span>
                               </div>
-                              <div className="text-xs text-neutral-500 dark:text-neutral-400 truncate">
+                              <div className="text-xs text-muted-foreground truncate">
                                 {r.date ? fmtDate(r.date) : ''}
                                 {r.eventName ? ` · ${r.eventName}` : ''}
                                 {r.invoiceNumber ? (
@@ -361,11 +361,11 @@ const RebillsPanel: React.FC<Props> = ({ customerAccountId }) => {
                               )}
                             </div>
                             <div className="text-right shrink-0">
-                              <div className="text-sm tabular-nums text-neutral-900 dark:text-neutral-100">
+                              <div className="text-sm tabular-nums text-foreground">
                                 {formatMoney(r.rebilledMinor / 100, r.currency)}
                               </div>
                               {r.rebilledMinor !== r.costMinor && (
-                                <div className="text-xs text-neutral-400 dark:text-neutral-500 tabular-nums">
+                                <div className="text-xs text-muted-foreground tabular-nums">
                                   {t('rebills.costLabel', 'cost {{amount}}', { amount: formatMoney(r.costMinor / 100, r.currency) })}
                                 </div>
                               )}

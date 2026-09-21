@@ -54,10 +54,10 @@ interface ToggleProps {
 const Toggle: React.FC<ToggleProps> = ({ enabled, onChange, label, hint, icon: Icon }) => (
   <label className="flex items-start justify-between gap-4 py-3 cursor-pointer">
     <div className="flex items-start gap-3 min-w-0">
-      <Icon className="w-5 h-5 mt-0.5 text-neutral-500 dark:text-neutral-400 shrink-0" />
+      <Icon className="w-5 h-5 mt-0.5 text-muted-foreground shrink-0" />
       <div className="min-w-0">
-        <div className="text-sm font-medium text-neutral-900 dark:text-neutral-100">{label}</div>
-        {hint && <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">{hint}</p>}
+        <div className="text-sm font-medium text-foreground">{label}</div>
+        {hint && <p className="text-xs text-muted-foreground mt-0.5">{hint}</p>}
       </div>
     </div>
     <Switch checked={enabled} onCheckedChange={onChange} />
@@ -109,10 +109,10 @@ export const CustomerDashboardBrandingCard: React.FC = () => {
                 <UserCog className="w-5 h-5" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                <h2 className="text-lg font-semibold text-foreground">
                   {t('settings.customerSurface.brandingTitle', 'Customer dashboard header')}
                 </h2>
-                <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">
+                <p className="text-sm text-muted-foreground mt-0.5">
                   {t(
                     'settings.customerSurface.brandingHint',
                     'Controls what shows in the header of /customer/dashboard. Public galleries and admin surfaces are not affected.',
@@ -134,7 +134,7 @@ export const CustomerDashboardBrandingCard: React.FC = () => {
                 hint={t('settings.customerSurface.showCompanyNameHint', 'Hide if your logo already includes the company name.')}
                 icon={Type}
               />
-            </div><div className="flex justify-end mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
+            </div><div className="flex justify-end mt-4 pt-4 border-t border-border">
               <Button
                               onClick={() => saveMutation.mutate()} disabled={!isDirty || saveMutation.isPending || saveMutation.isPending}
                             >

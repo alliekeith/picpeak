@@ -18,8 +18,8 @@ interface Props {
   webhooks?: WebhookOption[];
 }
 
-const field = 'w-full px-2 py-1.5 rounded-sm border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 text-sm';
-const lbl = 'block text-xs text-neutral-500 dark:text-neutral-400 mb-1';
+const field = 'w-full px-2 py-1.5 rounded-sm border border-border bg-card text-foreground text-sm';
+const lbl = 'block text-xs text-muted-foreground mb-1';
 
 const ACTIONS = [
   ['queue_payment_check', 'Send payment-check email (dunning gate)'],
@@ -75,7 +75,7 @@ export const NodeConfigPanel: React.FC<Props> = ({ nodeType, config, onChange, w
   return (
     <div className="space-y-3">
       {nodeType === 'trigger' && (
-        <p className="text-sm text-neutral-500 dark:text-neutral-400">
+        <p className="text-sm text-muted-foreground">
           {t('workflows.editor.triggerHint', 'The trigger is set in the toolbar above (When …).')}
         </p>
       )}
@@ -105,7 +105,7 @@ export const NodeConfigPanel: React.FC<Props> = ({ nodeType, config, onChange, w
       {nodeType === 'action' && config.action === 'notify_pre_event' && (
         <Row label={t('workflows.editor.templateGroup', 'Reminder template group')}>
           <input className={field} value={config.templateGroup || ''} onChange={(e) => set({ templateGroup: e.target.value })} placeholder="event_reminder" />
-          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             {t('workflows.editor.templateGroupHint', 'The exact template is auto-picked per event type within this group: «group»_«eventType» if you authored one, else «group»_default. Blank = event_reminder.')}
           </p>
         </Row>
@@ -119,7 +119,7 @@ export const NodeConfigPanel: React.FC<Props> = ({ nodeType, config, onChange, w
               <option key={w.id} value={w.id}>{w.name}{w.active ? '' : ` ${t('workflows.editor.webhookInactive', '(inactive)')}`}</option>
             ))}
           </select>
-          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             {t('workflows.editor.webhookHint', 'Delivered via the webhook pipeline (signing, retries, SSRF checks). Manage endpoints in Settings → Webhooks.')}
           </p>
         </Row>
@@ -149,7 +149,7 @@ export const NodeConfigPanel: React.FC<Props> = ({ nodeType, config, onChange, w
               )}
             </>
           )}
-          <p className="text-xs text-neutral-500 dark:text-neutral-400">
+          <p className="text-xs text-muted-foreground">
             {t('workflows.editor.conditionHint', 'Routes to the “yes” edge when true, “no” when false.')}
           </p>
         </>
@@ -205,13 +205,13 @@ export const NodeConfigPanel: React.FC<Props> = ({ nodeType, config, onChange, w
           <Row label={t('workflows.editor.gateTimeout', 'Auto-expire after (days, optional)')}>
             <input type="number" min={0} className={field} value={config.timeoutDays ?? ''} onChange={(e) => set({ timeoutDays: num(e.target.value) })} />
           </Row>
-          <p className="text-xs text-neutral-500 dark:text-neutral-400">
+          <p className="text-xs text-muted-foreground">
             {t('workflows.editor.gateHint', 'Emails the admin a confirm/deny link; routes to the “confirm” or “deny” edge.')}
           </p>
         </>
       )}
 
-      <button type="button" className="text-xs text-neutral-500 dark:text-neutral-400 underline" onClick={() => { setJsonText(JSON.stringify(config || {}, null, 2)); setShowJson((s) => !s); }}>
+      <button type="button" className="text-xs text-muted-foreground underline" onClick={() => { setJsonText(JSON.stringify(config || {}, null, 2)); setShowJson((s) => !s); }}>
         {showJson ? t('workflows.editor.hideAdvanced', 'Hide advanced (JSON)') : t('workflows.editor.showAdvanced', 'Advanced (JSON)')}
       </button>
       {showJson && (

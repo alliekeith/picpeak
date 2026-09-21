@@ -95,6 +95,7 @@ import { RequireFeature } from './components/admin/RequireFeature';
 import { PageErrorBoundary, OfflineIndicator, SkipLink, DynamicFavicon, RobotsMetaTags, CMSContentBlock, Loading } from './components/common';
 import { MaintenanceWrapper } from './components/MaintenanceWrapper';
 import { GlobalThemeProvider } from './components/GlobalThemeProvider';
+import { UnbrandedSurfaceScope } from './components/UnbrandedSurfaceScope';
 import { ConfirmDialogProvider } from './components/common';
 import { usePublicSettings } from './hooks/usePublicSettings';
 import { SetupPage } from './pages/SetupPage';
@@ -216,6 +217,7 @@ function App() {
               <RobotsMetaTags />
               <Router>
                 <AnalyticsRouteTracker />
+                <UnbrandedSurfaceScope />
                 <MaintenanceWrapper>
                   <SkipLink />
                   <Routes>

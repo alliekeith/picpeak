@@ -252,7 +252,7 @@ export const AdminPhotoGrid: React.FC<AdminPhotoGridProps> = ({
               
               {selectedPhotos.size > 0 && (
                 <>
-                  <span className="text-sm text-neutral-600 dark:text-neutral-400">
+                  <span className="text-sm text-muted-foreground">
                     {t('gallery.photosSelected', { count: selectedPhotos.size })}
                   </span>
                   <PermissionGate permission="photos.edit">
@@ -304,12 +304,12 @@ export const AdminPhotoGrid: React.FC<AdminPhotoGridProps> = ({
         </div>
         
         <div className="flex items-center gap-3">
-          <div className="text-sm text-neutral-600 dark:text-neutral-400">
+          <div className="text-sm text-muted-foreground">
             {t('gallery.photosCount', { count: photos.length })}
           </div>
           {/* Layout toggle: Grid / List — radiogroup so a screen reader
               announces the two options as one mutually-exclusive set. */}
-          <div className="inline-flex rounded-lg border border-neutral-300 dark:border-neutral-600 overflow-hidden" role="radiogroup" aria-label={t('admin.photos.viewMode', 'View mode')}>
+          <div className="inline-flex rounded-lg border border-border overflow-hidden" role="radiogroup" aria-label={t('admin.photos.viewMode', 'View mode')}>
             <button
               type="button"
               role="radio"
@@ -318,8 +318,8 @@ export const AdminPhotoGrid: React.FC<AdminPhotoGridProps> = ({
               title={t('admin.photos.gridView', 'Grid view')}
               className={`p-1.5 transition-colors ${
                 viewMode === 'grid'
-                  ? 'bg-brand-500 text-white'
-                  : 'bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700'
+                  ? 'bg-brand-500 text-primary-foreground'
+                  : 'bg-card text-muted-foreground hover:bg-accent'
               }`}
             >
               <LayoutGrid className="w-4 h-4" />
@@ -330,10 +330,10 @@ export const AdminPhotoGrid: React.FC<AdminPhotoGridProps> = ({
               onClick={() => selectView('list')}
               aria-checked={viewMode === 'list'}
               title={t('admin.photos.listView', 'List view')}
-              className={`p-1.5 transition-colors border-l border-neutral-300 dark:border-neutral-600 ${
+              className={`p-1.5 transition-colors border-l border-border ${
                 viewMode === 'list'
-                  ? 'bg-brand-500 text-white'
-                  : 'bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700'
+                  ? 'bg-brand-500 text-primary-foreground'
+                  : 'bg-card text-muted-foreground hover:bg-accent'
               }`}
             >
               <List className="w-4 h-4" />
@@ -358,7 +358,7 @@ export const AdminPhotoGrid: React.FC<AdminPhotoGridProps> = ({
             <div
               key={photo.id}
               data-testid={`admin-photo-tile-${photo.id}`}
-              className={`relative group cursor-pointer rounded-lg overflow-hidden bg-neutral-100 dark:bg-neutral-800 transition-opacity ${
+              className={`relative group cursor-pointer rounded-lg overflow-hidden bg-muted transition-opacity ${
                 isSelectionMode ? 'ring-2 ring-offset-2 ' + (selectedPhotos.has(photo.id) ? 'ring-brand-500' : 'ring-transparent') : ''
               } ${isDeleting ? 'opacity-50' : ''}`}
               onClick={() => !isDeleting && onPhotoClick(photo, index)}
@@ -445,13 +445,13 @@ export const AdminPhotoGrid: React.FC<AdminPhotoGridProps> = ({
                   className="w-full h-full object-cover"
                   loading="lazy"
                   fallback={
-                    <div className="w-full h-full flex items-center justify-center text-neutral-400">
+                    <div className="w-full h-full flex items-center justify-center text-muted-foreground">
                       <Eye className="w-8 h-8" />
                     </div>
                   }
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-neutral-400">
+                <div className="w-full h-full flex items-center justify-center text-muted-foreground">
                   <Eye className="w-8 h-8" />
                 </div>
               )}
@@ -499,7 +499,7 @@ export const AdminPhotoGrid: React.FC<AdminPhotoGridProps> = ({
             {/* Category Badge - move to top-left and prevent overlap with select checkbox */}
             {photo.category_name && (
               <div className={`absolute left-2 ${isHidden ? 'top-9' : 'top-2'} pointer-events-none`}>
-                <span className="px-2 py-1 text-xs font-medium bg-white/90 text-neutral-700 rounded-sm max-w-[70%] whitespace-nowrap overflow-hidden text-ellipsis">
+                <span className="px-2 py-1 text-xs font-medium bg-white/90 text-foreground rounded-sm max-w-[70%] whitespace-nowrap overflow-hidden text-ellipsis">
                   {photo.category_name}
                 </span>
               </div>
@@ -554,7 +554,7 @@ export const AdminPhotoGrid: React.FC<AdminPhotoGridProps> = ({
                 )}
                 {!!photo.my_rating && (
                   <span
-                    className="bg-white/90 backdrop-blur-xs rounded-full px-1.5 py-0.5 text-xs font-medium text-neutral-700 flex items-center gap-0.5"
+                    className="bg-white/90 backdrop-blur-xs rounded-full px-1.5 py-0.5 text-xs font-medium text-foreground flex items-center gap-0.5"
                     title={t('admin.photos.yourMarkRating', 'Your rating: {{count}}', { count: photo.my_rating })}
                   >
                     <Star className="w-3 h-3 text-yellow-500" fill="currentColor" />
@@ -570,13 +570,13 @@ export const AdminPhotoGrid: React.FC<AdminPhotoGridProps> = ({
                 {averageRating > 0 && (
                   <div className="bg-white/90 backdrop-blur-xs rounded-full px-2 py-1 flex items-center gap-1" title={`Rating: ${Number(averageRating).toFixed(1)}`}>
                     <Star className="w-3.5 h-3.5 text-yellow-500" fill="currentColor" />
-                    <span className="text-xs font-medium text-neutral-700">{Number(averageRating).toFixed(1)}</span>
+                    <span className="text-xs font-medium text-foreground">{Number(averageRating).toFixed(1)}</span>
                   </div>
                 )}
                 {commentCount > 0 && (
                   <div className="bg-white/90 backdrop-blur-xs rounded-full px-2 py-1 flex items-center gap-1" title={`${commentCount} comments`}>
                     <MessageSquare className="w-3.5 h-3.5 text-brand" fill="currentColor" />
-                    <span className="text-xs font-medium text-neutral-700">{commentCount}</span>
+                    <span className="text-xs font-medium text-foreground">{commentCount}</span>
                   </div>
                 )}
               </div>
@@ -589,35 +589,35 @@ export const AdminPhotoGrid: React.FC<AdminPhotoGridProps> = ({
 
       {/* Photo List */}
       {viewMode === 'list' && (
-      <div className="overflow-x-auto rounded-lg border border-neutral-200 dark:border-neutral-700">
+      <div className="overflow-x-auto rounded-lg border border-border">
         <table className="w-full">
-          <thead className="bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700">
+          <thead className="bg-muted border-b border-border">
             <tr>
               <th className="w-8 px-3 py-2" />
-              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+              <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 {t('admin.photos.columns.photo', 'Photo')}
               </th>
-              <th className="hidden lg:table-cell px-3 py-2 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+              <th className="hidden lg:table-cell px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 {t('admin.photos.columns.category', 'Category')}
               </th>
-              <th className="hidden md:table-cell px-3 py-2 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+              <th className="hidden md:table-cell px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 {t('admin.photos.columns.uploaded', 'Uploaded')}
               </th>
-              <th className="hidden xl:table-cell px-3 py-2 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+              <th className="hidden xl:table-cell px-3 py-2 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 {t('admin.photos.columns.engagement', 'Engagement')}
               </th>
-              <th className="hidden sm:table-cell px-3 py-2 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+              <th className="hidden sm:table-cell px-3 py-2 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 {t('admin.photos.columns.feedback', 'Feedback')}
               </th>
-              <th className="px-3 py-2 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+              <th className="px-3 py-2 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 {t('admin.photos.columns.size', 'Size')}
               </th>
-              <th className="w-px px-3 py-2 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+              <th className="w-px px-3 py-2 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 {t('admin.photos.columns.actions', 'Actions')}
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white dark:bg-neutral-800 divide-y divide-neutral-200 dark:divide-neutral-700">
+          <tbody className="bg-card divide-y divide-neutral-200 dark:divide-neutral-700">
             {photos.map((photo, index) => {
               const isRowDeleting = deletingPhotos.has(photo.id);
               const commentCount = photo.comment_count ?? 0;
@@ -636,7 +636,7 @@ export const AdminPhotoGrid: React.FC<AdminPhotoGridProps> = ({
                   key={photo.id}
                   data-testid={`admin-photo-row-${photo.id}`}
                   className={`group cursor-pointer transition-colors ${
-                    isSelected ? 'bg-brand-50 dark:bg-brand-900/20' : 'hover:bg-neutral-50 dark:hover:bg-neutral-700/50'
+                    isSelected ? 'bg-brand-50 dark:bg-brand-900/20' : 'hover:bg-accent'
                   } ${isRowDeleting ? 'opacity-50' : ''}`}
                   onClick={() => !isRowDeleting && onPhotoClick(photo, index)}
                 >
@@ -653,7 +653,7 @@ export const AdminPhotoGrid: React.FC<AdminPhotoGridProps> = ({
                       <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
                         isSelected
                           ? 'bg-primary border-primary'
-                          : 'border-neutral-300 dark:border-neutral-500 group-hover:border-neutral-400'
+                          : 'border-border'
                       }`}>
                         {isSelected && <Check className="w-3.5 h-3.5 text-white" />}
                       </div>
@@ -663,7 +663,7 @@ export const AdminPhotoGrid: React.FC<AdminPhotoGridProps> = ({
                   {/* Thumbnail + filename + badges */}
                   <td className="px-3 py-2">
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="shrink-0 w-10 h-10 rounded-sm overflow-hidden bg-neutral-100 dark:bg-neutral-700">
+                      <div className="shrink-0 w-10 h-10 rounded-sm overflow-hidden bg-muted">
                         {status === 'pending' || status === 'processing' ? (
                           <div className="w-full h-full flex items-center justify-center text-amber-600 dark:text-amber-300">
                             <Cog className="w-4 h-4 animate-spin" />
@@ -679,24 +679,24 @@ export const AdminPhotoGrid: React.FC<AdminPhotoGridProps> = ({
                             className="w-full h-full object-cover"
                             loading="lazy"
                             fallback={
-                              <div className="w-full h-full flex items-center justify-center text-neutral-400">
+                              <div className="w-full h-full flex items-center justify-center text-muted-foreground">
                                 <Eye className="w-4 h-4" />
                               </div>
                             }
                           />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center text-neutral-400">
+                          <div className="w-full h-full flex items-center justify-center text-muted-foreground">
                             <Eye className="w-4 h-4" />
                           </div>
                         )}
                       </div>
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
-                          <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100 truncate">
+                          <p className="text-sm font-medium text-foreground truncate">
                             {photo.filename}
                           </p>
                           {isVideo && (
-                            <span className="shrink-0 inline-flex items-center gap-1 px-1.5 py-0.5 rounded-sm bg-neutral-200 dark:bg-neutral-600 text-neutral-700 dark:text-neutral-200 text-[10px] font-medium">
+                            <span className="shrink-0 inline-flex items-center gap-1 px-1.5 py-0.5 rounded-sm bg-muted text-foreground text-[10px] font-medium">
                               <Video className="w-3 h-3" />
                               {t('common.video', 'Video')}
                             </span>
@@ -712,7 +712,7 @@ export const AdminPhotoGrid: React.FC<AdminPhotoGridProps> = ({
                           )}
                         </div>
                         {photo.original_filename && photo.original_filename !== photo.filename && (
-                          <p className="text-xs text-neutral-500 dark:text-neutral-400 truncate">
+                          <p className="text-xs text-muted-foreground truncate">
                             {photo.original_filename}
                           </p>
                         )}
@@ -721,17 +721,17 @@ export const AdminPhotoGrid: React.FC<AdminPhotoGridProps> = ({
                   </td>
 
                   {/* Category */}
-                  <td className="hidden lg:table-cell px-3 py-2 max-w-48 truncate text-sm text-neutral-600 dark:text-neutral-400">
+                  <td className="hidden lg:table-cell px-3 py-2 max-w-48 truncate text-sm text-muted-foreground">
                     {photo.category_name || '—'}
                   </td>
 
                   {/* Uploaded date */}
-                  <td className="hidden md:table-cell px-3 py-2 whitespace-nowrap text-sm text-neutral-600 dark:text-neutral-400">
+                  <td className="hidden md:table-cell px-3 py-2 whitespace-nowrap text-sm text-muted-foreground">
                     {photo.uploaded_at ? formatDate(photo.uploaded_at) : '—'}
                   </td>
 
                   {/* Engagement: views / downloads / likes */}
-                  <td className="hidden xl:table-cell px-3 py-2 text-right text-xs text-neutral-500 dark:text-neutral-400 tabular-nums">
+                  <td className="hidden xl:table-cell px-3 py-2 text-right text-xs text-muted-foreground tabular-nums">
                     <div className="flex items-center justify-end gap-3">
                       <span className="inline-flex items-center gap-1" title={t('admin.photos.columns.views', 'Views')}>
                         <Eye className="w-3.5 h-3.5" />
@@ -749,7 +749,7 @@ export const AdminPhotoGrid: React.FC<AdminPhotoGridProps> = ({
                   </td>
 
                   {/* Feedback: rating + comments */}
-                  <td className="hidden sm:table-cell px-3 py-2 text-right text-xs text-neutral-600 dark:text-neutral-400">
+                  <td className="hidden sm:table-cell px-3 py-2 text-right text-xs text-muted-foreground">
                     {averageRating > 0 || commentCount > 0 ? (
                       <div className="flex items-center justify-end gap-2">
                         {averageRating > 0 && (
@@ -769,7 +769,7 @@ export const AdminPhotoGrid: React.FC<AdminPhotoGridProps> = ({
                   </td>
 
                   {/* Size */}
-                  <td className="px-3 py-2 text-right text-sm text-neutral-500 dark:text-neutral-400 whitespace-nowrap tabular-nums">
+                  <td className="px-3 py-2 text-right text-sm text-muted-foreground whitespace-nowrap tabular-nums">
                     {photosService.formatBytes(photo.size)}
                   </td>
 
@@ -780,7 +780,7 @@ export const AdminPhotoGrid: React.FC<AdminPhotoGridProps> = ({
                         <PermissionGate permission="photos.download">
                           <button
                             onClick={(e) => handleDownload(photo, e)}
-                            className="p-1.5 text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-600 rounded-sm"
+                            className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-accent rounded-sm"
                             title={t('common.download', 'Download')}
                           >
                             <Download className="w-4 h-4" />
@@ -809,7 +809,7 @@ export const AdminPhotoGrid: React.FC<AdminPhotoGridProps> = ({
 
       {photos.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-neutral-500 dark:text-neutral-400">{t('gallery.noMedia', 'No media uploaded yet')}</p>
+          <p className="text-muted-foreground">{t('gallery.noMedia', 'No media uploaded yet')}</p>
         </div>
       )}
 

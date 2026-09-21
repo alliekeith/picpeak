@@ -41,7 +41,7 @@ const getRoleBadgeColor = (roleName: string): string => {
       return 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 border-green-200 dark:border-green-800';
     case 'viewer':
     default:
-      return 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 border-neutral-200 dark:border-neutral-600';
+      return 'bg-muted text-foreground border-border';
   }
 };
 
@@ -101,22 +101,22 @@ const CreateInvitationModal: React.FC<CreateInvitationModalProps> = ({
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <Card className="w-full max-w-md"><CardContent><div className="p-6">
                     <div className="flex items-center justify-between mb-4">
-                      <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+                      <h2 className="text-xl font-semibold text-foreground">
                         {t('userManagement.createInvitation')}
                       </h2>
                       <button
                         onClick={handleClose}
-                        className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors"
+                        className="p-1 hover:bg-accent rounded-lg transition-colors"
                         disabled={isLoading}
                       >
-                        <X className="w-5 h-5 text-neutral-500 dark:text-neutral-400" />
+                        <X className="w-5 h-5 text-muted-foreground" />
                       </button>
                     </div>
 
                     <form onSubmit={handleSubmit}>
                       <div className="space-y-4">
                         <div>
-                          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                          <label className="block text-sm font-medium text-foreground mb-1">
                             {t('userManagement.email')}
                           </label>
                           <Input
@@ -135,7 +135,7 @@ const CreateInvitationModal: React.FC<CreateInvitationModalProps> = ({
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                          <label className="block text-sm font-medium text-foreground mb-1">
                             {t('userManagement.role')}
                           </label>
                           <select
@@ -144,7 +144,7 @@ const CreateInvitationModal: React.FC<CreateInvitationModalProps> = ({
                               setRoleId(e.target.value ? Number(e.target.value) : '');
                               setErrors((prev) => ({ ...prev, role: undefined }));
                             }}
-                            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:border-primary"
+                            className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:border-primary"
                             disabled={isLoading}
                           >
                             <option value="">{t('userManagement.selectRole')}</option>
@@ -224,34 +224,34 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <Card className="w-full max-w-md"><CardContent><div className="p-6">
                     <div className="flex items-center justify-between mb-4">
-                      <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+                      <h2 className="text-xl font-semibold text-foreground">
                         {t('userManagement.editUser')}
                       </h2>
                       <button
                         onClick={handleClose}
-                        className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors"
+                        className="p-1 hover:bg-accent rounded-lg transition-colors"
                         disabled={isLoading}
                       >
-                        <X className="w-5 h-5 text-neutral-500 dark:text-neutral-400" />
+                        <X className="w-5 h-5 text-muted-foreground" />
                       </button>
                     </div>
 
-                    <div className="mb-4 p-3 bg-neutral-50 dark:bg-neutral-700 rounded-lg">
-                      <p className="text-sm text-neutral-600 dark:text-neutral-300">
+                    <div className="mb-4 p-3 bg-muted rounded-lg">
+                      <p className="text-sm text-muted-foreground">
                         {t('userManagement.editingUser')}: <strong>{user.username}</strong>
                       </p>
-                      <p className="text-sm text-neutral-500 dark:text-neutral-400">{user.email}</p>
+                      <p className="text-sm text-muted-foreground">{user.email}</p>
                     </div>
 
                     <form onSubmit={handleSubmit}>
                       <div>
-                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                        <label className="block text-sm font-medium text-foreground mb-1">
                           {t('userManagement.role')}
                         </label>
                         <select
                           value={roleId}
                           onChange={(e) => setRoleId(e.target.value ? Number(e.target.value) : '')}
-                          className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:border-primary"
+                          className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:border-primary"
                           disabled={isLoading}
                         >
                           <option value="">{t('userManagement.selectRole')}</option>
@@ -325,8 +325,8 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
                         />
                       </div>
                       <div>
-                        <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">{title}</h2>
-                        <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">{message}</p>
+                        <h2 className="text-lg font-semibold text-foreground">{title}</h2>
+                        <p className="text-sm text-muted-foreground mt-1">{message}</p>
                       </div>
                     </div>
 
@@ -562,10 +562,10 @@ export const UserManagementPage: React.FC = () => {
     return (
       <div>
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
+          <h1 className="text-2xl font-bold text-foreground">
             {t('userManagement.title')}
           </h1>
-          <p className="text-neutral-600 dark:text-neutral-400 mt-1">{t('userManagement.subtitle')}</p>
+          <p className="text-muted-foreground mt-1">{t('userManagement.subtitle')}</p>
         </div>
         <div className="flex items-center justify-center min-h-[400px]">
           <Loading size="lg" text={t('userManagement.loading')} />
@@ -579,10 +579,10 @@ export const UserManagementPage: React.FC = () => {
     return (
       <div>
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
+          <h1 className="text-2xl font-bold text-foreground">
             {t('userManagement.title')}
           </h1>
-          <p className="text-neutral-600 dark:text-neutral-400 mt-1">{t('userManagement.subtitle')}</p>
+          <p className="text-muted-foreground mt-1">{t('userManagement.subtitle')}</p>
         </div>
         <div className="text-center py-12">
           <p className="text-red-600">{t('userManagement.loadError')}</p>
@@ -611,10 +611,10 @@ export const UserManagementPage: React.FC = () => {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
+          <h1 className="text-2xl font-bold text-foreground">
             {t('userManagement.title')}
           </h1>
-          <p className="text-neutral-600 dark:text-neutral-400 mt-1">{t('userManagement.subtitle')}</p>
+          <p className="text-muted-foreground mt-1">{t('userManagement.subtitle')}</p>
         </div>
         <Button
                         onClick={createInvitationModal.open}
@@ -626,10 +626,10 @@ export const UserManagementPage: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <Card className="py-4"><CardContent className="px-4"><div className="flex items-center justify-between">
                           <div>
-                            <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                            <p className="text-sm text-muted-foreground">
                               {t('userManagement.stats.totalUsers')}
                             </p>
-                            <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
+                            <p className="text-2xl font-bold text-foreground">
                               {users?.length || 0}
                             </p>
                           </div>
@@ -638,10 +638,10 @@ export const UserManagementPage: React.FC = () => {
 
         <Card className="py-4"><CardContent className="px-4"><div className="flex items-center justify-between">
                           <div>
-                            <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                            <p className="text-sm text-muted-foreground">
                               {t('userManagement.stats.activeUsers')}
                             </p>
-                            <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
+                            <p className="text-2xl font-bold text-foreground">
                               {users?.filter((u) => u.isActive).length || 0}
                             </p>
                           </div>
@@ -650,10 +650,10 @@ export const UserManagementPage: React.FC = () => {
 
         <Card className="py-4"><CardContent className="px-4"><div className="flex items-center justify-between">
                           <div>
-                            <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                            <p className="text-sm text-muted-foreground">
                               {t('userManagement.stats.pendingInvitations')}
                             </p>
-                            <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
+                            <p className="text-2xl font-bold text-foreground">
                               {invitations?.length || 0}
                             </p>
                           </div>
@@ -662,19 +662,19 @@ export const UserManagementPage: React.FC = () => {
 
         <Card className="py-4"><CardContent className="px-4"><div className="flex items-center justify-between">
                           <div>
-                            <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                            <p className="text-sm text-muted-foreground">
                               {t('userManagement.stats.inactiveUsers')}
                             </p>
-                            <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
+                            <p className="text-2xl font-bold text-foreground">
                               {users?.filter((u) => !u.isActive).length || 0}
                             </p>
                           </div>
-                          <XCircle className="w-8 h-8 text-neutral-400" />
+                          <XCircle className="w-8 h-8 text-muted-foreground" />
                         </div></CardContent></Card>
       </div>
 
       {/* Tab Navigation */}
-      <div className="border-b border-neutral-200 dark:border-neutral-700 mb-6">
+      <div className="border-b border-border mb-6">
         <nav className="-mb-px flex gap-6">
           {tabs.map((tab) => (
             <button
@@ -683,7 +683,7 @@ export const UserManagementPage: React.FC = () => {
               className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors flex items-center gap-2 ${
                 activeTab === tab.key
                   ? 'border-brand text-brand'
-                  : 'border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300'
+                  : 'border-transparent text-muted-foreground hover:text-foreground'
               }`}
             >
               {tab.label}
@@ -691,7 +691,7 @@ export const UserManagementPage: React.FC = () => {
                 className={`px-2 py-0.5 text-xs rounded-full ${
                   activeTab === tab.key
                     ? 'bg-primary/15 text-primary'
-                    : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400'
+                    : 'bg-muted text-muted-foreground'
                 }`}
               >
                 {tab.count}
@@ -705,7 +705,7 @@ export const UserManagementPage: React.FC = () => {
       {activeTab !== 'roles' && (
         <Card className="py-4 mb-6"><CardContent className="px-4"><div className="flex flex-col sm:flex-row gap-4">
                           <div className="flex-1">
-                            <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Search className="w-5 h-5 text-neutral-400" />}</div><Input
+                            <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Search className="w-5 h-5 text-muted-foreground" />}</div><Input
                                                     type="text"
                                                     placeholder={
                                                       activeTab === 'users'
@@ -723,29 +723,29 @@ export const UserManagementPage: React.FC = () => {
       {activeTab === 'users' && (
         <Card className="overflow-visible"><CardContent><div className="overflow-x-auto">
                           <table className="w-full">
-                            <thead className="bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700">
+                            <thead className="bg-muted border-b border-border">
                               <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                                   {t('userManagement.table.user')}
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                                   {t('userManagement.table.role')}
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                                   {t('userManagement.table.status')}
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                                   {t('userManagement.table.lastLogin')}
                                 </th>
-                                <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
                                   {t('userManagement.table.actions')}
                                 </th>
                               </tr>
                             </thead>
-                            <tbody className="bg-white dark:bg-neutral-800 divide-y divide-neutral-200 dark:divide-neutral-700">
+                            <tbody className="bg-card divide-y divide-neutral-200 dark:divide-neutral-700">
                               {filteredUsers.length === 0 ? (
                                 <tr>
-                                  <td colSpan={5} className="px-6 py-12 text-center text-neutral-500 dark:text-neutral-400">
+                                  <td colSpan={5} className="px-6 py-12 text-center text-muted-foreground">
                                     {searchTerm
                                       ? t('userManagement.noUsersFound')
                                       : t('userManagement.noUsers')}
@@ -753,7 +753,7 @@ export const UserManagementPage: React.FC = () => {
                                 </tr>
                               ) : (
                                 filteredUsers.map((user) => (
-                                  <tr key={user.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-700/50">
+                                  <tr key={user.id} className="hover:bg-accent">
                                     <td className="px-6 py-4">
                                       <div className="flex items-center gap-3">
                                         <div className="w-10 h-10 rounded-full bg-primary/15 flex items-center justify-center">
@@ -762,10 +762,10 @@ export const UserManagementPage: React.FC = () => {
                                           </span>
                                         </div>
                                         <div>
-                                          <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                                          <p className="text-sm font-medium text-foreground">
                                             {user.username}
                                           </p>
-                                          <p className="text-xs text-neutral-500 dark:text-neutral-400">{user.email}</p>
+                                          <p className="text-xs text-muted-foreground">{user.email}</p>
                                         </div>
                                       </div>
                                     </td>
@@ -784,7 +784,7 @@ export const UserManagementPage: React.FC = () => {
                                         className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                                           user.isActive
                                             ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300'
-                                            : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-500 dark:text-neutral-400'
+                                            : 'bg-muted text-muted-foreground'
                                         }`}
                                       >
                                         {user.isActive
@@ -794,14 +794,14 @@ export const UserManagementPage: React.FC = () => {
                                     </td>
                                     <td className="px-6 py-4">
                                       {user.lastLogin ? (
-                                        <div className="flex items-center gap-1 text-sm text-neutral-600 dark:text-neutral-300">
+                                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
                                           <Clock className="w-4 h-4" />
                                           {formatDistanceToNow(parseISO(user.lastLogin), {
                                             addSuffix: true,
                                           })}
                                         </div>
                                       ) : (
-                                        <span className="text-sm text-neutral-400 dark:text-neutral-500">
+                                        <span className="text-sm text-muted-foreground">
                                           {t('userManagement.neverLoggedIn')}
                                         </span>
                                       )}
@@ -810,7 +810,7 @@ export const UserManagementPage: React.FC = () => {
                                       <div className="flex items-center justify-end gap-2">
                                         <button
                                           onClick={() => handleEditUser(user)}
-                                          className="p-1.5 text-neutral-400 hover:text-brand hover:bg-primary/15 rounded-lg transition-colors"
+                                          className="p-1.5 text-muted-foreground hover:text-brand hover:bg-primary/15 rounded-lg transition-colors"
                                           title={t('userManagement.editUser')}
                                         >
                                           <Edit className="w-4 h-4" />
@@ -818,7 +818,7 @@ export const UserManagementPage: React.FC = () => {
                                         {user.isActive ? (
                                           <button
                                             onClick={() => handleDeactivateUser(user)}
-                                            className="p-1.5 text-neutral-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
+                                            className="p-1.5 text-muted-foreground hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
                                             title={t('userManagement.deactivateUser')}
                                           >
                                             <UserX className="w-4 h-4" />
@@ -827,14 +827,14 @@ export const UserManagementPage: React.FC = () => {
                                           <>
                                             <button
                                               onClick={() => handleActivateUser(user)}
-                                              className="p-1.5 text-neutral-400 hover:text-green-600 hover:bg-green-50 dark:hover:bg-green-900/30 rounded-lg transition-colors"
+                                              className="p-1.5 text-muted-foreground hover:text-green-600 hover:bg-green-50 dark:hover:bg-green-900/30 rounded-lg transition-colors"
                                               title={t('userManagement.activateUser', 'Reactivate user')}
                                             >
                                               <UserCheck className="w-4 h-4" />
                                             </button>
                                             <button
                                               onClick={() => handleDeleteUser(user)}
-                                              className="p-1.5 text-neutral-400 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
+                                              className="p-1.5 text-muted-foreground hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
                                               title={t('userManagement.deleteUser', 'Delete user permanently')}
                                             >
                                               <Trash2 className="w-4 h-4" />
@@ -855,29 +855,29 @@ export const UserManagementPage: React.FC = () => {
       {activeTab === 'invitations' && (
         <Card className="overflow-visible"><CardContent><div className="overflow-x-auto">
                           <table className="w-full">
-                            <thead className="bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700">
+                            <thead className="bg-muted border-b border-border">
                               <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                                   {t('userManagement.table.email')}
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                                   {t('userManagement.table.role')}
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                                   {t('userManagement.table.invitedBy')}
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                                   {t('userManagement.table.expires')}
                                 </th>
-                                <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
                                   {t('userManagement.table.actions')}
                                 </th>
                               </tr>
                             </thead>
-                            <tbody className="bg-white dark:bg-neutral-800 divide-y divide-neutral-200 dark:divide-neutral-700">
+                            <tbody className="bg-card divide-y divide-neutral-200 dark:divide-neutral-700">
                               {filteredInvitations.length === 0 ? (
                                 <tr>
-                                  <td colSpan={5} className="px-6 py-12 text-center text-neutral-500 dark:text-neutral-400">
+                                  <td colSpan={5} className="px-6 py-12 text-center text-muted-foreground">
                                     {searchTerm
                                       ? t('userManagement.noInvitationsFound')
                                       : t('userManagement.noInvitations')}
@@ -887,13 +887,13 @@ export const UserManagementPage: React.FC = () => {
                                 filteredInvitations.map((invitation) => {
                                   const isExpired = isPast(parseISO(invitation.expiresAt));
                                   return (
-                                    <tr key={invitation.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-700/50">
+                                    <tr key={invitation.id} className="hover:bg-accent">
                                       <td className="px-6 py-4">
                                         <div className="flex items-center gap-3">
                                           <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center">
                                             <Mail className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                                           </div>
-                                          <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                                          <p className="text-sm font-medium text-foreground">
                                             {invitation.email}
                                           </p>
                                         </div>
@@ -908,13 +908,13 @@ export const UserManagementPage: React.FC = () => {
                                           {invitation.roleName}
                                         </span>
                                       </td>
-                                      <td className="px-6 py-4 text-sm text-neutral-600 dark:text-neutral-300">
+                                      <td className="px-6 py-4 text-sm text-muted-foreground">
                                         {invitation.invitedBy || '-'}
                                       </td>
                                       <td className="px-6 py-4">
                                         <span
                                           className={`inline-flex items-center gap-1 text-sm ${
-                                            isExpired ? 'text-red-600 dark:text-red-400' : 'text-neutral-600 dark:text-neutral-300'
+                                            isExpired ? 'text-red-600 dark:text-red-400' : 'text-muted-foreground'
                                           }`}
                                         >
                                           <Clock className="w-4 h-4" />
@@ -928,7 +928,7 @@ export const UserManagementPage: React.FC = () => {
                                       <td className="px-6 py-4 text-right">
                                         <button
                                           onClick={() => handleCancelInvitation(invitation)}
-                                          className="p-1.5 text-neutral-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
+                                          className="p-1.5 text-muted-foreground hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
                                           title={t('userManagement.cancelInvitation')}
                                         >
                                           <Trash2 className="w-4 h-4" />

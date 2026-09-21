@@ -227,7 +227,7 @@ export const CustomerProfilePage: React.FC = () => {
               <label className="block text-sm font-medium text-foreground mb-1">
                 {t('customer.profile.field.email', 'Email (login)')}
               </label>
-              <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Mail className="w-5 h-5 text-neutral-400" />}</div><Input
+              <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Mail className="w-5 h-5 text-muted-foreground" />}</div><Input
                                           value={profile.email}
                                           readOnly
                                           disabled className="pl-10"

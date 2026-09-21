@@ -197,11 +197,11 @@ export const CrmDevelopmentPage: React.FC = () => {
   return (
     <div>
       <div className="mb-6">
-        <h2 className="text-xl font-bold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
           <Wrench className="w-5 h-5" />
           {t('crmDev.title', 'CRM Development')}
         </h2>
-        <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
+        <p className="text-sm text-muted-foreground mt-1">
           {t('crmDev.subtitle',
             'Internal tools for verifying CRM flows. Hidden by default — enabled via Settings → Features → Development.')}
         </p>
@@ -239,18 +239,18 @@ export const CrmDevelopmentPage: React.FC = () => {
       <Card className="mb-5"><CardContent><h3 className="font-semibold mb-1 flex items-center gap-2">
                     <MailCheck className="w-4 h-4" />
                     {t('crmDev.paymentCheck.title', 'Test payment-check email (real invoice)')}
-                  </h3><p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
+                  </h3><p className="text-sm text-muted-foreground mb-4">
                     {t('crmDev.paymentCheck.help',
                       'Fires the admin payment-check email for a real sent/overdue invoice, bypassing the 24h throttle. The three buttons in the email are real signed tokens — clicking them will affect the invoice status.')}
                   </p>{invoiceListLoading ? <Loading /> : (
                     <>
-                      <label className="block text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-1">
+                      <label className="block text-xs uppercase tracking-wider text-muted-foreground mb-1">
                         {t('crmDev.paymentCheck.selectInvoice', 'Sent or overdue invoice')}
                       </label>
                       <select
                         value={selectedInvoiceId || ''}
                         onChange={(e) => setSelectedInvoiceId(e.target.value ? Number(e.target.value) : null)}
-                        className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm mb-3"
+                        className="w-full px-3 py-2 rounded-md border border-border bg-card text-sm mb-3"
                       >
                         <option value="">{t('crmDev.paymentCheck.selectPlaceholder', '— Pick an invoice —')}</option>
                         {(invoiceList?.invoices || []).map((inv) => (
@@ -260,7 +260,7 @@ export const CrmDevelopmentPage: React.FC = () => {
                         ))}
                       </select>
                       {invoiceList && invoiceList.invoices.length === 0 && (
-                        <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-3">
+                        <p className="text-sm text-muted-foreground mb-3">
                           {t('crmDev.paymentCheck.noneAvailable',
                             'No sent or overdue invoices in the database.')}
                         </p>
@@ -280,19 +280,19 @@ export const CrmDevelopmentPage: React.FC = () => {
       <Card><CardContent><h3 className="font-semibold mb-1 flex items-center gap-2">
                     <Mail className="w-4 h-4" />
                     {t('crmDev.templates.title', 'Send any CRM email to me (mock data)')}
-                  </h3><p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
+                  </h3><p className="text-sm text-muted-foreground mb-4">
                     {t('crmDev.templates.help',
                       'Queues the chosen template to your own admin email with placeholder values. When the install has a real quote / invoice on file, the appropriate PDF is attached so you can verify the full output.')}
                   </p>{templatesLoading ? <Loading /> : isEnvDisabled(templatesError) ? (
                     // Env gate banner above already explains the situation —
                     // keep this card empty rather than rendering a misleading
                     // "0 templates" list.
-                    <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                    <p className="text-sm text-muted-foreground">
                       {t('crmDev.envDisabled.cardHint',
                         'Email templates can\'t be listed until the dev-tools env gate is opened.')}
                     </p>
                   ) : (templates && templates.length === 0) ? (
-                    <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                    <p className="text-sm text-muted-foreground">
                       {t('crmDev.templates.empty',
                         'No CRM email templates found — run migrations to seed them.')}
                     </p>
@@ -307,7 +307,7 @@ export const CrmDevelopmentPage: React.FC = () => {
                           <li key={tpl.key} className="py-3 flex items-start gap-3">
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2">
-                                <span className="font-mono text-xs text-neutral-500">{tpl.key}</span>
+                                <span className="font-mono text-xs text-muted-foreground">{tpl.key}</span>
                                 {!tpl.present && (
                                   <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-sm font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">
                                     {t('crmDev.templates.notSeeded', 'Not seeded')}
@@ -316,7 +316,7 @@ export const CrmDevelopmentPage: React.FC = () => {
                               </div>
                               <div className="text-sm font-medium mt-0.5">{title}</div>
                               {description && (
-                                <div className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">{description}</div>
+                                <div className="text-xs text-muted-foreground mt-0.5">{description}</div>
                               )}
                             </div>
                             <Button

@@ -68,7 +68,7 @@ export const BillsListPage: React.FC = () => {
       <div className="flex items-center justify-between mb-6">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{t('bills.title', 'Invoices')}</h1>
+            <h1 className="text-2xl font-bold text-foreground">{t('bills.title', 'Invoices')}</h1>
             {/* Beta badge — matches the Customers + Quotes pages. */}
             <span
               className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-sm font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
@@ -77,7 +77,7 @@ export const BillsListPage: React.FC = () => {
               {t('navigation.betaTag', 'Beta')}
             </span>
           </div>
-          <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             {t('bills.subtitle', 'Schedule, send, track payments and chase late invoices.')}
           </p>
         </div>
@@ -98,11 +98,11 @@ export const BillsListPage: React.FC = () => {
 
       <Card className="py-8"><CardContent className="px-8"><div className="flex flex-wrap items-center gap-3">
                     <div className="relative flex-1 min-w-[200px]">
-                      <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
+                      <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                       <input
                         type="text"
                         placeholder={t('bills.searchPlaceholder', 'Search by number or customer…') as string}
-                        className="w-full pl-9 pr-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm"
+                        className="w-full pl-9 pr-3 py-2 rounded-md border border-border bg-card text-sm"
                         value={search}
                         onChange={(e) => { setSearch(e.target.value); setPage(1); }}
                       />
@@ -117,19 +117,19 @@ export const BillsListPage: React.FC = () => {
                       return (
                         <button key={s} type="button" onClick={() => toggleStatus(s)}
                           className={`px-2.5 py-1 rounded-full text-xs font-medium border transition-colors ${
-                            active ? 'bg-primary text-white border-primary' : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-neutral-300 dark:border-neutral-600'
+                            active ? 'bg-primary text-primary-foreground border-primary' : 'bg-card text-foreground border-border'
                           }`}
                         >{t(`bills.status.${s}`, s)}</button>
                       );
                     })}
                   </div>{/* Body inside the same card (matches Customers + Quotes). */}<div className="mt-4">
                     {isLoading ? <Loading /> : !data || data.invoices.length === 0 ? (
-                      <p className="text-center text-neutral-500 dark:text-neutral-400 py-8">{t('bills.empty', 'No invoices yet.')}</p>
+                      <p className="text-center text-muted-foreground py-8">{t('bills.empty', 'No invoices yet.')}</p>
                     ) : (
-                      <div className="rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden">
+                      <div className="rounded-lg border border-border overflow-hidden">
                         <div className="overflow-x-auto">
                           <table className="w-full text-sm">
-                            <thead className="bg-neutral-50 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300">
+                            <thead className="bg-muted text-foreground">
                               <tr>
                                 <SortableHeader label="#" columnKey="number" activeKey={activeKey} activeDir={activeDir} onSort={onSort} />
                                 <SortableHeader label={t('bills.table.customer', 'Customer')} columnKey="customer" activeKey={activeKey} activeDir={activeDir} onSort={onSort} />
@@ -144,7 +144,7 @@ export const BillsListPage: React.FC = () => {
                             <tbody>
                               {data.invoices.map((inv) => (
                                 <tr key={inv.id}
-                                  className="border-t border-neutral-200 dark:border-neutral-700 cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-800"
+                                  className="border-t border-border cursor-pointer hover:bg-accent"
                                   onClick={() => navigate(`/admin/clients/bills/${inv.id}`)}
                                 >
                                   <td className="px-3 py-2 font-mono text-xs">
@@ -175,11 +175,11 @@ export const BillsListPage: React.FC = () => {
                                   <td className="px-3 py-2 truncate max-w-xs">
                                     {inv.eventName
                                       ? (inv.eventId
-                                          ? <Link to={`/admin/events/${inv.eventId}`} className="text-neutral-900 dark:text-neutral-100 hover:underline" onClick={(e) => e.stopPropagation()}>{inv.eventName}</Link>
+                                          ? <Link to={`/admin/events/${inv.eventId}`} className="text-foreground hover:underline" onClick={(e) => e.stopPropagation()}>{inv.eventName}</Link>
                                           : inv.eventName)
                                       : '—'}
                                   </td>
-                                  <td className="px-3 py-2 text-xs text-neutral-500 dark:text-neutral-400">
+                                  <td className="px-3 py-2 text-xs text-muted-foreground">
                                     {inv.installmentTotal > 1 ? `${inv.installmentIndex + 1}/${inv.installmentTotal} · ${inv.installmentLabel || ''}` : '—'}
                                   </td>
                                   <td className="px-3 py-2 whitespace-nowrap">{inv.issueDate ? fmtDate(inv.issueDate) : '—'}</td>
@@ -200,8 +200,8 @@ export const BillsListPage: React.FC = () => {
                                         inv.status === 'paid' ? 'bg-green-100 text-green-800'
                                           : inv.status === 'overdue' ? 'bg-red-100 text-red-800'
                                           : inv.status === 'sent' ? 'bg-blue-100 text-blue-800'
-                                          : inv.status === 'cancelled' ? 'bg-neutral-200 text-neutral-600'
-                                          : inv.status === 'skipped' ? 'bg-neutral-100 text-neutral-500 italic'
+                                          : inv.status === 'cancelled' ? 'bg-muted text-muted-foreground'
+                                          : inv.status === 'skipped' ? 'bg-muted text-muted-foreground italic'
                                           : 'bg-amber-100 text-amber-800'
                                       }`}>{t(`bills.status.${inv.status}`, inv.status)}</span>
                                     )}
@@ -286,18 +286,18 @@ const ImportHistoricalInvoiceModal: React.FC<ImportModalProps> = ({ onClose }) =
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
       onClick={onClose}>
-      <div className="bg-white dark:bg-neutral-900 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+      <div className="bg-card rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}>
-        <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-200 dark:border-neutral-700">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-border">
           <h2 className="text-lg font-semibold">
             {t('bills.importTitle', 'Import historical invoice')}
           </h2>
-          <button type="button" onClick={onClose} className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-sm">
+          <button type="button" onClick={onClose} className="p-1 hover:bg-accent rounded-sm">
             <X className="w-4 h-4" />
           </button>
         </div>
         <div className="p-5 space-y-4">
-          <p className="text-xs text-neutral-500">
+          <p className="text-xs text-muted-foreground">
             {t('bills.importHelp',
               'Attach a PDF from a previous billing system. The customer sees this original document in their portal — picpeak does not regenerate it.')}
           </p>
@@ -309,9 +309,9 @@ const ImportHistoricalInvoiceModal: React.FC<ImportModalProps> = ({ onClose }) =
             </label>
             {customerId ? (
               <div className="flex items-center gap-2 text-sm">
-                <span className="px-2 py-1 rounded-sm bg-neutral-100 dark:bg-neutral-800">{customerLabel}</span>
+                <span className="px-2 py-1 rounded-sm bg-muted">{customerLabel}</span>
                 <button type="button" onClick={() => { setCustomerId(null); setCustomerLabel(''); }}
-                  className="text-xs text-neutral-500 hover:underline">
+                  className="text-xs text-muted-foreground hover:underline">
                   {t('common.change', 'Change')}
                 </button>
               </div>
@@ -321,7 +321,7 @@ const ImportHistoricalInvoiceModal: React.FC<ImportModalProps> = ({ onClose }) =
                   value={customerSearch}
                   onChange={(e) => setCustomerSearch(e.target.value)} />
                 {customerSearch.length >= 2 && customerOptions && (
-                  <ul className="mt-1 max-h-40 overflow-y-auto border border-neutral-200 dark:border-neutral-700 rounded-sm">
+                  <ul className="mt-1 max-h-40 overflow-y-auto border border-border rounded-sm">
                     {(customerOptions as any[]).map((c) => (
                       <li key={c.id}>
                         <button type="button"
@@ -329,14 +329,14 @@ const ImportHistoricalInvoiceModal: React.FC<ImportModalProps> = ({ onClose }) =
                             setCustomerId(c.id);
                             setCustomerLabel(c.companyName || c.displayName || c.email);
                           }}
-                          className="w-full text-left px-3 py-1.5 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-800">
+                          className="w-full text-left px-3 py-1.5 text-sm hover:bg-accent">
                           {c.companyName || c.displayName || c.email}
-                          <span className="text-xs text-neutral-500 ml-2">{c.email}</span>
+                          <span className="text-xs text-muted-foreground ml-2">{c.email}</span>
                         </button>
                       </li>
                     ))}
                     {(customerOptions as any[]).length === 0 && (
-                      <li className="px-3 py-2 text-xs text-neutral-500">{t('bills.noMatch', 'No matches')}</li>
+                      <li className="px-3 py-2 text-xs text-muted-foreground">{t('bills.noMatch', 'No matches')}</li>
                     )}
                   </ul>
                 )}
@@ -382,7 +382,7 @@ const ImportHistoricalInvoiceModal: React.FC<ImportModalProps> = ({ onClose }) =
               <label className="block text-sm font-medium mb-1">{t('bills.field.status', 'Status')}</label>
               <select value={status}
                 onChange={(e) => setStatus(e.target.value as any)}
-                className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm">
+                className="w-full px-3 py-2 rounded-md border border-border bg-card text-sm">
                 <option value="paid">{t('bills.status.paid', 'Paid')}</option>
                 <option value="sent">{t('bills.status.sent', 'Sent')}</option>
                 <option value="overdue">{t('bills.status.overdue', 'Overdue')}</option>
@@ -408,11 +408,11 @@ const ImportHistoricalInvoiceModal: React.FC<ImportModalProps> = ({ onClose }) =
               className="text-sm file:mr-3 file:rounded-md file:border-0 file:bg-brand-600 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-white hover:file:bg-brand-700"
             />
             {file && (
-              <p className="text-xs text-neutral-500 mt-1">{file.name} · {(file.size / 1024).toFixed(1)} KB</p>
+              <p className="text-xs text-muted-foreground mt-1">{file.name} · {(file.size / 1024).toFixed(1)} KB</p>
             )}
           </div>
         </div>
-        <div className="flex justify-end gap-2 px-5 py-4 border-t border-neutral-200 dark:border-neutral-700">
+        <div className="flex justify-end gap-2 px-5 py-4 border-t border-border">
           <Button variant="outline" onClick={onClose} disabled={submitting}>
             {t('common.cancel', 'Cancel')}
           </Button>

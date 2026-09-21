@@ -84,7 +84,7 @@ export const LegalPage: React.FC = () => {
 
   if (isLoading || willRedirect) {
     return (
-      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+      <div className="min-h-screen bg-muted flex items-center justify-center">
         <Loading size="lg" text="Loading..." />
       </div>
     );
@@ -92,10 +92,10 @@ export const LegalPage: React.FC = () => {
 
   if (error || !page) {
     return (
-      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+      <div className="min-h-screen bg-muted flex items-center justify-center">
         <Card className="max-w-md w-full mx-4"><CardContent><div className="text-center py-12 px-6">
-                        <h2 className="text-xl font-semibold text-neutral-900 mb-2">Page Not Found</h2>
-                        <p className="text-neutral-600 mb-6">
+                        <h2 className="text-xl font-semibold text-foreground mb-2">Page Not Found</h2>
+                        <p className="text-muted-foreground mb-6">
                           The page you're looking for doesn't exist.
                         </p>
                         <Link
@@ -111,13 +111,13 @@ export const LegalPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-muted">
       {/* Header */}
-      <header className="bg-white border-b border-neutral-200">
+      <header className="bg-card border-b border-border">
         <div className="container py-4">
           <button
             onClick={() => navigate(-1)}
-            className="inline-flex items-center gap-2 text-neutral-600 hover:text-neutral-900 transition-colors"
+            className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             {i18n.language === 'de' ? 'Zurück' : 'Back'}
@@ -128,12 +128,12 @@ export const LegalPage: React.FC = () => {
       {/* Content */}
       <main className="container py-12">
         <div className="max-w-4xl mx-auto">
-          <Card className="py-8"><CardContent className="px-8"><h1 className="text-3xl font-bold text-neutral-900 mb-8">{page.title}</h1>{/* This page's chrome is hardcoded light (bg-neutral-50 wrapper,
+          <Card className="py-8"><CardContent className="px-8"><h1 className="text-3xl font-bold text-foreground mb-8">{page.title}</h1>{/* This page's chrome is hardcoded light (bg-neutral-50 wrapper,
                                   white card). Without an explicit text color the CMS body
                                   inherits `body { color: var(--foreground) }`, which a
                                   dark-toned branding theme sets to near-white — leaving the
                                   Impressum / Datenschutz text invisible (QA S3). */}<div
-                                className="prose prose-neutral max-w-none text-neutral-800"
+                                className="prose prose-neutral max-w-none text-foreground"
                                 dangerouslySetInnerHTML={{ 
                                   __html: DOMPurify.sanitize(page.content, {
                                     ALLOWED_TAGS: [
@@ -153,24 +153,24 @@ export const LegalPage: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer className="mt-auto py-8 border-t border-neutral-200">
+      <footer className="mt-auto py-8 border-t border-border">
         <div className="container text-center">
           <div className="flex justify-center gap-4 text-sm">
             <Link
               to="/impressum"
-              className="text-neutral-600 hover:text-neutral-900"
+              className="text-muted-foreground hover:text-foreground"
             >
               {lang === 'de' ? 'Impressum' : 'Legal Notice'}
             </Link>
-            <span className="text-neutral-400">•</span>
+            <span className="text-muted-foreground">•</span>
             <Link
               to="/datenschutz"
-              className="text-neutral-600 hover:text-neutral-900"
+              className="text-muted-foreground hover:text-foreground"
             >
               {lang === 'de' ? 'Datenschutz' : 'Privacy Policy'}
             </Link>
           </div>
-          <p className="text-sm text-neutral-500 mt-4">
+          <p className="text-sm text-muted-foreground mt-4">
             © {new Date().getFullYear()} PicPeak. All rights reserved.
           </p>
         </div>

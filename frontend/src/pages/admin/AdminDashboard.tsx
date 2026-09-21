@@ -259,8 +259,8 @@ export const AdminDashboard: React.FC = () => {
       {/* Page Header */}
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{t('navigation.dashboard')}</h1>
-          <p className="text-neutral-600 dark:text-neutral-400 mt-1">{t('admin.dashboardSubtitle')}</p>
+          <h1 className="text-2xl font-bold text-foreground">{t('navigation.dashboard')}</h1>
+          <p className="text-muted-foreground mt-1">{t('admin.dashboardSubtitle')}</p>
         </div>
         <Button
                         onClick={() => navigate('/admin/events/new')}
@@ -273,13 +273,13 @@ export const AdminDashboard: React.FC = () => {
         {stats.map((stat) => (
           <Card key={stat.title} className="p-6"><CardContent><div className="flex items-center justify-between">
                           <div>
-                            <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">{stat.title}</p>
-                            <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100 mt-1">{stat.value}</p>
+                            <p className="text-sm font-medium text-muted-foreground">{stat.title}</p>
+                            <p className="text-2xl font-bold text-foreground mt-1">{stat.value}</p>
                             {stat.change && (
-                              <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">{stat.change}</p>
+                              <p className="text-sm text-muted-foreground mt-1">{stat.change}</p>
                             )}
                           </div>
-                          <div className={`p-3 rounded-full bg-neutral-100 dark:bg-neutral-700 ${stat.color}`}>
+                          <div className={`p-3 rounded-full bg-muted ${stat.color}`}>
                             <stat.icon className="w-6 h-6" />
                           </div>
                         </div></CardContent></Card>
@@ -291,10 +291,10 @@ export const AdminDashboard: React.FC = () => {
         {/* Expiring Events */}
         <div className="lg:col-span-2">
           <Card><CardContent><div className="flex items-center justify-between mb-4">
-                                <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">{t('admin.eventsExpiringSoon')}</h2>
+                                <h2 className="text-lg font-semibold text-foreground">{t('admin.eventsExpiringSoon')}</h2>
                                 <AlertTriangle className="w-5 h-5 text-orange-600" />
                               </div>{expiringEvents.length === 0 ? (
-                                <p className="text-neutral-600 dark:text-neutral-400 py-8 text-center">{t('admin.noEventsExpiring')}</p>
+                                <p className="text-muted-foreground py-8 text-center">{t('admin.noEventsExpiring')}</p>
                               ) : (
                                 <div className="space-y-3">
                                   {expiringEvents.map((event) => {
@@ -310,9 +310,9 @@ export const AdminDashboard: React.FC = () => {
                                         onClick={() => navigate(`/admin/events/${event.id}`)}
                                       >
                                         <div>
-                                          <h3 className="font-medium text-neutral-900 dark:text-neutral-100">{event.event_name}</h3>
+                                          <h3 className="font-medium text-foreground">{event.event_name}</h3>
                                           {event.event_date && (
-                                            <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                                            <p className="text-sm text-muted-foreground">
                                               {format(parseISO(event.event_date), 'PP')}
                                             </p>
                                           )}
@@ -321,7 +321,7 @@ export const AdminDashboard: React.FC = () => {
                                           <p className="text-sm font-medium text-orange-600 dark:text-orange-400">
                                             {t('admin.daysLeft', { count: daysLeft })}
                                           </p>
-                                          <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                                          <p className="text-xs text-muted-foreground">
                                             {t('gallery.expires')} {format(parseISO(event.expires_at!), 'PP')}
                                           </p>
                                         </div>
@@ -342,7 +342,7 @@ export const AdminDashboard: React.FC = () => {
               rendered when the workflow engine is live and something is waiting. */}
           {!!flags.workflows && pendingApprovals && pendingApprovals.length > 0 && (
             <Card className="mt-6"><CardContent><div className="flex items-center justify-between mb-4">
-                                      <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">{t('workflows.approvals.pendingTitle', 'Pending approvals')}</h2>
+                                      <h2 className="text-lg font-semibold text-foreground">{t('workflows.approvals.pendingTitle', 'Pending approvals')}</h2>
                                       <Inbox className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                                     </div><div className="space-y-3">
                                       {pendingApprovals.slice(0, 5).map((a) => {
@@ -350,8 +350,8 @@ export const AdminDashboard: React.FC = () => {
                                         const href = approvalEntityHref(a);
                                         const info = (
                                           <>
-                                            <h3 className="font-medium text-neutral-900 dark:text-neutral-100 truncate">{a.workflow_name}</h3>
-                                            <p className="text-sm text-neutral-600 dark:text-neutral-400 truncate">
+                                            <h3 className="font-medium text-foreground truncate">{a.workflow_name}</h3>
+                                            <p className="text-sm text-muted-foreground truncate">
                                               {prompt || a.type}{a.entity_type ? ` · ${a.entity_type} #${a.entity_id}` : ''}
                                             </p>
                                           </>
@@ -394,11 +394,11 @@ export const AdminDashboard: React.FC = () => {
 
         {/* Recent Activity */}
         <Card><CardContent><div className="flex items-center justify-between mb-4">
-                          <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">{t('admin.recentActivity')}</h2>
-                          <Clock className="w-5 h-5 text-neutral-500 dark:text-neutral-400" />
+                          <h2 className="text-lg font-semibold text-foreground">{t('admin.recentActivity')}</h2>
+                          <Clock className="w-5 h-5 text-muted-foreground" />
                         </div><div className="space-y-4">
                           {!recentActivity || recentActivity.length === 0 ? (
-                            <p className="text-sm text-neutral-500 dark:text-neutral-400 text-center py-4">{t('admin.noRecentActivity')}</p>
+                            <p className="text-sm text-muted-foreground text-center py-4">{t('admin.noRecentActivity')}</p>
                           ) : (
                             recentActivity.slice(0, 5).map((activity) => {
                               // Get color based on activity type
@@ -435,11 +435,11 @@ export const AdminDashboard: React.FC = () => {
                                 <div key={activity.id} className="flex items-start gap-3">
                                   <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${getActivityColor(activity.type)}`} />
                                   <div className="flex-1 min-w-0">
-                                    <p className="text-sm text-neutral-900 dark:text-neutral-100 wrap-break-word">
+                                    <p className="text-sm text-foreground wrap-break-word">
                                       {getActivityMessage()}
                                     </p>
-                                    <p className="text-xs text-neutral-500 dark:text-neutral-400">{activity.actorName}</p>
-                                    <p className="text-xs text-neutral-400 dark:text-neutral-500 mt-1">
+                                    <p className="text-xs text-muted-foreground">{activity.actorName}</p>
+                                    <p className="text-xs text-muted-foreground mt-1">
                                       {formatDistanceToNow(parseISO(activity.createdAt), { addSuffix: true })}
                                     </p>
                                   </div>

@@ -14,10 +14,10 @@ export const HeaderStyleCard: React.FC<HeaderStyleCardProps> = ({ localTheme, ha
   const { t } = useTranslation();
 
   return (
-    <Card className="p-6"><CardContent><h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4 flex items-center gap-2">
+    <Card className="p-6"><CardContent><h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
               <ImageIcon className="w-5 h-5" />
               {t('branding.headerStyle', 'Header Style')}
-            </h3><p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
+            </h3><p className="text-sm text-muted-foreground mb-4">
               {t('branding.headerStyleDescription', 'Choose how the gallery header appears. The header style is independent of the photo layout.')}
             </p>{/* auto-fit/minmax rather than viewport breakpoints (#1412): the
                 breakpoints size the columns off the WINDOW, but this card sits in a
@@ -33,7 +33,7 @@ export const HeaderStyleCard: React.FC<HeaderStyleCardProps> = ({ localTheme, ha
                   className={`relative p-4 rounded-lg border-2 transition-all ${
                     (localTheme.headerStyle || 'standard') === style
                       ? 'tile-selected'
-                      : 'border-neutral-200 dark:border-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600'
+                      : 'border-border'
                   }`}
                 >
                   {/* min-w-0 + wrap-break-word: a grid item will not shrink below its
@@ -44,13 +44,13 @@ export const HeaderStyleCard: React.FC<HeaderStyleCardProps> = ({ localTheme, ha
                       Any translation can do this, so the constraint belongs on the
                       element rather than on the strings. */}
                   <div className="flex flex-col items-center text-center w-full min-w-0">
-                    <div className="mb-2 text-neutral-700 dark:text-neutral-300">
+                    <div className="mb-2 text-foreground">
                       {headerStyleIcons[style]}
                     </div>
-                    <span className="w-full wrap-break-word font-medium text-sm capitalize text-neutral-900 dark:text-neutral-100">
+                    <span className="w-full wrap-break-word font-medium text-sm capitalize text-foreground">
                       {t(`branding.headerStyleOptions.${style}`, style)}
                     </span>
-                    <span className="w-full wrap-break-word text-xs text-neutral-600 dark:text-neutral-400 mt-1">
+                    <span className="w-full wrap-break-word text-xs text-muted-foreground mt-1">
                       {t(`branding.headerStyleDescriptions.${style}`, '')}
                     </span>
                   </div>
@@ -60,11 +60,11 @@ export const HeaderStyleCard: React.FC<HeaderStyleCardProps> = ({ localTheme, ha
                 </button>
               ))}
             </div>{/* Divider Style - Only show when hero header is selected */}{localTheme.headerStyle === 'hero' && (
-              <div className="mt-6 pt-6 border-t border-neutral-200 dark:border-neutral-700">
-                <h4 className="font-medium text-sm text-neutral-700 dark:text-neutral-300 mb-3">
+              <div className="mt-6 pt-6 border-t border-border">
+                <h4 className="font-medium text-sm text-foreground mb-3">
                   {t('branding.heroDividerStyle', 'Divider Style')}
                 </h4>
-                <p className="text-xs text-neutral-600 dark:text-neutral-400 mb-4">
+                <p className="text-xs text-muted-foreground mb-4">
                   {t('branding.heroDividerDescription', 'Choose how the transition between the hero image and gallery content looks.')}
                 </p>
                 <div className="grid grid-cols-[repeat(auto-fit,minmax(6rem,1fr))] gap-3">
@@ -76,7 +76,7 @@ export const HeaderStyleCard: React.FC<HeaderStyleCardProps> = ({ localTheme, ha
                       className={`relative p-3 rounded-lg border-2 transition-all ${
                         (localTheme.heroDividerStyle || 'wave') === divider
                           ? 'tile-selected'
-                          : 'border-neutral-200 dark:border-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600'
+                          : 'border-border'
                       }`}
                     >
                       <div className="flex flex-col items-center w-full min-w-0">
@@ -84,7 +84,7 @@ export const HeaderStyleCard: React.FC<HeaderStyleCardProps> = ({ localTheme, ha
                           <div className="h-8"></div>
                           {dividerStylePreviews[divider]}
                         </div>
-                        <span className="w-full wrap-break-word text-xs font-medium capitalize text-neutral-900 dark:text-neutral-100">
+                        <span className="w-full wrap-break-word text-xs font-medium capitalize text-foreground">
                           {t(`branding.dividerOptions.${divider}`, divider)}
                         </span>
                       </div>

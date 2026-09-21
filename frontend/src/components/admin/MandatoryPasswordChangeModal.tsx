@@ -108,8 +108,8 @@ export const MandatoryPasswordChangeModal: React.FC = () => {
                       <div className="mx-auto w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mb-4">
                         <AlertCircle className="w-6 h-6 text-amber-600" />
                       </div>
-                      <h2 className="text-xl font-semibold text-neutral-900 mb-2">{t('mandatoryPasswordChange.title')}</h2>
-                      <p className="text-sm text-neutral-600">
+                      <h2 className="text-xl font-semibold text-foreground mb-2">{t('mandatoryPasswordChange.title')}</h2>
+                      <p className="text-sm text-muted-foreground">
                         {t('mandatoryPasswordChange.description')}
                       </p>
                     </div>
@@ -117,11 +117,11 @@ export const MandatoryPasswordChangeModal: React.FC = () => {
                     <form onSubmit={handleSubmit} className="space-y-4">
                       {/* Current Password */}
                       <div>
-                        <label htmlFor="currentPassword" className="block text-sm font-medium text-neutral-700 mb-1">
+                        <label htmlFor="currentPassword" className="block text-sm font-medium text-foreground mb-1">
                           {t('passwordChange.currentPassword')}
                         </label>
                         <div className="relative">
-                          <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-neutral-400" />}</div><Input
+                          <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-muted-foreground" />}</div><Input
                                                       id="currentPassword"
                                                       type={showPasswords.current ? 'text' : 'password'}
                                                       value={formData.currentPassword}
@@ -131,11 +131,11 @@ export const MandatoryPasswordChangeModal: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => setShowPasswords(prev => ({ ...prev, current: !prev.current }))}
-                            className="absolute right-3 top-2 p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-sm"
+                            className="absolute right-3 top-2 p-1 hover:bg-accent rounded-sm"
                           >
                             {showPasswords.current ? 
-                              <EyeOff className="w-4 h-4 text-neutral-500" /> : 
-                              <Eye className="w-4 h-4 text-neutral-500" />
+                              <EyeOff className="w-4 h-4 text-muted-foreground" /> : 
+                              <Eye className="w-4 h-4 text-muted-foreground" />
                             }
                           </button>
                         </div>
@@ -143,11 +143,11 @@ export const MandatoryPasswordChangeModal: React.FC = () => {
 
                       {/* New Password */}
                       <div>
-                        <label htmlFor="newPassword" className="block text-sm font-medium text-neutral-700 mb-1">
+                        <label htmlFor="newPassword" className="block text-sm font-medium text-foreground mb-1">
                           {t('passwordChange.newPassword')}
                         </label>
                         <div className="relative">
-                          <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-neutral-400" />}</div><Input
+                          <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-muted-foreground" />}</div><Input
                                                       id="newPassword"
                                                       type={showPasswords.new ? 'text' : 'password'}
                                                       value={formData.newPassword}
@@ -157,11 +157,11 @@ export const MandatoryPasswordChangeModal: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => setShowPasswords(prev => ({ ...prev, new: !prev.new }))}
-                            className="absolute right-3 top-2 p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-sm"
+                            className="absolute right-3 top-2 p-1 hover:bg-accent rounded-sm"
                           >
                             {showPasswords.new ? 
-                              <EyeOff className="w-4 h-4 text-neutral-500" /> : 
-                              <Eye className="w-4 h-4 text-neutral-500" />
+                              <EyeOff className="w-4 h-4 text-muted-foreground" /> : 
+                              <Eye className="w-4 h-4 text-muted-foreground" />
                             }
                           </button>
                         </div>
@@ -169,11 +169,11 @@ export const MandatoryPasswordChangeModal: React.FC = () => {
 
                       {/* Confirm Password */}
                       <div>
-                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-neutral-700 mb-1">
+                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-foreground mb-1">
                           {t('passwordChange.confirmPassword')}
                         </label>
                         <div className="relative">
-                          <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-neutral-400" />}</div><Input
+                          <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-muted-foreground" />}</div><Input
                                                       id="confirmPassword"
                                                       type={showPasswords.confirm ? 'text' : 'password'}
                                                       value={formData.confirmPassword}
@@ -183,11 +183,11 @@ export const MandatoryPasswordChangeModal: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => setShowPasswords(prev => ({ ...prev, confirm: !prev.confirm }))}
-                            className="absolute right-3 top-2 p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-sm"
+                            className="absolute right-3 top-2 p-1 hover:bg-accent rounded-sm"
                           >
                             {showPasswords.confirm ? 
-                              <EyeOff className="w-4 h-4 text-neutral-500" /> : 
-                              <Eye className="w-4 h-4 text-neutral-500" />
+                              <EyeOff className="w-4 h-4 text-muted-foreground" /> : 
+                              <Eye className="w-4 h-4 text-muted-foreground" />
                             }
                           </button>
                         </div>

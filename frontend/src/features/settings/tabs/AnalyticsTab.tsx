@@ -89,15 +89,15 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({
 
   return (
     <div className="space-y-6">
-      <Card><CardContent><h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-1">
+      <Card><CardContent><h2 className="text-lg font-semibold text-foreground mb-1">
                     {t('settings.analytics.providerHeading', 'Analytics provider')}
-                  </h2><p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
+                  </h2><p className="text-sm text-muted-foreground mb-4">
                     {t(
                       'settings.analytics.providerDescription',
                       'Pick which tracker to use for the public gallery, or paste your own script. The admin dashboard\'s device-breakdown chart only enriches when you pick Umami or Rybbit — those expose a metrics API. Other providers (Plausible, Matomo, GA4, …) work via the Custom mode below.',
                     )}
                   </p>{/* Provider dropdown — single source of truth for which panel renders. */}<div className="mb-4">
-                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                    <label className="block text-sm font-medium text-foreground mb-1">
                       {t('settings.analytics.providerLabel', 'Provider')}
                     </label>
                     <select
@@ -106,7 +106,7 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({
                         ...prev,
                         tracker_provider: e.target.value as TrackerProvider,
                       }))}
-                      className="w-full sm:w-72 px-3 py-2 text-sm border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100"
+                      className="w-full sm:w-72 px-3 py-2 text-sm border border-border rounded-lg bg-card text-foreground"
                     >
                       {PROVIDER_OPTIONS.map((p) => (
                         <option key={p} value={p}>
@@ -117,62 +117,62 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({
                   </div>{/* Umami panel */}{provider === 'umami' && (
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                        <label className="block text-sm font-medium text-foreground mb-1">
                           {t('settings.analytics.umamiUrl')}
                         </label>
-                        <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Globe className="w-5 h-5 text-neutral-400" />}</div><Input
+                        <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Globe className="w-5 h-5 text-muted-foreground" />}</div><Input
                                                     type="url"
                                                     value={analyticsSettings.umami_url}
                                                     onChange={(e) => setAnalyticsSettings((prev) => ({ ...prev, umami_url: e.target.value }))}
                                                     placeholder="https://analytics.yourdomain.com" className="pl-10"
                                                   /></div>
-                        <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                        <p className="text-xs text-muted-foreground mt-1">
                           {t('settings.analytics.umamiUrlHelp')}
                         </p>
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                        <label className="block text-sm font-medium text-foreground mb-1">
                           {t('settings.analytics.websiteId')}
                         </label>
-                        <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Key className="w-5 h-5 text-neutral-400" />}</div><Input
+                        <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Key className="w-5 h-5 text-muted-foreground" />}</div><Input
                                                     type="text"
                                                     value={analyticsSettings.umami_website_id}
                                                     onChange={(e) => setAnalyticsSettings((prev) => ({ ...prev, umami_website_id: e.target.value }))}
                                                     placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" className="pl-10"
                                                   /></div>
-                        <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                        <p className="text-xs text-muted-foreground mt-1">
                           {t('settings.analytics.websiteIdHelp')}
                         </p>
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                        <label className="block text-sm font-medium text-foreground mb-1">
                           {t('settings.analytics.shareUrl')}
                         </label>
-                        <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Activity className="w-5 h-5 text-neutral-400" />}</div><Input
+                        <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Activity className="w-5 h-5 text-muted-foreground" />}</div><Input
                                                     type="url"
                                                     value={analyticsSettings.umami_share_url}
                                                     onChange={(e) => setAnalyticsSettings((prev) => ({ ...prev, umami_share_url: e.target.value }))}
                                                     placeholder="https://analytics.yourdomain.com/share/..." className="pl-10"
                                                   /></div>
-                        <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                        <p className="text-xs text-muted-foreground mt-1">
                           {t('settings.analytics.shareUrlHelp')}
                         </p>
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                        <label className="block text-sm font-medium text-foreground mb-1">
                           {t('settings.analytics.umamiApiKey', 'API key')}
                         </label>
-                        <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Key className="w-5 h-5 text-neutral-400" />}</div><Input
+                        <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Key className="w-5 h-5 text-muted-foreground" />}</div><Input
                                                     type="password"
                                                     value={analyticsSettings.umami_api_key}
                                                     onChange={(e) => setAnalyticsSettings((prev) => ({ ...prev, umami_api_key: e.target.value }))}
                                                     placeholder="api_xxx…"
                                                     autoComplete="off" className="pl-10"
                                                   /></div>
-                        <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                        <p className="text-xs text-muted-foreground mt-1">
                           {t(
                             'settings.analytics.umamiApiKeyHelp',
                             'Optional. Required only for the device-breakdown chart on the Analytics dashboard. Generate in Umami → Settings → Profile → API Keys. Stored masked as •••••••• once saved — leave the masked value to keep the existing key.',
@@ -185,16 +185,16 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({
                   )}{/* Rybbit panel */}{provider === 'rybbit' && (
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                        <label className="block text-sm font-medium text-foreground mb-1">
                           {t('settings.analytics.rybbitUrl', 'Rybbit URL')}
                         </label>
-                        <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Globe className="w-5 h-5 text-neutral-400" />}</div><Input
+                        <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Globe className="w-5 h-5 text-muted-foreground" />}</div><Input
                                                     type="url"
                                                     value={analyticsSettings.rybbit_url}
                                                     onChange={(e) => setAnalyticsSettings((prev) => ({ ...prev, rybbit_url: e.target.value }))}
                                                     placeholder="https://app.rybbit.io" className="pl-10"
                                                   /></div>
-                        <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                        <p className="text-xs text-muted-foreground mt-1">
                           {t(
                             'settings.analytics.rybbitUrlHelp',
                             'Your Rybbit instance URL — `https://app.rybbit.io` for the SaaS, or `https://rybbit.yourdomain.com` for self-hosted.',
@@ -203,16 +203,16 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                        <label className="block text-sm font-medium text-foreground mb-1">
                           {t('settings.analytics.rybbitWebsiteId', 'Site ID')}
                         </label>
-                        <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Key className="w-5 h-5 text-neutral-400" />}</div><Input
+                        <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Key className="w-5 h-5 text-muted-foreground" />}</div><Input
                                                     type="text"
                                                     value={analyticsSettings.rybbit_website_id}
                                                     onChange={(e) => setAnalyticsSettings((prev) => ({ ...prev, rybbit_website_id: e.target.value }))}
                                                     placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" className="pl-10"
                                                   /></div>
-                        <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                        <p className="text-xs text-muted-foreground mt-1">
                           {t(
                             'settings.analytics.rybbitWebsiteIdHelp',
                             'Found in Rybbit → Sites → your site → Tracking script.',
@@ -221,17 +221,17 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                        <label className="block text-sm font-medium text-foreground mb-1">
                           {t('settings.analytics.rybbitApiKey', 'API key')}
                         </label>
-                        <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Key className="w-5 h-5 text-neutral-400" />}</div><Input
+                        <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Key className="w-5 h-5 text-muted-foreground" />}</div><Input
                                                     type="password"
                                                     value={analyticsSettings.rybbit_api_key}
                                                     onChange={(e) => setAnalyticsSettings((prev) => ({ ...prev, rybbit_api_key: e.target.value }))}
                                                     placeholder="rybbit_xxx…"
                                                     autoComplete="off" className="pl-10"
                                                   /></div>
-                        <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                        <p className="text-xs text-muted-foreground mt-1">
                           {t(
                             'settings.analytics.rybbitApiKeyHelp',
                             'Optional. Required only for the device-breakdown chart. Generate in Rybbit → Account → Settings → API Keys. Stored masked as •••••••• once saved.',
@@ -244,12 +244,12 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({
                   )}{/* Custom panel */}{provider === 'custom' && (
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                        <label className="block text-sm font-medium text-foreground mb-1">
                           {t('settings.analytics.customHeadHtml', 'Custom <head> HTML')}
                         </label>
                         <div className="relative">
                           <span className="absolute left-3 top-3 pointer-events-none">
-                            <Code className="w-5 h-5 text-neutral-400" />
+                            <Code className="w-5 h-5 text-muted-foreground" />
                           </span>
                           <textarea
                             value={analyticsSettings.custom_head_html}
@@ -257,10 +257,10 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({
                             placeholder={'<script async defer data-domain="example.com" src="https://plausible.io/js/script.js"></script>'}
                             rows={6}
                             spellCheck={false}
-                            className="w-full pl-10 pr-3 py-2 font-mono text-xs border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100"
+                            className="w-full pl-10 pr-3 py-2 font-mono text-xs border border-border rounded-lg bg-card text-foreground"
                           />
                         </div>
-                        <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                        <p className="text-xs text-muted-foreground mt-1">
                           {t(
                             'settings.analytics.customHeadHtmlHelp',
                             'Paste your tracker\'s `<head>` snippet (Plausible, Matomo, Pirsch, GA4, GoatCounter, Fathom, Cloudflare Web Analytics, …). Sanitised on save: only `<script>` / `<noscript>` / `<link rel="preconnect|dns-prefetch">` / `<meta>` tags survive, and event-handler attributes are stripped. The admin dashboard\'s device-breakdown chart falls back to a server-side user-agent heuristic in this mode — pick Umami or Rybbit if you want the tracker-side numbers.',
@@ -290,19 +290,19 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({
                   </div></CardContent></Card>
 
       {/* Backend Analytics Info */}
-      <Card><CardContent><h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">{t('settings.analytics.backendAnalytics')}</h2><p className="text-sm text-neutral-700 dark:text-neutral-300 mb-4">{t('settings.analytics.backendAnalyticsText')}</p><div className="grid grid-cols-2 gap-4">
-                    <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-4">
-                      <h3 className="text-sm font-medium text-neutral-900 dark:text-neutral-100 mb-2">{t('settings.analytics.tracked')}</h3>
-                      <ul className="text-xs text-neutral-600 dark:text-neutral-400 space-y-1">
+      <Card><CardContent><h2 className="text-lg font-semibold text-foreground mb-4">{t('settings.analytics.backendAnalytics')}</h2><p className="text-sm text-foreground mb-4">{t('settings.analytics.backendAnalyticsText')}</p><div className="grid grid-cols-2 gap-4">
+                    <div className="bg-muted rounded-lg p-4">
+                      <h3 className="text-sm font-medium text-foreground mb-2">{t('settings.analytics.tracked')}</h3>
+                      <ul className="text-xs text-muted-foreground space-y-1">
                         <li>• {t('settings.analytics.galleryViews')}</li>
                         <li>• {t('settings.analytics.photoDownloads')}</li>
                         <li>• {t('settings.analytics.uniqueVisitors')}</li>
                         <li>• {t('settings.analytics.deviceTypes')}</li>
                       </ul>
                     </div>
-                    <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-4">
-                      <h3 className="text-sm font-medium text-neutral-900 dark:text-neutral-100 mb-2">{t('settings.analytics.privacy')}</h3>
-                      <p className="text-xs text-neutral-600 dark:text-neutral-400">
+                    <div className="bg-muted rounded-lg p-4">
+                      <h3 className="text-sm font-medium text-foreground mb-2">{t('settings.analytics.privacy')}</h3>
+                      <p className="text-xs text-muted-foreground">
                         {t('settings.analytics.privacyText')}
                       </p>
                     </div>

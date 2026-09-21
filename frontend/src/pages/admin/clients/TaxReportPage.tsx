@@ -25,7 +25,7 @@ import { Loading, LocalizedDateInput } from '../../../components/common';
 // doesn't export a Select component, and the form pieces here are
 // small enough that a plain styled <select> is the right call.
 const selectClassName =
-  'w-full rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-brand-500';
+  'w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground focus:outline-hidden focus:ring-2 focus:ring-brand-500';
 import { taxReportService, type TaxReportParams } from '../../../services/taxReport.service';
 import { ledgerService, type ExportFormat } from '../../../services/ledger.service';
 import { useFeatureFlags } from '../../../contexts/FeatureFlagsContext';
@@ -217,10 +217,10 @@ export const TaxReportPage: React.FC = () => {
                             <Calculator className="w-5 h-5" />
                           </div>
                           <div className="min-w-0">
-                            <h1 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                            <h1 className="text-lg font-semibold text-foreground">
                               {t('taxReport.title', 'Tax report')}
                             </h1>
-                            <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-0.5">
+                            <p className="text-sm text-muted-foreground mt-0.5">
                               {t(
                                 'taxReport.intro',
                                 'Period-scoped revenue list with net + VAT breakdown grouped by VAT rate. Cancelled invoices stay visible for audit-trail continuity but are excluded from totals.',
@@ -233,7 +233,7 @@ export const TaxReportPage: React.FC = () => {
                             Row 3: currency (full width)
                             Row 4: export buttons (right-aligned) */}<div className="space-y-3">
                           <div>
-                            <label htmlFor="period-preset" className="block text-xs font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                            <label htmlFor="period-preset" className="block text-xs font-medium text-foreground mb-1">
                               {t('taxReport.filters.period', 'Period')}
                             </label>
                             <select
@@ -252,7 +252,7 @@ export const TaxReportPage: React.FC = () => {
 
                           <div className="grid grid-cols-2 gap-3">
                             <div>
-                              <label className="block text-xs font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                              <label className="block text-xs font-medium text-foreground mb-1">
                                 {t('taxReport.filters.from', 'From')}
                               </label>
                               <LocalizedDateInput
@@ -261,7 +261,7 @@ export const TaxReportPage: React.FC = () => {
                               />
                             </div>
                             <div>
-                              <label className="block text-xs font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                              <label className="block text-xs font-medium text-foreground mb-1">
                                 {t('taxReport.filters.to', 'To')}
                               </label>
                               <LocalizedDateInput
@@ -272,7 +272,7 @@ export const TaxReportPage: React.FC = () => {
                           </div>
 
                           <div>
-                            <label htmlFor="currency" className="block text-xs font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                            <label htmlFor="currency" className="block text-xs font-medium text-foreground mb-1">
                               {t('taxReport.filters.currency', 'Currency')}
                             </label>
                             <select
@@ -293,19 +293,19 @@ export const TaxReportPage: React.FC = () => {
                               (PDF/CSV) and the accounting Journal (for the Treuhänder). The
                               Journal group only shows when the accounting layer is on, since
                               it needs the Chart-of-accounts mapping. */}
-                          <div className="pt-3 mt-1 border-t border-neutral-200 dark:border-neutral-700 space-y-3">
+                          <div className="pt-3 mt-1 border-t border-border space-y-3">
                             {/* Group 1 — Report (for you) */}
                             <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
                               <div className="min-w-0">
-                                <div className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+                                <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                                   {t('taxReport.export.reportTitle', 'Report')}
                                 </div>
-                                <div className="text-[11px] text-neutral-400 dark:text-neutral-500">
+                                <div className="text-[11px] text-muted-foreground">
                                   {t('taxReport.export.reportHint', 'Readable list — for your own records.')}
                                 </div>
                               </div>
                               <div className="flex flex-wrap items-center gap-2">
-                                <label className="flex items-center gap-1.5 text-xs font-medium text-neutral-500 dark:text-neutral-400">
+                                <label className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
                                   {t('taxReport.export.scopeLabel', 'Scope')}
                                   <select
                                     value={exportScope}
@@ -335,14 +335,14 @@ export const TaxReportPage: React.FC = () => {
                             {/* Group 2 — Accounting journal (for your accountant). Solid
                                 divider above to separate it from the Report group. */}
                             {flags.accounting && (
-                              <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 pt-3 border-t border-neutral-200 dark:border-neutral-700">
+                              <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 pt-3 border-t border-border">
                                 <div className="min-w-0">
-                                  <div className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+                                  <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                                     {t('taxReport.export.journalTitle', 'Accounting journal')}
                                   </div>
-                                  <div className="text-[11px] text-neutral-400 dark:text-neutral-500">
+                                  <div className="text-[11px] text-muted-foreground">
                                     {t('taxReport.ledgerExportHint', 'Double-entry postings for your accountant, mapped via your Chart of accounts.')}{' '}
-                                    <Link to="/admin/settings?tab=accounting" className="underline hover:text-neutral-600 dark:hover:text-neutral-300">
+                                    <Link to="/admin/settings?tab=accounting" className="underline hover:text-foreground">
                                       {t('taxReport.ledgerExportConfigure', 'Configure →')}
                                     </Link>
                                   </div>
@@ -377,24 +377,24 @@ export const TaxReportPage: React.FC = () => {
             the grand totals). Cancelled footnote at the bottom when
             applicable. */}
         {hasAnyData && report && (
-          <Card><CardContent><h2 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2">
+          <Card><CardContent><h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
                                 {t('taxReport.summary.outgoingTitle', 'Outgoing invoices')}
                               </h2><div className="space-y-1.5 text-sm">
                                 <div className="flex justify-between gap-3">
-                                  <span className="text-neutral-700 dark:text-neutral-300">{t('taxReport.grandTotalNet', 'Total net')}</span>
-                                  <span className="tabular-nums font-medium text-neutral-900 dark:text-neutral-100">
+                                  <span className="text-foreground">{t('taxReport.grandTotalNet', 'Total net')}</span>
+                                  <span className="tabular-nums font-medium text-foreground">
                                     {formatMinor(report.grandTotalNet, report.currency, intlLocale)}
                                   </span>
                                 </div>
                                 <div className="flex justify-between gap-3">
-                                  <span className="text-neutral-700 dark:text-neutral-300">{t('taxReport.grandTotalVat', 'Total VAT')}</span>
-                                  <span className="tabular-nums font-medium text-neutral-900 dark:text-neutral-100">
+                                  <span className="text-foreground">{t('taxReport.grandTotalVat', 'Total VAT')}</span>
+                                  <span className="tabular-nums font-medium text-foreground">
                                     {formatMinor(report.grandTotalVat, report.currency, intlLocale)}
                                   </span>
                                 </div>
-                                <div className="flex justify-between gap-3 pt-1.5 border-t border-neutral-200 dark:border-neutral-700">
-                                  <span className="font-semibold text-neutral-900 dark:text-neutral-100">{t('taxReport.grandTotalGross', 'Total gross')}</span>
-                                  <span className="tabular-nums font-semibold text-neutral-900 dark:text-neutral-100">
+                                <div className="flex justify-between gap-3 pt-1.5 border-t border-border">
+                                  <span className="font-semibold text-foreground">{t('taxReport.grandTotalGross', 'Total gross')}</span>
+                                  <span className="tabular-nums font-semibold text-foreground">
                                     {formatMinor(report.grandTotal, report.currency, intlLocale)}
                                   </span>
                                 </div>
@@ -402,30 +402,30 @@ export const TaxReportPage: React.FC = () => {
                                   Always shown when the cost side loaded (even with zero costs)
                                   so the result/income is visible, not just revenue. Hidden only
                                   if the cost side errored (a banner explains that separately). */}{report.summary && !report.costsError && (
-                                <div className="mt-4 pt-3 border-t border-neutral-200 dark:border-neutral-700">
-                                  <h2 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2">
+                                <div className="mt-4 pt-3 border-t border-border">
+                                  <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
                                     {t('taxReport.summary.title', 'Income / costs')}
                                   </h2>
                                   <div className="space-y-1.5 text-sm">
                                     <div className="flex justify-between gap-3">
-                                      <span className="text-neutral-700 dark:text-neutral-300">{t('taxReport.summary.income', 'Income')}</span>
+                                      <span className="text-foreground">{t('taxReport.summary.income', 'Income')}</span>
                                       <span className="tabular-nums text-emerald-700 dark:text-emerald-400">
                                         {formatMinor(report.summary.incomeGrossMinor, report.currency, intlLocale)}
                                       </span>
                                     </div>
                                     <div className="flex justify-between gap-3">
-                                      <span className="text-neutral-700 dark:text-neutral-300">{t('taxReport.summary.costs', 'Costs')}</span>
+                                      <span className="text-foreground">{t('taxReport.summary.costs', 'Costs')}</span>
                                       <span className="tabular-nums text-rose-700 dark:text-rose-400">
                                         −{formatMinor(report.summary.costGrossMinor, report.currency, intlLocale)}
                                       </span>
                                     </div>
-                                    <div className="flex justify-between gap-3 pt-1.5 border-t border-neutral-200 dark:border-neutral-700">
-                                      <span className="font-semibold text-neutral-900 dark:text-neutral-100">{t('taxReport.summary.result', 'Result')}</span>
-                                      <span className="tabular-nums font-semibold text-neutral-900 dark:text-neutral-100">
+                                    <div className="flex justify-between gap-3 pt-1.5 border-t border-border">
+                                      <span className="font-semibold text-foreground">{t('taxReport.summary.result', 'Result')}</span>
+                                      <span className="tabular-nums font-semibold text-foreground">
                                         {formatMinor(report.summary.resultGrossMinor, report.currency, intlLocale)}
                                       </span>
                                     </div>
-                                    <div className="flex justify-between gap-3 text-xs text-neutral-500 dark:text-neutral-400">
+                                    <div className="flex justify-between gap-3 text-xs text-muted-foreground">
                                       <span>{t('taxReport.summary.vatPayable', 'VAT payable (output − input)')}</span>
                                       <span className="tabular-nums">
                                         {report.summary.vatRegistrationConfigured === false || report.summary.vatPayableMinor == null
@@ -442,22 +442,22 @@ export const TaxReportPage: React.FC = () => {
                                   </div>
                                 </div>
                               )}{showPerRateBreakdown && (
-                                <div className="mt-4 pt-3 border-t border-neutral-200 dark:border-neutral-700">
-                                  <h2 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2">
+                                <div className="mt-4 pt-3 border-t border-border">
+                                  <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
                                     {t('taxReport.totalsByVatRate', 'Totals by VAT rate')}
                                   </h2>
                                   <div className="space-y-2 text-sm">
                                     {report.totalsByVatRate.map((b) => (
                                       <div key={b.vatRate}>
-                                        <div className="text-xs text-neutral-500 dark:text-neutral-400">
+                                        <div className="text-xs text-muted-foreground">
                                           {Number(b.vatRate).toFixed(1)}%
                                         </div>
                                         <div className="flex justify-between gap-3 tabular-nums">
-                                          <span className="text-neutral-700 dark:text-neutral-300">{t('taxReport.col.net', 'Net')}</span>
+                                          <span className="text-foreground">{t('taxReport.col.net', 'Net')}</span>
                                           <span>{formatMinor(b.netMinor, report.currency, intlLocale)}</span>
                                         </div>
                                         <div className="flex justify-between gap-3 tabular-nums">
-                                          <span className="text-neutral-700 dark:text-neutral-300">{t('taxReport.col.vat', 'VAT')}</span>
+                                          <span className="text-foreground">{t('taxReport.col.vat', 'VAT')}</span>
                                           <span>{formatMinor(b.vatMinor, report.currency, intlLocale)}</span>
                                         </div>
                                       </div>
@@ -465,7 +465,7 @@ export const TaxReportPage: React.FC = () => {
                                   </div>
                                 </div>
                               )}{report.cancelledCount > 0 && (
-                                <p className="mt-3 pt-3 border-t border-neutral-200 dark:border-neutral-700 text-xs text-neutral-500 dark:text-neutral-400">
+                                <p className="mt-3 pt-3 border-t border-border text-xs text-muted-foreground">
                                   {t('taxReport.cancelledFootnote', '{{count}} cancelled invoice(s) — amounts excluded from totals (shown for audit-trail continuity).', { count: report.cancelledCount })}
                                 </p>
                               )}</CardContent></Card>
@@ -478,7 +478,7 @@ export const TaxReportPage: React.FC = () => {
                           <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
                           <div>
                             <p className="font-medium">{t('taxReport.costsErrorTitle', 'Costs could not be loaded')}</p>
-                            <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1 wrap-break-word">{report.costsError}</p>
+                            <p className="text-sm text-muted-foreground mt-1 wrap-break-word">{report.costsError}</p>
                           </div>
                         </div></CardContent></Card>
       )}
@@ -491,7 +491,7 @@ export const TaxReportPage: React.FC = () => {
                               <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
                               <div>
                                 <p className="font-medium">{t('taxReport.errorTitle', 'Could not load tax report')}</p>
-                                <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
+                                <p className="text-sm text-muted-foreground mt-1">
                                   {(error as Error)?.message || String(error)}
                                 </p>
                                 <Button variant="outline" size="sm" onClick={() => refetch()} className="mt-3">
@@ -500,7 +500,7 @@ export const TaxReportPage: React.FC = () => {
                               </div>
                             </div></CardContent></Card>
       ) : !hasAnyData ? (
-        <Card className="py-8"><CardContent className="px-8"><p className="text-center text-sm text-neutral-600 dark:text-neutral-400">
+        <Card className="py-8"><CardContent className="px-8"><p className="text-center text-sm text-muted-foreground">
                                   {t('taxReport.empty', 'No invoices in this period.')}
                                 </p></CardContent></Card>
       ) : (
@@ -517,7 +517,7 @@ export const TaxReportPage: React.FC = () => {
                                                   on a single element would cancel the auto-scroll. */}<div className="rounded-xl overflow-hidden">
                                                 <div className="overflow-x-auto">
                                                   <table className="w-full text-sm">
-                                                  <thead className="bg-neutral-50 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300">
+                                                  <thead className="bg-muted text-foreground">
                                                     <tr>
                                                       <th className="px-2 py-2 text-right font-medium w-10">#</th>
                                                       <th className="px-2 py-2 text-left font-medium whitespace-nowrap">
@@ -561,8 +561,8 @@ export const TaxReportPage: React.FC = () => {
                                                       <tr
                                                         key={row.key}
                                                         className={row.isCancelled
-                                                          ? 'text-neutral-400 dark:text-neutral-500 italic'
-                                                          : 'text-neutral-900 dark:text-neutral-100'}
+                                                          ? 'text-muted-foreground italic'
+                                                          : 'text-foreground'}
                                                       >
                                                         <td className="px-2 py-1.5 text-right tabular-nums">{i + 1}</td>
                                                         <td className="px-2 py-1.5 whitespace-nowrap">
@@ -580,7 +580,7 @@ export const TaxReportPage: React.FC = () => {
                                                         <td className="px-2 py-1.5 whitespace-nowrap">
                                                           <span className="font-medium">{row.reference}</span>
                                                           {row.isCancelled && (
-                                                            <span className="ml-2 inline-block px-1.5 py-0.5 text-[10px] uppercase tracking-wider rounded-sm bg-neutral-200 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 font-semibold not-italic">
+                                                            <span className="ml-2 inline-block px-1.5 py-0.5 text-[10px] uppercase tracking-wider rounded-sm bg-muted text-foreground font-semibold not-italic">
                                                               {t('taxReport.statusCancelled', 'Cancelled')}
                                                             </span>
                                                           )}
@@ -602,13 +602,13 @@ export const TaxReportPage: React.FC = () => {
                                                         <td className="px-2 py-1.5 truncate max-w-[180px]" title={row.party}>{row.party}</td>
                                                         <td className="px-2 py-1.5 truncate max-w-[180px]" title={row.eventName}>
                                                           {row.eventName || (row.type !== 'outgoing'
-                                                            ? <span className="text-neutral-400 dark:text-neutral-500">{t('taxReport.cost.company', 'Company')}</span>
+                                                            ? <span className="text-muted-foreground">{t('taxReport.cost.company', 'Company')}</span>
                                                             : '')}
                                                         </td>
                                                         <td className="px-2 py-1.5 whitespace-nowrap">
                                                           {row.type === 'outgoing'
                                                             ? <span className="tabular-nums">{Number(row.vatRate).toFixed(1)}%</span>
-                                                            : <span className="text-xs text-neutral-500 dark:text-neutral-400">{row.taxTreatment}</span>}
+                                                            : <span className="text-xs text-muted-foreground">{row.taxTreatment}</span>}
                                                         </td>
                                                         <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap">
                                                           {formatMinor(row.netMinor, report.currency, intlLocale)}
@@ -642,7 +642,7 @@ export const TaxReportPage: React.FC = () => {
               the user at a professional. Shown whenever the ledger holds
               any cost row. */}
           {ledgerHasCosts && (
-            <p className="flex items-start gap-2 text-xs text-neutral-500 dark:text-neutral-400">
+            <p className="flex items-start gap-2 text-xs text-muted-foreground">
               <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
               <span>
                 {t(

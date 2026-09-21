@@ -179,7 +179,7 @@ export const InstallmentsPanel: React.FC<InstallmentsPanelProps> = ({
 
       {enabled && (
         <>
-          <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-3">
+          <p className="text-xs text-muted-foreground mb-3">
             {advanced
               ? t('installments.advancedHint',
                 'Pick a trigger (quote accepted, before/after event, on delivery, fixed date) plus offset in days. Triggers re-resolve if the event date later shifts.')
@@ -191,10 +191,10 @@ export const InstallmentsPanel: React.FC<InstallmentsPanelProps> = ({
             {rows.map((row, idx) => (
               <div
                 key={idx}
-                className="grid grid-cols-12 gap-2 items-end p-2 rounded-md bg-neutral-50 dark:bg-neutral-800/40"
+                className="grid grid-cols-12 gap-2 items-end p-2 rounded-md bg-muted"
               >
                 <div className="col-span-2">
-                  <label className="block text-xs text-neutral-500 dark:text-neutral-400 mb-1">
+                  <label className="block text-xs text-muted-foreground mb-1">
                     {t('installments.percent', '%')}
                   </label>
                   <Input
@@ -208,7 +208,7 @@ export const InstallmentsPanel: React.FC<InstallmentsPanelProps> = ({
                   />
                 </div>
                 <div className="col-span-4">
-                  <label className="block text-xs text-neutral-500 dark:text-neutral-400 mb-1">
+                  <label className="block text-xs text-muted-foreground mb-1">
                     {t('installments.label', 'Label')}
                   </label>
                   <Input
@@ -221,11 +221,11 @@ export const InstallmentsPanel: React.FC<InstallmentsPanelProps> = ({
 
                 {!advanced ? (
                   <div className="col-span-5">
-                    <label className="block text-xs text-neutral-500 dark:text-neutral-400 mb-1">
+                    <label className="block text-xs text-muted-foreground mb-1">
                       {t('installments.sendOn', 'Send on')}
                     </label>
                     {row.trigger === 'after_delivery' ? (
-                      <div className="text-xs text-neutral-500 dark:text-neutral-400 py-2">
+                      <div className="text-xs text-muted-foreground py-2">
                         {t('installments.onDeliveryHint',
                           'On delivery — admin releases manually. Switch to advanced to change.')}
                       </div>
@@ -244,7 +244,7 @@ export const InstallmentsPanel: React.FC<InstallmentsPanelProps> = ({
                 ) : (
                   <>
                     <div className="col-span-3">
-                      <label className="block text-xs text-neutral-500 dark:text-neutral-400 mb-1">
+                      <label className="block text-xs text-muted-foreground mb-1">
                         {t('installments.trigger', 'Trigger')}
                       </label>
                       <select
@@ -254,7 +254,7 @@ export const InstallmentsPanel: React.FC<InstallmentsPanelProps> = ({
                           offset_days: e.target.value === 'after_delivery' ? 0 : row.offset_days,
                         })}
                         disabled={disabled}
-                        className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm"
+                        className="w-full px-3 py-2 rounded-md border border-border bg-card text-sm"
                       >
                         {ALL_TRIGGERS.map((tr) => (
                           <option key={tr} value={tr}>
@@ -264,7 +264,7 @@ export const InstallmentsPanel: React.FC<InstallmentsPanelProps> = ({
                       </select>
                     </div>
                     <div className="col-span-2">
-                      <label className="block text-xs text-neutral-500 dark:text-neutral-400 mb-1">
+                      <label className="block text-xs text-muted-foreground mb-1">
                         {t('installments.offsetDays', 'Offset (days)')}
                       </label>
                       <Input
@@ -282,7 +282,7 @@ export const InstallmentsPanel: React.FC<InstallmentsPanelProps> = ({
                     type="button"
                     onClick={() => remove(idx)}
                     disabled={disabled}
-                    className="p-2 rounded-sm hover:bg-neutral-200 dark:hover:bg-neutral-700 text-red-600"
+                    className="p-2 rounded-sm hover:bg-accent text-red-600"
                     aria-label={t('installments.removeRow', 'Remove row') as string}
                   >
                     <Trash2 className="w-4 h-4" />

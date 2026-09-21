@@ -207,8 +207,8 @@ const ContractRow: React.FC<{ c: CustomerContract }> = ({ c }) => {
       : c.status === 'signed_by_customer' || c.status === 'signed_by_admin' ? 'bg-blue-100 text-blue-800'
       : c.status === 'sent' ? 'bg-amber-100 text-amber-800'
       : c.status === 'declined' ? 'bg-red-100 text-red-800'
-      : c.status === 'cancelled' ? 'bg-neutral-200 text-neutral-600'
-      : 'bg-neutral-100 text-neutral-700';
+      : c.status === 'cancelled' ? 'bg-muted text-muted-foreground'
+      : 'bg-muted text-foreground';
 
   return (
     <li className="p-4 flex items-center justify-between gap-3 flex-wrap">
@@ -249,7 +249,7 @@ const ContractRow: React.FC<{ c: CustomerContract }> = ({ c }) => {
             type="button"
             onClick={handleSign}
             disabled={opening}
-            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-sm text-sm bg-primary text-white hover:opacity-90 disabled:opacity-50"
+            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-sm text-sm bg-primary text-primary-foreground hover:opacity-90 disabled:opacity-50"
           >
             <PenLine className="w-4 h-4" />
             {opening

@@ -118,7 +118,7 @@ export const BackupHistory = () => {
       <Card className="p-4"><CardContent><div className="flex flex-col sm:flex-row gap-4">
                     <div className="flex-1">
                       <div className="relative">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400" />
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input
                           type="text"
                           placeholder={t('backup.history.searchPlaceholder')}
@@ -133,7 +133,7 @@ export const BackupHistory = () => {
                       <select
                         value={filterStatus}
                         onChange={(e) => setFilterStatus(e.target.value)}
-                        className="px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-md focus:outline-hidden focus:ring-primary focus:border-primary"
+                        className="px-3 py-2 border border-border bg-card text-foreground rounded-md focus:outline-hidden focus:ring-primary focus:border-primary"
                       >
                         <option value="all">All Status</option>
                         <option value="completed">Completed</option>
@@ -156,33 +156,33 @@ export const BackupHistory = () => {
       <Card className="overflow-hidden"><CardContent><div className="overflow-x-auto">
                     <table className="w-full">
                       <thead>
-                        <tr className="bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700">
-                          <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        <tr className="bg-muted border-b border-border">
+                          <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                             {t('backup.history.columns.status')}
                           </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                          <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                             {t('backup.history.columns.dateTime')}
                           </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                          <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                             {t('backup.history.columns.type')}
                           </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                          <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                             {t('backup.history.columns.size')}
                           </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                          <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                             {t('backup.history.columns.duration')}
                           </th>
-                          <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                          <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
                             {t('backup.history.columns.actions')}
                           </th>
                         </tr>
                       </thead>
-                      <tbody className="bg-white dark:bg-neutral-800 divide-y divide-neutral-200 dark:divide-neutral-700">
+                      <tbody className="bg-card divide-y divide-neutral-200 dark:divide-neutral-700">
                         {backups.length === 0 ? (
                           <tr>
-                            <td colSpan={6} className="px-6 py-12 text-center text-neutral-500 dark:text-neutral-400">
-                              <FileArchive className="h-12 w-12 mx-auto mb-3 text-neutral-300 dark:text-neutral-600" />
-                              <p className="text-lg font-medium text-neutral-900 dark:text-neutral-100">No backups found</p>
+                            <td colSpan={6} className="px-6 py-12 text-center text-muted-foreground">
+                              <FileArchive className="h-12 w-12 mx-auto mb-3 text-muted-foreground" />
+                              <p className="text-lg font-medium text-foreground">No backups found</p>
                               <p className="text-sm mt-1">Backups will appear here once created</p>
                             </td>
                           </tr>
@@ -195,21 +195,21 @@ export const BackupHistory = () => {
 
                             return (
                               <React.Fragment key={backup.id}>
-                                <tr className="hover:bg-neutral-50 dark:hover:bg-neutral-700/50">
+                                <tr className="hover:bg-accent">
                                   <td className="px-6 py-4 whitespace-nowrap">
                                     <div className="flex items-center">
                                       <StatusIcon className={`h-5 w-5 ${statusColor}`} />
-                                      <span className="ml-2 text-sm font-medium text-neutral-900 dark:text-neutral-100 capitalize">
+                                      <span className="ml-2 text-sm font-medium text-foreground capitalize">
                                         {backup.status}
                                       </span>
                                     </div>
                                   </td>
                                   <td className="px-6 py-4 whitespace-nowrap">
                                     <div>
-                                      <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                                      <p className="text-sm font-medium text-foreground">
                                         {format(new Date(backup.created_at))}
                                       </p>
-                                      <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                                      <p className="text-xs text-muted-foreground">
                                         {formatTime(new Date(backup.created_at))} • {formatDistanceToNow(new Date(backup.created_at), { addSuffix: true })}
                                       </p>
                                     </div>
@@ -220,14 +220,14 @@ export const BackupHistory = () => {
                                     </span>
                                   </td>
                                   <td className="px-6 py-4 whitespace-nowrap">
-                                    <p className="text-sm text-neutral-900 dark:text-neutral-100">
+                                    <p className="text-sm text-foreground">
                                       {formatBytes(stats.total_size || 0)}
                                     </p>
-                                    <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                                    <p className="text-xs text-muted-foreground">
                                       {stats.files_processed || 0} {t('backup.dashboard.stats.files')}
                                     </p>
                                   </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-900 dark:text-neutral-100">
+                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                                     {backup.duration_seconds
                                       ? `${Math.round(backup.duration_seconds / 60)}m ${backup.duration_seconds % 60}s`
                                       : '-'}
@@ -236,7 +236,7 @@ export const BackupHistory = () => {
                                     <div className="flex items-center justify-end space-x-2">
                                       <button
                                         onClick={() => toggleRowExpansion(backup.id)}
-                                        className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300"
+                                        className="text-muted-foreground hover:text-foreground"
                                         title={t('backup.actions.view')}
                                       >
                                         {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
@@ -244,7 +244,7 @@ export const BackupHistory = () => {
                                       {backup.manifest_path && (
                                         <button
                                           onClick={() => window.open(`/api/admin/backup/download/${backup.id}`, '_blank')}
-                                          className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300"
+                                          className="text-muted-foreground hover:text-foreground"
                                           title={t('backup.actions.download')}
                                         >
                                           <Download size={20} />
@@ -252,7 +252,7 @@ export const BackupHistory = () => {
                                       )}
                                       <button
                                         onClick={() => handleDelete(backup)}
-                                        className="text-neutral-400 hover:text-red-600"
+                                        className="text-muted-foreground hover:text-red-600"
                                         title={t('backup.actions.delete')}
                                         disabled={deleteMutation.isLoading}
                                       >
@@ -265,24 +265,24 @@ export const BackupHistory = () => {
                                 {/* Expanded Details Row */}
                                 {isExpanded && (
                                   <tr>
-                                    <td colSpan={6} className="px-6 py-4 bg-neutral-50 dark:bg-neutral-700/50">
+                                    <td colSpan={6} className="px-6 py-4 bg-muted">
                                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                         {/* Backup Details */}
                                         <div className="space-y-2">
-                                          <h4 className="font-medium text-neutral-900 dark:text-neutral-100">{t('backup.history.details.backupDetails')}</h4>
+                                          <h4 className="font-medium text-foreground">{t('backup.history.details.backupDetails')}</h4>
                                           <div className="text-sm space-y-1">
                                             <div className="flex justify-between">
-                                              <span className="text-neutral-500 dark:text-neutral-400">{t('backup.history.details.destination')}:</span>
-                                              <span className="text-neutral-900 dark:text-neutral-100">{backup.destination_type || 'Unknown'}</span>
+                                              <span className="text-muted-foreground">{t('backup.history.details.destination')}:</span>
+                                              <span className="text-foreground">{backup.destination_type || 'Unknown'}</span>
                                             </div>
                                             <div className="flex justify-between">
-                                              <span className="text-neutral-500 dark:text-neutral-400">{t('backup.history.details.started')}:</span>
-                                              <span className="text-neutral-900 dark:text-neutral-100">{formatTime(new Date(backup.created_at))}</span>
+                                              <span className="text-muted-foreground">{t('backup.history.details.started')}:</span>
+                                              <span className="text-foreground">{formatTime(new Date(backup.created_at))}</span>
                                             </div>
                                             {backup.completed_at && (
                                               <div className="flex justify-between">
-                                                <span className="text-neutral-500 dark:text-neutral-400">{t('backup.history.details.completed')}:</span>
-                                                <span className="text-neutral-900 dark:text-neutral-100">{formatTime(new Date(backup.completed_at))}</span>
+                                                <span className="text-muted-foreground">{t('backup.history.details.completed')}:</span>
+                                                <span className="text-foreground">{formatTime(new Date(backup.completed_at))}</span>
                                               </div>
                                             )}
                                           </div>
@@ -299,11 +299,11 @@ export const BackupHistory = () => {
                                                 up when restoring a backup taken before this
                                                 change shipped. */}
                                         <div className="space-y-2">
-                                          <h4 className="font-medium text-neutral-900 dark:text-neutral-100">{t('backup.history.details.contentBackedUp')}</h4>
+                                          <h4 className="font-medium text-foreground">{t('backup.history.details.contentBackedUp')}</h4>
                                           <div className="space-y-2">
                                             <div className="flex items-center space-x-2">
-                                              <Database className={`h-4 w-4 ${stats.database_backed_up ? 'text-green-500' : 'text-neutral-300 dark:text-neutral-600'}`} />
-                                              <span className="text-sm text-neutral-700 dark:text-neutral-300">{t('backup.configuration.whatToBackup.database')}</span>
+                                              <Database className={`h-4 w-4 ${stats.database_backed_up ? 'text-green-500' : 'text-muted-foreground'}`} />
+                                              <span className="text-sm text-foreground">{t('backup.configuration.whatToBackup.database')}</span>
                                             </div>
                                             {(() => {
                                               // Per-path breakdown when present
@@ -324,17 +324,17 @@ export const BackupHistory = () => {
                                                   <>
                                                     {entries.map(([pathKey, info]) => (
                                                       <div key={pathKey} className="flex items-center space-x-2">
-                                                        <FileArchive className={`h-4 w-4 ${info.count > 0 ? 'text-green-500' : 'text-neutral-300 dark:text-neutral-600'}`} />
-                                                        <span className="text-sm text-neutral-700 dark:text-neutral-300 font-mono">
+                                                        <FileArchive className={`h-4 w-4 ${info.count > 0 ? 'text-green-500' : 'text-muted-foreground'}`} />
+                                                        <span className="text-sm text-foreground font-mono">
                                                           {pathKey}
                                                         </span>
-                                                        <span className="text-sm text-neutral-500 dark:text-neutral-400 ml-auto">
+                                                        <span className="text-sm text-muted-foreground ml-auto">
                                                           {info.count} {info.size ? `(${formatSize(info.size)})` : ''}
                                                         </span>
                                                       </div>
                                                     ))}
-                                                    <div className="flex items-center space-x-2 pt-1 border-t border-neutral-200 dark:border-neutral-700">
-                                                      <span className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+                                                    <div className="flex items-center space-x-2 pt-1 border-t border-border">
+                                                      <span className="text-xs uppercase tracking-wide text-muted-foreground">
                                                         {t('backup.history.details.totalFiles', 'Total files')}: {stats.files_processed || 0}
                                                       </span>
                                                     </div>
@@ -352,25 +352,25 @@ export const BackupHistory = () => {
                                               return (
                                                 <>
                                                   <div className="flex items-center space-x-2">
-                                                    <Image className={`h-4 w-4 ${stats.photos_backed_up > 0 ? 'text-green-500' : 'text-neutral-300 dark:text-neutral-600'}`} />
-                                                    <span className="text-sm text-neutral-700 dark:text-neutral-300">
+                                                    <Image className={`h-4 w-4 ${stats.photos_backed_up > 0 ? 'text-green-500' : 'text-muted-foreground'}`} />
+                                                    <span className="text-sm text-foreground">
                                                       Photos ({stats.photos_backed_up || 0} of {stats.total_photos || 0})
                                                     </span>
                                                   </div>
                                                   <div className="flex items-center space-x-2">
-                                                    <FileArchive className={`h-4 w-4 ${stats.archives_backed_up > 0 ? 'text-green-500' : 'text-neutral-300 dark:text-neutral-600'}`} />
-                                                    <span className="text-sm text-neutral-700 dark:text-neutral-300">
+                                                    <FileArchive className={`h-4 w-4 ${stats.archives_backed_up > 0 ? 'text-green-500' : 'text-muted-foreground'}`} />
+                                                    <span className="text-sm text-foreground">
                                                       Archives ({stats.archives_backed_up || 0})
                                                     </span>
                                                   </div>
                                                   <div className="flex items-center space-x-2">
-                                                    <FileArchive className={`h-4 w-4 ${other > 0 ? 'text-green-500' : 'text-neutral-300 dark:text-neutral-600'}`} />
-                                                    <span className="text-sm text-neutral-700 dark:text-neutral-300">
+                                                    <FileArchive className={`h-4 w-4 ${other > 0 ? 'text-green-500' : 'text-muted-foreground'}`} />
+                                                    <span className="text-sm text-foreground">
                                                       {t('backup.history.details.otherFiles', 'Business documents & other')} ({other})
                                                     </span>
                                                   </div>
-                                                  <div className="flex items-center space-x-2 pt-1 border-t border-neutral-200 dark:border-neutral-700">
-                                                    <span className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+                                                  <div className="flex items-center space-x-2 pt-1 border-t border-border">
+                                                    <span className="text-xs uppercase tracking-wide text-muted-foreground">
                                                       {t('backup.history.details.totalFiles', 'Total files')}: {total}
                                                     </span>
                                                   </div>
@@ -393,8 +393,8 @@ export const BackupHistory = () => {
                                         {/* Manifest Path */}
                                         {backup.manifest_path && (
                                           <div className="space-y-2">
-                                            <h4 className="font-medium text-neutral-900 dark:text-neutral-100">{t('backup.history.details.manifest')}</h4>
-                                            <p className="text-sm text-neutral-600 dark:text-neutral-400 font-mono break-all">
+                                            <h4 className="font-medium text-foreground">{t('backup.history.details.manifest')}</h4>
+                                            <p className="text-sm text-muted-foreground font-mono break-all">
                                               {backup.manifest_path}
                                             </p>
                                           </div>
@@ -410,7 +410,7 @@ export const BackupHistory = () => {
                       </tbody>
                     </table>
                   </div>{/* Pagination */}{pagination.pages > 1 && (
-                    <div className="bg-white dark:bg-neutral-800 px-4 py-3 border-t border-neutral-200 dark:border-neutral-700 sm:px-6">
+                    <div className="bg-card px-4 py-3 border-t border-border sm:px-6">
                       <div className="flex items-center justify-between">
                         <div className="flex-1 flex justify-between sm:hidden">
                           <Button
@@ -432,7 +432,7 @@ export const BackupHistory = () => {
                         </div>
                         <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                           <div>
-                            <p className="text-sm text-neutral-700 dark:text-neutral-300">
+                            <p className="text-sm text-foreground">
                               {t('backup.history.pagination.showing', {
                                 from: (currentPage - 1) * pagination.limit + 1,
                                 to: Math.min(currentPage * pagination.limit, pagination.total),
@@ -445,7 +445,7 @@ export const BackupHistory = () => {
                               <button
                                 onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                                 disabled={currentPage === 1}
-                                className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm font-medium text-neutral-500 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-border bg-card text-sm font-medium text-muted-foreground hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
                               >
                                 {t('backup.history.pagination.previous')}
                               </button>
@@ -459,7 +459,7 @@ export const BackupHistory = () => {
                                     className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
                                       currentPage === pageNum
                                         ? 'z-10 bg-primary/15 border-primary text-primary'
-                                        : 'bg-white dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700'
+                                        : 'bg-card border-border text-foreground hover:bg-accent'
                                     }`}
                                   >
                                     {pageNum}
@@ -470,7 +470,7 @@ export const BackupHistory = () => {
                               <button
                                 onClick={() => setCurrentPage(p => Math.min(pagination.pages, p + 1))}
                                 disabled={currentPage === pagination.pages}
-                                className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm font-medium text-neutral-500 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-border bg-card text-sm font-medium text-muted-foreground hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
                               >
                                 {t('backup.history.pagination.next')}
                               </button>

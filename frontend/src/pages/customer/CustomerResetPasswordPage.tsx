@@ -150,7 +150,7 @@ export const CustomerResetPasswordPage: React.FC = () => {
                               <label className="block text-sm font-medium text-foreground mb-1">
                                 {t('customer.resetPassword.password', 'New password')}
                               </label>
-                              <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-neutral-400" />}</div><Input
+                              <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-muted-foreground" />}</div><Input
                                                                   type="password"
                                                                   value={form.password}
                                                                   onChange={(e) => setForm((p) => ({ ...p, password: e.target.value }))}
@@ -166,7 +166,7 @@ export const CustomerResetPasswordPage: React.FC = () => {
                               <label className="block text-sm font-medium text-foreground mb-1">
                                 {t('customer.resetPassword.confirm', 'Confirm new password')}
                               </label>
-                              <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-neutral-400" />}</div><Input
+                              <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-muted-foreground" />}</div><Input
                                                                   type="password"
                                                                   value={form.confirm}
                                                                   onChange={(e) => setForm((p) => ({ ...p, confirm: e.target.value }))}

@@ -78,7 +78,7 @@ export const FeedbackModerationPanel: React.FC<FeedbackModerationPanelProps> = (
   return (
     <Card className={className}><CardContent><div className={compact ? 'p-4' : 'p-6'}>
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-neutral-900">
+                <h2 className="text-lg font-semibold text-foreground">
                   {t('feedback.pendingModeration', 'Pending Moderation')}
                 </h2>
                 {hasPending && (
@@ -91,16 +91,16 @@ export const FeedbackModerationPanel: React.FC<FeedbackModerationPanelProps> = (
               {!hasPending ? (
                 <div className="text-center py-8">
                   <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-3" />
-                  <p className="text-neutral-600 dark:text-neutral-300">{t('feedback.noPendingComments', 'No comments pending moderation')}</p>
+                  <p className="text-muted-foreground">{t('feedback.noPendingComments', 'No comments pending moderation')}</p>
                 </div>
               ) : (
                 <div className="space-y-3">
                   {pendingComments.slice(0, showAllModal.isOpen ? undefined : maxItems).map((item) => (
-                    <div key={item.id} className="border border-neutral-200 dark:border-neutral-700 rounded-lg p-4 hover:bg-neutral-50 dark:hover:bg-neutral-800">
+                    <div key={item.id} className="border border-border rounded-lg p-4 hover:bg-accent">
                       <div className="flex items-start gap-3">
                         <div className="shrink-0">
-                          <div className="w-10 h-10 bg-neutral-100 dark:bg-neutral-800 rounded-full flex items-center justify-center">
-                            <User className="w-5 h-5 text-neutral-600 dark:text-neutral-300" />
+                          <div className="w-10 h-10 bg-muted rounded-full flex items-center justify-center">
+                            <User className="w-5 h-5 text-muted-foreground" />
                           </div>
                         </div>
 
@@ -108,15 +108,15 @@ export const FeedbackModerationPanel: React.FC<FeedbackModerationPanelProps> = (
                           <div className="flex items-start justify-between gap-2">
                             <div className="flex-1">
                               <div className="flex items-center gap-2 text-sm">
-                                <span className="font-medium text-neutral-900 dark:text-neutral-100">
+                                <span className="font-medium text-foreground">
                                   {item.guest_name || t('feedback.anonymous', 'Anonymous')}
                                 </span>
-                                <span className="text-neutral-500 dark:text-neutral-400">•</span>
-                                <span className="text-neutral-500 dark:text-neutral-400">
+                                <span className="text-muted-foreground">•</span>
+                                <span className="text-muted-foreground">
                                   {formatDateTime(item.created_at)}
                                 </span>
                               </div>
-                              <p className="mt-1 text-sm text-neutral-700">{item.comment_text || item.comment}</p>
+                              <p className="mt-1 text-sm text-foreground">{item.comment_text || item.comment}</p>
                               {item.photo_id && (
                                 <div className="mt-2 flex items-center gap-2">
                                   <div className="w-16 h-16 overflow-hidden rounded-sm">
@@ -126,7 +126,7 @@ export const FeedbackModerationPanel: React.FC<FeedbackModerationPanelProps> = (
                                       className="w-16 h-16 object-cover rounded-sm"
                                     />
                                   </div>
-                                  <p className="text-xs text-neutral-500">
+                                  <p className="text-xs text-muted-foreground">
                                     {t('feedback.onPhoto', 'On photo')}: {item.filename || item.photo_filename || `#${item.photo_id}`}
                                   </p>
                                 </div>
@@ -183,7 +183,7 @@ export const FeedbackModerationPanel: React.FC<FeedbackModerationPanelProps> = (
               )}
 
               {/* Quick link to full feedback page */}
-              <div className="mt-4 pt-4 border-t border-neutral-200">
+              <div className="mt-4 pt-4 border-t border-border">
                 <a
                   href={`/admin/events/${eventId}/feedback`}
                   className="text-sm text-brand hover:opacity-80 font-medium flex items-center gap-1"

@@ -117,7 +117,7 @@ export const SignaturePadField = forwardRef<SignaturePadHandle, SignaturePadFiel
           ref={canvasRef}
           role="img"
           aria-label={label}
-          className={`w-full ${heightClassName} bg-white rounded-sm border border-neutral-300 dark:border-neutral-600 touch-none`}
+          className={`w-full ${heightClassName} bg-card rounded-sm border border-border touch-none`}
         />
         <div className="mt-1 flex justify-end">
           <button
@@ -126,7 +126,7 @@ export const SignaturePadField = forwardRef<SignaturePadHandle, SignaturePadFiel
               padRef.current?.clear();
               onChangeRef.current?.(true);
             }}
-            className="text-xs text-neutral-600 dark:text-neutral-400 hover:underline inline-flex items-center gap-1"
+            className="text-xs text-muted-foreground hover:underline inline-flex items-center gap-1"
           >
             <RotateCcw className="w-3 h-3" />
             {t('publicContract.clearSignature', 'Clear')}

@@ -189,12 +189,12 @@ export const AssignedEventsDialog: React.FC<Props> = ({ customerId, isOpen, init
         <div className="flex-1 overflow-y-auto space-y-4">
           {/* Selected chips */}
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
               {t('customers.assignedEvents.currentLabel', 'Assigned galleries')}
-              <span className="ml-1.5 normal-case text-neutral-400">({selected.length})</span>
+              <span className="ml-1.5 normal-case text-muted-foreground">({selected.length})</span>
             </label>
             {selected.length === 0 ? (
-              <p className="text-sm text-neutral-500 dark:text-neutral-400 italic">
+              <p className="text-sm text-muted-foreground italic">
                 {t('customers.assignedEvents.empty', 'No galleries assigned yet. Search below to add one.')}
               </p>
             ) : (
@@ -202,18 +202,18 @@ export const AssignedEventsDialog: React.FC<Props> = ({ customerId, isOpen, init
                 {selected.map((s) => (
                   <li
                     key={s.id}
-                    className="inline-flex items-center gap-2 pl-2 pr-1 py-1 rounded-full text-sm bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 border border-neutral-200 dark:border-neutral-700"
+                    className="inline-flex items-center gap-2 pl-2 pr-1 py-1 rounded-full text-sm bg-muted text-foreground border border-border"
                   >
-                    <CalendarIcon className="w-3.5 h-3.5 text-neutral-500" />
+                    <CalendarIcon className="w-3.5 h-3.5 text-muted-foreground" />
                     <span className="truncate max-w-[220px]">{s.eventName}</span>
                     <button
                       type="button"
                       onClick={() => remove(s.id)}
                       disabled={saveMutation.isPending}
                       aria-label={t('customers.assignedEvents.removeAria', 'Remove {{name}}', { name: s.eventName })}
-                      className="p-0.5 rounded-full hover:bg-neutral-200 dark:hover:bg-neutral-700"
+                      className="p-0.5 rounded-full hover:bg-accent"
                     >
-                      <X className="w-3.5 h-3.5 text-neutral-500" />
+                      <X className="w-3.5 h-3.5 text-muted-foreground" />
                     </button>
                   </li>
                 ))}
@@ -223,11 +223,11 @@ export const AssignedEventsDialog: React.FC<Props> = ({ customerId, isOpen, init
 
           {/* Search */}
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
               {t('customers.assignedEvents.searchLabel', 'Add a gallery')}
             </label>
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 pointer-events-none" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
               <input
                 ref={searchInputRef}
                 type="text"
@@ -235,7 +235,7 @@ export const AssignedEventsDialog: React.FC<Props> = ({ customerId, isOpen, init
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder={t('customers.assignedEvents.searchPlaceholder', 'Search by event name')}
                 disabled={saveMutation.isPending}
-                className="w-full pl-9 pr-9 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-brand-500"
+                className="w-full pl-9 pr-9 py-2 border border-border bg-card text-foreground rounded-lg focus:outline-hidden focus:ring-2 focus:ring-brand-500"
               />
               {/* Inline clear button — visible only while the query has
                   content. We keep the query through add() now so the
@@ -249,26 +249,26 @@ export const AssignedEventsDialog: React.FC<Props> = ({ customerId, isOpen, init
                   onClick={clearQuery}
                   disabled={saveMutation.isPending}
                   aria-label={t('customers.assignedEvents.clearSearchAria', 'Clear search')}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-700 disabled:opacity-50"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-sm hover:bg-accent disabled:opacity-50"
                 >
-                  <X className="w-3.5 h-3.5 text-neutral-500" />
+                  <X className="w-3.5 h-3.5 text-muted-foreground" />
                 </button>
               )}
             </div>
 
             {/* Results dropdown — inline (not a popover) since this is
                 already inside a modal, no nested-popover headaches. */}
-            <div className="mt-2 border border-neutral-200 dark:border-neutral-700 rounded-lg overflow-hidden bg-white dark:bg-neutral-800">
+            <div className="mt-2 border border-border rounded-lg overflow-hidden bg-card">
               {!query.trim() ? (
-                <p className="px-3 py-3 text-sm text-neutral-500 dark:text-neutral-400">
+                <p className="px-3 py-3 text-sm text-muted-foreground">
                   {t('customers.assignedEvents.searchHint', 'Start typing to find galleries.')}
                 </p>
               ) : isSearching ? (
-                <p className="px-3 py-3 text-sm text-neutral-500 dark:text-neutral-400">
+                <p className="px-3 py-3 text-sm text-muted-foreground">
                   {t('common.searching', 'Searching…')}
                 </p>
               ) : results.length === 0 ? (
-                <p className="px-3 py-3 text-sm text-neutral-500 dark:text-neutral-400">
+                <p className="px-3 py-3 text-sm text-muted-foreground">
                   {t('customers.assignedEvents.noResults', 'No matching galleries.')}
                 </p>
               ) : (
@@ -279,16 +279,16 @@ export const AssignedEventsDialog: React.FC<Props> = ({ customerId, isOpen, init
                         type="button"
                         onClick={() => add(ev)}
                         disabled={saveMutation.isPending}
-                        className="w-full text-left px-3 py-2 flex items-center justify-between gap-3 hover:bg-neutral-50 dark:hover:bg-neutral-700"
+                        className="w-full text-left px-3 py-2 flex items-center justify-between gap-3 hover:bg-accent"
                       >
                         <span className="flex items-center gap-2 min-w-0">
-                          <CalendarIcon className="w-4 h-4 shrink-0 text-neutral-400" />
-                          <span className="truncate text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                          <CalendarIcon className="w-4 h-4 shrink-0 text-muted-foreground" />
+                          <span className="truncate text-sm font-medium text-foreground">
                             {ev.event_name}
                           </span>
                         </span>
                         {ev.event_date && (
-                          <span className="text-xs text-neutral-500 dark:text-neutral-400 shrink-0">
+                          <span className="text-xs text-muted-foreground shrink-0">
                             {ev.event_date}
                           </span>
                         )}

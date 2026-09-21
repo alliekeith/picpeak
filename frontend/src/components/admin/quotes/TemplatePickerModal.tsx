@@ -89,7 +89,7 @@ export const TemplatePickerModal: React.FC<Props> = ({ open, onClose }) => {
               id="template-picker-template"
               value={templateId ?? ''}
               onChange={(e) => setTemplateId(e.target.value ? Number(e.target.value) : null)}
-              className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm"
+              className="w-full px-3 py-2 rounded-md border border-border bg-card text-sm"
             >
               <option value="">{t('quotes.templates.blankQuote', 'Blank quote')}</option>
               {templates.map((tpl) => (
@@ -97,12 +97,12 @@ export const TemplatePickerModal: React.FC<Props> = ({ open, onClose }) => {
               ))}
             </select>
             {!isLoading && templates.length === 0 && (
-              <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+              <p className="mt-1 text-xs text-muted-foreground">
                 {t('quotes.templates.noneYet', 'No published templates yet — create one under Catalogue & templates.')}
               </p>
             )}
             {selected?.description && (
-              <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">{selected.description}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{selected.description}</p>
             )}
           </div>
 
@@ -125,8 +125,8 @@ export const TemplatePickerModal: React.FC<Props> = ({ open, onClose }) => {
                 <label htmlFor="template-picker-hours" className="block text-sm font-medium mb-1">{t('quotes.field.hours', 'Hours')}</label>
                 <DecimalInput id="template-picker-hours" value={hours} onChange={setHours} fractionDigits={2}
                   placeholder={selected.draft.hours != null ? String(selected.draft.hours) : ''}
-                  className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm" />
-                <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                  className="w-full px-3 py-2 rounded-md border border-border bg-card text-sm" />
+                <p className="mt-1 text-xs text-muted-foreground">
                   {t('quotes.templates.hoursHint', 'Leave blank to use the template\'s hours.')}
                 </p>
               </div>

@@ -57,17 +57,17 @@ export const SendGalleryEmailDialog: React.FC<SendGalleryEmailDialogProps> = ({
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <Card className="max-w-md w-full"><CardContent><div className="flex items-center justify-between mb-4">
-                    <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+                    <h2 className="text-xl font-semibold text-foreground">
                       {t('events.sendGalleryEmail.title', 'Send gallery email')}
                     </h2>
                     <button
                       onClick={onClose}
-                      className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300"
+                      className="text-muted-foreground hover:text-foreground"
                       aria-label={t('common.close', 'Close')}
                     >
                       <X className="w-5 h-5" />
                     </button>
-                  </div><p className="text-neutral-600 dark:text-neutral-400 mb-4">
+                  </div><p className="text-muted-foreground mb-4">
                     {t('events.sendGalleryEmail.description', {
                       eventName,
                       recipient,

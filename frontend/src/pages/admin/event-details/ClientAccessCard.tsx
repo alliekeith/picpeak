@@ -18,14 +18,14 @@ export const ClientAccessCard: React.FC<ClientAccessCardProps> = ({ event, refet
   const [clientPin, setClientPin] = useState('');
 
   return (
-    <Card><CardContent><h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4 flex items-center gap-2">
+    <Card><CardContent><h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
               <Shield className="w-5 h-5" />
               {t('clientAccess.adminTitle')}
             </h2><div className="space-y-4">
               <label className="flex items-start gap-2">
                 <input
                   type="checkbox"
-                  className="mt-1 w-4 h-4 text-brand border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-brand-500"
+                  className="mt-1 w-4 h-4 text-brand border-border rounded-sm focus:ring-brand-500"
                   checked={!!event?.client_access_enabled}
                   onChange={async (e) => {
                     try {
@@ -38,10 +38,10 @@ export const ClientAccessCard: React.FC<ClientAccessCardProps> = ({ event, refet
                   disabled={event?.is_archived}
                 />
                 <div>
-                  <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                  <span className="text-sm font-medium text-foreground">
                     {t('clientAccess.enableToggle')}
                   </span>
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                  <p className="text-xs text-muted-foreground mt-1">
                     {t('clientAccess.enableDescription')}
                   </p>
                 </div>
@@ -53,7 +53,7 @@ export const ClientAccessCard: React.FC<ClientAccessCardProps> = ({ event, refet
                   {/* Set/Change PIN */}
                   <div className="flex items-end gap-2">
                     <div className="flex-1">
-                      <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                      <label className="block text-sm font-medium text-foreground mb-1">
                         {t('clientAccess.pinLabel')}
                       </label>
                       <input
@@ -61,7 +61,7 @@ export const ClientAccessCard: React.FC<ClientAccessCardProps> = ({ event, refet
                         value={clientPin}
                         onChange={(e) => setClientPin(e.target.value)}
                         placeholder={t('clientAccess.pinPlaceholder')}
-                        className="w-full px-3 py-2 bg-neutral-50 dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 text-neutral-900 dark:text-neutral-100 rounded-lg text-sm"
+                        className="w-full px-3 py-2 bg-muted border border-border text-foreground rounded-lg text-sm"
                       />
                     </div>
                     <Button
@@ -85,7 +85,7 @@ export const ClientAccessCard: React.FC<ClientAccessCardProps> = ({ event, refet
                   {/* Client access link */}
                   {event?.client_share_token && (
                     <div>
-                      <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                      <label className="block text-sm font-medium text-foreground mb-1">
                         {t('clientAccess.linkLabel')}
                       </label>
                       <div className="flex items-center gap-2">
@@ -93,7 +93,7 @@ export const ClientAccessCard: React.FC<ClientAccessCardProps> = ({ event, refet
                           type="text"
                           value={`${window.location.origin}/gallery/${event.slug}/client-access?token=${event.client_share_token}`}
                           readOnly
-                          className="flex-1 px-3 py-2 bg-neutral-50 dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 text-neutral-900 dark:text-neutral-100 rounded-lg text-sm"
+                          className="flex-1 px-3 py-2 bg-muted border border-border text-foreground rounded-lg text-sm"
                         />
                         <Button
                                                             variant="outline"

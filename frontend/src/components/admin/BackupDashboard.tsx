@@ -82,10 +82,10 @@ interface BackupDashboardProps {
 const StatCard: React.FC<StatCardProps> = ({ icon: Icon, label, value, color = 'blue', subtext }) => (
   <Card className="p-6"><CardContent><div className="flex items-center justify-between">
           <div className="flex-1">
-            <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">{label}</p>
-            <p className="mt-2 text-3xl font-semibold text-neutral-900 dark:text-neutral-100">{value}</p>
+            <p className="text-sm font-medium text-muted-foreground">{label}</p>
+            <p className="mt-2 text-3xl font-semibold text-foreground">{value}</p>
             {subtext && (
-              <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">{subtext}</p>
+              <p className="mt-1 text-sm text-muted-foreground">{subtext}</p>
             )}
           </div>
           <div className={`p-3 bg-${color}-100 dark:bg-${color}-900/40 rounded-lg`}>
@@ -182,7 +182,7 @@ export const BackupDashboard: React.FC<BackupDashboardProps> = ({ status, config
 
       {/* Health Score Card */}
       <Card className="p-6"><CardContent><div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">{t('backup.dashboard.health.title')}</h3>
+                    <h3 className="text-lg font-semibold text-foreground">{t('backup.dashboard.health.title')}</h3>
                     <span className={`px-3 py-1 rounded-full text-sm font-medium bg-${healthColors[health.status]}-100 dark:bg-${healthColors[health.status]}-900/40 text-${healthColors[health.status]}-700 dark:text-${healthColors[health.status]}-300`}>
                       {t(`backup.dashboard.healthStatus.${health.status}`)}
                     </span>
@@ -210,17 +210,17 @@ export const BackupDashboard: React.FC<BackupDashboardProps> = ({ status, config
                         />
                       </svg>
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{health.score}%</span>
+                        <span className="text-2xl font-bold text-foreground">{health.score}%</span>
                       </div>
                     </div>
 
                     <div className="flex-1">
-                      <p className="text-neutral-700 dark:text-neutral-300 font-medium">{health.message}</p>
+                      <p className="text-foreground font-medium">{health.message}</p>
                       {/* Show the last successful backup explicitly — previously
                           this read `lastBackup.created_at` which silently rendered
                           a failed/running row as if it were the last success. */}
                       {lastSuccessfulBackup && (
-                        <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
+                        <p className="text-sm text-muted-foreground mt-1">
                           {t('backup.dashboard.lastSuccessful', 'Last successful backup')}: {formatDistanceToNow(new Date(lastSuccessfulBackup.created_at), { addSuffix: true })}
                         </p>
                       )}
@@ -233,7 +233,7 @@ export const BackupDashboard: React.FC<BackupDashboardProps> = ({ status, config
                             ? 'text-red-600 dark:text-red-400 font-medium'
                             : lastBackup.status === 'running'
                               ? 'text-blue-600 dark:text-blue-400'
-                              : 'text-neutral-500 dark:text-neutral-400'
+                              : 'text-muted-foreground'
                         }`}>
                           {t('backup.dashboard.lastAttempt', 'Last attempt')}: {formatDistanceToNow(new Date(lastBackup.created_at), { addSuffix: true })}
                           {' · '}
@@ -314,9 +314,9 @@ export const BackupDashboard: React.FC<BackupDashboardProps> = ({ status, config
 
       {/* Recent Activity */}
       {status?.recentBackups && status.recentBackups.length > 0 && (
-        <Card className="p-6"><CardContent><h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">{t('backup.dashboard.recentActivity.title')}</h3><div className="space-y-3">
+        <Card className="p-6"><CardContent><h3 className="text-lg font-semibold text-foreground mb-4">{t('backup.dashboard.recentActivity.title')}</h3><div className="space-y-3">
                           {status.recentBackups.slice(0, 5).map((backup) => (
-                            <div key={backup.id} className="flex items-center justify-between py-3 border-b border-neutral-100 dark:border-neutral-700 last:border-0">
+                            <div key={backup.id} className="flex items-center justify-between py-3 border-b border-border last:border-0">
                               <div className="flex items-center space-x-3">
                                 {backup.status === 'completed' ? (
                                   <CheckCircle className="h-5 w-5 text-green-500" />
@@ -326,19 +326,19 @@ export const BackupDashboard: React.FC<BackupDashboardProps> = ({ status, config
                                   <Loader2 className="h-5 w-5 text-blue-500 animate-spin" />
                                 )}
                                 <div>
-                                  <p className="font-medium text-neutral-900 dark:text-neutral-100">
+                                  <p className="font-medium text-foreground">
                                     {t('backup.dashboard.backupType', { type: backup.backup_type })}
                                   </p>
-                                  <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                                  <p className="text-sm text-muted-foreground">
                                     {formatDateTime(new Date(backup.created_at))}
                                   </p>
                                 </div>
                               </div>
                               <div className="text-right">
-                                <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                                <p className="text-sm font-medium text-foreground">
                                   {formatBytes(backup.statistics?.total_size || 0)}
                                 </p>
-                                <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                                <p className="text-sm text-muted-foreground">
                                   {backup.statistics?.files_processed || 0} files
                                 </p>
                               </div>
@@ -349,14 +349,14 @@ export const BackupDashboard: React.FC<BackupDashboardProps> = ({ status, config
 
       {/* Storage Status */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="p-6"><CardContent><h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">{t('backup.dashboard.coverage.title')}</h3><div className="space-y-4">
+        <Card className="p-6"><CardContent><h3 className="text-lg font-semibold text-foreground mb-4">{t('backup.dashboard.coverage.title')}</h3><div className="space-y-4">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-2">
-                              <Database className="h-5 w-5 text-neutral-400" />
-                              <span className="text-neutral-700 dark:text-neutral-300">Database</span>
+                              <Database className="h-5 w-5 text-muted-foreground" />
+                              <span className="text-foreground">Database</span>
                             </div>
                             <span className={`px-2 py-1 rounded text-xs font-medium ${
-                              statistics.database_backed_up ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300' : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300'
+                              statistics.database_backed_up ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300' : 'bg-muted text-foreground'
                             }`}>
                               {statistics.database_backed_up ? t('backup.dashboard.coverage.included') : t('backup.dashboard.coverage.excluded')}
                             </span>
@@ -364,41 +364,41 @@ export const BackupDashboard: React.FC<BackupDashboardProps> = ({ status, config
 
                           <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-2">
-                              <Image className="h-5 w-5 text-neutral-400" />
-                              <span className="text-neutral-700 dark:text-neutral-300">{t('backup.configuration.whatToBackup.photos')}</span>
+                              <Image className="h-5 w-5 text-muted-foreground" />
+                              <span className="text-foreground">{t('backup.configuration.whatToBackup.photos')}</span>
                             </div>
-                            <span className="text-sm text-neutral-500 dark:text-neutral-400">
+                            <span className="text-sm text-muted-foreground">
                               {statistics.photos_backed_up || 0} {t('common.of')} {statistics.total_photos || 0}
                             </span>
                           </div>
 
                           <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-2">
-                              <FileArchive className="h-5 w-5 text-neutral-400" />
-                              <span className="text-neutral-700 dark:text-neutral-300">{t('backup.configuration.whatToBackup.archives')}</span>
+                              <FileArchive className="h-5 w-5 text-muted-foreground" />
+                              <span className="text-foreground">{t('backup.configuration.whatToBackup.archives')}</span>
                             </div>
-                            <span className="text-sm text-neutral-500 dark:text-neutral-400">
+                            <span className="text-sm text-muted-foreground">
                               {statistics.archives_backed_up || 0} {t('backup.dashboard.stats.files')}
                             </span>
                           </div>
                         </div></CardContent></Card>
 
-        <Card className="p-6"><CardContent><h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">{t('backup.dashboard.storageDestination')}</h3><div className="space-y-3">
+        <Card className="p-6"><CardContent><h3 className="text-lg font-semibold text-foreground mb-4">{t('backup.dashboard.storageDestination')}</h3><div className="space-y-3">
                           <div className="flex items-center space-x-3">
                             {config?.backup_destination_type === 's3' ? (
                               <Cloud className="h-5 w-5 text-blue-500" />
                             ) : config?.backup_destination_type === 'rsync' ? (
                               <Server className="h-5 w-5 text-purple-500" />
                             ) : (
-                              <HardDrive className="h-5 w-5 text-neutral-500" />
+                              <HardDrive className="h-5 w-5 text-muted-foreground" />
                             )}
                             <div>
-                              <p className="font-medium text-neutral-900 dark:text-neutral-100">
+                              <p className="font-medium text-foreground">
                                 {config?.backup_destination_type
                                   ? t(`backup.configuration.destinationTypes.${config.backup_destination_type}.name`)
                                   : t('backup.dashboard.notConfigured.title')}
                               </p>
-                              <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                              <p className="text-sm text-muted-foreground">
                                 {config?.backup_destination_type === 's3' && config?.backup_s3_bucket
                                   ? `Bucket: ${config.backup_s3_bucket}`
                                   : config?.backup_destination_type === 'local' && config?.backup_destination_path
@@ -411,10 +411,10 @@ export const BackupDashboard: React.FC<BackupDashboardProps> = ({ status, config
                           </div>
 
                           {config?.backup_retention_days && (
-                            <div className="mt-4 p-3 bg-neutral-50 dark:bg-neutral-700 rounded-lg">
+                            <div className="mt-4 p-3 bg-muted rounded-lg">
                               <div className="flex items-center space-x-2">
-                                <Info className="h-4 w-4 text-neutral-400" />
-                                <span className="text-sm text-neutral-600 dark:text-neutral-300">
+                                <Info className="h-4 w-4 text-muted-foreground" />
+                                <span className="text-sm text-muted-foreground">
                                   {t('backup.configuration.schedule.retentionDays')} {config.backup_retention_days} {t('backup.configuration.schedule.retentionHelp').replace('days (older backups will be automatically deleted)', '')}
                                 </span>
                               </div>

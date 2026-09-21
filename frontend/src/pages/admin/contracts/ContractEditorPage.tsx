@@ -558,14 +558,14 @@ export const ContractEditorPage: React.FC = () => {
 
   const fieldErrorClass = 'mt-1 text-sm text-red-600 dark:text-red-400';
   const textareaClass = (invalid: boolean) =>
-    `w-full px-3 py-2 rounded-md border ${invalid ? 'border-red-500' : 'border-neutral-300 dark:border-neutral-600'} bg-white dark:bg-neutral-800 text-sm`;
+    `w-full px-3 py-2 rounded-md border ${invalid ? 'border-red-500' : 'border-border'} bg-card text-sm`;
 
   return (
     <div>
       <div className="mb-4 flex items-center gap-3">
         <Link
           to="/admin/clients/contracts"
-          className="inline-flex items-center gap-1 text-sm text-neutral-600 dark:text-neutral-400 hover:text-primary"
+          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"
         >
           <ArrowLeft className="w-4 h-4" />
           {t('contracts.editor.back', 'Back to list')}
@@ -670,7 +670,7 @@ export const ContractEditorPage: React.FC = () => {
                         ))}
                         <option value="none">{t('contracts.editor.templateNone', 'No template — pick the clauses below')}</option>
                       </select>
-                      <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                      <p className="text-xs text-muted-foreground mt-1">
                         {chosenTemplate
                           ? t('contracts.editor.templateHint', 'The contract starts with this template\'s clauses and texts. You can adjust them once it\'s created.')
                           : t('contracts.editor.templateNoneHint', 'Pick the clauses yourself below.')}
@@ -728,11 +728,11 @@ export const ContractEditorPage: React.FC = () => {
                   </div>{/* Event snapshot fields. Match the quote editor so the chain
                       quote → contract → invoice carries the same labels. When
                       createFromQuote drafts a contract from an accepted quote
-                      these come prefilled from the quote. */}<div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
+                      these come prefilled from the quote. */}<div className="mt-4 pt-4 border-t border-border">
                     <h3 className="text-sm font-semibold mb-2">
                       {t('contracts.editor.eventSection', 'Event (optional)')}
                     </h3>
-                    <p className="text-xs text-neutral-500 mb-3">
+                    <p className="text-xs text-muted-foreground mb-3">
                       {t('contracts.editor.eventHelp',
                         'Snapshotted onto the contract and propagated to any event / invoice generated from it. Set this so the customer portal and dunning emails show the right "Wedding Doe / Müller" label.')}
                     </p>
@@ -839,7 +839,7 @@ export const ContractEditorPage: React.FC = () => {
         <Card key={section} className="py-8 mb-3"><CardContent className="px-8"><h2 className="text-lg font-semibold mb-2">
                       {t(`contracts.sections.${section}`, section)}
                     </h2>{blocksBySection[section].length === 0 ? (
-                      <p className="text-sm text-neutral-500">
+                      <p className="text-sm text-muted-foreground">
                         {t('contracts.editor.noBlocksInSection', 'No blocks for this section yet.')}
                       </p>
                     ) : (
@@ -847,7 +847,7 @@ export const ContractEditorPage: React.FC = () => {
                         {blocksBySection[section].map((b) => (
                           <li
                             key={b.blockId}
-                            className="flex items-start gap-3 p-2 rounded-sm border border-neutral-200 dark:border-neutral-700"
+                            className="flex items-start gap-3 p-2 rounded-sm border border-border"
                           >
                             <input
                               type="checkbox"
@@ -859,24 +859,24 @@ export const ContractEditorPage: React.FC = () => {
                               <div className="flex items-center gap-2 flex-wrap">
                                 <span className="font-medium text-sm">{b.name}</span>
                                 {b.isSystem && (
-                                  <span className="text-[10px] uppercase tracking-wide px-1.5 py-0.5 rounded-sm bg-neutral-200 dark:bg-neutral-700">
+                                  <span className="text-[10px] uppercase tracking-wide px-1.5 py-0.5 rounded-sm bg-muted">
                                     {t('contracts.editor.systemBadge', 'System')}
                                   </span>
                                 )}
                               </div>
                               {b.description && (
-                                <p className="text-xs text-neutral-500 mt-1">{b.description}</p>
+                                <p className="text-xs text-muted-foreground mt-1">{b.description}</p>
                               )}
                             </div>
                             <div className="flex flex-col gap-1">
                               <button
                                 type="button"
-                                className="px-2 py-0.5 text-xs rounded-sm border border-neutral-300 dark:border-neutral-600"
+                                className="px-2 py-0.5 text-xs rounded-sm border border-border"
                                 onClick={() => moveBlock(b.blockId, -1)}
                               >↑</button>
                               <button
                                 type="button"
-                                className="px-2 py-0.5 text-xs rounded-sm border border-neutral-300 dark:border-neutral-600"
+                                className="px-2 py-0.5 text-xs rounded-sm border border-border"
                                 onClick={() => moveBlock(b.blockId, 1)}
                               >↓</button>
                             </div>
@@ -895,13 +895,13 @@ export const ContractEditorPage: React.FC = () => {
       )}
 
       {isEdit && (existing?.contract.textSections || []).length > 0 && (
-        <Card className="py-8 mb-3"><CardContent className="px-8"><h2 className="text-lg font-semibold mb-2">{t('contracts.editor.textSections', 'Free-text sections')}</h2><p className="text-xs text-neutral-500 dark:text-neutral-400 mb-2">
+        <Card className="py-8 mb-3"><CardContent className="px-8"><h2 className="text-lg font-semibold mb-2">{t('contracts.editor.textSections', 'Free-text sections')}</h2><p className="text-xs text-muted-foreground mb-2">
                           {t('contracts.editor.textSectionsHint', 'These come from the template and stay as they are when you save.')}
                         </p><ul className="space-y-2">
                           {(existing?.contract.textSections || []).map((s) => (
-                            <li key={s.id} className="p-2 rounded-sm border border-neutral-200 dark:border-neutral-700">
+                            <li key={s.id} className="p-2 rounded-sm border border-border">
                               <p className="text-sm font-medium">{s.heading || t(`contracts.sections.${s.section}`, s.section)}</p>
-                              <p className="text-xs text-neutral-600 dark:text-neutral-400 whitespace-pre-line line-clamp-3">
+                              <p className="text-xs text-muted-foreground whitespace-pre-line line-clamp-3">
                                 {s.body[language as keyof typeof s.body] || s.body.en || s.body.de || ''}
                               </p>
                             </li>

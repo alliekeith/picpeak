@@ -133,14 +133,14 @@ export const UpdateAvailableModal: React.FC<UpdateAvailableModalProps> = ({
       <Card
                   className="py-0 w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col"
                   onClick={(e: React.MouseEvent) => e.stopPropagation()}
-                ><CardContent className="px-0">{/* Header */}<div className="flex items-start justify-between p-5 border-b border-neutral-200 dark:border-neutral-700">
+                ><CardContent className="px-0">{/* Header */}<div className="flex items-start justify-between p-5 border-b border-border">
                     <div className="flex items-start gap-3">
                       <ArrowUpCircle className="w-6 h-6 text-blue-600 mt-0.5 shrink-0" />
                       <div>
-                        <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                        <h2 className="text-lg font-semibold text-foreground">
                           {t('admin.updates.modalTitle', 'Update available')}
                         </h2>
-                        <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">
+                        <p className="text-sm text-muted-foreground mt-0.5">
                           {t('admin.updates.modalSubtitle', 'v{{current}} → v{{latest}}', {
                             current: currentVersion,
                             latest: latestVersion,
@@ -150,7 +150,7 @@ export const UpdateAvailableModal: React.FC<UpdateAvailableModalProps> = ({
                     </div>
                     <button
                       onClick={onClose}
-                      className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200"
+                      className="text-muted-foreground hover:text-foreground"
                       aria-label={t('common.close', 'Close')}
                     >
                       <X className="w-5 h-5" />
@@ -158,16 +158,16 @@ export const UpdateAvailableModal: React.FC<UpdateAvailableModalProps> = ({
                   </div>{/* Body — scrollable */}<div className="flex-1 overflow-y-auto p-5 space-y-5">
                     {/* Upgrade instructions */}
                     <section>
-                      <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 mb-2">
+                      <h3 className="text-sm font-semibold text-foreground mb-2">
                         {t('admin.updates.howToUpgrade', 'How to upgrade')}
                       </h3>
                       {instructionsLoading && (
-                        <p className="text-sm text-neutral-500">{t('common.loading', 'Loading…')}</p>
+                        <p className="text-sm text-muted-foreground">{t('common.loading', 'Loading…')}</p>
                       )}
                       {!instructionsLoading && instructions?.instructions && (
                         <div className="space-y-3">
                           {instructions.environment?.description && (
-                            <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                            <p className="text-xs text-muted-foreground">
                               {t('admin.updates.detectedEnv', 'Detected environment: {{env}}', {
                                 env: instructions.environment.description,
                               })}
@@ -177,7 +177,7 @@ export const UpdateAvailableModal: React.FC<UpdateAvailableModalProps> = ({
                             const key = `step-${idx}`;
                             return (
                               <div key={key}>
-                                <p className="text-sm text-neutral-700 dark:text-neutral-300 mb-1">
+                                <p className="text-sm text-foreground mb-1">
                                   {idx + 1}. {step.description}
                                 </p>
                                 {step.command && (
@@ -200,7 +200,7 @@ export const UpdateAvailableModal: React.FC<UpdateAvailableModalProps> = ({
                             );
                           })}
                           {instructions.instructions.notes && instructions.instructions.notes.length > 0 && (
-                            <ul className="text-xs text-neutral-500 dark:text-neutral-400 list-disc list-inside space-y-1">
+                            <ul className="text-xs text-muted-foreground list-disc list-inside space-y-1">
                               {instructions.instructions.notes.map((note, idx) => (
                                 <li key={idx}>{note}</li>
                               ))}
@@ -212,11 +212,11 @@ export const UpdateAvailableModal: React.FC<UpdateAvailableModalProps> = ({
 
                     {/* Aggregated changelog */}
                     <section>
-                      <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 mb-2">
+                      <h3 className="text-sm font-semibold text-foreground mb-2">
                         {t('admin.updates.releaseNotes', 'Release notes')}
                       </h3>
                       {changelogLoading && (
-                        <p className="text-sm text-neutral-500">{t('common.loading', 'Loading…')}</p>
+                        <p className="text-sm text-muted-foreground">{t('common.loading', 'Loading…')}</p>
                       )}
                       {changelogError && (
                         <p className="text-sm text-red-600">
@@ -224,7 +224,7 @@ export const UpdateAvailableModal: React.FC<UpdateAvailableModalProps> = ({
                         </p>
                       )}
                       {changelog?.releases.length === 0 && !changelogLoading && (
-                        <p className="text-sm text-neutral-500">
+                        <p className="text-sm text-muted-foreground">
                           {t('admin.updates.noReleases', 'No release notes available.')}
                         </p>
                       )}
@@ -235,21 +235,21 @@ export const UpdateAvailableModal: React.FC<UpdateAvailableModalProps> = ({
                             return (
                               <div
                                 key={release.version}
-                                className="border border-neutral-200 dark:border-neutral-700 rounded-sm"
+                                className="border border-border rounded-sm"
                               >
                                 <button
                                   onClick={() => toggle(release.version)}
-                                  className="w-full flex items-center justify-between p-3 hover:bg-neutral-50 dark:hover:bg-neutral-800"
+                                  className="w-full flex items-center justify-between p-3 hover:bg-accent"
                                 >
                                   <div className="flex items-center gap-2 text-left">
                                     {isOpen
-                                      ? <ChevronDown className="w-4 h-4 text-neutral-500" />
-                                      : <ChevronRight className="w-4 h-4 text-neutral-500" />}
-                                    <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                                      ? <ChevronDown className="w-4 h-4 text-muted-foreground" />
+                                      : <ChevronRight className="w-4 h-4 text-muted-foreground" />}
+                                    <span className="text-sm font-medium text-foreground">
                                       {release.name}
                                     </span>
                                     {release.publishedAt && (
-                                      <span className="text-xs text-neutral-500">
+                                      <span className="text-xs text-muted-foreground">
                                         {formatDate(release.publishedAt)}
                                       </span>
                                     )}
@@ -266,7 +266,7 @@ export const UpdateAvailableModal: React.FC<UpdateAvailableModalProps> = ({
                                   </a>
                                 </button>
                                 {isOpen && release.body && (
-                                  <div className="px-4 pb-4 pt-1 border-t border-neutral-100 dark:border-neutral-800">
+                                  <div className="px-4 pb-4 pt-1 border-t border-border">
                                     <MarkdownContent
                                       source={release.body}
                                       className="text-sm prose prose-sm dark:prose-invert max-w-none"
@@ -274,7 +274,7 @@ export const UpdateAvailableModal: React.FC<UpdateAvailableModalProps> = ({
                                   </div>
                                 )}
                                 {isOpen && !release.body && (
-                                  <div className="px-4 pb-4 pt-1 text-sm text-neutral-500 italic">
+                                  <div className="px-4 pb-4 pt-1 text-sm text-muted-foreground italic">
                                     {t('admin.updates.noNotes', 'No release notes provided.')}
                                   </div>
                                 )}
@@ -284,7 +284,7 @@ export const UpdateAvailableModal: React.FC<UpdateAvailableModalProps> = ({
                         </div>
                       )}
                     </section>
-                  </div>{/* Footer */}<div className="flex items-center justify-between gap-3 p-4 border-t border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900/50">
+                  </div>{/* Footer */}<div className="flex items-center justify-between gap-3 p-4 border-t border-border bg-muted">
                     <Button
                       variant="ghost"
                       size="sm"

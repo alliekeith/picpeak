@@ -42,10 +42,10 @@ const PLACEHOLDERS = [
   'business_name', 'hours', 'days', 'hourly_rate', 'day_rate',
 ];
 
-const inputCls = 'w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900';
+const inputCls = 'w-full px-3 py-2 rounded-md border border-border bg-card text-foreground text-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900';
 // Native selects ignore vertical padding in Safari; a fixed height keeps them level with the inputs.
 const selectCls = `${inputCls} h-10`;
-const labelCls = 'block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1';
+const labelCls = 'block text-sm font-medium text-foreground mb-1';
 const toMinor = (major: number) => Math.round((Number.isFinite(major) ? major : 0) * 100);
 // The API's message, plus what each rejected field says (a 400 lists them in `details`).
 const errorText = (err: any): string => {
@@ -61,7 +61,7 @@ const errorText = (err: any): string => {
 const ArchivedBadge: React.FC = () => {
   const { t } = useTranslation();
   return (
-    <span className="ml-2 rounded-sm bg-neutral-200 dark:bg-neutral-700 px-1.5 py-0.5 text-[11px] text-neutral-600 dark:text-neutral-300">
+    <span className="ml-2 rounded-sm bg-muted px-1.5 py-0.5 text-[11px] text-muted-foreground">
       {t('quotes.catalog.archived', 'Archived')}
     </span>
   );
@@ -185,7 +185,7 @@ const ServicesTab: React.FC = () => {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
+        <p className="text-sm text-muted-foreground">
           {t('quotes.catalog.servicesIntro', 'Your services with a fixed price or priced by the hour / day. They appear in the quote editor\'s "Add from preset" list and in packages.')}
         </p>
         <PermissionGate permission="quotes.manage">
@@ -222,7 +222,7 @@ const ServicesTab: React.FC = () => {
                               <label htmlFor="service-pinned-rate" className={labelCls}>{t('quotes.catalog.field.pinnedRate', 'Own rate (optional)')}</label>
                               <DecimalInput id="service-pinned-rate" className={inputCls} value={form.pinnedRate} fractionDigits={2}
                                 onChange={(n) => setForm({ ...form, pinnedRate: n })} />
-                              <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                              <p className="mt-1 text-xs text-muted-foreground">
                                 {t('quotes.catalog.field.pinnedRateHint', 'Leave blank to use the customer\'s rate, or the default rate from Settings → Accounting.')}
                               </p>
                             </div>
@@ -266,16 +266,16 @@ const ServicesTab: React.FC = () => {
       )}
 
       <Card className="py-8"><CardContent className="px-8">{presets.length === 0 ? (
-                    <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('quotes.catalog.emptyServices', 'No services yet.')}</p>
+                    <p className="text-sm text-muted-foreground">{t('quotes.catalog.emptyServices', 'No services yet.')}</p>
                   ) : (
                     <table className="w-full text-sm">
                       <tbody>
                         {presets.map((p) => (
-                          <tr key={p.id} className={`border-b border-neutral-100 dark:border-neutral-800 ${p.isActive ? '' : 'opacity-60'}`}>
+                          <tr key={p.id} className={`border-b border-border ${p.isActive ? '' : 'opacity-60'}`}>
                             <td className="py-2">
                               <span className="font-medium">{p.name}</span>
                               {!p.isActive && <ArchivedBadge />}
-                              {p.category && <div className="text-xs text-neutral-500 dark:text-neutral-400">{p.category}</div>}
+                              {p.category && <div className="text-xs text-muted-foreground">{p.category}</div>}
                             </td>
                             <td className="py-2 text-right tabular-nums">{priceLabel(p)}</td>
                             <td className="py-2">
@@ -376,7 +376,7 @@ const PackagesTab: React.FC = () => {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
+        <p className="text-sm text-muted-foreground">
           {t('quotes.catalog.packagesIntro', 'A package with one item shows its price on the package line; with several items, each item keeps its price and the package line shows the sum.')}
         </p>
         <PermissionGate permission="quotes.manage">
@@ -424,8 +424,8 @@ const PackagesTab: React.FC = () => {
                                     <option value="days">{t('crm.lineItems.followsDays', 'Follows the quote days')}</option>
                                   </select>
                                 )}
-                                <button type="button" onClick={() => moveItem(idx, -1)} aria-label="Move up" className="p-1 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-700"><ArrowUp className="w-4 h-4" /></button>
-                                <button type="button" onClick={() => moveItem(idx, 1)} aria-label="Move down" className="p-1 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-700"><ArrowDown className="w-4 h-4" /></button>
+                                <button type="button" onClick={() => moveItem(idx, -1)} aria-label="Move up" className="p-1 rounded-sm hover:bg-accent"><ArrowUp className="w-4 h-4" /></button>
+                                <button type="button" onClick={() => moveItem(idx, 1)} aria-label="Move down" className="p-1 rounded-sm hover:bg-accent"><ArrowDown className="w-4 h-4" /></button>
                                 <button type="button" onClick={() => setItems(form.items.filter((_, i) => i !== idx))} aria-label="Remove"
                                   className="p-1 rounded-sm hover:bg-red-50 dark:hover:bg-red-900/30 text-red-600"><X className="w-4 h-4" /></button>
                               </div>
@@ -444,16 +444,16 @@ const PackagesTab: React.FC = () => {
       )}
 
       <Card className="py-8"><CardContent className="px-8">{packages.length === 0 ? (
-                    <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('quotes.catalog.emptyPackages', 'No packages yet.')}</p>
+                    <p className="text-sm text-muted-foreground">{t('quotes.catalog.emptyPackages', 'No packages yet.')}</p>
                   ) : (
                     <table className="w-full text-sm">
                       <tbody>
                         {packages.map((p) => (
-                          <tr key={p.id} className={`border-b border-neutral-100 dark:border-neutral-800 ${p.isActive ? '' : 'opacity-60'}`}>
+                          <tr key={p.id} className={`border-b border-border ${p.isActive ? '' : 'opacity-60'}`}>
                             <td className="py-2">
                               <span className="font-medium">{p.name}</span>
                               {!p.isActive && <ArchivedBadge />}
-                              <div className="text-xs text-neutral-500 dark:text-neutral-400">{p.items.map((it) => it.presetName).join(' · ')}</div>
+                              <div className="text-xs text-muted-foreground">{p.items.map((it) => it.presetName).join(' · ')}</div>
                             </td>
                             <td className="py-2">
                               <RowActions active={p.isActive} onEdit={() => edit(p)}
@@ -550,7 +550,7 @@ const PromotionsTab: React.FC = () => {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
+        <p className="text-sm text-muted-foreground">
           {t('quotes.catalog.promotionsIntro', 'Ticked in the quote editor. Percentages apply first, then fixed amounts, before VAT — never more than the subtotal.')}
         </p>
         <PermissionGate permission="quotes.manage">
@@ -577,7 +577,7 @@ const PromotionsTab: React.FC = () => {
                               <label htmlFor="promotion-percent" className={labelCls}>{t('quotes.catalog.field.percent', 'Percent')}</label>
                               <DecimalInput id="promotion-percent" className={inputCls} value={form.percent}
                                 aria-describedby="promotion-percent-hint" onChange={(n) => setForm({ ...form, percent: n })} />
-                              <p id="promotion-percent-hint" className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                              <p id="promotion-percent-hint" className="mt-1 text-xs text-muted-foreground">
                                 {t('quotes.catalog.promotionPercentHint', 'The percentage to subtract, e.g. 10 for −10 %.')}
                               </p>
                             </div>
@@ -587,7 +587,7 @@ const PromotionsTab: React.FC = () => {
                                 <label htmlFor="promotion-value" className={labelCls}>{t('quotes.catalog.field.amount', 'Amount')}</label>
                                 <DecimalInput id="promotion-value" className={inputCls} value={form.value} fractionDigits={2}
                                   aria-describedby="promotion-value-hint" onChange={(n) => setForm({ ...form, value: n })} />
-                                <p id="promotion-value-hint" className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                                <p id="promotion-value-hint" className="mt-1 text-xs text-muted-foreground">
                                   {t('quotes.catalog.promotionAmountHint', 'The amount to subtract, e.g. 300 for −300.')}
                                 </p>
                               </div>
@@ -606,7 +606,7 @@ const PromotionsTab: React.FC = () => {
                             <div>
                               <LocalizedDateInput label={t('quotes.catalog.field.validUntil', 'Valid until') as string} value={form.validUntil}
                                 onChange={(iso) => setForm({ ...form, validUntil: iso })} />
-                              <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                              <p className="mt-1 text-xs text-muted-foreground">
                                 {t('quotes.catalog.noEndDateHint', 'Leave empty for no end date.')}
                               </p>
                             </div>
@@ -616,7 +616,7 @@ const PromotionsTab: React.FC = () => {
                             <textarea id="promotion-description" rows={2} className={inputCls} value={form.description}
                               aria-describedby="promotion-description-hint"
                               onChange={(e) => setForm({ ...form, description: e.target.value })} />
-                            <p id="promotion-description-hint" className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                            <p id="promotion-description-hint" className="mt-1 text-xs text-muted-foreground">
                               {t('quotes.catalog.promotionDescriptionHint', 'Shown on the quote under the discount.')}
                             </p>
                           </div>
@@ -627,16 +627,16 @@ const PromotionsTab: React.FC = () => {
       )}
 
       <Card className="py-8"><CardContent className="px-8">{promotions.length === 0 ? (
-                    <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('quotes.catalog.emptyPromotions', 'No promotions yet.')}</p>
+                    <p className="text-sm text-muted-foreground">{t('quotes.catalog.emptyPromotions', 'No promotions yet.')}</p>
                   ) : (
                     <table className="w-full text-sm">
                       <tbody>
                         {promotions.map((p) => (
-                          <tr key={p.id} className={`border-b border-neutral-100 dark:border-neutral-800 ${p.isActive ? '' : 'opacity-60'}`}>
+                          <tr key={p.id} className={`border-b border-border ${p.isActive ? '' : 'opacity-60'}`}>
                             <td className="py-2">
                               <span className="font-medium">{p.name}</span>
                               {!p.isActive && <ArchivedBadge />}
-                              <div className="text-xs text-neutral-500 dark:text-neutral-400">
+                              <div className="text-xs text-muted-foreground">
                                 {p.validUntil
                                   ? `${p.validFrom ? `${fmtDate(p.validFrom)} – ` : `${t('quotes.catalog.validUntilOnly', 'Until')} `}${fmtDate(p.validUntil)}`
                                   : p.validFrom
@@ -709,7 +709,7 @@ const TextBlocksTab: React.FC = () => {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
+        <p className="text-sm text-muted-foreground">
           {t('quotes.catalog.textBlocksIntro', 'Reusable texts for the quote intro and outro. Placeholders are filled in when the quote is saved.')}
         </p>
         <PermissionGate permission="quotes.manage">
@@ -741,7 +741,7 @@ const TextBlocksTab: React.FC = () => {
                             <label htmlFor="text-block-body" className={labelCls}>{t('quotes.catalog.field.body', 'Text')}</label>
                             <textarea id="text-block-body" rows={5} className={inputCls} value={form.body}
                               onChange={(e) => setForm({ ...form, body: e.target.value })} />
-                            <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                            <p className="mt-1 text-xs text-muted-foreground">
                               {t('quotes.catalog.placeholdersHint', 'Placeholders:')}{' '}
                               <span className="font-mono">{PLACEHOLDERS.map((p) => `{{${p}}}`).join(' ')}</span>
                             </p>
@@ -753,16 +753,16 @@ const TextBlocksTab: React.FC = () => {
       )}
 
       <Card className="py-8"><CardContent className="px-8">{blocks.length === 0 ? (
-                    <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('quotes.catalog.emptyTextBlocks', 'No text blocks yet.')}</p>
+                    <p className="text-sm text-muted-foreground">{t('quotes.catalog.emptyTextBlocks', 'No text blocks yet.')}</p>
                   ) : (
                     <table className="w-full text-sm">
                       <tbody>
                         {blocks.map((b) => (
-                          <tr key={b.id} className={`border-b border-neutral-100 dark:border-neutral-800 ${b.isActive ? '' : 'opacity-60'}`}>
+                          <tr key={b.id} className={`border-b border-border ${b.isActive ? '' : 'opacity-60'}`}>
                             <td className="py-2">
                               <span className="font-medium">{b.name}</span>
                               {!b.isActive && <ArchivedBadge />}
-                              <div className="text-xs text-neutral-500 dark:text-neutral-400">
+                              <div className="text-xs text-muted-foreground">
                                 {t(`quotes.catalog.textBlockKind.${b.kind}`, b.kind)} · {b.language.toUpperCase()}
                               </div>
                             </td>
@@ -814,7 +814,7 @@ const TemplatesTab: React.FC = () => {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
+        <p className="text-sm text-muted-foreground">
           {t('quotes.catalog.templatesIntro', 'A template fills in a new quote. Publishing freezes a version, so later catalogue changes never alter quotes you already created.')}
         </p>
         <PermissionGate permission="quotes.manage">
@@ -822,17 +822,17 @@ const TemplatesTab: React.FC = () => {
         </PermissionGate>
       </div>
       <Card className="py-8"><CardContent className="px-8">{templates.length === 0 ? (
-                    <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('quotes.catalog.emptyTemplates', 'No templates yet.')}</p>
+                    <p className="text-sm text-muted-foreground">{t('quotes.catalog.emptyTemplates', 'No templates yet.')}</p>
                   ) : (
                     <table className="w-full text-sm">
                       <tbody>
                         {templates.map((tpl) => (
-                          <tr key={tpl.id} className={`border-b border-neutral-100 dark:border-neutral-800 ${tpl.status === 'archived' ? 'opacity-60' : ''}`}>
+                          <tr key={tpl.id} className={`border-b border-border ${tpl.status === 'archived' ? 'opacity-60' : ''}`}>
                             <td className="py-2">
                               <Link to={`/admin/clients/quotes/catalog/templates/${tpl.id}`} className="font-medium hover:underline">{tpl.name}</Link>
-                              {tpl.description && <div className="text-xs text-neutral-500 dark:text-neutral-400">{tpl.description}</div>}
+                              {tpl.description && <div className="text-xs text-muted-foreground">{tpl.description}</div>}
                             </td>
-                            <td className="py-2 text-sm text-neutral-600 dark:text-neutral-400">
+                            <td className="py-2 text-sm text-muted-foreground">
                               {statusLabel(tpl.status)}
                               {tpl.currentVersion != null && ` · v${tpl.currentVersion}`}
                             </td>
@@ -873,10 +873,10 @@ export const QuoteCatalogPage: React.FC = () => {
     <div className="space-y-4">
       <div>
         <button onClick={() => navigate('/admin/clients/quotes')}
-          className="text-sm text-neutral-600 dark:text-neutral-400 hover:underline mb-1 inline-flex items-center gap-1">
+          className="text-sm text-muted-foreground hover:underline mb-1 inline-flex items-center gap-1">
           <ArrowLeft className="w-4 h-4" /> {t('common.back', 'Back')}
         </button>
-        <h2 className="text-xl font-bold text-neutral-900 dark:text-neutral-100">{t('quotes.catalog.title', 'Catalogue & templates')}</h2>
+        <h2 className="text-xl font-bold text-foreground">{t('quotes.catalog.title', 'Catalogue & templates')}</h2>
       </div>
 
       {/* Stock shadcn Tabs. The active tab still lives in the query string,

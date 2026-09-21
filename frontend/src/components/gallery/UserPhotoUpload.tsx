@@ -284,7 +284,7 @@ export const UserPhotoUpload: React.FC<UserPhotoUploadProps> = ({
                   onDragLeave={handleDragLeave}
                   onDrop={handleDrop}
                 >
-                  <Upload className="w-10 h-10 sm:w-12 sm:h-12 text-neutral-400 mx-auto mb-3" />
+                  <Upload className="w-10 h-10 sm:w-12 sm:h-12 text-muted-foreground mx-auto mb-3" />
                   <p className="text-sm font-medium text-muted-foreground mb-1">
                     {t('upload.clickToUpload')}
                   </p>
@@ -337,7 +337,7 @@ export const UserPhotoUpload: React.FC<UserPhotoUploadProps> = ({
                           <CheckCircle className="w-5 h-5 text-green-600" />
                         ) : (
                           <div className="w-20">
-                            <div className="bg-neutral-200 rounded-full h-2">
+                            <div className="bg-muted rounded-full h-2">
                               <div
                                 className="bg-primary h-2 rounded-full transition-all"
                                 style={{ width: `${uploadProgress[file.name]}%` }}

@@ -23,10 +23,10 @@ export interface AttachmentRow {
   isActive: boolean;
 }
 
-const fieldClass = 'focus:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900 px-2 py-1 rounded-md border border-neutral-300 dark:border-neutral-600 '
-  + 'bg-white dark:bg-neutral-800 text-sm text-neutral-900 dark:text-neutral-100';
-const iconButton = 'focus:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900 p-1 rounded-sm border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-200 '
-  + 'disabled:opacity-40 hover:bg-neutral-50 dark:hover:bg-neutral-700';
+const fieldClass = 'focus:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900 px-2 py-1 rounded-md border border-border '
+  + 'bg-card text-sm text-foreground';
+const iconButton = 'focus:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-900 p-1 rounded-sm border border-border text-foreground '
+  + 'disabled:opacity-40 hover:bg-accent';
 
 export const AttachmentListEditor: React.FC<{
   idPrefix: string;
@@ -64,17 +64,17 @@ export const AttachmentListEditor: React.FC<{
   return (
     <div className="space-y-2">
       {value.length === 0 ? (
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
+        <p className="text-sm text-muted-foreground">
           {t('contracts.attachments.none', 'No attachments.')}
         </p>
       ) : (
         <ol className="space-y-2">
           {value.map((row, index) => (
-            <li key={row.attachmentId} className="rounded-sm border border-neutral-200 dark:border-neutral-700 p-2 flex flex-wrap items-center gap-2">
-              <span className="text-xs tabular-nums text-neutral-500 dark:text-neutral-400 w-6">{index + 1}.</span>
+            <li key={row.attachmentId} className="rounded-sm border border-border p-2 flex flex-wrap items-center gap-2">
+              <span className="text-xs tabular-nums text-muted-foreground w-6">{index + 1}.</span>
               <span className="flex-1 min-w-[160px] text-sm">
-                <span className="font-medium text-neutral-900 dark:text-neutral-100">{row.name}</span>
-                <span className="ml-2 text-xs text-neutral-500 dark:text-neutral-400">
+                <span className="font-medium text-foreground">{row.name}</span>
+                <span className="ml-2 text-xs text-muted-foreground">
                   {t('contracts.attachments.pages', '{{count}} pages', { count: row.pages })} · {formatAttachmentSize(row.bytes)}
                 </span>
                 {!row.isActive && (
@@ -112,13 +112,13 @@ export const AttachmentListEditor: React.FC<{
           ))}
         </ol>
       )}
-      <p className="text-xs text-neutral-500 dark:text-neutral-400">
+      <p className="text-xs text-muted-foreground">
         {t('contracts.attachments.mergedHint', 'Attachments in the contract PDF come after the clauses, before the signature page.')}
       </p>
       {!readOnly && (
-        <div className="flex flex-wrap items-end gap-2 pt-2 border-t border-neutral-200 dark:border-neutral-700">
+        <div className="flex flex-wrap items-end gap-2 pt-2 border-t border-border">
           <div className="flex-1 min-w-[220px]">
-            <label htmlFor={`${idPrefix}-pick`} className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+            <label htmlFor={`${idPrefix}-pick`} className="block text-sm font-medium text-foreground mb-1">
               {t('contracts.attachments.pick', 'Attachment from the library')}
             </label>
             <select id={`${idPrefix}-pick`} className={`${fieldClass} w-full py-2`} value={pick} onChange={(e) => setPick(e.target.value)}>
@@ -129,7 +129,7 @@ export const AttachmentListEditor: React.FC<{
           <Button variant="outline" onClick={add} disabled={!pick}>
             <Plus className="w-4 h-4 mr-1" />{t('contracts.attachments.add', 'Add attachment')}
           </Button>
-          <Link to="/admin/clients/contracts/attachments" className="text-sm underline text-neutral-700 dark:text-neutral-300 py-2">
+          <Link to="/admin/clients/contracts/attachments" className="text-sm underline text-foreground py-2">
             {t('contracts.attachments.manageLibrary', 'Manage the library')}
           </Link>
         </div>

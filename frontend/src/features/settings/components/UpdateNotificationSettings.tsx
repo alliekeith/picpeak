@@ -127,33 +127,33 @@ export const UpdateNotificationSettings: React.FC = () => {
   if (isLoading) {
     return (
       <Card><CardContent><div className="animate-pulse space-y-4">
-                  <div className="h-6 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-1/3"></div>
-                  <div className="h-10 bg-neutral-200 dark:bg-neutral-700 rounded-sm"></div>
-                  <div className="h-10 bg-neutral-200 dark:bg-neutral-700 rounded-sm"></div>
+                  <div className="h-6 bg-muted rounded-sm w-1/3"></div>
+                  <div className="h-10 bg-muted rounded-sm"></div>
+                  <div className="h-10 bg-muted rounded-sm"></div>
                 </div></CardContent></Card>
     );
   }
 
   return (
-    <Card><CardContent><h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4 flex items-center gap-2">
+    <Card><CardContent><h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
               <Bell className="w-5 h-5" />
               {t('settings.updateNotifications.title', 'Update Notifications')}
-            </h2><p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
+            </h2><p className="text-sm text-muted-foreground mb-4">
               {t('settings.updateNotifications.description', 'Receive email notifications when new versions of PicPeak are available.')}
             </p><div className="space-y-4">
               {/* Enable/Disable Toggle */}
-              <label className="flex items-center gap-3 p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg cursor-pointer">
+              <label className="flex items-center gap-3 p-4 bg-muted rounded-lg cursor-pointer">
                 <input
                   type="checkbox"
                   checked={localEnabled}
                   onChange={(e) => handleToggleEnabled(e.target.checked)}
-                  className="w-4 h-4 text-brand-600 bg-neutral-100 border-neutral-300 rounded-sm focus:ring-brand-500"
+                  className="w-4 h-4 text-brand-600 bg-muted border-border rounded-sm focus:ring-brand-500"
                 />
                 <div>
-                  <p className="font-medium text-neutral-900 dark:text-neutral-100">
+                  <p className="font-medium text-foreground">
                     {t('settings.updateNotifications.enableEmails', 'Enable email notifications')}
                   </p>
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                  <p className="text-sm text-muted-foreground">
                     {t('settings.updateNotifications.enableEmailsDesc', 'Send email to admins when a new version is available')}
                   </p>
                 </div>
@@ -161,7 +161,7 @@ export const UpdateNotificationSettings: React.FC = () => {
 
               {/* Recipients */}
               <div>
-                <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('settings.updateNotifications.recipients', 'Email Recipients')}</span><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Mail className="w-4 h-4 text-neutral-400" />}</div><Input
+                <div className="w-full"><Label className="block"><span className="mb-1.5 block">{t('settings.updateNotifications.recipients', 'Email Recipients')}</span><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Mail className="w-4 h-4 text-muted-foreground" />}</div><Input
                                     type="text"
                                     value={localRecipients}
                                     onChange={handleRecipientsChange}
@@ -182,7 +182,7 @@ export const UpdateNotificationSettings: React.FC = () => {
               )}
 
               {/* Action Buttons */}
-              <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-neutral-200 dark:border-neutral-700">
+              <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-border">
                 <div className="flex flex-wrap gap-2">
                   <Button
                                           variant="secondary"

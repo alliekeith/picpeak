@@ -26,7 +26,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
 const STATUS_CHIP: Record<string, string> = {
-  pending: 'bg-neutral-100 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-200',
+  pending: 'bg-muted text-foreground',
   invited: 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200',
   signed: 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-200',
   declined: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-200',
@@ -84,17 +84,17 @@ export const SigningOverviewCard: React.FC<SigningOverviewCardProps> = ({ contra
   return (
     <>
       <Card className="py-8 mb-4"><CardContent className="px-8"><div className="flex items-center justify-between gap-2 flex-wrap mb-1">
-                    <h2 className="font-semibold flex items-center gap-2 text-neutral-900 dark:text-neutral-100">
+                    <h2 className="font-semibold flex items-center gap-2 text-foreground">
                       <Users className="w-4 h-4" />
                       {t('contracts.signers.title', 'Signers')}
                     </h2>
-                    <span className="text-xs text-neutral-600 dark:text-neutral-400">
+                    <span className="text-xs text-muted-foreground">
                       {overview.order === 'sequential'
                         ? t('contracts.signers.orderSequential', 'One after the other')
                         : t('contracts.signers.orderParallel', 'All at once')}
                     </span>
                   </div>{contractStatus === 'sent' && (
-                    <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-3">
+                    <p className="text-sm text-muted-foreground mb-3">
                       {t('contracts.signers.countersignLater', 'You counter-sign here once every customer signer has signed.')}
                     </p>
                   )}{overview.followUp && (
@@ -121,18 +121,18 @@ export const SigningOverviewCard: React.FC<SigningOverviewCardProps> = ({ contra
                       const canResend = s.role === 'customer' && s.status === 'invited' && contractStatus === 'sent';
                       return (
                         <li key={s.id} className="py-2 flex flex-wrap items-start gap-3 text-sm">
-                          <span className="w-5 text-neutral-500 dark:text-neutral-400">{s.position}.</span>
+                          <span className="w-5 text-muted-foreground">{s.position}.</span>
                           <div className="flex-1 min-w-[180px]">
-                            <p className="font-medium text-neutral-900 dark:text-neutral-100">
+                            <p className="font-medium text-foreground">
                               {s.name || '—'}
-                              <span className="ml-2 text-xs font-normal text-neutral-500 dark:text-neutral-400">
+                              <span className="ml-2 text-xs font-normal text-muted-foreground">
                                 {s.role === 'issuer'
                                   ? t('contracts.signers.role.issuer', 'Issuer')
                                   : t('contracts.signers.role.customer', 'Customer')}
                               </span>
                             </p>
-                            {s.email && <p className="text-xs text-neutral-600 dark:text-neutral-400">{s.email}</p>}
-                            <p className="text-xs text-neutral-600 dark:text-neutral-400">
+                            {s.email && <p className="text-xs text-muted-foreground">{s.email}</p>}
+                            <p className="text-xs text-muted-foreground">
                               {[
                                 s.status === 'invited' && s.invitedAt
                                   ? t('contracts.signers.invitedAt', 'Link sent {{date}}', { date: formatDateTime(s.invitedAt) })
@@ -173,7 +173,7 @@ export const SigningOverviewCard: React.FC<SigningOverviewCardProps> = ({ contra
                   </PermissionGate></CardContent></Card>
 
       <Card className="py-8 mb-4"><CardContent className="px-8"><div className="flex items-center justify-between gap-2 flex-wrap mb-1">
-                    <h2 className="font-semibold flex items-center gap-2 text-neutral-900 dark:text-neutral-100">
+                    <h2 className="font-semibold flex items-center gap-2 text-foreground">
                       <ShieldCheck className="w-4 h-4" />
                       {t('contracts.signers.log.title', 'Signing log')}
                     </h2>
@@ -181,7 +181,7 @@ export const SigningOverviewCard: React.FC<SigningOverviewCardProps> = ({ contra
                       <span className="inline-flex items-center gap-1 text-xs text-green-700 dark:text-green-300">
                         <CheckCircle2 className="w-3.5 h-3.5" />
                         {t('contracts.signers.log.chainOk', 'Chain intact')}
-                        <span className="text-neutral-500 dark:text-neutral-400">
+                        <span className="text-muted-foreground">
                           {' · '}{t('contracts.signers.log.chainCount', 'Entries checked: {{count}}', { count: overview.chain.count })}
                         </span>
                       </span>
@@ -191,14 +191,14 @@ export const SigningOverviewCard: React.FC<SigningOverviewCardProps> = ({ contra
                         {t('contracts.signers.log.chainBroken', 'Chain broken at #{{seq}}', { seq: overview.chain.brokenAt ?? '?' })}
                       </span>
                     ))}
-                  </div><p className="text-xs text-neutral-500 dark:text-neutral-400 mb-3">
+                  </div><p className="text-xs text-muted-foreground mb-3">
                     {t('contracts.signers.log.help', 'Every step of the signing, in order. Each entry is chained to the one before, so a change to any entry shows up in the check.')}
                   </p>{overview.chain && !overview.chain.ok && overview.chain.reason && (
                     <p className="text-sm text-red-700 dark:text-red-300 mb-3">
                       {t(`contracts.signers.log.reason.${overview.chain.reason}`, overview.chain.reason)}
                     </p>
                   )}{overview.events.length === 0 ? (
-                    <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('contracts.signers.log.empty', 'No entries yet.')}</p>
+                    <p className="text-sm text-muted-foreground">{t('contracts.signers.log.empty', 'No entries yet.')}</p>
                   ) : (
                     <ol className="space-y-2">
                       {overview.events.map((e) => {
@@ -206,17 +206,17 @@ export const SigningOverviewCard: React.FC<SigningOverviewCardProps> = ({ contra
                         const signer = nameOf(e.signerId);
                         return (
                           <li key={e.seq} className="flex items-start gap-3 text-sm border-l-2 border-primary pl-3">
-                            <span className="font-mono text-xs text-neutral-500 dark:text-neutral-400 w-8 shrink-0">#{e.seq}</span>
+                            <span className="font-mono text-xs text-muted-foreground w-8 shrink-0">#{e.seq}</span>
                             <div className="flex-1 min-w-0">
-                              <div className="font-medium text-neutral-900 dark:text-neutral-100">
+                              <div className="font-medium text-foreground">
                                 {t(`contracts.signers.log.type.${e.type}`, e.type.replace(/_/g, ' '))}
                               </div>
-                              <div className="text-xs text-neutral-600 dark:text-neutral-400">
+                              <div className="text-xs text-muted-foreground">
                                 {actor}
                                 {signer && signer !== e.actorLabel && ` · ${signer}`}
                               </div>
                             </div>
-                            <div className="text-xs text-neutral-600 dark:text-neutral-400 whitespace-nowrap font-mono">
+                            <div className="text-xs text-muted-foreground whitespace-nowrap font-mono">
                               {formatDateTime(e.occurredAt)}
                             </div>
                           </li>
@@ -242,13 +242,13 @@ const EvidencePanel: React.FC<{ contractId: number }> = ({ contractId }) => {
 
   const row = (label: string, value: string | null, mono = false) => (
     <>
-      <dt className="text-neutral-500 dark:text-neutral-400">{label}</dt>
-      <dd className={`text-neutral-900 dark:text-neutral-100 break-all ${mono ? 'font-mono' : ''}`}>{value || '—'}</dd>
+      <dt className="text-muted-foreground">{label}</dt>
+      <dd className={`text-foreground break-all ${mono ? 'font-mono' : ''}`}>{value || '—'}</dd>
     </>
   );
 
   return (
-    <div className="mt-3 pt-3 border-t border-neutral-200 dark:border-neutral-700">
+    <div className="mt-3 pt-3 border-t border-border">
       <div className="flex items-center gap-3 flex-wrap">
         <Button
                         variant="outline"
@@ -265,7 +265,7 @@ const EvidencePanel: React.FC<{ contractId: number }> = ({ contractId }) => {
                         {isFetching && <Loader2 className="animate-spin" />}{shown ? <EyeOff className="w-4 h-4 mr-1" /> : <Eye className="w-4 h-4 mr-1" />}{shown
                           ? t('contracts.signers.evidence.hide', 'Hide evidence')
                           : t('contracts.signers.evidence.show', 'Show evidence')}</Button>
-        <span className="text-xs text-neutral-500 dark:text-neutral-400">
+        <span className="text-xs text-muted-foreground">
           {t('contracts.signers.evidence.note', 'Shows the IP address, browser and decline reason recorded for each signer. Each time you open it, that is recorded in the activity log.')}
         </span>
       </div>
@@ -277,11 +277,11 @@ const EvidencePanel: React.FC<{ contractId: number }> = ({ contractId }) => {
       {shown && data && (
         <div className="mt-3 space-y-3">
           {data.evidence.length === 0 && (
-            <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('contracts.signers.evidence.empty', 'Nothing recorded yet.')}</p>
+            <p className="text-sm text-muted-foreground">{t('contracts.signers.evidence.empty', 'Nothing recorded yet.')}</p>
           )}
           {data.evidence.map((ev) => (
-            <div key={ev.signerId} className="p-3 rounded-sm border border-neutral-200 dark:border-neutral-700">
-              <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100 mb-1">{ev.name || '—'}</p>
+            <div key={ev.signerId} className="p-3 rounded-sm border border-border">
+              <p className="text-sm font-medium text-foreground mb-1">{ev.name || '—'}</p>
               <dl className="grid grid-cols-1 sm:grid-cols-[12rem_1fr] gap-x-3 gap-y-1 text-xs">
                 {row(t('contracts.signers.evidence.ip', 'IP address'), ev.ip, true)}
                 {row(t('contracts.signers.evidence.userAgent', 'Browser'), ev.userAgent)}

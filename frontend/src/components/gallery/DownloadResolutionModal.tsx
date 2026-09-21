@@ -142,7 +142,7 @@ export const DownloadResolutionModal: React.FC<DownloadResolutionModalProps> = (
                             className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
                               selected === choice.id
                                 ? 'border-brand-500 bg-brand-50 dark:bg-brand-900/20'
-                                : 'border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800'
+                                : 'border-border hover:bg-accent'
                             }`}
                           >
                             <input
@@ -154,11 +154,11 @@ export const DownloadResolutionModal: React.FC<DownloadResolutionModalProps> = (
                               className="accent-brand-600"
                             />
                             <span className="flex-1 min-w-0">
-                              <span className="block text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                              <span className="block text-sm font-medium text-foreground">
                                 {choice.label}
                               </span>
                               {choice.width && choice.height && (
-                                <span className="block text-xs text-neutral-500 dark:text-neutral-400">
+                                <span className="block text-xs text-muted-foreground">
                                   {t('gallery.resolutionUpTo', 'up to {{width}} × {{height}} px', {
                                     width: choice.width,
                                     height: choice.height,
@@ -181,10 +181,10 @@ export const DownloadResolutionModal: React.FC<DownloadResolutionModalProps> = (
         {phase === 'preparing' && (
                     <div className="py-6 text-center">
                       <Loader2 className="w-8 h-8 mx-auto mb-3 animate-spin text-brand-600" />
-                      <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                      <p className="text-sm font-medium text-foreground">
                         {t('gallery.preparingDownload', 'Preparing your download…')}
                       </p>
-                      <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                      <p className="text-xs text-muted-foreground mt-1">
                         {photoCount > 0
                           ? t('gallery.preparingProgress', '{{count}} photos packaged', { count: photoCount })
                           : t('gallery.preparingHint', 'Resizing photos — this can take a moment for large galleries.')}
@@ -196,7 +196,7 @@ export const DownloadResolutionModal: React.FC<DownloadResolutionModalProps> = (
                       <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
                         <Check className="w-6 h-6 text-green-600 dark:text-green-400" />
                       </div>
-                      <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100 mb-4">
+                      <p className="text-sm font-medium text-foreground mb-4">
                         {t('gallery.downloadReady', 'Your download is ready')}
                       </p>
                       <Button onClick={download}>
@@ -206,7 +206,7 @@ export const DownloadResolutionModal: React.FC<DownloadResolutionModalProps> = (
         {phase === 'error' && (
                     <div className="py-6 text-center">
                       <AlertCircle className="w-8 h-8 mx-auto mb-3 text-red-600 dark:text-red-400" />
-                      <p className="text-sm text-neutral-700 dark:text-neutral-300 mb-4">{error}</p>
+                      <p className="text-sm text-foreground mb-4">{error}</p>
                       <div className="flex justify-center gap-2">
                         <Button variant="outline" onClick={onClose}>
                           {t('common.close', 'Close')}

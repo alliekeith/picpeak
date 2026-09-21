@@ -50,22 +50,42 @@
  * formats support them.
  */
 :root {
-  --radius: 0.5rem;
+  /*
+   * The built-in palette. These --default-* values are the single source of
+   * truth for "unbranded": :root points the live tokens at them, and the
+   * .unbranded-surface scope below points them back at the same values to
+   * undo whatever branding applyTheme() wrote onto <html>.
+   */
+  --default-radius: 0.5rem;
+  --default-background: oklch(0.985 0 0);
+  --default-foreground: oklch(0.145 0 0);
+  --default-card: oklch(1 0 0);
+  --default-muted: oklch(0.97 0 0);
+  --default-muted-foreground: oklch(0.556 0 0);
+  --default-border: oklch(0.922 0 0);
+  /* Brand CTA fill (#5C8762 — scrappbook.de green). */
+  --default-primary: oklch(0.5758 0.0605 145.28);
+  --default-primary-foreground: oklch(1 0 0);
+  --default-brand: oklch(0.723 0.1854 145.3);
+  --default-brand-foreground: oklch(1 0 0);
+  --default-brand-light: oklch(0.6756 0.0713 145.6);
+  --default-brand-dark: oklch(0.4989 0.0545 145.4);
+
+  --radius: var(--default-radius);
 
   /*
    * BASE tokens. ThemeContext.applyTheme() overwrites exactly these at
-   * runtime from the photographer's branding settings.
+   * runtime from the branding settings.
    */
-  --background: oklch(0.985 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --border: oklch(0.922 0 0);
+  --background: var(--default-background);
+  --foreground: var(--default-foreground);
+  --card: var(--default-card);
+  --muted: var(--default-muted);
+  --muted-foreground: var(--default-muted-foreground);
+  --border: var(--default-border);
 
-  /* Brand CTA fill (#5C8762 — scrappbook.de green). */
-  --primary: oklch(0.5758 0.0605 145.28);
-  --primary-foreground: oklch(1 0 0);
+  --primary: var(--default-primary);
+  --primary-foreground: var(--default-primary-foreground);
 
   /*
    * DERIVED tokens. These reference the base tokens rather than repeating
@@ -93,10 +113,10 @@
    * PicPeak brand tokens. Not part of shadcn's set: these carry the
    * photographer's colour for links, focus rings and tinted chips.
    */
-  --brand: oklch(0.723 0.1854 145.3);
-  --brand-foreground: oklch(1 0 0);
-  --brand-light: oklch(0.6756 0.0713 145.6);
-  --brand-dark: oklch(0.4989 0.0545 145.4);
+  --brand: var(--default-brand);
+  --brand-foreground: var(--default-brand-foreground);
+  --brand-light: var(--default-brand-light);
+  --brand-dark: var(--default-brand-dark);
 
   /* Non-colour theme values written by ThemeContext.applyTheme(). */
   --font-family: 'Inter', 'Noto Sans', system-ui, -apple-system, sans-serif;
@@ -107,26 +127,61 @@
 
 .dark {
   /*
-   * Only the base tokens are redeclared; the derived ones in :root follow
-   * automatically because they are var() references.
+   * Redefines the DEFAULTS rather than the live tokens, so both :root and the
+   * .unbranded-surface scope below pick dark mode up. Only the base tokens
+   * are listed; the derived ones in :root follow automatically because they
+   * are var() references.
    */
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --border: oklch(0.269 0 0);
+  --default-background: oklch(0.145 0 0);
+  --default-foreground: oklch(0.985 0 0);
+  --default-card: oklch(0.205 0 0);
+  --default-muted: oklch(0.269 0 0);
+  --default-muted-foreground: oklch(0.708 0 0);
+  --default-border: oklch(0.269 0 0);
 
-  --primary: oklch(0.5758 0.0605 145.28);
-  --primary-foreground: oklch(1 0 0);
+  --background: var(--default-background);
+  --foreground: var(--default-foreground);
+  --card: var(--default-card);
+  --muted: var(--default-muted);
+  --muted-foreground: var(--default-muted-foreground);
+  --border: var(--default-border);
 
   --destructive: oklch(0.637 0.237 25.331);
   --destructive-foreground: oklch(1 0 0);
+}
 
-  --brand: oklch(0.723 0.1854 145.3);
-  --brand-foreground: oklch(1 0 0);
-  --brand-light: oklch(0.6756 0.0713 145.6);
-  --brand-dark: oklch(0.4989 0.0545 145.4);
+/*
+ * Unbranded scope.
+ *
+ * applyTheme() writes the instance branding as inline custom properties on
+ * <html>, because the page background and its pattern live on body and
+ * body::before and need document-level scope. The admin panel is deliberately
+ * NOT branded — it has its own dark-mode switch — so this class, set on <body>
+ * for admin routes, re-points the base tokens at the built-in palette.
+ * Everything inside body then resolves to the defaults, dialogs, dropdowns and
+ * toasts included: those portal to body and would escape a scope placed on a
+ * layout element instead.
+ *
+ * Only colour, radius, shadow and the background pattern are reset.
+ * Typography still follows the instance setting, which is applied through a
+ * separate `*` rule.
+ */
+.unbranded-surface {
+  --background: var(--default-background);
+  --foreground: var(--default-foreground);
+  --card: var(--default-card);
+  --muted: var(--default-muted);
+  --muted-foreground: var(--default-muted-foreground);
+  --border: var(--default-border);
+  --primary: var(--default-primary);
+  --primary-foreground: var(--default-primary-foreground);
+  --brand: var(--default-brand);
+  --brand-foreground: var(--default-brand-foreground);
+  --brand-light: var(--default-brand-light);
+  --brand-dark: var(--default-brand-dark);
+  --radius: var(--default-radius);
+  --shadow-default: 0 4px 6px rgb(0 0 0 / 0.1);
+  --background-pattern: none;
 }
 
 @theme inline {
@@ -224,6 +279,23 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
+ * The themed page background lives OUTSIDE @layer base on purpose.
+ *
+ * index.html carries an anti-flash <style> in <head> setting
+ * `html, body { background-color: #fafafa }` so the first frame is not white
+ * on dark-OS devices (#358). Under Tailwind 3 that inline style lost to this
+ * rule on document order. Tailwind 4 emits @layer base as a real cascade
+ * layer, and unlayered rules beat layered ones no matter where they appear —
+ * which pinned every themed page to the bootstrap colour and stopped gallery
+ * backgrounds following their theme. Keeping this rule unlayered restores
+ * that, while the bootstrap still wins for the frames before CSS loads.
+ */
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+/*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,
   so we've added these compatibility styles to make sure everything still
   looks the same as it did with Tailwind CSS v3.
@@ -288,11 +360,6 @@
   color: var(--foreground);
   @apply hover:opacity-80;
 
-  /* Secondary and outline buttons for admin dark mode — restore explicit
-   * neutral overrides so existing admin pages render exactly as before. */
-  .dark & {
-    @apply bg-neutral-700 border-neutral-600 text-neutral-100;
-  }
 }
 
 @utility btn-outline {
@@ -301,12 +368,8 @@
   color: var(--muted-foreground);
   @apply border hover:opacity-80;
 
-  .dark & {
-    @apply border-neutral-600 text-neutral-300;
-  }
-
-  .dark &:hover {
-    @apply bg-neutral-800;
+  &:hover {
+    background-color: var(--accent);
   }
 }
 
@@ -324,25 +387,19 @@
 
 @utility input {
   /*
-   * Input styles - Admin inputs keep explicit Tailwind colors so the visual
-   * contract is byte-for-byte identical to pre-migration (border-neutral-300
-   * vs the lighter neutral-200/surface-border). Dark mode is handled by the
-   * .dark .input override below. Gallery inputs use .input-themed which
-   * binds to the 8-token palette via CSS variables.
+   * Bound to the theme tokens. This used to hardcode bg-white/neutral-300 and
+   * then restate the same colours twice more — once under `.dark .input` and
+   * once under `.customer-surface .input`. A token resolves per theme on its
+   * own, so both overrides are gone and a branded gallery now restyles these
+   * inputs without any extra scope.
    */
   @apply flex h-10 w-full rounded-lg border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
-  @apply bg-white border-neutral-300 text-neutral-900;
+  background-color: var(--card);
+  border-color: var(--input);
+  color: var(--foreground);
 
   &::placeholder {
-    @apply text-neutral-500;
-  }
-
-  .dark & {
-    @apply bg-neutral-800 border-neutral-700 text-neutral-100;
-  }
-
-  .dark &::placeholder {
-    @apply text-neutral-500;
+    color: var(--muted-foreground);
   }
 
   .customer-surface & {
@@ -386,27 +443,15 @@
     color: var(--muted-foreground);
   }
 
-  .dark & {
-    @apply bg-neutral-800 border-neutral-700 text-neutral-100;
-  }
-
-  .dark &::placeholder {
-    @apply text-neutral-500;
-  }
 }
 
 @utility card {
-  /* Card styles - Admin cards keep their explicit Tailwind colors for
-   * migration safety (visible border lightness change otherwise); the
-   * .dark .card override below handles admin dark mode. Gallery uses
-   * .card-themed which binds to the 8-token palette. */
-  @apply rounded-xl border bg-white border-neutral-200;
+  /* Bound to the theme tokens, so this one rule covers light mode, admin
+   * dark mode and per-gallery branding. */
+  @apply rounded-xl border;
+  background-color: var(--card);
+  border-color: var(--border);
   box-shadow: var(--shadow-default);
-
-  /* Admin dark mode overrides (via Tailwind dark: class on html) */
-  .dark & {
-    @apply bg-neutral-800 border-neutral-700;
-  }
 
   /*
    * Customer-surface scope (#354): the default .input and .card classes
@@ -445,9 +490,6 @@
   border-color: var(--border);
   box-shadow: var(--shadow-default);
 
-  .dark & {
-    @apply bg-neutral-800 border-neutral-700;
-  }
 }
 
 @utility container {
@@ -512,6 +554,16 @@
  * ordinary rule in a layer instead.
  */
 @layer components {
+  /*
+   * Admin dark-mode overrides for the legacy component classes.
+   *
+   * Every rule here must carry the `.dark` prefix explicitly. The Tailwind 4
+   * codemod had folded this whole block into `@utility dark { & ... }`, and
+   * when it was unwound the element rules below (table, thead, th, td,
+   * select, ...) kept a bare `&`, which compiles to `:scope` at the top
+   * level of a stylesheet — that matches the document root, so the dark
+   * table and select styling was applying in light mode too.
+   */
   .dark .bg-brand-soft {
     background-color: var(--primary);
     background-color: color-mix(
@@ -533,33 +585,7 @@
   }
 
   /* Admin dark mode overrides (via Tailwind dark: class on html) */
-  .dark .card {
-    @apply bg-neutral-800 border-neutral-700;
-  }
 
-  .dark .card-themed {
-    @apply bg-neutral-800 border-neutral-700;
-  }
-
-  .dark .input {
-    @apply bg-neutral-800 border-neutral-700 text-neutral-100;
-  }
-
-  .dark .input::placeholder {
-    @apply text-neutral-500;
-  }
-
-  .dark .input-themed {
-    @apply bg-neutral-800 border-neutral-700 text-neutral-100;
-  }
-
-  .dark .input-themed::placeholder {
-    @apply text-neutral-500;
-  }
-
-  .dark .skeleton {
-    @apply bg-neutral-700;
-  }
 
   .dark .badge-success {
     @apply bg-green-900/40 text-green-300;
@@ -575,57 +601,46 @@
 
   /* Secondary and outline buttons for admin dark mode — restore explicit
    * neutral overrides so existing admin pages render exactly as before. */
-  .dark .btn-secondary {
-    @apply bg-neutral-700 border-neutral-600 text-neutral-100;
-  }
-
-  .dark .btn-outline {
-    @apply border-neutral-600 text-neutral-300;
-  }
-
-  .dark .btn-outline:hover {
-    @apply bg-neutral-800;
-  }
 
   /* Table styles for admin dark mode */
-  & table {
-    @apply bg-neutral-800;
+  .dark table {
+    background-color: var(--card);
   }
 
-  & thead {
-    @apply bg-neutral-900/50;
+  .dark thead {
+    background-color: var(--muted);
   }
 
-  & th {
-    @apply text-neutral-300 border-neutral-700;
+  .dark th {
+    color: var(--muted-foreground);
+    border-color: var(--border);
   }
 
-  & td {
-    @apply text-neutral-200 border-neutral-700;
+  .dark td {
+    color: var(--foreground);
+    border-color: var(--border);
   }
 
-  & tbody tr {
-    @apply border-neutral-700;
+  .dark tbody tr {
+    border-color: var(--border);
   }
 
-  & tbody tr:hover {
-    @apply bg-neutral-700/50;
+  .dark tbody tr:hover {
+    background-color: var(--accent);
   }
 
   /* Select/dropdown for admin dark mode */
-  & select {
-    @apply bg-neutral-800 border-neutral-700 text-neutral-100;
+  .dark select {
+    background-color: var(--card);
+    border-color: var(--input);
+    color: var(--foreground);
   }
 
   /* Tag/chip styles for admin dark mode */
-  .dark .tag {
-    @apply bg-neutral-700 text-neutral-200 border-neutral-600;
-  }
-  & [class*='tag-'] {
-    @apply bg-neutral-700 text-neutral-200 border-neutral-600;
-  }
-  .dark .chip {
-    @apply bg-neutral-700 text-neutral-200 border-neutral-600;
+  .dark [class*='tag-'] {
+    background-color: var(--muted);
+    color: var(--foreground);
+    border-color: var(--border);
   }
 
   /* Alert/info boxes for admin dark mode */
@@ -743,11 +758,8 @@
 
 @utility skeleton {
   /* Image loading skeleton */
-  @apply animate-pulse rounded-lg bg-neutral-200;
-
-  .dark & {
-    @apply bg-neutral-700;
-  }
+  @apply animate-pulse rounded-lg;
+  background-color: var(--muted);
 }
 
 @utility gallery-grid {
@@ -845,16 +857,15 @@
 }
 
 @utility tag {
-  /* Tag/chip styles for admin dark mode */
-  .dark & {
-    @apply bg-neutral-700 text-neutral-200 border-neutral-600;
-  }
+  background-color: var(--muted);
+  color: var(--foreground);
+  border-color: var(--border);
 }
 
 @utility chip {
-  .dark & {
-    @apply bg-neutral-700 text-neutral-200 border-neutral-600;
-  }
+  background-color: var(--muted);
+  color: var(--foreground);
+  border-color: var(--border);
 }
 
 @utility alert-info {
@@ -1032,8 +1043,6 @@
   }
 
   body {
-    background-color: var(--background);
-    color: var(--foreground);
     font-size: var(--font-size-base);
     @apply antialiased;
     overflow-x: hidden;
@@ -1059,28 +1068,20 @@
     height: 10px;
   }
 
+  /* Token-bound, so the scrollbar follows the theme in light mode, admin
+   * dark mode and a branded gallery alike — the .dark duplicates these used
+   * to need are gone. */
   ::-webkit-scrollbar-track {
-    @apply bg-neutral-100;
+    background-color: var(--muted);
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-neutral-300 rounded-full;
+    @apply rounded-full;
+    background-color: var(--border);
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-neutral-400;
-  }
-
-  .dark ::-webkit-scrollbar-track {
-    @apply bg-neutral-800;
-  }
-
-  .dark ::-webkit-scrollbar-thumb {
-    @apply bg-neutral-600;
-  }
-
-  .dark ::-webkit-scrollbar-thumb:hover {
-    @apply bg-neutral-500;
+    background-color: var(--muted-foreground);
   }
 }
 

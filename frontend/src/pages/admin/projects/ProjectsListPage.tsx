@@ -61,11 +61,11 @@ export const ProjectsListPage: React.FC = () => {
     <div>
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
-            <FolderKanban className="w-6 h-6 text-neutral-500" />
+          <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
+            <FolderKanban className="w-6 h-6 text-muted-foreground" />
             {t('projects.title', 'Project Overview')}
           </h1>
-          <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             {t('projects.subtitle', 'Group events into projects and see every email, document, gallery and hour in one cockpit.')}
           </p>
         </div>
@@ -74,7 +74,7 @@ export const ProjectsListPage: React.FC = () => {
       {/* Inline create */}
       <Card className="mb-4"><CardContent><div className="flex flex-col sm:flex-row gap-3 sm:items-end">
                     <div className="flex-1">
-                      <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                      <label className="block text-sm font-medium text-foreground mb-1">
                         {t('projects.create.label', 'New project name')}
                       </label>
                       <Input
@@ -92,7 +92,7 @@ export const ProjectsListPage: React.FC = () => {
 
       {/* Search */}
       <div className="relative mb-3 max-w-sm">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         <Input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -104,14 +104,14 @@ export const ProjectsListPage: React.FC = () => {
       {isLoading ? (
         <Loading />
       ) : !projects || projects.length === 0 ? (
-        <Card><CardContent><div className="text-center py-10 text-neutral-500 dark:text-neutral-400">
+        <Card><CardContent><div className="text-center py-10 text-muted-foreground">
                               {t('projects.empty', 'No projects yet. Create one above, or events you already have were grouped automatically.')}
                             </div></CardContent></Card>
       ) : (
-        <div className="rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden">
+        <div className="rounded-lg border border-border overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-neutral-50 dark:bg-neutral-800 text-left">
+              <thead className="bg-muted text-left">
                 <tr>
                   <th className="px-4 py-2 font-medium">{t('projects.col.name', 'Project')}</th>
                   <th className="px-4 py-2 font-medium">{t('projects.col.customer', 'Customer')}</th>
@@ -126,18 +126,18 @@ export const ProjectsListPage: React.FC = () => {
                   <tr
                     key={p.id}
                     onClick={() => navigate(`/admin/clients/projects/${p.id}`)}
-                    className="border-t border-neutral-100 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-800/60 cursor-pointer"
+                    className="border-t border-border hover:bg-accent cursor-pointer"
                   >
-                    <td className="px-4 py-2 font-medium text-neutral-900 dark:text-neutral-100">{p.name}</td>
-                    <td className="px-4 py-2 text-neutral-600 dark:text-neutral-400">{p.customerEmail || '—'}</td>
+                    <td className="px-4 py-2 font-medium text-foreground">{p.name}</td>
+                    <td className="px-4 py-2 text-muted-foreground">{p.customerEmail || '—'}</td>
                     <td className="px-4 py-2 text-right tabular-nums">{p.eventCount ?? 0}</td>
-                    <td className="px-4 py-2 text-right tabular-nums font-medium text-neutral-900 dark:text-neutral-100">{formatValuation(p)}</td>
+                    <td className="px-4 py-2 text-right tabular-nums font-medium text-foreground">{formatValuation(p)}</td>
                     <td className="px-4 py-2">
-                      <span className="inline-block rounded-full px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-200">
+                      <span className="inline-block rounded-full px-2 py-0.5 text-xs bg-muted text-foreground">
                         {t(`projects.status.${p.status}`, p.status)}
                       </span>
                     </td>
-                    <td className="px-4 py-2 text-neutral-500 dark:text-neutral-400">{p.updatedAt ? format(p.updatedAt) : '—'}</td>
+                    <td className="px-4 py-2 text-muted-foreground">{p.updatedAt ? format(p.updatedAt) : '—'}</td>
                   </tr>
                 ))}
               </tbody>

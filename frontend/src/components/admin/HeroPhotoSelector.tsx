@@ -39,11 +39,11 @@ export const HeroPhotoSelector: React.FC<HeroPhotoSelectorProps> = ({
   if (!isEditing) {
     return (
       <div>
-        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+        <label className="block text-sm font-medium text-foreground mb-1">
           {t('events.heroPhoto')}
         </label>
         {currentHeroPhoto ? (
-          <div className="relative w-full h-48 rounded-lg overflow-hidden bg-neutral-100">
+          <div className="relative w-full h-48 rounded-lg overflow-hidden bg-muted">
             <AuthenticatedImage
               src={currentHeroPhoto.thumbnail_url || currentHeroPhoto.url}
               alt={currentHeroPhoto.filename}
@@ -51,7 +51,7 @@ export const HeroPhotoSelector: React.FC<HeroPhotoSelectorProps> = ({
             />
           </div>
         ) : (
-          <p className="text-sm text-neutral-500">{t('events.noHeroPhotoSelected')}</p>
+          <p className="text-sm text-muted-foreground">{t('events.noHeroPhotoSelected')}</p>
         )}
       </div>
     );
@@ -59,15 +59,15 @@ export const HeroPhotoSelector: React.FC<HeroPhotoSelectorProps> = ({
 
   return (
     <div>
-      <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+      <label className="block text-sm font-medium text-foreground mb-1">
         {t('events.heroPhoto')}
       </label>
-      <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-2">
+      <p className="text-xs text-muted-foreground mb-2">
         {t('events.heroPhotoHelp')}
       </p>
       
       {currentHeroPhoto ? (
-        <div className="relative w-full h-48 rounded-lg overflow-hidden bg-neutral-100 mb-2">
+        <div className="relative w-full h-48 rounded-lg overflow-hidden bg-muted mb-2">
           <AuthenticatedImage
             src={currentHeroPhoto.thumbnail_url || currentHeroPhoto.url}
             alt={currentHeroPhoto.filename}
@@ -78,7 +78,7 @@ export const HeroPhotoSelector: React.FC<HeroPhotoSelectorProps> = ({
               variant="secondary"
               size="sm"
               onClick={() => setIsOpen(true)}
-              className="bg-white/90 hover:bg-white"
+              className="bg-white/90 hover:bg-accent"
             >
               {t('common.change')}
             </Button>
@@ -86,7 +86,7 @@ export const HeroPhotoSelector: React.FC<HeroPhotoSelectorProps> = ({
                                     variant="secondary"
                                     size="sm"
                                     onClick={handleRemove}
-                                    className="bg-white/90 hover:bg-white"
+                                    className="bg-white/90 hover:bg-accent"
                                   >
                                     <X className="w-4 h-4" />{t('common.remove')}</Button>
           </div>
@@ -104,19 +104,19 @@ export const HeroPhotoSelector: React.FC<HeroPhotoSelectorProps> = ({
       {/* Photo Selection Modal */}
       {isOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-          <Card className="max-w-4xl w-full max-h-[90vh] overflow-hidden"><CardContent><div className="p-6 border-b border-neutral-200 dark:border-neutral-700">
+          <Card className="max-w-4xl w-full max-h-[90vh] overflow-hidden"><CardContent><div className="p-6 border-b border-border">
                                 <div className="flex items-center justify-between">
-                                  <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">{t('events.selectHeroPhoto')}</h2>
+                                  <h2 className="text-xl font-semibold text-foreground">{t('events.selectHeroPhoto')}</h2>
                                   <button
                                     onClick={() => setIsOpen(false)}
-                                    className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors"
+                                    className="p-2 hover:bg-accent rounded-lg transition-colors"
                                   >
                                     <X className="w-5 h-5" />
                                   </button>
                                 </div>
                               </div><div className="p-6 overflow-y-auto max-h-[calc(90vh-180px)]">
                                 {photos.length === 0 ? (
-                                  <p className="text-center text-neutral-500 py-8">
+                                  <p className="text-center text-muted-foreground py-8">
                                     {t('events.noPhotosAvailable')}
                                   </p>
                                 ) : (
@@ -128,10 +128,10 @@ export const HeroPhotoSelector: React.FC<HeroPhotoSelectorProps> = ({
                                         className={`relative cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${
                                           photo.id === selectedPhotoId
                                             ? 'border-primary ring-2 ring-brand-500 ring-offset-2'
-                                            : 'border-transparent hover:border-neutral-300'
+                                            : 'border-transparent hover:border-border'
                                         }`}
                                       >
-                                        <div className="aspect-square bg-neutral-100">
+                                        <div className="aspect-square bg-muted">
                                           <AuthenticatedImage
                                             src={photo.thumbnail_url || photo.url}
                                             alt={photo.filename}
@@ -150,7 +150,7 @@ export const HeroPhotoSelector: React.FC<HeroPhotoSelectorProps> = ({
                                     ))}
                                   </div>
                                 )}
-                              </div><div className="p-6 border-t border-neutral-200 dark:border-neutral-700 flex justify-end gap-3">
+                              </div><div className="p-6 border-t border-border flex justify-end gap-3">
                                 <Button
                                   variant="outline"
                                   onClick={() => setIsOpen(false)}

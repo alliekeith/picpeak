@@ -124,7 +124,7 @@ export default function ProductUsageTab() {
   return (
     <div className="space-y-6 text-foreground">
       <p>{t('productUsage.purpose')}</p>
-      <Card className="space-y-4"><CardContent><h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+      <Card className="space-y-4"><CardContent><h3 className="text-lg font-semibold text-foreground">
                     {t(`productUsage.states.${data.status}`)}
                   </h3><p>{t(`productUsage.stateDetails.${data.status}`)}</p>{data.status !== 'disabled' && <p>{t('productUsage.currentSchema', { schema: data.schema_version })}</p>}{data.consent_update_available && (
                     <div className="rounded-sm border border-theme p-3 space-y-2">
@@ -169,7 +169,7 @@ export default function ProductUsageTab() {
                     // A paced install is waiting, not broken. Without this the tab shows
                     // a delivery error and an idle Retry button, and nothing says the
                     // sender is going to try again on its own.
-                    <p role="status" className="text-sm text-neutral-600 dark:text-neutral-400">
+                    <p role="status" className="text-sm text-muted-foreground">
                       {t('productUsage.retryScheduled', {
                         time: new Date(data.retry_after).toLocaleTimeString()
                       })}
@@ -224,7 +224,7 @@ export default function ProductUsageTab() {
                     // activation_pending/deletion_pending with their own packet still
                     // in flight). Which controls it names depends on whether the
                     // v5-upgrade section is actually on screen.
-                    <p role="status" className="text-sm text-neutral-600 dark:text-neutral-400">
+                    <p role="status" className="text-sm text-muted-foreground">
                       {t(data.consent_update_available ? 'productUsage.pendingBlocksActions' : 'productUsage.pendingBlocksPortal')}
                     </p>
                   )}<div className="flex flex-wrap gap-3">
@@ -330,7 +330,7 @@ export default function ProductUsageTab() {
                               data.privacy_receipts.last_deletion ||
                                 data.privacy_receipts.last_abandonment
                             ) && (
-                              <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                              <p className="text-sm text-muted-foreground">
                                 {t('productUsage.auditPreviousParticipation')}
                               </p>
                             )}<Button
@@ -347,7 +347,7 @@ export default function ProductUsageTab() {
         )}
       {active && (
         <>
-          <Card className="space-y-4"><CardContent><h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+          <Card className="space-y-4"><CardContent><h3 className="text-lg font-semibold text-foreground">
                                 {t('productUsage.inspect')}
                               </h3>{/* `.btn` sets whitespace-nowrap, and these labels are long
                                   sentences in both locales — at 390px two of them ran past the
@@ -424,7 +424,7 @@ export default function ProductUsageTab() {
                                 });
                               }}
                             >
-                              <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                              <h3 className="text-lg font-semibold text-foreground">
                                 {t('productUsage.feedbackTitle')}
                               </h3>
                               <p>{t('productUsage.feedbackDisclosure')}</p>

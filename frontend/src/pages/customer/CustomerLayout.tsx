@@ -196,7 +196,7 @@ export const CustomerLayout: React.FC = () => {
                   onClick={() => setSidebarOpen(false)}
                   className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                     isActive
-                      ? 'bg-primary text-white'
+                      ? 'bg-primary text-primary-foreground'
                       // Hover uses the theme `--muted` token
                       // (light mode = #f5f5f5, dark mode = #1f1f1f) —
                       // mirrors the admin sidebar's subtle grey hover.
@@ -243,7 +243,7 @@ export const CustomerLayout: React.FC = () => {
             <button
               type="button"
               onClick={() => { void logout(); }}
-              className="p-2 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 text-muted-foreground hover:text-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2"
+              className="p-2 rounded-sm hover:bg-accent text-muted-foreground hover:text-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2"
               aria-label={t('common.logout', 'Logout')}
               title={t('common.logout', 'Logout')}
             >
@@ -265,7 +265,7 @@ export const CustomerLayout: React.FC = () => {
           <button
             type="button"
             onClick={() => setSidebarOpen(true)}
-            className="p-2 -ml-2 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 text-foreground"
+            className="p-2 -ml-2 rounded-sm hover:bg-accent text-foreground"
             aria-label={t('common.menu', 'Menu')}
           >
             <Menu className="w-6 h-6" />

@@ -289,7 +289,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
             onClick={handleProgressClick}
           >
             <div
-              className="h-full bg-white rounded-full transition-all"
+              className="h-full bg-card rounded-full transition-all"
               style={{ width: `${progress}%` }}
             />
           </div>

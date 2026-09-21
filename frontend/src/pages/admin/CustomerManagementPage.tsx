@@ -128,16 +128,16 @@ export const CustomerManagementPage: React.FC = () => {
     const display = c.displayName?.trim()
       || [c.firstName, c.lastName].filter(Boolean).join(' ').trim()
       || c.companyName?.trim();
-    return display || <span className="text-neutral-500 dark:text-neutral-400 italic">{t('customers.unnamed', 'Unnamed')}</span>;
+    return display || <span className="text-muted-foreground italic">{t('customers.unnamed', 'Unnamed')}</span>;
   };
 
   const renderTabs = () => (
-    <div className="flex gap-6 border-b border-neutral-200 dark:border-neutral-700 mb-6">
+    <div className="flex gap-6 border-b border-border mb-6">
       <button
         type="button"
         onClick={() => setActiveTab('customers')}
         className={`pb-3 -mb-px border-b-2 text-sm font-medium ${
-          activeTab === 'customers' ? 'border-brand text-brand' : 'border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100'
+          activeTab === 'customers' ? 'border-brand text-brand' : 'border-transparent text-muted-foreground hover:text-foreground'
         }`}
       >
         {t('customers.tabs.customers', 'Customers')}
@@ -147,7 +147,7 @@ export const CustomerManagementPage: React.FC = () => {
         type="button"
         onClick={() => setActiveTab('invitations')}
         className={`pb-3 -mb-px border-b-2 text-sm font-medium ${
-          activeTab === 'invitations' ? 'border-brand text-brand' : 'border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100'
+          activeTab === 'invitations' ? 'border-brand text-brand' : 'border-transparent text-muted-foreground hover:text-foreground'
         }`}
       >
         {t('customers.tabs.invitations', 'Invitations')}
@@ -161,7 +161,7 @@ export const CustomerManagementPage: React.FC = () => {
       <div className="flex items-center justify-between mb-6">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{t('customers.pageTitle', 'Customers')}</h1>
+            <h1 className="text-2xl font-bold text-foreground">{t('customers.pageTitle', 'Customers')}</h1>
             {/* Beta badge — Calendar/Quotes/Bills tabs in the customer
                 surface are placeholders, so flag the whole feature as
                 still evolving. Keeps expectations honest. */}
@@ -172,7 +172,7 @@ export const CustomerManagementPage: React.FC = () => {
               {t('navigation.betaTag', 'Beta')}
             </span>
           </div>
-          <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             {t('customers.pageSubtitle', 'Recurring customer accounts that can log in at /customer/login.')}
           </p>
         </div>
@@ -185,7 +185,7 @@ export const CustomerManagementPage: React.FC = () => {
       </div>
 
       <Card className="py-8"><CardContent className="px-8">{renderTabs()}<div className="mb-4">
-                    <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Search className="w-5 h-5 text-neutral-400" />}</div><Input
+                    <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Search className="w-5 h-5 text-muted-foreground" />}</div><Input
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                     placeholder={t('customers.search.placeholder', 'Search by email, name, or company')} className="pl-10"
@@ -199,14 +199,14 @@ export const CustomerManagementPage: React.FC = () => {
                         {t('customers.loadError', 'Could not load customers')}
                       </div>
                     ) : filteredCustomers.length === 0 ? (
-                      <div className="text-center text-neutral-500 dark:text-neutral-400 py-12">
+                      <div className="text-center text-muted-foreground py-12">
                         {t('customers.empty', 'No customers yet. Click "Invite customer" to add one.')}
                       </div>
                     ) : (
                       <div className="overflow-x-auto">
                         <table className="min-w-full text-sm">
                           <thead>
-                            <tr className="text-left text-neutral-500 dark:text-neutral-400">
+                            <tr className="text-left text-muted-foreground">
                               <th className="px-3 py-2 font-medium">{t('customers.table.name', 'Name')}</th>
                               <th className="px-3 py-2 font-medium">{t('customers.table.email', 'Email')}</th>
                               <th className="px-3 py-2 font-medium">{t('customers.table.company', 'Company')}</th>
@@ -218,16 +218,16 @@ export const CustomerManagementPage: React.FC = () => {
                           </thead>
                           <tbody>
                             {filteredCustomers.map((c) => (
-                              <tr key={c.id} className="border-t border-neutral-200 dark:border-neutral-700">
+                              <tr key={c.id} className="border-t border-border">
                                 <td className="px-3 py-3">
-                                  <Link to={`/admin/clients/accounts/${c.id}`} className="text-neutral-900 dark:text-neutral-100 hover:underline">
+                                  <Link to={`/admin/clients/accounts/${c.id}`} className="text-foreground hover:underline">
                                     {renderCustomerName(c)}
                                   </Link>
                                 </td>
-                                <td className="px-3 py-3 text-neutral-500 dark:text-neutral-400">{c.email}</td>
-                                <td className="px-3 py-3 text-neutral-500 dark:text-neutral-400">{c.companyName || '—'}</td>
-                                <td className="px-3 py-3 text-neutral-500 dark:text-neutral-400">{c.eventCount ?? 0}</td>
-                                <td className="px-3 py-3 text-neutral-500 dark:text-neutral-400">{formatDate(c.lastLogin)}</td>
+                                <td className="px-3 py-3 text-muted-foreground">{c.email}</td>
+                                <td className="px-3 py-3 text-muted-foreground">{c.companyName || '—'}</td>
+                                <td className="px-3 py-3 text-muted-foreground">{c.eventCount ?? 0}</td>
+                                <td className="px-3 py-3 text-muted-foreground">{formatDate(c.lastLogin)}</td>
                                 <td className="px-3 py-3">
                                   <div className="flex flex-col gap-1">
                                     {c.isActive ? (
@@ -262,7 +262,7 @@ export const CustomerManagementPage: React.FC = () => {
                                           {t('customers.invitePending.badge', 'Invitation pending')}
                                         </span>
                                       ) : (
-                                        <span className="inline-flex items-center gap-1 text-[11px] px-1.5 py-0.5 rounded-sm bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300">
+                                        <span className="inline-flex items-center gap-1 text-[11px] px-1.5 py-0.5 rounded-sm bg-muted text-foreground">
                                           {t('customers.passive.badge', 'Passive — admin only')}
                                         </span>
                                       );
@@ -295,14 +295,14 @@ export const CustomerManagementPage: React.FC = () => {
                         {t('customers.loadInvitationsError', 'Could not load invitations')}
                       </div>
                     ) : filteredInvitations.length === 0 ? (
-                      <div className="text-center text-neutral-500 dark:text-neutral-400 py-12">
+                      <div className="text-center text-muted-foreground py-12">
                         {t('customers.invitations.empty', 'No pending invitations.')}
                       </div>
                     ) : (
                       <div className="overflow-x-auto">
                         <table className="min-w-full text-sm">
                           <thead>
-                            <tr className="text-left text-neutral-500 dark:text-neutral-400">
+                            <tr className="text-left text-muted-foreground">
                               <th className="px-3 py-2 font-medium">{t('customers.invitations.email', 'Email')}</th>
                               <th className="px-3 py-2 font-medium">{t('customers.invitations.invitedBy', 'Invited by')}</th>
                               <th className="px-3 py-2 font-medium">{t('customers.invitations.expiresAt', 'Expires')}</th>
@@ -312,16 +312,16 @@ export const CustomerManagementPage: React.FC = () => {
                           </thead>
                           <tbody>
                             {filteredInvitations.map((inv: CustomerInvitationSummary) => (
-                              <tr key={inv.id} className="border-t border-neutral-200 dark:border-neutral-700">
-                                <td className="px-3 py-3 text-neutral-900 dark:text-neutral-100">{inv.email}</td>
-                                <td className="px-3 py-3 text-neutral-500 dark:text-neutral-400">{inv.invitedBy || '—'}</td>
-                                <td className="px-3 py-3 text-neutral-500 dark:text-neutral-400">
+                              <tr key={inv.id} className="border-t border-border">
+                                <td className="px-3 py-3 text-foreground">{inv.email}</td>
+                                <td className="px-3 py-3 text-muted-foreground">{inv.invitedBy || '—'}</td>
+                                <td className="px-3 py-3 text-muted-foreground">
                                   <span className="inline-flex items-center gap-1">
                                     <Clock className="w-3.5 h-3.5" />
                                     {formatDate(inv.expiresAt)}
                                   </span>
                                 </td>
-                                <td className="px-3 py-3 text-neutral-500 dark:text-neutral-400">{formatDate(inv.createdAt)}</td>
+                                <td className="px-3 py-3 text-muted-foreground">{formatDate(inv.createdAt)}</td>
                                 <td className="px-3 py-3 text-right">
                                   <Button
                                                                   type="button"
@@ -352,7 +352,7 @@ export const CustomerManagementPage: React.FC = () => {
           onClick={() => setCreateMode(null)}
         >
           <div
-            className="w-full max-w-2xl rounded-xl shadow-lg max-h-[90vh] overflow-y-auto bg-white dark:bg-neutral-900"
+            className="w-full max-w-2xl rounded-xl shadow-lg max-h-[90vh] overflow-y-auto bg-card"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-6">
@@ -372,17 +372,17 @@ export const CustomerManagementPage: React.FC = () => {
 
       {confirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-          <div className="w-full max-w-md rounded-xl shadow-lg bg-white dark:bg-neutral-900">
+          <div className="w-full max-w-md rounded-xl shadow-lg bg-card">
             <div className="p-6">
               <div className="flex items-start gap-3 mb-4">
                 <AlertTriangle className="w-5 h-5 mt-0.5 text-amber-500" />
                 <div>
-                  <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                  <h2 className="text-lg font-semibold text-foreground">
                     {confirm.kind === 'deactivate'
                       ? t('customers.deactivate.title', 'Deactivate customer?')
                       : t('customers.cancelInvitation.title', 'Cancel invitation?')}
                   </h2>
-                  <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+                  <p className="mt-1 text-sm text-muted-foreground">
                     {confirm.kind === 'deactivate'
                       ? t('customers.deactivate.body',
                         'They will no longer be able to log in. You can re-invite them later.')

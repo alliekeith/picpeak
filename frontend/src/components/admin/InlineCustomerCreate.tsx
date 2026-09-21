@@ -245,17 +245,17 @@ export const InlineCustomerCreate: React.FC<Props> = ({ onCreated, onCancel, mod
     <div className="space-y-3">
       <div className="flex items-start gap-3 mb-2">
         <div>
-          <h4 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
+          <h4 className="text-sm font-semibold text-foreground">
             {heading.title}
           </h4>
-          <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-0.5">
+          <p className="text-xs text-muted-foreground mt-0.5">
             {heading.subtitle}
           </p>
         </div>
         <button
           type="button"
           onClick={onCancel}
-          className="ml-auto p-1 rounded-sm text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100"
+          className="ml-auto p-1 rounded-sm text-muted-foreground hover:text-foreground"
           aria-label={t('common.cancel', 'Cancel') as string}
         >
           <X className="w-4 h-4" />
@@ -275,7 +275,7 @@ export const InlineCustomerCreate: React.FC<Props> = ({ onCreated, onCancel, mod
                         onChange={setField('companyName')}
                       /></Label></div>
         <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+          <label className="block text-sm font-medium text-foreground mb-1">
             {t('customers.detail.salutation', 'Salutation')}
           </label>
           {/* Salutation values are stored verbatim ("Herr", "Frau",
@@ -286,7 +286,7 @@ export const InlineCustomerCreate: React.FC<Props> = ({ onCreated, onCancel, mod
           <select
             value={form.salutation}
             onChange={setField('salutation')}
-            className="w-full rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100"
+            className="w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground"
           >
             <option value="">{t('customer.profile.salutation.none', '— Not specified —')}</option>
             <option value="Herr">{t('customer.profile.salutation.herr', 'Mr.')}</option>
@@ -345,13 +345,13 @@ export const InlineCustomerCreate: React.FC<Props> = ({ onCreated, onCancel, mod
           onChange={(code) => setForm((prev) => ({ ...prev, countryCode: code }))}
         />
         <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+          <label className="block text-sm font-medium text-foreground mb-1">
             {t('customers.detail.preferredLanguage', 'Preferred language')}
           </label>
           <select
             value={form.preferredLanguage || ''}
             onChange={setField('preferredLanguage')}
-            className="w-full rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100"
+            className="w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground"
           >
             <option value="en">English</option>
             <option value="de">Deutsch</option>
@@ -363,7 +363,7 @@ export const InlineCustomerCreate: React.FC<Props> = ({ onCreated, onCancel, mod
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center justify-end gap-2 pt-2 border-t border-neutral-200 dark:border-neutral-700">
+      <div className="flex flex-wrap items-center justify-end gap-2 pt-2 border-t border-border">
         <Button variant="outline" onClick={onCancel} disabled={busy !== null}>
           {t('common.cancel', 'Cancel')}
         </Button>

@@ -32,7 +32,7 @@ export const FolderTreeNode: React.FC<{
     'flex items-center gap-1 py-1 pr-1 rounded-sm ' +
     (isSelected
       ? 'bg-primary/15'
-      : 'hover:bg-neutral-50 dark:hover:bg-neutral-700');
+      : 'hover:bg-accent');
 
   return (
     <div>
@@ -40,7 +40,7 @@ export const FolderTreeNode: React.FC<{
         <button
           type="button"
           onClick={() => toggleExpand(path)}
-          className="p-0.5 text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200"
+          className="p-0.5 text-muted-foreground hover:text-foreground"
           aria-label={isExpanded ? t('common.collapse', 'Collapse') : t('common.expand', 'Expand')}
         >
           {isExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
@@ -52,13 +52,13 @@ export const FolderTreeNode: React.FC<{
             'flex items-center gap-1.5 flex-1 min-w-0 text-left text-sm ' +
             (isSelected
               ? 'text-primary font-medium'
-              : 'text-neutral-900 dark:text-neutral-100')
+              : 'text-foreground')
           }
         >
           {isExpanded ? (
             <FolderOpen className="w-4 h-4 shrink-0 text-brand" />
           ) : (
-            <Folder className="w-4 h-4 shrink-0 text-neutral-500" />
+            <Folder className="w-4 h-4 shrink-0 text-muted-foreground" />
           )}
           <span className="truncate">{name}</span>
         </button>
@@ -67,7 +67,7 @@ export const FolderTreeNode: React.FC<{
         <div>
           {isLoading && (
             <div
-              className="flex items-center gap-2 py-1 text-xs text-neutral-500 dark:text-neutral-400"
+              className="flex items-center gap-2 py-1 text-xs text-muted-foreground"
               style={childIndentStyle}
             >
               <Loader2 className="w-3 h-3 animate-spin" />
@@ -84,7 +84,7 @@ export const FolderTreeNode: React.FC<{
           )}
           {showEmpty && (
             <div
-              className="py-1 text-xs italic text-neutral-500 dark:text-neutral-400"
+              className="py-1 text-xs italic text-muted-foreground"
               style={childIndentStyle}
             >
               {t('events.externalFolderEmpty', 'No subfolders')}

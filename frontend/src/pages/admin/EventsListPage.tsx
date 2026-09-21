@@ -266,7 +266,7 @@ export const EventsListPage: React.FC = () => {
 
   const getEventStatus = (event: Event) => {
     if (event.is_draft) return { label: t('events.draft'), color: 'text-yellow-600 dark:text-yellow-400 bg-yellow-100 dark:bg-yellow-900/40' };
-    if (event.is_archived) return { label: t('events.archived'), color: 'text-neutral-500 dark:text-neutral-400 bg-neutral-100 dark:bg-neutral-700' };
+    if (event.is_archived) return { label: t('events.archived'), color: 'text-muted-foreground bg-muted' };
     if (!event.is_active) return { label: t('events.inactive'), color: 'text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/40' };
 
     if (!event.expires_at) return { label: t('events.active'), color: 'text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/40' };
@@ -289,8 +289,8 @@ export const EventsListPage: React.FC = () => {
       <div>
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{t('events.title')}</h1>
-            <p className="text-neutral-600 dark:text-neutral-400 mt-1">{t('events.subtitle')}</p>
+            <h1 className="text-2xl font-bold text-foreground">{t('events.title')}</h1>
+            <p className="text-muted-foreground mt-1">{t('events.subtitle')}</p>
           </div>
         </div>
         <SkeletonTable rows={5} />
@@ -315,8 +315,8 @@ export const EventsListPage: React.FC = () => {
         {/* Page Header */}
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{t('events.title')}</h1>
-            <p className="text-neutral-600 dark:text-neutral-400 mt-1">{t('events.subtitle')}</p>
+            <h1 className="text-2xl font-bold text-foreground">{t('events.title')}</h1>
+            <p className="text-muted-foreground mt-1">{t('events.subtitle')}</p>
           </div>
           <PermissionGate permission="events.create">
             <Button
@@ -331,16 +331,16 @@ export const EventsListPage: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <Card className="py-4"><CardContent className="px-4"><div className="flex items-center justify-between">
                               <div>
-                                <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('events.stats.totalEvents')}</p>
-                                <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{dashboardStats?.totalEvents ?? 0}</p>
+                                <p className="text-sm text-muted-foreground">{t('events.stats.totalEvents')}</p>
+                                <p className="text-2xl font-bold text-foreground">{dashboardStats?.totalEvents ?? 0}</p>
                               </div>
                               <Calendar className="w-8 h-8 text-brand" />
                             </div></CardContent></Card>
 
         <Card className="py-4"><CardContent className="px-4"><div className="flex items-center justify-between">
                               <div>
-                                <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('events.stats.activeEvents')}</p>
-                                <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
+                                <p className="text-sm text-muted-foreground">{t('events.stats.activeEvents')}</p>
+                                <p className="text-2xl font-bold text-foreground">
                                   {dashboardStats?.activeEvents ?? 0}
                                 </p>
                               </div>
@@ -349,8 +349,8 @@ export const EventsListPage: React.FC = () => {
 
         <Card className="py-4"><CardContent className="px-4"><div className="flex items-center justify-between">
                               <div>
-                                <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('events.stats.totalPhotos')}</p>
-                                <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
+                                <p className="text-sm text-muted-foreground">{t('events.stats.totalPhotos')}</p>
+                                <p className="text-2xl font-bold text-foreground">
                                   {dashboardStats?.totalPhotos ?? 0}
                                 </p>
                               </div>
@@ -359,8 +359,8 @@ export const EventsListPage: React.FC = () => {
 
         <Card className="py-4"><CardContent className="px-4"><div className="flex items-center justify-between">
                               <div>
-                                <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('events.stats.expiringEvents')}</p>
-                                <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
+                                <p className="text-sm text-muted-foreground">{t('events.stats.expiringEvents')}</p>
+                                <p className="text-2xl font-bold text-foreground">
                                   {dashboardStats?.expiringEvents ?? 0}
                                 </p>
                               </div>
@@ -372,7 +372,7 @@ export const EventsListPage: React.FC = () => {
       <Card className="py-4 mb-6"><CardContent className="px-4"><div className="flex flex-col lg:flex-row gap-4">
                         {/* Search */}
                         <div className="flex-1">
-                          <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Search className="w-5 h-5 text-neutral-400" />}</div><Input
+                          <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Search className="w-5 h-5 text-muted-foreground" />}</div><Input
                                                   type="text"
                                                   placeholder={t('events.searchEventsPlaceholder')}
                                                   value={searchTerm}
@@ -449,43 +449,43 @@ export const EventsListPage: React.FC = () => {
       {/* Events Table */}
       <Card className="overflow-visible"><CardContent><div className="overflow-x-auto overflow-y-visible">
                         <table className="w-full">
-                          <thead className="bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700">
+                          <thead className="bg-muted border-b border-border">
                             <tr>
                               <th className="px-6 py-3 text-left">
                                 <input
                                   type="checkbox"
                                   checked={selectedEvents.length === events.length && events.length > 0}
                                   onChange={handleSelectAll}
-                                  className="w-4 h-4 text-brand border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-brand-500 dark:bg-neutral-700"
+                                  className="w-4 h-4 text-brand border-border rounded-sm focus:ring-brand-500 dark:bg-neutral-700"
                                 />
                               </th>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                              <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                                 {t('events.event')}
                               </th>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                              <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                                 {t('events.type')}
                               </th>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                              <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                                 {t('events.date')}
                               </th>
-                              <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                              <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
                                 {t('events.photos', 'Photos')}
                               </th>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                              <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                                 {t('events.status')}
                               </th>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                              <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                                 {t('events.expires')}
                               </th>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                              <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                                 {t('events.actions')}
                               </th>
                             </tr>
                           </thead>
-                          <tbody className="bg-white dark:bg-neutral-800 divide-y divide-neutral-200 dark:divide-neutral-700">
+                          <tbody className="bg-card divide-y divide-neutral-200 dark:divide-neutral-700">
                             {events.length === 0 ? (
                               <tr>
-                                <td colSpan={8} className="px-6 py-12 text-center text-neutral-500 dark:text-neutral-400">
+                                <td colSpan={8} className="px-6 py-12 text-center text-muted-foreground">
                                   {t('events.noEventsFound')}
                                 </td>
                               </tr>
@@ -496,7 +496,7 @@ export const EventsListPage: React.FC = () => {
                                 return (
                                   <tr
                                     key={event.id}
-                                    className="hover:bg-neutral-50 dark:hover:bg-neutral-700/50 cursor-pointer"
+                                    className="hover:bg-accent cursor-pointer"
                                     onClick={() => navigate(`/admin/events/${event.id}`)}
                                   >
                                     <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
@@ -504,19 +504,19 @@ export const EventsListPage: React.FC = () => {
                                         type="checkbox"
                                         checked={selectedEvents.includes(event.id)}
                                         onChange={() => handleSelectEvent(event.id)}
-                                        className="w-4 h-4 text-brand border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-brand-500 dark:bg-neutral-700"
+                                        className="w-4 h-4 text-brand border-border rounded-sm focus:ring-brand-500 dark:bg-neutral-700"
                                       />
                                     </td>
                                     <td className="px-6 py-4">
                                       <div>
-                                        <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">{event.event_name}</p>
-                                        <p className="text-xs text-neutral-500 dark:text-neutral-400">{event.customer_email}</p>
+                                        <p className="text-sm font-medium text-foreground">{event.event_name}</p>
+                                        <p className="text-xs text-muted-foreground">{event.customer_email}</p>
                                         <div className="mt-1">
                                           <span
                                             className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium ${
                                               isGalleryPublic(event.require_password)
                                                 ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300'
-                                                : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300'
+                                                : 'bg-muted text-foreground'
                                             }`}
                                           >
                                             {isGalleryPublic(event.require_password) ? t('events.publicAccess', 'Public access') : t('events.passwordProtected', 'Password protected')}
@@ -524,13 +524,13 @@ export const EventsListPage: React.FC = () => {
                                         </div>
                                       </div>
                                     </td>
-                                    <td className="px-6 py-4 text-sm text-neutral-700 dark:text-neutral-300">
+                                    <td className="px-6 py-4 text-sm text-foreground">
                                       {event.event_type}
                                     </td>
-                                    <td className="px-6 py-4 text-sm text-neutral-700 dark:text-neutral-300">
+                                    <td className="px-6 py-4 text-sm text-foreground">
                                       {event.event_date ? format(parseISO(event.event_date)) : 'N/A'}
                                     </td>
-                                    <td className="px-6 py-4 text-sm text-right tabular-nums text-neutral-700 dark:text-neutral-300">
+                                    <td className="px-6 py-4 text-sm text-right tabular-nums text-foreground">
                                       {event.photo_count ?? 0}
                                     </td>
                                     <td className="px-6 py-4">
@@ -538,7 +538,7 @@ export const EventsListPage: React.FC = () => {
                                         {status.label}
                                       </span>
                                     </td>
-                                    <td className="px-6 py-4 text-sm text-neutral-700 dark:text-neutral-300">
+                                    <td className="px-6 py-4 text-sm text-foreground">
                                       {event.expires_at ? format(parseISO(event.expires_at)) : 'N/A'}
                                     </td>
                                     <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
@@ -596,14 +596,14 @@ export const EventsListPage: React.FC = () => {
                                                 });
                                               }
                                             }}
-                                            className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 p-1"
+                                            className="text-muted-foreground hover:text-foreground p-1"
                                           >
                                             <MoreVertical className="w-5 h-5" />
                                           </button>
 
                                           {activeDropdown === event.id && dropdownPosition && (
                                             <div
-                                              className="fixed z-50 w-56 rounded-md shadow-lg bg-white dark:bg-neutral-800 ring-1 ring-black ring-opacity-5 dark:ring-neutral-700"
+                                              className="fixed z-50 w-56 rounded-md shadow-lg bg-card ring-1 ring-black ring-opacity-5 dark:ring-neutral-700"
                                               style={{ top: `${dropdownPosition.top}px`, left: `${dropdownPosition.left}px` }}
                                             >
                                               <div className="py-1">
@@ -614,7 +614,7 @@ export const EventsListPage: React.FC = () => {
                                                     setActiveDropdown(null);
                                                     setDropdownPosition(null);
                                                   }}
-                                                  className="md:hidden w-full text-left px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 flex items-center gap-2"
+                                                  className="md:hidden w-full text-left px-4 py-2 text-sm text-foreground hover:bg-accent flex items-center gap-2"
                                                 >
                                                   <Edit className="w-4 h-4" />
                                                   {t('events.viewDetails')}
@@ -624,7 +624,7 @@ export const EventsListPage: React.FC = () => {
                                                     href={buildShareLinkUrl(event.share_link)}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="md:hidden w-full text-left px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 flex items-center gap-2"
+                                                    className="md:hidden w-full text-left px-4 py-2 text-sm text-foreground hover:bg-accent flex items-center gap-2"
                                                     onClick={() => {
                                                       setActiveDropdown(null);
                                                       setDropdownPosition(null);
@@ -641,7 +641,7 @@ export const EventsListPage: React.FC = () => {
                                                       setActiveDropdown(null);
                                                       setDropdownPosition(null);
                                                     }}
-                                                    className="md:hidden w-full text-left px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 flex items-center gap-2"
+                                                    className="md:hidden w-full text-left px-4 py-2 text-sm text-foreground hover:bg-accent flex items-center gap-2"
                                                   >
                                                     <Copy className="w-4 h-4" />
                                                     {t('events.copyLink', 'Copy Link')}
@@ -655,7 +655,7 @@ export const EventsListPage: React.FC = () => {
                                                         setActiveDropdown(null);
                                                         setDropdownPosition(null);
                                                       }}
-                                                      className="w-full text-left px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 flex items-center gap-2"
+                                                      className="w-full text-left px-4 py-2 text-sm text-foreground hover:bg-accent flex items-center gap-2"
                                                     >
                                                       <Archive className="w-4 h-4" />
                                                       {t('events.archiveEventAction')}
@@ -670,7 +670,7 @@ export const EventsListPage: React.FC = () => {
                                                         setActiveDropdown(null);
                                                         setDropdownPosition(null);
                                                       }}
-                                                      className="w-full text-left px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 flex items-center gap-2"
+                                                      className="w-full text-left px-4 py-2 text-sm text-foreground hover:bg-accent flex items-center gap-2"
                                                     >
                                                       <Download className="w-4 h-4" />
                                                       {t('events.downloadArchiveAction')}
@@ -708,7 +708,7 @@ export const EventsListPage: React.FC = () => {
 
       {/* Pagination — only when the current filter has more than one page */}
       {totalPages > 1 && (
-        <div className="mt-4 flex items-center justify-between text-sm text-neutral-600 dark:text-neutral-400">
+        <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
           <div>
             {t('events.paginationLabel', {
               from: events.length === 0 ? 0 : (page - 1) * PAGE_SIZE + 1,
@@ -717,7 +717,7 @@ export const EventsListPage: React.FC = () => {
               defaultValue: '{{from}}–{{to}} of {{total}}',
             })}
             {isFilteringOrSearching && (
-              <span className="ml-2 text-neutral-400">({t('events.filtered', 'filtered')})</span>
+              <span className="ml-2 text-muted-foreground">({t('events.filtered', 'filtered')})</span>
             )}
           </div>
           <div className="flex items-center gap-2">

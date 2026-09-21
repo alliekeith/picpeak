@@ -84,7 +84,7 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
       <div className="flex flex-col md:flex-row gap-3 md:gap-4">
         {/* Search Bar */}
         <div className="flex-1">
-          <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Search className="w-5 h-5 text-neutral-400" />}</div><Input
+          <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Search className="w-5 h-5 text-muted-foreground" />}</div><Input
                               type="text"
                               placeholder={t('gallery.searchPhotos')}
                               value={searchTerm}
@@ -116,7 +116,7 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
                   setShowSortMenu(false);
                 }}
                 className={`w-full text-left px-4 py-2 text-sm hover:bg-black/10 ${
-                  sortBy === 'date' ? 'bg-primary text-white' : 'text-muted-foreground'
+                  sortBy === 'date' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'
                 }`}
               >
                 {t('gallery.sortByDate')}
@@ -127,7 +127,7 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
                   setShowSortMenu(false);
                 }}
                 className={`w-full text-left px-4 py-2 text-sm hover:bg-black/10 ${
-                  sortBy === 'capture_date' ? 'bg-primary text-white' : 'text-muted-foreground'
+                  sortBy === 'capture_date' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'
                 }`}
               >
                 {t('photoSort.dateTaken', 'Date Taken')}
@@ -138,7 +138,7 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
                   setShowSortMenu(false);
                 }}
                 className={`w-full text-left px-4 py-2 text-sm hover:bg-black/10 ${
-                  sortBy === 'name' ? 'bg-primary text-white' : 'text-muted-foreground'
+                  sortBy === 'name' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'
                 }`}
               >
                 {t('gallery.sortByName')}
@@ -149,7 +149,7 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
                   setShowSortMenu(false);
                 }}
                 className={`w-full text-left px-4 py-2 text-sm hover:bg-black/10 ${
-                  sortBy === 'size' ? 'bg-primary text-white' : 'text-muted-foreground'
+                  sortBy === 'size' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'
                 }`}
               >
                 {t('gallery.sortBySize')}
@@ -160,7 +160,7 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
                   setShowSortMenu(false);
                 }}
                 className={`w-full text-left px-4 py-2 text-sm hover:bg-black/10 ${
-                  sortBy === 'rating' ? 'bg-primary text-white' : 'text-muted-foreground'
+                  sortBy === 'rating' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'
                 }`}
               >
                 {t('gallery.sortByRating', 'Sort by Rating')}
@@ -175,7 +175,7 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
                       setShowSortMenu(false);
                     }}
                     className={`w-full text-left px-4 py-2 text-sm hover:bg-black/10 flex items-center gap-2 ${
-                      !sortDesc ? 'bg-primary text-white' : 'text-muted-foreground'
+                      !sortDesc ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'
                     }`}
                   >
                     <SortAsc className="w-4 h-4" />
@@ -187,7 +187,7 @@ export const PhotoFilterBar: React.FC<PhotoFilterBarProps> = ({
                       setShowSortMenu(false);
                     }}
                     className={`w-full text-left px-4 py-2 text-sm hover:bg-black/10 flex items-center gap-2 ${
-                      sortDesc ? 'bg-primary text-white' : 'text-muted-foreground'
+                      sortDesc ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'
                     }`}
                   >
                     <SortDesc className="w-4 h-4" />

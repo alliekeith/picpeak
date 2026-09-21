@@ -22,7 +22,7 @@ describe('Skeleton — theme-aware colour', () => {
     expect(div!.className).toMatch(/\bbg-accent\b/);
   });
 
-  it('does NOT add the legacy hard-coded bg-neutral-200 class', () => {
+  it('does NOT add the legacy hard-coded bg-muted class', () => {
     const { container } = render(<Skeleton />);
     const div = container.querySelector('div');
     expect(div!.className).not.toMatch(/bg-neutral-200/);

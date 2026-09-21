@@ -101,7 +101,7 @@ export const PreviewPage: React.FC = () => {
       {photos.map((photo) => (
         <Card key={photo.id} className="overflow-hidden group cursor-pointer"><CardContent><div className="aspect-4/3 bg-linear-to-br from-neutral-200 to-neutral-300 relative">
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <Camera className="w-12 h-12 text-neutral-400" />
+                        <Camera className="w-12 h-12 text-muted-foreground" />
                       </div>
                       <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/60 to-transparent p-2">
                         <p className="text-white text-xs truncate">{photo.filename}</p>
@@ -123,8 +123,8 @@ export const PreviewPage: React.FC = () => {
     >
       <div className="mt-8">
         <div className="text-center mb-6">
-          <h2 className="text-xl font-semibold text-neutral-900">Theme Preview</h2>
-          <p className="text-neutral-600">This is how your galleries will look with the current theme settings</p>
+          <h2 className="text-xl font-semibold text-foreground">Theme Preview</h2>
+          <p className="text-muted-foreground">This is how your galleries will look with the current theme settings</p>
         </div>
 
         {/* Filters */}

@@ -109,23 +109,23 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
   };
 
   return (
-    <Card><CardContent><h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">{t('events.eventInformation')}</h2>{isEditing ? (
+    <Card><CardContent><h2 className="text-lg font-semibold text-foreground mb-4">{t('events.eventInformation')}</h2>{isEditing ? (
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                  <label className="block text-sm font-medium text-foreground mb-1">
                     {t('events.welcomeMessageLabel')}
                   </label>
                   <textarea
                     value={editForm.welcome_message}
                     onChange={(e) => setEditForm(prev => ({ ...prev, welcome_message: e.target.value }))}
-                    className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
+                    className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
                     rows={3}
                     placeholder={t('events.welcomeMessage')}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                  <label className="block text-sm font-medium text-foreground mb-1">
                     {t('events.hostName')}
                   </label>
                   <Input
@@ -137,7 +137,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                  <label className="block text-sm font-medium text-foreground mb-1">
                     {t('events.hostEmail')}
                   </label>
                   <Input
@@ -150,7 +150,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
 
                 {phoneFieldEnabled && (
                   <div>
-                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                    <label className="block text-sm font-medium text-foreground mb-1">
                       {t('events.customerPhone', 'Customer Phone')} ({t('common.optional')})
                     </label>
                     <Input
@@ -170,7 +170,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                 />
 
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                  <label className="block text-sm font-medium text-foreground mb-1">
                     {t('events.expirationDate')}
                   </label>
                   <LocalizedDateInput
@@ -199,16 +199,16 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                   <label className={`flex items-start gap-2 cursor-pointer ${editForm.hero_photo_id ? '' : 'opacity-60 cursor-not-allowed'}`}>
                     <input
                       type="checkbox"
-                      className="mt-0.5 rounded-sm border-neutral-300 dark:border-neutral-600 text-brand focus:ring-brand-500"
+                      className="mt-0.5 rounded-sm border-border text-brand focus:ring-brand-500"
                       checked={editForm.og_image_share_enabled === true}
                       disabled={!editForm.hero_photo_id}
                       onChange={(e) => setEditForm(prev => ({ ...prev, og_image_share_enabled: e.target.checked }))}
                     />
                     <span className="text-sm">
-                      <span className="font-medium text-neutral-900 dark:text-neutral-100">
+                      <span className="font-medium text-foreground">
                         {t('events.ogShare.title', 'Use hero photo as social-share preview')}
                       </span>
-                      <span className="block text-xs text-neutral-600 dark:text-neutral-400 mt-0.5">
+                      <span className="block text-xs text-muted-foreground mt-0.5">
                         {editForm.hero_photo_id
                           ? t('events.ogShare.help', 'When this gallery URL is shared on WhatsApp, Facebook, Slack, etc., the link preview will show the hero photo above. The thumbnail is fetched unauthenticated by link-preview crawlers — anyone with the URL effectively makes this image public. Off by default; pick a hero you are comfortable surfacing publicly before enabling.')
                           : t('events.ogShare.heroRequired', 'Pick a hero photo above first — this option uses it as the WhatsApp / Facebook / Slack preview image.')}
@@ -224,10 +224,10 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                   if (!heroImageUrl) return null;
                   return (
                     <div className="ml-6 mt-2">
-                      <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                      <label className="block text-sm font-medium text-foreground mb-1">
                         {t('events.heroImageAnchor', 'Hero Image Crop Position')}
                       </label>
-                      <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-2">
+                      <p className="text-xs text-muted-foreground mb-2">
                         {t('events.heroImageAnchorDescription', 'Click on the image to set the focal point for cropping.')}
                       </p>
                       <FocalPointPicker
@@ -244,7 +244,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                   <label className="flex items-start gap-2">
                     <input
                       type="checkbox"
-                      className="mt-1 w-4 h-4 text-brand border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-brand-500"
+                      className="mt-1 w-4 h-4 text-brand border-border rounded-sm focus:ring-brand-500"
                       checked={editForm.require_password}
                       onChange={(e) => {
                         const checked = e.target.checked;
@@ -260,8 +260,8 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                       }}
                     />
                     <div>
-                      <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">{t('events.requirePasswordToggle')}</span>
-                      <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                      <span className="text-sm font-medium text-foreground">{t('events.requirePasswordToggle')}</span>
+                      <p className="text-xs text-muted-foreground mt-1">
                         {t('events.requirePasswordToggleHelp', 'Disable this if you want to share the gallery without a password. Anyone with the link will be able to view the photos.')}
                       </p>
                     </div>
@@ -277,11 +277,11 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                 {editForm.require_password && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                      <label className="block text-sm font-medium text-foreground mb-1">
                         {t('events.newPasswordLabel', 'New gallery password')}
                       </label>
                       <div className="relative">
-                        <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-neutral-400" />}</div><Input
+                        <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-muted-foreground" />}</div><Input
                                                         type={showNewPassword ? 'text' : 'password'}
                                                         value={editForm.new_password}
                                                         onChange={(e) => setEditForm(prev => ({ ...prev, new_password: e.target.value }))}
@@ -294,19 +294,19 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                           className="absolute inset-y-0 right-0 pr-3 flex items-center"
                         >
                           {showNewPassword ? (
-                            <EyeOff className="w-5 h-5 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300" />
+                            <EyeOff className="w-5 h-5 text-muted-foreground hover:text-foreground" />
                           ) : (
-                            <Eye className="w-5 h-5 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300" />
+                            <Eye className="w-5 h-5 text-muted-foreground hover:text-foreground" />
                           )}
                         </button>
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                      <label className="block text-sm font-medium text-foreground mb-1">
                         {t('events.confirmPassword')}
                       </label>
-                      <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-neutral-400" />}</div><Input
+                      <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-muted-foreground" />}</div><Input
                                                   type={showNewPassword ? 'text' : 'password'}
                                                   value={editForm.confirm_new_password}
                                                   onChange={(e) => setEditForm(prev => ({ ...prev, confirm_new_password: e.target.value }))}
@@ -317,7 +317,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                 )}
 
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                  <label className="block text-sm font-medium text-foreground mb-1">
                     {t('events.sourceMode', 'Source Mode')}
                   </label>
                   <select
@@ -337,45 +337,45 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                           : ''
                       }));
                     }}
-                    className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
+                    className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
                   >
                     <option value="managed">{t('events.sourceModeManaged', 'Managed (upload to PicPeak)')}</option>
                     <option value="reference">{t('events.sourceModeReference', 'Reference external folder')}</option>
                   </select>
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                  <p className="text-xs text-muted-foreground mt-1">
                     {t('events.sourceModeHelp', 'Use managed mode for direct uploads or reference an external folder that is mounted at /external-media in Docker.')}
                   </p>
                 </div>
 
                 {editForm.source_mode === 'reference' && (
                   <div className="mt-3">
-                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+                    <label className="block text-sm font-medium text-foreground mb-2">
                       {t('events.externalFolder', 'External Folder')}
                     </label>
                     <ExternalFolderPicker
                       value={editForm.external_path || ''}
                       onChange={(folder) => setEditForm(prev => ({ ...prev, external_path: folder }))}
                     />
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                    <p className="text-xs text-muted-foreground mt-1">
                       {t('events.externalFolderHint', 'These folders come from the /external-media mount inside the container. Ensure it is accessible to the backend process.')}
                     </p>
                     <label className={`flex items-start gap-2 mt-3 ${canEnableWatch || editForm.external_watch ? 'cursor-pointer' : 'opacity-60 cursor-not-allowed'}`}>
                       <input
                         type="checkbox"
-                        className="mt-0.5 rounded-sm border-neutral-300 dark:border-neutral-600 text-brand focus:ring-brand-500"
+                        className="mt-0.5 rounded-sm border-border text-brand focus:ring-brand-500"
                         checked={editForm.external_watch === true}
                         disabled={!canEnableWatch && !editForm.external_watch}
                         onChange={(e) => setEditForm(prev => ({ ...prev, external_watch: e.target.checked }))}
                       />
                       <span className="text-sm">
-                        <span className="font-medium text-neutral-900 dark:text-neutral-100">
+                        <span className="font-medium text-foreground">
                           {t('events.externalWatch', 'Watch folder for new files')}
                         </span>
-                        <span className="block text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+                        <span className="block text-xs text-muted-foreground mt-0.5">
                           {t('events.externalWatchHint', 'New images copied into this folder are imported automatically, the same way the Import button does it. Files removed from the folder are never deleted from the gallery.')}
                         </span>
                         {!canEnableWatch && !editForm.external_watch && (
-                          <span className="block text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+                          <span className="block text-xs text-muted-foreground mt-0.5">
                             {t('events.externalWatchNoPermission', 'Requires the permission to upload photos.')}
                           </span>
                         )}
@@ -386,7 +386,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
 
                 {/* Photo Cap */}
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                  <label className="block text-sm font-medium text-foreground mb-1">
                     {t('events.photoCap', 'Photo Limit')}
                   </label>
                   <div className="flex items-center gap-2">
@@ -400,9 +400,9 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                       // aria-valuemax="0", and an out-of-range value only fails at
                       // INSERT.
                       max={2147483647}
-                      className="w-24 px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
+                      className="w-24 px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
                     />
-                    <span className="text-xs text-neutral-500 dark:text-neutral-400">
+                    <span className="text-xs text-muted-foreground">
                       {t('events.photoCapHelp', 'Maximum number of photos allowed. 0 = unlimited')}
                     </span>
                   </div>
@@ -410,13 +410,13 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
 
                 {/* Default Photo Sort */}
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                  <label className="block text-sm font-medium text-foreground mb-1">
                     {t('photoSort.defaultSort', 'Default Photo Sort')}
                   </label>
                   <select
                     value={editForm.default_photo_sort}
                     onChange={(e) => setEditForm(prev => ({ ...prev, default_photo_sort: e.target.value }))}
-                    className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
+                    className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
                   >
                     <option value="upload_date_desc">{t('photoSort.uploadDateNewest', 'Upload Date (Newest First)')}</option>
                     <option value="upload_date_asc">{t('photoSort.uploadDateOldest', 'Upload Date (Oldest First)')}</option>
@@ -433,18 +433,18 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                       type="checkbox"
                       checked={editForm.allow_user_uploads}
                       onChange={(e) => setEditForm(prev => ({ ...prev, allow_user_uploads: e.target.checked }))}
-                      className="w-4 h-4 text-brand border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-brand-500"
+                      className="w-4 h-4 text-brand border-border rounded-sm focus:ring-brand-500"
                     />
-                    <span className="ml-2 text-sm text-neutral-700 dark:text-neutral-300">{t('events.allowUserUploads')}</span>
+                    <span className="ml-2 text-sm text-foreground">{t('events.allowUserUploads')}</span>
                   </label>
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1 ml-6">
+                  <p className="text-xs text-muted-foreground mt-1 ml-6">
                     {t('events.allowUserUploadsHelp')}
                   </p>
                 </div>
 
                 {editForm.allow_user_uploads && (
                   <div>
-                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                    <label className="block text-sm font-medium text-foreground mb-1">
                       {t('events.uploadCategory')}
                     </label>
                     <select
@@ -453,7 +453,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                         ...prev,
                         upload_category_id: e.target.value ? parseInt(e.target.value) : null
                       }))}
-                      className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
+                      className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary"
                     >
                       <option value="">{t('events.selectCategory')}</option>
                       {categories?.map(category => (
@@ -462,7 +462,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                         </option>
                       ))}
                     </select>
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                    <p className="text-xs text-muted-foreground mt-1">
                       {t('events.uploadCategoryHelp')}
                     </p>
                   </div>
@@ -476,27 +476,27 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                         type="checkbox"
                         checked={editForm.reveal_mode}
                         onChange={(e) => setEditForm(prev => ({ ...prev, reveal_mode: e.target.checked }))}
-                        className="w-4 h-4 text-brand border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-brand-500"
+                        className="w-4 h-4 text-brand border-border rounded-sm focus:ring-brand-500"
                       />
-                      <span className="ml-2 text-sm text-neutral-700 dark:text-neutral-300">
+                      <span className="ml-2 text-sm text-foreground">
                         {t('events.revealMode', 'Reveal mode (hide gallery until reveal)')}
                       </span>
                     </label>
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1 ml-6">
+                    <p className="text-xs text-muted-foreground mt-1 ml-6">
                       {t('events.revealModeHelp', 'Guests can upload but see no photos until you reveal the gallery — manually or at the scheduled time. Slideshow and client access keep working.')}
                     </p>
                     {editForm.reveal_mode && (
                       <div className="mt-2 ml-6">
-                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                        <label className="block text-sm font-medium text-foreground mb-1">
                           {t('events.revealAt', 'Scheduled reveal (optional)')}
                         </label>
                         <input
                           type="datetime-local"
                           value={editForm.reveal_at}
                           onChange={(e) => setEditForm(prev => ({ ...prev, reveal_at: e.target.value }))}
-                          className="px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-brand-500"
+                          className="px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500"
                         />
-                        <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                        <p className="text-xs text-muted-foreground mt-1">
                           {t('events.revealAtHelp', 'Leave empty to reveal manually with the "Reveal now" button.')}
                         </p>
                       </div>
@@ -505,8 +505,8 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                 )}
 
                 {/* Feedback Settings */}
-                <div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
-                  <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 mb-3">{t('feedback.settings.title', 'Guest Feedback Settings')}</h3>
+                <div className="mt-4 pt-4 border-t border-border">
+                  <h3 className="text-sm font-semibold text-foreground mb-3">{t('feedback.settings.title', 'Guest Feedback Settings')}</h3>
                   <FeedbackSettings
                     settings={feedbackSettings}
                     onChange={setFeedbackSettings}
@@ -514,11 +514,11 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                 </div>
 
                 {/* Promotional Banner Override (#440) — three-way: inherit / custom / off */}
-                <div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
-                  <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 mb-3">
+                <div className="mt-4 pt-4 border-t border-border">
+                  <h3 className="text-sm font-semibold text-foreground mb-3">
                     {t('events.promoBanner.title', 'Promotional Banner')}
                   </h3>
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-3">
+                  <p className="text-xs text-muted-foreground mb-3">
                     {t('events.promoBanner.help', 'Choose how this gallery handles the promotional banner. "Inherit" uses your global default; "Custom" overrides it for this event; "Off" hides it entirely.')}
                   </p>
                   <div className="space-y-2">
@@ -530,9 +530,9 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                           value={mode}
                           checked={editForm.promo_mode === mode}
                           onChange={() => setEditForm(prev => ({ ...prev, promo_mode: mode }))}
-                          className="w-4 h-4 text-brand border-neutral-300 dark:border-neutral-600 focus:ring-brand-500"
+                          className="w-4 h-4 text-brand border-border focus:ring-brand-500"
                         />
-                        <span className="ml-2 text-sm text-neutral-700 dark:text-neutral-300">
+                        <span className="ml-2 text-sm text-foreground">
                           {t(`events.promoBanner.mode_${mode}`, mode === 'inherit' ? 'Inherit global default' : mode === 'custom' ? 'Custom override for this event' : 'Off (hide for this event)')}
                         </span>
                       </label>
@@ -545,14 +545,14 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                         onChange={(e) => setEditForm(prev => ({ ...prev, promo_markdown: e.target.value }))}
                         rows={5}
                         placeholder={t('events.promoBanner.placeholder', 'Markdown content (e.g. **Special offer:** [book your next session](https://example.com))')}
-                        className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary font-mono text-sm"
+                        className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary font-mono text-sm"
                       />
                       {editForm.promo_markdown.trim() && (
-                        <div className="border border-neutral-200 dark:border-neutral-700 rounded-lg p-3 bg-neutral-50 dark:bg-neutral-900">
-                          <p className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-2">
+                        <div className="border border-border rounded-lg p-3 bg-muted">
+                          <p className="text-xs uppercase tracking-wide text-muted-foreground mb-2">
                             {t('events.promoBanner.preview', 'Preview')}
                           </p>
-                          <MarkdownContent source={editForm.promo_markdown} className="prose prose-sm dark:prose-invert max-w-none text-sm text-neutral-800 dark:text-neutral-200 prose-a:text-brand-600 dark:prose-a:text-brand-400" />
+                          <MarkdownContent source={editForm.promo_markdown} className="prose prose-sm dark:prose-invert max-w-none text-sm text-foreground prose-a:text-brand-600 dark:prose-a:text-brand-400" />
                         </div>
                       )}
                     </div>
@@ -562,11 +562,11 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                 {/* Info Banner Override (#932) — three-way: inherit / custom / off.
                     Mirrors the promotional override above, but this banner renders
                     at the TOP of the gallery, above the photos. */}
-                <div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
-                  <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 mb-3">
+                <div className="mt-4 pt-4 border-t border-border">
+                  <h3 className="text-sm font-semibold text-foreground mb-3">
                     {t('events.infoBanner.title', 'Info Banner')}
                   </h3>
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-3">
+                  <p className="text-xs text-muted-foreground mb-3">
                     {t('events.infoBanner.help', 'A short note shown above the photos in this gallery. "Inherit" uses your global default; "Custom" overrides it for this event; "Off" hides it entirely.')}
                   </p>
                   <div className="space-y-2">
@@ -578,9 +578,9 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                           value={mode}
                           checked={editForm.info_mode === mode}
                           onChange={() => setEditForm(prev => ({ ...prev, info_mode: mode }))}
-                          className="w-4 h-4 text-brand border-neutral-300 dark:border-neutral-600 focus:ring-brand-500"
+                          className="w-4 h-4 text-brand border-border focus:ring-brand-500"
                         />
-                        <span className="ml-2 text-sm text-neutral-700 dark:text-neutral-300">
+                        <span className="ml-2 text-sm text-foreground">
                           {t(`events.infoBanner.mode_${mode}`, mode === 'inherit' ? 'Inherit global default' : mode === 'custom' ? 'Custom override for this event' : 'Off (hide for this event)')}
                         </span>
                       </label>
@@ -593,14 +593,14 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                         onChange={(e) => setEditForm(prev => ({ ...prev, info_markdown: e.target.value }))}
                         rows={3}
                         placeholder={t('events.infoBanner.placeholder', 'Use the menu button in the top-left corner to filter the photos.')}
-                        className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary font-mono text-sm"
+                        className="w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary font-mono text-sm"
                       />
                       {editForm.info_markdown.trim() && (
-                        <div className="border border-neutral-200 dark:border-neutral-700 rounded-lg p-3 bg-neutral-50 dark:bg-neutral-900">
-                          <p className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-2">
+                        <div className="border border-border rounded-lg p-3 bg-muted">
+                          <p className="text-xs uppercase tracking-wide text-muted-foreground mb-2">
                             {t('events.infoBanner.preview', 'Preview')}
                           </p>
-                          <MarkdownContent source={editForm.info_markdown} className="prose prose-sm dark:prose-invert max-w-none text-sm text-neutral-800 dark:text-neutral-200 prose-a:text-brand-600 dark:prose-a:text-brand-400" />
+                          <MarkdownContent source={editForm.info_markdown} className="prose prose-sm dark:prose-invert max-w-none text-sm text-foreground prose-a:text-brand-600 dark:prose-a:text-brand-400" />
                         </div>
                       )}
                     </div>
@@ -608,8 +608,8 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                 </div>
 
                 {/* Download Protection Settings */}
-                <div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
-                  <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 mb-3 flex items-center gap-2">
+                <div className="mt-4 pt-4 border-t border-border">
+                  <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
                     <Shield className="w-4 h-4 text-brand" />
                     {t('events.downloadProtection', 'Download Protection')}
                   </h3>
@@ -620,10 +620,10 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                         type="checkbox"
                         checked={editForm.allow_downloads}
                         onChange={(e) => setEditForm(prev => ({ ...prev, allow_downloads: e.target.checked }))}
-                        className="w-4 h-4 text-brand border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-brand-500"
+                        className="w-4 h-4 text-brand border-border rounded-sm focus:ring-brand-500"
                       />
-                      <Download className="w-4 h-4 ml-2 mr-1 text-neutral-500 dark:text-neutral-400" />
-                      <span className="text-sm text-neutral-700 dark:text-neutral-300">{t('events.allowDownloads', 'Allow photo downloads')}</span>
+                      <Download className="w-4 h-4 ml-2 mr-1 text-muted-foreground" />
+                      <span className="text-sm text-foreground">{t('events.allowDownloads', 'Allow photo downloads')}</span>
                     </label>
 
                     <label className="flex items-center">
@@ -631,10 +631,10 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                         type="checkbox"
                         checked={editForm.disable_right_click}
                         onChange={(e) => setEditForm(prev => ({ ...prev, disable_right_click: e.target.checked }))}
-                        className="w-4 h-4 text-brand border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-brand-500"
+                        className="w-4 h-4 text-brand border-border rounded-sm focus:ring-brand-500"
                       />
-                      <MousePointer className="w-4 h-4 ml-2 mr-1 text-neutral-500 dark:text-neutral-400" />
-                      <span className="text-sm text-neutral-700 dark:text-neutral-300">{t('events.disableRightClick', 'Block right-click menu')}</span>
+                      <MousePointer className="w-4 h-4 ml-2 mr-1 text-muted-foreground" />
+                      <span className="text-sm text-foreground">{t('events.disableRightClick', 'Block right-click menu')}</span>
                     </label>
 
                     <label className="flex items-center">
@@ -645,10 +645,10 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                           ...prev,
                           watermark_downloads: e.target.checked,
                         }))}
-                        className="w-4 h-4 text-brand border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-brand-500"
+                        className="w-4 h-4 text-brand border-border rounded-sm focus:ring-brand-500"
                       />
-                      <Droplets className="w-4 h-4 ml-2 mr-1 text-neutral-500 dark:text-neutral-400" />
-                      <span className="text-sm text-neutral-700 dark:text-neutral-300">{t('events.watermarkDownloads', 'Add watermark to downloads')}</span>
+                      <Droplets className="w-4 h-4 ml-2 mr-1 text-muted-foreground" />
+                      <span className="text-sm text-foreground">{t('events.watermarkDownloads', 'Add watermark to downloads')}</span>
                     </label>
 
 
@@ -658,10 +658,10 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                         type="checkbox"
                         checked={editForm.enable_devtools_protection}
                         onChange={(e) => setEditForm(prev => ({ ...prev, enable_devtools_protection: e.target.checked }))}
-                        className="w-4 h-4 text-brand border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-brand-500"
+                        className="w-4 h-4 text-brand border-border rounded-sm focus:ring-brand-500"
                       />
-                      <Monitor className="w-4 h-4 ml-2 mr-1 text-neutral-500 dark:text-neutral-400" />
-                      <span className="text-sm text-neutral-700 dark:text-neutral-300">{t('events.enableDevtoolsProtection', 'Detect developer tools')}</span>
+                      <Monitor className="w-4 h-4 ml-2 mr-1 text-muted-foreground" />
+                      <span className="text-sm text-foreground">{t('events.enableDevtoolsProtection', 'Detect developer tools')}</span>
                     </label>
 
                     <label className="flex items-center">
@@ -669,29 +669,29 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                         type="checkbox"
                         checked={editForm.use_canvas_rendering}
                         onChange={(e) => setEditForm(prev => ({ ...prev, use_canvas_rendering: e.target.checked }))}
-                        className="w-4 h-4 text-brand border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-brand-500"
+                        className="w-4 h-4 text-brand border-border rounded-sm focus:ring-brand-500"
                       />
-                      <Image className="w-4 h-4 ml-2 mr-1 text-neutral-500 dark:text-neutral-400" />
-                      <span className="text-sm text-neutral-700 dark:text-neutral-300">{t('events.useCanvasRendering', 'Canvas rendering in the lightbox (advanced protection)')}</span>
+                      <Image className="w-4 h-4 ml-2 mr-1 text-muted-foreground" />
+                      <span className="text-sm text-foreground">{t('events.useCanvasRendering', 'Canvas rendering in the lightbox (advanced protection)')}</span>
                     </label>
 
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-2">
+                    <p className="text-xs text-muted-foreground mt-2">
                       {t('events.protectionInfo', 'Protection features help prevent unauthorized downloads but cannot block all methods.')}
                     </p>
                   </div>
                 </div>
 
                 {/* Hero Logo Settings */}
-                <div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
-                  <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 mb-3 flex items-center gap-2">
+                <div className="mt-4 pt-4 border-t border-border">
+                  <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
                     <Layout className="w-4 h-4 text-brand" />
                     {t('events.heroLogoSettings', 'Hero Logo Settings')}
                   </h3>
 
                   <div className="space-y-3">
                     <div>
-                      <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1 flex items-center gap-1">
-                        <Image className="w-4 h-4 text-neutral-500 dark:text-neutral-400" />
+                      <label className="block text-sm font-medium text-foreground mb-1 flex items-center gap-1">
+                        <Image className="w-4 h-4 text-muted-foreground" />
                         {t('events.heroLogoVisible', 'Display logo in hero section')}
                       </label>
                       <select
@@ -705,7 +705,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                           ...prev,
                           hero_logo_visible: e.target.value === 'inherit' ? null : e.target.value === 'show'
                         }))}
-                        className="w-full sm:w-64 px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-md shadow-xs focus:ring-brand-500 focus:border-primary text-sm"
+                        className="w-full sm:w-64 px-3 py-2 border border-border bg-card text-foreground rounded-md shadow-xs focus:ring-brand-500 focus:border-primary text-sm"
                       >
                         <option value="inherit">{t('events.heroLogoInherit', 'Use branding default')}</option>
                         <option value="show">{t('events.heroLogoShow', 'Always show')}</option>
@@ -716,14 +716,14 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                     {editForm.hero_logo_visible !== false && (
                       <>
                         <div className="ml-6">
-                          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                          <label className="block text-sm font-medium text-foreground mb-1">
                             {t('events.heroLogoSize', 'Logo Size')}
                           </label>
                           <select
                             // '' = inherit the global branding logo size (#756).
                             value={editForm.hero_logo_size ?? ''}
                             onChange={(e) => setEditForm(prev => ({ ...prev, hero_logo_size: e.target.value === '' ? null : e.target.value as 'small' | 'medium' | 'large' | 'xlarge' }))}
-                            className="w-full sm:w-48 px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-md shadow-xs focus:ring-brand-500 focus:border-primary text-sm"
+                            className="w-full sm:w-48 px-3 py-2 border border-border bg-card text-foreground rounded-md shadow-xs focus:ring-brand-500 focus:border-primary text-sm"
                           >
                             <option value="">{t('events.heroLogoInherit', 'Use branding default')}</option>
                             <option value="small">{t('events.heroLogoSizeSmall', 'Small')}</option>
@@ -734,13 +734,13 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                         </div>
 
                         <div className="ml-6">
-                          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                          <label className="block text-sm font-medium text-foreground mb-1">
                             {t('events.heroLogoPosition', 'Logo Position')}
                           </label>
                           <select
                             value={editForm.hero_logo_position}
                             onChange={(e) => setEditForm(prev => ({ ...prev, hero_logo_position: e.target.value as 'top' | 'center' | 'bottom' }))}
-                            className="w-full sm:w-48 px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-md shadow-xs focus:ring-brand-500 focus:border-primary text-sm"
+                            className="w-full sm:w-48 px-3 py-2 border border-border bg-card text-foreground rounded-md shadow-xs focus:ring-brand-500 focus:border-primary text-sm"
                           >
                             <option value="top">{t('events.heroLogoPositionTop', 'Top (above title)')}</option>
                             <option value="center">{t('events.heroLogoPositionCenter', 'Center (between title and dates)')}</option>
@@ -749,17 +749,17 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                         </div>
 
                         {/* Custom Event Logo Upload */}
-                        <div className="ml-6 mt-3 pt-3 border-t border-neutral-100 dark:border-neutral-700">
-                          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+                        <div className="ml-6 mt-3 pt-3 border-t border-border">
+                          <label className="block text-sm font-medium text-foreground mb-2">
                             {t('events.eventCustomLogo', 'Custom Event Logo')}
                           </label>
-                          <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-2">
+                          <p className="text-xs text-muted-foreground mb-2">
                             {t('events.eventCustomLogoDescription', 'Upload a custom logo for this event. This overrides the global branding logo for this gallery only.')}
                           </p>
 
                           {event.hero_logo_url ? (
                             <div className="flex items-center gap-3">
-                              <div className="w-16 h-16 border border-neutral-200 dark:border-neutral-600 rounded-md flex items-center justify-center bg-neutral-50 dark:bg-neutral-700 overflow-hidden">
+                              <div className="w-16 h-16 border border-border rounded-md flex items-center justify-center bg-muted overflow-hidden">
                                 <img
                                   src={buildResourceUrl(event.hero_logo_url)}
                                   alt={t('events.eventCustomLogo', 'Custom Event Logo')}
@@ -796,7 +796,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                             </div>
                           ) : (
                             <div className="flex items-center gap-2">
-                              <label className={`cursor-pointer inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 rounded-md hover:bg-neutral-50 dark:hover:bg-neutral-700 ${logoUploading ? 'opacity-50 pointer-events-none' : ''}`}>
+                              <label className={`cursor-pointer inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium border border-border text-foreground rounded-md hover:bg-accent ${logoUploading ? 'opacity-50 pointer-events-none' : ''}`}>
                                 <Upload className="w-3.5 h-3.5" />
                                 {t('events.uploadEventLogo', 'Upload Logo')}
                                 <input
@@ -819,8 +819,8 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                     )}
 
                     <div>
-                      <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1 flex items-center gap-1">
-                        <Image className="w-4 h-4 text-neutral-500 dark:text-neutral-400" />
+                      <label className="block text-sm font-medium text-foreground mb-1 flex items-center gap-1">
+                        <Image className="w-4 h-4 text-muted-foreground" />
                         {t('events.loginLogoVisible', 'Display logo on password page')}
                       </label>
                       <select
@@ -831,14 +831,14 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                           ...prev,
                           login_logo_visible: e.target.value === 'hide' ? false : null
                         }))}
-                        className="w-full sm:w-64 px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-md shadow-xs focus:ring-brand-500 focus:border-primary text-sm"
+                        className="w-full sm:w-64 px-3 py-2 border border-border bg-card text-foreground rounded-md shadow-xs focus:ring-brand-500 focus:border-primary text-sm"
                       >
                         <option value="show">{t('events.loginLogoShow', 'Show (default)')}</option>
                         <option value="hide">{t('events.loginLogoHide', 'Hide')}</option>
                       </select>
                     </div>
 
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-2">
+                    <p className="text-xs text-muted-foreground mt-2">
                       {t('events.heroLogoInfo', 'These settings apply when the gallery uses the Hero layout. You can hide the logo or customize its size and position.')}
                     </p>
                   </div>
@@ -847,53 +847,53 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
             ) : (
               <dl className="space-y-4">
                 <div>
-                  <dt className="text-sm font-medium text-neutral-500 dark:text-neutral-400">{t('events.sourceMode', 'Source Mode')}</dt>
-                  <dd className="mt-1 text-sm text-neutral-900 dark:text-neutral-100">
+                  <dt className="text-sm font-medium text-muted-foreground">{t('events.sourceMode', 'Source Mode')}</dt>
+                  <dd className="mt-1 text-sm text-foreground">
                     {event.source_mode === 'reference' ? t('events.sourceModeReference', 'Reference external folder') : t('events.sourceModeManaged', 'Managed (upload to PicPeak)')}
                     {event.source_mode === 'reference' && event.external_path ? (
-                      <span className="text-neutral-500 dark:text-neutral-400 ml-2">/external-media/{event.external_path}</span>
+                      <span className="text-muted-foreground ml-2">/external-media/{event.external_path}</span>
                     ) : null}
                     {event.source_mode === 'reference' && event.external_watch ? (
-                      <span className="block text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                      <span className="block text-xs text-muted-foreground mt-1">
                         {t('events.externalWatchActive', 'Folder is watched — new files are imported automatically.')}
                       </span>
                     ) : null}
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-sm font-medium text-neutral-500 dark:text-neutral-400">{t('events.welcomeMessage')}</dt>
-                  <dd className="mt-1 text-sm text-neutral-900 dark:text-neutral-100">
-                    {event.welcome_message || <span className="text-neutral-400">{t('events.noWelcomeMessageSet')}</span>}
+                  <dt className="text-sm font-medium text-muted-foreground">{t('events.welcomeMessage')}</dt>
+                  <dd className="mt-1 text-sm text-foreground">
+                    {event.welcome_message || <span className="text-muted-foreground">{t('events.noWelcomeMessageSet')}</span>}
                   </dd>
                 </div>
 
                 <div>
-                  <dt className="text-sm font-medium text-neutral-500 dark:text-neutral-400">{t('events.hostName')}</dt>
-                  <dd className="mt-1 text-sm text-neutral-900 dark:text-neutral-100">
-                    {event.customer_name || <span className="text-neutral-400">{t('common.notSet')}</span>}
+                  <dt className="text-sm font-medium text-muted-foreground">{t('events.hostName')}</dt>
+                  <dd className="mt-1 text-sm text-foreground">
+                    {event.customer_name || <span className="text-muted-foreground">{t('common.notSet')}</span>}
                   </dd>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <dt className="text-sm font-medium text-neutral-500 dark:text-neutral-400">{t('events.hostEmail')}</dt>
-                  <dd className="mt-1 text-sm text-neutral-900 dark:text-neutral-100">{event.customer_email}</dd>
+                    <dt className="text-sm font-medium text-muted-foreground">{t('events.hostEmail')}</dt>
+                  <dd className="mt-1 text-sm text-foreground">{event.customer_email}</dd>
                   </div>
 
                   <div>
-                    <dt className="text-sm font-medium text-neutral-500 dark:text-neutral-400">{t('events.adminEmail')}</dt>
-                    <dd className="mt-1 text-sm text-neutral-900 dark:text-neutral-100">{event.admin_email}</dd>
+                    <dt className="text-sm font-medium text-muted-foreground">{t('events.adminEmail')}</dt>
+                    <dd className="mt-1 text-sm text-foreground">{event.admin_email}</dd>
                   </div>
                 </div>
 
                 {phoneFieldEnabled && (
                   <div>
-                    <dt className="text-sm font-medium text-neutral-500 dark:text-neutral-400">
+                    <dt className="text-sm font-medium text-muted-foreground">
                       {t('events.customerPhone', 'Customer Phone')}
                     </dt>
-                    <dd className="mt-1 text-sm text-neutral-900 dark:text-neutral-100">
+                    <dd className="mt-1 text-sm text-foreground">
                       {event.customer_phone || (
-                        <span className="text-neutral-400">{t('common.notSet')}</span>
+                        <span className="text-muted-foreground">{t('common.notSet')}</span>
                       )}
                     </dd>
                   </div>
@@ -901,58 +901,58 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <dt className="text-sm font-medium text-neutral-500 dark:text-neutral-400">{t('events.created')}</dt>
-                    <dd className="mt-1 text-sm text-neutral-900 dark:text-neutral-100">
+                    <dt className="text-sm font-medium text-muted-foreground">{t('events.created')}</dt>
+                    <dd className="mt-1 text-sm text-foreground">
                       {event.created_at && format(safeParseDate(event.created_at)!, 'PP')}
                     </dd>
                   </div>
 
                   <div>
-                    <dt className="text-sm font-medium text-neutral-500 dark:text-neutral-400">{t('events.expires')}</dt>
-                    <dd className="mt-1 text-sm text-neutral-900 dark:text-neutral-100">
+                    <dt className="text-sm font-medium text-muted-foreground">{t('events.expires')}</dt>
+                    <dd className="mt-1 text-sm text-foreground">
                       {event.expires_at ? (
                         <>
                           {format(safeParseDate(event.expires_at)!, 'PP')}
                           {!event.is_archived && daysUntilExpiration !== null && daysUntilExpiration > 0 && (
-                            <span className="text-neutral-500 dark:text-neutral-400 ml-1">
+                            <span className="text-muted-foreground ml-1">
                               {t('events.daysLeft', { count: daysUntilExpiration })}
                             </span>
                           )}
                         </>
                       ) : (
-                        <span className="text-neutral-500 dark:text-neutral-400">{t('events.neverExpires', 'Never')}</span>
+                        <span className="text-muted-foreground">{t('events.neverExpires', 'Never')}</span>
                       )}
                     </dd>
                   </div>
                 </div>
 
                 <div>
-                  <dt className="text-sm font-medium text-neutral-500 dark:text-neutral-400">{t('events.heroPhoto')}</dt>
-                  <dd className="mt-1 text-sm text-neutral-900 dark:text-neutral-100">
+                  <dt className="text-sm font-medium text-muted-foreground">{t('events.heroPhoto')}</dt>
+                  <dd className="mt-1 text-sm text-foreground">
                     {event.hero_photo_id ? (
                       <span className="text-brand">{t('events.heroPhotoSelected')}</span>
                     ) : (
-                      <span className="text-neutral-400">{t('events.noHeroPhotoSelected')}</span>
+                      <span className="text-muted-foreground">{t('events.noHeroPhotoSelected')}</span>
                     )}
                   </dd>
                 </div>
 
                 <div>
-                  <dt className="text-sm font-medium text-neutral-500 dark:text-neutral-400">{t('events.userUploads')}</dt>
-                  <dd className="mt-1 text-sm text-neutral-900 dark:text-neutral-100">
+                  <dt className="text-sm font-medium text-muted-foreground">{t('events.userUploads')}</dt>
+                  <dd className="mt-1 text-sm text-foreground">
                     {event.allow_user_uploads ? (
                       <div className="space-y-1">
                         <span className="inline-flex items-center px-2 py-1 text-xs font-medium text-green-700 dark:text-green-300 bg-green-100 dark:bg-green-900/40 rounded-sm">
                           {t('common.yes')}
                         </span>
                         {event.upload_category_id && (
-                          <p className="text-xs text-neutral-600 dark:text-neutral-400">
+                          <p className="text-xs text-muted-foreground">
                             {t('events.uploadCategory')}: {categories.find(c => c.id === event.upload_category_id)?.name || 'N/A'}
                           </p>
                         )}
                       </div>
                     ) : (
-                      <span className="inline-flex items-center px-2 py-1 text-xs font-medium text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-700 rounded-sm">
+                      <span className="inline-flex items-center px-2 py-1 text-xs font-medium text-foreground bg-muted rounded-sm">
                         {t('common.no')}
                       </span>
                     )}
@@ -961,8 +961,8 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
 
                 {Boolean(event.reveal_mode) && (
                   <div>
-                    <dt className="text-sm font-medium text-neutral-500 dark:text-neutral-400">{t('events.revealModeStatus', 'Reveal mode')}</dt>
-                    <dd className="mt-1 text-sm text-neutral-900 dark:text-neutral-100">
+                    <dt className="text-sm font-medium text-muted-foreground">{t('events.revealModeStatus', 'Reveal mode')}</dt>
+                    <dd className="mt-1 text-sm text-foreground">
                       {event.revealed_at ? (
                         <span className="inline-flex items-center px-2 py-1 text-xs font-medium text-green-700 dark:text-green-300 bg-green-100 dark:bg-green-900/40 rounded-sm">
                           {t('events.revealed', 'Revealed')}
@@ -973,7 +973,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                             {t('events.hiddenUntilReveal', 'Hidden from guests')}
                           </span>
                           {event.reveal_at && (
-                            <p className="text-xs text-neutral-600 dark:text-neutral-400">
+                            <p className="text-xs text-muted-foreground">
                               {t('events.revealScheduled', 'Scheduled: {{date}}', { date: new Date(event.reveal_at).toLocaleString() })}
                             </p>
                           )}
@@ -981,7 +981,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                             <button
                               type="button"
                               onClick={onRevealNow}
-                              className="block px-3 py-1.5 text-xs font-medium text-white bg-brand hover:bg-primary rounded-sm transition-colors"
+                              className="block px-3 py-1.5 text-xs font-medium text-primary-foreground bg-brand hover:bg-primary rounded-sm transition-colors"
                             >
                               {t('events.revealNow', 'Reveal now')}
                             </button>
@@ -993,30 +993,30 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                 )}
 
                 {/* Download Protection Display */}
-                <div className="pt-3 mt-3 border-t border-neutral-200 dark:border-neutral-700">
-                  <dt className="text-sm font-medium text-neutral-500 dark:text-neutral-400 flex items-center gap-2">
+                <div className="pt-3 mt-3 border-t border-border">
+                  <dt className="text-sm font-medium text-muted-foreground flex items-center gap-2">
                     <Shield className="w-4 h-4" />
                     {t('events.downloadProtection', 'Download Protection')}
                   </dt>
-                  <dd className="mt-2 text-sm text-neutral-900 dark:text-neutral-100">
+                  <dd className="mt-2 text-sm text-foreground">
                     <div className="flex flex-wrap gap-2">
                       <span className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded ${
                         event.protection_level === 'maximum' ? 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300' :
                         event.protection_level === 'enhanced' ? 'bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300' :
                         event.protection_level === 'standard' ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300' :
-                        'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300'
+                        'bg-muted text-foreground'
                       }`}>
                         {event.protection_level || 'standard'}
                       </span>
                       {/* !! on the next three — SQLite integer booleans render literal "0" when falsy */}
                       {!!event.disable_right_click && (
-                        <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-sm">
+                        <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-muted text-foreground rounded-sm">
                           <MousePointer className="w-3 h-3 mr-1" />
                           {t('events.rightClickBlocked', 'Right-click blocked')}
                         </span>
                       )}
                       {!!event.enable_devtools_protection && (
-                        <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-sm">
+                        <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-muted text-foreground rounded-sm">
                           <Monitor className="w-3 h-3 mr-1" />
                           {t('events.devtoolsDetection', 'DevTools detection')}
                         </span>
@@ -1028,7 +1028,7 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                         </span>
                       )}
                       {!!event.watermark_downloads && (
-                        <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-sm">
+                        <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-muted text-foreground rounded-sm">
                           <Droplets className="w-3 h-3 mr-1" />
                           {t('events.watermarked', 'Watermarked')}
                         </span>
@@ -1038,12 +1038,12 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                 </div>
 
                 {/* Hero Logo Settings Display */}
-                <div className="pt-3 mt-3 border-t border-neutral-200 dark:border-neutral-700">
-                  <dt className="text-sm font-medium text-neutral-500 dark:text-neutral-400 flex items-center gap-2">
+                <div className="pt-3 mt-3 border-t border-border">
+                  <dt className="text-sm font-medium text-muted-foreground flex items-center gap-2">
                     <Layout className="w-4 h-4" />
                     {t('events.heroLogoSettings', 'Hero Logo Settings')}
                   </dt>
-                  <dd className="mt-2 text-sm text-neutral-900 dark:text-neutral-100">
+                  <dd className="mt-2 text-sm text-foreground">
                     <div className="flex flex-wrap gap-2">
                       {event.hero_logo_visible !== false ? (
                         <>
@@ -1051,15 +1051,15 @@ export const EventInformationCard: React.FC<EventInformationCardProps> = ({
                             <Image className="w-3 h-3 mr-1" />
                             {t('events.heroLogoVisibleLabel', 'Logo visible')}
                           </span>
-                          <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-sm">
+                          <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-muted text-foreground rounded-sm">
                             {t('events.heroLogoSizeLabel', 'Size')}: {event.hero_logo_size || 'medium'}
                           </span>
-                          <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-sm">
+                          <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-muted text-foreground rounded-sm">
                             {t('events.heroLogoPositionLabel', 'Position')}: {event.hero_logo_position || 'top'}
                           </span>
                         </>
                       ) : (
-                        <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-sm">
+                        <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-muted text-foreground rounded-sm">
                           <Image className="w-3 h-3 mr-1" />
                           {t('events.heroLogoHidden', 'Logo hidden')}
                         </span>

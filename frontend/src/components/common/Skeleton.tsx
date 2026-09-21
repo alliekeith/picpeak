@@ -59,7 +59,7 @@ export const SkeletonTable: React.FC<{ rows?: number; className?: string }> = ({
   className
 }) => (
   <div className={cn('rounded-lg shadow-xs overflow-hidden', className)} style={SURFACE_STYLE}>
-    <div className="border-b border-neutral-200 dark:border-neutral-700 p-4">
+    <div className="border-b border-border p-4">
       <div className="flex gap-4">
         <Skeleton style={{ width: "30%", height: '20px' }} />
         <Skeleton style={{ width: "25%", height: '20px' }} />

@@ -91,18 +91,18 @@ export const PasswordResetModal: React.FC<PasswordResetModalProps> = ({
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <Card className="max-w-md w-full"><CardContent><div className="flex items-center justify-between mb-4">
-                    <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+                    <h2 className="text-xl font-semibold text-foreground">
                       {resultPassword ? t('events.passwordReset.newTitle') : t('events.passwordReset.title')}
                     </h2>
                     <button
                       onClick={onClose}
-                      className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300"
+                      className="text-muted-foreground hover:text-foreground"
                     >
                       <X className="w-5 h-5" />
                     </button>
                   </div>{!resultPassword ? (
                     <>
-                      <p className="text-neutral-600 mb-4">
+                      <p className="text-muted-foreground mb-4">
                         {t('events.passwordReset.description', { eventName })}
                       </p>
 
@@ -155,16 +155,16 @@ export const PasswordResetModal: React.FC<PasswordResetModalProps> = ({
                             type="checkbox"
                             checked={sendEmail}
                             onChange={(e) => setSendEmail(e.target.checked)}
-                            className="w-4 h-4 text-brand bg-neutral-100 dark:bg-neutral-700 border-neutral-300 dark:border-neutral-600 rounded-sm focus:ring-brand-500 focus:ring-2"
+                            className="w-4 h-4 text-brand bg-muted border-border rounded-sm focus:ring-brand-500 focus:ring-2"
                           />
                           <div className="flex-1">
                             <div className="flex items-center gap-2">
-                              <Mail className="w-4 h-4 text-neutral-500" />
-                              <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                              <Mail className="w-4 h-4 text-muted-foreground" />
+                              <span className="text-sm font-medium text-foreground">
                                 {t('events.passwordReset.sendEmail')}
                               </span>
                             </div>
-                            <p className="text-xs text-neutral-500 mt-1">
+                            <p className="text-xs text-muted-foreground mt-1">
                               {t('events.passwordReset.sendEmailHelp')}
                             </p>
                           </div>
@@ -210,7 +210,7 @@ export const PasswordResetModal: React.FC<PasswordResetModalProps> = ({
                       {resultWasGenerated && (
                         <>
                           <div className="mb-4">
-                            <label className="block text-sm font-medium text-neutral-700 mb-2">
+                            <label className="block text-sm font-medium text-foreground mb-2">
                               {t('events.passwordReset.generatedLabel')}
                             </label>
                             <div className="flex gap-2">
@@ -218,7 +218,7 @@ export const PasswordResetModal: React.FC<PasswordResetModalProps> = ({
                                 type="text"
                                 value={resultPassword}
                                 readOnly
-                                className="flex-1 px-3 py-2 bg-neutral-50 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-neutral-100 rounded-lg font-mono text-sm"
+                                className="flex-1 px-3 py-2 bg-muted border border-border text-foreground rounded-lg font-mono text-sm"
                               />
                               <Button
                                                                           variant="outline"

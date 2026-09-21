@@ -45,8 +45,8 @@ function statusBadgeClass(status: ContractStatus): string {
     : status === 'signed_by_admin'         ? 'bg-blue-100 text-blue-800'
     : status === 'sent'                    ? 'bg-amber-100 text-amber-800'
     : status === 'declined'                ? 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-200'
-    : status === 'cancelled'               ? 'bg-neutral-200 text-neutral-600'
-    :                                        'bg-neutral-100 text-neutral-700';
+    : status === 'cancelled'               ? 'bg-muted text-muted-foreground'
+    :                                        'bg-muted text-foreground';
 }
 
 export const ContractDetailPage: React.FC = () => {
@@ -249,7 +249,7 @@ export const ContractDetailPage: React.FC = () => {
       <div className="mb-4 flex items-center gap-3 flex-wrap">
         <Link
           to="/admin/clients/contracts"
-          className="inline-flex items-center gap-1 text-sm text-neutral-600 dark:text-neutral-400 hover:text-primary"
+          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"
         >
           <ArrowLeft className="w-4 h-4" />
           {t('contracts.detail.back', 'Back to list')}
@@ -257,9 +257,9 @@ export const ContractDetailPage: React.FC = () => {
         <h1 className="text-2xl font-bold flex items-center gap-2 flex-1">
           <ScrollText className="w-6 h-6" />
           <span className="font-mono text-base">{c.contractNumber}</span>
-          {c.title && <span className="text-base text-neutral-600 dark:text-neutral-400">— {c.title}</span>}
+          {c.title && <span className="text-base text-muted-foreground">— {c.title}</span>}
           {c.templateName && (
-            <span className="text-xs font-normal text-neutral-600 dark:text-neutral-400">
+            <span className="text-xs font-normal text-muted-foreground">
               {t('contracts.detail.fromTemplate', 'Template: {{name}} · v{{version}}', { name: c.templateName, version: c.templateVersion ?? '' })}
             </span>
           )}
@@ -447,7 +447,7 @@ export const ContractDetailPage: React.FC = () => {
       {/* Recipient + dates */}
       <Card className="py-8 mb-4"><CardContent className="px-8"><h2 className="font-semibold mb-2">{t('contracts.detail.parties', 'Parties')}</h2><div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                     <div>
-                      <p className="text-xs uppercase text-neutral-500 dark:text-neutral-400 tracking-wide">
+                      <p className="text-xs uppercase text-muted-foreground tracking-wide">
                         {t('contracts.detail.customer', 'Customer')}
                       </p>
                       <p className="font-medium">
@@ -456,25 +456,25 @@ export const ContractDetailPage: React.FC = () => {
                           || c.customer.displayName
                           || c.customer.email}
                       </p>
-                      <p className="text-xs text-neutral-600 dark:text-neutral-300">{c.customer.email}</p>
+                      <p className="text-xs text-muted-foreground">{c.customer.email}</p>
                     </div>
                     <div>
-                      <p className="text-xs uppercase text-neutral-500 dark:text-neutral-400 tracking-wide">
+                      <p className="text-xs uppercase text-muted-foreground tracking-wide">
                         {t('contracts.detail.dates', 'Dates')}
                       </p>
                       <p className="text-xs">
-                        <span className="text-neutral-600 dark:text-neutral-300">{t('contracts.detail.issued', 'Issued')}: </span>
+                        <span className="text-muted-foreground">{t('contracts.detail.issued', 'Issued')}: </span>
                         {formatDate(c.issueDate)}
                       </p>
                       {c.validUntil && (
                         <p className="text-xs">
-                          <span className="text-neutral-600 dark:text-neutral-300">{t('contracts.detail.signBy', 'Sign by')}: </span>
+                          <span className="text-muted-foreground">{t('contracts.detail.signBy', 'Sign by')}: </span>
                           {formatDate(c.validUntil)}
                         </p>
                       )}
                       {c.sentAt && (
                         <p className="text-xs">
-                          <span className="text-neutral-600 dark:text-neutral-300">{t('contracts.detail.sentAt', 'Sent at')}: </span>
+                          <span className="text-muted-foreground">{t('contracts.detail.sentAt', 'Sent at')}: </span>
                           {formatDateTime(c.sentAt)}
                         </p>
                       )}
@@ -487,7 +487,7 @@ export const ContractDetailPage: React.FC = () => {
                           surfaces without scrolling. */}
                       {sourceQuoteId && (
                         <p className="text-xs">
-                          <span className="text-neutral-600 dark:text-neutral-300">{t('contracts.detail.fromQuote', 'From quote')}: </span>
+                          <span className="text-muted-foreground">{t('contracts.detail.fromQuote', 'From quote')}: </span>
                           <Link
                             to={`/admin/clients/quotes/${sourceQuoteId}`}
                             className="text-primary hover:underline font-mono"
@@ -498,7 +498,7 @@ export const ContractDetailPage: React.FC = () => {
                       )}
                       {linkedInvoices && linkedInvoices.length > 0 && (
                         <p className="text-xs">
-                          <span className="text-neutral-600 dark:text-neutral-300">{t('contracts.detail.linkedInvoice', 'Invoice')}: </span>
+                          <span className="text-muted-foreground">{t('contracts.detail.linkedInvoice', 'Invoice')}: </span>
                           <Link
                             to={`/admin/clients/bills/${linkedInvoices[0].id}`}
                             className="text-primary hover:underline font-mono"
@@ -506,7 +506,7 @@ export const ContractDetailPage: React.FC = () => {
                             {linkedInvoices[0].invoiceNumber}
                           </Link>
                           {linkedInvoices.length > 1 && (
-                            <span className="text-neutral-600 dark:text-neutral-300"> (+{linkedInvoices.length - 1})</span>
+                            <span className="text-muted-foreground"> (+{linkedInvoices.length - 1})</span>
                           )}
                         </p>
                       )}
@@ -522,14 +522,14 @@ export const ContractDetailPage: React.FC = () => {
           above covers v2). */}
       {legacySigning && (c.signedByCustomerAt || c.signedByAdminAt) && (
         <Card className="py-8 mb-4"><CardContent className="px-8"><h2 className="font-semibold mb-2">{t('contracts.detail.signatures', 'Signatures')}</h2><div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                          <div className="p-3 rounded-sm border border-neutral-200 dark:border-neutral-700">
-                            <p className="text-xs uppercase text-neutral-500 dark:text-neutral-400 tracking-wide">
+                          <div className="p-3 rounded-sm border border-border">
+                            <p className="text-xs uppercase text-muted-foreground tracking-wide">
                               {t('contracts.detail.signedByCustomer', 'Signed by customer')}
                             </p>
                             {c.signedByCustomerAt ? (
                               <>
                                 <p className="font-medium">{c.signedCustomerName}</p>
-                                <p className="text-xs text-neutral-600 dark:text-neutral-300">{formatDateTime(c.signedByCustomerAt)}</p>
+                                <p className="text-xs text-muted-foreground">{formatDateTime(c.signedByCustomerAt)}</p>
                                 {!c.signedCustomerSignaturePath && (
                                   <p className="text-xs text-amber-700 dark:text-amber-300 mt-1">
                                     {t('contracts.detail.noSignatureImage',
@@ -538,17 +538,17 @@ export const ContractDetailPage: React.FC = () => {
                                 )}
                               </>
                             ) : (
-                              <p className="text-xs text-neutral-600 dark:text-neutral-300">—</p>
+                              <p className="text-xs text-muted-foreground">—</p>
                             )}
                           </div>
-                          <div className="p-3 rounded-sm border border-neutral-200 dark:border-neutral-700">
-                            <p className="text-xs uppercase text-neutral-500 dark:text-neutral-400 tracking-wide">
+                          <div className="p-3 rounded-sm border border-border">
+                            <p className="text-xs uppercase text-muted-foreground tracking-wide">
                               {t('contracts.detail.signedByAdmin', 'Counter-signed')}
                             </p>
                             {c.signedByAdminAt ? (
                               <>
                                 <p className="font-medium">{c.signedAdminName}</p>
-                                <p className="text-xs text-neutral-600 dark:text-neutral-300">{formatDateTime(c.signedByAdminAt)}</p>
+                                <p className="text-xs text-muted-foreground">{formatDateTime(c.signedByAdminAt)}</p>
                                 {!c.signedAdminSignaturePath && (
                                   <p className="text-xs text-amber-700 dark:text-amber-300 mt-1">
                                     {t('contracts.detail.noSignatureImage',
@@ -557,7 +557,7 @@ export const ContractDetailPage: React.FC = () => {
                                 )}
                               </>
                             ) : (
-                              <p className="text-xs text-neutral-600 dark:text-neutral-300">—</p>
+                              <p className="text-xs text-muted-foreground">—</p>
                             )}
                           </div>
                         </div></CardContent></Card>
@@ -605,7 +605,7 @@ export const ContractDetailPage: React.FC = () => {
       />
       {c.convertedEventId && (
         <Card className="mb-4"><CardContent><p className="text-sm">
-                          <span className="text-neutral-500 dark:text-neutral-400 mr-2">
+                          <span className="text-muted-foreground mr-2">
                             {t('contracts.detail.convertedToEvent', 'Converted to event')}:
                           </span>
                           <Link to={`/admin/events/${c.convertedEventId}`} className="font-medium text-brand-600 dark:text-brand-400 hover:underline">
@@ -621,13 +621,13 @@ export const ContractDetailPage: React.FC = () => {
                         .filter((inc) => inc.included)
                         .map((inc) => (
                           <li key={inc.id} className="flex items-center gap-2">
-                            <span className="text-xs uppercase tracking-wide text-neutral-500 w-24">{inc.section}</span>
+                            <span className="text-xs uppercase tracking-wide text-muted-foreground w-24">{inc.section}</span>
                             <span>{inc.block?.name || `Block ${inc.blockId}`}</span>
                           </li>
                         ))}
                     </ul>
                   ) : (
-                    <p className="text-sm text-neutral-500">
+                    <p className="text-sm text-muted-foreground">
                       {t('contracts.detail.noBlocks', 'No blocks included.')}
                     </p>
                   )}</CardContent></Card>
@@ -636,8 +636,8 @@ export const ContractDetailPage: React.FC = () => {
         <Card className="py-8 mt-4"><CardContent className="px-8"><h2 className="font-semibold mb-2">{t('contracts.attachments.heading', 'Attachments')}</h2><ul className="space-y-1 text-sm">
                           {(c.attachments || []).map((a) => (
                             <li key={a.attachmentId} className="flex flex-wrap items-center gap-2">
-                              <span className="font-medium text-neutral-900 dark:text-neutral-100">{a.name}</span>
-                              <span className="text-xs text-neutral-500 dark:text-neutral-400">
+                              <span className="font-medium text-foreground">{a.name}</span>
+                              <span className="text-xs text-muted-foreground">
                                 {a.delivery === 'merged'
                                   ? t('contracts.attachments.merged', 'In the contract PDF')
                                   : t('contracts.attachments.separate', 'Separate file')}
@@ -692,7 +692,7 @@ const IntegrityCheckCard: React.FC<{ contractId: number }> = ({ contractId }) =>
     let badge: React.ReactNode;
     if (!leg.path) {
       badge = (
-        <span className="inline-flex items-center gap-1 text-xs text-neutral-500">
+        <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
           {t('contracts.detail.integrity.notIssued', 'Not yet issued')}
         </span>
       );
@@ -719,21 +719,21 @@ const IntegrityCheckCard: React.FC<{ contractId: number }> = ({ contractId }) =>
       );
     }
     return (
-      <div className="border border-neutral-200 dark:border-neutral-700 rounded-sm p-3 space-y-1">
+      <div className="border border-border rounded-sm p-3 space-y-1">
         <div className="flex items-center justify-between gap-2">
           <span className="text-sm font-medium">{t(titleKey, titleFallback)}</span>
           {badge}
         </div>
         {leg.path && (
-          <p className="text-[11px] text-neutral-500 font-mono break-all" title={leg.path}>
+          <p className="text-[11px] text-muted-foreground font-mono break-all" title={leg.path}>
             {leg.path}
           </p>
         )}
         {(leg.expected || leg.actual) && (
           <dl className="grid grid-cols-[6rem_1fr] gap-x-2 gap-y-0.5 text-[11px] font-mono">
-            <dt className="text-neutral-500">{t('contracts.detail.integrity.expected', 'expected')}</dt>
+            <dt className="text-muted-foreground">{t('contracts.detail.integrity.expected', 'expected')}</dt>
             <dd className="break-all">{leg.expected || '—'}</dd>
-            <dt className="text-neutral-500">{t('contracts.detail.integrity.actual', 'actual')}</dt>
+            <dt className="text-muted-foreground">{t('contracts.detail.integrity.actual', 'actual')}</dt>
             <dd className={leg.match ? 'break-all' : 'break-all text-red-700 dark:text-red-300'}>
               {leg.actual || '—'}
             </dd>
@@ -757,7 +757,7 @@ const IntegrityCheckCard: React.FC<{ contractId: number }> = ({ contractId }) =>
                               {isFetching && <Loader2 className="animate-spin" />}{isSuccess
                                 ? t('contracts.detail.integrity.reverify', 'Re-verify')
                                 : t('contracts.detail.integrity.verify', 'Verify')}</Button>
-            </div><p className="text-xs text-neutral-500 mb-3">
+            </div><p className="text-xs text-muted-foreground mb-3">
               {t('contracts.detail.integrity.help',
                 'Re-hashes the unsigned + signed PDFs on disk and compares them to the SHA-256 stored when the document was issued. Catches backup corruption or manual edits since the customer received their copy.')}
             </p>{error && (
@@ -793,25 +793,25 @@ const GeneratedDocumentsCard: React.FC<{ contractId: number }> = ({ contractId }
   });
   const documents = data?.documents || [];
   return (
-    <Card className="py-8 mt-4"><CardContent className="px-8"><h3 className="text-lg font-semibold mb-1">{t('contracts.detail.documents', 'Generated documents')}</h3><p className="text-xs text-neutral-500 dark:text-neutral-400 mb-3">
+    <Card className="py-8 mt-4"><CardContent className="px-8"><h3 className="text-lg font-semibold mb-1">{t('contracts.detail.documents', 'Generated documents')}</h3><p className="text-xs text-muted-foreground mb-3">
               {t('contracts.detail.documentsHelp', 'Every PDF made for this contract, with its checksum. Re-hash a copy to confirm it matches.')}
             </p>{documents.length === 0 ? (
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('contracts.detail.documentsEmpty', 'No PDFs generated yet.')}</p>
+              <p className="text-sm text-muted-foreground">{t('contracts.detail.documentsEmpty', 'No PDFs generated yet.')}</p>
             ) : (
               <ul className="divide-y divide-neutral-200 dark:divide-neutral-700 text-sm">
                 {documents.map((d) => (
                   <li key={d.id} className="py-2 flex flex-wrap items-center gap-3">
-                    <span className="font-medium text-neutral-900 dark:text-neutral-100">
+                    <span className="font-medium text-foreground">
                       {t(`contracts.detail.documentKind.${d.kind}`, d.kind)}
                     </span>
-                    <span className="text-neutral-600 dark:text-neutral-400">{fmtDateTime(d.generatedAt)}</span>
+                    <span className="text-muted-foreground">{fmtDateTime(d.generatedAt)}</span>
                     {d.pages != null && (
-                      <span className="text-neutral-600 dark:text-neutral-400">
+                      <span className="text-muted-foreground">
                         {t('contracts.detail.documentPages', 'Pages: {{count}}', { count: d.pages })}
                       </span>
                     )}
-                    <span className="text-neutral-600 dark:text-neutral-400">{Math.max(1, Math.round(d.bytes / 1024))} KB</span>
-                    <span className="font-mono text-xs text-neutral-500 dark:text-neutral-400 break-all" title={d.sha256}>
+                    <span className="text-muted-foreground">{Math.max(1, Math.round(d.bytes / 1024))} KB</span>
+                    <span className="font-mono text-xs text-muted-foreground break-all" title={d.sha256}>
                       {d.sha256.slice(0, 16)}…
                     </span>
                   </li>
@@ -839,7 +839,7 @@ const AuditTrailCard: React.FC<{ contractId: number }> = ({ contractId }) => {
     return (
       <Card className="py-8 mt-4"><CardContent className="px-8"><h2 className="font-semibold mb-2">
                   {t('contracts.detail.auditTrail', 'Audit trail')}
-                </h2><p className="text-sm text-neutral-500">
+                </h2><p className="text-sm text-muted-foreground">
                   {t('contracts.detail.auditEmpty', 'No audit-log entries yet.')}
                 </p></CardContent></Card>
     );
@@ -849,7 +849,7 @@ const AuditTrailCard: React.FC<{ contractId: number }> = ({ contractId }) => {
     <Card className="py-8 mt-4"><CardContent className="px-8"><h2 className="font-semibold mb-2 flex items-center gap-2">
               <ScrollText className="w-4 h-4" />
               {t('contracts.detail.auditTrail', 'Audit trail')}
-            </h2><p className="text-xs text-neutral-500 mb-3">
+            </h2><p className="text-xs text-muted-foreground mb-3">
               {t('contracts.detail.auditTrailHelp',
                 'Every event recorded on this contract. The list is append-only and is the source of truth if the contract is challenged.')}
             </p><ol className="space-y-2">
@@ -879,14 +879,14 @@ const AuditTrailCard: React.FC<{ contractId: number }> = ({ contractId }) => {
                   <li key={e.id} className="flex items-start gap-3 text-sm border-l-2 border-primary pl-3">
                     <div className="flex-1 min-w-0">
                       <div className="font-medium">{label}</div>
-                      <div className="text-xs text-neutral-500">
+                      <div className="text-xs text-muted-foreground">
                         {e.actor_name || e.actor_type || 'system'}
                         {metaChips.length > 0 && (
                           <span className="ml-2 font-mono">· {metaChips.join(' · ')}</span>
                         )}
                       </div>
                     </div>
-                    <div className="text-xs text-neutral-500 whitespace-nowrap font-mono">
+                    <div className="text-xs text-muted-foreground whitespace-nowrap font-mono">
                       {fmtDateTime(e.created_at)}
                     </div>
                   </li>
@@ -920,7 +920,7 @@ const CountersignCard: React.FC<CountersignProps> = ({
   return (
     <Card className="py-8 mb-4"><CardContent className="px-8"><h2 className="font-semibold mb-2">
               {t('contracts.detail.countersignTitle', 'Counter-sign to make it binding')}
-            </h2><p className="text-sm text-neutral-600 dark:text-neutral-400 mb-3">
+            </h2><p className="text-sm text-muted-foreground mb-3">
               {modeChoice
                 ? t('contracts.detail.countersignHelpV2', 'Every customer has signed. Your signature goes into the issuer\'s field on the PDF, and the signing certificate is issued once you sign.')
                 : t('contracts.detail.countersignHelp',
@@ -931,10 +931,10 @@ const CountersignCard: React.FC<CountersignProps> = ({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder={t('contracts.detail.signedNamePlaceholder', 'Your full name') as string}
-                className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm"
+                className="w-full px-3 py-2 rounded-md border border-border bg-card text-sm"
               />
               {modeChoice && (
-                <div role="radiogroup" aria-label={t('contracts.detail.countersignModeLabel', 'How do you want to sign?') as string} className="flex gap-4 text-sm text-neutral-800 dark:text-neutral-200">
+                <div role="radiogroup" aria-label={t('contracts.detail.countersignModeLabel', 'How do you want to sign?') as string} className="flex gap-4 text-sm text-foreground">
                   {(['drawn', 'typed'] as const).map((value) => (
                     <label key={value} className="inline-flex items-center gap-2">
                       <input
@@ -952,7 +952,7 @@ const CountersignCard: React.FC<CountersignProps> = ({
               )}
               {drawn ? (
                 <div>
-                  <label className="block text-xs text-neutral-600 dark:text-neutral-400 mb-1">
+                  <label className="block text-xs text-muted-foreground mb-1">
                     {t('contracts.detail.countersignSignaturePrompt', 'Draw your signature')}
                   </label>
                   <SignaturePadField
@@ -961,7 +961,7 @@ const CountersignCard: React.FC<CountersignProps> = ({
                   />
                 </div>
               ) : (
-                <p className="text-xs text-neutral-600 dark:text-neutral-400">
+                <p className="text-xs text-muted-foreground">
                   {t('contracts.detail.countersignTypedHint', 'Your name, as typed above, is placed in the signature field.')}
                 </p>
               )}
@@ -1075,24 +1075,24 @@ const RestampSignaturesCard: React.FC<RestampCardProps> = ({ contract, onSuccess
   return (
     <Card className="py-8 mb-4 border-amber-300 dark:border-amber-700"><CardContent className="px-8"><h2 className="font-semibold mb-2">
               {t('contracts.detail.restampTitle', 'Re-stamp missing signatures')}
-            </h2><p className="text-sm text-neutral-600 dark:text-neutral-400 mb-3">
+            </h2><p className="text-sm text-muted-foreground mb-3">
               {t('contracts.detail.restampHelp',
                 'One or both signatures didn\'t capture an image. Draw the missing signature(s) here and we\'ll re-render the PDF. The typed names, timestamps, and IPs already on file stay untouched.')}
             </p><div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {missingCustomer && (
                 <div>
-                  <label className="block text-xs text-neutral-600 dark:text-neutral-400 mb-1">
+                  <label className="block text-xs text-muted-foreground mb-1">
                     {t('contracts.detail.restampCustomer', 'Customer signature')}{' '}
                     <span className="font-medium">({contract.signedCustomerName})</span>
                   </label>
                   <canvas
                     ref={customerCanvasRef}
-                    className="w-full h-24 bg-white rounded-sm border border-neutral-300 dark:border-neutral-600 touch-none"
+                    className="w-full h-24 bg-card rounded-sm border border-border touch-none"
                   />
                   <button
                     type="button"
                     onClick={() => customerPadRef.current?.clear()}
-                    className="mt-1 text-xs text-neutral-600 dark:text-neutral-400 hover:underline inline-flex items-center gap-1"
+                    className="mt-1 text-xs text-muted-foreground hover:underline inline-flex items-center gap-1"
                   >
                     <RotateCcw className="w-3 h-3" />
                     {t('contracts.detail.clearSignature', 'Clear')}
@@ -1101,18 +1101,18 @@ const RestampSignaturesCard: React.FC<RestampCardProps> = ({ contract, onSuccess
               )}
               {missingAdmin && (
                 <div>
-                  <label className="block text-xs text-neutral-600 dark:text-neutral-400 mb-1">
+                  <label className="block text-xs text-muted-foreground mb-1">
                     {t('contracts.detail.restampAdmin', 'Admin signature')}{' '}
                     <span className="font-medium">({contract.signedAdminName})</span>
                   </label>
                   <canvas
                     ref={adminCanvasRef}
-                    className="w-full h-24 bg-white rounded-sm border border-neutral-300 dark:border-neutral-600 touch-none"
+                    className="w-full h-24 bg-card rounded-sm border border-border touch-none"
                   />
                   <button
                     type="button"
                     onClick={() => adminPadRef.current?.clear()}
-                    className="mt-1 text-xs text-neutral-600 dark:text-neutral-400 hover:underline inline-flex items-center gap-1"
+                    className="mt-1 text-xs text-muted-foreground hover:underline inline-flex items-center gap-1"
                   >
                     <RotateCcw className="w-3 h-3" />
                     {t('contracts.detail.clearSignature', 'Clear')}

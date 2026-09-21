@@ -102,7 +102,7 @@ export const ClientAccessPage: React.FC = () => {
               <CardContent className="text-center py-12">
                 <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
                 <h2 className="text-xl font-semibold mb-2">{t('errors.galleryNotFound')}</h2>
-                <p className="text-neutral-600">{t('errors.galleryNotFoundMessage')}</p>
+                <p className="text-muted-foreground">{t('errors.galleryNotFoundMessage')}</p>
               </CardContent>
             </Card>
           </div>
@@ -132,13 +132,13 @@ export const ClientAccessPage: React.FC = () => {
                 <div className="w-16 h-16 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Lock className="w-8 h-8 text-amber-600 dark:text-amber-400" />
                 </div>
-                <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
+                <h1 className="text-2xl font-bold text-foreground">
                   {t('clientAccess.title')}
                 </h1>
-                <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-2">
+                <p className="text-sm text-muted-foreground mt-2">
                   {galleryInfo.event_name}
                 </p>
-                <p className="text-xs text-neutral-500 dark:text-neutral-500 mt-1">
+                <p className="text-xs text-muted-foreground mt-1">
                   {t('clientAccess.description')}
                 </p>
               </div>
@@ -162,8 +162,8 @@ export const ClientAccessPage: React.FC = () => {
                                                 {isLoggingIn && <Loader2 className="animate-spin" />}{t('clientAccess.loginButton')}</Button>
               </form>
 
-              <div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700 text-center">
-                <p className="text-xs text-neutral-500 dark:text-neutral-400">
+              <div className="mt-4 pt-4 border-t border-border text-center">
+                <p className="text-xs text-muted-foreground">
                   {t('clientAccess.guestHint')}{' '}
                   <Link
                     to={`/gallery/${slug}`}
@@ -182,19 +182,19 @@ export const ClientAccessPage: React.FC = () => {
           <div className="flex items-center justify-center gap-4">
             <Link
               to="/impressum"
-              className="text-xs text-neutral-500 hover:text-neutral-700 transition-colors"
+              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
               {t('legal.impressum')}
             </Link>
-            <span className="text-xs text-neutral-400">|</span>
+            <span className="text-xs text-muted-foreground">|</span>
             <Link
               to="/datenschutz"
-              className="text-xs text-neutral-500 hover:text-neutral-700 transition-colors"
+              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
               {t('legal.datenschutz')}
             </Link>
           </div>
-          <PoweredBy className="text-xs mt-2 text-neutral-500" />
+          <PoweredBy className="text-xs mt-2 text-muted-foreground" />
         </div>
       </div>
     </div>

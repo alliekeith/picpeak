@@ -158,10 +158,10 @@ export const EventFeedbackPage: React.FC = () => {
                             >
                               <ArrowLeft className="w-4 h-4" />{t('common.back')}</Button>
           <div>
-            <h1 className="text-2xl font-bold text-neutral-900">
+            <h1 className="text-2xl font-bold text-foreground">
               {t('feedback.title', 'Feedback Management')}
             </h1>
-            <p className="text-sm text-neutral-600 mt-1">
+            <p className="text-sm text-muted-foreground mt-1">
               {event.event_name} • {event.slug}
             </p>
           </div>
@@ -170,14 +170,14 @@ export const EventFeedbackPage: React.FC = () => {
           {/* Shape selector (#640 #6). Long is the existing per-action shape;
               pivot is per-(photo, guest) for spreadsheet pivot tables. */}
           <div className="flex flex-col gap-1">
-            <label className="text-xs text-neutral-500 dark:text-neutral-400" htmlFor="feedback-export-shape">
+            <label className="text-xs text-muted-foreground" htmlFor="feedback-export-shape">
               {t('feedback.exportShapeLabel', 'Shape')}
             </label>
             <select
               id="feedback-export-shape"
               value={exportShape}
               onChange={(e) => setExportShape(e.target.value as 'long' | 'pivot')}
-              className="text-sm px-2 py-1.5 rounded-sm border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800"
+              className="text-sm px-2 py-1.5 rounded-sm border border-border bg-card"
             >
               <option value="long">{t('feedback.exportShapeLong', 'Per-action (long)')}</option>
               <option value="pivot">{t('feedback.exportShapePivot', 'Per-guest (pivot)')}</option>
@@ -199,7 +199,7 @@ export const EventFeedbackPage: React.FC = () => {
       </div>
 
       {/* Tabs */}
-      <div className="mb-6 border-b border-neutral-200">
+      <div className="mb-6 border-b border-border">
         <nav className="-mb-px flex gap-6">
           {[
             { id: 'settings', label: t('feedback.tabs.settings', 'Settings'), icon: Shield },
@@ -213,7 +213,7 @@ export const EventFeedbackPage: React.FC = () => {
               className={`flex items-center gap-2 px-1 py-2 border-b-2 font-medium text-sm transition-colors ${
                 activeTab === tab.id
                   ? 'border-brand text-brand'
-                  : 'border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300'
+                  : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
               }`}
             >
               <tab.icon className="w-4 h-4" />
@@ -238,7 +238,7 @@ export const EventFeedbackPage: React.FC = () => {
                                 <select
                                   value={feedbackFilter.type}
                                   onChange={(e) => setFeedbackFilter({ ...feedbackFilter, type: e.target.value, page: 1 })}
-                                  className="px-3 py-2 border border-neutral-300 rounded-lg"
+                                  className="px-3 py-2 border border-border rounded-lg"
                                 >
                                   <option value="">{t('feedback.allTypes', 'All Types')}</option>
                                   <option value="rating">{t('feedback.types.rating', 'Ratings')}</option>
@@ -250,7 +250,7 @@ export const EventFeedbackPage: React.FC = () => {
                                 <select
                                   value={feedbackFilter.status}
                                   onChange={(e) => setFeedbackFilter({ ...feedbackFilter, status: e.target.value, page: 1 })}
-                                  className="px-3 py-2 border border-neutral-300 rounded-lg"
+                                  className="px-3 py-2 border border-border rounded-lg"
                                 >
                                   <option value="">{t('feedback.allStatuses', 'All Statuses')}</option>
                                   <option value="pending">{t('feedback.status.pending', 'Pending')}</option>
@@ -263,7 +263,7 @@ export const EventFeedbackPage: React.FC = () => {
           {feedbackLoading ? (
             <Loading />
           ) : feedbackData?.feedback?.length === 0 ? (
-            <Card><CardContent><div className="p-8 text-center text-neutral-500">
+            <Card><CardContent><div className="p-8 text-center text-muted-foreground">
                                           {t('feedback.noFeedback', 'No feedback found')}
                                         </div></CardContent></Card>
           ) : (
@@ -293,7 +293,7 @@ export const EventFeedbackPage: React.FC = () => {
                                                 {item.guest_name || t('feedback.anonymous', 'Anonymous')}
                                               </span>
                                               {item.guest_email && (
-                                                <span className="text-xs text-neutral-500">({item.guest_email})</span>
+                                                <span className="text-xs text-muted-foreground">({item.guest_email})</span>
                                               )}
                                             </div>
                                             {item.rating && (
@@ -302,16 +302,16 @@ export const EventFeedbackPage: React.FC = () => {
                                                   <Star
                                                     key={star}
                                                     className={`w-4 h-4 ${
-                                                      star <= item.rating! ? 'fill-yellow-500 text-yellow-500' : 'text-neutral-300'
+                                                      star <= item.rating! ? 'fill-yellow-500 text-yellow-500' : 'text-muted-foreground'
                                                     }`}
                                                   />
                                                 ))}
                                               </div>
                                             )}
                                             {item.comment_text && (
-                                              <p className="text-sm text-neutral-700">{item.comment_text}</p>
+                                              <p className="text-sm text-foreground">{item.comment_text}</p>
                                             )}
-                                            <p className="text-xs text-neutral-500 mt-1">
+                                            <p className="text-xs text-muted-foreground mt-1">
                                               {(() => {
                                                 const d = typeof item.created_at === 'string' 
                                                   ? parseISO(item.created_at) 
@@ -383,7 +383,7 @@ export const EventFeedbackPage: React.FC = () => {
               >
                 {t('common.previous', 'Previous')}
               </Button>
-              <span className="flex items-center px-3 text-sm text-neutral-600">
+              <span className="flex items-center px-3 text-sm text-muted-foreground">
                 {t('common.pageOf', 'Page {{current}} of {{total}}', {
                   current: feedbackFilter.page,
                   total: totalPages
@@ -415,10 +415,10 @@ export const EventFeedbackPage: React.FC = () => {
                                                         <Star className="w-8 h-8 text-yellow-500" />
                                                         <div>
                                                           <p className="text-2xl font-bold">{(analytics.summary.average_rating || 0).toFixed(1)}</p>
-                                                          <p className="text-sm text-neutral-600">{t('feedback.avgRating', 'Average Rating')}</p>
+                                                          <p className="text-sm text-muted-foreground">{t('feedback.avgRating', 'Average Rating')}</p>
                                                         </div>
                                                       </div>
-                                                      <p className="text-xs text-neutral-500">
+                                                      <p className="text-xs text-muted-foreground">
                                                         {t('feedback.totalRatings', '{{count}} ratings', { count: analytics.summary.total_ratings })}
                                                       </p>
                                                     </div></CardContent></Card>
@@ -427,7 +427,7 @@ export const EventFeedbackPage: React.FC = () => {
                                                         <Heart className="w-8 h-8 text-red-500" />
                                                         <div>
                                                           <p className="text-2xl font-bold">{analytics.summary.total_likes}</p>
-                                                          <p className="text-sm text-neutral-600">{t('feedback.totalLikes', 'Total Likes')}</p>
+                                                          <p className="text-sm text-muted-foreground">{t('feedback.totalLikes', 'Total Likes')}</p>
                                                         </div>
                                                       </div>
                                                     </div></CardContent></Card>
@@ -436,7 +436,7 @@ export const EventFeedbackPage: React.FC = () => {
                                                         <Smile className="w-8 h-8 text-amber-500" />
                                                         <div>
                                                           <p className="text-2xl font-bold">{analytics.summary.total_reactions || 0}</p>
-                                                          <p className="text-sm text-neutral-600">{t('feedback.totalReactions', 'Total Reactions')}</p>
+                                                          <p className="text-sm text-muted-foreground">{t('feedback.totalReactions', 'Total Reactions')}</p>
                                                         </div>
                                                       </div>
                                                     </div></CardContent></Card>
@@ -445,7 +445,7 @@ export const EventFeedbackPage: React.FC = () => {
                                                         <MessageSquare className="w-8 h-8 text-blue-500" />
                                                         <div>
                                                           <p className="text-2xl font-bold">{analytics.summary.total_comments}</p>
-                                                          <p className="text-sm text-neutral-600">{t('feedback.totalComments', 'Total Comments')}</p>
+                                                          <p className="text-sm text-muted-foreground">{t('feedback.totalComments', 'Total Comments')}</p>
                                                         </div>
                                                       </div>
                                                       {analytics.summary.pending_moderation > 0 && (
@@ -461,7 +461,7 @@ export const EventFeedbackPage: React.FC = () => {
                                                         <TrendingUp className="w-8 h-8 text-green-500" />
                                                         <div>
                                                           <p className="text-2xl font-bold">{analytics.summary.total_feedback}</p>
-                                                          <p className="text-sm text-neutral-600">{t('feedback.totalInteractions', 'Total Interactions')}</p>
+                                                          <p className="text-sm text-muted-foreground">{t('feedback.totalInteractions', 'Total Interactions')}</p>
                                                         </div>
                                                       </div>
                                                     </div></CardContent></Card>
@@ -483,12 +483,12 @@ export const EventFeedbackPage: React.FC = () => {
                                                                     className={`w-3 h-3 ${
                                                                       star <= Math.round(photo.average_rating) 
                                                                         ? 'fill-yellow-500 text-yellow-500' 
-                                                                        : 'text-neutral-300'
+                                                                        : 'text-muted-foreground'
                                                                     }`}
                                                                   />
                                                                 ))}
                                                               </div>
-                                                              <span className="text-sm text-neutral-600">
+                                                              <span className="text-sm text-muted-foreground">
                                                                 {Number(photo.average_rating).toFixed(1)} ({photo.feedback_count})
                                                               </span>
                                                             </div>
@@ -504,9 +504,9 @@ export const EventFeedbackPage: React.FC = () => {
                                                       <h3 className="text-lg font-semibold mb-4">{t('feedback.recentComments', 'Recent Comments')}</h3>
                                                       <div className="space-y-3">
                                                         {analytics.recentComments.map((comment, idx) => (
-                                                          <div key={idx} className="border-b border-neutral-100 pb-3 last:border-0">
-                                                            <p className="text-sm text-neutral-700">{comment.comment_text}</p>
-                                                            <p className="text-xs text-neutral-500 mt-1">
+                                                          <div key={idx} className="border-b border-border pb-3 last:border-0">
+                                                            <p className="text-sm text-foreground">{comment.comment_text}</p>
+                                                            <p className="text-xs text-muted-foreground mt-1">
                                                               {comment.guest_name} • {comment.filename} • 
                                                               {(() => {
                                                                 const d = typeof comment.created_at === 'string' 
@@ -529,7 +529,7 @@ export const EventFeedbackPage: React.FC = () => {
         <div className="space-y-4">
           <Card><CardContent><div className="p-6">
                                 <h3 className="text-lg font-semibold mb-4">{t('feedback.wordFilters', 'Word Filters')}</h3>
-                                <p className="text-sm text-neutral-600">
+                                <p className="text-sm text-muted-foreground">
                                   {t('feedback.wordFiltersDesc', 'Manage blocked words for comment moderation')}
                                 </p>
                                 <Button

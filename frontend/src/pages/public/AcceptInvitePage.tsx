@@ -278,13 +278,13 @@ export const AcceptInvitePage: React.FC = () => {
                               <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-red-100 flex items-center justify-center">
                                 <XCircle className="w-8 h-8 text-red-600" />
                               </div>
-                              <h1 className="text-2xl font-bold text-neutral-900 mb-2">
+                              <h1 className="text-2xl font-bold text-foreground mb-2">
                                 {t('acceptInvitation.invalidToken')}
                               </h1>
-                              <p className="text-neutral-600 mb-6">
+                              <p className="text-muted-foreground mb-6">
                                 {errorMessage}
                               </p>
-                              <p className="text-sm text-neutral-500 mb-6">
+                              <p className="text-sm text-muted-foreground mb-6">
                                 {t('acceptInvitation.contactAdminMessage')}
                               </p>
                               <Button
@@ -307,13 +307,13 @@ export const AcceptInvitePage: React.FC = () => {
                               <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-green-100 flex items-center justify-center">
                                 <CheckCircle className="w-8 h-8 text-green-600" />
                               </div>
-                              <h1 className="text-2xl font-bold text-neutral-900 mb-2">
+                              <h1 className="text-2xl font-bold text-foreground mb-2">
                                 {t('acceptInvitation.success')}
                               </h1>
-                              <p className="text-neutral-600 mb-6">
+                              <p className="text-muted-foreground mb-6">
                                 {t('acceptInvitation.successMessage')}
                               </p>
-                              <p className="text-sm text-neutral-500 mb-6">
+                              <p className="text-sm text-muted-foreground mb-6">
                                 {t('acceptInvitation.redirecting', { seconds: redirectCountdown })}
                               </p>
                               <Button
@@ -357,15 +357,15 @@ export const AcceptInvitePage: React.FC = () => {
                             <Mail className="w-5 h-5 text-brand-600" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm text-neutral-500">{t('acceptInvitation.invitedAs')}</p>
-                            <p className="font-medium text-neutral-900 truncate">{invitation.email}</p>
+                            <p className="text-sm text-muted-foreground">{t('acceptInvitation.invitedAs')}</p>
+                            <p className="font-medium text-foreground truncate">{invitation.email}</p>
                             <div className="flex items-center gap-2 mt-2">
                               <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                 <Shield className="w-3 h-3" />
                                 {formatRole(invitation.role)}
                               </span>
                             </div>
-                            <p className="text-xs text-neutral-500 mt-2">
+                            <p className="text-xs text-muted-foreground mt-2">
                               {t('acceptInvitation.expiresAt', { date: formatExpirationDate(invitation.expiresAt) })}
                             </p>
                           </div>
@@ -375,10 +375,10 @@ export const AcceptInvitePage: React.FC = () => {
         <Card className="py-8"><CardContent className="px-8"><form onSubmit={handleSubmit} className="space-y-6">
                           {/* Username Field */}
                           <div>
-                            <label htmlFor="username" className="block text-sm font-medium text-neutral-700 mb-1">
+                            <label htmlFor="username" className="block text-sm font-medium text-foreground mb-1">
                               {t('acceptInvitation.usernameLabel')}
                             </label>
-                            <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<User className="w-5 h-5 text-neutral-400" />}</div><Input
+                            <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<User className="w-5 h-5 text-muted-foreground" />}</div><Input
                                                     id="username"
                                                     type="text"
                                                     value={formData.username}
@@ -387,18 +387,18 @@ export const AcceptInvitePage: React.FC = () => {
                                                     autoComplete="username"
                                                     autoFocus className="pl-10" aria-invalid={!!(errors.username)} aria-describedby={(errors.username) ? "username-error" : undefined}
                                                   /></div>{(errors.username) && <p id={"username-error"} className="mt-1.5 text-sm text-destructive">{errors.username}</p>}</div>
-                            <p className="mt-1 text-xs text-neutral-500">
+                            <p className="mt-1 text-xs text-muted-foreground">
                               {t('acceptInvitation.usernameHelp')}
                             </p>
                           </div>
 
                           {/* Password Field */}
                           <div>
-                            <label htmlFor="password" className="block text-sm font-medium text-neutral-700 mb-1">
+                            <label htmlFor="password" className="block text-sm font-medium text-foreground mb-1">
                               {t('acceptInvitation.passwordLabel')}
                             </label>
                             <div className="relative">
-                              <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-neutral-400" />}</div><Input
+                              <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-muted-foreground" />}</div><Input
                                                           id="password"
                                                           type={showPassword ? 'text' : 'password'}
                                                           value={formData.password}
@@ -409,7 +409,7 @@ export const AcceptInvitePage: React.FC = () => {
                               <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-3 top-3 text-neutral-400 hover:text-neutral-600 transition-colors"
+                                className="absolute right-3 top-3 text-muted-foreground hover:text-foreground transition-colors"
                                 tabIndex={-1}
                               >
                                 {showPassword ? (
@@ -424,7 +424,7 @@ export const AcceptInvitePage: React.FC = () => {
                             {formData.password && (
                               <div className="mt-3">
                                 <div className="flex items-center justify-between mb-1">
-                                  <span className="text-xs text-neutral-500">{t('acceptInvitation.passwordStrength')}</span>
+                                  <span className="text-xs text-muted-foreground">{t('acceptInvitation.passwordStrength')}</span>
                                   <span className={`text-xs font-medium ${
                                     passwordStrength.level <= 1 ? 'text-red-600' :
                                     passwordStrength.level === 2 ? 'text-yellow-600' :
@@ -434,7 +434,7 @@ export const AcceptInvitePage: React.FC = () => {
                                     {passwordStrength.label}
                                   </span>
                                 </div>
-                                <div className="h-1.5 bg-neutral-200 rounded-full overflow-hidden">
+                                <div className="h-1.5 bg-muted rounded-full overflow-hidden">
                                   <div
                                     className={`h-full transition-all duration-300 ${passwordStrength.color}`}
                                     style={{ width: `${(passwordStrength.level / 4) * 100}%` }}
@@ -445,7 +445,7 @@ export const AcceptInvitePage: React.FC = () => {
 
                             {/* Password Requirements */}
                             <div className="mt-3 space-y-1.5">
-                              <p className="text-xs font-medium text-neutral-600">{t('acceptInvitation.requirements.title')}</p>
+                              <p className="text-xs font-medium text-muted-foreground">{t('acceptInvitation.requirements.title')}</p>
                               {passwordRequirements.map((req, index) => {
                                 const isMet = req.test(formData.password);
                                 return (
@@ -453,9 +453,9 @@ export const AcceptInvitePage: React.FC = () => {
                                     {isMet ? (
                                       <CheckCircle className="w-3.5 h-3.5 text-green-500" />
                                     ) : (
-                                      <div className="w-3.5 h-3.5 rounded-full border border-neutral-300" />
+                                      <div className="w-3.5 h-3.5 rounded-full border border-border" />
                                     )}
-                                    <span className={`text-xs ${isMet ? 'text-green-700' : 'text-neutral-500'}`}>
+                                    <span className={`text-xs ${isMet ? 'text-green-700' : 'text-muted-foreground'}`}>
                                       {req.label}
                                     </span>
                                   </div>
@@ -466,11 +466,11 @@ export const AcceptInvitePage: React.FC = () => {
 
                           {/* Confirm Password Field */}
                           <div>
-                            <label htmlFor="confirmPassword" className="block text-sm font-medium text-neutral-700 mb-1">
+                            <label htmlFor="confirmPassword" className="block text-sm font-medium text-foreground mb-1">
                               {t('acceptInvitation.confirmPasswordLabel')}
                             </label>
                             <div className="relative">
-                              <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-neutral-400" />}</div><Input
+                              <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-muted-foreground" />}</div><Input
                                                           id="confirmPassword"
                                                           type={showConfirmPassword ? 'text' : 'password'}
                                                           value={formData.confirmPassword}
@@ -481,7 +481,7 @@ export const AcceptInvitePage: React.FC = () => {
                               <button
                                 type="button"
                                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                className="absolute right-3 top-3 text-neutral-400 hover:text-neutral-600 transition-colors"
+                                className="absolute right-3 top-3 text-muted-foreground hover:text-foreground transition-colors"
                                 tabIndex={-1}
                               >
                                 {showConfirmPassword ? (

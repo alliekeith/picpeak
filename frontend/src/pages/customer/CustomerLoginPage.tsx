@@ -198,7 +198,7 @@ export const CustomerLoginPage: React.FC = () => {
                             <label htmlFor="customer-email" className="block text-sm font-medium text-foreground mb-1">
                               {t('customer.login.email', 'Email')}
                             </label>
-                            <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Mail className="w-5 h-5 text-neutral-400" />}</div><Input
+                            <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Mail className="w-5 h-5 text-muted-foreground" />}</div><Input
                                                     id="customer-email"
                                                     name="email"
                                                     type="email"
@@ -215,7 +215,7 @@ export const CustomerLoginPage: React.FC = () => {
                               {t('customer.login.password', 'Password')}
                             </label>
                             <div className="relative">
-                              <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-neutral-400" />}</div><Input
+                              <div className="w-full"><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-muted-foreground" />}</div><Input
                                                           id="customer-password"
                                                           name="current-password"
                                                           type={showPassword ? 'text' : 'password'}
@@ -227,7 +227,7 @@ export const CustomerLoginPage: React.FC = () => {
                               <button
                                 type="button"
                                 onClick={() => setShowPassword((p) => !p)}
-                                className="absolute right-3 top-3 text-neutral-400 hover:text-neutral-600 transition-colors"
+                                className="absolute right-3 top-3 text-muted-foreground hover:text-foreground transition-colors"
                                 tabIndex={-1}
                                 aria-label={showPassword
                                   ? t('customer.login.hidePassword', 'Hide password')

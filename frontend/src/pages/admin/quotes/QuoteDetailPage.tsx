@@ -227,13 +227,13 @@ export const QuoteDetailPage: React.FC = () => {
       <div className="flex items-center justify-between">
         <div>
           <button onClick={() => navigate('/admin/clients/quotes')}
-            className="text-sm text-neutral-600 dark:text-neutral-400 hover:underline mb-1 inline-flex items-center gap-1">
+            className="text-sm text-muted-foreground hover:underline mb-1 inline-flex items-center gap-1">
             <ArrowLeft className="w-4 h-4" /> {t('common.back', 'Back')}
           </button>
           <h2 className="text-xl font-bold">
-            {q.quoteNumber} <span className="ml-2 text-xs font-medium px-2 py-0.5 rounded-sm bg-neutral-100 text-neutral-700">{t(`quotes.status.${q.status}`, q.status)}</span>
+            {q.quoteNumber} <span className="ml-2 text-xs font-medium px-2 py-0.5 rounded-sm bg-muted text-foreground">{t(`quotes.status.${q.status}`, q.status)}</span>
           </h2>
-          <p className="text-sm text-neutral-600 dark:text-neutral-400">
+          <p className="text-sm text-muted-foreground">
             {q.customer.companyName || q.customer.displayName || q.customer.email}
           </p>
         </div>
@@ -302,41 +302,41 @@ export const QuoteDetailPage: React.FC = () => {
       </div>
 
       <Card><CardContent><div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                    <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.field.issueDate', 'Issued')}</div><div>{fmtDate(q.issueDate)}</div></div>
-                    {q.validUntil && <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.field.validUntil', 'Valid until')}</div><div>{fmtDate(q.validUntil)}</div></div>}
-                    <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.field.eventName', 'Event')}</div><div>{q.eventName || '—'}</div></div>
-                    {q.eventDate && <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.field.eventDate', 'Event date')}</div><div>{fmtDate(q.eventDate)}{q.eventTimeStart ? ` ${fmtTime(q.eventTimeStart)}-${q.eventTimeEnd ? fmtTime(q.eventTimeEnd) : ''}` : ''}</div></div>}
-                    {q.sentAt && <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.field.sentAt', 'Sent at')}</div><div>{fmtDateTime(q.sentAt)}</div></div>}
-                    {q.acceptedAt && <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.field.acceptedAt', 'Accepted at')}</div><div>{fmtDateTime(q.acceptedAt)}</div></div>}
-                    {q.declinedAt && <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.field.declinedAt', 'Declined at')}</div><div>{fmtDateTime(q.declinedAt)}</div></div>}
+                    <div><div className="text-muted-foreground">{t('quotes.field.issueDate', 'Issued')}</div><div>{fmtDate(q.issueDate)}</div></div>
+                    {q.validUntil && <div><div className="text-muted-foreground">{t('quotes.field.validUntil', 'Valid until')}</div><div>{fmtDate(q.validUntil)}</div></div>}
+                    <div><div className="text-muted-foreground">{t('quotes.field.eventName', 'Event')}</div><div>{q.eventName || '—'}</div></div>
+                    {q.eventDate && <div><div className="text-muted-foreground">{t('quotes.field.eventDate', 'Event date')}</div><div>{fmtDate(q.eventDate)}{q.eventTimeStart ? ` ${fmtTime(q.eventTimeStart)}-${q.eventTimeEnd ? fmtTime(q.eventTimeEnd) : ''}` : ''}</div></div>}
+                    {q.sentAt && <div><div className="text-muted-foreground">{t('quotes.field.sentAt', 'Sent at')}</div><div>{fmtDateTime(q.sentAt)}</div></div>}
+                    {q.acceptedAt && <div><div className="text-muted-foreground">{t('quotes.field.acceptedAt', 'Accepted at')}</div><div>{fmtDateTime(q.acceptedAt)}</div></div>}
+                    {q.declinedAt && <div><div className="text-muted-foreground">{t('quotes.field.declinedAt', 'Declined at')}</div><div>{fmtDateTime(q.declinedAt)}</div></div>}
                     {q.replacesQuoteId && q.replacesQuoteNumber && (
-                      <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.replacesQuote', 'Replaces')}</div>
+                      <div><div className="text-muted-foreground">{t('quotes.replacesQuote', 'Replaces')}</div>
                         <button type="button" className="text-brand-600 dark:text-brand-400 hover:underline"
                           onClick={() => navigate(`/admin/clients/quotes/${q.replacesQuoteId}`)}>{q.replacesQuoteNumber}</button></div>
                     )}
                     {q.replacedByQuoteId && q.replacedByQuoteNumber && (
-                      <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.replacedByQuote', 'Replaced by')}</div>
+                      <div><div className="text-muted-foreground">{t('quotes.replacedByQuote', 'Replaced by')}</div>
                         <button type="button" className="text-brand-600 dark:text-brand-400 hover:underline"
                           onClick={() => navigate(`/admin/clients/quotes/${q.replacedByQuoteId}`)}>{q.replacedByQuoteNumber}</button></div>
                     )}
-                    {q.declineReason && <div className="col-span-2 md:col-span-4"><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.field.declineReason', 'Decline reason')}</div><div className="whitespace-pre-line">{q.declineReason}</div></div>}
+                    {q.declineReason && <div className="col-span-2 md:col-span-4"><div className="text-muted-foreground">{t('quotes.field.declineReason', 'Decline reason')}</div><div className="whitespace-pre-line">{q.declineReason}</div></div>}
                     {q.respondedAt && !responseLocked && (
-                      <div><div className="text-neutral-600 dark:text-neutral-300">{t('quotes.field.responseWindow', 'Response window')}</div>
+                      <div><div className="text-muted-foreground">{t('quotes.field.responseWindow', 'Response window')}</div>
                         <div className="text-amber-700">{t('quotes.responseWindowOpen', 'Open until {{at}}', { at: q.responseLockedAt ? fmtDateTime(q.responseLockedAt) : '' })}</div></div>
                     )}
                   </div></CardContent></Card>
 
       {/* What the customer wrote with their acceptance (#1451) — plain text. */}
       {q.customerMessage && (
-        <Card><CardContent><h3 className="font-semibold mb-2 text-neutral-900 dark:text-neutral-100">
+        <Card><CardContent><h3 className="font-semibold mb-2 text-foreground">
                           {t('quotes.section.customerMessage', 'Message from the customer')}
-                        </h3><p className="text-sm whitespace-pre-wrap wrap-break-word text-neutral-700 dark:text-neutral-300">{q.customerMessage}</p></CardContent></Card>
+                        </h3><p className="text-sm whitespace-pre-wrap wrap-break-word text-foreground">{q.customerMessage}</p></CardContent></Card>
       )}
 
       <QuoteAddOnsCard quote={q} lineItems={data.lineItems} />
 
       <Card><CardContent><h3 className="font-semibold mb-3">{t('quotes.section.lineItems', 'Line items')}</h3><table className="w-full text-sm">
-                    <thead><tr className="border-b border-neutral-200 dark:border-neutral-700">
+                    <thead><tr className="border-b border-border">
                       <th className="text-left py-2">#</th>
                       <th className="text-left py-2">{t('crm.lineItems.quantity', 'Qty')}</th>
                       <th className="text-left py-2">{t('crm.lineItems.description', 'Description')}</th>
@@ -356,14 +356,14 @@ export const QuoteDetailPage: React.FC = () => {
                           if (!isSubItem) number += 1;
                           const unitLabel = li.unit ? t(`crm.lineItems.unitShort.${li.unit}`, li.unit) : '';
                           return (
-                            <tr key={li.id} className={`border-b border-neutral-100 dark:border-neutral-800 ${notIncluded ? 'opacity-60' : ''}`}>
+                            <tr key={li.id} className={`border-b border-border ${notIncluded ? 'opacity-60' : ''}`}>
                               <td className="py-2">{isSubItem ? '' : number}</td>
                               <td className="py-2">{isDiscountLine ? '' : `${Number(li.quantity)}${unitLabel ? ` ${unitLabel}` : ''}`}</td>
                               <td className={`py-2 whitespace-pre-line ${isSubItem ? 'pl-6' : ''}`}>
                                 {isSubItem ? '• ' : ''}{li.description}
                                 {/* An add-on's status is the last line of its item. */}
                                 {li.isOptional && (
-                                  <div className="text-xs text-neutral-500 dark:text-neutral-400">
+                                  <div className="text-xs text-muted-foreground">
                                     {notIncluded
                                       ? t('crm.lineItems.optionalNotIncluded', '(add-on, not booked)')
                                       : t('crm.lineItems.optionalIncluded', '(add-on, booked)')}
@@ -378,9 +378,9 @@ export const QuoteDetailPage: React.FC = () => {
                       })()}
                     </tbody>
                   </table><div className="flex flex-col items-end gap-1 mt-4 text-sm">
-                    <div className="flex gap-6"><span className="text-neutral-600">{t('crm.lineItems.subtotal', 'Subtotal')}:</span>
+                    <div className="flex gap-6"><span className="text-muted-foreground">{t('crm.lineItems.subtotal', 'Subtotal')}:</span>
                       <span className="tabular-nums w-28 text-right">{formatMoney(Number(q.netAmountMinor || 0) / 100, q.currency)}</span></div>
-                    <div className="flex gap-6"><span className="text-neutral-600">{t('crm.lineItems.vat', 'VAT')} ({Number(q.vatRate || 0).toFixed(1)}%):</span>
+                    <div className="flex gap-6"><span className="text-muted-foreground">{t('crm.lineItems.vat', 'VAT')} ({Number(q.vatRate || 0).toFixed(1)}%):</span>
                       <span className="tabular-nums w-28 text-right">{formatMoney(Number(q.vatAmountMinor || 0) / 100, q.currency)}</span></div>
                     <div className="flex gap-6 font-semibold text-base"><span>{t('crm.lineItems.total', 'Total')}:</span>
                       <span className="tabular-nums w-28 text-right">{formatMoney(Number(q.totalAmountMinor || 0) / 100, q.currency)}</span></div>
@@ -397,7 +397,7 @@ export const QuoteDetailPage: React.FC = () => {
       />
 
       {q.internalNotes && (
-        <Card><CardContent><h3 className="font-semibold mb-2">{t('quotes.section.internalNotes', 'Internal notes')}</h3><p className="text-sm whitespace-pre-line text-neutral-700 dark:text-neutral-300">{q.internalNotes}</p></CardContent></Card>
+        <Card><CardContent><h3 className="font-semibold mb-2">{t('quotes.section.internalNotes', 'Internal notes')}</h3><p className="text-sm whitespace-pre-line text-foreground">{q.internalNotes}</p></CardContent></Card>
       )}
     </div>
   );

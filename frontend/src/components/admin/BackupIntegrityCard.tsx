@@ -65,13 +65,13 @@ export const BackupIntegrityCard: React.FC = () => {
                   ) : report ? (
                     <ShieldAlert className="w-5 h-5 text-red-600 dark:text-red-400" />
                   ) : (
-                    <ShieldCheck className="w-5 h-5 text-neutral-400" />
+                    <ShieldCheck className="w-5 h-5 text-muted-foreground" />
                   )}
-                  <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                  <h3 className="text-lg font-semibold text-foreground">
                     {t('backup.integrity.title', 'Document integrity')}
                   </h3>
                 </div>
-                <p className="text-sm text-neutral-600 dark:text-neutral-400 max-w-2xl">
+                <p className="text-sm text-muted-foreground max-w-2xl">
                   {t(
                     'backup.integrity.description',
                     'Verifies every CRM document (quote / contract / invoice / signature) referenced from the database actually exists on disk and — where a hash is stored — its bytes still match. Read-only, on-demand.',
@@ -137,7 +137,7 @@ export const BackupIntegrityCard: React.FC = () => {
                   />
                 </div>
 
-                <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-3">
+                <p className="text-xs text-muted-foreground mb-3">
                   {t('backup.integrity.scannedAt', 'Last checked: {{when}}', {
                     when: formatDateTime(new Date(report.scannedAt)),
                   })}
@@ -176,7 +176,7 @@ export const BackupIntegrityCard: React.FC = () => {
                 )}
               </>
             )}{!report && !runCheck.isPending && (
-              <p className="text-sm text-neutral-500 dark:text-neutral-400 italic">
+              <p className="text-sm text-muted-foreground italic">
                 {t(
                   'backup.integrity.emptyState',
                   'No check has been run yet in this session. Click "Run check now" to scan the document estate.',
@@ -189,7 +189,7 @@ export const BackupIntegrityCard: React.FC = () => {
 type Tone = 'neutral' | 'green' | 'amber' | 'red';
 
 const TONE_CLASSES: Record<Tone, string> = {
-  neutral: 'bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-200',
+  neutral: 'bg-muted text-foreground',
   green: 'bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300',
   amber: 'bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300',
   red: 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300',
@@ -231,15 +231,15 @@ const ResultTable: React.FC<{
 }> = ({ title, caption, rows }) => {
   const { t } = useTranslation();
   return (
-    <div className="mt-4 border border-neutral-200 dark:border-neutral-700 rounded-lg overflow-hidden">
-      <div className="p-3 bg-neutral-50 dark:bg-neutral-800/50 border-b border-neutral-200 dark:border-neutral-700">
-        <h4 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">{title}</h4>
-        <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1">{caption}</p>
+    <div className="mt-4 border border-border rounded-lg overflow-hidden">
+      <div className="p-3 bg-muted border-b border-border">
+        <h4 className="text-sm font-semibold text-foreground">{title}</h4>
+        <p className="text-xs text-muted-foreground mt-1">{caption}</p>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="bg-neutral-50 dark:bg-neutral-800/30">
-            <tr className="text-left text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+          <thead className="bg-muted">
+            <tr className="text-left text-xs uppercase tracking-wide text-muted-foreground">
               <th className="px-3 py-2">{t('backup.integrity.results.table', 'Table')}</th>
               <th className="px-3 py-2">{t('backup.integrity.results.rowId', 'Row id')}</th>
               <th className="px-3 py-2">{t('backup.integrity.results.column', 'Column')}</th>
@@ -250,18 +250,18 @@ const ResultTable: React.FC<{
             {rows.map((r, i) => (
               <tr
                 key={`${r.table}-${r.rowId}-${r.column}-${i}`}
-                className="border-t border-neutral-200 dark:border-neutral-700"
+                className="border-t border-border"
               >
-                <td className="px-3 py-2 font-mono text-xs text-neutral-700 dark:text-neutral-300">
+                <td className="px-3 py-2 font-mono text-xs text-foreground">
                   {r.table}
                 </td>
-                <td className="px-3 py-2 tabular-nums text-neutral-700 dark:text-neutral-300">
+                <td className="px-3 py-2 tabular-nums text-foreground">
                   {r.rowId}
                 </td>
-                <td className="px-3 py-2 font-mono text-xs text-neutral-700 dark:text-neutral-300">
+                <td className="px-3 py-2 font-mono text-xs text-foreground">
                   {r.column}
                 </td>
-                <td className="px-3 py-2 font-mono text-xs text-neutral-700 dark:text-neutral-300 break-all">
+                <td className="px-3 py-2 font-mono text-xs text-foreground break-all">
                   {r.detail}
                 </td>
               </tr>

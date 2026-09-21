@@ -43,23 +43,23 @@ export const WelcomeMessageEditor: React.FC<WelcomeMessageEditorProps> = ({
           onChange={handleChange}
           placeholder={placeholder}
           rows={rows}
-          className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary transition-colors resize-none font-mono text-sm"
+          className="w-full px-3 py-2 border border-border bg-card text-foreground placeholder-neutral-400 dark:placeholder-neutral-500 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary transition-colors resize-none font-mono text-sm"
         />
-        <div className="absolute top-2 right-2 text-neutral-400" title="Line breaks will be preserved in emails">
+        <div className="absolute top-2 right-2 text-muted-foreground" title="Line breaks will be preserved in emails">
           <HelpCircle className="w-4 h-4" aria-hidden="true" />
         </div>
       </div>
       
-      <div className="text-xs text-neutral-500 dark:text-neutral-400">
+      <div className="text-xs text-muted-foreground">
         Tip: Press Enter to create a new line. Each line will appear as a separate paragraph in emails.
       </div>
 
       {value && (
         <div className="mt-4">
-          <p className="text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">Preview:</p>
-          <div className="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700">
+          <p className="text-sm font-medium text-foreground mb-2">Preview:</p>
+          <div className="p-4 bg-muted rounded-lg border border-border">
             <div
-              className="text-sm text-neutral-700 dark:text-neutral-300 whitespace-pre-wrap"
+              className="text-sm text-foreground whitespace-pre-wrap"
               dangerouslySetInnerHTML={{ __html: getPreviewHtml() }}
             />
           </div>

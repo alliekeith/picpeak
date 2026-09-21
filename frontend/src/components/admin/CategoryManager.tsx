@@ -116,7 +116,7 @@ export const CategoryManager: React.FC = () => {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">{t('categories.title')}</h3>
+        <h3 className="text-lg font-semibold text-foreground">{t('categories.title')}</h3>
         {!addingModal.isOpen && (
           <Button
                               size="sm"
@@ -128,7 +128,7 @@ export const CategoryManager: React.FC = () => {
 
       {/* Add new category form */}
       {addingModal.isOpen && (
-        <div className="flex gap-2 p-3 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+        <div className="flex gap-2 p-3 bg-muted rounded-lg">
           <input
             type="text"
             value={newCategoryName}
@@ -136,7 +136,7 @@ export const CategoryManager: React.FC = () => {
             onKeyPress={(e) => e.key === 'Enter' && handleCreate()}
             placeholder={t('categories.categoryName')}
             maxLength={100}
-            className="flex-1 px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-md bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-brand-500"
+            className="flex-1 px-3 py-2 border border-border rounded-md bg-card text-foreground focus:ring-2 focus:ring-brand-500"
             autoFocus
           />
           <Button
@@ -166,14 +166,14 @@ export const CategoryManager: React.FC = () => {
       {/* Categories list */}
       <div className="space-y-2">
         {ordered.length === 0 ? (
-          <p className="text-neutral-500 dark:text-neutral-400 text-center py-8">
+          <p className="text-muted-foreground text-center py-8">
             {t('categories.noCategoriesYet')}
           </p>
         ) : (
           ordered.map((category, index) => (
             <div
               key={category.id}
-              className="flex items-center justify-between p-3 bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600 transition-colors"
+              className="flex items-center justify-between p-3 bg-card rounded-lg border border-border transition-colors"
             >
               {editingId === category.id ? (
                 <div className="flex gap-2 flex-1">
@@ -186,7 +186,7 @@ export const CategoryManager: React.FC = () => {
                       if (e.key === 'Escape') cancelEdit();
                     }}
                     maxLength={100}
-                    className="flex-1 px-3 py-1 border border-neutral-300 dark:border-neutral-600 rounded-md bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-brand-500"
+                    className="flex-1 px-3 py-1 border border-border rounded-md bg-card text-foreground focus:ring-2 focus:ring-brand-500"
                     autoFocus
                   />
                   <Button
@@ -217,7 +217,7 @@ export const CategoryManager: React.FC = () => {
                       <button
                         onClick={() => handleMove(index, -1)}
                         disabled={index === 0 || reorderMutation.isPending}
-                        className="p-0.5 text-neutral-400 dark:text-neutral-500 hover:text-primary disabled:opacity-30 disabled:hover:text-neutral-400 transition-colors"
+                        className="p-0.5 text-muted-foreground hover:text-primary disabled:opacity-30 disabled:hover:text-muted-foreground transition-colors"
                         title={t('categories.moveUp', 'Move up')}
                         aria-label={t('categories.moveUp', 'Move up')}
                       >
@@ -226,7 +226,7 @@ export const CategoryManager: React.FC = () => {
                       <button
                         onClick={() => handleMove(index, 1)}
                         disabled={index === ordered.length - 1 || reorderMutation.isPending}
-                        className="p-0.5 text-neutral-400 dark:text-neutral-500 hover:text-primary disabled:opacity-30 disabled:hover:text-neutral-400 transition-colors"
+                        className="p-0.5 text-muted-foreground hover:text-primary disabled:opacity-30 disabled:hover:text-muted-foreground transition-colors"
                         title={t('categories.moveDown', 'Move down')}
                         aria-label={t('categories.moveDown', 'Move down')}
                       >
@@ -234,21 +234,21 @@ export const CategoryManager: React.FC = () => {
                       </button>
                     </div>
                     <div className="min-w-0">
-                      <p className="font-medium text-neutral-900 dark:text-neutral-100 truncate">{category.name}</p>
-                      <p className="text-sm text-neutral-500 dark:text-neutral-400 truncate">/{category.slug}</p>
+                      <p className="font-medium text-foreground truncate">{category.name}</p>
+                      <p className="text-sm text-muted-foreground truncate">/{category.slug}</p>
                     </div>
                   </div>
                   <div className="flex gap-1">
                     <button
                       onClick={() => startEdit(category)}
-                      className="p-1.5 text-neutral-600 dark:text-neutral-400 hover:text-brand dark:hover:text-brand hover:bg-primary/15 rounded-sm transition-colors"
+                      className="p-1.5 text-muted-foreground hover:text-brand dark:hover:text-brand hover:bg-primary/15 rounded-sm transition-colors"
                       title={t('common.edit')}
                     >
                       <Edit2 className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => handleDelete(category)}
-                      className="p-1.5 text-neutral-600 dark:text-neutral-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-sm transition-colors"
+                      className="p-1.5 text-muted-foreground hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-sm transition-colors"
                       title={t('common.delete')}
                       disabled={deleteMutation.isPending}
                     >

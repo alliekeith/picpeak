@@ -16,8 +16,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
-const labelCls = 'block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1';
-const selectCls = 'w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary';
+const labelCls = 'block text-sm font-medium text-foreground mb-1';
+const selectCls = 'w-full px-3 py-2 border border-border bg-card text-foreground rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-primary';
 
 const ACCOUNT_KEY = 'customers';
 
@@ -56,20 +56,20 @@ export const CustomerMailboxCard: React.FC = () => {
   if (isLoading) return <Loading />;
 
   return (
-    <Card className="mt-6"><CardContent><h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-1 flex items-center gap-2">
-              <Inbox className="w-5 h-5 text-neutral-400" />
+    <Card className="mt-6"><CardContent><h2 className="text-lg font-semibold text-foreground mb-1 flex items-center gap-2">
+              <Inbox className="w-5 h-5 text-muted-foreground" />
               {t('email.customerMailbox.title', 'Customer mailbox (hello@)')}
-            </h2><p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
+            </h2><p className="text-sm text-muted-foreground mb-4">
               {t('email.customerMailbox.subtitle', 'A second inbound mailbox for customer conversations. Its mail appears under Messages → Customers; attachments are not routed to Accounting.')}
             </p><div className="space-y-4">
-              <label className="flex items-center gap-2 text-sm text-neutral-700 dark:text-neutral-300">
+              <label className="flex items-center gap-2 text-sm text-foreground">
                 <input type="checkbox" checked={!!cfg.enabled} onChange={(e) => set('enabled', e.target.checked)} />
                 {t('email.customerMailbox.enabled', 'Poll this mailbox every minute')}
               </label>
 
               <div>
                 <label className={labelCls}>{t('email.incoming.host', 'IMAP Host')} <span className="text-red-500">*</span></label>
-                <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Server className="w-5 h-5 text-neutral-400" />}</div><Input type="text" value={cfg.imap_host || ''} onChange={(e) => set('imap_host', e.target.value)} placeholder="imap.example.com" className="pl-10" /></div>
+                <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Server className="w-5 h-5 text-muted-foreground" />}</div><Input type="text" value={cfg.imap_host || ''} onChange={(e) => set('imap_host', e.target.value)} placeholder="imap.example.com" className="pl-10" /></div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -88,14 +88,14 @@ export const CustomerMailboxCard: React.FC = () => {
 
               <div>
                 <label className={labelCls}>{t('email.incoming.user', 'Username')} <span className="text-red-500">*</span></label>
-                <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<User className="w-5 h-5 text-neutral-400" />}</div><Input type="text" value={cfg.imap_user || ''} onChange={(e) => set('imap_user', e.target.value)} autoComplete="off" placeholder="hello@yourdomain.com" className="pl-10" /></div>
+                <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<User className="w-5 h-5 text-muted-foreground" />}</div><Input type="text" value={cfg.imap_user || ''} onChange={(e) => set('imap_user', e.target.value)} autoComplete="off" placeholder="hello@yourdomain.com" className="pl-10" /></div>
               </div>
 
               <div>
                 <label className={labelCls}>{t('email.incoming.pass', 'Password')}</label>
                 <div className="relative">
-                  <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-neutral-400" />}</div><Input type={passwordVisibility.isOpen ? 'text' : 'password'} value={cfg.imap_pass || ''} onChange={(e) => set('imap_pass', e.target.value)} autoComplete="new-password" placeholder={t('email.enterPassword', 'Enter password')} className="pl-10" /></div>
-                  <button type="button" onClick={passwordVisibility.toggle} className="absolute right-3 top-3 text-neutral-400 hover:text-neutral-600">
+                  <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-muted-foreground" />}</div><Input type={passwordVisibility.isOpen ? 'text' : 'password'} value={cfg.imap_pass || ''} onChange={(e) => set('imap_pass', e.target.value)} autoComplete="new-password" placeholder={t('email.enterPassword', 'Enter password')} className="pl-10" /></div>
+                  <button type="button" onClick={passwordVisibility.toggle} className="absolute right-3 top-3 text-muted-foreground hover:text-foreground">
                     {passwordVisibility.isOpen ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
                 </div>
@@ -106,21 +106,21 @@ export const CustomerMailboxCard: React.FC = () => {
                 <Input type="text" value={cfg.imap_folder || 'INBOX'} onChange={(e) => set('imap_folder', e.target.value)} placeholder="INBOX" />
               </div>
 
-              <div className="pt-4 mt-1 border-t border-neutral-200 dark:border-neutral-700">
-                <div className="text-sm font-semibold text-neutral-800 dark:text-neutral-200">
+              <div className="pt-4 mt-1 border-t border-border">
+                <div className="text-sm font-semibold text-foreground">
                   {t('email.customerMailbox.outgoing', 'Outgoing (SMTP)')}
                 </div>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 mb-3">
+                <p className="text-xs text-muted-foreground mt-0.5 mb-3">
                   {t('email.customerMailbox.outgoingHint', 'Replies from this mailbox send from here. Leave blank to fall back to the global outgoing address.')}
                 </p>
                 <div className="space-y-4">
                   <div>
                     <label className={labelCls}>{t('email.customerMailbox.fromEmail', 'From address')}</label>
-                    <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<User className="w-5 h-5 text-neutral-400" />}</div><Input type="text" value={cfg.from_email || ''} onChange={(e) => set('from_email', e.target.value)} placeholder="hello@yourdomain.com" className="pl-10" /></div>
+                    <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<User className="w-5 h-5 text-muted-foreground" />}</div><Input type="text" value={cfg.from_email || ''} onChange={(e) => set('from_email', e.target.value)} placeholder="hello@yourdomain.com" className="pl-10" /></div>
                   </div>
                   <div>
                     <label className={labelCls}>{t('email.customerMailbox.smtpHost', 'SMTP Host')}</label>
-                    <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Server className="w-5 h-5 text-neutral-400" />}</div><Input type="text" value={cfg.smtp_host || ''} onChange={(e) => set('smtp_host', e.target.value)} placeholder="smtp.example.com" className="pl-10" /></div>
+                    <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Server className="w-5 h-5 text-muted-foreground" />}</div><Input type="text" value={cfg.smtp_host || ''} onChange={(e) => set('smtp_host', e.target.value)} placeholder="smtp.example.com" className="pl-10" /></div>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
@@ -137,11 +137,11 @@ export const CustomerMailboxCard: React.FC = () => {
                   </div>
                   <div>
                     <label className={labelCls}>{t('email.customerMailbox.smtpUser', 'SMTP Username')}</label>
-                    <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<User className="w-5 h-5 text-neutral-400" />}</div><Input type="text" value={cfg.smtp_user || ''} onChange={(e) => set('smtp_user', e.target.value)} autoComplete="off" placeholder="hello@yourdomain.com" className="pl-10" /></div>
+                    <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<User className="w-5 h-5 text-muted-foreground" />}</div><Input type="text" value={cfg.smtp_user || ''} onChange={(e) => set('smtp_user', e.target.value)} autoComplete="off" placeholder="hello@yourdomain.com" className="pl-10" /></div>
                   </div>
                   <div>
                     <label className={labelCls}>{t('email.customerMailbox.smtpPass', 'SMTP Password')}</label>
-                    <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-neutral-400" />}</div><Input type={passwordVisibility.isOpen ? 'text' : 'password'} value={cfg.smtp_pass || ''} onChange={(e) => set('smtp_pass', e.target.value)} autoComplete="new-password" placeholder={t('email.enterPassword', 'Enter password')} className="pl-10" /></div>
+                    <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">{<Lock className="w-5 h-5 text-muted-foreground" />}</div><Input type={passwordVisibility.isOpen ? 'text' : 'password'} value={cfg.smtp_pass || ''} onChange={(e) => set('smtp_pass', e.target.value)} autoComplete="new-password" placeholder={t('email.enterPassword', 'Enter password')} className="pl-10" /></div>
                   </div>
                 </div>
               </div>

@@ -34,10 +34,10 @@ export const AdminLayout: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 flex items-center justify-center">
+      <div className="min-h-screen bg-muted flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-neutral-600">Loading...</p>
+          <p className="text-muted-foreground">Loading...</p>
         </div>
       </div>
     );
@@ -80,7 +80,7 @@ const AdminLayoutInner: React.FC<AdminLayoutInnerProps> = ({ sidebarOpen, setSid
     // colour class inherited it through `body { color: var(--foreground) }` and
     // rendered near-invisible on a dark-toned theme. Components with an
     // explicit class or `text-foreground` still win over this.
-    <div className="h-screen bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 flex overflow-hidden">
+    <div className="h-screen bg-muted text-foreground flex overflow-hidden">
       {/* Mandatory Password Change Modal */}
       {mustChangePassword && <MandatoryPasswordChangeModal />}
       
